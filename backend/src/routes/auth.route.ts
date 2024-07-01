@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getUser, loginUser } from "../controllers/auth.controller";
 import { body } from "express-validator";
+import { authorize } from "../middlewares/authorize";
 
 const authRouter = Router();
 
@@ -16,6 +17,6 @@ const loginValidationRules = [
 ];
 
 authRouter.post("/login", loginValidationRules, loginUser);
-authRouter.get("/user", getUser);
+authRouter.get("/user", authorize, getUser);
 
 export default authRouter;
