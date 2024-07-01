@@ -48,6 +48,14 @@ export const loginUser = (req: Request, res: Response) => {
   return res.status(200).json({ message: "Successfully logged in" });
 };
 
+export const logoutUser = (req: Request, res: Response) => {
+  const token = req.body.token;
+
+  const logoutJwt = JwtHandler.encode(token, { expiresIn: "0" });
+  res.cookie("token", logoutJwt, { httpOnly: true });
+  res.status(200).json({ message: "Successfully logged out" });
+};
+
 export const getUser = (req: Request, res: Response) => {
   const userId = req.body.token.userId;
   const user = dummyUsers.find((usr) => usr.id === userId);
