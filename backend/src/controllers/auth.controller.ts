@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Hasher } from "../lib/Hasher";
 import { User } from "../models/User";
+import { JwtHandler } from "../lib/JwtHandler";
 
 const dummyUsers: User[] = [
   {
@@ -35,7 +36,8 @@ export const loginUser = (req: Request, res: Response) => {
     return res.status(401).json({ message: "Invalid login or password" });
   }
 
-  const jwt = "ujhfduyds";
+  const jwt = JwtHandler.encode({ userId: user.id });
+
   res.cookie("token", jwt, { httpOnly: true });
   return res.status(200).json({ message: "Successfully logged in" });
 };
