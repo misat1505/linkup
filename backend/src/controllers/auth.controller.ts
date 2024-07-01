@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Hasher } from "../lib/Hasher";
 import { User } from "../models/User";
 import { JwtHandler } from "../lib/JwtHandler";
+import { validationResult } from "express-validator";
 
 const dummyUsers: User[] = [
   {
@@ -25,6 +26,11 @@ const dummyUsers: User[] = [
 ];
 
 export const loginUser = (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { login, password } = req.body;
 
   const hashedPassword = Hasher.hash(password);
