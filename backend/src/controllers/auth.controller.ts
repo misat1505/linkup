@@ -47,3 +47,21 @@ export const loginUser = (req: Request, res: Response) => {
   res.cookie("token", jwt, { httpOnly: true });
   return res.status(200).json({ message: "Successfully logged in" });
 };
+
+export const getUser = (req: Request, res: Response) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(400).json({ message: "Invalid request - no token" });
+  }
+
+  const tokenPayload = JwtHandler.decode(token);
+  if (!tokenPayload) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+
+  const userId = tokenPayload.userId;
+  const user = dummyUsers.find((usr) => usr.id === userId);
+
+  return res.status(200).json(user);
+};
