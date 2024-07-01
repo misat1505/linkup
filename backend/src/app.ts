@@ -1,7 +1,7 @@
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express, { Request, Response } from "express";
-import authRouter from "./routes/auth.route";
+import authRouter from "./routes/auth.router";
 
 const app = express();
 
