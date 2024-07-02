@@ -1,74 +1,83 @@
-import React, { useRef, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
+import React, { lazy, Suspense } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AuthProvider from "./contexts/AuthProvider";
+import Loading from "./components/common/Loading";
 
-function App() {
-  const API_URL = "http://localhost:5500";
-  const loginRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+const Home = lazy(() => import("./pages/Home"));
+const Settings = lazy(() => import("./pages/Settings"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
 
-  const [data, setData] = useState<any>();
+export default function App() {
+  const SuspenseWrapper = ({
+    lazyComponent,
+  }: {
+    lazyComponent: React.LazyExoticComponent<() => JSX.Element>;
+  }) => {
+    return (
+      <Suspense fallback={<Loading />}>
+        {React.createElement(lazyComponent)}
+      </Suspense>
+    );
+  };
 
-  const handleLogin = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  const authorize = (
+    Component: React.LazyExoticComponent<() => JSX.Element>
   ) => {
-    e.preventDefault();
-
-    const response = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        login: loginRef.current!.value,
-        password: passwordRef.current!.value,
-      }),
-      credentials: "include",
-    });
-
-    await response.json();
+    return (
+      <AuthProvider>
+        <Suspense fallback={<Loading />}>
+          <Component />
+        </Suspense>
+      </AuthProvider>
+    );
   };
 
-  const fetchUser = async () => {
-    const response = await fetch(`${API_URL}/auth/user`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+  const protectedRoutes = [
+    {
+      path: "/",
+      component: Home,
+    },
+    {
+      path: "/settings",
+      component: Settings,
+    },
+  ];
 
-    const fetched = await response.json();
-    setData(fetched);
-  };
+  const routes = [
+    {
+      path: "/login",
+      component: Login,
+    },
+    {
+      path: "/signup",
+      component: Signup,
+    },
+    {
+      path: "*",
+      component: NotFound,
+    },
+  ];
 
   return (
-    <div>
-      <form>
-        <input type="text" placeholder="login" ref={loginRef} />
-        <input type="text" placeholder="password" ref={passwordRef} />
-        <button onClick={handleLogin}>login</button>
-      </form>
-      <button onClick={fetchUser}>fetch user</button>
-      {data && data.user && (
-        <div>
-          <div>
-            Name: {data.user.firstName} {data.user.lastName}
-          </div>
-          <Avatar className="w-64 h-64">
-            <AvatarImage
-              src={`${API_URL}${data.user.photoURL}`}
-              className="object-cover"
-            />
-            <AvatarFallback>
-              {data.user.firstName[0].toUpperCase()}
-              {data.user.lastName[0].toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        </div>
-      )}
-      {data && data.message && <div>{data.message}</div>}
-    </div>
+    <Router>
+      <Routes>
+        {protectedRoutes.map((route, index) => (
+          <Route
+            key={index}
+            path={route.path}
+            element={authorize(route.component)}
+          />
+        ))}
+        {routes.map((route, index) => (
+          <Route
+            key={index}
+            path={route.path}
+            element={<SuspenseWrapper lazyComponent={route.component} />}
+          />
+        ))}
+      </Routes>
+    </Router>
   );
 }
-
-export default App;
