@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Hasher } from "../lib/Hasher";
 import { User } from "../models/User";
 import { JwtHandler } from "../lib/JwtHandler";
+import { createFilename } from "../lib/utils/file";
 
 const dummyUsers: User[] = [
   {
@@ -26,9 +27,7 @@ const dummyUsers: User[] = [
 
 export const signupUser = (req: Request, res: Response) => {
   const { firstName, lastName, login, password } = req.body;
-  const file = req.file
-    ? req.file.destination.slice(1) + req.file.filename
-    : null;
+  const file = createFilename(req.file);
 
   const hashedPassword = Hasher.hash(password);
 
