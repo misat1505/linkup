@@ -3,6 +3,7 @@ import { Hasher } from "../lib/Hasher";
 import { User } from "../models/User";
 import { JwtHandler } from "../lib/JwtHandler";
 import { createFilename } from "../lib/utils/file";
+import { db } from "../lib/DatabaseConnector";
 
 const dummyUsers: User[] = [
   {
@@ -25,18 +26,32 @@ const dummyUsers: User[] = [
   },
 ];
 
-export const signupUser = (req: Request, res: Response) => {
+export const signupUser = async (req: Request, res: Response) => {
   const { firstName, lastName, login, password } = req.body;
   const file = createFilename(req.file);
 
-  if (dummyUsers.find((user) => user.login === login)) {
-    return res.status(409).json({ message: "Login already taken." });
-  }
   const hashedPassword = Hasher.hash(password);
 
-  const id = dummyUsers.length + 1;
+  const isLoginTaken =
+    (
+      await db.executeQuery("SELECT COUNT(*) FROM Users WHERE login = ?", [
+        login,
+      ])
+    )[0]["COUNT(*)"] > 0;
+
+  if (isLoginTaken) {
+    return res.status(409).json({ message: "Login already taken." });
+  }
+
+  const result = await db.executeQuery(
+    "INSERT INTO Users (login, password, first_name, last_name, photoURL) VALUES (?, ?, ?, ?, ?);",
+    [login, hashedPassword, firstName, lastName, file]
+  );
+
+  const userId = result.insertId;
+
   const user: User = {
-    id,
+    id: userId,
     firstName,
     lastName,
     login,
@@ -44,9 +59,7 @@ export const signupUser = (req: Request, res: Response) => {
     photoURL: file,
   };
 
-  dummyUsers.push(user);
-
-  const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
+  const jwt = JwtHandler.encode({ userId }, { expiresIn: "1h" });
   res.cookie("token", jwt, { httpOnly: true });
   return res.status(201).json({ user });
 };
