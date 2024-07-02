@@ -1,7 +1,7 @@
 import { ValidationChain } from "express-validator";
 import express from "express";
 import { validate } from "../../src/middlewares/validate";
-import { loginRules } from "../../src/validators/auth.validator";
+import { loginRules, signupRules } from "../../src/validators/auth.validator";
 import request from "supertest";
 
 const createTestServer = (validations: ValidationChain[]) => {
@@ -14,7 +14,7 @@ const createTestServer = (validations: ValidationChain[]) => {
 };
 
 describe("Auth validators", () => {
-  describe("Login rules", () => {
+  describe("Login validation rules", () => {
     it("passes with correct data", async () => {
       const app = createTestServer(loginRules);
       const res = await request(app).post("/test").send({
@@ -96,6 +96,102 @@ describe("Auth validators", () => {
           }),
         ])
       );
+    });
+  });
+
+  describe("Signup validation rules", () => {
+    it("passes with correct data", async () => {
+      const app = createTestServer(signupRules);
+      const res = await request(app).post("/test").send({
+        firstName: "John",
+        lastName: "Doe",
+        login: "login1",
+        password: "pass1",
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.text).toBe("Validation passed");
+    });
+
+    it("fails with no data", async () => {
+      const app = createTestServer(signupRules);
+      const res = await request(app).post("/test").send({});
+
+      expect(res.statusCode).toBe(400);
+      expect.arrayContaining([
+        expect.objectContaining({ msg: "First name must be provided." }),
+        expect.objectContaining({ msg: "Last name must be provided." }),
+        expect.objectContaining({ msg: "Login must be provided." }),
+        expect.objectContaining({ msg: "Password must be provided." }),
+      ]);
+    });
+
+    it("fails with bad data types", async () => {
+      const app = createTestServer(signupRules);
+      const res = await request(app).post("/test").send({
+        firstName: 11111,
+        lastName: 22222,
+        login: 33333,
+        password: 44444,
+      });
+
+      expect(res.statusCode).toBe(400);
+      expect.arrayContaining([
+        expect.objectContaining({ msg: "First name must be a string." }),
+        expect.objectContaining({ msg: "Last name must be a string." }),
+        expect.objectContaining({ msg: "Login must be a string." }),
+        expect.objectContaining({ msg: "Password must be a string." }),
+      ]);
+    });
+
+    it("fails with too short data", async () => {
+      const app = createTestServer(signupRules);
+      const res = await request(app).post("/test").send({
+        firstName: "",
+        lastName: "",
+        login: "",
+        password: "",
+      });
+
+      expect(res.statusCode).toBe(400);
+      expect.arrayContaining([
+        expect.objectContaining({ msg: "First name must not be empty." }),
+        expect.objectContaining({ msg: "Last name must not be empty." }),
+        expect.objectContaining({
+          msg: "Login must be at least 5 characters long.",
+        }),
+        expect.objectContaining({
+          msg: "Password must be at least 5 characters long.",
+        }),
+      ]);
+    });
+
+    it("fails with too long data", async () => {
+      const app = createTestServer(signupRules);
+      const res = await request(app)
+        .post("/test")
+        .send({
+          firstName: "a".repeat(51),
+          lastName: "a".repeat(51),
+          login: "a".repeat(51),
+          password: "pass1",
+        });
+
+      expect(res.statusCode).toBe(400);
+      expect.arrayContaining([
+        expect.objectContaining({
+          msg: "Fist name must be at most 50 characters long.",
+        }),
+        expect.objectContaining({
+          msg: "Last name must be at most 50 characters long.",
+        }),
+        expect.objectContaining({
+          msg: "Login must be at least 5 characters long.",
+        }),
+        expect.objectContaining({
+          msg: "Password must be at least 5 characters long.",
+        }),
+      ]);
     });
   });
 });
