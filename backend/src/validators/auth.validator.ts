@@ -5,11 +5,17 @@ export const loginRules = [
     .exists()
     .withMessage("Login must be provided.")
     .bail()
+    .isString()
+    .withMessage("Login has to be a string.")
+    .bail()
     .isLength({ min: 5, max: 50 })
     .withMessage("Login must be between 5 and 50 characters long."),
   body("password")
     .exists()
     .withMessage("Password must be provided.")
+    .bail()
+    .isString()
+    .withMessage("Password has to be a string.")
     .bail()
     .isLength({ min: 5 })
     .withMessage("Password must be at least 5 characters long."),

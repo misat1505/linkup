@@ -26,6 +26,26 @@ describe("Auth validators", () => {
       expect(res.text).toBe("Validation passed");
     });
 
+    it("fails with data of bad types", async () => {
+      const app = createTestServer(loginRules);
+      const res = await request(app).post("/test").send({
+        login: 11111,
+        password: 22222,
+      });
+
+      expect(res.statusCode).toBe(400);
+      expect(res.body.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            msg: "Login has to be a string.",
+          }),
+          expect.objectContaining({
+            msg: "Password has to be a string.",
+          }),
+        ])
+      );
+    });
+
     it("fails with no data", async () => {
       const app = createTestServer(loginRules);
       const res = await request(app).post("/test").send({});
