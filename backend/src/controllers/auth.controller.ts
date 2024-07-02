@@ -5,27 +5,6 @@ import { JwtHandler } from "../lib/JwtHandler";
 import { createFilename } from "../lib/utils/file";
 import { db } from "../lib/DatabaseConnector";
 
-const dummyUsers: User[] = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    login: "login1",
-    password: Hasher.hash("pass1"),
-    photoURL:
-      "https://img.a.transfermarkt.technology/portrait/big/342229-1682683695.jpg?lm=1",
-  },
-  {
-    id: 2,
-    firstName: "Jane",
-    lastName: "Smith",
-    login: "login2",
-    password: Hasher.hash("pass2"),
-    photoURL:
-      "https://img.a.transfermarkt.technology/portrait/big/17121-1672341199.jpg?lm=1",
-  },
-];
-
 export const signupUser = async (req: Request, res: Response) => {
   const { firstName, lastName, login, password } = req.body;
   const file = createFilename(req.file);
@@ -64,19 +43,22 @@ export const signupUser = async (req: Request, res: Response) => {
   return res.status(201).json({ user });
 };
 
-export const loginUser = (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response) => {
   const { login, password } = req.body;
 
   const hashedPassword = Hasher.hash(password);
-  const user = dummyUsers.find(
-    (user) => user.login === login && user.password === hashedPassword
-  );
 
-  if (!user) {
+  const result = await db.executeQuery(
+    "SELECT id FROM Users WHERE login = ? AND password = ?;",
+    [login, hashedPassword]
+  );
+  const userData = result[0];
+
+  if (!userData) {
     return res.status(401).json({ message: "Invalid login or password." });
   }
 
-  const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
+  const jwt = JwtHandler.encode({ userId: userData.id }, { expiresIn: "1h" });
   res.cookie("token", jwt, { httpOnly: true });
   return res.status(200).json({ message: "Successfully logged in." });
 };
@@ -97,13 +79,22 @@ export const logoutUser = (req: Request, res: Response) => {
   res.status(200).json({ message: "Successfully logged out." });
 };
 
-export const getUser = (req: Request, res: Response) => {
+export const getUser = async (req: Request, res: Response) => {
   const userId = req.body.token.userId;
-  const user = dummyUsers.find((usr) => usr.id === userId);
 
-  if (!user) {
+  const result = await db.executeQuery("SELECT * FROM Users WHERE id = ?;", [
+    userId,
+  ]);
+
+  const userData = result[0];
+  console.log(userData);
+
+  if (!userData) {
     return res.status(404).json({ message: "User not found." });
   }
+
+  const { first_name: firstName, last_name: lastName, ...rest } = userData;
+  const user = { firstName, lastName, ...rest } as User;
 
   return res.status(200).json({ user });
 };
