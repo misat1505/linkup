@@ -24,6 +24,28 @@ const dummyUsers: User[] = [
   },
 ];
 
+export const signupUser = (req: Request, res: Response) => {
+  const { firstName, lastName, login, password } = req.body;
+  const file = req.file
+    ? req.file.destination.slice(1) + req.file.filename
+    : null;
+
+  const hashedPassword = Hasher.hash(password);
+
+  const id = dummyUsers.length + 1;
+  const user: User = {
+    id,
+    firstName,
+    lastName,
+    login,
+    password: hashedPassword,
+    photoURL: file,
+  };
+
+  dummyUsers.push(user);
+  res.status(201).json({ user });
+};
+
 export const loginUser = (req: Request, res: Response) => {
   const { login, password } = req.body;
 
