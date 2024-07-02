@@ -3,13 +3,13 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express, { Request, Response } from "express";
 import authRouter from "./routes/auth.router";
-import { PORT } from "./constants";
+import { FRONTEND_URL, PORT } from "./constants";
 
 const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: FRONTEND_URL,
     credentials: true,
   })
 );

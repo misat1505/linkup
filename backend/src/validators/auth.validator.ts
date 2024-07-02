@@ -5,8 +5,8 @@ export const loginRules = [
     .exists()
     .withMessage("Login must be provided.")
     .bail()
-    .isLength({ min: 5 })
-    .withMessage("Login must be at least 5 characters long."),
+    .isLength({ min: 5, max: 50 })
+    .withMessage("Login must be between 5 and 50 characters long."),
   body("password")
     .exists()
     .withMessage("Password must be provided.")
@@ -23,8 +23,8 @@ export const signupRules = [
     .isString()
     .withMessage("First name must be a string.")
     .bail()
-    .notEmpty()
-    .withMessage("First name cannot be empty."),
+    .isLength({ max: 50 })
+    .withMessage("First name must be at most 50 characters long."),
   body("lastName")
     .exists()
     .withMessage("Last name must be provided.")
@@ -32,13 +32,13 @@ export const signupRules = [
     .isString()
     .withMessage("Last name must be a string.")
     .bail()
-    .notEmpty()
-    .withMessage("Last name cannot be empty."),
+    .isLength({ max: 50 })
+    .withMessage("Last name must be at most 50 characters long."),
   body("login")
     .exists()
     .withMessage("Login must be provided.")
     .bail()
-    .isLength({ min: 5 })
+    .isLength({ min: 5, max: 50 })
     .withMessage("Login must be at least 5 characters long."),
   body("password")
     .exists()
