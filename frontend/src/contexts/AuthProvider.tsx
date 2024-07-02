@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../constants";
 
 interface AuthContextProps {
   children: React.ReactNode;
@@ -23,7 +24,7 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
         console.log("Trying to refresh the token...");
 
         const response = await axios.post(
-          `${process.env.REACT_APP_SERVER_URL}/auth/refresh`,
+          `${API_URL}/auth/refresh`,
           {},
           {
             withCredentials: true,
