@@ -5,7 +5,7 @@ export const validate = (validations: ValidationChain[]) => {
   /**
    * Middleware validating request based on provided rules.
    *
-   * Terminates request on failure and errors.
+   * Terminates request on failure and returns errors.
    * Otherwise, calls next function.
    */
 

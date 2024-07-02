@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express, { Request, Response } from "express";
 import authRouter from "./routes/auth.router";
+import { PORT } from "./constants";
 
 const app = express();
 
@@ -15,8 +16,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");
 });
 
-const port = 5500;
-
-app.listen(port, () => {
-  console.log(`Server is running at port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running at port ${PORT}`);
 });

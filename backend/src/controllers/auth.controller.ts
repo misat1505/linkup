@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { Hasher } from "../lib/Hasher";
 import { User } from "../models/User";
 import { JwtHandler } from "../lib/JwtHandler";
-import { validationResult } from "express-validator";
 
 const dummyUsers: User[] = [
   {
@@ -34,13 +33,21 @@ export const loginUser = (req: Request, res: Response) => {
   );
 
   if (!user) {
-    return res.status(401).json({ message: "Invalid login or password" });
+    return res.status(401).json({ message: "Invalid login or password." });
   }
 
-  const jwt = JwtHandler.encode({ userId: user.id });
+  const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
 
   res.cookie("token", jwt, { httpOnly: true });
-  return res.status(200).json({ message: "Successfully logged in" });
+  return res.status(200).json({ message: "Successfully logged in." });
+};
+
+export const refreshToken = (req: Request, res: Response) => {
+  const userId = req.body.token.userId;
+
+  const jwt = JwtHandler.encode({ userId }, { expiresIn: "1h" });
+  res.cookie("token", jwt, { httpOnly: true });
+  return res.status(200).json({ message: "Successfully refreshed token." });
 };
 
 export const logoutUser = (req: Request, res: Response) => {
@@ -48,7 +55,7 @@ export const logoutUser = (req: Request, res: Response) => {
 
   const logoutJwt = JwtHandler.encode(token, { expiresIn: "0" });
   res.cookie("token", logoutJwt, { httpOnly: true });
-  res.status(200).json({ message: "Successfully logged out" });
+  res.status(200).json({ message: "Successfully logged out." });
 };
 
 export const getUser = (req: Request, res: Response) => {
