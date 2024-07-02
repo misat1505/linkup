@@ -29,6 +29,9 @@ export const signupUser = (req: Request, res: Response) => {
   const { firstName, lastName, login, password } = req.body;
   const file = createFilename(req.file);
 
+  if (dummyUsers.find((user) => user.login === login)) {
+    return res.status(409).json({ message: "Login already taken." });
+  }
   const hashedPassword = Hasher.hash(password);
 
   const id = dummyUsers.length + 1;
@@ -42,7 +45,10 @@ export const signupUser = (req: Request, res: Response) => {
   };
 
   dummyUsers.push(user);
-  res.status(201).json({ user });
+
+  const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
+  res.cookie("token", jwt, { httpOnly: true });
+  return res.status(201).json({ user });
 };
 
 export const loginUser = (req: Request, res: Response) => {
@@ -58,7 +64,6 @@ export const loginUser = (req: Request, res: Response) => {
   }
 
   const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
-
   res.cookie("token", jwt, { httpOnly: true });
   return res.status(200).json({ message: "Successfully logged in." });
 };
@@ -83,5 +88,9 @@ export const getUser = (req: Request, res: Response) => {
   const userId = req.body.token.userId;
   const user = dummyUsers.find((usr) => usr.id === userId);
 
-  return res.status(200).json(user);
+  if (!user) {
+    return res.status(404).json({ message: "User not found." });
+  }
+
+  return res.status(200).json({ user });
 };
