@@ -28,7 +28,7 @@ export const signupFormSchema = z
     confirmPassword: z
       .string()
       .min(5, "Password must be at least 5 characters long."),
-    file: z.optional(z.instanceof(File)),
+    file: z.optional(z.instanceof(FileList)),
   })
   .refine((ctx) => ctx.password === ctx.confirmPassword, {
     message: "Passwords don't match",

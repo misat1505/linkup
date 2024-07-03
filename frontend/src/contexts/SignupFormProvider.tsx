@@ -5,6 +5,7 @@ import {
   SubmitHandler,
   UseFormHandleSubmit,
   UseFormRegister,
+  UseFormWatch,
   useForm,
 } from "react-hook-form";
 import {
@@ -26,7 +27,7 @@ type SignupFormEntries = {
   login: string;
   password: string;
   confirmPassword: string;
-  file?: File | undefined;
+  file?: FileList | undefined;
 };
 
 type LoginContextValue = {
@@ -35,6 +36,7 @@ type LoginContextValue = {
   errors: FieldErrors<SignupFormEntries>;
   isSubmitting: boolean;
   onSubmit: SubmitHandler<SignupFormEntries>;
+  watch: UseFormWatch<SignupFormEntries>;
 };
 
 const SignupFormContext = createContext<LoginContextValue>(
@@ -48,6 +50,7 @@ export const SignupFormProvider = ({ children }: SignupFormContextProps) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormType>({
     resolver: zodResolver(signupFormSchema),
@@ -72,6 +75,7 @@ export const SignupFormProvider = ({ children }: SignupFormContextProps) => {
         errors,
         isSubmitting,
         onSubmit,
+        watch,
       }}
     >
       {children}
