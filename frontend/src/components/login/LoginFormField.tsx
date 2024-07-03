@@ -1,18 +1,12 @@
 import React from "react";
-import { LoginFormType } from "../../validators/auth.validators";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { useLoginFormContext } from "../../contexts/LoginFormProvider";
 
 type LoginFormFieldProps = {
   type: "login" | "password";
-  register: UseFormRegister<LoginFormType>;
-  errors: FieldErrors<LoginFormType>;
 };
 
-export default function LoginFormField({
-  errors,
-  register,
-  type,
-}: LoginFormFieldProps) {
+export default function LoginFormField({ type }: LoginFormFieldProps) {
+  const { errors, register } = useLoginFormContext();
   const isPassword = type === "password";
 
   return (
