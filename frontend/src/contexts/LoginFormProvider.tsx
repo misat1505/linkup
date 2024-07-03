@@ -10,6 +10,7 @@ import {
 import { LoginFormType, loginFormSchema } from "../validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginUser } from "../api/authAPI";
+import { toast } from "react-toastify";
 
 type LoginFormContextProps = {
   children: React.ReactNode;
@@ -58,8 +59,8 @@ export const LoginFormProvider = ({ children }: LoginFormContextProps) => {
     try {
       await loginUser(data);
       navigate("/");
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      toast.error(e.response.data.message);
     }
   };
 
