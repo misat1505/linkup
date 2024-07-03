@@ -4,7 +4,7 @@ import React from "react";
 export default function SignupImageFormField() {
   const { errors, register, watch } = useSignupFormContext();
 
-  const fileData = watch().file?.[0];
+  const fileData = watch()?.file?.[0];
   const file = fileData ? URL.createObjectURL(fileData) : null;
 
   return (

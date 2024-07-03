@@ -13,7 +13,7 @@ import {
   signupFormSchema,
 } from "../validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser } from "../api/authAPI";
+import { signupUser } from "../api/authAPI";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 
@@ -58,7 +58,7 @@ export const SignupFormProvider = ({ children }: SignupFormContextProps) => {
 
   const onSubmit: SubmitHandler<SignupFormType> = async (data) => {
     try {
-      // await loginUser(data);
+      await signupUser(data);
       navigate("/");
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
