@@ -1,18 +1,10 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { API_URL } from "../constants";
 import { useNavigate } from "react-router-dom";
-
-export const schema = z.object({
-  login: z
-    .string()
-    .min(5, "Login must be at least 5 characters long.")
-    .max(50, "Login must be at most 50 characters long."),
-  password: z.string().min(5, "Password must be at least 5 characters long."),
-});
+import { LoginFormType, loginFormSchema } from "../validators/auth.validators";
+import { loginUser } from "../api/authAPI";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -20,15 +12,13 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: zodResolver(schema),
+  } = useForm<LoginFormType>({
+    resolver: zodResolver(loginFormSchema),
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, data, {
-        withCredentials: true,
-      });
+      await loginUser(data);
       navigate("/");
     } catch (e) {
       console.error(e);
@@ -40,15 +30,13 @@ export default function Login() {
       <div>
         <label>Login</label>
         <input {...register("login")} />
-        {errors.login && (
-          <p className="text-red-500">{(errors.login as any).message}</p>
-        )}
+        {errors.login && <p className="text-red-500">{errors.login.message}</p>}
       </div>
       <div>
         <label>Password</label>
         <input type="password" {...register("password")} />
         {errors.password && (
-          <p className="text-red-500">{(errors.password as any).message}</p>
+          <p className="text-red-500">{errors.password.message}</p>
         )}
       </div>
       <button
