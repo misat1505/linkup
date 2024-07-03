@@ -7,7 +7,7 @@ export default function LoginForm() {
   const { handleSubmit, onSubmit } = useLoginFormContext();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="">
+    <form onSubmit={handleSubmit(onSubmit)}>
       <LoginFormField type="login" />
       <LoginFormField type="password" />
       <LoginFormSubmitButton />
