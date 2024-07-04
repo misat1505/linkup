@@ -9,13 +9,19 @@ export default function SignupForm() {
 
   return (
     <form onSubmit={submitForm}>
-      <SignupFormField type="firstName" />
-      <SignupFormField type="lastName" />
-      <SignupFormField type="login" />
-      <SignupFormField type="password" />
-      <SignupFormField type="confirmPassword" />
-      <SignupImageFormField />
-      <StyledButton>Sign up</StyledButton>
+      <div className="grid grid-cols-2 gap-x-4">
+        <div>
+          <SignupFormField type="firstName" />
+          <SignupFormField type="lastName" />
+          <SignupFormField type="login" />
+          <SignupFormField type="password" />
+          <SignupFormField type="confirmPassword" />
+        </div>
+        <SignupImageFormField />
+      </div>
+      <div className="flex justify-center mt-4">
+        <StyledButton className="mx-auto">Sign up</StyledButton>
+      </div>
     </form>
   );
 }
