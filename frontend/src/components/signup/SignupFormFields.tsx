@@ -5,7 +5,6 @@ import { SignupFormType } from "../../validators/auth.validators";
 
 export default function SignupFormFields() {
   const { register, errors } = useSignupFormContext();
-  console.log(errors);
 
   const renderFormField = (
     name: keyof SignupFormType,
