@@ -31,6 +31,7 @@ export type useSubmitFormValue = {
   submitForm: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
+  removeFile: () => void;
 };
 
 export default function useSignupForm(): useSubmitFormValue {
@@ -39,6 +40,7 @@ export default function useSignupForm(): useSubmitFormValue {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormType>({
     resolver: zodResolver(signupFormSchema),
@@ -59,11 +61,16 @@ export default function useSignupForm(): useSubmitFormValue {
 
   const file = watch()?.file?.[0] || null;
 
+  const removeFile = () => {
+    setValue("file", undefined);
+  };
+
   return {
     register,
     errors,
     isSubmitting,
     file,
     submitForm,
+    removeFile,
   };
 }

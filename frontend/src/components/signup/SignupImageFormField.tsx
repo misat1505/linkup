@@ -11,6 +11,7 @@ export default function SignupImageFormField() {
       <SignupImageDisplay />
       <Input
         type="file"
+        accept=".jpg, .webp, .png"
         className="hover:cursor-pointer mt-2"
         {...register("file")}
       />

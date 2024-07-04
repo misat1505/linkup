@@ -1,7 +1,6 @@
 import { useSignupFormContext } from "../../contexts/SignupFormProvider";
 import React from "react";
 import SignupFormField from "./SignupFormField";
-import StyledButton from "../common/StyledButton";
 import SignupImageFormField from "./SignupImageFormField";
 import SignupSubmitButton from "./SignupSubmitButton";
 
