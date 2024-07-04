@@ -5,10 +5,10 @@ import StyledButton from "../common/StyledButton";
 import SignupImageFormField from "./SignupImageFormField";
 
 export default function SignupForm() {
-  const { handleSubmit, onSubmit } = useSignupFormContext();
+  const { submitForm } = useSignupFormContext();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={submitForm}>
       <SignupFormField type="firstName" />
       <SignupFormField type="lastName" />
       <SignupFormField type="login" />

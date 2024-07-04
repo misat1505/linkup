@@ -1,83 +1,23 @@
 import React, { createContext, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  FieldErrors,
-  SubmitHandler,
-  UseFormHandleSubmit,
-  UseFormRegister,
-  UseFormWatch,
-  useForm,
-} from "react-hook-form";
-import {
-  SignupFormType,
-  signupFormSchema,
-} from "../validators/auth.validators";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signupUser } from "../api/authAPI";
-import { toast } from "react-toastify";
-import { AxiosError } from "axios";
+import useSignupForm, {
+  useSubmitFormValue,
+} from "../hooks/signup/useSignupForm";
 
 type SignupFormContextProps = {
   children: React.ReactNode;
 };
 
-type SignupFormEntries = {
-  firstName: string;
-  lastName: string;
-  login: string;
-  password: string;
-  confirmPassword: string;
-  file?: FileList | undefined;
-};
+type SignupContextValue = useSubmitFormValue;
 
-type LoginContextValue = {
-  register: UseFormRegister<SignupFormEntries>;
-  handleSubmit: UseFormHandleSubmit<SignupFormEntries, undefined>;
-  errors: FieldErrors<SignupFormEntries>;
-  isSubmitting: boolean;
-  onSubmit: SubmitHandler<SignupFormEntries>;
-  watch: UseFormWatch<SignupFormEntries>;
-};
-
-const SignupFormContext = createContext<LoginContextValue>(
-  {} as LoginContextValue
+const SignupFormContext = createContext<SignupContextValue>(
+  {} as SignupContextValue
 );
 
 export const useSignupFormContext = () => useContext(SignupFormContext);
 
 export const SignupFormProvider = ({ children }: SignupFormContextProps) => {
-  const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors, isSubmitting },
-  } = useForm<SignupFormType>({
-    resolver: zodResolver(signupFormSchema),
-  });
-
-  const onSubmit: SubmitHandler<SignupFormType> = async (data) => {
-    try {
-      await signupUser(data);
-      navigate("/");
-    } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        toast.error(e.response?.data.message);
-      }
-    }
-  };
-
   return (
-    <SignupFormContext.Provider
-      value={{
-        register,
-        handleSubmit,
-        errors,
-        isSubmitting,
-        onSubmit,
-        watch,
-      }}
-    >
+    <SignupFormContext.Provider value={useSignupForm()}>
       {children}
     </SignupFormContext.Provider>
   );

@@ -14,17 +14,8 @@ const LoginFormContext = createContext<LoginContextValue>(
 export const useLoginFormContext = () => useContext(LoginFormContext);
 
 export const LoginFormProvider = ({ children }: LoginFormContextProps) => {
-  const { register, errors, isSubmitting, submitForm } = useLoginForm();
-
   return (
-    <LoginFormContext.Provider
-      value={{
-        register,
-        errors,
-        isSubmitting,
-        submitForm,
-      }}
-    >
+    <LoginFormContext.Provider value={useLoginForm()}>
       {children}
     </LoginFormContext.Provider>
   );
