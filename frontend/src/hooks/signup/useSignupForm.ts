@@ -9,7 +9,6 @@ import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
-  UseFormWatch,
   useForm,
 } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +27,7 @@ export type useSubmitFormValue = {
   register: UseFormRegister<SignupFormEntries>;
   errors: FieldErrors<SignupFormEntries>;
   isSubmitting: boolean;
-  watch: UseFormWatch<SignupFormEntries>;
+  file: File | null;
   submitForm: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
@@ -58,11 +57,13 @@ export default function useSignupForm(): useSubmitFormValue {
 
   const submitForm = handleSubmit(onSubmit);
 
+  const file = watch()?.file?.[0] || null;
+
   return {
     register,
     errors,
     isSubmitting,
-    watch,
+    file,
     submitForm,
   };
 }
