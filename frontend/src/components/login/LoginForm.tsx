@@ -4,10 +4,10 @@ import { useLoginFormContext } from "../../contexts/LoginFormProvider";
 import LoginFormSubmitButton from "./LoginFormSubmitButton";
 
 export default function LoginForm() {
-  const { handleSubmit, onSubmit } = useLoginFormContext();
+  const { submitForm } = useLoginFormContext();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={submitForm}>
       <LoginFormField type="login" />
       <LoginFormField type="password" />
       <LoginFormSubmitButton />
