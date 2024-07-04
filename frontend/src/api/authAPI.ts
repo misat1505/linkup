@@ -32,3 +32,7 @@ export const signupUser = async (data: SignupFormType): Promise<void> => {
     },
   });
 };
+
+export const logoutUser = async (): Promise<any> => {
+  return await AUTH_API.post("/logout");
+};

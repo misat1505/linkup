@@ -64,7 +64,7 @@ export const loginUser = async (req: Request, res: Response) => {
 };
 
 export const refreshToken = (req: Request, res: Response) => {
-  const userId = req.body.token.userId;
+  const { userId } = req.body.token;
 
   const jwt = JwtHandler.encode({ userId }, { expiresIn: "1h" });
   res.cookie("token", jwt, { httpOnly: true });
@@ -72,9 +72,9 @@ export const refreshToken = (req: Request, res: Response) => {
 };
 
 export const logoutUser = (req: Request, res: Response) => {
-  const token = req.body.token;
+  const { userId } = req.body.token;
 
-  const logoutJwt = JwtHandler.encode(token, { expiresIn: "0" });
+  const logoutJwt = JwtHandler.encode({ userId }, { expiresIn: "0" });
   res.cookie("token", logoutJwt, { httpOnly: true });
   res.status(200).json({ message: "Successfully logged out." });
 };
