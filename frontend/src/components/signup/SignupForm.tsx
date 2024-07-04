@@ -3,6 +3,7 @@ import React from "react";
 import SignupFormField from "./SignupFormField";
 import StyledButton from "../common/StyledButton";
 import SignupImageFormField from "./SignupImageFormField";
+import SignupSubmitButton from "./SignupSubmitButton";
 
 export default function SignupForm() {
   const { submitForm } = useSignupFormContext();
@@ -19,9 +20,7 @@ export default function SignupForm() {
         </div>
         <SignupImageFormField />
       </div>
-      <div className="flex justify-center mt-4">
-        <StyledButton className="mx-auto">Sign up</StyledButton>
-      </div>
+      <SignupSubmitButton />
     </form>
   );
 }

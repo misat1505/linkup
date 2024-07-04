@@ -1,3 +1,4 @@
+import AlreadyHaveAccount from "../components/signup/AlreadyHaveAccount";
 import SignupForm from "../components/signup/SignupForm";
 import SignupFormProvider from "../contexts/SignupFormProvider";
 import React from "react";
@@ -8,6 +9,7 @@ export default function Signup() {
       <SignupFormProvider>
         <SignupForm />
       </SignupFormProvider>
+      <AlreadyHaveAccount />
     </div>
   );
 }
