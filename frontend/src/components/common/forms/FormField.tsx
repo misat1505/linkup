@@ -1,7 +1,8 @@
 import React from "react";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
+import FormFieldError from "./FormFieldError";
 
-export type FormFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
+type FormFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
   error?: string | null;
 };
 
@@ -18,7 +19,7 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
           }`}
           {...rest}
         />
-        {error && <p className="text-red-500 text-sm font-semibold">{error}</p>}
+        {error && <FormFieldError message={error} />}
       </div>
     );
   }

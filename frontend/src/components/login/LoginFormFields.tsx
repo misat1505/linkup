@@ -1,5 +1,5 @@
 import React from "react";
-import FormField from "../common/FormField";
+import FormField from "../common/forms/FormField";
 import { LoginFormType } from "../../validators/auth.validators";
 import { useLoginFormContext } from "../../contexts/LoginFormProvider";
 

@@ -1,6 +1,6 @@
 import { useSignupFormContext } from "../../contexts/SignupFormProvider";
 import React from "react";
-import FormField from "../common/FormField";
+import FormField from "../common/forms/FormField";
 import { SignupFormType } from "../../validators/auth.validators";
 
 export default function SignupFormFields() {
