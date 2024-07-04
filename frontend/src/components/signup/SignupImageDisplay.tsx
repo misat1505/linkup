@@ -1,4 +1,4 @@
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, useMemo } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { useSignupFormContext } from "../../contexts/SignupFormProvider";
@@ -6,7 +6,10 @@ import { useSignupFormContext } from "../../contexts/SignupFormProvider";
 export default function SignupImageDisplay() {
   const { file: fileData, removeFile } = useSignupFormContext();
 
-  const file = fileData ? URL.createObjectURL(fileData) : null;
+  const file = useMemo(
+    () => (fileData ? URL.createObjectURL(fileData) : null),
+    [fileData]
+  );
 
   const handleRemoveFile = (e: MouseEvent) => {
     e.preventDefault();
