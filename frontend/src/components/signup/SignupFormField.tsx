@@ -1,5 +1,6 @@
 import { useSignupFormContext } from "../../contexts/SignupFormProvider";
 import React from "react";
+import { Input } from "../ui/input";
 
 type SignupFormFieldProps = {
   type: "firstName" | "lastName" | "login" | "password" | "confirmPassword";
@@ -19,9 +20,11 @@ export default function SignupFormField({ type }: SignupFormFieldProps) {
 
   return (
     <div className="w-full">
-      <input
+      <Input
         className={`w-full bg-transparent p-2 my-2 border-b-2 border-b-slate-400 ${
-          errors[type] ? "outline-red-500" : ""
+          errors[type]
+            ? "focus-visible:ring-red-500 ring-2 ring-offset-2 mt-4 ring-red-500"
+            : ""
         }`}
         placeholder={placeholderTextMap[type]}
         type={isPassword ? "password" : "text"}
