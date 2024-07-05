@@ -4,7 +4,7 @@ import fs from "fs";
 import request from "supertest";
 import { upload } from "../../src/middlewares/multer";
 
-describe("multer", () => {
+describe("multer middleware", () => {
   const app = express();
   app.use(express.json());
   app.post("/test", upload.single("file"), (req, res) => {
