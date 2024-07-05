@@ -9,7 +9,7 @@ import {
 import { authorize } from "../middlewares/authorize";
 import { validate } from "../middlewares/validate";
 import { loginRules, signupRules } from "../validators/auth.validator";
-import { upload } from "../lib/multer";
+import { upload } from "../middlewares/multer";
 
 const authRouter = Router();
 
