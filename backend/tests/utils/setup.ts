@@ -1,6 +1,6 @@
 import { db } from "../../src/lib/DatabaseConnector";
 
-export const setupTests = () => {
+export const testsWithTransactions = () => {
   beforeEach(async () => {
     await db.connection?.beginTransaction();
   });

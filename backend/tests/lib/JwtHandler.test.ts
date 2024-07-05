@@ -1,0 +1,34 @@
+import { JwtHandler, JwtPayload } from "../../src/lib/JwtHandler";
+
+jest.mock("../../src/constants", () => ({
+  JWT_SECRET: "test-secret-key",
+}));
+
+describe("JwtHandler", () => {
+  const payload: JwtPayload = { userId: 1 };
+
+  it("encodes correctly", () => {
+    const encoded = JwtHandler.encode(payload);
+    expect(typeof encoded).toBe("string");
+  });
+
+  describe("decodes correctly", () => {
+    it("without options", () => {
+      const encoded = JwtHandler.encode(payload);
+      const decoded = JwtHandler.decode(encoded);
+      expect(decoded?.userId).toEqual(payload.userId);
+    });
+
+    it("with options", () => {
+      const encoded = JwtHandler.encode(payload, { expiresIn: "1h" });
+      const decoded = JwtHandler.decode(encoded);
+      expect(decoded?.userId).toEqual(payload.userId);
+    });
+
+    it("returns null if not valid", () => {
+      const encoded = JwtHandler.encode(payload, { expiresIn: "0" });
+      const decoded = JwtHandler.decode(encoded);
+      expect(decoded).toBeNull();
+    });
+  });
+});
