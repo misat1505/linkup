@@ -47,10 +47,15 @@ export class DatabaseConnector {
   }
 }
 
+const database =
+  process.env.NODE_ENV === "test"
+    ? process.env.DB_TEST_DATABASE!
+    : process.env.DB_DATABASE!;
+
 export const db = new DatabaseConnector(
   process.env.DB_HOST!,
   process.env.DB_USER!,
   process.env.DB_PASSWORD!,
-  process.env.DB_DATABASE!,
+  database,
   parseInt(process.env.DB_PORT!)
 );
