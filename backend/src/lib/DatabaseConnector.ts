@@ -1,4 +1,7 @@
 import mysql from "mysql2/promise";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const isError = (err: unknown): err is Error => err instanceof Error;
 

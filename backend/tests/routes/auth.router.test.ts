@@ -68,7 +68,7 @@ describe("auth router", () => {
 
   describe("/user", () => {
     it("should get user", async () => {
-      const token = JwtHandler.encode({ userId: 14 });
+      const token = JwtHandler.encode({ userId: 14 }, { expiresIn: "1h" });
 
       const res = await request(app)
         .get("/auth/user")
