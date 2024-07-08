@@ -15,7 +15,7 @@ import { User } from "../../src/models/User";
 jest.mock("../../src/services/UserService");
 jest.mock("../../src/lib/JwtHandler");
 
-describe("User Controller Tests", () => {
+describe("Auth Controllers", () => {
   const app = express();
   app.use(express.json());
   app.post("/signup", signupUser);
