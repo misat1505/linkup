@@ -48,7 +48,7 @@ export class UserService {
     return user ? this.intoUser(user as DatabaseUser) : null;
   }
 
-  static intoUser(databaseUser: DatabaseUser): User {
+  private static intoUser(databaseUser: DatabaseUser): User {
     const {
       first_name: firstName,
       last_name: lastName,
