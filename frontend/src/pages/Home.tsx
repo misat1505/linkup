@@ -37,6 +37,9 @@ export default function Home() {
           {user.firstName} {user.lastName}
         </p>
       </div>
+      <StyledButton onClick={() => navigate("/settings")}>
+        Settings
+      </StyledButton>
       <StyledButton onClick={handleLogout}>logout</StyledButton>
     </div>
   );

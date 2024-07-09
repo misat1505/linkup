@@ -23,15 +23,14 @@ export const useAppContext = () => useContext(AuthContext);
 
 export const AppProvider = ({ children }: AppContextProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const { data, isLoading } = useQuery("user", fetchUser);
+  const { data, isLoading } = useQuery("user", fetchUser, {
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
 
   useEffect(() => {
     setUser(data!);
   }, [data]);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   return (
     <AuthContext.Provider

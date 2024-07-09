@@ -48,7 +48,9 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
         clearInterval(refreshTokenIntervalRef.current);
       }
     };
-  }, [navigate]);
+
+    // no navigate so that it doesnt rerender on switchin between pages
+  }, []);
 
   return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
 };
