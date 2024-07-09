@@ -40,7 +40,7 @@ export default function useLoginForm(): useLoginFormValue {
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     try {
-      await loginUser(data);
+      const user = await loginUser(data);
       navigate("/");
     } catch (e: unknown) {
       if (e instanceof AxiosError) {

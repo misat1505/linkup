@@ -90,7 +90,7 @@ describe("Auth Controllers", () => {
       });
 
       expect(response.status).toBe(200);
-      expect(response.body.message).toBe("Successfully logged in.");
+      expect(response.body.user).toBeDefined();
       expect(response.headers["set-cookie"]).toBeDefined();
     });
 

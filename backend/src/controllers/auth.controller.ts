@@ -45,7 +45,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
   const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
   res.cookie("token", jwt, { httpOnly: true });
-  return res.status(200).json({ message: "Successfully logged in." });
+  return res.status(200).json({ user });
 };
 
 export const refreshToken = (req: Request, res: Response) => {

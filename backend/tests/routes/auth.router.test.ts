@@ -13,7 +13,7 @@ describe("auth router", () => {
         password: "pass1",
       });
       expect(res.statusCode).toEqual(200);
-      expect(res.body.message).toEqual("Successfully logged in.");
+      expect(res.body.user).toBeDefined();
       expect(res.headers["set-cookie"]).toBeDefined();
     });
   });

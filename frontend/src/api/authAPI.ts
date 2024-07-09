@@ -8,8 +8,9 @@ export const fetchUser = async (): Promise<User> => {
   return data.user;
 };
 
-export const loginUser = async (data: LoginFormType): Promise<void> => {
-  await AUTH_API.post("/login", data);
+export const loginUser = async (payload: LoginFormType): Promise<User> => {
+  const { data } = await AUTH_API.post("/login", payload);
+  return data.user;
 };
 
 export const refreshToken = async (): Promise<AxiosResponse<any>> => {
