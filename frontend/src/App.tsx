@@ -4,6 +4,7 @@ import AuthProvider from "./contexts/AuthProvider";
 import Loading from "./components/common/Loading";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AppProvider from "./contexts/AppProvider";
 
 const Home = lazy(() => import("./pages/Home"));
 const Settings = lazy(() => import("./pages/Settings"));
@@ -63,7 +64,7 @@ export default function App() {
   ];
 
   return (
-    <>
+    <AppProvider>
       <Router>
         <Routes>
           {protectedRoutes.map((route, index) => (
@@ -95,6 +96,6 @@ export default function App() {
         pauseOnHover
         theme="colored"
       />
-    </>
+    </AppProvider>
   );
 }

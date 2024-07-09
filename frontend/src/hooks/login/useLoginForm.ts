@@ -1,3 +1,4 @@
+import { useAppContext } from "../../contexts/AppProvider";
 import { loginUser } from "../../api/authAPI";
 import {
   LoginFormType,
@@ -30,6 +31,7 @@ export type useLoginFormValue = {
 
 export default function useLoginForm(): useLoginFormValue {
   const navigate = useNavigate();
+  const { setUser } = useAppContext();
   const {
     register,
     handleSubmit,
@@ -41,6 +43,7 @@ export default function useLoginForm(): useLoginFormValue {
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     try {
       const user = await loginUser(data);
+      setUser(user);
       navigate("/");
     } catch (e: unknown) {
       if (e instanceof AxiosError) {

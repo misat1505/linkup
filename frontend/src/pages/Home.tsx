@@ -1,24 +1,24 @@
 import React, { MouseEvent } from "react";
 import Loading from "../components/common/Loading";
 import { API_URL } from "../constants";
-import { useQuery } from "react-query";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
-import { fetchUser, logoutUser } from "../api/authAPI";
+import { logoutUser } from "../api/authAPI";
 import StyledButton from "../components/common/StyledButton";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../contexts/AppProvider";
 
 export default function Home() {
-  const { data: user, error, isLoading } = useQuery("user", fetchUser);
+  const { user, isLoading, setUser } = useAppContext();
   const navigate = useNavigate();
 
   const handleLogout = async (e: MouseEvent) => {
     e.preventDefault();
     await logoutUser();
+    setUser(null);
     navigate("/login");
   };
 
-  if (isLoading) return <Loading />;
-  if (error || !user) return <div>{JSON.stringify(error)}</div>;
+  if (isLoading || !user) return <Loading />;
 
   return (
     <div className="w-full flex justify-between">
