@@ -8,4 +8,8 @@ export const testsWithTransactions = () => {
   afterEach(async () => {
     await db.connection?.rollback();
   });
+
+  afterAll(async () => {
+    await db.connection?.end();
+  });
 };
