@@ -1,18 +1,15 @@
-import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express, { Request, Response } from "express";
 import authRouter from "./routes/auth.router";
-import { FRONTEND_URL, PORT } from "./constants";
+import { PORT } from "./constants";
+import { limiter } from "./config/rate-limiter";
+import { corsConfig } from "./config/cors";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: FRONTEND_URL,
-    credentials: true,
-  })
-);
+app.use(corsConfig);
+app.use(limiter);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
