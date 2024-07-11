@@ -5,6 +5,8 @@ import authRouter from "./routes/auth.router";
 import { PORT } from "./constants";
 import { limiter } from "./config/rate-limiter";
 import { corsConfig } from "./config/cors";
+import { credentials } from "./config/https";
+import https from "https";
 
 const app = express();
 
@@ -22,7 +24,8 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => {
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
   });
 }

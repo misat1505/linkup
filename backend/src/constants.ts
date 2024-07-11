@@ -8,4 +8,4 @@ export const PORT = process.env.PORT;
 export const JWT_SECRET = process.env.JWT_SECRET!;
 
 // frontend server url
-export const FRONTEND_URL = "http://localhost:3000";
+export const FRONTEND_URL = "https://localhost:3000";

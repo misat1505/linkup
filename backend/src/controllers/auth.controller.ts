@@ -4,6 +4,7 @@ import { User } from "../models/User";
 import { JwtHandler } from "../lib/JwtHandler";
 import { createFilename } from "../lib/utils/file";
 import { UserService } from "../services/UserService";
+import { jwtCookieOptions } from "../config/jwt-ccokie";
 
 export const signupUser = async (req: Request, res: Response) => {
   const { firstName, lastName, login, password } = req.body;
@@ -29,7 +30,7 @@ export const signupUser = async (req: Request, res: Response) => {
 
   const user: User = { id, ...userData };
   const jwt = JwtHandler.encode({ userId: id }, { expiresIn: "1h" });
-  res.cookie("token", jwt, { httpOnly: true });
+  res.cookie("token", jwt, jwtCookieOptions);
   return res.status(201).json({ user });
 };
 
@@ -44,7 +45,7 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 
   const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
-  res.cookie("token", jwt, { httpOnly: true });
+  res.cookie("token", jwt, jwtCookieOptions);
   return res.status(200).json({ user });
 };
 
@@ -52,7 +53,7 @@ export const refreshToken = (req: Request, res: Response) => {
   const { userId } = req.body.token;
 
   const jwt = JwtHandler.encode({ userId }, { expiresIn: "1h" });
-  res.cookie("token", jwt, { httpOnly: true });
+  res.cookie("token", jwt, jwtCookieOptions);
   return res.status(200).json({ message: "Successfully refreshed token." });
 };
 
@@ -60,7 +61,7 @@ export const logoutUser = (req: Request, res: Response) => {
   const { userId } = req.body.token;
 
   const logoutJwt = JwtHandler.encode({ userId }, { expiresIn: "0" });
-  res.cookie("token", logoutJwt, { httpOnly: true });
+  res.cookie("token", logoutJwt, jwtCookieOptions);
   res.status(200).json({ message: "Successfully logged out." });
 };
 
