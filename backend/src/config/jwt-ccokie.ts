@@ -5,4 +5,5 @@ export const jwtCookieOptions: CookieOptions = {
   secure: true,
   sameSite: "none",
   path: "/",
-}
+  maxAge: 60 * 60 * 1000, // 1hr
+};
