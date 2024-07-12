@@ -7,9 +7,11 @@ import { limiter } from "./config/rate-limiter";
 import { corsConfig } from "./config/cors";
 import { credentials } from "./config/https";
 import https from "https";
+import helmet from "helmet";
 
 const app = express();
 
+app.use(helmet());
 app.use(corsConfig);
 app.use(limiter);
 app.use(cookieParser());
