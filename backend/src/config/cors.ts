@@ -1,7 +1,7 @@
-import { FRONTEND_URL } from "../constants";
+import { env } from "./env";
 import cors from "cors";
 
 export const corsConfig = cors({
-  origin: FRONTEND_URL,
+  origin: env.FRONTEND_URL,
   credentials: true,
 });

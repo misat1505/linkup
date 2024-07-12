@@ -1,9 +1,5 @@
 import { JwtHandler, JwtPayload } from "../../src/lib/JwtHandler";
 
-jest.mock("../../src/constants", () => ({
-  JWT_SECRET: "test-secret-key",
-}));
-
 describe("JwtHandler", () => {
   const payload: JwtPayload = { userId: 1 };
 

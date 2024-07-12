@@ -2,7 +2,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express, { Request, Response } from "express";
 import authRouter from "./routes/auth.router";
-import { PORT } from "./constants";
+import { env } from "./config/env";
 import { limiter } from "./config/rate-limiter";
 import { corsConfig } from "./config/cors";
 import { credentials } from "./config/https";
@@ -25,10 +25,10 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");
 });
 
-if (process.env.NODE_ENV !== "test") {
+if (env.NODE_ENV !== "test") {
   const httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
+  httpsServer.listen(env.PORT, () => {
+    console.log(`Server is running on port ${env.PORT}.`);
   });
 }
 

@@ -1,10 +1,10 @@
 import jwt, { SignOptions } from "jsonwebtoken";
-import { JWT_SECRET } from "../constants";
+import { env } from "../config/env";
 
 export type JwtPayload = { userId: number };
 
 export class JwtHandler {
-  private static readonly secret = JWT_SECRET;
+  private static readonly secret = env.JWT_SECRET;
 
   static encode(payload: JwtPayload, options?: SignOptions): string {
     return jwt.sign(payload, this.secret, options);

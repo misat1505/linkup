@@ -1,7 +1,5 @@
 import mysql from "mysql2/promise";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { env } from "../config/env";
 
 const isError = (err: unknown): err is Error => err instanceof Error;
 
@@ -51,14 +49,12 @@ export class DatabaseConnector {
 }
 
 const database =
-  process.env.NODE_ENV === "test"
-    ? process.env.DB_TEST_DATABASE!
-    : process.env.DB_DATABASE!;
+  env.NODE_ENV === "test" ? env.DB_TEST_DATABASE : env.DB_DATABASE;
 
 export const db = new DatabaseConnector(
-  process.env.DB_HOST!,
-  process.env.DB_USER!,
-  process.env.DB_PASSWORD!,
+  env.DB_HOST,
+  env.DB_USER,
+  env.DB_PASSWORD,
   database,
-  parseInt(process.env.DB_PORT!)
+  env.DB_PORT
 );
