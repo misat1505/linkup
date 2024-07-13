@@ -7,19 +7,18 @@ import { limiter } from "./config/rate-limiter";
 import { corsConfig } from "./config/cors";
 import { credentials } from "./config/https";
 import https from "https";
-import helmet from "helmet";
+import fileRouter from "./routes/file.router";
 
 const app = express();
 
-app.use(helmet());
 app.use(corsConfig);
 app.use(limiter);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/static", express.static("static"));
 
 app.use("/auth", authRouter);
+app.use("/files", fileRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");

@@ -25,7 +25,7 @@ export default function Home() {
       <div className="flex items-center gap-x-8 m-4 p-4 bg-slate-200 w-fit rounded-md  ">
         <Avatar className="w-12 h-12">
           <AvatarImage
-            src={`${API_URL}${user.photoURL}`}
+            src={`${API_URL}/files/${user.photoURL}`}
             className="object-cover"
           />
           <AvatarFallback>
