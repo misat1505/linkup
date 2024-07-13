@@ -5,6 +5,6 @@ export const limiter = rateLimit({
   max: 100,
   message: "Too many requests, please try again later.",
   skip: (req, res) => {
-    return req.ip === "127.0.0.1";
+    return req.hostname === "localhost";
   },
 });
