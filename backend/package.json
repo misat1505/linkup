@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production ts-node src/app.ts",
     "dev": "cross-env NODE_ENV=development nodemon src/app.ts",
-    "test": "cross-env NODE_ENV=test npx jest"
+    "test": "cross-env NODE_ENV=test npx jest",
+    "test:coverage": "cross-env NODE_ENV=test npx jest --coverage"
   },
   "keywords": [],
   "author": "",
