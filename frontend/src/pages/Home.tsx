@@ -39,51 +39,31 @@ export default function Home() {
 }
 
 function ProfileAvatar({ user }: { user: User }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await fetch(`${API_URL}/files/${user.photoURL}`, {
-          credentials: "include",
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch image");
-        }
-        const imageData = await response.blob();
-        setAvatarFile(new File([imageData], user.photoURL!));
-      } catch (error) {
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchImage();
-  }, [user.photoURL]);
 
   const initials = `${user.firstName[0].toUpperCase()}${user.lastName[0].toUpperCase()}`;
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsError(true);
+    }, 2000);
+  }, []);
+
   return (
     <Avatar className="w-12 h-12">
-      {isLoading && (
-        <AvatarFallback className="bg-transparent">
+      <AvatarImage
+        src={`${API_URL}/files/${user.photoURL}`}
+        className="object-cover"
+      />
+      <AvatarFallback className="bg-transparent">
+        {isError ? (
+          <div className="font-semibold bg-white w-full h-full flex items-center justify-center">
+            {initials}
+          </div>
+        ) : (
           <Skeleton className="w-full h-full" />
-        </AvatarFallback>
-      )}
-      {isError && (
-        <AvatarFallback className="font-semibold">{initials}</AvatarFallback>
-      )}
-      {avatarFile && (
-        <AvatarImage
-          src={URL.createObjectURL(avatarFile)}
-          className="object-cover"
-          alt={`${user.firstName} ${user.lastName}`}
-          onClick={() => console.log("Image clicked")}
-        />
-      )}
+        )}
+      </AvatarFallback>
     </Avatar>
   );
 }
