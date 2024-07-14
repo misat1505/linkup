@@ -4,7 +4,7 @@ import { User } from "../models/User";
 import { JwtHandler } from "../lib/JwtHandler";
 import { createFilename } from "../lib/utils/file";
 import { UserService } from "../services/UserService";
-import { jwtCookieOptions } from "../config/jwt-ccokie";
+import { jwtCookieOptions } from "../config/jwt-cookie";
 
 export const signupUser = async (req: Request, res: Response) => {
   const { firstName, lastName, login, password } = req.body;

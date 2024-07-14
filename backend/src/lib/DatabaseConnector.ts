@@ -1,8 +1,6 @@
 import mysql from "mysql2/promise";
 import { env } from "../config/env";
 
-const isError = (err: unknown): err is Error => err instanceof Error;
-
 export class DatabaseConnector {
   connectionOptions: mysql.ConnectionOptions;
   connection: mysql.Connection | null;
@@ -29,10 +27,7 @@ export class DatabaseConnector {
       this.connection = await mysql.createConnection(this.connectionOptions);
       console.log("Connected to the database.");
     } catch (err) {
-      if (isError(err))
-        console.log("Failed to connect to the database:", err.message);
-      console.log("Retrying to connect to the database...");
-      setTimeout(() => this.connect(), 1000);
+      console.error("Failed to connect to the database.");
     }
   }
 
