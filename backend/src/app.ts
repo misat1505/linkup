@@ -8,9 +8,11 @@ import { corsConfig } from "./config/cors";
 import { credentials } from "./config/https";
 import https from "https";
 import fileRouter from "./routes/file.router";
+import expressStatusMonitor from "express-status-monitor";
 
 const app = express();
 
+app.use(expressStatusMonitor());
 app.use(corsConfig);
 app.use(limiter);
 app.use(cookieParser());
