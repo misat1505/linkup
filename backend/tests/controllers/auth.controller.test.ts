@@ -9,8 +9,7 @@ import {
 } from "../../src/controllers/auth.controller";
 import { UserService } from "../../src/services/UserService";
 import { JwtHandler } from "../../src/lib/JwtHandler";
-import { Hasher } from "../../src/lib/Hasher";
-import { User } from "../../src/models/User";
+import { FrontendUser, User } from "../../src/models/User";
 import { v4 as uuidv4 } from "uuid";
 
 jest.mock("uuid");
@@ -26,6 +25,18 @@ describe("Auth Controllers", () => {
   app.post("/logout", logoutUser);
   app.get("/user", getUser);
 
+  const intoFrontendUser = (user: User): FrontendUser => {
+    const { login, password, ...rest } = user;
+    const frontendUser: FrontendUser = { ...rest };
+    return frontendUser;
+  };
+
+  beforeAll(() => {
+    (UserService.intoFrontendUser as jest.Mock).mockImplementation(
+      intoFrontendUser
+    );
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -40,7 +51,7 @@ describe("Auth Controllers", () => {
         firstName: "John",
         lastName: "Doe",
         login: "john_doe",
-        password: Hasher.hash("password123"),
+        password: "password123",
         photoURL: null,
       };
 
@@ -55,7 +66,7 @@ describe("Auth Controllers", () => {
       });
 
       expect(response.status).toBe(201);
-      expect(response.body.user).toEqual(mockUser);
+      expect(response.body.user).toEqual(intoFrontendUser(mockUser));
       expect(response.headers["set-cookie"]).toBeDefined();
     });
 
@@ -76,8 +87,10 @@ describe("Auth Controllers", () => {
 
   describe("loginUser", () => {
     it("should log in a user with valid credentials", async () => {
-      const mockUser = {
-        id: 1,
+      const id = uuidv4();
+
+      const mockUser: User = {
+        id,
         firstName: "John",
         lastName: "Doe",
         login: "john_doe",
@@ -94,7 +107,7 @@ describe("Auth Controllers", () => {
       });
 
       expect(response.status).toBe(200);
-      expect(response.body.user).toBeDefined();
+      expect(response.body.user).toEqual(intoFrontendUser(mockUser));
       expect(response.headers["set-cookie"]).toBeDefined();
     });
 
@@ -141,8 +154,10 @@ describe("Auth Controllers", () => {
 
   describe("getUser", () => {
     it("should get a user by id", async () => {
-      const mockUser = {
-        id: 1,
+      const id = uuidv4();
+
+      const mockUser: User = {
+        id,
         firstName: "John",
         lastName: "Doe",
         login: "john_doe",
@@ -154,10 +169,10 @@ describe("Auth Controllers", () => {
 
       const response = await request(app)
         .get("/user")
-        .send({ token: { userId: 1 } });
+        .send({ token: { userId: id } });
 
       expect(response.status).toBe(200);
-      expect(response.body.user).toEqual(mockUser);
+      expect(response.body.user).toEqual(intoFrontendUser(mockUser));
     });
 
     it("should return 404 if user not found", async () => {
