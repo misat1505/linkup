@@ -16,15 +16,13 @@ export class UserService {
     return result[0]["COUNT(*)"] > 0;
   }
 
-  static async insertUser(user: Omit<User, "id">): Promise<number> {
+  static async insertUser(user: User): Promise<void> {
     const { firstName, login, lastName, password, photoURL } = user;
 
-    const result = await db.executeQuery(
+    await db.executeQuery(
       "INSERT INTO Users (login, password, first_name, last_name, photoURL) VALUES (?, ?, ?, ?, ?);",
       [login, password, firstName, lastName, photoURL]
     );
-
-    return result.insertId;
   }
 
   static async loginUser(

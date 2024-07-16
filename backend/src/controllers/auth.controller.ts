@@ -5,6 +5,7 @@ import { JwtHandler } from "../lib/JwtHandler";
 import { createFilename } from "../lib/utils/file";
 import { UserService } from "../services/UserService";
 import { jwtCookieOptions } from "../config/jwt-cookie";
+import { v4 as uuidv4 } from "uuid";
 
 export const signupUser = async (req: Request, res: Response) => {
   const { firstName, lastName, login, password } = req.body;
@@ -18,7 +19,8 @@ export const signupUser = async (req: Request, res: Response) => {
     return res.status(409).json({ message: "Login already taken." });
   }
 
-  const userData: Omit<User, "id"> = {
+  const user: User = {
+    id: uuidv4(),
     firstName,
     lastName,
     login,
@@ -26,10 +28,9 @@ export const signupUser = async (req: Request, res: Response) => {
     photoURL: file,
   };
 
-  const id = await UserService.insertUser(userData);
+  await UserService.insertUser(user);
 
-  const user: User = { id, ...userData };
-  const jwt = JwtHandler.encode({ userId: id }, { expiresIn: "1h" });
+  const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
   res.cookie("token", jwt, jwtCookieOptions);
   return res.status(201).json({ user });
 };

@@ -1,7 +1,8 @@
 import jwt, { SignOptions } from "jsonwebtoken";
 import { env } from "../config/env";
+import { User } from "../models/User";
 
-export type JwtPayload = { userId: number };
+export type JwtPayload = { userId: User["id"] };
 
 export class JwtHandler {
   private static readonly secret = env.JWT_SECRET;
