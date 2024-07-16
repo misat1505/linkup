@@ -3,6 +3,7 @@ import fs from "fs";
 import request from "supertest";
 import app from "../../src/app";
 import { JwtHandler } from "../../src/lib/JwtHandler";
+import { VALID_USER_ID } from "../utils/constants";
 
 const filename = "testfile.txt";
 const testFilePath = path.join(__dirname, "..", "..", "static", filename);
@@ -21,7 +22,7 @@ const deleteTestFile = () => {
 };
 
 describe("file router", () => {
-  const token = JwtHandler.encode({ userId: 1 });
+  const token = JwtHandler.encode({ userId: VALID_USER_ID });
 
   beforeEach(() => {
     createTestFile();

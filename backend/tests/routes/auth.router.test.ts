@@ -2,6 +2,7 @@ import request from "supertest";
 import app from "../../src/app";
 import { testsWithTransactions } from "../utils/setup";
 import { JwtHandler } from "../../src/lib/JwtHandler";
+import { VALID_USER_ID } from "../utils/constants";
 
 describe("auth router", () => {
   testsWithTransactions();
@@ -42,7 +43,7 @@ describe("auth router", () => {
 
   describe("/refresh", () => {
     it("should refresh token", async () => {
-      const token = JwtHandler.encode({ userId: 14 });
+      const token = JwtHandler.encode({ userId: VALID_USER_ID });
 
       const res = await request(app)
         .post("/auth/refresh")
@@ -55,7 +56,7 @@ describe("auth router", () => {
 
   describe("/logout", () => {
     it("should logout user", async () => {
-      const token = JwtHandler.encode({ userId: 14 });
+      const token = JwtHandler.encode({ userId: VALID_USER_ID });
 
       const res = await request(app)
         .post("/auth/logout")
@@ -68,7 +69,10 @@ describe("auth router", () => {
 
   describe("/user", () => {
     it("should get user", async () => {
-      const token = JwtHandler.encode({ userId: 14 }, { expiresIn: "1h" });
+      const token = JwtHandler.encode(
+        { userId: VALID_USER_ID },
+        { expiresIn: "1h" }
+      );
 
       const res = await request(app)
         .get("/auth/user")

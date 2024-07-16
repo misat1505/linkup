@@ -1,7 +1,8 @@
 import { JwtHandler, JwtPayload } from "../../src/lib/JwtHandler";
+import { v4 as uuidv4 } from "uuid";
 
 describe("JwtHandler", () => {
-  const payload: JwtPayload = { userId: 1 };
+  const payload: JwtPayload = { userId: uuidv4() };
 
   it("encodes correctly", () => {
     const encoded = JwtHandler.encode(payload);

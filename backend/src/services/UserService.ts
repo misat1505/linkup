@@ -17,11 +17,11 @@ export class UserService {
   }
 
   static async insertUser(user: User): Promise<void> {
-    const { firstName, login, lastName, password, photoURL } = user;
+    const { id, firstName, login, lastName, password, photoURL } = user;
 
     await db.executeQuery(
-      "INSERT INTO Users (login, password, first_name, last_name, photoURL) VALUES (?, ?, ?, ?, ?);",
-      [login, password, firstName, lastName, photoURL]
+      "INSERT INTO Users (id, login, password, first_name, last_name, photoURL) VALUES (?, ?, ?, ?, ?, ?);",
+      [id, login, password, firstName, lastName, photoURL]
     );
   }
 
@@ -37,7 +37,7 @@ export class UserService {
     return userData ? this.intoUser(userData as DatabaseUser) : null;
   }
 
-  static async getUser(id: number): Promise<User | null> {
+  static async getUser(id: User["id"]): Promise<User | null> {
     const result = await db.executeQuery("SELECT * FROM Users WHERE id = ?;", [
       id,
     ]);

@@ -1,7 +1,9 @@
 import { Hasher } from "../../src/lib/Hasher";
 import { User } from "../../src/models/User";
 import { UserService } from "../../src/services/UserService";
+import { VALID_USER_ID } from "../utils/constants";
 import { testsWithTransactions } from "../utils/setup";
+import { v4 as uuidv4 } from "uuid";
 
 describe("UserService", () => {
   testsWithTransactions();
@@ -20,7 +22,8 @@ describe("UserService", () => {
 
   describe("insertUser", () => {
     it("should insert user", async () => {
-      const user: Omit<User, "id"> = {
+      const user: User = {
+        id: uuidv4(),
         login: "not_taken",
         password: "udgfyudsgfyd",
         firstName: "Melon",
@@ -28,8 +31,8 @@ describe("UserService", () => {
         photoURL: null,
       };
 
-      const id = await UserService.insertUser(user);
-      expect(id).not.toBe(null);
+      await UserService.insertUser(user);
+      expect(true).toBe(true); // check if no error
     });
   });
 
@@ -50,12 +53,12 @@ describe("UserService", () => {
 
   describe("getUser", () => {
     it("should return user if existent", async () => {
-      const user = await UserService.getUser(14);
+      const user = await UserService.getUser(VALID_USER_ID);
       expect(user).not.toBe(null);
     });
 
     it("should return null if not existent", async () => {
-      const user = await UserService.getUser(0);
+      const user = await UserService.getUser("invalid");
       expect(user).toBe(null);
     });
   });

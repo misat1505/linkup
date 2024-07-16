@@ -3,6 +3,7 @@ import request from "supertest";
 import { authorize } from "../../src/middlewares/authorize";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import cookieParser from "cookie-parser";
+import { v4 as uuidv4 } from "uuid";
 
 describe("authorize middleware", () => {
   const app = express();
@@ -13,7 +14,7 @@ describe("authorize middleware", () => {
   });
 
   it("should append token on authorized", async () => {
-    const userId = 1;
+    const userId = uuidv4();
     const token = JwtHandler.encode({ userId });
     const response = await request(app)
       .post("/test")

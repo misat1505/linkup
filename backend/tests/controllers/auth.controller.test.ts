@@ -11,7 +11,9 @@ import { UserService } from "../../src/services/UserService";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { Hasher } from "../../src/lib/Hasher";
 import { User } from "../../src/models/User";
+import { v4 as uuidv4 } from "uuid";
 
+jest.mock("uuid");
 jest.mock("../../src/services/UserService");
 jest.mock("../../src/lib/JwtHandler");
 
@@ -30,8 +32,11 @@ describe("Auth Controllers", () => {
 
   describe("signupUser", () => {
     it("should sign up a new user", async () => {
+      const id = "fixed-uuid";
+      (uuidv4 as jest.Mock).mockReturnValue(id);
+
       const mockUser: User = {
-        id: 1,
+        id,
         firstName: "John",
         lastName: "Doe",
         login: "john_doe",
@@ -40,7 +45,6 @@ describe("Auth Controllers", () => {
       };
 
       (UserService.isLoginTaken as jest.Mock).mockResolvedValue(false);
-      (UserService.insertUser as jest.Mock).mockResolvedValue(1);
       (JwtHandler.encode as jest.Mock).mockReturnValue("fake_jwt_token");
 
       const response = await request(app).post("/signup").send({
