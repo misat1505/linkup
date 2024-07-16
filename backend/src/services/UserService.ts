@@ -1,13 +1,15 @@
 import { db } from "../lib/DatabaseConnector";
-import { FrontendUser, User } from "../models/User";
+import { User, UserWithCredentials } from "../models/User";
 
-type DatabaseUser = Omit<User, "firstName" | "lastName"> & {
-  first_name: User["firstName"];
-  last_name: User["lastName"];
+type DatabaseUser = Omit<UserWithCredentials, "firstName" | "lastName"> & {
+  first_name: UserWithCredentials["firstName"];
+  last_name: UserWithCredentials["lastName"];
 };
 
 export class UserService {
-  static async isLoginTaken(login: User["login"]): Promise<boolean> {
+  static async isLoginTaken(
+    login: UserWithCredentials["login"]
+  ): Promise<boolean> {
     const result = await db.executeQuery(
       "SELECT COUNT(*) FROM Users WHERE login = ?",
       [login]
@@ -16,7 +18,7 @@ export class UserService {
     return result[0]["COUNT(*)"] > 0;
   }
 
-  static async insertUser(user: User): Promise<void> {
+  static async insertUser(user: UserWithCredentials): Promise<void> {
     const { id, firstName, login, lastName, password, photoURL } = user;
 
     await db.executeQuery(
@@ -26,9 +28,9 @@ export class UserService {
   }
 
   static async loginUser(
-    login: User["login"],
-    password: User["password"]
-  ): Promise<User | null> {
+    login: UserWithCredentials["login"],
+    password: UserWithCredentials["password"]
+  ): Promise<UserWithCredentials | null> {
     const result = await db.executeQuery(
       "SELECT * FROM Users WHERE login = ? AND password = ?;",
       [login, password]
@@ -37,7 +39,9 @@ export class UserService {
     return userData ? this.intoUser(userData as DatabaseUser) : null;
   }
 
-  static async getUser(id: User["id"]): Promise<User | null> {
+  static async getUser(
+    id: UserWithCredentials["id"]
+  ): Promise<UserWithCredentials | null> {
     const result = await db.executeQuery("SELECT * FROM Users WHERE id = ?;", [
       id,
     ]);
@@ -46,19 +50,19 @@ export class UserService {
     return user ? this.intoUser(user as DatabaseUser) : null;
   }
 
-  private static intoUser(databaseUser: DatabaseUser): User {
+  private static intoUser(databaseUser: DatabaseUser): UserWithCredentials {
     const {
       first_name: firstName,
       last_name: lastName,
       ...rest
     } = databaseUser;
-    const user = { firstName, lastName, ...rest } as User;
+    const user = { firstName, lastName, ...rest } as UserWithCredentials;
     return user;
   }
 
-  static intoFrontendUser(user: User): FrontendUser {
-    const { login, password, ...rest } = user;
-    const frontendUser: FrontendUser = { ...rest };
-    return frontendUser;
+  static removeCredentials(userWithCredentials: UserWithCredentials): User {
+    const { login, password, ...rest } = userWithCredentials;
+    const user: User = { ...rest };
+    return user;
   }
 }

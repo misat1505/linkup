@@ -1,5 +1,5 @@
 import { Hasher } from "../../src/lib/Hasher";
-import { User } from "../../src/models/User";
+import { UserWithCredentials } from "../../src/models/User";
 import { UserService } from "../../src/services/UserService";
 import { VALID_USER_ID } from "../utils/constants";
 import { testsWithTransactions } from "../utils/setup";
@@ -22,7 +22,7 @@ describe("UserService", () => {
 
   describe("insertUser", () => {
     it("should insert user", async () => {
-      const user: User = {
+      const user: UserWithCredentials = {
         id: uuidv4(),
         login: "not_taken",
         password: "udgfyudsgfyd",

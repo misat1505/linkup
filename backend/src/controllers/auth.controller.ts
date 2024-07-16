@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Hasher } from "../lib/Hasher";
-import { User } from "../models/User";
+import { UserWithCredentials } from "../models/User";
 import { JwtHandler } from "../lib/JwtHandler";
 import { createFilename } from "../lib/utils/file";
 import { UserService } from "../services/UserService";
@@ -19,7 +19,7 @@ export const signupUser = async (req: Request, res: Response) => {
     return res.status(409).json({ message: "Login already taken." });
   }
 
-  const user: User = {
+  const user: UserWithCredentials = {
     id: uuidv4(),
     firstName,
     lastName,
@@ -32,7 +32,7 @@ export const signupUser = async (req: Request, res: Response) => {
 
   const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
   res.cookie("token", jwt, jwtCookieOptions);
-  return res.status(201).json({ user: UserService.intoFrontendUser(user) });
+  return res.status(201).json({ user: UserService.removeCredentials(user) });
 };
 
 export const loginUser = async (req: Request, res: Response) => {
@@ -47,7 +47,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
   const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
   res.cookie("token", jwt, jwtCookieOptions);
-  return res.status(200).json({ user: UserService.intoFrontendUser(user) });
+  return res.status(200).json({ user: UserService.removeCredentials(user) });
 };
 
 export const refreshToken = (req: Request, res: Response) => {
@@ -75,5 +75,5 @@ export const getUser = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "User not found." });
   }
 
-  return res.status(200).json({ user: UserService.intoFrontendUser(user) });
+  return res.status(200).json({ user: UserService.removeCredentials(user) });
 };
