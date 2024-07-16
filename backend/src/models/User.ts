@@ -6,3 +6,5 @@ export type User = {
   password: string;
   photoURL: string | null;
 };
+
+export type FrontendUser = Omit<User, "login" | "password">;

@@ -1,5 +1,5 @@
 import { db } from "../lib/DatabaseConnector";
-import { User } from "../models/User";
+import { FrontendUser, User } from "../models/User";
 
 type DatabaseUser = Omit<User, "firstName" | "lastName"> & {
   first_name: User["firstName"];
@@ -54,5 +54,11 @@ export class UserService {
     } = databaseUser;
     const user = { firstName, lastName, ...rest } as User;
     return user;
+  }
+
+  static intoFrontendUser(user: User): FrontendUser {
+    const { login, password, ...rest } = user;
+    const frontendUser: FrontendUser = { ...rest };
+    return frontendUser;
   }
 }

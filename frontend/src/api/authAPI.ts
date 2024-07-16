@@ -17,7 +17,7 @@ export const refreshToken = async (): Promise<AxiosResponse<any>> => {
   return await AUTH_API.post("/refresh");
 };
 
-export const signupUser = async (data: SignupFormType): Promise<void> => {
+export const signupUser = async (data: SignupFormType): Promise<User> => {
   const formData = new FormData();
   formData.append("login", data.login);
   formData.append("password", data.password);
@@ -27,11 +27,13 @@ export const signupUser = async (data: SignupFormType): Promise<void> => {
     formData.append("file", data.file?.[0]);
   }
 
-  await AUTH_API.post("/signup", formData, {
+  const response = await AUTH_API.post("/signup", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
+
+  return response.data.user as User;
 };
 
 export const logoutUser = async (): Promise<any> => {

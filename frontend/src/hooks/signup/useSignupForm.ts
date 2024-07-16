@@ -1,3 +1,4 @@
+import { useAppContext } from "../../contexts/AppProvider";
 import { signupUser } from "../../api/authAPI";
 import {
   SignupFormType,
@@ -36,6 +37,7 @@ export type useSubmitFormValue = {
 
 export default function useSignupForm(): useSubmitFormValue {
   const navigate = useNavigate();
+  const { setUser } = useAppContext();
   const {
     register,
     handleSubmit,
@@ -48,7 +50,8 @@ export default function useSignupForm(): useSubmitFormValue {
 
   const onSubmit: SubmitHandler<SignupFormType> = async (data) => {
     try {
-      await signupUser(data);
+      const user = await signupUser(data);
+      setUser(user);
       navigate("/");
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
