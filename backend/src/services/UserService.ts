@@ -63,6 +63,13 @@ export class UserService {
     return user ? this.intoUser(user as DatabaseUser) : null;
   }
 
+  static async updateLastActive(id: User["id"]): Promise<void> {
+    await db.executeQuery("UPDATE Users SET last_active = ? WHERE id = ?;", [
+      new Date().toISOString(),
+      id,
+    ]);
+  }
+
   private static intoUser(databaseUser: DatabaseUser): UserWithCredentials {
     const {
       first_name: firstName,
