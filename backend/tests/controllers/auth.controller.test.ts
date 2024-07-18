@@ -55,6 +55,7 @@ describe("Auth Controllers", () => {
         login: "john_doe",
         password: "password123",
         photoURL: null,
+        lastActive: new Date(),
       };
 
       (UserService.isLoginTaken as jest.Mock).mockResolvedValue(false);
@@ -67,8 +68,22 @@ describe("Auth Controllers", () => {
         password: "password123",
       });
 
+      response.body.user.lastActive = new Date(response.body.user.lastActive);
+
+      const dateDiff = Math.abs(
+        response.body.user.lastActive.getTime() - mockUser.lastActive.getTime()
+      );
+      expect(dateDiff).toBeLessThan(1000);
+
+      const responseUserWithoutLastActive = { ...response.body.user };
+      const mockUserWithoutLastActive = { ...mockUser };
+      delete responseUserWithoutLastActive.lastActive;
+      delete (mockUserWithoutLastActive as any).lastActive;
+
       expect(response.status).toBe(201);
-      expect(response.body.user).toEqual(removeCredentials(mockUser));
+      expect(responseUserWithoutLastActive).toEqual(
+        removeCredentials(mockUserWithoutLastActive)
+      );
       expect(response.headers["set-cookie"]).toBeDefined();
     });
 
@@ -98,6 +113,7 @@ describe("Auth Controllers", () => {
         login: "john_doe",
         password: "hashed_password",
         photoURL: "file.jpg",
+        lastActive: new Date(),
       };
 
       (UserService.loginUser as jest.Mock).mockResolvedValue(mockUser);
@@ -108,8 +124,22 @@ describe("Auth Controllers", () => {
         password: "password123",
       });
 
+      response.body.user.lastActive = new Date(response.body.user.lastActive);
+
+      const dateDiff = Math.abs(
+        response.body.user.lastActive.getTime() - mockUser.lastActive.getTime()
+      );
+      expect(dateDiff).toBeLessThan(1000);
+
+      const responseUserWithoutLastActive = { ...response.body.user };
+      const mockUserWithoutLastActive = { ...mockUser };
+      delete responseUserWithoutLastActive.lastActive;
+      delete (mockUserWithoutLastActive as any).lastActive;
+
       expect(response.status).toBe(200);
-      expect(response.body.user).toEqual(removeCredentials(mockUser));
+      expect(responseUserWithoutLastActive).toEqual(
+        removeCredentials(mockUserWithoutLastActive)
+      );
       expect(response.headers["set-cookie"]).toBeDefined();
     });
 
@@ -165,6 +195,7 @@ describe("Auth Controllers", () => {
         login: "john_doe",
         password: "hashed_password",
         photoURL: "file.jpg",
+        lastActive: new Date(),
       };
 
       (UserService.getUser as jest.Mock).mockResolvedValue(mockUser);
@@ -173,8 +204,22 @@ describe("Auth Controllers", () => {
         .get("/user")
         .send({ token: { userId: id } });
 
+      response.body.user.lastActive = new Date(response.body.user.lastActive);
+
+      const dateDiff = Math.abs(
+        response.body.user.lastActive.getTime() - mockUser.lastActive.getTime()
+      );
+      expect(dateDiff).toBeLessThan(1000);
+
+      const responseUserWithoutLastActive = { ...response.body.user };
+      const mockUserWithoutLastActive = { ...mockUser };
+      delete responseUserWithoutLastActive.lastActive;
+      delete (mockUserWithoutLastActive as any).lastActive;
+
       expect(response.status).toBe(200);
-      expect(response.body.user).toEqual(removeCredentials(mockUser));
+      expect(responseUserWithoutLastActive).toEqual(
+        removeCredentials(mockUserWithoutLastActive)
+      );
     });
 
     it("should return 404 if user not found", async () => {

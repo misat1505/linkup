@@ -29,6 +29,7 @@ describe("UserService", () => {
         firstName: "Melon",
         lastName: "Musg",
         photoURL: null,
+        lastActive: new Date(),
       };
 
       await UserService.insertUser(user);

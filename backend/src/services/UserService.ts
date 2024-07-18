@@ -1,7 +1,10 @@
 import { db } from "../lib/DatabaseConnector";
 import { User, UserWithCredentials } from "../models/User";
 
-type DatabaseUser = Omit<UserWithCredentials, "firstName" | "lastName"> & {
+type DatabaseUser = Omit<
+  UserWithCredentials,
+  "firstName" | "lastName" | "lastActive"
+> & {
   first_name: UserWithCredentials["firstName"];
   last_name: UserWithCredentials["lastName"];
   last_active: User["lastActive"];
@@ -64,14 +67,14 @@ export class UserService {
     const {
       first_name: firstName,
       last_name: lastName,
-      last_active: lastActive,
+      last_active,
       ...rest
     } = databaseUser;
 
     const user = {
       firstName,
       lastName,
-      last_active: new Date(lastActive),
+      lastActive: new Date(last_active),
       ...rest,
     } as UserWithCredentials;
 

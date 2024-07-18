@@ -4,13 +4,19 @@ import { AUTH_API } from "./utils";
 import { AxiosResponse } from "axios";
 
 export const fetchUser = async (): Promise<User> => {
-  const { data } = await AUTH_API.get("/user");
-  return data.user;
+  const {
+    data: { user },
+  } = await AUTH_API.get("/user");
+  user.lastActive = new Date(user.lastActive);
+  return user as User;
 };
 
 export const loginUser = async (payload: LoginFormType): Promise<User> => {
-  const { data } = await AUTH_API.post("/login", payload);
-  return data.user;
+  const {
+    data: { user },
+  } = await AUTH_API.post("/login", payload);
+  user.lastActive = new Date(user.lastActive);
+  return user as User;
 };
 
 export const refreshToken = async (): Promise<AxiosResponse<any>> => {
@@ -27,13 +33,16 @@ export const signupUser = async (data: SignupFormType): Promise<User> => {
     formData.append("file", data.file?.[0]);
   }
 
-  const response = await AUTH_API.post("/signup", formData, {
+  const {
+    data: { user },
+  } = await AUTH_API.post("/signup", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
 
-  return response.data.user as User;
+  user.lastActive = new Date(user.lastActive);
+  return user as User;
 };
 
 export const logoutUser = async (): Promise<any> => {
