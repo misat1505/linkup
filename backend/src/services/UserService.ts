@@ -4,6 +4,7 @@ import { User, UserWithCredentials } from "../models/User";
 type DatabaseUser = Omit<UserWithCredentials, "firstName" | "lastName"> & {
   first_name: UserWithCredentials["firstName"];
   last_name: UserWithCredentials["lastName"];
+  last_active: User["lastActive"];
 };
 
 export class UserService {
@@ -19,11 +20,20 @@ export class UserService {
   }
 
   static async insertUser(user: UserWithCredentials): Promise<void> {
-    const { id, firstName, login, lastName, password, photoURL } = user;
+    const { id, firstName, login, lastName, password, photoURL, lastActive } =
+      user;
 
     await db.executeQuery(
-      "INSERT INTO Users (id, login, password, first_name, last_name, photoURL) VALUES (?, ?, ?, ?, ?, ?);",
-      [id, login, password, firstName, lastName, photoURL]
+      "INSERT INTO Users (id, login, password, first_name, last_name, photoURL, last_active) VALUES (?, ?, ?, ?, ?, ?, ?);",
+      [
+        id,
+        login,
+        password,
+        firstName,
+        lastName,
+        photoURL,
+        lastActive.toISOString(),
+      ]
     );
   }
 
@@ -54,9 +64,17 @@ export class UserService {
     const {
       first_name: firstName,
       last_name: lastName,
+      last_active: lastActive,
       ...rest
     } = databaseUser;
-    const user = { firstName, lastName, ...rest } as UserWithCredentials;
+
+    const user = {
+      firstName,
+      lastName,
+      last_active: new Date(lastActive),
+      ...rest,
+    } as UserWithCredentials;
+
     return user;
   }
 

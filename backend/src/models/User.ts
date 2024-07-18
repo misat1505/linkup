@@ -3,6 +3,7 @@ export type User = {
   firstName: string;
   lastName: string;
   photoURL: string | null;
+  lastActive: Date;
 };
 
 export type UserWithCredentials = User & {

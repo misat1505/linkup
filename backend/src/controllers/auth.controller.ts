@@ -26,6 +26,7 @@ export const signupUser = async (req: Request, res: Response) => {
     login,
     password: hashedPassword,
     photoURL: file,
+    lastActive: new Date(),
   };
 
   await UserService.insertUser(user);
