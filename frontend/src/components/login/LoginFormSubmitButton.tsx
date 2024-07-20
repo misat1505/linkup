@@ -7,10 +7,10 @@ export default function LoginFormSubmitButton() {
   const { isSubmitting } = useLoginFormContext();
 
   return (
-    <div className="flex justify-center mt-4">
+    <div className="mt-4 flex justify-center">
       <StyledButton type="submit" disabled={isSubmitting}>
         {isSubmitting ? (
-          <div className="flex gap-x-2 items-center">
+          <div className="flex items-center gap-x-2">
             <ClipLoader size={12} color="whitesmoke" />
             <p>Signing in...</p>
           </div>

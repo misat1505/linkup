@@ -12,9 +12,9 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
       <div className="w-full">
         <Input
           ref={ref}
-          className={`w-full bg-transparent p-2 my-2 border-b-2 border-b-slate-400 ${
+          className={`my-2 w-full border-b-2 border-b-slate-400 bg-transparent p-2 ${
             error
-              ? "focus-visible:ring-red-500 ring-2 ring-offset-2 mt-4 ring-red-500"
+              ? "mt-4 ring-2 ring-red-500 ring-offset-2 focus-visible:ring-red-500"
               : ""
           }`}
           {...rest}

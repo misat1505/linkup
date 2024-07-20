@@ -4,7 +4,7 @@ import { LOGO_PATH } from "../../constants";
 
 export default function LoginPageLogo() {
   return (
-    <Avatar className="w-64 h-64 mx-auto mb-4">
+    <Avatar className="mx-auto mb-4 h-64 w-64">
       <AvatarImage className="object-cover" src={LOGO_PATH} />
       <AvatarFallback>Logo</AvatarFallback>
     </Avatar>

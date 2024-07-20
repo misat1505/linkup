@@ -3,7 +3,7 @@ import React, {
   PropsWithChildren,
   useContext,
   useEffect,
-  useState,
+  useState
 } from "react";
 import { fetchUser } from "../api/authAPI";
 import { User } from "../models/User";
@@ -34,7 +34,7 @@ export const AppProvider = ({ children }: AppContextProps) => {
       value={{
         user,
         setUser,
-        isLoading,
+        isLoading
       }}
     >
       {children}

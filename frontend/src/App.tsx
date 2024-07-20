@@ -14,7 +14,7 @@ const Signup = lazy(() => import("./pages/Signup"));
 
 export default function App() {
   const SuspenseWrapper = ({
-    lazyComponent,
+    lazyComponent
   }: {
     lazyComponent: React.LazyExoticComponent<() => JSX.Element>;
   }) => {
@@ -40,27 +40,27 @@ export default function App() {
   const protectedRoutes = [
     {
       path: "/",
-      component: Home,
+      component: Home
     },
     {
       path: "/settings",
-      component: Settings,
-    },
+      component: Settings
+    }
   ];
 
   const routes = [
     {
       path: "/login",
-      component: Login,
+      component: Login
     },
     {
       path: "/signup",
-      component: Signup,
+      component: Signup
     },
     {
       path: "*",
-      component: NotFound,
-    },
+      component: NotFound
+    }
   ];
 
   return (

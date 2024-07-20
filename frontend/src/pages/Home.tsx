@@ -23,10 +23,10 @@ export default function Home() {
   if (isLoading || !user) return <Loading />;
 
   return (
-    <div className="w-full flex justify-between">
-      <div className="flex items-center gap-x-8 m-4 p-4 bg-slate-200 w-fit rounded-md  ">
+    <div className="flex w-full justify-between">
+      <div className="m-4 flex w-fit items-center gap-x-8 rounded-md bg-slate-200 p-4">
         <ProfileAvatar user={user} />
-        <p className="font-semibold text-lg">
+        <p className="text-lg font-semibold">
           {user.firstName} {user.lastName}
         </p>
       </div>
@@ -50,18 +50,18 @@ function ProfileAvatar({ user }: { user: User }) {
   }, []);
 
   return (
-    <Avatar className="w-12 h-12">
+    <Avatar className="h-12 w-12">
       <AvatarImage
         src={`${API_URL}/files/${user.photoURL}`}
         className="object-cover"
       />
       <AvatarFallback className="bg-transparent">
         {isError ? (
-          <div className="font-semibold bg-white w-full h-full flex items-center justify-center">
+          <div className="flex h-full w-full items-center justify-center bg-white font-semibold">
             {initials}
           </div>
         ) : (
-          <Skeleton className="w-full h-full" />
+          <Skeleton className="h-full w-full" />
         )}
       </AvatarFallback>
     </Avatar>

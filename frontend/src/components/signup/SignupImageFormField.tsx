@@ -7,16 +7,16 @@ export default function SignupImageFormField() {
   const { errors, register } = useSignupFormContext();
 
   return (
-    <div className="w-full flex flex-col justify-center">
+    <div className="flex w-full flex-col justify-center">
       <SignupImageDisplay />
       <Input
         type="file"
         accept=".jpg, .webp, .png"
-        className="hover:cursor-pointer mt-2"
+        className="mt-2 hover:cursor-pointer"
         {...register("file")}
       />
       {errors.file && (
-        <p className="text-red-500 text-sm font-semibold">
+        <p className="text-sm font-semibold text-red-500">
           {errors.file.message}
         </p>
       )}

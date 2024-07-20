@@ -5,7 +5,7 @@ import React from "react";
 
 export default function Signup() {
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-200 rounded-lg p-4">
+    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-slate-200 p-4">
       <SignupFormProvider>
         <SignupForm />
       </SignupFormProvider>

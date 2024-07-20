@@ -7,10 +7,10 @@ export default function SignupSubmitButton() {
   const { isSubmitting } = useSignupFormContext();
 
   return (
-    <div className="flex justify-center mt-8">
+    <div className="mt-8 flex justify-center">
       <StyledButton type="submit" disabled={isSubmitting}>
         {isSubmitting ? (
-          <div className="flex gap-x-2 items-center">
+          <div className="flex items-center gap-x-2">
             <ClipLoader size={12} color="whitesmoke" />
             <p>Signing up...</p>
           </div>
