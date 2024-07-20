@@ -11,8 +11,10 @@ import { UserService } from "../../src/services/UserService";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { User, UserWithCredentials } from "../../src/models/User";
 import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcryptjs";
 
 jest.mock("uuid");
+jest.mock("bcryptjs");
 jest.mock("../../src/services/UserService");
 jest.mock("../../src/lib/JwtHandler");
 
@@ -46,7 +48,9 @@ describe("Auth Controllers", () => {
   describe("signupUser", () => {
     it("should sign up a new user", async () => {
       const id = "fixed-uuid";
+      const salt = "salt";
       (uuidv4 as jest.Mock).mockReturnValue(id);
+      (bcrypt.genSalt as jest.Mock).mockResolvedValue(salt);
 
       const mockUser: UserWithCredentials = {
         id,
@@ -55,6 +59,7 @@ describe("Auth Controllers", () => {
         login: "john_doe",
         password: "password123",
         photoURL: null,
+        salt,
         lastActive: new Date(),
       };
 
@@ -105,23 +110,26 @@ describe("Auth Controllers", () => {
   describe("loginUser", () => {
     it("should log in a user with valid credentials", async () => {
       const id = uuidv4();
+      const salt = "salt";
 
       const mockUser: UserWithCredentials = {
         id,
         firstName: "John",
         lastName: "Doe",
         login: "john_doe",
-        password: "hashed_password",
+        password:
+          "7a37b85c8918eac19a9089c0fa5a2ab4dce3f90528dcdeec108b23ddf3607b99",
+        salt,
         photoURL: "file.jpg",
         lastActive: new Date(),
       };
 
-      (UserService.loginUser as jest.Mock).mockResolvedValue(mockUser);
+      (UserService.getUserByLogin as jest.Mock).mockResolvedValue(mockUser);
       (JwtHandler.encode as jest.Mock).mockReturnValue("fake_jwt_token");
 
       const response = await request(app).post("/login").send({
         login: "john_doe",
-        password: "password123",
+        password: "password",
       });
 
       response.body.user.lastActive = new Date(response.body.user.lastActive);
@@ -143,8 +151,8 @@ describe("Auth Controllers", () => {
       expect(response.headers["set-cookie"]).toBeDefined();
     });
 
-    it("should not log in a user with invalid credentials", async () => {
-      (UserService.loginUser as jest.Mock).mockResolvedValue(null);
+    it("should not log in a user with invalid login", async () => {
+      (UserService.getUserByLogin as jest.Mock).mockResolvedValue(null);
 
       const response = await request(app).post("/login").send({
         login: "john_doe",
@@ -152,7 +160,30 @@ describe("Auth Controllers", () => {
       });
 
       expect(response.status).toBe(401);
-      expect(response.body.message).toBe("Invalid login or password.");
+      expect(response.body.message).toBe("Invalid login.");
+    });
+
+    it("should not log in a user with invalid password", async () => {
+      const mockUser: UserWithCredentials = {
+        id: uuidv4(),
+        firstName: "John",
+        lastName: "Doe",
+        login: "login1",
+        password:
+          "7a37b85c8918eac19a9089c0fa5a2ab4dce3f90528dcdeec108b23ddf3607b99",
+        salt: "salt",
+        photoURL: "file.jpg",
+        lastActive: new Date(),
+      };
+      (UserService.getUserByLogin as jest.Mock).mockResolvedValue(mockUser);
+
+      const response = await request(app).post("/login").send({
+        login: "login1",
+        password: "wrong_password",
+      });
+
+      expect(response.status).toBe(401);
+      expect(response.body.message).toBe("Invalid password.");
     });
   });
 
@@ -187,6 +218,7 @@ describe("Auth Controllers", () => {
   describe("getUser", () => {
     it("should get a user by id", async () => {
       const id = uuidv4();
+      const salt = "salt";
 
       const mockUser: UserWithCredentials = {
         id,
@@ -194,6 +226,7 @@ describe("Auth Controllers", () => {
         lastName: "Doe",
         login: "john_doe",
         password: "hashed_password",
+        salt,
         photoURL: "file.jpg",
         lastActive: new Date(),
       };

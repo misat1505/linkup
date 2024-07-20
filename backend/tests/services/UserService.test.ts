@@ -4,6 +4,7 @@ import { UserService } from "../../src/services/UserService";
 import { VALID_USER_ID } from "../utils/constants";
 import { testsWithTransactions } from "../utils/setup";
 import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcryptjs";
 
 describe("UserService", () => {
   testsWithTransactions();
@@ -28,6 +29,7 @@ describe("UserService", () => {
         password: "udgfyudsgfyd",
         firstName: "Melon",
         lastName: "Musg",
+        salt: await bcrypt.genSalt(10),
         photoURL: null,
         lastActive: new Date(),
       };
@@ -37,17 +39,14 @@ describe("UserService", () => {
     });
   });
 
-  describe("loginUser", () => {
+  describe("getUserByLogin", () => {
     it("should return user if existent", async () => {
-      const user = await UserService.loginUser("login1", Hasher.hash("pass1"));
+      const user = await UserService.getUserByLogin("login1");
       expect(user).not.toBe(null);
     });
 
     it("should return null if not existent", async () => {
-      const user = await UserService.loginUser(
-        "not_existent",
-        Hasher.hash("pass1")
-      );
+      const user = await UserService.getUserByLogin("not_existent");
       expect(user).toBe(null);
     });
   });
