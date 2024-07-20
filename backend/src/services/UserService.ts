@@ -23,11 +23,19 @@ export class UserService {
   }
 
   static async insertUser(user: UserWithCredentials): Promise<void> {
-    const { id, firstName, login, lastName, password, photoURL, lastActive } =
-      user;
+    const {
+      id,
+      firstName,
+      login,
+      lastName,
+      password,
+      photoURL,
+      lastActive,
+      salt,
+    } = user;
 
     await db.executeQuery(
-      "INSERT INTO Users (id, login, password, first_name, last_name, photoURL, last_active) VALUES (?, ?, ?, ?, ?, ?, ?);",
+      "INSERT INTO Users (id, login, password, first_name, last_name, photoURL, last_active, salt) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
       [
         id,
         login,
@@ -36,20 +44,20 @@ export class UserService {
         lastName,
         photoURL,
         lastActive.toISOString(),
+        salt,
       ]
     );
   }
 
-  static async loginUser(
-    login: UserWithCredentials["login"],
-    password: UserWithCredentials["password"]
+  static async getUserByLogin(
+    login: UserWithCredentials["login"]
   ): Promise<UserWithCredentials | null> {
     const result = await db.executeQuery(
-      "SELECT * FROM Users WHERE login = ? AND password = ?;",
-      [login, password]
+      "SELECT * FROM Users WHERE login = ?;",
+      [login]
     );
-    const userData = result[0];
-    return userData ? this.intoUser(userData as DatabaseUser) : null;
+    const user = result[0];
+    return user ? this.intoUser(user as DatabaseUser) : null;
   }
 
   static async getUser(
@@ -89,7 +97,7 @@ export class UserService {
   }
 
   static removeCredentials(userWithCredentials: UserWithCredentials): User {
-    const { login, password, ...rest } = userWithCredentials;
+    const { login, password, salt, ...rest } = userWithCredentials;
     const user: User = { ...rest };
     return user;
   }

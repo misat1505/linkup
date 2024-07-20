@@ -9,4 +9,5 @@ export type User = {
 export type UserWithCredentials = User & {
   login: string;
   password: string;
+  salt: string;
 };

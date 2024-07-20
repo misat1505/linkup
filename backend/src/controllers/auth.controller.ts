@@ -6,12 +6,14 @@ import { createFilename } from "../lib/utils/file";
 import { UserService } from "../services/UserService";
 import { jwtCookieOptions } from "../config/jwt-cookie";
 import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcryptjs";
 
 export const signupUser = async (req: Request, res: Response) => {
   const { firstName, lastName, login, password } = req.body;
   const file = createFilename(req.file);
 
-  const hashedPassword = Hasher.hash(password);
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = Hasher.hash(password + salt);
 
   const isLoginTaken = await UserService.isLoginTaken(login);
 
@@ -25,6 +27,7 @@ export const signupUser = async (req: Request, res: Response) => {
     lastName,
     login,
     password: hashedPassword,
+    salt,
     photoURL: file,
     lastActive: new Date(),
   };
@@ -38,12 +41,16 @@ export const signupUser = async (req: Request, res: Response) => {
 
 export const loginUser = async (req: Request, res: Response) => {
   const { login, password } = req.body;
-  const hashedPassword = Hasher.hash(password);
 
-  const user = await UserService.loginUser(login, hashedPassword);
+  const user = await UserService.getUserByLogin(login);
 
   if (!user) {
-    return res.status(401).json({ message: "Invalid login or password." });
+    return res.status(401).json({ message: "Invalid login." });
+  }
+
+  const hashedPassword = Hasher.hash(password + user.salt);
+  if (hashedPassword !== user.password) {
+    return res.status(401).json({ message: "Invalid password." });
   }
 
   const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
