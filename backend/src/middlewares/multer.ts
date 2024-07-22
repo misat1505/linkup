@@ -2,17 +2,16 @@ import fs from "fs";
 import path from "path";
 import multer from "multer";
 import { v4 as uuidv4 } from "uuid";
-import { Request } from "express";
 
 const storage = multer.diskStorage({
-  destination: (req: Request, file: Express.Multer.File, cb: any) => {
-    const destinationPath = "./static/";
+  destination: (req, file, cb) => {
+    const destinationPath = path.join(__dirname, "..", "..", "static");
     fs.mkdirSync(destinationPath, { recursive: true });
     cb(null, destinationPath);
   },
-  filename: (req: Request, file: Express.Multer.File, cb: any) => {
+  filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    cb(null, uuidv4() + `.${ext}`);
+    cb(null, `${uuidv4()}.${ext}`);
   },
 });
 
