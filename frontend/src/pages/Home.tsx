@@ -11,7 +11,7 @@ import { Skeleton } from "../components/ui/skeleton";
 import { Img } from "react-image";
 
 export default function Home() {
-  const { user, isLoading, setUser } = useAppContext();
+  const { user, setUser } = useAppContext();
   const navigate = useNavigate();
 
   const handleLogout = async (e: MouseEvent) => {
@@ -21,7 +21,7 @@ export default function Home() {
     navigate("/login");
   };
 
-  if (isLoading || !user) return <Loading />;
+  if (!user) return <Loading />;
 
   return (
     <div className="flex w-full justify-between">
