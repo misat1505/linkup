@@ -2,15 +2,15 @@ import { Request, Response } from "express";
 import { Hasher } from "../lib/Hasher";
 import { UserWithCredentials } from "../models/User";
 import { JwtHandler } from "../lib/JwtHandler";
-import { createFilename } from "../lib/utils/file";
 import { UserService } from "../services/UserService";
 import { jwtCookieOptions } from "../config/jwt-cookie";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
+import { processAvatar } from "../lib/processAvatar";
 
 export const signupUser = async (req: Request, res: Response) => {
   const { firstName, lastName, login, password } = req.body;
-  const file = createFilename(req.file);
+  const file = await processAvatar(req.file?.path);
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = Hasher.hash(password + salt);
