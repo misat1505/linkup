@@ -1,5 +1,7 @@
 import request from "supertest";
 import app from "../../src/app";
+import fs from "fs";
+import path from "path";
 import { testsWithTransactions } from "../utils/setup";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { VALID_USER_ID } from "../utils/constants";
@@ -38,6 +40,26 @@ describe("auth router", () => {
         password,
       });
       expect(res2.statusCode).toBe(200);
+    });
+
+    it("should sign up with image", async () => {
+      const login = "valid_login";
+      const password = "valid_password";
+
+      const res = await request(app)
+        .post("/auth/signup")
+        .field("firstName", "Melon")
+        .field("lastName", "Muzg")
+        .field("login", login)
+        .field("password", password)
+        .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+
+      expect(res.statusCode).toEqual(201);
+      const { photoURL } = res.body.user;
+
+      const pathToImage = path.join(__dirname, "..", "..", "static", photoURL);
+      expect(fs.existsSync(pathToImage)).toBe(true);
+      fs.unlinkSync(pathToImage);
     });
   });
 
