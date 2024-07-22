@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../contexts/AppProvider";
 import { User } from "../models/User";
 import { Skeleton } from "../components/ui/skeleton";
+import { Img } from "react-image";
 
 export default function Home() {
   const { user, isLoading, setUser } = useAppContext();
@@ -39,31 +40,20 @@ export default function Home() {
 }
 
 function ProfileAvatar({ user }: { user: User }) {
-  const [isError, setIsError] = useState(false);
-
   const initials = `${user.firstName[0].toUpperCase()}${user.lastName[0].toUpperCase()}`;
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsError(true);
-    }, 2000);
-  }, []);
-
   return (
-    <Avatar className="h-12 w-12">
-      <AvatarImage
+    <div className="h-12 w-12">
+      <Img
+        className="h-full w-full rounded-full object-cover"
         src={`${API_URL}/files/${user.photoURL}`}
-        className="object-cover"
-      />
-      <AvatarFallback className="bg-transparent">
-        {isError ? (
-          <div className="flex h-full w-full items-center justify-center bg-white font-semibold">
+        loader={<Skeleton className="h-full w-full rounded-full" />}
+        unloader={
+          <p className="flex h-full w-full items-center justify-center rounded-full bg-white font-semibold">
             {initials}
-          </div>
-        ) : (
-          <Skeleton className="h-full w-full" />
-        )}
-      </AvatarFallback>
-    </Avatar>
+          </p>
+        }
+      />
+    </div>
   );
 }
