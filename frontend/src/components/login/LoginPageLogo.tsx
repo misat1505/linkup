@@ -1,24 +1,16 @@
 import React from "react";
 import { LOGO_PATH } from "../../constants";
-import { Img } from "react-image";
-import { Skeleton } from "../ui/skeleton";
-import { cn } from "../../lib/utils";
+import Image from "../common/Image";
 
 export default function LoginPageLogo() {
-  const commonClasses = "mx-auto mb-4 h-64 w-64 rounded-full";
-
   return (
-    <Img
-      className={commonClasses}
+    <Image
       src={LOGO_PATH}
-      loader={<Skeleton className={commonClasses} />}
-      unloader={
-        <div
-          className={cn("items-center justify-center bg-white", commonClasses)}
-        >
-          Logo
-        </div>
-      }
+      className={{
+        common: "mx-auto mb-12 aspect-square w-64 rounded-full",
+        error: "bg-white text-lg font-semibold"
+      }}
+      errorContent="Couldn't display logo"
     />
   );
 }

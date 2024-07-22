@@ -1,14 +1,12 @@
-import React, { MouseEvent, useEffect, useState } from "react";
+import React, { MouseEvent } from "react";
 import Loading from "../components/common/Loading";
 import { API_URL } from "../constants";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { logoutUser } from "../api/authAPI";
 import StyledButton from "../components/common/StyledButton";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../contexts/AppProvider";
 import { User } from "../models/User";
-import { Skeleton } from "../components/ui/skeleton";
-import { Img } from "react-image";
+import Image from "../components/common/Image";
 
 export default function Home() {
   const { user, setUser } = useAppContext();
@@ -43,17 +41,14 @@ function ProfileAvatar({ user }: { user: User }) {
   const initials = `${user.firstName[0].toUpperCase()}${user.lastName[0].toUpperCase()}`;
 
   return (
-    <div className="h-12 w-12">
-      <Img
-        className="h-full w-full rounded-full object-cover"
-        src={`${API_URL}/files/${user.photoURL}`}
-        loader={<Skeleton className="h-full w-full rounded-full" />}
-        unloader={
-          <p className="flex h-full w-full items-center justify-center rounded-full bg-white font-semibold">
-            {initials}
-          </p>
-        }
-      />
-    </div>
+    <Image
+      src={`${API_URL}/files/${user.photoURL}`}
+      className={{
+        common: "h-12 w-12 rounded-full",
+        img: "object-cover",
+        error: "bg-white font-semibold"
+      }}
+      errorContent={initials}
+    />
   );
 }
