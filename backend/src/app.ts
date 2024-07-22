@@ -9,9 +9,12 @@ import https from "https";
 import expressStatusMonitor from "express-status-monitor";
 import protectedRoutes from "./routes/protected.routes";
 import publicRoutes from "./routes/public.routes";
+import morgan from "morgan";
+import { accessLogStream } from "./config/log";
 
 const app = express();
 
+app.use(morgan("combined", { stream: accessLogStream }));
 app.use(expressStatusMonitor());
 app.use(corsConfig);
 app.use(limiter);
