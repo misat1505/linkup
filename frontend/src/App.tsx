@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AppProvider from "./contexts/AppProvider";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import { protectedRoutes, publicRoutes } from "./lib/routes";
+import { toastContainerProps } from "./config/toasts";
 
 export default function App() {
   return (
@@ -39,18 +40,7 @@ export default function App() {
         </Routes>
       </Router>
 
-      <ToastContainer
-        position="bottom-left"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+      <ToastContainer {...toastContainerProps} />
     </AppProvider>
   );
 }
