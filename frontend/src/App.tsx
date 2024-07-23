@@ -1,10 +1,10 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AuthProvider from "./contexts/AuthProvider";
 import Loading from "./components/common/Loading";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AppProvider from "./contexts/AppProvider";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 const Home = lazy(() => import("./pages/Home"));
 const Settings = lazy(() => import("./pages/Settings"));
@@ -13,30 +13,6 @@ const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 
 export default function App() {
-  const SuspenseWrapper = ({
-    lazyComponent
-  }: {
-    lazyComponent: React.LazyExoticComponent<() => JSX.Element>;
-  }) => {
-    return (
-      <Suspense fallback={<Loading />}>
-        {React.createElement(lazyComponent)}
-      </Suspense>
-    );
-  };
-
-  const authorize = (
-    Component: React.LazyExoticComponent<() => JSX.Element>
-  ) => {
-    return (
-      <AuthProvider>
-        <Suspense fallback={<Loading />}>
-          <Component />
-        </Suspense>
-      </AuthProvider>
-    );
-  };
-
   const protectedRoutes = [
     {
       path: "/",
@@ -48,7 +24,7 @@ export default function App() {
     }
   ];
 
-  const routes = [
+  const publicRoutes = [
     {
       path: "/login",
       component: Login
@@ -71,14 +47,24 @@ export default function App() {
             <Route
               key={index}
               path={route.path}
-              element={authorize(route.component)}
+              element={
+                <ProtectedRoute>
+                  <Suspense fallback={<Loading />}>
+                    <route.component />
+                  </Suspense>
+                </ProtectedRoute>
+              }
             />
           ))}
-          {routes.map((route, index) => (
+          {publicRoutes.map((route, index) => (
             <Route
               key={index}
               path={route.path}
-              element={<SuspenseWrapper lazyComponent={route.component} />}
+              element={
+                <Suspense fallback={<Loading />}>
+                  <route.component />
+                </Suspense>
+              }
             />
           ))}
         </Routes>
