@@ -2,7 +2,7 @@ import { useAppContext } from "../../contexts/AppProvider";
 import { signupUser } from "../../api/authAPI";
 import {
   SignupFormType,
-  signupFormSchema,
+  signupFormSchema
 } from "../../validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
@@ -10,10 +10,10 @@ import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
-  useForm,
+  useForm
 } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useToast } from "../../components/ui/use-toast";
 
 type SignupFormEntries = {
   firstName: string;
@@ -37,15 +37,16 @@ export type useSubmitFormValue = {
 
 export default function useSignupForm(): useSubmitFormValue {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { setUser } = useAppContext();
   const {
     register,
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting }
   } = useForm<SignupFormType>({
-    resolver: zodResolver(signupFormSchema),
+    resolver: zodResolver(signupFormSchema)
   });
 
   const onSubmit: SubmitHandler<SignupFormType> = async (data) => {
@@ -55,7 +56,11 @@ export default function useSignupForm(): useSubmitFormValue {
       navigate("/");
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
-        toast.error(e.response?.data.message);
+        toast({
+          title: "Cannot create new account.",
+          description: e.response?.data.message,
+          variant: "destructive"
+        });
       }
     }
   };
@@ -74,6 +79,6 @@ export default function useSignupForm(): useSubmitFormValue {
     isSubmitting,
     file,
     submitForm,
-    removeFile,
+    removeFile
   };
 }

@@ -2,7 +2,7 @@ import { useAppContext } from "../../contexts/AppProvider";
 import { loginUser } from "../../api/authAPI";
 import {
   LoginFormType,
-  loginFormSchema,
+  loginFormSchema
 } from "../../validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
@@ -10,10 +10,10 @@ import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
-  useForm,
+  useForm
 } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useToast } from "../../components/ui/use-toast";
 
 type LoginFormEntries = {
   login: string;
@@ -31,13 +31,14 @@ export type useLoginFormValue = {
 
 export default function useLoginForm(): useLoginFormValue {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { setUser } = useAppContext();
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting }
   } = useForm<LoginFormType>({
-    resolver: zodResolver(loginFormSchema),
+    resolver: zodResolver(loginFormSchema)
   });
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
@@ -47,7 +48,11 @@ export default function useLoginForm(): useLoginFormValue {
       navigate("/");
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
-        toast.error(e.response?.data.message);
+        toast({
+          title: "Cannot login.",
+          description: e.response?.data.message,
+          variant: "destructive"
+        });
       }
     }
   };
@@ -58,6 +63,6 @@ export default function useLoginForm(): useLoginFormValue {
     register,
     errors,
     isSubmitting,
-    submitForm,
+    submitForm
   };
 }

@@ -1,12 +1,10 @@
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "./components/common/Loading";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import AppProvider from "./contexts/AppProvider";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import { protectedRoutes, publicRoutes } from "./lib/routes";
-import { toastContainerProps } from "./config/toasts";
+import { Toaster } from "./components/ui/toaster";
 
 export default function App() {
   return (
@@ -40,7 +38,7 @@ export default function App() {
         </Routes>
       </Router>
 
-      <ToastContainer {...toastContainerProps} />
+      <Toaster />
     </AppProvider>
   );
 }
