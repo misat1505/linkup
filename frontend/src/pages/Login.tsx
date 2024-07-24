@@ -11,7 +11,7 @@ export default function Login() {
     <BgGradient>
       <div className="h-full w-full grid-cols-2 px-12 xl:grid">
         <LoginSlogan />
-        <div className="col-span-1 mx-auto my-auto h-fit w-96 rounded-lg bg-white px-4 py-8 shadow-xl">
+        <div className="col-span-1 mx-auto my-auto h-fit w-96 rounded-lg bg-transparent px-4 py-8 shadow-2xl shadow-black">
           <LoginPageLogo />
           <LoginFormProvider>
             <LoginForm />

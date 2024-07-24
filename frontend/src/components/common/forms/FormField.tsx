@@ -14,9 +14,9 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
         <Input
           ref={ref}
           className={cn(
-            "my-2 w-full border-b-2 border-b-slate-400 bg-transparent p-2",
+            "my-4 w-full border-b-2 border-b-slate-400 bg-transparent p-2 shadow-lg",
             {
-              "mt-4 ring-2 ring-red-500 ring-offset-2 focus-visible:ring-red-500":
+              "mb-2 ring-2 ring-red-500 ring-offset-2 focus-visible:ring-red-500":
                 error
             }
           )}

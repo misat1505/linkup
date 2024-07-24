@@ -10,7 +10,7 @@ export default function Signup() {
     <BgGradient>
       <div className="h-full w-full grid-cols-2 px-12 xl:grid">
         <SignupSlogan />
-        <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-white p-4 shadow-xl">
+        <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
           <SignupFormProvider>
             <SignupForm />
           </SignupFormProvider>
