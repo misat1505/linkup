@@ -9,7 +9,7 @@ export default function NavbarAvatar() {
 
   if (!user) {
     return (
-      <div className="flex h-16 w-16 items-center rounded-full bg-slate-200">
+      <div className="flex h-16 w-16 items-center rounded-full bg-white">
         <FaUser className="h-full flex-grow rounded-full pt-4 text-slate-600" />
       </div>
     );
