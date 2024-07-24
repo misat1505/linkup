@@ -2,7 +2,7 @@ import React from "react";
 
 export default function LoginSlogan() {
   return (
-    <div className="col-span-2">
+    <div className="col-span-2 mx-20 flex flex-col justify-center">
       <h1 className="mt-20 text-9xl font-bold text-white">
         <div>Welcome to</div>
         <div>Link Up</div>

@@ -9,9 +9,9 @@ import LoginSlogan from "../components/login/LoginSlogan";
 export default function Login() {
   return (
     <BgGradient>
-      <div className="absolute left-1/2 top-1/2 grid w-full -translate-x-1/2 -translate-y-1/2 grid-cols-4 px-12">
+      <div className="grid h-full w-full grid-cols-4 px-12">
         <LoginSlogan />
-        <div className="col-span-2 mx-auto h-fit w-96 rounded-lg bg-white px-4 py-8">
+        <div className="col-span-2 mx-auto my-auto h-fit w-96 rounded-lg bg-white px-4 py-8 shadow-xl">
           <LoginPageLogo />
           <LoginFormProvider>
             <LoginForm />
