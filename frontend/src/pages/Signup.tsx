@@ -8,7 +8,7 @@ import React from "react";
 export default function Signup() {
   return (
     <BgGradient>
-      <div className="grid h-full w-full grid-cols-2 px-12">
+      <div className="h-full w-full grid-cols-2 px-12 xl:grid">
         <SignupSlogan />
         <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-white p-4 shadow-xl">
           <SignupFormProvider>
