@@ -2,6 +2,7 @@ import { useAppContext } from "../../contexts/AppProvider";
 import { Navigate } from "react-router-dom";
 import React from "react";
 import Loading from "./Loading";
+import { ROUTES } from "../../lib/routes";
 
 export default function ProtectedRoute({
   children
@@ -15,7 +16,7 @@ export default function ProtectedRoute({
   }
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to={ROUTES.LOGIN.path} />;
   }
 
   return children;

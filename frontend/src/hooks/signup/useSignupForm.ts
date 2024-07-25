@@ -14,6 +14,7 @@ import {
 } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../components/ui/use-toast";
+import { ROUTES } from "../../lib/routes";
 
 type SignupFormEntries = {
   firstName: string;
@@ -53,7 +54,7 @@ export default function useSignupForm(): useSubmitFormValue {
     try {
       const user = await signupUser(data);
       setUser(user);
-      navigate("/");
+      navigate(ROUTES.HOME.path);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
