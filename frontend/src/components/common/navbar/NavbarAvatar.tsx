@@ -9,8 +9,8 @@ export default function NavbarAvatar() {
 
   if (!user) {
     return (
-      <div className="flex h-16 w-16 items-center rounded-full bg-white">
-        <FaUser className="h-full flex-grow rounded-full pt-4 text-slate-600" />
+      <div className="flex h-12 w-12 items-center rounded-full bg-white">
+        <FaUser className="h-full flex-grow rounded-full pt-3 text-slate-600" />
       </div>
     );
   }
@@ -21,9 +21,9 @@ export default function NavbarAvatar() {
     <Image
       src={`${API_URL}/files/${user.photoURL}`}
       className={{
-        common: "h-16 w-16 rounded-full bg-slate-200",
+        common: "h-12 w-12 rounded-full bg-slate-200",
         img: "object-cover",
-        error: "font-semibold"
+        error: "bg-white font-semibold"
       }}
       errorContent={initials}
     />
