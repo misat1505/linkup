@@ -18,20 +18,20 @@ const envSchema = z.object({
     message: "'JWT_SECRET' needs to be at least 20 characters long.",
   }),
 
-  DB_HOST: z.string({ message: "'DB_HOST' must be provided." }),
-  DB_USER: z.string({ message: "'DB_USER' must be provided." }),
-  DB_PASSWORD: z.string({ message: "'DB_PASSWORD' must be provided." }),
-  DB_DATABASE: z.string({ message: "'DB_DATABASE' must be provided." }),
-  DB_PORT: z
-    .string()
-    .transform((val) => parseInt(val, 10))
-    .refine((val) => !isNaN(val), {
-      message: "'DB_PORT' must be a number.",
-    }),
+  // DB_HOST: z.string({ message: "'DB_HOST' must be provided." }),
+  // DB_USER: z.string({ message: "'DB_USER' must be provided." }),
+  // DB_PASSWORD: z.string({ message: "'DB_PASSWORD' must be provided." }),
+  // DB_DATABASE: z.string({ message: "'DB_DATABASE' must be provided." }),
+  // DB_PORT: z
+  //   .string()
+  //   .transform((val) => parseInt(val, 10))
+  //   .refine((val) => !isNaN(val), {
+  //     message: "'DB_PORT' must be a number.",
+  //   }),
 
-  DB_TEST_DATABASE: z.string({
-    message: "'DB_TEST_DATABASE' must be provided.",
-  }),
+  // DB_TEST_DATABASE: z.string({
+  //   message: "'DB_TEST_DATABASE' must be provided.",
+  // }),
   FRONTEND_URL: z.string().url({
     message: "'FRONTEND_URL' must be a valid URL.",
   }),

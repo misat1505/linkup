@@ -3,3 +3,5 @@
 /static
 /load-tests-report
 /logs
+/build
+/prisma/migrations
