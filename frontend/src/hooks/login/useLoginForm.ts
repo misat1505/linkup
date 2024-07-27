@@ -14,6 +14,7 @@ import {
 } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../components/ui/use-toast";
+import { ROUTES } from "../../lib/routes";
 
 type LoginFormEntries = {
   login: string;
@@ -45,7 +46,7 @@ export default function useLoginForm(): useLoginFormValue {
     try {
       const user = await loginUser(data);
       setUser(user);
-      navigate("/");
+      navigate(ROUTES.HOME.path);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({

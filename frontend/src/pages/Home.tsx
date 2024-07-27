@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../contexts/AppProvider";
 import { User } from "../models/User";
 import Image from "../components/common/Image";
+import { ROUTES } from "../lib/routes";
 
 export default function Home() {
   const { user, setUser } = useAppContext();
@@ -16,7 +17,7 @@ export default function Home() {
     e.preventDefault();
     await logoutUser();
     setUser(null);
-    navigate("/login");
+    navigate(ROUTES.LOGIN.path);
   };
 
   if (!user) return <Loading />;
@@ -29,7 +30,7 @@ export default function Home() {
           {user.firstName} {user.lastName}
         </p>
       </div>
-      <StyledButton onClick={() => navigate("/settings")}>
+      <StyledButton onClick={() => navigate(ROUTES.SETTINGS.path)}>
         Settings
       </StyledButton>
       <StyledButton onClick={handleLogout}>logout</StyledButton>

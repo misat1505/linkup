@@ -5,10 +5,13 @@ import AppProvider from "./contexts/AppProvider";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import { protectedRoutes, publicRoutes } from "./lib/routes";
 import { Toaster } from "./components/ui/toaster";
+import Navbar from "./components/common/navbar/Navbar";
 
 export default function App() {
   return (
     <AppProvider>
+      <Navbar />
+
       <Router>
         <Routes>
           {protectedRoutes.map((route, index) => (
