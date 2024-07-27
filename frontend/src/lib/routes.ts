@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import { route } from "react-router-typesafe-routes/dom";
 
 const Home = lazy(() => import("../pages/Home"));
 const Settings = lazy(() => import("../pages/Settings"));
@@ -11,24 +12,31 @@ type RouteType = {
   component: React.LazyExoticComponent<() => JSX.Element>;
 };
 
+export const ROUTES = {
+  HOME: route(""),
+  SETTINGS: route("settings"),
+  LOGIN: route("login"),
+  SIGNUP: route("signup")
+};
+
 export const protectedRoutes: RouteType[] = [
   {
-    path: "/",
+    path: ROUTES.HOME.path,
     component: Home
   },
   {
-    path: "/settings",
+    path: ROUTES.SETTINGS.path,
     component: Settings
   }
 ];
 
 export const publicRoutes: RouteType[] = [
   {
-    path: "/login",
+    path: ROUTES.LOGIN.path,
     component: Login
   },
   {
-    path: "/signup",
+    path: ROUTES.SIGNUP.path,
     component: Signup
   },
   {

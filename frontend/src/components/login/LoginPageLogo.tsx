@@ -7,7 +7,7 @@ export default function LoginPageLogo() {
     <Image
       src={LOGO_PATH}
       className={{
-        common: "mx-auto mb-12 aspect-square w-64 rounded-full",
+        common: "mx-auto mb-20 aspect-square w-64 rounded-full",
         error: "bg-white text-lg font-semibold"
       }}
       errorContent="Couldn't display logo"

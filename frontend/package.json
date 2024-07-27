@@ -24,6 +24,7 @@
     "react-image": "^4.1.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.24.0",
+    "react-router-typesafe-routes": "^1.2.2",
     "react-scripts": "5.0.1",
     "react-spinners": "^0.14.1",
     "tailwind-merge": "^2.3.0",
