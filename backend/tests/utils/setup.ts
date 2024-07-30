@@ -1,15 +1,11 @@
-import { db } from "../../src/lib/DatabaseConnector";
+import { prisma } from "../../src/lib/Prisma";
+import { USER } from "./constants";
 
-export const testsWithTransactions = () => {
-  beforeEach(async () => {
-    await db.connection?.beginTransaction();
-  });
-
-  afterEach(async () => {
-    await db.connection?.rollback();
-  });
-
-  afterAll(async () => {
-    await db.connection?.end();
+export const resetDB = async (): Promise<void> => {
+  await prisma.$transaction(async (prisma) => {
+    await prisma.user.deleteMany();
+    await prisma.user.create({
+      data: USER,
+    });
   });
 };

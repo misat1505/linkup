@@ -2,18 +2,15 @@ import request from "supertest";
 import app from "../../src/app";
 import fs from "fs";
 import path from "path";
-import { testsWithTransactions } from "../utils/setup";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { VALID_USER_ID } from "../utils/constants";
 
 describe("auth router", () => {
-  testsWithTransactions();
-
   describe("/login", () => {
     it("should login", async () => {
       const res = await request(app).post("/auth/login").send({
-        login: "login1",
-        password: "pass1",
+        login: "login2",
+        password: "pass2",
       });
       expect(res.statusCode).toEqual(200);
       expect(res.body.user).toBeDefined();

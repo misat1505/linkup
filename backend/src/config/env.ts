@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { z } from "zod";
 
-dotenv.config();
+dotenv.config({ path: process.env.NODE_ENV === "test" ? ".env.test" : ".env" });
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["production", "development", "test"], {
@@ -32,6 +32,7 @@ const envSchema = z.object({
   // DB_TEST_DATABASE: z.string({
   //   message: "'DB_TEST_DATABASE' must be provided.",
   // }),
+  DATABASE_URL: z.string({ message: "'DATABASE_URL' must be a string" }),
   FRONTEND_URL: z.string().url({
     message: "'FRONTEND_URL' must be a valid URL.",
   }),
