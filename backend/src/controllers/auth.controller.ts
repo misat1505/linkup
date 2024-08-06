@@ -6,7 +6,7 @@ import { UserService } from "../services/UserService";
 import { jwtCookieOptions } from "../config/jwt-cookie";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
-import { processAvatar } from "../lib/processAvatar";
+import { processAvatar } from "../utils/processAvatar";
 
 export const signupUser = async (req: Request, res: Response) => {
   try {

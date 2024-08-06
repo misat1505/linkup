@@ -1,7 +1,10 @@
 import dotenv from "dotenv";
 import { z } from "zod";
 
-dotenv.config({ path: process.env.NODE_ENV === "test" ? ".env.test" : ".env" });
+dotenv.config({
+  override: true,
+  path: process.env.NODE_ENV === "test" ? ".env.test" : ".env",
+});
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["production", "development", "test"], {
@@ -17,21 +20,6 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(20, {
     message: "'JWT_SECRET' needs to be at least 20 characters long.",
   }),
-
-  // DB_HOST: z.string({ message: "'DB_HOST' must be provided." }),
-  // DB_USER: z.string({ message: "'DB_USER' must be provided." }),
-  // DB_PASSWORD: z.string({ message: "'DB_PASSWORD' must be provided." }),
-  // DB_DATABASE: z.string({ message: "'DB_DATABASE' must be provided." }),
-  // DB_PORT: z
-  //   .string()
-  //   .transform((val) => parseInt(val, 10))
-  //   .refine((val) => !isNaN(val), {
-  //     message: "'DB_PORT' must be a number.",
-  //   }),
-
-  // DB_TEST_DATABASE: z.string({
-  //   message: "'DB_TEST_DATABASE' must be provided.",
-  // }),
   DATABASE_URL: z.string({ message: "'DATABASE_URL' must be a string" }),
   FRONTEND_URL: z.string().url({
     message: "'FRONTEND_URL' must be a valid URL.",
