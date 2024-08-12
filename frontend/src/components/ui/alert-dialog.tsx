@@ -25,12 +25,17 @@ const AlertDialogOverlay = React.forwardRef<
 ));
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
 
+function MyOverlay() {
+  return <div className="absolute inset-0 z-50 bg-black/80"></div>;
+}
+
 const AlertDialogContent = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
 >(({ className, ...props }, ref) => (
   <AlertDialogPortal>
-    <AlertDialogOverlay />
+    <MyOverlay />
+    {/* <AlertDialogOverlay /> */}
     <AlertDialogPrimitive.Content
       ref={ref}
       className={cn(
@@ -102,7 +107,7 @@ const AlertDialogAction = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Action
     ref={ref}
-    className={cn(buttonVariants(), className)}
+    className={cn(buttonVariants({ variant: "blueish" }), className)}
     {...props}
   />
 ));
