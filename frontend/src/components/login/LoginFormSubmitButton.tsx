@@ -1,14 +1,14 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
 import { ClipLoader } from "react-spinners";
 import { useLoginFormContext } from "../../contexts/LoginFormProvider";
+import { Button } from "../ui/button";
 
 export default function LoginFormSubmitButton() {
   const { isSubmitting } = useLoginFormContext();
 
   return (
     <div className="mt-4 flex justify-center">
-      <StyledButton type="submit" disabled={isSubmitting}>
+      <Button variant="blueish" type="submit" disabled={isSubmitting}>
         {isSubmitting ? (
           <div className="flex items-center gap-x-2">
             <ClipLoader size={12} color="whitesmoke" />
@@ -17,7 +17,7 @@ export default function LoginFormSubmitButton() {
         ) : (
           <p>Sign in</p>
         )}
-      </StyledButton>
+      </Button>
     </div>
   );
 }

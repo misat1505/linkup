@@ -2,12 +2,12 @@ import React, { MouseEvent } from "react";
 import Loading from "../components/common/Loading";
 import { API_URL } from "../constants";
 import { logoutUser } from "../api/authAPI";
-import StyledButton from "../components/common/StyledButton";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../contexts/AppProvider";
 import { User } from "../models/User";
 import Image from "../components/common/Image";
 import { ROUTES } from "../lib/routes";
+import { Button } from "../components/ui/button";
 
 export default function Home() {
   const { user, setUser } = useAppContext();
@@ -30,10 +30,12 @@ export default function Home() {
           {user.firstName} {user.lastName}
         </p>
       </div>
-      <StyledButton onClick={() => navigate(ROUTES.SETTINGS.path)}>
+      <Button variant="blueish" onClick={() => navigate(ROUTES.SETTINGS.path)}>
         Settings
-      </StyledButton>
-      <StyledButton onClick={handleLogout}>logout</StyledButton>
+      </Button>
+      <Button variant="blueish" onClick={handleLogout}>
+        logout
+      </Button>
     </div>
   );
 }
