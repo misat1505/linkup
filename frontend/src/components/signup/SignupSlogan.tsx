@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../../styles/slogan.module.css";
 import { cn } from "../../lib/utils";
+import Balancer from "react-wrap-balancer";
 
 export default function SignupSlogan() {
   return (
@@ -20,8 +21,10 @@ export default function SignupSlogan() {
           styles.description
         )}
       >
-        Start your journey today and discover a world of connections and
-        opportunities.
+        <Balancer>
+          Start your journey today and discover a world of connections and
+          opportunities.
+        </Balancer>
       </p>
     </div>
   );

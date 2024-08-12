@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../../styles/slogan.module.css";
 import { cn } from "../../lib/utils";
+import Balancer from "react-wrap-balancer";
 
 export default function LoginSlogan() {
   return (
@@ -15,9 +16,11 @@ export default function LoginSlogan() {
           styles.description
         )}
       >
-        Immerse yourself in a social network where connecting with friends,
-        sharing your moments, and discovering new communities is just a click
-        away.
+        <Balancer>
+          Immerse yourself in a social network where connecting with friends,
+          sharing your moments, and discovering new communities is just a click
+          away.
+        </Balancer>
       </p>
     </div>
   );
