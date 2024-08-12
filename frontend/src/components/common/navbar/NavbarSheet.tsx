@@ -25,6 +25,9 @@ import {
   AlertDialogTrigger
 } from "../../ui/alert-dialog";
 import { useAppContext } from "../../../contexts/AppProvider";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../lib/routes";
+import { logoutUser } from "../../../api/authAPI";
 
 export default function NavbarSheet() {
   const { user } = useAppContext();
@@ -47,33 +50,38 @@ type ButtonsType = {
 };
 
 function LoggedInSheet() {
+  const { user } = useAppContext();
+  const navigate = useNavigate();
+
   const buttons: ButtonsType[] = [
     {
       icon: <FaHome size={20} className="text-blue-500" />,
       text: "Home",
-      onClick: () => {}
+      onClick: () => navigate(ROUTES.HOME.path)
     },
     {
       icon: <PiChatsCircleFill size={20} className="text-blue-500" />,
       text: "Chats",
-      onClick: () => {}
+      onClick: () => navigate(ROUTES.HOME.path)
     },
     {
       icon: <MdArticle size={20} className="text-blue-500" />,
       text: "Posts",
-      onClick: () => {}
+      onClick: () => navigate(ROUTES.HOME.path)
     },
     {
       icon: <FaUserFriends size={20} className="text-blue-500" />,
       text: "Friends",
-      onClick: () => {}
+      onClick: () => navigate(ROUTES.HOME.path)
     }
   ];
 
   return (
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Welcome user!</SheetTitle>
+        <SheetTitle>
+          Welcome {user?.firstName} {user?.lastName}!
+        </SheetTitle>
       </SheetHeader>
       <SheetDescription className="flex h-full flex-col justify-between pb-8 pt-4 text-sm text-muted-foreground">
         <span>
@@ -93,16 +101,18 @@ function LoggedInSheet() {
 }
 
 function GuestSheet() {
+  const navigate = useNavigate();
+
   const buttons: ButtonsType[] = [
     {
       icon: <CiLogin size={20} className="text-emerald-500" />,
       text: "Login",
-      onClick: () => {}
+      onClick: () => navigate(ROUTES.LOGIN.path)
     },
     {
       icon: <MdOutlineSupervisorAccount size={20} />,
       text: "Create new account",
-      onClick: () => {}
+      onClick: () => navigate(ROUTES.SIGNUP.path)
     }
   ];
 
@@ -149,6 +159,15 @@ function SheetItem({ text, className, Icon, ...rest }: SheetItemType) {
 }
 
 function LogoutDialog() {
+  const navigate = useNavigate();
+  const { setUser } = useAppContext();
+
+  const handleLogout = async () => {
+    await logoutUser();
+    setUser(null);
+    navigate(ROUTES.LOGIN.path);
+  };
+
   const button: ButtonsType = {
     text: "Logout",
     icon: <CiLogout size={20} className="text-red-500" />,
@@ -174,7 +193,9 @@ function LogoutDialog() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Yes, logout</AlertDialogAction>
+          <AlertDialogAction onClick={() => handleLogout()}>
+            Yes, logout
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
