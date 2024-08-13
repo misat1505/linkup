@@ -21,6 +21,7 @@ import {
 import { useDebounce } from "use-debounce";
 import { Skeleton } from "../../ui/skeleton";
 import { useQuery } from "react-query";
+import { searchUsers } from "../../../api/userAPI";
 
 const users: User[] = [
   {
@@ -124,8 +125,8 @@ export default function NavbarSearch() {
   const [debouncedText] = useDebounce(text, 300);
 
   const { data: users = [], isFetching } = useQuery({
-    queryKey: ["users", { debouncedText }],
-    queryFn: () => filterUsers(debouncedText),
+    queryKey: ["search-users", { debouncedText }],
+    queryFn: () => searchUsers(debouncedText),
     enabled: debouncedText.length > 0
   });
 
