@@ -47,9 +47,11 @@ const sheetVariants = cva(
   }
 );
 
-function MyOverlay() {
-  return <div className="absolute inset-0 z-50 bg-black/80"></div>;
-}
+const MyOverlay = React.forwardRef<HTMLDivElement, {}>((props, ref) => {
+  return (
+    <div ref={ref} className="absolute inset-0 z-50 bg-black/80" {...props} />
+  );
+});
 
 interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
