@@ -140,23 +140,26 @@ type SheetItemType = HTMLAttributes<HTMLButtonElement> & {
   text: string;
 };
 
-function SheetItem({ text, className, Icon, ...rest }: SheetItemType) {
-  return (
-    <button
-      className={cn(
-        "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200",
-        className
-      )}
-      {...rest}
-    >
-      <div className="flex items-center gap-x-4">
-        {Icon}
-        {text}
-      </div>
-      <div></div>
-    </button>
-  );
-}
+const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
+  ({ text, className, Icon, ...rest }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={cn(
+          "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200",
+          className
+        )}
+        {...rest}
+      >
+        <div className="flex items-center gap-x-4">
+          {Icon}
+          {text}
+        </div>
+        <div></div>
+      </button>
+    );
+  }
+);
 
 function LogoutDialog() {
   const navigate = useNavigate();

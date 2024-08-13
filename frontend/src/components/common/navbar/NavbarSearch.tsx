@@ -166,7 +166,9 @@ export default function NavbarSearch() {
                 hidden: users.length > 0 || debouncedText.length === 0
               })}
             >
-              <CommandEmpty>No users found.</CommandEmpty>
+              <CommandEmpty>
+                <p className="text-muted-foreground">No users found.</p>
+              </CommandEmpty>
             </div>
             <CommandGroup
               className={cn({ hidden: users.length === 0 })}
