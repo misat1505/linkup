@@ -2,6 +2,36 @@ import { User, UserWithCredentials } from "../models/User";
 import { prisma } from "../lib/Prisma";
 
 export class UserService {
+  static async searchUsers(term: string): Promise<User[]> {
+    const normalizedTerm = term.trim().toLowerCase();
+
+    const users: User[] = await prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            firstName: {
+              contains: term,
+            },
+          },
+          {
+            lastName: {
+              contains: term,
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        photoURL: true,
+        lastActive: true,
+      },
+    });
+
+    return users;
+  }
+
   static async isLoginTaken(
     login: UserWithCredentials["login"]
   ): Promise<boolean> {
