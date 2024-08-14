@@ -1,10 +1,21 @@
 import { UserWithCredentials } from "../../src/models/User";
 import { UserService } from "../../src/services/UserService";
-import { VALID_USER_ID } from "../utils/constants";
+import { USER_WITHOUT_CREDENTIALS, VALID_USER_ID } from "../utils/constants";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 
 describe("UserService", () => {
+  describe("searchUsers", () => {
+    it("should return users fitting given term", async () => {
+      const result = await UserService.searchUsers("Kyli");
+      expect(result.map(({ lastActive, ...rest }) => ({ ...rest }))).toEqual(
+        [USER_WITHOUT_CREDENTIALS].map(({ lastActive, ...rest }) => ({
+          ...rest,
+        }))
+      );
+    });
+  });
+
   describe("isLoginTaken", () => {
     it("should return true if taken", async () => {
       const result = await UserService.isLoginTaken("login2");

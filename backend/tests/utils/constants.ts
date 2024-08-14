@@ -1,4 +1,4 @@
-import { UserWithCredentials } from "../../src/models/User";
+import { User, UserWithCredentials } from "../../src/models/User";
 
 export const USER: UserWithCredentials = {
   id: "3daf7676-ec0f-4548-85a7-67b4382166d4",
@@ -12,3 +12,12 @@ export const USER: UserWithCredentials = {
 };
 
 export const VALID_USER_ID = USER.id;
+
+const { id, firstName, lastActive, lastName, photoURL } = USER;
+export const USER_WITHOUT_CREDENTIALS: User = {
+  id,
+  firstName,
+  lastActive,
+  lastName,
+  photoURL,
+};

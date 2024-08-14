@@ -3,8 +3,6 @@ import { prisma } from "../lib/Prisma";
 
 export class UserService {
   static async searchUsers(term: string): Promise<User[]> {
-    const normalizedTerm = term.trim().toLowerCase();
-
     const users: User[] = await prisma.user.findMany({
       where: {
         OR: [
