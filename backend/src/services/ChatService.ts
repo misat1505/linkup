@@ -10,11 +10,10 @@ export class ChatService {
       where: {
         type: "PRIVATE",
         users: {
-          some: {
-            id: id1,
-          },
           every: {
-            id: id2,
+            id: {
+              in: [id1, id2],
+            },
           },
         },
       },

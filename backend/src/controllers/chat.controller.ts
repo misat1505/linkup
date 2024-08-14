@@ -6,7 +6,6 @@ export const createPrivateChat = async (req: Request, res: Response) => {
     const { users } = req.body;
 
     const chat = await ChatService.getPrivateChatByUserIds(users[0], users[1]);
-    console.log(chat);
 
     if (chat) return res.status(409).json({ chat });
 
