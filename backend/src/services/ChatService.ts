@@ -1,7 +1,33 @@
 import { prisma } from "../lib/Prisma";
 import { Chat } from "../models/Chat";
+import { User } from "../models/User";
 
 export class ChatService {
+  static async getUserChats(userId: User["id"]): Promise<Chat[]> {
+    const result: Chat[] = await prisma.chat.findMany({
+      where: {
+        users: {
+          some: {
+            id: userId,
+          },
+        },
+      },
+      include: {
+        users: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            lastActive: true,
+            photoURL: true,
+          },
+        },
+      },
+    });
+
+    return result;
+  }
+
   static async getPrivateChatByUserIds(
     id1: string,
     id2: string
