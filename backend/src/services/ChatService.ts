@@ -5,6 +5,43 @@ import { User } from "../models/User";
 import { v7 as uuidv7 } from "uuid";
 
 export class ChatService {
+  static async getChatMessages(chatId: Chat["id"]): Promise<Message[]> {
+    const result: (Message & {
+      authorId: User["id"];
+      responseId: Message["id"] | null;
+    })[] = await prisma.message.findMany({
+      where: {
+        chatId,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            lastActive: true,
+            photoURL: true,
+          },
+        },
+        response: {
+          select: {
+            id: true,
+            content: true,
+            author: true,
+            createdAt: true,
+            chatId: true,
+          },
+        },
+      },
+    });
+
+    const messages: Message[] = result.map(
+      ({ authorId, responseId, ...message }) => ({ ...message })
+    );
+
+    return messages;
+  }
+
   static async isUserInChat({
     userId,
     chatId,

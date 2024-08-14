@@ -1,6 +1,26 @@
 import { Request, Response } from "express";
 import { ChatService } from "../services/ChatService";
 
+export const getChatMessages = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.body.token;
+    const { chatId } = req.params;
+
+    const isUserAuthorized = await ChatService.isUserInChat({ chatId, userId });
+
+    if (!isUserAuthorized)
+      return res
+        .status(401)
+        .json({ message: "You cannot read messages from this chat." });
+
+    const messages = await ChatService.getChatMessages(chatId);
+
+    return res.status(200).json({ messages });
+  } catch (e) {
+    return res.status(500).json({ message: "Cannot get messages." });
+  }
+};
+
 export const createMessage = async (req: Request, res: Response) => {
   try {
     const { content } = req.body;
@@ -20,7 +40,7 @@ export const createMessage = async (req: Request, res: Response) => {
       chatId,
     });
 
-    return res.status(200).json({ message });
+    return res.status(201).json({ message });
   } catch (e) {
     return res.status(500).json({ message: "Cannot create message." });
   }

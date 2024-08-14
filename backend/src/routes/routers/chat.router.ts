@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createMessage,
   createPrivateChat,
+  getChatMessages,
   getUserChats,
 } from "../../controllers/chat.controller";
 import { validate } from "../../middlewares/validate";
@@ -16,5 +17,6 @@ chatRouter.post(
 );
 chatRouter.get("/", getUserChats);
 chatRouter.post("/:chatId/messages", createMessage);
+chatRouter.get("/:chatId/messages", getChatMessages);
 
 export default chatRouter;
