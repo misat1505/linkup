@@ -9,8 +9,11 @@
   }
 }
 
-.title {
+.shadow {
   text-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.title {
   animation: titleEntry 1s ease-in-out;
 }
 

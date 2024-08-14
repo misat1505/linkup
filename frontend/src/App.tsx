@@ -10,9 +10,8 @@ import Navbar from "./components/common/navbar/Navbar";
 export default function App() {
   return (
     <AppProvider>
-      <Navbar />
-
       <Router>
+        <Navbar />
         <Routes>
           {protectedRoutes.map((route, index) => (
             <Route

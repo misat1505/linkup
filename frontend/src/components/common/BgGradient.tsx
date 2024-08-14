@@ -7,3 +7,15 @@ export default function BgGradient({ children }: PropsWithChildren) {
     </div>
   );
 }
+
+// export default function BgGradient({ children }: PropsWithChildren) {
+//   return (
+//     <>
+//       <img
+//         src="/assets/bg.webp"
+//         className="absolute inset-0 h-full w-full overflow-auto object-cover"
+//       />
+//       <div className="z-10">{children}</div>
+//     </>
+//   );
+// }

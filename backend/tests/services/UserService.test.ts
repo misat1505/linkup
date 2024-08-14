@@ -1,17 +1,24 @@
-import { Hasher } from "../../src/lib/Hasher";
 import { UserWithCredentials } from "../../src/models/User";
 import { UserService } from "../../src/services/UserService";
-import { VALID_USER_ID } from "../utils/constants";
-import { testsWithTransactions } from "../utils/setup";
+import { USER_WITHOUT_CREDENTIALS, VALID_USER_ID } from "../utils/constants";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 
 describe("UserService", () => {
-  testsWithTransactions();
+  describe("searchUsers", () => {
+    it("should return users fitting given term", async () => {
+      const result = await UserService.searchUsers("Kyli");
+      expect(result.map(({ lastActive, ...rest }) => ({ ...rest }))).toEqual(
+        [USER_WITHOUT_CREDENTIALS].map(({ lastActive, ...rest }) => ({
+          ...rest,
+        }))
+      );
+    });
+  });
 
   describe("isLoginTaken", () => {
     it("should return true if taken", async () => {
-      const result = await UserService.isLoginTaken("login1");
+      const result = await UserService.isLoginTaken("login2");
       expect(result).toBe(true);
     });
 
@@ -23,9 +30,10 @@ describe("UserService", () => {
 
   describe("insertUser", () => {
     it("should insert user", async () => {
+      const login = "not_taken";
       const user: UserWithCredentials = {
         id: uuidv4(),
-        login: "not_taken",
+        login,
         password: "udgfyudsgfyd",
         firstName: "Melon",
         lastName: "Musg",
@@ -41,7 +49,7 @@ describe("UserService", () => {
 
   describe("getUserByLogin", () => {
     it("should return user if existent", async () => {
-      const user = await UserService.getUserByLogin("login1");
+      const user = await UserService.getUserByLogin("login2");
       expect(user).not.toBe(null);
     });
 

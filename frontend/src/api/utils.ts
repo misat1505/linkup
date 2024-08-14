@@ -3,5 +3,10 @@ import axios from "axios";
 
 export const AUTH_API = axios.create({
   baseURL: `${API_URL}/auth`,
-  withCredentials: true,
+  withCredentials: true
+});
+
+export const USER_API = axios.create({
+  baseURL: `${API_URL}/users`,
+  withCredentials: true
 });

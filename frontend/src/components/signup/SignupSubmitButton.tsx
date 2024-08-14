@@ -1,14 +1,14 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
 import { useSignupFormContext } from "../../contexts/SignupFormProvider";
 import { ClipLoader } from "react-spinners";
+import { Button } from "../ui/button";
 
 export default function SignupSubmitButton() {
   const { isSubmitting } = useSignupFormContext();
 
   return (
     <div className="mt-8 flex justify-center">
-      <StyledButton type="submit" disabled={isSubmitting}>
+      <Button variant="blueish" type="submit" disabled={isSubmitting}>
         {isSubmitting ? (
           <div className="flex items-center gap-x-2">
             <ClipLoader size={12} color="whitesmoke" />
@@ -17,7 +17,7 @@ export default function SignupSubmitButton() {
         ) : (
           <p>Sign up</p>
         )}
-      </StyledButton>
+      </Button>
     </div>
   );
 }
