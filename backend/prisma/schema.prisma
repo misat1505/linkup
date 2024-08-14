@@ -14,12 +14,109 @@ datasource db {
 }
 
 model User {
-  id         String  @id @default(uuid()) @db.VarChar(36)
-  login      String  @unique @db.VarChar(50)
-  password   String  @db.VarChar(100)
-  firstName  String  @db.VarChar(50)
-  lastName   String  @db.VarChar(50)
-  photoURL   String? @db.VarChar(100)
-  lastActive DateTime
-  salt       String @db.VarChar(30)
+  id          String    @id @default(uuid())
+  firstName   String
+  lastName    String
+  photoURL    String?
+  lastActive  DateTime
+  login       String    @unique
+  password    String
+  salt        String
+
+  posts       Post[]    @relation("UserPosts")
+  chats       Chat[]    @relation("UserChats")
+  messages    Message[] @relation("MessageAuthor")
+  reactions   UserReaction[]
+
+  sentRequests      Friend[] @relation("UserSentRequests")
+  receivedRequests  Friend[] @relation("UserReceivedRequests")
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+}
+
+model Friend {
+  requesterId String
+  acceptorId  String
+  status      FriendshipStatus
+
+  requester   User @relation("UserSentRequests", fields: [requesterId], references: [id])
+  acceptor    User @relation("UserReceivedRequests", fields: [acceptorId], references: [id])
+
+  @@id([requesterId, acceptorId])
+}
+
+model Post {
+  id          String    @id @default(uuid())
+  content     String
+  authorId    String
+  createdAt   DateTime  @default(now())
+  chatId      String    @unique
+
+  author      User      @relation("UserPosts", fields: [authorId], references: [id])
+  chat        Chat      @relation("PostChat", fields: [chatId], references: [id])
+  files       File[]    @relation("PostFiles")
+}
+
+enum ChatType {
+  GROUP
+  PRIVATE
+  POST
+}
+
+model Chat {
+  id        String      @id @default(uuid())
+  createdAt DateTime    @default(now())
+  photoURL  String?
+  type      ChatType
+
+  users     User[]      @relation("UserChats")
+  post      Post?       @relation("PostChat")
+  messages  Message[]   @relation("MessageChat")
+}
+
+model Message {
+  id          String    @id @default(uuid())
+  content     String?
+  authorId    String
+  createdAt   DateTime  @default(now())
+  responseId  String?
+  chatId      String
+
+  chat        Chat      @relation("MessageChat", fields: [chatId], references: [id])
+  author      User      @relation("MessageAuthor", fields: [authorId], references: [id])
+  response    Message?  @relation("MessageResponses", fields: [responseId], references: [id])
+  replies     Message[] @relation("MessageResponses")
+  files       File[]    @relation("MessageFiles")
+  reactions   UserReaction[]
+}
+
+model File {
+  id          String    @id @default(uuid())
+  url         String    @unique
+  messageId   String?
+  postId      String?
+
+  message     Message? @relation("MessageFiles", fields: [messageId], references: [id])
+  post        Post?    @relation("PostFiles", fields: [postId], references: [id])
+}
+
+model Reaction {
+  id          String    @id @default(uuid())
+  name        String
+  userReactions UserReaction[]
+}
+
+model UserReaction {
+  userId      String
+  messageId   String
+  reactionId  String
+
+  user        User      @relation(fields: [userId], references: [id])
+  message     Message   @relation(fields: [messageId], references: [id])
+  reaction    Reaction  @relation(fields: [reactionId], references: [id])
+
+  @@id([userId, messageId])
 }
