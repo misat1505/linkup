@@ -4,6 +4,7 @@ import authRouterProtected from "./routers/auth.router";
 import fileRouter from "./routers/file.router";
 import { updateLastActive } from "../middlewares/updateLastActive";
 import userRouter from "./routers/user.router";
+import chatRouter from "./routers/chat.router";
 
 const protectedRoutes = Router();
 
@@ -13,5 +14,6 @@ protectedRoutes.use(updateLastActive);
 protectedRoutes.use("/auth", authRouterProtected);
 protectedRoutes.use("/files", fileRouter);
 protectedRoutes.use("/users", userRouter);
+protectedRoutes.use("/chats", chatRouter);
 
 export default protectedRoutes;
