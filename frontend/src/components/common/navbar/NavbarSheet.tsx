@@ -62,7 +62,7 @@ function LoggedInSheet() {
     {
       icon: <PiChatsCircleFill size={20} className="text-blue-500" />,
       text: "Chats",
-      onClick: () => navigate(ROUTES.HOME.path)
+      onClick: () => navigate(ROUTES.CHATS.path)
     },
     {
       icon: <MdArticle size={20} className="text-blue-500" />,

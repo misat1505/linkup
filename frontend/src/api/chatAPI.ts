@@ -23,3 +23,13 @@ export const createChatBetweenUsers = async (
     throw e;
   }
 };
+
+export const getUserChats = async (): Promise<any> => {
+  const response = await CHAT_API.get("");
+  return response.data.chats;
+};
+
+export const getChatMessages = async (chatId: string): Promise<any> => {
+  const response = await CHAT_API.get(`/${chatId}/messages`);
+  return response.data.messages;
+};
