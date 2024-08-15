@@ -111,7 +111,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
     return fullName;
   };
 
-  const handleCreateChat = async (userId: string) => {
+  const handleCreateChat = async (userId: User["id"]) => {
     const chat = await createChatBetweenUsers(me!.id, userId);
     setIsExpanded(false);
     navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
