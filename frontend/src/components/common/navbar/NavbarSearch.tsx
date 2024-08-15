@@ -6,7 +6,7 @@ import {
   CommandItem,
   CommandList
 } from "../../ui/command";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, PropsWithChildren } from "react";
 import { cn } from "../../../lib/utils";
 import { User } from "../../../models/User";
 import Image from "../Image";
@@ -129,30 +129,20 @@ export default function NavbarSearch() {
                     </span>
                   </div>
                   <div className="flex gap-x-2">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button>
-                            <FaUserFriends className="transition-all hover:scale-125" />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Add Friend</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button onClick={() => handleCreateChat(user.id)}>
-                            <IoIosChatbubbles className="transition-all hover:scale-125" />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Send Message</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <ActionButton
+                      onClick={() => {}}
+                      tooltipText="Add friend"
+                      Icon={
+                        <FaUserFriends className="transition-all hover:scale-125" />
+                      }
+                    />
+                    <ActionButton
+                      onClick={() => handleCreateChat(user.id)}
+                      tooltipText="Send Message"
+                      Icon={
+                        <IoIosChatbubbles className="transition-all hover:scale-125" />
+                      }
+                    />
                   </div>
                 </CommandItem>
               ))}
@@ -161,5 +151,26 @@ export default function NavbarSearch() {
         )}
       </CommandList>
     </Command>
+  );
+}
+
+type ActionButtonProps = {
+  tooltipText: string;
+  onClick: () => void;
+  Icon: JSX.Element;
+};
+
+function ActionButton({ onClick, tooltipText, Icon }: ActionButtonProps) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button onClick={onClick}>{Icon}</button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{tooltipText}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
