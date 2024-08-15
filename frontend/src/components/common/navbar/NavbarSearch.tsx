@@ -6,7 +6,7 @@ import {
   CommandItem,
   CommandList
 } from "../../ui/command";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { cn } from "../../../lib/utils";
 import { User } from "../../../models/User";
 import Image from "../Image";
@@ -33,6 +33,7 @@ export default function NavbarSearch() {
   const [text, setText] = useState("");
   const [debouncedText] = useDebounce(text, 300);
   const navigate = useNavigate();
+  const commandListRef = useRef<HTMLDivElement>(null);
 
   const { data: users = [], isFetching } = useQuery({
     queryKey: ["search-users", { debouncedText }],
@@ -54,8 +55,26 @@ export default function NavbarSearch() {
 
   const handleCreateChat = async (userId: string) => {
     const chat = await createChatBetweenUsers(user!.id, userId);
+    setIsExpanded(false);
     navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        commandListRef.current &&
+        !commandListRef.current.contains(event.target as Node)
+      ) {
+        setIsExpanded(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Command className="w-60 rounded-lg border shadow-md">
@@ -63,9 +82,9 @@ export default function NavbarSearch() {
         placeholder="Search on Link Up..."
         onInput={(e) => setText(e.currentTarget.value)}
         onFocus={() => setIsExpanded(true)}
-        // onBlur={() => setIsExpanded(false)}
       />
       <CommandList
+        ref={commandListRef}
         className={cn(
           "no-scrollbar absolute top-14 w-[238px] bg-white shadow-md",
           {
@@ -91,7 +110,7 @@ export default function NavbarSearch() {
               forceMount={users.length > 0}
               heading="Suggestions"
             >
-              {users.map((user, idx) => (
+              {users.map((user) => (
                 <CommandItem
                   key={user.id}
                   className="flex w-full items-center justify-between"
