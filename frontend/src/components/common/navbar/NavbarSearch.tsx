@@ -28,11 +28,9 @@ import { createChatBetweenUsers } from "../../../api/chatAPI";
 import { useAppContext } from "../../../contexts/AppProvider";
 
 export default function NavbarSearch() {
-  const { user } = useAppContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const [text, setText] = useState("");
   const [debouncedText] = useDebounce(text, 300);
-  const navigate = useNavigate();
   const commandListRef = useRef<HTMLDivElement>(null);
 
   const { data: users = [], isFetching } = useQuery({
@@ -40,24 +38,6 @@ export default function NavbarSearch() {
     queryFn: () => searchUsers(debouncedText),
     enabled: debouncedText.length > 0
   });
-
-  const createFullName = (
-    firstName: User["firstName"],
-    lastName: User["lastName"],
-    maxLength = 15
-  ): string => {
-    const fullName = `${firstName} ${lastName}`;
-    if (firstName.length + lastName.length > maxLength) {
-      return `${fullName.substring(0, maxLength)}...`;
-    }
-    return fullName;
-  };
-
-  const handleCreateChat = async (userId: string) => {
-    const chat = await createChatBetweenUsers(user!.id, userId);
-    setIsExpanded(false);
-    navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
-  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -111,46 +91,78 @@ export default function NavbarSearch() {
               heading="Suggestions"
             >
               {users.map((user) => (
-                <CommandItem
+                <SearchResultItem
                   key={user.id}
-                  className="flex w-full items-center justify-between"
-                >
-                  <div className="flex items-center">
-                    <Image
-                      src={user.photoURL!}
-                      className={{
-                        common: "h-8 w-8 rounded-full object-cover",
-                        error: "bg-white text-xs font-semibold"
-                      }}
-                      errorContent={`${user.firstName.toUpperCase()[0]}${user.lastName.toUpperCase()[0]}`}
-                    />
-                    <span className="ml-4">
-                      {createFullName(user.firstName, user.lastName)}
-                    </span>
-                  </div>
-                  <div className="flex gap-x-2">
-                    <ActionButton
-                      onClick={() => {}}
-                      tooltipText="Add friend"
-                      Icon={
-                        <FaUserFriends className="transition-all hover:scale-125" />
-                      }
-                    />
-                    <ActionButton
-                      onClick={() => handleCreateChat(user.id)}
-                      tooltipText="Send Message"
-                      Icon={
-                        <IoIosChatbubbles className="transition-all hover:scale-125" />
-                      }
-                    />
-                  </div>
-                </CommandItem>
+                  user={user}
+                  setIsExpanded={setIsExpanded}
+                />
               ))}
             </CommandGroup>
           </>
         )}
       </CommandList>
     </Command>
+  );
+}
+
+type SearchResultItemProps = {
+  user: User;
+  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
+  const { user: me } = useAppContext();
+  const navigate = useNavigate();
+
+  const createFullName = (
+    firstName: User["firstName"],
+    lastName: User["lastName"],
+    maxLength = 15
+  ): string => {
+    const fullName = `${firstName} ${lastName}`;
+    if (firstName.length + lastName.length > maxLength) {
+      return `${fullName.substring(0, maxLength)}...`;
+    }
+    return fullName;
+  };
+
+  const handleCreateChat = async (userId: string) => {
+    const chat = await createChatBetweenUsers(me!.id, userId);
+    setIsExpanded(false);
+    navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
+  };
+
+  return (
+    <CommandItem
+      key={user.id}
+      className="flex w-full items-center justify-between"
+    >
+      <div className="flex items-center">
+        <Image
+          src={user.photoURL!}
+          className={{
+            common: "h-8 w-8 rounded-full object-cover",
+            error: "bg-white text-xs font-semibold"
+          }}
+          errorContent={`${user.firstName.toUpperCase()[0]}${user.lastName.toUpperCase()[0]}`}
+        />
+        <span className="ml-4">
+          {createFullName(user.firstName, user.lastName)}
+        </span>
+      </div>
+      <div className="flex gap-x-2">
+        <ActionButton
+          onClick={() => {}}
+          tooltipText="Add friend"
+          Icon={<FaUserFriends className="transition-all hover:scale-125" />}
+        />
+        <ActionButton
+          onClick={() => handleCreateChat(user.id)}
+          tooltipText="Send Message"
+          Icon={<IoIosChatbubbles className="transition-all hover:scale-125" />}
+        />
+      </div>
+    </CommandItem>
   );
 }
 
