@@ -10,3 +10,8 @@ export const USER_API = axios.create({
   baseURL: `${API_URL}/users`,
   withCredentials: true
 });
+
+export const CHAT_API = axios.create({
+  baseURL: `${API_URL}/chats`,
+  withCredentials: true
+});

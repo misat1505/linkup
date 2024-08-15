@@ -6,6 +6,7 @@ const Settings = lazy(() => import("../pages/Settings"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const Login = lazy(() => import("../pages/Login"));
 const Signup = lazy(() => import("../pages/Signup"));
+const Chats = lazy(() => import("../pages/Chats"));
 
 type RouteType = {
   path: string;
@@ -16,7 +17,9 @@ export const ROUTES = {
   HOME: route(""),
   SETTINGS: route("settings"),
   LOGIN: route("login"),
-  SIGNUP: route("signup")
+  SIGNUP: route("signup"),
+  CHATS: route("chats"),
+  CHAT_DETAIL: route("chats/:chatId")
 };
 
 export const protectedRoutes: RouteType[] = [
@@ -27,6 +30,14 @@ export const protectedRoutes: RouteType[] = [
   {
     path: ROUTES.SETTINGS.path,
     component: Settings
+  },
+  {
+    path: ROUTES.CHATS.path,
+    component: Chats
+  },
+  {
+    path: ROUTES.CHAT_DETAIL.path,
+    component: Chats
   }
 ];
 

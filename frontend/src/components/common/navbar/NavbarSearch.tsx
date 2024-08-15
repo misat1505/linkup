@@ -22,11 +22,17 @@ import { useDebounce } from "use-debounce";
 import { Skeleton } from "../../ui/skeleton";
 import { useQuery } from "react-query";
 import { searchUsers } from "../../../api/userAPI";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../lib/routes";
+import { createChatBetweenUsers } from "../../../api/chatAPI";
+import { useAppContext } from "../../../contexts/AppProvider";
 
 export default function NavbarSearch() {
+  const { user } = useAppContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const [text, setText] = useState("");
   const [debouncedText] = useDebounce(text, 300);
+  const navigate = useNavigate();
 
   const { data: users = [], isFetching } = useQuery({
     queryKey: ["search-users", { debouncedText }],
@@ -46,13 +52,18 @@ export default function NavbarSearch() {
     return fullName;
   };
 
+  const handleCreateChat = async (userId: string) => {
+    const chat = await createChatBetweenUsers(user!.id, userId);
+    navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
+  };
+
   return (
     <Command className="w-60 rounded-lg border shadow-md">
       <CommandInput
         placeholder="Search on Link Up..."
         onInput={(e) => setText(e.currentTarget.value)}
         onFocus={() => setIsExpanded(true)}
-        onBlur={() => setIsExpanded(false)}
+        // onBlur={() => setIsExpanded(false)}
       />
       <CommandList
         className={cn(
@@ -114,7 +125,7 @@ export default function NavbarSearch() {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <button>
+                          <button onClick={() => handleCreateChat(user.id)}>
                             <IoIosChatbubbles className="transition-all hover:scale-125" />
                           </button>
                         </TooltipTrigger>
