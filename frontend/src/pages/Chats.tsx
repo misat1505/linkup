@@ -6,7 +6,7 @@ import React from "react";
 export default function Chats() {
   return (
     <BgGradient>
-      <div className="mt-20 flex h-[calc(100vh-80px)] justify-between">
+      <div className="mt-20 flex h-[calc(100vh-80px)]">
         <ChatNavigation />
         <Chat />
       </div>
