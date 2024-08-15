@@ -60,7 +60,9 @@ export class ChatService {
       },
     });
 
-    return !!chat;
+    if (!chat) return false;
+
+    return chat.users.length !== 0;
   }
 
   static async createMessage({
