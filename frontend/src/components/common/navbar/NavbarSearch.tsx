@@ -6,7 +6,7 @@ import {
   CommandItem,
   CommandList
 } from "../../ui/command";
-import { useState, useEffect, useRef, PropsWithChildren } from "react";
+import { useState, useRef } from "react";
 import { cn } from "../../../lib/utils";
 import { User } from "../../../models/User";
 import Image from "../Image";
@@ -26,35 +26,20 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../lib/routes";
 import { createChatBetweenUsers } from "../../../api/chatAPI";
 import { useAppContext } from "../../../contexts/AppProvider";
+import useClickOutside from "../../../hooks/useClickOutside";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [text, setText] = useState("");
   const [debouncedText] = useDebounce(text, 300);
   const commandListRef = useRef<HTMLDivElement>(null);
+  useClickOutside(commandListRef, () => setIsExpanded(false));
 
   const { data: users = [], isFetching } = useQuery({
     queryKey: ["search-users", { debouncedText }],
     queryFn: () => searchUsers(debouncedText),
     enabled: debouncedText.length > 0
   });
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        commandListRef.current &&
-        !commandListRef.current.contains(event.target as Node)
-      ) {
-        setIsExpanded(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <Command className="w-60 rounded-lg border shadow-md">
