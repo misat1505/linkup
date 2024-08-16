@@ -9,7 +9,6 @@ import {
 import { useState, useRef } from "react";
 import { cn } from "../../../lib/utils";
 import { User } from "../../../models/User";
-import Image from "../Image";
 import { FaUserFriends } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
 import {
@@ -122,7 +121,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
           className="h-8 w-8 text-xs"
         />
         <span className="ml-4">
-          {createFullName(user.firstName, user.lastName)}
+          {createFullName({ firstName, lastName, maxLength: 15 })}
         </span>
       </div>
       <div className="flex gap-x-2">
