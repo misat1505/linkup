@@ -10,7 +10,8 @@ import Avatar from "../common/Avatar";
 import {
   getChatName,
   getImageAlt,
-  getImageURL
+  getImageURL,
+  getLastActive
 } from "../../utils/chatNavigationUtils";
 
 export default function ChatNavigation() {
@@ -41,13 +42,14 @@ function NavigationItem({ chat }: { chat: Chat }) {
   const src = `${API_URL}/files/${getImageURL({ me, chat })!}`;
   const alt = getImageAlt({ me, chat });
   const chatName = getChatName({ me, chat });
+  const lastActive = getLastActive({ me, chat });
 
   return (
     <button
       className="m-4 flex w-72 items-center gap-x-4 rounded-md bg-slate-100 p-4 transition-all hover:cursor-pointer hover:bg-slate-200"
       onClick={() => handleOpenChat(chat.id)}
     >
-      <Avatar src={src} alt={alt} />
+      <Avatar src={src} alt={alt} lastActive={lastActive} />
       <div className="font-semibold">{chatName}</div>
     </button>
   );
