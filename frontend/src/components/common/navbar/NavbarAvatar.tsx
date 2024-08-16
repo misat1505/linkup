@@ -3,6 +3,8 @@ import React from "react";
 import Image from "../Image";
 import { API_URL } from "../../../constants";
 import { FaUser } from "react-icons/fa";
+import Avatar from "../Avatar";
+import { getInitials } from "../../../utils/getInitials";
 
 export default function NavbarAvatar() {
   const { user } = useAppContext();
@@ -15,17 +17,13 @@ export default function NavbarAvatar() {
     );
   }
 
-  const initials = `${user.firstName[0].toUpperCase()}${user.lastName[0].toUpperCase()}`;
+  const { firstName, lastName, lastActive } = user;
 
   return (
-    <Image
+    <Avatar
       src={`${API_URL}/files/${user.photoURL}`}
-      className={{
-        common: "h-12 w-12 rounded-full bg-slate-200",
-        img: "object-cover",
-        error: "bg-white font-semibold"
-      }}
-      errorContent={initials}
+      alt={getInitials({ firstName, lastName })}
+      lastActive={lastActive}
     />
   );
 }

@@ -27,6 +27,9 @@ import { ROUTES } from "../../../lib/routes";
 import { createChatBetweenUsers } from "../../../api/chatAPI";
 import { useAppContext } from "../../../contexts/AppProvider";
 import useClickOutside from "../../../hooks/useClickOutside";
+import Avatar from "../Avatar";
+import { getInitials } from "../../../utils/getInitials";
+import { createFullName } from "../../../utils/createFullName";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -99,23 +102,13 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
   const { user: me } = useAppContext();
   const navigate = useNavigate();
 
-  const createFullName = (
-    firstName: User["firstName"],
-    lastName: User["lastName"],
-    maxLength = 15
-  ): string => {
-    const fullName = `${firstName} ${lastName}`;
-    if (firstName.length + lastName.length > maxLength) {
-      return `${fullName.substring(0, maxLength)}...`;
-    }
-    return fullName;
-  };
-
   const handleCreateChat = async (userId: User["id"]) => {
     const chat = await createChatBetweenUsers(me!.id, userId);
     setIsExpanded(false);
     navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
   };
+
+  const { firstName, lastName } = user;
 
   return (
     <CommandItem
@@ -123,13 +116,10 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
       className="flex w-full items-center justify-between"
     >
       <div className="flex items-center">
-        <Image
+        <Avatar
           src={user.photoURL!}
-          className={{
-            common: "h-8 w-8 rounded-full object-cover",
-            error: "bg-white text-xs font-semibold"
-          }}
-          errorContent={`${user.firstName.toUpperCase()[0]}${user.lastName.toUpperCase()[0]}`}
+          alt={getInitials({ firstName, lastName })}
+          className="h-8 w-8 text-xs"
         />
         <span className="ml-4">
           {createFullName(user.firstName, user.lastName)}
