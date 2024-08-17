@@ -1,11 +1,11 @@
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Loading from "./components/common/Loading";
 import AppProvider from "./contexts/AppProvider";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import { protectedRoutes, publicRoutes } from "./lib/routes";
 import { Toaster } from "./components/ui/toaster";
 import Navbar from "./components/common/navbar/Navbar";
+import RouteSuspenseFallback from "./components/common/RouteSuspenseFallback";
 
 export default function App() {
   return (
@@ -19,7 +19,7 @@ export default function App() {
               path={route.path}
               element={
                 <ProtectedRoute>
-                  <Suspense fallback={<Loading />}>
+                  <Suspense fallback={<RouteSuspenseFallback />}>
                     <route.component />
                   </Suspense>
                 </ProtectedRoute>
@@ -31,7 +31,7 @@ export default function App() {
               key={index}
               path={route.path}
               element={
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<RouteSuspenseFallback />}>
                   <route.component />
                 </Suspense>
               }
