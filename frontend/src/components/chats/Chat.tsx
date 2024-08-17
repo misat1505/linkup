@@ -1,3 +1,4 @@
+import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { getChatMessages } from "../../api/chatAPI";
 import React from "react";
 import { useQuery } from "react-query";
@@ -12,12 +13,18 @@ export default function ChatGuard() {
 }
 
 function Chat({ chatId }: { chatId: string }) {
-  const { data, isLoading, error } = useQuery({
+  const { isLoading: chatsLoading, getChatById } = useChatPageContext();
+  const {
+    data: messages,
+    isLoading,
+    error
+  } = useQuery({
     queryKey: ["messages", { chatId }],
     queryFn: () => getChatMessages(chatId)
   });
 
-  if (isLoading) return <div className="flex-grow">loading...</div>;
+  if (isLoading || chatsLoading)
+    return <div className="flex-grow">loading...</div>;
 
   if (error)
     return (
@@ -28,5 +35,10 @@ function Chat({ chatId }: { chatId: string }) {
       </div>
     );
 
-  return <div className="flex-grow">{JSON.stringify(data)}</div>;
+  return (
+    <div className="flex-grow">
+      {JSON.stringify(getChatById(chatId))}
+      {JSON.stringify(messages)}
+    </div>
+  );
 }

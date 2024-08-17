@@ -14,12 +14,10 @@ import {
   getLastActive
 } from "../../utils/chatNavigationUtils";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { useChatPageContext } from "../../contexts/ChatPageProvider";
 
 export default function ChatNavigation() {
-  const { data: chats, isLoading } = useQuery({
-    queryKey: ["chats"],
-    queryFn: getUserChats
-  });
+  const { chats, isLoading } = useChatPageContext();
 
   if (isLoading) return <div className="w-80">loading...</div>;
 
