@@ -10,7 +10,7 @@ import { useToast } from "../../components/ui/use-toast";
 import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
 import { createMessage } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
-import { useQueryClient } from "react-query";
+import useChat from "./useChat";
 
 type ChatFormEntries = {
   content: string;
@@ -26,8 +26,8 @@ export type useChatFormValue = {
 };
 
 export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
+  const { addMessage } = useChat(chatId);
   const { toast } = useToast();
-  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -39,9 +39,9 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
 
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {
-      await createMessage(chatId, data);
+      const message = await createMessage(chatId, data);
       reset();
-      queryClient.invalidateQueries(["messages", { chatId }]);
+      addMessage(message);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
