@@ -15,6 +15,7 @@ type ChatContextValue = {
   error: unknown;
   chat: Chat | null;
   addMessage: (message: Message) => void;
+  chatId: Chat["id"];
 };
 
 const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
@@ -23,10 +24,10 @@ export const useChatContext = () => useContext(ChatContext);
 
 export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
   const queryClient = useQueryClient();
-  const { isLoading: chatsLoading, chats } = useChatPageContext();
+  const { chats } = useChatPageContext();
   const {
     data: messages,
-    isLoading: messagesLoading,
+    isLoading,
     error
   } = useQuery({
     queryKey: ["messages", { chatId }],
@@ -48,10 +49,11 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
     <ChatContext.Provider
       value={{
         messages,
-        isLoading: messagesLoading || chatsLoading,
+        isLoading,
         error,
         chat,
-        addMessage
+        addMessage,
+        chatId
       }}
     >
       {children}

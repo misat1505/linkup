@@ -19,16 +19,16 @@ export default function ChatGuard() {
 }
 
 function Chat() {
-  const { isLoading, error, chat } = useChatContext();
+  const { isLoading, error, chat, chatId } = useChatContext();
 
-  if (isLoading)
-    return (
-      <div className="relative flex-grow">
-        <Loading />
-      </div>
-    );
+  // if (isLoading)
+  //   return (
+  //     <div className="relative flex-grow">
+  //       <Loading />
+  //     </div>
+  //   );
 
-  if (error || !chat)
+  if (error)
     return (
       <div className="relative flex-grow">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-slate-100 p-4">
@@ -39,9 +39,9 @@ function Chat() {
 
   return (
     <div className="flex-grow">
-      <ChatHeader />
+      <ChatHeader chatId={chatId} />
       <ChatContent />
-      <ChatFooter />
+      <ChatFooter chatId={chatId} />
     </div>
   );
 }

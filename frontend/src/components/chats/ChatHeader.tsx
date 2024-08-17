@@ -13,12 +13,14 @@ import { RxCross1 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
 import { getStatus, Status, timeDifference } from "../../utils/timeDifference";
-import { useChatContext } from "../../contexts/ChatProvider";
+import { useChatPageContext } from "../../contexts/ChatPageProvider";
 
-export default function ChatHeader() {
-  const { chat } = useChatContext();
+export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
+  const { chats } = useChatPageContext();
   const { user: me } = useAppContext();
   const navigate = useNavigate();
+
+  const chat = chats?.find((c) => c.id === chatId);
 
   if (!me || !chat) throw new Error();
 
