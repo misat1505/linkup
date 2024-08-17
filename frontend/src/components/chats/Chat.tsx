@@ -4,6 +4,8 @@ import React from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import ChatHeader from "./ChatHeader";
+import ChatContent from "./ChatContent";
+import ChatFooter from "./ChatFooter";
 
 export default function ChatGuard() {
   const { chatId } = useParams();
@@ -41,7 +43,8 @@ function Chat({ chatId }: { chatId: string }) {
   return (
     <div className="flex-grow">
       <ChatHeader chat={chat} />
-      {JSON.stringify(messages)}
+      <ChatContent messages={messages!} />
+      <ChatFooter />
     </div>
   );
 }
