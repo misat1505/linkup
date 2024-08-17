@@ -10,7 +10,7 @@ import { useToast } from "../../components/ui/use-toast";
 import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
 import { createMessage } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
-import useChat from "./useChat";
+import { useChatContext } from "../../contexts/ChatProvider";
 
 type ChatFormEntries = {
   content: string;
@@ -26,7 +26,7 @@ export type useChatFormValue = {
 };
 
 export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
-  const { addMessage } = useChat(chatId);
+  const { addMessage } = useChatContext();
   const { toast } = useToast();
   const {
     register,

@@ -10,7 +10,6 @@ type ChatPageContextProps = {
 type ChatPageContextValue = {
   chats: Chat[] | undefined;
   isLoading: boolean;
-  getChatById: (chatId: Chat["id"]) => Chat | null;
 };
 
 const ChatPageContext = createContext<ChatPageContextValue>(
@@ -25,12 +24,8 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
     queryFn: getUserChats
   });
 
-  const getChatById = (chatId: Chat["id"]): Chat | null => {
-    return chats?.find((chat) => chat.id === chatId) || null;
-  };
-
   return (
-    <ChatPageContext.Provider value={{ chats, isLoading, getChatById }}>
+    <ChatPageContext.Provider value={{ chats, isLoading }}>
       {children}
     </ChatPageContext.Provider>
   );

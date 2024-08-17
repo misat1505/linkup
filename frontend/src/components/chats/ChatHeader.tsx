@@ -13,12 +13,14 @@ import { RxCross1 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
 import { getStatus, Status, timeDifference } from "../../utils/timeDifference";
+import { useChatContext } from "../../contexts/ChatProvider";
 
-export default function ChatHeader({ chat }: { chat: Chat }) {
+export default function ChatHeader() {
+  const { chat } = useChatContext();
   const { user: me } = useAppContext();
   const navigate = useNavigate();
 
-  if (!me) throw new Error();
+  if (!me || !chat) throw new Error();
 
   const src = `${API_URL}/files/${getImageURL({ me, chat })!}`;
   const alt = getImageAlt({ me, chat });

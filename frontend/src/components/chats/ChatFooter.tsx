@@ -3,11 +3,12 @@ import { FaFileAlt } from "react-icons/fa";
 import { Textarea } from "../ui/textarea";
 import { IoSend } from "react-icons/io5";
 import { Input } from "../ui/input";
-import { Chat } from "../../models/Chat";
 import useChatForm from "../../hooks/chats/useChatForm";
+import { useChatContext } from "../../contexts/ChatProvider";
 
-export default function ChatFooter({ chatId }: { chatId: Chat["id"] }) {
-  const { register, submitForm } = useChatForm(chatId);
+export default function ChatFooter() {
+  const { chat } = useChatContext();
+  const { register, submitForm } = useChatForm(chat!.id);
 
   return (
     <form

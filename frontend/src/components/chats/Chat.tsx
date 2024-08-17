@@ -1,35 +1,26 @@
-import { useChatPageContext } from "../../contexts/ChatPageProvider";
-import { getChatMessages } from "../../api/chatAPI";
 import React from "react";
-import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import ChatHeader from "./ChatHeader";
 import ChatContent from "./ChatContent";
 import ChatFooter from "./ChatFooter";
+import ChatProvider, { useChatContext } from "../../contexts/ChatProvider";
 
 export default function ChatGuard() {
   const { chatId } = useParams();
 
   if (!chatId) return <div className="flex-grow">No chat selected.</div>;
 
-  return <Chat chatId={chatId} />;
+  return (
+    <ChatProvider chatId={chatId}>
+      <Chat />
+    </ChatProvider>
+  );
 }
 
-function Chat({ chatId }: { chatId: string }) {
-  const { isLoading: chatsLoading, getChatById } = useChatPageContext();
-  const {
-    data: messages,
-    isLoading,
-    error
-  } = useQuery({
-    queryKey: ["messages", { chatId }],
-    queryFn: () => getChatMessages(chatId)
-  });
+function Chat() {
+  const { isLoading, error, chat } = useChatContext();
 
-  if (isLoading || chatsLoading)
-    return <div className="flex-grow">loading...</div>;
-
-  const chat = getChatById(chatId);
+  if (isLoading) return <div className="flex-grow">loading...</div>;
 
   if (error || !chat)
     return (
@@ -42,9 +33,9 @@ function Chat({ chatId }: { chatId: string }) {
 
   return (
     <div className="flex-grow">
-      <ChatHeader chat={chat} />
-      <ChatContent messages={messages!} />
-      <ChatFooter chatId={chat.id} />
+      <ChatHeader />
+      <ChatContent />
+      <ChatFooter />
     </div>
   );
 }
