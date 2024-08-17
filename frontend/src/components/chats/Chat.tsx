@@ -44,7 +44,7 @@ function Chat({ chatId }: { chatId: string }) {
     <div className="flex-grow">
       <ChatHeader chat={chat} />
       <ChatContent messages={messages!} />
-      <ChatFooter />
+      <ChatFooter chatId={chat.id} />
     </div>
   );
 }

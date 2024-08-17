@@ -3,6 +3,7 @@ import { User } from "../models/User";
 import { CHAT_API } from "./utils";
 import { Chat } from "../models/Chat";
 import { Message } from "../models/Message";
+import { ChatFormType } from "@/validators/chat.validators";
 
 export const createChatBetweenUsers = async (
   user1: User["id"],
@@ -31,7 +32,17 @@ export const getUserChats = async (): Promise<Chat[]> => {
   return response.data.chats;
 };
 
-export const getChatMessages = async (chatId: string): Promise<Message[]> => {
+export const getChatMessages = async (
+  chatId: Chat["id"]
+): Promise<Message[]> => {
   const response = await CHAT_API.get(`/${chatId}/messages`);
   return response.data.messages;
+};
+
+export const createMessage = async (
+  chatId: Chat["id"],
+  payload: ChatFormType
+): Promise<Message> => {
+  const response = await CHAT_API.post(`/${chatId}/messages`, payload);
+  return response.data.message;
 };
