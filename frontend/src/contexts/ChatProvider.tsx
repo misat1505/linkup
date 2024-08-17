@@ -1,9 +1,10 @@
-import { getChatMessages, getUserChats } from "../api/chatAPI";
+import { getChatMessages } from "../api/chatAPI";
 import { Chat } from "../models/Chat";
 import React, { createContext, PropsWithChildren, useContext } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useChatPageContext } from "./ChatPageProvider";
 import { Message } from "../models/Message";
+import { queryKeys } from "../lib/queryKeys";
 
 type ChatContextProps = PropsWithChildren & {
   chatId: Chat["id"];
@@ -30,13 +31,14 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
     isLoading,
     error
   } = useQuery({
-    queryKey: ["messages", { chatId }],
-    queryFn: () => getChatMessages(chatId)
+    queryKey: queryKeys.messages(chatId),
+    queryFn: () => getChatMessages(chatId),
+    refetchOnMount: false
   });
 
   const addMessage = (message: Message): void => {
     queryClient.setQueryData<Message[]>(
-      ["messages", { chatId }],
+      queryKeys.messages(chatId),
       (oldMessages) => {
         return oldMessages ? [...oldMessages, message] : [message];
       }

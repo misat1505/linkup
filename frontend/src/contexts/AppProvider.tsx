@@ -9,6 +9,7 @@ import React, {
 import { fetchUser, refreshToken } from "../api/authAPI";
 import { User } from "../models/User";
 import { useQuery } from "react-query";
+import { queryKeys } from "../lib/queryKeys";
 
 type AppContextProps = PropsWithChildren;
 
@@ -24,7 +25,9 @@ export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children }: AppContextProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const { status } = useQuery("user", fetchUser, {
+  const { status } = useQuery({
+    queryKey: queryKeys.me(),
+    queryFn: fetchUser,
     onSuccess: (d) => setUser(d)
   });
   const refreshTokenIntervalRef = useRef<NodeJS.Timeout | null>(null);

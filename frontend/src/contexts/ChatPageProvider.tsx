@@ -1,3 +1,4 @@
+import { queryKeys } from "../lib/queryKeys";
 import { getUserChats } from "../api/chatAPI";
 import { Chat } from "../models/Chat";
 import React, { createContext, useContext } from "react";
@@ -21,10 +22,11 @@ export const useChatPageContext = () => useContext(ChatPageContext);
 export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
   const queryClient = useQueryClient();
   const { data: chats, isLoading } = useQuery({
-    queryKey: ["chats"],
+    queryKey: queryKeys.chats(),
     queryFn: getUserChats,
     refetchOnMount: true,
-    onSuccess: (data) => queryClient.setQueryData<Chat[]>(["chats"], data)
+    onSuccess: (data) =>
+      queryClient.setQueryData<Chat[]>(queryKeys.chats(), data)
   });
 
   return (

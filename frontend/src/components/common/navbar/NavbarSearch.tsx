@@ -29,6 +29,7 @@ import useClickOutside from "../../../hooks/useClickOutside";
 import Avatar from "../Avatar";
 import { getInitials } from "../../../utils/getInitials";
 import { createFullName } from "../../../utils/createFullName";
+import { queryKeys } from "../../../lib/queryKeys";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -38,7 +39,7 @@ export default function NavbarSearch() {
   useClickOutside(commandListRef, () => setIsExpanded(false));
 
   const { data: users = [], isFetching } = useQuery({
-    queryKey: ["search-users", { debouncedText }],
+    queryKey: queryKeys.searchUsers(debouncedText),
     queryFn: () => searchUsers(debouncedText),
     enabled: debouncedText.length > 0
   });
