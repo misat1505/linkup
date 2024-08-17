@@ -13,6 +13,7 @@ import {
   getImageURL,
   getLastActive
 } from "../../utils/chatNavigationUtils";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
 export default function ChatNavigation() {
   const { data: chats, isLoading } = useQuery({
@@ -24,7 +25,22 @@ export default function ChatNavigation() {
 
   return (
     <div className="w-80">
-      {chats?.map((chat) => <NavigationItem key={chat.id} chat={chat} />)}
+      <ChatNavigationHeader />
+      <div className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto">
+        {chats?.map((chat) => <NavigationItem key={chat.id} chat={chat} />)}
+      </div>
+    </div>
+  );
+}
+
+function ChatNavigationHeader() {
+  return (
+    <div className="flex w-full items-center justify-between bg-transparent px-4 py-2 text-white">
+      <h2 className="text-lg font-semibold">Chat with others</h2>
+      <IoIosAddCircleOutline
+        size={20}
+        className="transition-all hover:scale-125 hover:cursor-pointer"
+      />
     </div>
   );
 }
@@ -46,7 +62,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
 
   return (
     <button
-      className="m-4 flex w-72 items-center gap-x-4 rounded-md bg-slate-100 p-4 transition-all hover:cursor-pointer hover:bg-slate-200"
+      className="mx-4 mb-4 flex w-72 items-center gap-x-4 rounded-md bg-slate-100 p-4 transition-all hover:cursor-pointer hover:bg-slate-200"
       onClick={() => handleOpenChat(chat.id)}
     >
       <Avatar src={src} alt={alt} lastActive={lastActive} />
