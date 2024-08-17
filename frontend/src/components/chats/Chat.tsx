@@ -3,6 +3,7 @@ import { getChatMessages } from "../../api/chatAPI";
 import React from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import ChatHeader from "./ChatHeader";
 
 export default function ChatGuard() {
   const { chatId } = useParams();
@@ -26,7 +27,9 @@ function Chat({ chatId }: { chatId: string }) {
   if (isLoading || chatsLoading)
     return <div className="flex-grow">loading...</div>;
 
-  if (error)
+  const chat = getChatById(chatId);
+
+  if (error || !chat)
     return (
       <div className="relative flex-grow">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-slate-100 p-4">
@@ -37,7 +40,7 @@ function Chat({ chatId }: { chatId: string }) {
 
   return (
     <div className="flex-grow">
-      {JSON.stringify(getChatById(chatId))}
+      <ChatHeader chat={chat} />
       {JSON.stringify(messages)}
     </div>
   );
