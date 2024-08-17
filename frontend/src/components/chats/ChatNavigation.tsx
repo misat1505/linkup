@@ -1,7 +1,5 @@
 import { Chat } from "../../models/Chat";
-import { getUserChats } from "../../api/chatAPI";
 import React from "react";
-import { useQuery } from "react-query";
 import { useAppContext } from "../../contexts/AppProvider";
 import { API_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";

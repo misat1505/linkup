@@ -4,6 +4,7 @@ import ChatHeader from "./ChatHeader";
 import ChatContent from "./ChatContent";
 import ChatFooter from "./ChatFooter";
 import ChatProvider, { useChatContext } from "../../contexts/ChatProvider";
+import Loading from "../common/Loading";
 
 export default function ChatGuard() {
   const { chatId } = useParams();
@@ -20,7 +21,12 @@ export default function ChatGuard() {
 function Chat() {
   const { isLoading, error, chat } = useChatContext();
 
-  if (isLoading) return <div className="flex-grow">loading...</div>;
+  if (isLoading)
+    return (
+      <div className="relative flex-grow">
+        <Loading />
+      </div>
+    );
 
   if (error || !chat)
     return (

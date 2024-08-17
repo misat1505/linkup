@@ -52,7 +52,7 @@ export function getImageAlt({ chat, me }: CommonArgs): string {
 export function getLastActive({ chat, me }: CommonArgs): User["lastActive"] {
   if (chat.type === "PRIVATE") {
     if (chat.users?.length === 1 && chat.users![0].id === me.id)
-      return me.lastActive;
+      return chat.users![0].lastActive;
 
     const otherUser = chat.users!.find((user) => user.id !== me.id)!;
     return otherUser.lastActive;
