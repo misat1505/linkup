@@ -53,7 +53,7 @@ function ActivityStatus({ lastActive }: { lastActive: User["lastActive"] }) {
   return (
     <div
       className="absolute bottom-0 right-0 h-4 w-fit overflow-hidden rounded-full border border-black bg-yellow-400 px-1 font-semibold text-black"
-      style={{ fontSize: "0.5rem" }}
+      style={{ fontSize: "0.6rem" }}
     >
       {text}
     </div>
