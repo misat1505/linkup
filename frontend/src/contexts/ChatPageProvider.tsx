@@ -4,9 +4,8 @@ import { Chat } from "../models/Chat";
 import React, { createContext, useContext, useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { sortChatsByActivity } from "../utils/sortChatsByActivity";
-import { useSocketContext } from "./SocketProvider";
-import { useChatContext } from "./ChatProvider";
 import { Message } from "../models/Message";
+import { SocketAction, socketClient } from "../lib/socketIOClient";
 
 type ChatPageContextProps = {
   children: React.ReactNode;
@@ -25,7 +24,6 @@ const ChatPageContext = createContext<ChatPageContextValue>(
 export const useChatPageContext = () => useContext(ChatPageContext);
 
 export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
-  const { socket } = useSocketContext();
   const queryClient = useQueryClient();
   const { data: chats, isLoading } = useQuery({
     queryKey: queryKeys.chats(),
@@ -36,11 +34,9 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
         queryKeys.chats(),
         sortChatsByActivity(data)
       );
-      if (socket) {
-        data.forEach((chat) => {
-          socket.emit("join-room", chat.id);
-        });
-      }
+      data.forEach((chat) => {
+        socketClient.joinRoom(chat.id);
+      });
     }
   });
 
@@ -64,21 +60,19 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
   };
 
   useEffect(() => {
-    if (!socket) return;
-
-    socket.on("receive-message", (message) => {
+    socketClient.onReceiveMessage((message) => {
       addMessage(message);
     });
 
     return () => {
-      socket.off("receive-message");
+      socketClient.off(SocketAction.RECEIVE_MESSAGE);
     };
-  }, [socket]);
+  }, [socketClient]);
 
   useEffect(() => {
     return () => {
       queryClient.getQueryData<Chat[]>(queryKeys.chats())?.forEach((chat) => {
-        socket!.emit("leave-room", chat.id);
+        socketClient.leaveRoom(chat.id);
       });
     };
   }, []);

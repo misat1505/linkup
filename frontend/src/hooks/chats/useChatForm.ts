@@ -10,8 +10,8 @@ import { useToast } from "../../components/ui/use-toast";
 import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
 import { createMessage } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
-import { useSocketContext } from "../../contexts/SocketProvider";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
+import { socketClient } from "../../lib/socketIOClient";
 
 type ChatFormEntries = {
   content: string;
@@ -28,7 +28,6 @@ export type useChatFormValue = {
 
 export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
   const { addMessage } = useChatPageContext();
-  const { socket } = useSocketContext();
   const { toast } = useToast();
   const {
     register,
@@ -44,7 +43,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
       const message = await createMessage(chatId, data);
       reset();
       addMessage(message);
-      socket?.emit("send-message", message, chatId);
+      socketClient.sendMessage(message, chatId);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
