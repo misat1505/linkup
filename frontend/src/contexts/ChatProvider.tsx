@@ -16,7 +16,7 @@ type ChatContextValue = {
   isLoading: boolean;
   error: unknown;
   chat: Chat | null;
-  addMessage: (message: Message) => void;
+  // addMessage: (message: Message) => void;
   chatId: Chat["id"];
 };
 
@@ -37,24 +37,24 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
     refetchOnMount: false
   });
 
-  const addMessage = (message: Message): void => {
-    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-      const updatedChats = oldChats!.map((chat) => {
-        if (chat.id !== message.chatId) return chat;
-        chat.lastMessage = message;
-        return { ...chat };
-      });
+  // const addMessage = (message: Message): void => {
+  //   queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+  //     const updatedChats = oldChats!.map((chat) => {
+  //       if (chat.id !== message.chatId) return chat;
+  //       chat.lastMessage = message;
+  //       return { ...chat };
+  //     });
 
-      return sortChatsByActivity(updatedChats);
-    });
+  //     return sortChatsByActivity(updatedChats);
+  //   });
 
-    queryClient.setQueryData<Message[]>(
-      queryKeys.messages(chatId),
-      (oldMessages) => {
-        return oldMessages ? [...oldMessages, message] : [message];
-      }
-    );
-  };
+  //   queryClient.setQueryData<Message[]>(
+  //     queryKeys.messages(chatId),
+  //     (oldMessages) => {
+  //       return oldMessages ? [...oldMessages, message] : [message];
+  //     }
+  //   );
+  // };
 
   const chat = chats?.find((c) => c.id === chatId) || null;
 
@@ -65,7 +65,7 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
         isLoading,
         error,
         chat,
-        addMessage,
+        // addMessage,
         chatId
       }}
     >

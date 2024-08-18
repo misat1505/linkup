@@ -11,6 +11,8 @@ import protectedRoutes from "./routes/protected.routes";
 import publicRoutes from "./routes/public.routes";
 import morgan from "morgan";
 import { accessLogStream } from "./config/log";
+import { Server } from "socket.io";
+import { setupSocket } from "./lib/sockets";
 
 const app = express();
 
@@ -31,6 +33,11 @@ app.get("/", (req: Request, res: Response) => {
 
 if (env.NODE_ENV !== "test") {
   const httpsServer = https.createServer(credentials, app);
+  const io = new Server(env.PORT + 1, {
+    cors: { origin: "https://localhost:3000", credentials: true },
+  });
+  setupSocket(io);
+
   httpsServer.listen(env.PORT, () => {
     console.log(`Server is running on port ${env.PORT}.`);
   });

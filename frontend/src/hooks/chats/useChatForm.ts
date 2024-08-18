@@ -11,6 +11,8 @@ import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
 import { createMessage } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
 import { useChatContext } from "../../contexts/ChatProvider";
+import { useSocketContext } from "../../contexts/SocketProvider";
+import { useChatPageContext } from "../../contexts/ChatPageProvider";
 
 type ChatFormEntries = {
   content: string;
@@ -26,7 +28,8 @@ export type useChatFormValue = {
 };
 
 export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
-  const { addMessage } = useChatContext();
+  const { addMessage } = useChatPageContext();
+  const { socket } = useSocketContext();
   const { toast } = useToast();
   const {
     register,
@@ -42,6 +45,8 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
       const message = await createMessage(chatId, data);
       reset();
       addMessage(message);
+      console.log(socket);
+      socket?.emit("send-message", message, chatId);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({

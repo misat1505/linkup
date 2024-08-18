@@ -4,6 +4,7 @@ import "./globals.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryClient, QueryClientProvider } from "react-query";
+import SocketProvider from "./contexts/SocketProvider";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,7 +21,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <SocketProvider>
+        <App />
+      </SocketProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );
