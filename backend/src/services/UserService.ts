@@ -1,5 +1,6 @@
 import { User, UserWithCredentials } from "../models/User";
 import { prisma } from "../lib/Prisma";
+import { userSelect } from "../utils/prisma/userSelect";
 
 export class UserService {
   static async searchUsers(term: string): Promise<User[]> {
@@ -18,13 +19,7 @@ export class UserService {
           },
         ],
       },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        photoURL: true,
-        lastActive: true,
-      },
+      select: userSelect,
     });
 
     return users;

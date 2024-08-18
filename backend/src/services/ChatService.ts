@@ -3,6 +3,7 @@ import { Chat } from "../models/Chat";
 import { Message } from "../models/Message";
 import { User } from "../models/User";
 import { v7 as uuidv7 } from "uuid";
+import { userSelect } from "../utils/prisma/userSelect";
 
 export class ChatService {
   static async getChatMessages(chatId: Chat["id"]): Promise<Message[]> {
@@ -15,13 +16,7 @@ export class ChatService {
       },
       include: {
         author: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            lastActive: true,
-            photoURL: true,
-          },
+          select: userSelect,
         },
         response: {
           select: {
@@ -86,13 +81,7 @@ export class ChatService {
       },
       include: {
         author: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            lastActive: true,
-            photoURL: true,
-          },
+          select: userSelect,
         },
         response: {
           select: {
@@ -122,13 +111,7 @@ export class ChatService {
       },
       include: {
         users: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            lastActive: true,
-            photoURL: true,
-          },
+          select: userSelect,
         },
       },
     });
@@ -153,13 +136,7 @@ export class ChatService {
       },
       include: {
         users: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            lastActive: true,
-            photoURL: true,
-          },
+          select: userSelect,
         },
       },
     });
@@ -177,13 +154,7 @@ export class ChatService {
       },
       include: {
         users: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            lastActive: true,
-            photoURL: true,
-          },
+          select: userSelect,
         },
       },
     });
