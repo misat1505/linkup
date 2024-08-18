@@ -15,7 +15,7 @@ class SocketClient {
   private socket: Socket;
 
   constructor(serverUrl: string) {
-    this.socket = io(serverUrl);
+    this.socket = io(serverUrl, { withCredentials: true });
 
     this.socket.on("connect", () => {
       console.log(`Connected to server with id: ${this.socket.id}`);
