@@ -58,15 +58,15 @@ function NavigationItem({ chat }: { chat: Chat }) {
   const chatName = getChatName({ me, chat });
   const lastActive = getLastActive({ me, chat });
 
-  const humanizeLastMessage = (chat: Chat): string => {
-    if (!chat.lastMessage) return "";
+  // const humanizeLastMessage = (chat: Chat): string => {
+  //   if (!chat.lastMessage) return "";
 
-    const displayName =
-      chat.lastMessage.author.id === me.id
-        ? "You"
-        : chat.lastMessage.author.firstName;
-    return `${displayName}: ${chat.lastMessage.content?.slice(0, 20)}`;
-  };
+  //   const displayName =
+  //     chat.lastMessage.author.id === me.id
+  //       ? "You"
+  //       : chat.lastMessage.author.firstName;
+  //   return `${displayName}: ${chat.lastMessage.content?.slice(0, 20)}`;
+  // };
 
   return (
     <button
@@ -76,8 +76,32 @@ function NavigationItem({ chat }: { chat: Chat }) {
       <Avatar src={src} alt={alt} lastActive={lastActive} />
       <div className="text-left">
         <div className="font-semibold">{chatName}</div>
-        <div className="text-sm">{humanizeLastMessage(chat)}</div>
+        <div className="text-sm">
+          <LastMessageDisplayer lastMessage={chat.lastMessage} />
+        </div>
       </div>
     </button>
+  );
+}
+
+function LastMessageDisplayer({
+  lastMessage
+}: {
+  lastMessage: Chat["lastMessage"];
+}) {
+  const { user: me } = useAppContext();
+
+  if (!lastMessage) return null;
+
+  const displayName =
+    lastMessage.author.id === me!.id ? "You" : lastMessage.author.firstName;
+
+  const text = lastMessage.content?.slice(0, 20);
+
+  return (
+    <>
+      <span className="font-semibold">{displayName}: </span>
+      <span>{text}</span>
+    </>
   );
 }
