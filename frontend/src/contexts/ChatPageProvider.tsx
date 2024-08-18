@@ -5,7 +5,8 @@ import React, { createContext, useContext, useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { sortChatsByActivity } from "../utils/sortChatsByActivity";
 import { Message } from "../models/Message";
-import { SocketAction, socketClient } from "../lib/socketClient";
+import { SocketAction, socketClient, SocketErrors } from "../lib/socketClient";
+import { useToast } from "../components/ui/use-toast";
 
 type ChatPageContextProps = {
   children: React.ReactNode;
@@ -24,6 +25,7 @@ const ChatPageContext = createContext<ChatPageContextValue>(
 export const useChatPageContext = () => useContext(ChatPageContext);
 
 export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
+  const { toast } = useToast();
   const queryClient = useQueryClient();
   const { data: chats, isLoading } = useQuery({
     queryKey: queryKeys.chats(),
@@ -62,6 +64,15 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
   useEffect(() => {
     socketClient.onReceiveMessage((message) => {
       addMessage(message);
+    });
+
+    socketClient.on(SocketErrors.JOINING_ROOM_ERROR, () => {
+      toast({
+        title: "Cannot join chat room.",
+        description:
+          "You will not be able to see real time sent messages. Try reloading the page.",
+        variant: "destructive"
+      });
     });
 
     return () => {

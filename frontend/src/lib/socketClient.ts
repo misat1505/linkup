@@ -11,6 +11,10 @@ export enum SocketAction {
   RECEIVE_MESSAGE = "receive-message"
 }
 
+export enum SocketErrors {
+  JOINING_ROOM_ERROR = "joining-room-error"
+}
+
 class SocketClient {
   private socket: Socket;
 
@@ -40,6 +44,10 @@ class SocketClient {
 
   onReceiveMessage(callback: (message: Message) => void) {
     this.socket.on(SocketAction.RECEIVE_MESSAGE, callback);
+  }
+
+  on(action: SocketAction | SocketErrors, cb: (...args: any[]) => void) {
+    this.socket.on(action, cb);
   }
 
   off(action: SocketAction) {
