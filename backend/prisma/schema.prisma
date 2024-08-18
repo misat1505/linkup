@@ -81,7 +81,7 @@ model Chat {
 
 model Message {
   id          String    @id @default(uuid())
-  content     String?
+  content     String?   @db.Text
   authorId    String
   createdAt   DateTime  @default(now())
   responseId  String?
