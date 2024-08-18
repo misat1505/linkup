@@ -5,7 +5,7 @@ import React, { createContext, useContext, useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { sortChatsByActivity } from "../utils/sortChatsByActivity";
 import { Message } from "../models/Message";
-import { SocketAction, socketClient } from "../lib/socketIOClient";
+import { SocketAction, socketClient } from "../lib/socketClient";
 
 type ChatPageContextProps = {
   children: React.ReactNode;

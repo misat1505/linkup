@@ -11,7 +11,7 @@ import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
 import { createMessage } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
-import { socketClient } from "../../lib/socketIOClient";
+import { socketClient } from "../../lib/socketClient";
 
 type ChatFormEntries = {
   content: string;
