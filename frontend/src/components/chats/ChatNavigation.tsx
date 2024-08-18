@@ -58,16 +58,6 @@ function NavigationItem({ chat }: { chat: Chat }) {
   const chatName = getChatName({ me, chat });
   const lastActive = getLastActive({ me, chat });
 
-  // const humanizeLastMessage = (chat: Chat): string => {
-  //   if (!chat.lastMessage) return "";
-
-  //   const displayName =
-  //     chat.lastMessage.author.id === me.id
-  //       ? "You"
-  //       : chat.lastMessage.author.firstName;
-  //   return `${displayName}: ${chat.lastMessage.content?.slice(0, 20)}`;
-  // };
-
   return (
     <button
       className="mx-4 mb-2 flex w-72 items-center gap-x-4 rounded-md bg-slate-100 px-4 py-2 transition-all hover:cursor-pointer hover:bg-slate-200"
