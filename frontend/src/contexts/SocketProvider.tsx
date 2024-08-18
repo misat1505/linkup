@@ -1,3 +1,4 @@
+import { SOCKET_URL } from "../constants";
 import React, {
   createContext,
   PropsWithChildren,
@@ -23,12 +24,7 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketIo = io("https://localhost:5501");
-    // console.log("connected");
-
-    // socketIo.on("connect", () => {
-    //   console.log("connected");
-    // });
+    const socketIo = io(SOCKET_URL);
 
     setSocket(socketIo);
 

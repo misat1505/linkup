@@ -1,11 +1,10 @@
 import { getChatMessages } from "../api/chatAPI";
 import { Chat } from "../models/Chat";
 import React, { createContext, PropsWithChildren, useContext } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { useChatPageContext } from "./ChatPageProvider";
 import { Message } from "../models/Message";
 import { queryKeys } from "../lib/queryKeys";
-import { sortChatsByActivity } from "../utils/sortChatsByActivity";
 
 type ChatContextProps = PropsWithChildren & {
   chatId: Chat["id"];
@@ -16,7 +15,6 @@ type ChatContextValue = {
   isLoading: boolean;
   error: unknown;
   chat: Chat | null;
-  // addMessage: (message: Message) => void;
   chatId: Chat["id"];
 };
 
@@ -25,7 +23,6 @@ const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
 export const useChatContext = () => useContext(ChatContext);
 
 export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
-  const queryClient = useQueryClient();
   const { chats } = useChatPageContext();
   const {
     data: messages,
@@ -37,25 +34,6 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
     refetchOnMount: false
   });
 
-  // const addMessage = (message: Message): void => {
-  //   queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-  //     const updatedChats = oldChats!.map((chat) => {
-  //       if (chat.id !== message.chatId) return chat;
-  //       chat.lastMessage = message;
-  //       return { ...chat };
-  //     });
-
-  //     return sortChatsByActivity(updatedChats);
-  //   });
-
-  //   queryClient.setQueryData<Message[]>(
-  //     queryKeys.messages(chatId),
-  //     (oldMessages) => {
-  //       return oldMessages ? [...oldMessages, message] : [message];
-  //     }
-  //   );
-  // };
-
   const chat = chats?.find((c) => c.id === chatId) || null;
 
   return (
@@ -65,7 +43,6 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
         isLoading,
         error,
         chat,
-        // addMessage,
         chatId
       }}
     >

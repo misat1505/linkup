@@ -10,7 +10,6 @@ import { useToast } from "../../components/ui/use-toast";
 import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
 import { createMessage } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
-import { useChatContext } from "../../contexts/ChatProvider";
 import { useSocketContext } from "../../contexts/SocketProvider";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 
