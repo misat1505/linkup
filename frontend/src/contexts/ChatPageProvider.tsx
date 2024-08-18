@@ -3,6 +3,7 @@ import { getUserChats } from "../api/chatAPI";
 import { Chat } from "../models/Chat";
 import React, { createContext, useContext } from "react";
 import { useQuery, useQueryClient } from "react-query";
+import { sortChatsByActivity } from "../utils/sortChatsByActivity";
 
 type ChatPageContextProps = {
   children: React.ReactNode;
@@ -26,7 +27,10 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
     queryFn: getUserChats,
     refetchOnMount: true,
     onSuccess: (data) =>
-      queryClient.setQueryData<Chat[]>(queryKeys.chats(), data)
+      queryClient.setQueryData<Chat[]>(
+        queryKeys.chats(),
+        sortChatsByActivity(data)
+      )
   });
 
   return (
