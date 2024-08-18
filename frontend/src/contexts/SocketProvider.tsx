@@ -23,7 +23,7 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketIo = io("http://localhost:5501");
+    const socketIo = io("https://localhost:5501");
     // console.log("connected");
 
     // socketIo.on("connect", () => {

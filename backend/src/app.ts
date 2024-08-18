@@ -32,12 +32,16 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 if (env.NODE_ENV !== "test") {
-  const httpsServer = https.createServer(credentials, app);
-  const io = new Server(env.SOCKET_PORT, {
+  const socketServer = https.createServer(credentials, app);
+  const io = new Server(socketServer, {
     cors: corsConfig,
   });
   setupSocket(io);
+  socketServer.listen(env.SOCKET_PORT, () => {
+    console.log(`Socket server is running on port ${env.SOCKET_PORT}.`);
+  });
 
+  const httpsServer = https.createServer(credentials, app);
   httpsServer.listen(env.PORT, () => {
     console.log(`Server is running on port ${env.PORT}.`);
   });
