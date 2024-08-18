@@ -6,7 +6,6 @@ import React, {
   useState
 } from "react";
 import { io, Socket } from "socket.io-client";
-import { API_URL } from "../constants";
 
 type SocketContextProps = PropsWithChildren;
 
@@ -27,15 +26,20 @@ export const SocketProvider = ({ children }: SocketContextProps) => {
     const socketIo = io("http://localhost:5501");
     // console.log("connected");
 
-    socketIo.on("connect", () => {
-      console.log("connected", socket?.id);
-    });
+    // socketIo.on("connect", () => {
+    //   console.log("connected");
+    // });
+
     setSocket(socketIo);
 
     return () => {
       socketIo.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    console.log(socket);
+  }, [socket]);
 
   return (
     <SocketContext.Provider

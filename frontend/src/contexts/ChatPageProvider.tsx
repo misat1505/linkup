@@ -6,7 +6,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { sortChatsByActivity } from "../utils/sortChatsByActivity";
 import { useSocketContext } from "./SocketProvider";
 import { useChatContext } from "./ChatProvider";
-import { Message } from "@/models/Message";
+import { Message } from "../models/Message";
 
 type ChatPageContextProps = {
   children: React.ReactNode;
@@ -39,7 +39,6 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
       if (socket) {
         data.forEach((chat) => {
           socket.emit("join-room", chat.id);
-          console.log("joined: ", chat.id);
         });
       }
     }
@@ -80,7 +79,6 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
     return () => {
       queryClient.getQueryData<Chat[]>(queryKeys.chats())?.forEach((chat) => {
         socket!.emit("leave-room", chat.id);
-        console.log("left: ", chat.id);
       });
     };
   }, []);

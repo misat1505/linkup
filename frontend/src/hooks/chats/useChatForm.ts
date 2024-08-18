@@ -45,7 +45,6 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
       const message = await createMessage(chatId, data);
       reset();
       addMessage(message);
-      console.log(socket);
       socket?.emit("send-message", message, chatId);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {

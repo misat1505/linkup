@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import express, { Request, Response } from "express";
 import { env } from "./config/env";
 import { limiter } from "./config/rate-limiter";
-import { corsConfig } from "./config/cors";
+import { corsConfig, corsMiddleware } from "./config/cors";
 import { credentials } from "./config/https";
 import https from "https";
 import expressStatusMonitor from "express-status-monitor";
@@ -18,7 +18,7 @@ const app = express();
 
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use(expressStatusMonitor());
-app.use(corsConfig);
+app.use(corsMiddleware);
 app.use(limiter);
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -33,8 +33,8 @@ app.get("/", (req: Request, res: Response) => {
 
 if (env.NODE_ENV !== "test") {
   const httpsServer = https.createServer(credentials, app);
-  const io = new Server(env.PORT + 1, {
-    cors: { origin: "https://localhost:3000", credentials: true },
+  const io = new Server(env.SOCKET_PORT, {
+    cors: corsConfig,
   });
   setupSocket(io);
 
