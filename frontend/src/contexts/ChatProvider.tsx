@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { useChatPageContext } from "./ChatPageProvider";
 import { Message } from "../models/Message";
 import { queryKeys } from "../lib/queryKeys";
+import { sortChatsByActivity } from "../utils/sortChatsByActivity";
 
 type ChatContextProps = PropsWithChildren & {
   chatId: Chat["id"];
@@ -37,6 +38,16 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
   });
 
   const addMessage = (message: Message): void => {
+    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+      const updatedChats = oldChats!.map((chat) => {
+        if (chat.id !== message.chatId) return chat;
+        chat.lastMessage = message;
+        return { ...chat };
+      });
+
+      return sortChatsByActivity(updatedChats);
+    });
+
     queryClient.setQueryData<Message[]>(
       queryKeys.messages(chatId),
       (oldMessages) => {
