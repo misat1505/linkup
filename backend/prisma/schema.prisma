@@ -71,10 +71,12 @@ model Chat {
   createdAt DateTime    @default(now())
   photoURL  String?
   type      ChatType
+  lastMessageId String? @unique
 
   users     User[]      @relation("UserChats")
   post      Post?       @relation("PostChat")
   messages  Message[]   @relation("MessageChat")
+  lastMessage  Message?  @relation("LastMessageInChat", fields: [lastMessageId], references: [id])
 }
 
 model Message {
@@ -91,6 +93,7 @@ model Message {
   replies     Message[] @relation("MessageResponses")
   files       File[]    @relation("MessageFiles")
   reactions   UserReaction[]
+  Chat        Chat?     @relation("LastMessageInChat")
 }
 
 model File {

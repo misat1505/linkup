@@ -4,6 +4,7 @@ import { Message } from "../models/Message";
 import { User } from "../models/User";
 import { v7 as uuidv7 } from "uuid";
 import { userSelect } from "../utils/prisma/userSelect";
+import { messageWithoutResponseSelect } from "../utils/prisma/messageWithoutResponseSelect";
 
 export class ChatService {
   static async getChatMessages(chatId: Chat["id"]): Promise<Message[]> {
@@ -19,13 +20,7 @@ export class ChatService {
           select: userSelect,
         },
         response: {
-          select: {
-            id: true,
-            content: true,
-            author: true,
-            createdAt: true,
-            chatId: true,
-          },
+          select: messageWithoutResponseSelect,
         },
       },
     });
@@ -84,15 +79,14 @@ export class ChatService {
           select: userSelect,
         },
         response: {
-          select: {
-            id: true,
-            content: true,
-            author: true,
-            createdAt: true,
-            chatId: true,
-          },
+          select: messageWithoutResponseSelect,
         },
       },
+    });
+
+    await prisma.chat.update({
+      data: { lastMessageId: result.id },
+      where: { id: chatId },
     });
 
     const { authorId: _, responseId, ...message } = result;
@@ -112,6 +106,9 @@ export class ChatService {
       include: {
         users: {
           select: userSelect,
+        },
+        lastMessage: {
+          select: messageWithoutResponseSelect,
         },
       },
     });
@@ -138,6 +135,9 @@ export class ChatService {
         users: {
           select: userSelect,
         },
+        lastMessage: {
+          select: messageWithoutResponseSelect,
+        },
       },
     });
 
@@ -155,6 +155,9 @@ export class ChatService {
       include: {
         users: {
           select: userSelect,
+        },
+        lastMessage: {
+          select: messageWithoutResponseSelect,
         },
       },
     });
