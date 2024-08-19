@@ -4,6 +4,9 @@ import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
+  UseFormSetFocus,
+  UseFormSetValue,
+  UseFormTrigger,
   useForm
 } from "react-hook-form";
 import { useToast } from "../../components/ui/use-toast";
@@ -13,14 +16,18 @@ import { Chat } from "../../models/Chat";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { socketClient } from "../../lib/socketClient";
 
-type ChatFormEntries = {
+export type ChatFormEntries = {
   content: string;
+  files?: File[] | undefined;
 };
 
 export type useChatFormValue = {
   register: UseFormRegister<ChatFormEntries>;
   errors: FieldErrors<ChatFormEntries>;
   isSubmitting: boolean;
+  files: File[] | undefined;
+  trigger: UseFormTrigger<ChatFormEntries>;
+  setValue: UseFormSetValue<ChatFormEntries>;
   submitForm: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
@@ -33,10 +40,15 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
+    watch,
+    getValues,
+    trigger,
+    setValue
   } = useForm<ChatFormType>({
     resolver: zodResolver(chatFormSchema)
   });
+  console.log("watch", watch());
 
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {
@@ -61,6 +73,9 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     register,
     errors,
     isSubmitting,
-    submitForm
+    submitForm,
+    files: getValues().files,
+    trigger,
+    setValue
   };
 }
