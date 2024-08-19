@@ -22,6 +22,9 @@ export class ChatService {
         response: {
           select: messageWithoutResponseSelect,
         },
+        files: {
+          select: { id: true, url: true },
+        },
       },
     });
 
@@ -59,10 +62,12 @@ export class ChatService {
     content,
     authorId,
     chatId,
+    files,
   }: {
     content: Message["content"];
     authorId: User["id"];
     chatId: Chat["id"];
+    files: string[];
   }): Promise<Message> {
     const result: Message & {
       authorId: User["id"];
@@ -73,13 +78,20 @@ export class ChatService {
         content,
         authorId,
         chatId,
+        files: {
+          create: files.map((fileUrl) => ({
+            id: uuidv7(),
+            url: fileUrl,
+          })),
+        },
       },
       include: {
         author: {
           select: userSelect,
         },
-        response: {
-          select: messageWithoutResponseSelect,
+        response: { select: messageWithoutResponseSelect },
+        files: {
+          select: { id: true, url: true },
         },
       },
     });

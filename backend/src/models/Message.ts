@@ -1,3 +1,4 @@
+import { File } from "./File";
 import { User } from "./User";
 
 export type Message = {
@@ -7,4 +8,5 @@ export type Message = {
   createdAt: Date;
   response: Omit<Message, "response"> | null;
   chatId: string;
+  files: File[];
 };

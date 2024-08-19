@@ -7,7 +7,7 @@ import Loading from "../common/Loading";
 export default function ChatContent() {
   const { messages, isLoading } = useChatContext();
   const styles =
-    "no-scrollbar h-[calc(100vh-14rem)] overflow-auto rounded-tl-lg bg-slate-100 px-4 pt-2";
+    " h-[calc(100vh-14rem)] overflow-auto rounded-tl-lg bg-slate-100 px-4 pt-2";
 
   if (isLoading)
     return (

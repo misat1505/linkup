@@ -26,6 +26,9 @@ export const createMessage = async (req: Request, res: Response) => {
     const { content } = req.body;
     const { userId } = req.body.token;
     const { chatId } = req.params;
+    const files = (req.files as Express.Multer.File[]).map(
+      (file) => file.filename
+    );
 
     const isUserAuthorized = await ChatService.isUserInChat({ chatId, userId });
 
@@ -38,10 +41,12 @@ export const createMessage = async (req: Request, res: Response) => {
       content,
       authorId: userId,
       chatId,
+      files,
     });
 
     return res.status(201).json({ message });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({ message: "Cannot create message." });
   }
 };

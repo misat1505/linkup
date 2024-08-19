@@ -8,4 +8,10 @@ export const messageWithoutResponseSelect = {
   },
   createdAt: true,
   chatId: true,
+  files: {
+    select: {
+      id: true,
+      url: true,
+    },
+  },
 } as const;
