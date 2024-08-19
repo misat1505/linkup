@@ -86,12 +86,17 @@ function LastMessageDisplayer({
   const displayName =
     lastMessage.author.id === me!.id ? "You" : lastMessage.author.firstName;
 
-  const text = lastMessage.content?.slice(0, 20);
+  if (lastMessage.content)
+    return (
+      <>
+        <span className="font-semibold">{displayName}: </span>
+        <span>{lastMessage.content?.slice(0, 20)}</span>
+      </>
+    );
 
   return (
-    <>
-      <span className="font-semibold">{displayName}: </span>
-      <span>{text}</span>
-    </>
+    <span>
+      {displayName} sent {lastMessage.files.length} file(s).
+    </span>
   );
 }
