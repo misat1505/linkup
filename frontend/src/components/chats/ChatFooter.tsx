@@ -15,7 +15,7 @@ export default function ChatFooter() {
   const isDisabled = isLoading || isSubmitting;
 
   return (
-    <form onSubmit={submitForm} className="bg-slate-100 p-4">
+    <form onSubmit={submitForm} className="bg-slate-200 p-4">
       <FileDisplayer />
       <div className="flex items-center gap-x-4">
         <FileAdder />
@@ -74,7 +74,7 @@ function FileDisplayer() {
   if (files === undefined || files.length === 0) return null;
 
   return (
-    <div className="flex">
+    <div className="mb-4 flex justify-end">
       {files.map((file, id) => (
         <FileDisplayerItem file={file} key={id} />
       ))}

@@ -4,8 +4,6 @@ import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
-  UseFormSetValue,
-  UseFormTrigger,
   useForm
 } from "react-hook-form";
 import { useToast } from "../../components/ui/use-toast";
@@ -41,7 +39,6 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     formState: { errors, isSubmitting },
     watch,
     getValues,
-    trigger,
     setValue
   } = useForm<ChatFormType>({
     resolver: zodResolver(chatFormSchema)
