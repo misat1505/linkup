@@ -24,6 +24,7 @@ export type useChatFormValue = {
   isSubmitting: boolean;
   files: File[] | undefined;
   appendFiles: (files: File[]) => void;
+  removeFile: (id: number) => void;
   submitForm: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
@@ -37,13 +38,13 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-    watch,
     getValues,
+    watch,
     setValue
   } = useForm<ChatFormType>({
     resolver: zodResolver(chatFormSchema)
   });
-  console.log("watch", watch());
+  console.log(watch());
 
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {
@@ -68,6 +69,15 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     setValue("files", [...prevFiles, ...files]);
   };
 
+  const removeFile = (id: number) => {
+    const prevFiles = getValues().files || [];
+
+    setValue(
+      "files",
+      prevFiles.filter((_, idx) => idx !== id)
+    );
+  };
+
   const submitForm = handleSubmit(onSubmit);
 
   return {
@@ -76,6 +86,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     isSubmitting,
     submitForm,
     files: getValues().files,
-    appendFiles
+    appendFiles,
+    removeFile
   };
 }

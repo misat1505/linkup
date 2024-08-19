@@ -44,10 +44,15 @@ export default function ChatFooter() {
 function FileAdder() {
   const { register, appendFiles } = useChatFooterContext();
   const inputRef = useRef<HTMLInputElement>(null);
+
   const clickInput = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-
     inputRef.current?.click();
+  };
+
+  const handleAppendFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    appendFiles(Array.from(e.currentTarget.files || []));
+    e.currentTarget.value = "";
   };
 
   const { ref, ...rest } = register("files");
@@ -57,7 +62,7 @@ function FileAdder() {
       <input
         ref={inputRef}
         {...rest}
-        onChange={(e) => appendFiles(Array.from(e.currentTarget.files || []))}
+        onChange={handleAppendFiles}
         type="file"
         multiple
         className="hidden"
@@ -70,13 +75,27 @@ function FileAdder() {
 }
 
 function FileDisplayer() {
-  const { files } = useChatFooterContext();
+  const { files, removeFile } = useChatFooterContext();
   if (files === undefined || files.length === 0) return null;
+
+  const handleRemoveFile = (id: number) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    removeFile(id);
+  };
 
   return (
     <div className="mb-4 flex justify-end">
       {files.map((file, id) => (
-        <FileDisplayerItem file={file} key={id} />
+        <button
+          key={id}
+          className="group relative h-40 w-40"
+          onClick={handleRemoveFile(id)}
+        >
+          <FileDisplayerItem file={file} />
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100">
+            Remove File
+          </div>
+        </button>
       ))}
     </div>
   );
@@ -101,21 +120,21 @@ function FileDisplayerItem({ file }: { file: File }) {
     return (
       <img
         src={URL.createObjectURL(file)}
-        className="h-40 w-40 object-cover"
+        className="h-full w-full object-cover"
         alt={file.name}
       />
     );
 
   if (type === "video")
     return (
-      <video className="h-40 w-40 object-cover" controls>
+      <video className="h-full w-full object-cover" controls>
         <source src={URL.createObjectURL(file)} type={file.type} />
         Your browser does not support the video tag.
       </video>
     );
 
   return (
-    <div className="h-40 w-40 overflow-hidden border border-gray-300 p-2">
+    <div className="h-full w-full overflow-hidden border border-gray-300 p-2">
       <p>{file.name}</p>
     </div>
   );
