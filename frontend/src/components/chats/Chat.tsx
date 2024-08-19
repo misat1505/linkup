@@ -5,6 +5,7 @@ import ChatContent from "./ChatContent";
 import ChatFooter from "./ChatFooter";
 import ChatProvider, { useChatContext } from "../../contexts/ChatProvider";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
+import ChatFooterProvider from "../../contexts/ChatFooterProvider";
 
 export default function ChatGuard() {
   const { chatId } = useParams();
@@ -38,7 +39,9 @@ function Chat() {
       <div className="flex h-full w-full flex-col">
         <ChatHeader chatId={chatId} />
         <ChatContent />
-        <ChatFooter chatId={chatId} />
+        <ChatFooterProvider chatId={chatId}>
+          <ChatFooter />
+        </ChatFooterProvider>
       </div>
     </div>
   );

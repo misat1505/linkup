@@ -3,35 +3,22 @@ import { FaFileAlt } from "react-icons/fa";
 import { Textarea } from "../ui/textarea";
 import { IoSend } from "react-icons/io5";
 import { Input } from "../ui/input";
-import useChatForm, { ChatFormEntries } from "../../hooks/chats/useChatForm";
-import { Chat } from "../../models/Chat";
 import { useChatContext } from "../../contexts/ChatProvider";
 import { cn } from "../../lib/utils";
 import { ClipLoader } from "react-spinners";
-import {
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormTrigger
-} from "react-hook-form";
+import { useChatFooterContext } from "../../contexts/ChatFooterProvider";
 
-export default function ChatFooter({ chatId }: { chatId: Chat["id"] }) {
+export default function ChatFooter() {
   const { isLoading } = useChatContext();
-  const { register, submitForm, isSubmitting, files, trigger, setValue } =
-    useChatForm(chatId);
-  console.log(files);
+  const { register, submitForm, isSubmitting } = useChatFooterContext();
 
   const isDisabled = isLoading || isSubmitting;
 
   return (
     <form onSubmit={submitForm} className="bg-slate-100 p-4">
-      <FileDisplayer files={files} />
+      <FileDisplayer />
       <div className="flex items-center gap-x-4">
-        <FileAdder
-          register={register}
-          trigger={trigger}
-          setValue={setValue}
-          files={files}
-        />
+        <FileAdder />
         <Input
           {...register("content")}
           className="z-20 min-h-8"
@@ -54,26 +41,14 @@ export default function ChatFooter({ chatId }: { chatId: Chat["id"] }) {
   );
 }
 
-function FileAdder({
-  register,
-  trigger,
-  setValue,
-  files
-}: {
-  register: UseFormRegister<ChatFormEntries>;
-  trigger: UseFormTrigger<ChatFormEntries>;
-  setValue: UseFormSetValue<ChatFormEntries>;
-  files: File[] | undefined;
-}) {
+function FileAdder() {
+  const { register, appendFiles } = useChatFooterContext();
   const inputRef = useRef<HTMLInputElement>(null);
   const clickInput = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    // trigger("files");
     inputRef.current?.click();
   };
-
-  const prevFiles = files ? files : [];
 
   const { ref, ...rest } = register("files");
 
@@ -82,12 +57,7 @@ function FileAdder({
       <input
         ref={inputRef}
         {...rest}
-        onChange={(e) =>
-          setValue("files", [
-            ...prevFiles,
-            ...Array.from(e.currentTarget.files || [])
-          ])
-        }
+        onChange={(e) => appendFiles(Array.from(e.currentTarget.files || []))}
         type="file"
         multiple
         className="hidden"
@@ -99,7 +69,8 @@ function FileAdder({
   );
 }
 
-function FileDisplayer({ files }: { files: File[] | undefined }) {
+function FileDisplayer() {
+  const { files } = useChatFooterContext();
   if (files === undefined || files.length === 0) return null;
 
   return (

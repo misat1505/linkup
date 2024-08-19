@@ -4,7 +4,6 @@ import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
-  UseFormSetFocus,
   UseFormSetValue,
   UseFormTrigger,
   useForm
@@ -26,8 +25,7 @@ export type useChatFormValue = {
   errors: FieldErrors<ChatFormEntries>;
   isSubmitting: boolean;
   files: File[] | undefined;
-  trigger: UseFormTrigger<ChatFormEntries>;
-  setValue: UseFormSetValue<ChatFormEntries>;
+  appendFiles: (files: File[]) => void;
   submitForm: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
@@ -67,6 +65,12 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     }
   };
 
+  const appendFiles = (files: File[]) => {
+    const prevFiles = getValues().files || [];
+
+    setValue("files", [...prevFiles, ...files]);
+  };
+
   const submitForm = handleSubmit(onSubmit);
 
   return {
@@ -75,7 +79,6 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     isSubmitting,
     submitForm,
     files: getValues().files,
-    trigger,
-    setValue
+    appendFiles
   };
 }
