@@ -13,21 +13,23 @@ export default function Message({ message }: { message: MessageType }) {
 
   return (
     <div
-      className={cn("flex w-full", {
-        "justify-start": !isMine,
-        "justify-end": isMine
+      className={cn("flex w-full flex-col", {
+        "items-end": isMine,
+        "items-start": !isMine
       })}
     >
       <MultimediaDisplay files={message.files} />
 
-      <div
-        className={cn("mb-1 w-fit max-w-[75%] rounded-md px-2 py-1", {
-          "bg-blue-500 text-white": isMine,
-          "bg-slate-200": !isMine
-        })}
-      >
-        {message.content}
-      </div>
+      {message.content && (
+        <div
+          className={cn("mb-1 w-fit max-w-[75%] rounded-md px-2 py-1", {
+            "bg-blue-500 text-white": isMine,
+            "bg-slate-200": !isMine
+          })}
+        >
+          {message.content}
+        </div>
+      )}
     </div>
   );
 }
