@@ -43,6 +43,11 @@ export const createMessage = async (
   chatId: Chat["id"],
   payload: ChatFormType
 ): Promise<Message> => {
-  const response = await CHAT_API.post(`/${chatId}/messages`, payload);
+  const formData = new FormData();
+  formData.append("content", payload.content);
+  payload.files?.forEach((file) => {
+    formData.append("files", file);
+  });
+  const response = await CHAT_API.post(`/${chatId}/messages`, formData);
   return response.data.message;
 };
