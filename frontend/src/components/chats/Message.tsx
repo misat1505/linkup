@@ -3,34 +3,79 @@ import { Message as MessageType } from "../../models/Message";
 import React from "react";
 import { cn } from "../../lib/utils";
 import MultimediaDisplay from "./MultimediaDisplay";
+import { API_URL } from "../../constants";
+import Avatar from "../common/Avatar";
+import { useChatContext } from "../../contexts/ChatProvider";
+import { isShowingAvatar } from "../../utils/isShowingAvatar";
+import { getInitials } from "../../utils/getInitials";
 
 export default function Message({ message }: { message: MessageType }) {
   const { user: me } = useAppContext();
-
   if (!me) throw new Error();
 
   const isMine = message.author.id === me.id;
 
+  if (isMine) return <MyMessage message={message} />;
+  return <ForeignMessage message={message} />;
+}
+
+function MyMessage({ message }: { message: MessageType }) {
   return (
-    <div
-      className={cn("flex w-full flex-col", {
-        "items-end": isMine,
-        "items-start": !isMine
-      })}
-    >
+    <div className="flex w-full flex-col items-end">
       <MultimediaDisplay files={message.files} />
 
       {message.content && (
         <div
-          className={cn("mb-1 w-fit max-w-[75%] rounded-b-md px-2 py-1", {
-            "bg-blue-500 text-white": isMine,
-            "bg-slate-200": !isMine,
-            "rounded-md": message.files.length === 0
-          })}
+          className={cn(
+            "mb-1 w-fit max-w-[75%] rounded-b-md bg-blue-500 px-2 py-1 text-white",
+            {
+              "rounded-md": message.files.length === 0
+            }
+          )}
         >
           {message.content}
         </div>
       )}
+    </div>
+  );
+}
+
+function ForeignMessage({ message }: { message: MessageType }) {
+  const { messages } = useChatContext();
+  const isDisplayingAvatar = isShowingAvatar(messages!, message);
+
+  const { firstName, lastName } = message.author;
+
+  return (
+    <div className="flex w-full flex-col items-start">
+      <div className="flex w-full items-end gap-x-2">
+        <div className="h-8 w-8">
+          {isDisplayingAvatar && (
+            <Avatar
+              src={`${API_URL}/files/${message.author.photoURL}`}
+              alt={getInitials({ firstName, lastName })}
+              className="h-8 w-8 object-cover text-xs"
+            />
+          )}
+        </div>
+
+        <div className="w-full">
+          <MultimediaDisplay files={message.files} />
+
+          {message.content && (
+            <div
+              className={cn(
+                "mb-1 w-fit max-w-[75%] rounded-b-md bg-slate-200 px-2 py-1",
+                {
+                  "rounded-md": message.files.length === 0
+                }
+              )}
+            >
+              {message.content}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
