@@ -22,9 +22,10 @@ export default function Message({ message }: { message: MessageType }) {
 
       {message.content && (
         <div
-          className={cn("mb-1 w-fit max-w-[75%] rounded-md px-2 py-1", {
+          className={cn("mb-1 w-fit max-w-[75%] rounded-b-md px-2 py-1", {
             "bg-blue-500 text-white": isMine,
-            "bg-slate-200": !isMine
+            "bg-slate-200": !isMine,
+            "rounded-md": message.files.length === 0
           })}
         >
           {message.content}

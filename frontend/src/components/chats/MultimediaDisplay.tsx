@@ -2,10 +2,14 @@ import { getFileType } from "../../utils/getFileType";
 import { File } from "../../models/File";
 import React from "react";
 import { API_URL } from "../../constants";
+import Image from "../common/Image";
+import { FaFileAlt } from "react-icons/fa";
 
 export default function MultimediaDisplay({ files }: { files: File[] }) {
+  if (files.length === 0) return null;
+
   return (
-    <div className="flex">
+    <div className="mt-2 flex">
       {files.map((file) => (
         <MultimediaDisplayItem file={file} key={file.id} />
       ))}
@@ -20,9 +24,13 @@ function MultimediaDisplayItem({ file }: { file: File }) {
 
   if (type === "image")
     return (
-      <img
+      <Image
         src={`${API_URL}/files/${file.url}`}
-        className="h-40 w-40 object-cover"
+        className={{
+          common: "h-40 w-40 object-cover",
+          error: "bg-slate-200 font-semibold"
+        }}
+        errorContent="Error loading image."
       />
     );
 
@@ -34,5 +42,10 @@ function MultimediaDisplayItem({ file }: { file: File }) {
       </video>
     );
 
-  return <div className="h-40 w-40 overflow-hidden">{file.url}</div>;
+  return (
+    <div className="h-40 w-40 overflow-hidden bg-slate-200 px-4 py-8">
+      <FaFileAlt size={20} />
+      <p className="mt-2 text-sm font-semibold">{file.url}</p>
+    </div>
+  );
 }
