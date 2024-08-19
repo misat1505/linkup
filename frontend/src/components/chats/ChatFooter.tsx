@@ -18,7 +18,7 @@ export default function ChatFooter({ chatId }: { chatId: Chat["id"] }) {
   return (
     <form
       onSubmit={submitForm}
-      className="flex h-16 items-center gap-x-4 bg-slate-100 px-4"
+      className="flex items-center gap-x-4 bg-slate-100 p-4"
     >
       <FaFileAlt className="text-blue-500" />
       <Input

@@ -35,9 +35,11 @@ function Chat() {
 
   return (
     <div className="flex-grow">
-      <ChatHeader chatId={chatId} />
-      <ChatContent />
-      <ChatFooter chatId={chatId} />
+      <div className="flex h-full w-full flex-col">
+        <ChatHeader chatId={chatId} />
+        <ChatContent />
+        <ChatFooter chatId={chatId} />
+      </div>
     </div>
   );
 }
