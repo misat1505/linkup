@@ -65,18 +65,23 @@ function FileAdder({
   setValue: UseFormSetValue<ChatFormEntries>;
   files: File[] | undefined;
 }) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const clickInput = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    trigger("files");
+    // trigger("files");
+    inputRef.current?.click();
   };
 
   const prevFiles = files ? files : [];
 
+  const { ref, ...rest } = register("files");
+
   return (
     <>
       <input
-        {...register("files")}
+        ref={inputRef}
+        {...rest}
         onChange={(e) =>
           setValue("files", [
             ...prevFiles,
@@ -85,7 +90,7 @@ function FileAdder({
         }
         type="file"
         multiple
-        className=""
+        className="hidden"
       />
       <button onClick={clickInput}>
         <FaFileAlt className="text-blue-500 transition-all hover:scale-125" />
