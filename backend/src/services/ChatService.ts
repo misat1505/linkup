@@ -132,7 +132,7 @@ export class ChatService {
     id1: string,
     id2: string
   ): Promise<Chat | null> {
-    const result: Chat | null = await prisma.chat.findFirst({
+    const result: Chat[] = await prisma.chat.findMany({
       where: {
         type: "PRIVATE",
         users: {
@@ -153,7 +153,11 @@ export class ChatService {
       },
     });
 
-    return result;
+    if (id1 !== id2) {
+      return result.filter((chat) => chat.users?.length !== 1)?.[0];
+    }
+
+    return result.filter((chat) => chat.users?.length === 1)?.[0];
   }
 
   static async createPrivateChat(id1: string, id2: string): Promise<Chat> {

@@ -19,7 +19,7 @@ import {
 } from "../../ui/tooltip";
 import { useDebounce } from "use-debounce";
 import { Skeleton } from "../../ui/skeleton";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { searchUsers } from "../../../api/userAPI";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../lib/routes";
@@ -30,6 +30,7 @@ import Avatar from "../Avatar";
 import { getInitials } from "../../../utils/getInitials";
 import { createFullName } from "../../../utils/createFullName";
 import { queryKeys } from "../../../lib/queryKeys";
+import { Chat } from "../../../models/Chat";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -100,11 +101,16 @@ type SearchResultItemProps = {
 
 function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
   const { user: me } = useAppContext();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const handleCreateChat = async (userId: User["id"]) => {
     const chat = await createChatBetweenUsers(me!.id, userId);
     setIsExpanded(false);
+    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+      if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
+      return oldChats ? [...oldChats, chat] : [chat];
+    });
     navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
   };
 
