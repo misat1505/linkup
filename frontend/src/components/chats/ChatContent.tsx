@@ -1,13 +1,14 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import Message from "./Message";
 import { useChatContext } from "../../contexts/ChatProvider";
-import { cn } from "../../lib/utils";
 import Loading from "../common/Loading";
+import IncomeMessage from "./IncomeMessage";
 
 export default function ChatContent() {
-  const { messages, isLoading } = useChatContext();
+  const { messages, isLoading, incomeMessage } = useChatContext();
   const bottomRef = useRef<HTMLDivElement>(null);
-  const styles = "flex-grow overflow-auto rounded-tl-lg bg-slate-100 px-4 pt-2";
+  const styles =
+    "flex-grow overflow-hidden rounded-tl-lg bg-slate-100 pt-2 relative";
 
   useLayoutEffect(() => {
     if (!messages) return;
@@ -17,7 +18,7 @@ export default function ChatContent() {
 
   if (isLoading)
     return (
-      <div className={cn(styles, "relative")}>
+      <div className={styles}>
         <Loading />
       </div>
     );
@@ -26,10 +27,13 @@ export default function ChatContent() {
 
   return (
     <div className={styles}>
-      {messages.map((message) => (
-        <Message key={message.id} message={message} />
-      ))}
-      <div ref={bottomRef} />
+      <div className="max-h-full overflow-auto px-4">
+        {messages.map((message) => (
+          <Message key={message.id} message={message} />
+        ))}
+        <div ref={bottomRef} />
+      </div>
+      {incomeMessage && <IncomeMessage message={incomeMessage} />}
     </div>
   );
 }
