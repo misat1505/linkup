@@ -5,6 +5,7 @@ type useChatScrollValue = {
   containerRef: React.RefObject<HTMLDivElement>;
   handleScroll: () => void;
   bottomRef: React.RefObject<HTMLDivElement>;
+  wasAtBottomRef: React.MutableRefObject<boolean>;
 };
 
 export default function useChatScroll(): useChatScrollValue {
@@ -44,6 +45,7 @@ export default function useChatScroll(): useChatScrollValue {
   return {
     containerRef,
     handleScroll,
-    bottomRef
+    bottomRef,
+    wasAtBottomRef
   };
 }

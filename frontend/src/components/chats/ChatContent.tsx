@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React from "react";
 import Message from "./Message";
 import { useChatContext } from "../../contexts/ChatProvider";
 import Loading from "../common/Loading";
@@ -7,7 +7,8 @@ import useChatScroll from "../../hooks/chats/useChatScroll";
 
 export default function ChatContent() {
   const { messages, isLoading, incomeMessage } = useChatContext();
-  const { bottomRef, containerRef, handleScroll } = useChatScroll();
+  const { bottomRef, containerRef, handleScroll, wasAtBottomRef } =
+    useChatScroll();
 
   const styles =
     "flex-grow overflow-hidden rounded-tl-lg bg-slate-100 pt-2 relative";
@@ -36,7 +37,9 @@ export default function ChatContent() {
         ))}
         <div ref={bottomRef} />
       </div>
-      {incomeMessage && <IncomeMessage message={incomeMessage} />}
+      {incomeMessage && !wasAtBottomRef.current && (
+        <IncomeMessage message={incomeMessage} />
+      )}
     </div>
   );
 }
