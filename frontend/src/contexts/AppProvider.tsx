@@ -1,20 +1,14 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from "react";
-import { fetchUser, refreshToken } from "../api/authAPI";
+import React, { createContext, PropsWithChildren, useContext } from "react";
+import { fetchUser } from "../api/authAPI";
 import { User } from "../models/User";
 import { useQuery, useQueryClient } from "react-query";
 import { queryKeys } from "../lib/queryKeys";
+import { useRefreshToken } from "../hooks/useRefreshToken";
 
 type AppContextProps = PropsWithChildren;
 
 type AppContextValue = {
-  user: User | undefined;
+  user: User | null | undefined;
   setUser: (user: User | null) => void;
   isLoading: boolean;
 };
@@ -35,34 +29,7 @@ export const AppProvider = ({ children }: AppContextProps) => {
     queryClient.setQueryData(queryKeys.me(), user);
   };
 
-  const refreshTokenIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    const handleRefreshToken = async () => {
-      if (!user) return;
-
-      try {
-        console.log("Trying to refresh the token...");
-        await refreshToken();
-        console.log("Token refreshed successfully.");
-      } catch (error) {
-        console.error("Error refreshing token:", error);
-      }
-    };
-
-    handleRefreshToken();
-
-    refreshTokenIntervalRef.current = setInterval(
-      handleRefreshToken,
-      30 * 60 * 1000
-    );
-
-    return () => {
-      if (refreshTokenIntervalRef.current !== null) {
-        clearInterval(refreshTokenIntervalRef.current);
-      }
-    };
-  }, [user]);
+  useRefreshToken(user);
 
   return (
     <AppContext.Provider
