@@ -13,7 +13,7 @@ export default function ChatGuard() {
   if (!chatId) return <div className="flex-grow">No chat selected.</div>;
 
   return (
-    <ChatProvider chatId={chatId}>
+    <ChatProvider key={chatId} chatId={chatId}>
       <Chat />
     </ChatProvider>
   );
@@ -23,9 +23,9 @@ function Chat() {
   const { error, chatId } = useChatContext();
   const { chats } = useChatPageContext();
 
-  const isUsersChat = chats?.find((c) => c.id === chatId);
+  const isUserInChat = chats?.find((c) => c.id === chatId);
 
-  if (error || !isUsersChat)
+  if (error || !isUserInChat)
     return (
       <div className="relative flex-grow">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-slate-100 p-4">

@@ -12,6 +12,7 @@ import { useChatPageContext } from "./ChatPageProvider";
 import { Message } from "../models/Message";
 import { queryKeys } from "../lib/queryKeys";
 import { SocketAction, socketClient } from "../lib/socketClient";
+import { useParams } from "react-router-dom";
 
 type ChatContextProps = PropsWithChildren & {
   chatId: Chat["id"];
@@ -51,7 +52,7 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
   useEffect(() => {
     socketClient.onReceiveMessage((message) => {
       addMessage(message);
-      setIncomeMessageId(message.id);
+      if (message.chatId === chatId) setIncomeMessageId(message.id);
     });
 
     return () => {
