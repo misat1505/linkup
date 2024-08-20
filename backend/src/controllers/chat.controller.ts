@@ -46,7 +46,6 @@ export const createMessage = async (req: Request, res: Response) => {
 
     return res.status(201).json({ message });
   } catch (e) {
-    console.log(e);
     return res.status(500).json({ message: "Cannot create message." });
   }
 };

@@ -9,9 +9,9 @@ export default function ProtectedRoute({
 }: {
   children: JSX.Element;
 }) {
-  const { status, user } = useAppContext();
+  const { isLoading, user } = useAppContext();
 
-  if (status === "loading") {
+  if (isLoading) {
     return <Loading />;
   }
 

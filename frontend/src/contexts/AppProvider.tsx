@@ -8,15 +8,15 @@ import React, {
 } from "react";
 import { fetchUser, refreshToken } from "../api/authAPI";
 import { User } from "../models/User";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { queryKeys } from "../lib/queryKeys";
 
 type AppContextProps = PropsWithChildren;
 
 type AppContextValue = {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  status: "idle" | "error" | "loading" | "success";
+  user: User | undefined;
+  setUser: (user: User | null) => void;
+  isLoading: boolean;
 };
 
 const AppContext = createContext<AppContextValue>({} as AppContextValue);
@@ -24,12 +24,17 @@ const AppContext = createContext<AppContextValue>({} as AppContextValue);
 export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children }: AppContextProps) => {
-  const [user, setUser] = useState<User | null>(null);
-  const { status } = useQuery({
+  const queryClient = useQueryClient();
+  const { isLoading } = useQuery({
     queryKey: queryKeys.me(),
-    queryFn: fetchUser,
-    onSuccess: (d) => setUser(d)
+    queryFn: fetchUser
   });
+
+  const user = queryClient.getQueryData<User>(queryKeys.me());
+  const setUser = (user: User | null) => {
+    queryClient.setQueryData(queryKeys.me(), user);
+  };
+
   const refreshTokenIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -64,7 +69,7 @@ export const AppProvider = ({ children }: AppContextProps) => {
       value={{
         user,
         setUser,
-        status
+        isLoading
       }}
     >
       {children}
