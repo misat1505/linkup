@@ -6,6 +6,7 @@ type useChatScrollValue = {
   handleScroll: () => void;
   bottomRef: React.RefObject<HTMLDivElement>;
   wasAtBottomRef: React.MutableRefObject<boolean>;
+  scrollToBottom: () => void;
 };
 
 export default function useChatScroll(): useChatScrollValue {
@@ -42,10 +43,15 @@ export default function useChatScroll(): useChatScrollValue {
     }
   }, [messages]);
 
+  const scrollToBottom = () => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return {
     containerRef,
     handleScroll,
     bottomRef,
-    wasAtBottomRef
+    wasAtBottomRef,
+    scrollToBottom
   };
 }

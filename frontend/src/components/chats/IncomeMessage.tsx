@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "../common/Avatar";
 import { Message } from "../../models/Message";
 import { API_URL } from "../../constants";
@@ -6,7 +6,16 @@ import { getInitials } from "../../utils/getInitials";
 import styles from "../../styles/incomeMessage.module.css";
 import { cn } from "../../lib/utils";
 
-export default function IncomeMessage({ message }: { message: Message }) {
+type IncomeMessageProps = {
+  message: Message;
+  onclick: () => void;
+};
+
+export default function IncomeMessage({
+  message,
+  onclick
+}: IncomeMessageProps) {
+  const [isClicked, setIsClicked] = useState(false);
   const { firstName, lastName } = message.author;
 
   const getText = (): string => {
@@ -15,12 +24,18 @@ export default function IncomeMessage({ message }: { message: Message }) {
     return `${firstName} ${lastName} sent ${message.files.length} file(s).`;
   };
 
+  const handleClick = () => {
+    setIsClicked(true);
+    onclick();
+  };
+
   return (
-    <div
-      key={message.id}
+    <button
+      onClick={handleClick}
       className={cn(
-        "absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-x-4 rounded-md bg-slate-300 p-4",
-        styles.incomeMessage
+        "absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-x-4 rounded-md bg-slate-300 p-4 transition-all hover:bg-slate-400",
+        styles.incomeMessage,
+        { hidden: isClicked }
       )}
     >
       <Avatar
@@ -29,6 +44,6 @@ export default function IncomeMessage({ message }: { message: Message }) {
         className="h-8 w-8 text-xs"
       />
       <div className="font-semibold">{getText()}</div>
-    </div>
+    </button>
   );
 }
