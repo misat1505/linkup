@@ -9,6 +9,7 @@ import { useChatContext } from "../../contexts/ChatProvider";
 import { isShowingAvatar } from "../../utils/isShowingAvatar";
 import { getInitials } from "../../utils/getInitials";
 import Response from "./Response";
+import ResponseText from "./ResponseText";
 
 export default function Message({ message }: { message: MessageType }) {
   const { user: me } = useAppContext();
@@ -28,7 +29,12 @@ function MyMessage({ message }: { message: MessageType }) {
       className="flex w-full flex-col items-end"
       ref={(el) => (messageRefs.current[message.id] = el)}
     >
-      {message.response && <Response message={message.response} />}
+      {message.response && (
+        <>
+          <ResponseText message={message} />
+          <Response message={message.response} />
+        </>
+      )}
 
       <MultimediaDisplay files={message.files} />
 
@@ -61,6 +67,7 @@ function ForeignMessage({ message }: { message: MessageType }) {
     >
       {message.response && (
         <div className="ml-10">
+          <ResponseText message={message} />
           <Response message={message.response} />
         </div>
       )}
