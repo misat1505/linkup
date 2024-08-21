@@ -7,6 +7,20 @@ import { userSelect } from "../utils/prisma/userSelect";
 import { messageWithoutResponseSelect } from "../utils/prisma/messageWithoutResponseSelect";
 
 export class ChatService {
+  static async isMessageInChat({
+    chatId,
+    messageId,
+  }: {
+    chatId: Chat["id"];
+    messageId: Message["id"];
+  }): Promise<boolean> {
+    const result = await prisma.message.findFirst({
+      where: { chatId, id: messageId },
+    });
+
+    return !!result;
+  }
+
   static async getChatMessages(chatId: Chat["id"]): Promise<Message[]> {
     const result: (Message & {
       authorId: User["id"];
@@ -63,11 +77,13 @@ export class ChatService {
     authorId,
     chatId,
     files,
+    responseId,
   }: {
     content: Message["content"];
     authorId: User["id"];
     chatId: Chat["id"];
     files: string[];
+    responseId: Message["id"] | null;
   }): Promise<Message> {
     const result: Message & {
       authorId: User["id"];
@@ -78,6 +94,7 @@ export class ChatService {
         content,
         authorId,
         chatId,
+        responseId,
         files: {
           create: files.map((fileUrl) => ({
             id: uuidv7(),
@@ -101,7 +118,7 @@ export class ChatService {
       where: { id: chatId },
     });
 
-    const { authorId: _, responseId, ...message } = result;
+    const { authorId: _, responseId: rId, ...message } = result;
 
     return message as Message;
   }

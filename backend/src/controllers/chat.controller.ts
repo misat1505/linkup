@@ -23,7 +23,7 @@ export const getChatMessages = async (req: Request, res: Response) => {
 
 export const createMessage = async (req: Request, res: Response) => {
   try {
-    const { content } = req.body;
+    const { content, responseId } = req.body;
     const { userId } = req.body.token;
     const { chatId } = req.params;
     const files = (req.files as Express.Multer.File[]).map(
@@ -37,11 +37,26 @@ export const createMessage = async (req: Request, res: Response) => {
         .status(401)
         .json({ message: "You cannot send a message to this chat." });
 
+    if (responseId) {
+      const isResponseInChat = await ChatService.isMessageInChat({
+        chatId,
+        messageId: responseId,
+      });
+
+      if (!isResponseInChat)
+        return res
+          .status(400)
+          .json({
+            message: "Message of responseId does not exist on this chat.",
+          });
+    }
+
     const message = await ChatService.createMessage({
       content,
       authorId: userId,
       chatId,
       files,
+      responseId,
     });
 
     return res.status(201).json({ message });
