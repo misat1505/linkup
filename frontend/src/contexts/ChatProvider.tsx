@@ -5,6 +5,7 @@ import React, {
   PropsWithChildren,
   useContext,
   useEffect,
+  useRef,
   useState
 } from "react";
 import { useQuery } from "react-query";
@@ -25,6 +26,9 @@ type ChatContextValue = {
   chat: Chat | null;
   chatId: Chat["id"];
   incomeMessage: Message | null;
+  messageRefs: React.MutableRefObject<
+    Record<Message["id"], HTMLDivElement | null>
+  >;
 };
 
 const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
@@ -32,6 +36,7 @@ const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
 export const useChatContext = () => useContext(ChatContext);
 
 export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
+  const messageRefs = useRef<Record<Message["id"], HTMLDivElement | null>>({});
   const [incomeMessageId, setIncomeMessageId] = useState<Message["id"] | null>(
     null
   );
@@ -70,7 +75,8 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
         error,
         chat,
         chatId,
-        incomeMessage
+        incomeMessage,
+        messageRefs
       }}
     >
       {children}

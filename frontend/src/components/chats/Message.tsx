@@ -8,6 +8,7 @@ import Avatar from "../common/Avatar";
 import { useChatContext } from "../../contexts/ChatProvider";
 import { isShowingAvatar } from "../../utils/isShowingAvatar";
 import { getInitials } from "../../utils/getInitials";
+import Response from "./Response";
 
 export default function Message({ message }: { message: MessageType }) {
   const { user: me } = useAppContext();
@@ -20,8 +21,15 @@ export default function Message({ message }: { message: MessageType }) {
 }
 
 function MyMessage({ message }: { message: MessageType }) {
+  const { messageRefs } = useChatContext();
+
   return (
-    <div className="flex w-full flex-col items-end">
+    <div
+      className="flex w-full flex-col items-end"
+      ref={(el) => (messageRefs.current[message.id] = el)}
+    >
+      {message.response && <Response message={message.response} />}
+
       <MultimediaDisplay files={message.files} />
 
       {message.content && (
@@ -41,13 +49,21 @@ function MyMessage({ message }: { message: MessageType }) {
 }
 
 function ForeignMessage({ message }: { message: MessageType }) {
-  const { messages } = useChatContext();
+  const { messages, messageRefs } = useChatContext();
   const isDisplayingAvatar = isShowingAvatar(messages!, message);
 
   const { firstName, lastName } = message.author;
 
   return (
-    <div className="flex w-full flex-col items-start">
+    <div
+      className="flex w-full flex-col items-start"
+      ref={(el) => (messageRefs.current[message.id] = el)}
+    >
+      {message.response && (
+        <div className="ml-10">
+          <Response message={message.response} />
+        </div>
+      )}
       <div className="flex w-full items-end gap-x-2">
         <div className="h-8 w-8">
           {isDisplayingAvatar && (
