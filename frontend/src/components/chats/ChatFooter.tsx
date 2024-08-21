@@ -7,6 +7,8 @@ import { useChatContext } from "../../contexts/ChatProvider";
 import { cn } from "../../lib/utils";
 import { ClipLoader } from "react-spinners";
 import { useChatFooterContext } from "../../contexts/ChatFooterProvider";
+import { useAppContext } from "../../contexts/AppProvider";
+import { RxCross2 } from "react-icons/rx";
 
 export default function ChatFooter() {
   const { isLoading } = useChatContext();
@@ -16,6 +18,7 @@ export default function ChatFooter() {
 
   return (
     <form onSubmit={submitForm} className="bg-slate-200 p-4">
+      <ResponseDisplayer />
       <FileDisplayer />
       <div className="flex items-center gap-x-4">
         <FileAdder />
@@ -136,6 +139,36 @@ function FileDisplayerItem({ file }: { file: File }) {
   return (
     <div className="h-full w-full overflow-hidden border border-gray-300 p-2">
       <p>{file.name}</p>
+    </div>
+  );
+}
+
+function ResponseDisplayer() {
+  const { user: me } = useAppContext();
+  const { responseId, setResponseId, messages } = useChatContext();
+  const message = messages?.find((m) => m.id === responseId);
+
+  if (!message) return null;
+
+  const getReplyAuthorText = (): string => {
+    if (message.author.id === me!.id) return "you";
+    return `${message.author.firstName} ${message.author.lastName}`;
+  };
+
+  const getReplyText = () => {
+    if (message.content) return message.content.substring(0, 50);
+    return `Sent ${message.files.length} file(s).`;
+  };
+
+  return (
+    <div className="flex w-full items-center justify-between pb-4">
+      <div>
+        <h2 className="font-semibold">Replying to {getReplyAuthorText()}.</h2>
+        <p className="overflow-hidden text-nowrap">{getReplyText()}</p>
+      </div>
+      <button onClick={() => setResponseId(null)}>
+        <RxCross2 size={20} />
+      </button>
     </div>
   );
 }

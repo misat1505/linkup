@@ -27,7 +27,7 @@ function MyMessage({ message }: { message: MessageType }) {
 
   return (
     <div className="group flex items-center justify-end gap-x-4">
-      <MessageControls />
+      <MessageControls message={message} />
       <div
         className="flex w-fit max-w-[75%] flex-col items-end"
         ref={(el) => (messageRefs.current[message.id] = el)}
@@ -105,7 +105,7 @@ function ForeignMessage({ message }: { message: MessageType }) {
           </div>
         </div>
       </div>
-      <MessageControls />
+      <MessageControls message={message} />
     </div>
   );
 }
