@@ -26,7 +26,7 @@ export default function Response({ message }: ResponseProps) {
   return (
     <div
       onClick={onclick}
-      className="w-fit rounded-t-md rounded-br-md bg-black p-2 text-muted-foreground shadow-lg transition-all hover:cursor-pointer hover:text-slate-400"
+      className="w-fit rounded-md bg-black p-2 text-muted-foreground shadow-lg transition-all hover:cursor-pointer hover:text-slate-400"
       style={{ boxShadow: "0 10px black" }}
     >
       {getText()}
