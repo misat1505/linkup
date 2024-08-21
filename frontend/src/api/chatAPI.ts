@@ -45,6 +45,8 @@ export const createMessage = async (
 ): Promise<Message> => {
   const formData = new FormData();
   formData.append("content", payload.content);
+  if (payload.responseId) formData.append("responseId", payload.responseId);
+
   payload.files?.forEach((file) => {
     formData.append("files", file);
   });

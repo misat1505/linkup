@@ -12,10 +12,14 @@ import { createMessage } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { socketClient } from "../../lib/socketClient";
+import { useChatContext } from "../../contexts/ChatProvider";
+import { useEffect } from "react";
+import { Message } from "../../models/Message";
 
 export type ChatFormEntries = {
   content: string;
   files?: File[] | undefined;
+  responseId: Message["id"] | null;
 };
 
 export type useChatFormValue = {
@@ -31,6 +35,7 @@ export type useChatFormValue = {
 };
 
 export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
+  const { responseId, setResponseId } = useChatContext();
   const { addMessage } = useChatPageContext();
   const { toast } = useToast();
   const {
@@ -44,12 +49,11 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
   } = useForm<ChatFormType>({
     resolver: zodResolver(chatFormSchema)
   });
-  watch();
-
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {
       const message = await createMessage(chatId, data);
       reset();
+      setResponseId(null);
       addMessage(message);
       socketClient.sendMessage(message, chatId);
     } catch (e: unknown) {
@@ -80,12 +84,16 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
 
   const submitForm = handleSubmit(onSubmit);
 
+  useEffect(() => {
+    setValue("responseId", responseId);
+  }, [responseId]);
+
   return {
     register,
     errors,
     isSubmitting,
     submitForm,
-    files: getValues().files,
+    files: watch().files,
     appendFiles,
     removeFile
   };

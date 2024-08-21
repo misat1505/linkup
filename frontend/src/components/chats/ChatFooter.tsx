@@ -167,7 +167,7 @@ function ResponseDisplayer() {
         <p className="overflow-hidden text-nowrap">{getReplyText()}</p>
       </div>
       <button onClick={() => setResponseId(null)}>
-        <RxCross2 size={20} />
+        <RxCross2 size={20} className="transition-all hover:scale-125" />
       </button>
     </div>
   );
