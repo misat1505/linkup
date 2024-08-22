@@ -15,6 +15,7 @@ export function getImageURL({ chat, me }: CommonArgs): User["photoURL"] {
     const otherUser = chat.users!.find((user) => user.id !== me.id);
     return otherUser!.photoURL;
   }
+  if (chat.type === "GROUP" && chat.photoURL) return chat.photoURL;
   return null;
 }
 
@@ -33,6 +34,7 @@ export function getChatName({ chat, me }: CommonArgs): string {
     });
   }
   if (chat.type === "GROUP") {
+    if (chat.name) return chat.name;
     const names = chat.users?.map(
       (user) => `${user.firstName} ${user.lastName}`
     );
