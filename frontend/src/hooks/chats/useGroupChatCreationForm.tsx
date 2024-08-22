@@ -14,6 +14,12 @@ import {
 import { User } from "../../models/User";
 import { useEffect } from "react";
 import { useAppContext } from "../../contexts/AppProvider";
+import { createGroupChat } from "../../api/chatAPI";
+import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../lib/routes";
+import { Chat } from "../../models/Chat";
+import { queryKeys } from "../../lib/queryKeys";
 
 type GroupChatFormEntries = {
   users: User[];
@@ -35,6 +41,8 @@ export type useNewGroupChatFormValue = {
 };
 
 export default function useNewGroupChatForm(): useNewGroupChatFormValue {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { user: me } = useAppContext();
   const { toast } = useToast();
   const {
@@ -49,7 +57,12 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
 
   const onSubmit: SubmitHandler<NewGroupChatFormType> = async (data) => {
     try {
-      console.log(data);
+      const chat = await createGroupChat(data);
+      queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+        if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
+        return oldChats ? [...oldChats, chat] : [chat];
+      });
+      navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({

@@ -69,6 +69,7 @@ enum ChatType {
 model Chat {
   id        String      @id @default(uuid())
   createdAt DateTime    @default(now())
+  name      String?
   photoURL  String?
   type      ChatType
   lastMessageId String? @unique

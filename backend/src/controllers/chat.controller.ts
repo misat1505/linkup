@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ChatService } from "../services/ChatService";
+import { processAvatar } from "../utils/processAvatar";
 
 export const getChatMessages = async (req: Request, res: Response) => {
   try {
@@ -79,18 +80,21 @@ export const createGroupChat = async (req: Request, res: Response) => {
   try {
     const {
       users,
+      name,
       token: { userId },
     } = req.body;
+    const file = await processAvatar(req.file?.path);
 
     if (!users.includes(userId))
       return res
         .status(401)
         .json({ message: "Cannot create group chat not belonging to you." });
 
-    const chat = await ChatService.createGroupChat(users);
+    const chat = await ChatService.createGroupChat(users, name, file);
 
     return res.status(201).json({ chat });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({ message: "Cannot create group chat." });
   }
 };

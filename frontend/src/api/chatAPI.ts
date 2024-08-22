@@ -3,7 +3,10 @@ import { User } from "../models/User";
 import { CHAT_API } from "./utils";
 import { Chat } from "../models/Chat";
 import { Message } from "../models/Message";
-import { ChatFormType } from "@/validators/chat.validators";
+import {
+  ChatFormType,
+  NewGroupChatFormType
+} from "@/validators/chat.validators";
 
 export const createChatBetweenUsers = async (
   user1: User["id"],
@@ -52,4 +55,23 @@ export const createMessage = async (
   });
   const response = await CHAT_API.post(`/${chatId}/messages`, formData);
   return response.data.message;
+};
+
+export const createGroupChat = async (
+  payload: NewGroupChatFormType
+): Promise<Chat> => {
+  const { users, file, name } = payload;
+  const formData = new FormData();
+
+  if (name) formData.append("name", name);
+  if (file) formData.append("file", file?.[0]);
+
+  const ids = users.map((user) => user.id);
+  // formData.append("users[]", JSON.stringify(ids));
+  users.forEach((user) => {
+    formData.append("users[]", user.id);
+  });
+
+  const response = await CHAT_API.post(`/group`, formData);
+  return response.data.chat;
 };

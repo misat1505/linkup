@@ -21,7 +21,7 @@ chatRouter.post(
   validate(createPrivateChatRules),
   createPrivateChat
 );
-chatRouter.post("/group", validate(createGroupChatRules), createGroupChat);
+chatRouter.post("/group", upload.single("file"), authorize, createGroupChat);
 chatRouter.get("/", getUserChats);
 chatRouter.post(
   "/:chatId/messages",
