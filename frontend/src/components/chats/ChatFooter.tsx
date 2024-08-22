@@ -9,13 +9,19 @@ import { ClipLoader } from "react-spinners";
 import { useChatFooterContext } from "../../contexts/ChatFooterProvider";
 import { useAppContext } from "../../contexts/AppProvider";
 import { RxCross2 } from "react-icons/rx";
-import useChatForm from "@/hooks/chats/useChatForm";
 
 export default function ChatFooter() {
   const { isLoading } = useChatContext();
   const { register, submitForm, isSubmitting } = useChatFooterContext();
 
   const isDisabled = isLoading || isSubmitting;
+
+  const handleTextInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      submitForm();
+    }
+  };
 
   return (
     <form onSubmit={submitForm} className="bg-slate-200 p-4">
@@ -27,6 +33,7 @@ export default function ChatFooter() {
           {...register("content")}
           className="z-20 min-h-8"
           placeholder="Type..."
+          onKeyDown={handleTextInputKeyDown}
         />
         <button type="submit" disabled={isDisabled}>
           {isSubmitting ? (
