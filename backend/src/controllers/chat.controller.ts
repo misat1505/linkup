@@ -44,11 +44,9 @@ export const createMessage = async (req: Request, res: Response) => {
       });
 
       if (!isResponseInChat)
-        return res
-          .status(400)
-          .json({
-            message: "Message of responseId does not exist on this chat.",
-          });
+        return res.status(400).json({
+          message: "Message of responseId does not exist on this chat.",
+        });
     }
 
     const message = await ChatService.createMessage({
@@ -74,6 +72,26 @@ export const getUserChats = async (req: Request, res: Response) => {
     return res.status(200).json({ chats });
   } catch (e) {
     return res.status(500).json({ message: "Cannot get user's chats." });
+  }
+};
+
+export const createGroupChat = async (req: Request, res: Response) => {
+  try {
+    const {
+      users,
+      token: { userId },
+    } = req.body;
+
+    if (!users.includes(userId))
+      return res
+        .status(401)
+        .json({ message: "Cannot create group chat not belonging to you." });
+
+    const chat = await ChatService.createGroupChat(users);
+
+    return res.status(201).json({ chat });
+  } catch (e) {
+    return res.status(500).json({ message: "Cannot create group chat." });
   }
 };
 

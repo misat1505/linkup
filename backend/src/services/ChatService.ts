@@ -197,4 +197,25 @@ export class ChatService {
 
     return result;
   }
+
+  static async createGroupChat(users: User["id"][]): Promise<Chat> {
+    const result: Chat = await prisma.chat.create({
+      data: {
+        type: "GROUP",
+        users: {
+          connect: users.map((user) => ({ id: user })),
+        },
+      },
+      include: {
+        users: {
+          select: userSelect,
+        },
+        lastMessage: {
+          select: messageWithoutResponseSelect,
+        },
+      },
+    });
+
+    return result;
+  }
 }

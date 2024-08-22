@@ -1,12 +1,16 @@
 import { Router } from "express";
 import {
+  createGroupChat,
   createMessage,
   createPrivateChat,
   getChatMessages,
   getUserChats,
 } from "../../controllers/chat.controller";
 import { validate } from "../../middlewares/validate";
-import { createPrivateChatRules } from "../../validators/chat.validators";
+import {
+  createGroupChatRules,
+  createPrivateChatRules,
+} from "../../validators/chat.validators";
 import { upload } from "../../middlewares/multer";
 import { authorize } from "../../middlewares/authorize";
 
@@ -17,6 +21,7 @@ chatRouter.post(
   validate(createPrivateChatRules),
   createPrivateChat
 );
+chatRouter.post("/group", validate(createGroupChatRules), createGroupChat);
 chatRouter.get("/", getUserChats);
 chatRouter.post(
   "/:chatId/messages",
