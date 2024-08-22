@@ -22,14 +22,13 @@ import { cn } from "../../lib/utils";
 import { API_URL } from "../../constants";
 import { useAppContext } from "../../contexts/AppProvider";
 import { getInitials } from "../../utils/getInitials";
-import { useDebounce } from "use-debounce";
-import { useQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import { queryKeys } from "../../lib/queryKeys";
-import { searchUsers } from "../../api/userAPI";
 import { createChatBetweenUsers } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
+import useUserSearch from "../../hooks/useUserSearch";
 
 export default function ChatCreator() {
   return (
@@ -79,14 +78,8 @@ function PrivateChatForm() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [text, setText] = useState("");
-  const [debouncedText] = useDebounce(text, 300);
+  const { data } = useUserSearch(text);
   const { user: me } = useAppContext();
-
-  const { data } = useQuery({
-    queryKey: queryKeys.searchUsers(debouncedText),
-    queryFn: () => searchUsers(debouncedText),
-    enabled: debouncedText.length > 0
-  });
 
   const handleClick =
     (user: User) =>
@@ -167,7 +160,9 @@ function ChatNameAndImage() {
 }
 
 function UserSearch() {
-  const { appendUser } = useGroupChatFormContext();
+  const { appendUser, users } = useGroupChatFormContext();
+  const [text, setText] = useState("");
+  const { data } = useUserSearch(text);
 
   const handleClick =
     (user: User) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -175,11 +170,19 @@ function UserSearch() {
       appendUser(user);
     };
 
+  const filteredUsers = data?.filter(
+    (user) => !users.some((u) => u.id === user.id)
+  );
+
   return (
     <div>
-      <Input placeholder="Search for people..." className="my-2" />
+      <Input
+        placeholder="Search for people..."
+        className="my-2"
+        onChange={(e) => setText(e.currentTarget.value)}
+      />
       <div className="no-scrollbar max-h-[340px] overflow-auto">
-        {users.map((user) => (
+        {filteredUsers?.map((user) => (
           <UserDisplay user={user} key={user.id} onClick={handleClick(user)} />
         ))}
       </div>
