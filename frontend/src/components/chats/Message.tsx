@@ -65,7 +65,11 @@ function ForeignMessage({ message }: { message: MessageType }) {
   const { firstName, lastName } = message.author;
 
   return (
-    <div className="group flex items-center justify-start gap-x-4">
+    <div
+      className={cn("group flex items-center justify-start gap-x-4", {
+        "mb-2": isDisplayingAvatar
+      })}
+    >
       <div
         className="flex w-fit max-w-[75%] flex-col items-start"
         ref={(el) => (messageRefs.current[message.id] = el)}

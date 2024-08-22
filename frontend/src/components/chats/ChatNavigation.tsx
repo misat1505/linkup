@@ -13,6 +13,7 @@ import {
 } from "../../utils/chatNavigationUtils";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
+import { FaUserGroup } from "react-icons/fa6";
 
 export default function ChatNavigation() {
   const { chats, isLoading } = useChatPageContext();
@@ -54,7 +55,12 @@ function NavigationItem({ chat }: { chat: Chat }) {
   };
 
   const src = `${API_URL}/files/${getImageURL({ me, chat })!}`;
-  const alt = getImageAlt({ me, chat });
+  const alt =
+    chat.type === "PRIVATE" ? (
+      getImageAlt({ me, chat })
+    ) : (
+      <FaUserGroup className="object-fit h-full w-full pt-4" />
+    );
   const chatName = getChatName({ me, chat });
   const lastActive = getLastActive({ me, chat });
 
@@ -64,8 +70,10 @@ function NavigationItem({ chat }: { chat: Chat }) {
       onClick={() => handleOpenChat(chat.id)}
     >
       <Avatar src={src} alt={alt} lastActive={lastActive} />
-      <div className="text-left">
-        <div className="font-semibold">{chatName}</div>
+      <div className="overflow-hidden text-left">
+        <div className="overflow-hidden text-nowrap font-semibold">
+          {chatName}
+        </div>
         <div className="text-sm">
           <LastMessageDisplayer lastMessage={chat.lastMessage} />
         </div>

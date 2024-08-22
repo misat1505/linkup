@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
 import { getStatus, Status, timeDifference } from "../../utils/timeDifference";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
+import { FaUserGroup } from "react-icons/fa6";
 
 export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   const { chats } = useChatPageContext();
@@ -25,7 +26,12 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   if (!me || !chat) throw new Error();
 
   const src = `${API_URL}/files/${getImageURL({ me, chat })!}`;
-  const alt = getImageAlt({ me, chat });
+  const alt =
+    chat.type === "PRIVATE" ? (
+      getImageAlt({ me, chat })
+    ) : (
+      <FaUserGroup className="object-fit h-full w-full pt-4" />
+    );
   const chatName = getChatName({ me, chat });
   const lastActive = getLastActive({ me, chat });
 

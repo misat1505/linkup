@@ -32,6 +32,13 @@ export function getChatName({ chat, me }: CommonArgs): string {
       lastName: otherUser.lastName
     });
   }
+  if (chat.type === "GROUP") {
+    const names = chat.users?.map(
+      (user) => `${user.firstName} ${user.lastName}`
+    );
+    const merged = names?.join(", ")!;
+    return merged;
+  }
   return "";
 }
 

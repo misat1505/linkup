@@ -7,7 +7,7 @@ import { ImCancelCircle } from "react-icons/im";
 
 type AvatarProps = {
   src: string;
-  alt: string;
+  alt: React.ReactNode;
   lastActive?: Date;
   className?: string;
 };
@@ -25,7 +25,7 @@ export default function Avatar({
         className={{
           common: cn("h-12 w-12 rounded-full bg-slate-200", className),
           img: "object-cover",
-          error: "bg-white font-semibold"
+          error: "overflow-hidden bg-white font-semibold"
         }}
         errorContent={alt}
       />
