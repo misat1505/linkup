@@ -11,9 +11,9 @@ import {
   getImageURL,
   getLastActive
 } from "../../utils/chatNavigationUtils";
-import { IoIosAddCircleOutline } from "react-icons/io";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { FaUserGroup } from "react-icons/fa6";
+import ChatCreator from "./ChatCreator";
 
 export default function ChatNavigation() {
   const { chats, isLoading } = useChatPageContext();
@@ -34,12 +34,7 @@ function ChatNavigationHeader() {
   return (
     <div className="flex w-full items-center justify-between bg-transparent px-4 py-2 text-white">
       <h2 className="text-lg font-semibold">Chat with others</h2>
-      <button>
-        <IoIosAddCircleOutline
-          size={20}
-          className="transition-all hover:scale-125 hover:cursor-pointer"
-        />
-      </button>
+      <ChatCreator />
     </div>
   );
 }
