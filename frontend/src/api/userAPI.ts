@@ -7,9 +7,8 @@ export const searchUsers = async (term: string): Promise<User[]> => {
     data: { users: data }
   } = await USER_API.get(`/search?term=${term}`);
 
-  const users = data.map(({ lastActive, photoURL, ...rest }: any) => ({
+  const users = data.map(({ lastActive, ...rest }: any) => ({
     lastActive: new Date(lastActive),
-    photoURL: `${API_URL}/files/${photoURL}`,
     ...rest
   })) as User[];
 

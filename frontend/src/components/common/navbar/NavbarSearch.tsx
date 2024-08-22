@@ -31,6 +31,7 @@ import { getInitials } from "../../../utils/getInitials";
 import { createFullName } from "../../../utils/createFullName";
 import { queryKeys } from "../../../lib/queryKeys";
 import { Chat } from "../../../models/Chat";
+import { API_URL } from "../../../constants";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -123,7 +124,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
     >
       <div className="flex items-center">
         <Avatar
-          src={user.photoURL!}
+          src={`${API_URL}/files/${user.photoURL}`}
           alt={getInitials({ firstName, lastName })}
           className="h-8 w-8 text-xs"
         />

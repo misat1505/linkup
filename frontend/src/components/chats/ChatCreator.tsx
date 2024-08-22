@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, useMemo } from "react";
+import React, { ButtonHTMLAttributes, useMemo, useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import {
   Dialog,
@@ -21,6 +21,15 @@ import Avatar from "../common/Avatar";
 import { cn } from "../../lib/utils";
 import { API_URL } from "../../constants";
 import { useAppContext } from "../../contexts/AppProvider";
+import { getInitials } from "../../utils/getInitials";
+import { useDebounce } from "use-debounce";
+import { useQuery, useQueryClient } from "react-query";
+import { queryKeys } from "../../lib/queryKeys";
+import { searchUsers } from "../../api/userAPI";
+import { createChatBetweenUsers } from "../../api/chatAPI";
+import { Chat } from "../../models/Chat";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../lib/routes";
 
 export default function ChatCreator() {
   return (
@@ -49,7 +58,7 @@ export default function ChatCreator() {
 
 function ChatCreatorDialogContent() {
   return (
-    <Tabs defaultValue="private" className="">
+    <Tabs defaultValue="private" className="h-[500px]">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="private">Private</TabsTrigger>
         <TabsTrigger value="group">Group</TabsTrigger>
@@ -67,18 +76,40 @@ function ChatCreatorDialogContent() {
 }
 
 function PrivateChatForm() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [text, setText] = useState("");
+  const [debouncedText] = useDebounce(text, 300);
   const { user: me } = useAppContext();
+
+  const { data } = useQuery({
+    queryKey: queryKeys.searchUsers(debouncedText),
+    queryFn: () => searchUsers(debouncedText),
+    enabled: debouncedText.length > 0
+  });
+
   const handleClick =
-    (user: User) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (user: User) =>
+    async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
-      console.log(me, user);
+      const chat = await createChatBetweenUsers(me!.id, user.id);
+
+      queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+        if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
+        return oldChats ? [...oldChats, chat] : [chat];
+      });
+      navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
     };
 
   return (
     <div className="mx-auto max-w-72">
-      <Input placeholder="Search for people..." className="my-2" />
-      <div className="no-scrollbar max-h-[410px] overflow-auto">
-        {users.map((user) => (
+      <Input
+        placeholder="Search for people..."
+        className="mb-2 mt-4"
+        onChange={(e) => setText(e.currentTarget.value)}
+      />
+      <div className="no-scrollbar max-h-[400px] overflow-auto">
+        {data?.map((user) => (
           <UserDisplay user={user} key={user.id} onClick={handleClick(user)} />
         ))}
       </div>
@@ -161,6 +192,8 @@ type UserDisplayProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 function UserDisplay({ user, className, ...rest }: UserDisplayProps) {
+  const { firstName, lastName } = user;
+
   return (
     <button
       {...rest}
@@ -171,8 +204,8 @@ function UserDisplay({ user, className, ...rest }: UserDisplayProps) {
     >
       <Avatar
         src={`${API_URL}/files/${user.photoURL!}`}
-        alt={""}
-        className="h-8 w-8"
+        alt={getInitials({ firstName, lastName })}
+        className="h-8 w-8 text-xs"
       />
       <p>
         {user.firstName} {user.lastName}
