@@ -4,7 +4,7 @@ export const chatFormSchema = z
   .object({
     content: z.string(),
     files: z.array(z.instanceof(File)).optional(),
-    responseId: z.string().nullable()
+    responseId: z.string().nullable().optional()
   })
   .refine(
     (data) => {

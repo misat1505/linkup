@@ -9,6 +9,7 @@ import { ClipLoader } from "react-spinners";
 import { useChatFooterContext } from "../../contexts/ChatFooterProvider";
 import { useAppContext } from "../../contexts/AppProvider";
 import { RxCross2 } from "react-icons/rx";
+import useChatForm from "@/hooks/chats/useChatForm";
 
 export default function ChatFooter() {
   const { isLoading } = useChatContext();
@@ -145,7 +146,8 @@ function FileDisplayerItem({ file }: { file: File }) {
 
 function ResponseDisplayer() {
   const { user: me } = useAppContext();
-  const { responseId, setResponseId, messages } = useChatContext();
+  const { messages } = useChatContext();
+  const { responseId, setResponse } = useChatFooterContext();
   const message = messages?.find((m) => m.id === responseId);
 
   if (!message) return null;
@@ -166,7 +168,7 @@ function ResponseDisplayer() {
         <h2 className="font-semibold">Replying to {getReplyAuthorText()}.</h2>
         <p className="overflow-hidden text-nowrap">{getReplyText()}</p>
       </div>
-      <button onClick={() => setResponseId(null)}>
+      <button onClick={() => setResponse(null)}>
         <RxCross2 size={20} className="transition-all hover:scale-125" />
       </button>
     </div>

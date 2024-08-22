@@ -38,8 +38,8 @@ function Chat() {
     <div className="flex-grow">
       <div className="flex h-full w-full flex-col">
         <ChatHeader chatId={chatId} />
-        <ChatContent />
         <ChatFooterProvider chatId={chatId}>
+          <ChatContent />
           <ChatFooter />
         </ChatFooterProvider>
       </div>

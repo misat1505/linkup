@@ -12,14 +12,12 @@ import { createMessage } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { socketClient } from "../../lib/socketClient";
-import { useChatContext } from "../../contexts/ChatProvider";
-import { useEffect } from "react";
 import { Message } from "../../models/Message";
 
 export type ChatFormEntries = {
   content: string;
   files?: File[] | undefined;
-  responseId: Message["id"] | null;
+  responseId?: Message["id"] | null;
 };
 
 export type useChatFormValue = {
@@ -29,13 +27,14 @@ export type useChatFormValue = {
   files: File[] | undefined;
   appendFiles: (files: File[]) => void;
   removeFile: (id: number) => void;
+  setResponse: (id: Message["id"] | null) => void;
+  responseId: Message["id"] | null | undefined;
   submitForm: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
 };
 
 export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
-  const { responseId, setResponseId } = useChatContext();
   const { addMessage } = useChatPageContext();
   const { toast } = useToast();
   const {
@@ -53,7 +52,6 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     try {
       const message = await createMessage(chatId, data);
       reset();
-      setResponseId(null);
       addMessage(message);
       socketClient.sendMessage(message, chatId);
     } catch (e: unknown) {
@@ -82,19 +80,23 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     );
   };
 
+  const setResponse = (id: Message["id"] | null) => {
+    setValue("responseId", id);
+  };
+
   const submitForm = handleSubmit(onSubmit);
 
-  useEffect(() => {
-    setValue("responseId", responseId);
-  }, [responseId]);
+  const { files, responseId } = watch();
 
   return {
     register,
     errors,
     isSubmitting,
     submitForm,
-    files: watch().files,
+    files,
+    responseId,
     appendFiles,
-    removeFile
+    removeFile,
+    setResponse
   };
 }

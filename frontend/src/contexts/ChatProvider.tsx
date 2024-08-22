@@ -29,8 +29,6 @@ type ChatContextValue = {
   messageRefs: React.MutableRefObject<
     Record<Message["id"], HTMLDivElement | null>
   >;
-  responseId: string | null;
-  setResponseId: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
@@ -38,7 +36,6 @@ const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
 export const useChatContext = () => useContext(ChatContext);
 
 export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
-  const [responseId, setResponseId] = useState<Message["id"] | null>(null);
   const messageRefs = useRef<Record<Message["id"], HTMLDivElement | null>>({});
   const [incomeMessageId, setIncomeMessageId] = useState<Message["id"] | null>(
     null
@@ -70,10 +67,6 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
 
   const chat = chats?.find((c) => c.id === chatId) || null;
 
-  useEffect(() => {
-    console.log(responseId);
-  }, [responseId]);
-
   return (
     <ChatContext.Provider
       value={{
@@ -83,9 +76,7 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
         chat,
         chatId,
         incomeMessage,
-        messageRefs,
-        responseId,
-        setResponseId
+        messageRefs
       }}
     >
       {children}
