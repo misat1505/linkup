@@ -19,3 +19,19 @@ export const chatFormSchema = z
   );
 
 export type ChatFormType = z.infer<typeof chatFormSchema>;
+
+const userSchema = z.object({
+  id: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  photoURL: z.string().nullable(),
+  lastActive: z.date()
+});
+
+export const newGroupChatFormSchema = z.object({
+  name: z.string().optional(),
+  file: z.optional(z.instanceof(FileList)),
+  users: z.array(userSchema)
+});
+
+export type NewGroupChatFormType = z.infer<typeof newGroupChatFormSchema>;
