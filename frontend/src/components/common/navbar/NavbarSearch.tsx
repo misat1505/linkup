@@ -11,12 +11,6 @@ import { cn } from "../../../lib/utils";
 import { User } from "../../../models/User";
 import { FaUserFriends } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "../../ui/tooltip";
 import { useDebounce } from "use-debounce";
 import { Skeleton } from "../../ui/skeleton";
 import { useQuery, useQueryClient } from "react-query";
@@ -31,6 +25,7 @@ import { queryKeys } from "../../../lib/queryKeys";
 import { Chat } from "../../../models/Chat";
 import { UserService } from "../../../services/User.service";
 import { ChatService } from "../../../services/Chat.service";
+import Tooltip from "../Tooltip";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -151,15 +146,8 @@ type ActionButtonProps = {
 
 function ActionButton({ onClick, tooltipText, Icon }: ActionButtonProps) {
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <button onClick={onClick}>{Icon}</button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{tooltipText}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip content={tooltipText}>
+      <button onClick={onClick}>{Icon}</button>
+    </Tooltip>
   );
 }
