@@ -1,6 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import { SOCKET_URL } from "../constants";
 import { Message } from "../models/Message";
+import { convertDates } from "../utils/convertDates";
 
 type Room = string;
 
@@ -22,11 +23,11 @@ class SocketClient {
     this.socket = io(serverUrl, { withCredentials: true });
 
     this.socket.on("connect", () => {
-      console.log(`Connected to server with id: ${this.socket.id}`);
+      console.log("Connected to socket.");
     });
 
     this.socket.on("disconnect", (reason: string) => {
-      console.log(`Disconnected from server: ${reason}`);
+      console.log("Disconnected from socket.");
     });
   }
 
@@ -43,7 +44,10 @@ class SocketClient {
   }
 
   onReceiveMessage(callback: (message: Message) => void) {
-    this.socket.on(SocketAction.RECEIVE_MESSAGE, callback);
+    this.socket.on(SocketAction.RECEIVE_MESSAGE, (dirtyMessage: any) => {
+      const message = convertDates(dirtyMessage as any) as unknown as Message;
+      callback(message);
+    });
   }
 
   on(action: SocketAction | SocketErrors, cb: (...args: any[]) => void) {

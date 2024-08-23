@@ -38,7 +38,6 @@ export class ChatService {
 
   static async getMessages(chatId: Chat["id"]): Promise<Message[]> {
     const response = await CHAT_API.get(`/${chatId}/messages`);
-    console.log(response.data.messages);
     return response.data.messages;
   }
 
