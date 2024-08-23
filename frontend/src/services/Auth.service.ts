@@ -8,7 +8,6 @@ export class AuthService {
     const {
       data: { user }
     } = await AUTH_API.get("/user");
-    console.log(user);
     return user;
   }
 

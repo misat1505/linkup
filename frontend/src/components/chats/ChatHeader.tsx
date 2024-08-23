@@ -2,7 +2,6 @@ import React from "react";
 import Avatar from "../common/Avatar";
 import { Chat } from "../../models/Chat";
 import { useAppContext } from "../../contexts/AppProvider";
-import { API_URL } from "../../constants";
 import { ChatUtils } from "../../utils/chatUtils";
 import { RxCross1 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +21,7 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
 
   const utils = new ChatUtils(chat, me);
 
-  const src = `${API_URL}/files/${utils.getImageURL()}`;
+  const src = utils.getImageURL()!;
   const alt =
     chat.type === "PRIVATE" ? (
       utils.getImageAlt()

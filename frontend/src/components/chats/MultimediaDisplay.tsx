@@ -25,7 +25,7 @@ function MultimediaDisplayItem({ file }: { file: File }) {
   if (type === "image")
     return (
       <Image
-        src={`${API_URL}/files/${file.url}`}
+        src={file.url}
         className={{
           common: "h-40 w-40 object-cover",
           error: "bg-slate-200 font-semibold"
@@ -37,7 +37,7 @@ function MultimediaDisplayItem({ file }: { file: File }) {
   if (type === "video")
     return (
       <video className="h-40 w-40 object-cover" controls>
-        <source src={`${API_URL}/files/${file.url}`} />
+        <source src={file.url} />
         Your browser does not support the video tag.
       </video>
     );

@@ -1,7 +1,6 @@
 import { Chat } from "../../models/Chat";
 import React from "react";
 import { useAppContext } from "../../contexts/AppProvider";
-import { API_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
 import Avatar from "../common/Avatar";
