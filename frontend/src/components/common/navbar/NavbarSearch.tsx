@@ -20,7 +20,6 @@ import {
 import { useDebounce } from "use-debounce";
 import { Skeleton } from "../../ui/skeleton";
 import { useQuery, useQueryClient } from "react-query";
-import { searchUsers } from "../../../api/userAPI";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../lib/routes";
 import { createChatBetweenUsers } from "../../../api/chatAPI";
@@ -32,6 +31,7 @@ import { createFullName } from "../../../utils/createFullName";
 import { queryKeys } from "../../../lib/queryKeys";
 import { Chat } from "../../../models/Chat";
 import { API_URL } from "../../../constants";
+import { UserService } from "../../../services/User.service";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -42,7 +42,7 @@ export default function NavbarSearch() {
 
   const { data: users = [], isFetching } = useQuery({
     queryKey: queryKeys.searchUsers(debouncedText),
-    queryFn: () => searchUsers(debouncedText),
+    queryFn: () => UserService.search(debouncedText),
     enabled: debouncedText.length > 0
   });
 

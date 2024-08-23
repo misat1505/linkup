@@ -1,4 +1,4 @@
-import { searchUsers } from "../api/userAPI";
+import { UserService } from "../services/User.service";
 import { queryKeys } from "../lib/queryKeys";
 import { User } from "../models/User";
 import { useQuery, UseQueryResult } from "react-query";
@@ -20,7 +20,7 @@ export default function useUserSearch(
 
   const data = useQuery({
     queryKey: queryKeys.searchUsers(debouncedText),
-    queryFn: () => searchUsers(debouncedText),
+    queryFn: () => UserService.search(debouncedText),
     enabled: debouncedText.length > 0
   });
 
