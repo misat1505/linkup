@@ -9,6 +9,7 @@ import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { FaUserGroup } from "react-icons/fa6";
 import ChatCreator from "./chatCreationDialog/ChatCreator";
 import { cn } from "../../lib/utils";
+import Tooltip from "../common/Tooltip";
 
 export default function ChatNavigation() {
   const { chatId } = useParams();
@@ -60,20 +61,24 @@ function NavigationItem({ chat }: { chat: Chat }) {
   const lastActive = utils.getLastActive();
 
   return (
-    <button
-      className="mx-4 mb-2 flex w-[calc(100%-2rem)] items-center gap-x-4 rounded-md bg-slate-100 px-4 py-2 shadow-md transition-all hover:cursor-pointer hover:bg-slate-200 md:w-72"
-      onClick={() => handleOpenChat(chat.id)}
-    >
-      <Avatar src={src} alt={alt} lastActive={lastActive} />
-      <div className="overflow-hidden text-left">
-        <div className="overflow-hidden text-nowrap font-semibold">
-          {chatName}
-        </div>
-        <div className="text-sm">
-          <LastMessageDisplayer lastMessage={chat.lastMessage} />
-        </div>
-      </div>
-    </button>
+    <Tooltip content="Open chat">
+      <span>
+        <button
+          className="mx-4 mb-2 flex w-[calc(100%-2rem)] items-center gap-x-4 rounded-md bg-slate-100 px-4 py-2 shadow-md transition-all hover:cursor-pointer hover:bg-slate-200 md:w-72"
+          onClick={() => handleOpenChat(chat.id)}
+        >
+          <Avatar src={src} alt={alt} lastActive={lastActive} />
+          <div className="overflow-hidden text-left">
+            <div className="overflow-hidden text-nowrap font-semibold">
+              {chatName}
+            </div>
+            <div className="text-sm">
+              <LastMessageDisplayer lastMessage={chat.lastMessage} />
+            </div>
+          </div>
+        </button>
+      </span>
+    </Tooltip>
   );
 }
 

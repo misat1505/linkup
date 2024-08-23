@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../lib/routes";
 import { useQueryClient } from "react-query";
 import { AuthService } from "../../../services/Auth.service";
+import Tooltip from "../../common/Tooltip";
 
 export default function NavbarSheet() {
   const { user } = useAppContext();
@@ -37,7 +38,11 @@ export default function NavbarSheet() {
   return (
     <Sheet>
       <SheetTrigger>
-        <NavbarAvatar />
+        <Tooltip content="Show actions">
+          <span>
+            <NavbarAvatar />
+          </span>
+        </Tooltip>
       </SheetTrigger>
       {isLoggedIn ? <LoggedInSheet /> : <GuestSheet />}
     </Sheet>
