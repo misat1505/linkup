@@ -164,8 +164,8 @@ function ResponseDisplayer() {
   const utils = new ChatFooterUtils(message, me);
 
   return (
-    <div className="flex w-full items-center justify-between pb-4">
-      <div className="w-[95%]">
+    <div className="flex w-full items-center justify-between gap-x-4 pb-4">
+      <div className="w-[calc(100%-2.25rem)]">
         <h2 className="font-semibold">{utils.getReplyAuthorText()}.</h2>
         <p className="overflow-hidden text-nowrap">{utils.getReplyText()}</p>
       </div>

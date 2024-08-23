@@ -39,7 +39,7 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   };
 
   return (
-    <div className="flex items-center justify-between p-4">
+    <div className="flex items-center justify-between gap-x-4 p-4">
       <div className="flex flex-grow items-center gap-x-4 overflow-hidden">
         <Avatar src={src} alt={alt} lastActive={lastActive} />
         <div className="overflow-hidden text-nowrap text-white">
