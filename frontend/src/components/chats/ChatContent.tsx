@@ -16,7 +16,7 @@ export default function ChatContent() {
   } = useChatScroll();
 
   const styles =
-    "flex-grow overflow-hidden rounded-tl-lg bg-slate-100 pt-2 relative";
+    "flex-grow overflow-hidden md:rounded-tl-lg bg-slate-100 pt-2 relative";
 
   if (isLoading) {
     return (

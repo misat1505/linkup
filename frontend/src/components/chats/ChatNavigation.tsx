@@ -61,7 +61,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
 
   return (
     <button
-      className="mx-4 mb-2 flex w-[calc(100%-2rem)] items-center gap-x-4 rounded-md bg-slate-100 px-4 py-2 transition-all hover:cursor-pointer hover:bg-slate-200 md:w-72"
+      className="mx-4 mb-2 flex w-[calc(100%-2rem)] items-center gap-x-4 rounded-md bg-slate-100 px-4 py-2 shadow-md transition-all hover:cursor-pointer hover:bg-slate-200 md:w-72"
       onClick={() => handleOpenChat(chat.id)}
     >
       <Avatar src={src} alt={alt} lastActive={lastActive} />
