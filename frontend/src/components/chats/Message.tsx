@@ -3,7 +3,6 @@ import { Message as MessageType } from "../../models/Message";
 import React from "react";
 import { cn } from "../../lib/utils";
 import MultimediaDisplay from "./MultimediaDisplay";
-import { API_URL } from "../../constants";
 import Avatar from "../common/Avatar";
 import { useChatContext } from "../../contexts/ChatProvider";
 import { isShowingAvatar } from "../../utils/isShowingAvatar";
@@ -82,7 +81,7 @@ function ForeignMessage({ message }: { message: MessageType }) {
           <div className="h-8 w-8">
             {isDisplayingAvatar && (
               <Avatar
-                src={`${API_URL}/files/${message.author.photoURL}`}
+                src={message.author.photoURL!}
                 alt={getInitials(message.author)}
                 className="h-8 w-8 object-cover text-xs"
               />

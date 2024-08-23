@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Avatar from "../common/Avatar";
 import { Message } from "../../models/Message";
-import { API_URL } from "../../constants";
 import { getInitials } from "../../utils/getInitials";
 import styles from "../../styles/incomeMessage.module.css";
 import { cn } from "../../lib/utils";
@@ -42,7 +41,7 @@ export default function IncomeMessage({
       )}
     >
       <Avatar
-        src={`${API_URL}/files/${message.author.photoURL}`}
+        src={message.author.photoURL!}
         alt={getInitials(message.author)}
         className="h-8 w-8 text-xs"
       />

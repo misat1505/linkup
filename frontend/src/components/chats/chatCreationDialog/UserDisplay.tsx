@@ -1,5 +1,4 @@
 import Avatar from "../../../components/common/Avatar";
-import { API_URL } from "../../../constants";
 import { cn } from "../../../lib/utils";
 import { User } from "../../../models/User";
 import { getInitials } from "../../../utils/getInitials";
@@ -23,7 +22,7 @@ export default function UserDisplay({
       )}
     >
       <Avatar
-        src={`${API_URL}/files/${user.photoURL!}`}
+        src={user.photoURL!}
         alt={getInitials(user)}
         className="h-8 w-8 text-xs"
       />

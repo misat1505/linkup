@@ -1,7 +1,5 @@
 import { useAppContext } from "../../../contexts/AppProvider";
 import React from "react";
-import Image from "../Image";
-import { API_URL } from "../../../constants";
 import { FaUser } from "react-icons/fa";
 import Avatar from "../Avatar";
 import { getInitials } from "../../../utils/getInitials";
@@ -17,7 +15,5 @@ export default function NavbarAvatar() {
     );
   }
 
-  return (
-    <Avatar src={`${API_URL}/files/${user.photoURL}`} alt={getInitials(user)} />
-  );
+  return <Avatar src={user.photoURL!} alt={getInitials(user)} />;
 }

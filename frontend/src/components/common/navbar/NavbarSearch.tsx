@@ -29,7 +29,6 @@ import { getInitials } from "../../../utils/getInitials";
 import { createFullName } from "../../../utils/createFullName";
 import { queryKeys } from "../../../lib/queryKeys";
 import { Chat } from "../../../models/Chat";
-import { API_URL } from "../../../constants";
 import { UserService } from "../../../services/User.service";
 import { ChatService } from "../../../services/Chat.service";
 
@@ -122,7 +121,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
     >
       <div className="flex items-center">
         <Avatar
-          src={`${API_URL}/files/${user.photoURL}`}
+          src={user.photoURL!}
           alt={getInitials(user)}
           className="h-8 w-8 text-xs"
         />

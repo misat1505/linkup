@@ -46,7 +46,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
     navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId }));
   };
 
-  const src = `${API_URL}/files/${utils.getImageURL()}`;
+  const src = utils.getImageURL()!;
   const alt =
     chat.type === "PRIVATE" ? (
       utils.getImageAlt()
