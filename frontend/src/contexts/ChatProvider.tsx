@@ -1,4 +1,3 @@
-import { getChatMessages } from "../api/chatAPI";
 import { Chat } from "../models/Chat";
 import React, {
   createContext,
@@ -13,7 +12,7 @@ import { useChatPageContext } from "./ChatPageProvider";
 import { Message } from "../models/Message";
 import { queryKeys } from "../lib/queryKeys";
 import { SocketAction, socketClient } from "../lib/socketClient";
-import { useParams } from "react-router-dom";
+import { ChatService } from "../services/Chat.service";
 
 type ChatContextProps = PropsWithChildren & {
   chatId: Chat["id"];
@@ -47,7 +46,7 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
     error
   } = useQuery({
     queryKey: queryKeys.messages(chatId),
-    queryFn: () => getChatMessages(chatId),
+    queryFn: () => ChatService.getMessages(chatId),
     refetchOnMount: false
   });
 

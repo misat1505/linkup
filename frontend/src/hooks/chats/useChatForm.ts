@@ -8,11 +8,11 @@ import {
 } from "react-hook-form";
 import { useToast } from "../../components/ui/use-toast";
 import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
-import { createMessage } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { socketClient } from "../../lib/socketClient";
 import { Message } from "../../models/Message";
+import { ChatService } from "../../services/Chat.service";
 
 export type ChatFormEntries = {
   content: string;
@@ -50,7 +50,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
   });
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {
-      const message = await createMessage(chatId, data);
+      const message = await ChatService.createMessage(chatId, data);
       reset();
       addMessage(message);
       socketClient.sendMessage(message);

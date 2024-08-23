@@ -16,7 +16,7 @@ import GroupChatFormProvider, {
 } from "../../contexts/GroupChatFormProvider";
 import Image from "../common/Image";
 import { FaUserGroup } from "react-icons/fa6";
-import { User, users } from "../../models/User";
+import { User } from "../../models/User";
 import Avatar from "../common/Avatar";
 import { cn } from "../../lib/utils";
 import { API_URL } from "../../constants";
@@ -24,11 +24,11 @@ import { useAppContext } from "../../contexts/AppProvider";
 import { getInitials } from "../../utils/getInitials";
 import { useQueryClient } from "react-query";
 import { queryKeys } from "../../lib/queryKeys";
-import { createChatBetweenUsers } from "../../api/chatAPI";
 import { Chat } from "../../models/Chat";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
 import useUserSearch from "../../hooks/useUserSearch";
+import { ChatService } from "../../services/Chat.service";
 
 export default function ChatCreator() {
   return (
@@ -85,7 +85,7 @@ function PrivateChatForm() {
     (user: User) =>
     async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
-      const chat = await createChatBetweenUsers(me!.id, user.id);
+      const chat = await ChatService.createPrivateChat(me!.id, user.id);
 
       queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
         if (oldChats?.find((c) => c.id === chat.id)) return oldChats;

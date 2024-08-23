@@ -1,5 +1,4 @@
 import { queryKeys } from "../lib/queryKeys";
-import { getUserChats } from "../api/chatAPI";
 import { Chat } from "../models/Chat";
 import React, { createContext, useContext, useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
@@ -7,6 +6,7 @@ import { sortChatsByActivity } from "../utils/sortChatsByActivity";
 import { Message } from "../models/Message";
 import { SocketAction, socketClient, SocketErrors } from "../lib/socketClient";
 import { useToast } from "../components/ui/use-toast";
+import { ChatService } from "../services/Chat.service";
 
 type ChatPageContextProps = {
   children: React.ReactNode;
@@ -29,7 +29,7 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
   const queryClient = useQueryClient();
   const { data: chats, isLoading } = useQuery({
     queryKey: queryKeys.chats(),
-    queryFn: getUserChats,
+    queryFn: ChatService.getChats,
     refetchOnMount: true,
     onSuccess: (data) => {
       queryClient.setQueryData<Chat[]>(

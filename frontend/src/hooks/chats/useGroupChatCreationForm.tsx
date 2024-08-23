@@ -14,12 +14,12 @@ import {
 import { User } from "../../models/User";
 import { useEffect } from "react";
 import { useAppContext } from "../../contexts/AppProvider";
-import { createGroupChat } from "../../api/chatAPI";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
 import { Chat } from "../../models/Chat";
 import { queryKeys } from "../../lib/queryKeys";
+import { ChatService } from "../../services/Chat.service";
 
 type GroupChatFormEntries = {
   users: User[];
@@ -57,7 +57,7 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
 
   const onSubmit: SubmitHandler<NewGroupChatFormType> = async (data) => {
     try {
-      const chat = await createGroupChat(data);
+      const chat = await ChatService.createGroupChat(data);
       queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
         if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
         return oldChats ? [...oldChats, chat] : [chat];
