@@ -9,6 +9,7 @@ import { ClipLoader } from "react-spinners";
 import { useChatFooterContext } from "../../contexts/ChatFooterProvider";
 import { useAppContext } from "../../contexts/AppProvider";
 import { RxCross2 } from "react-icons/rx";
+import { ChatFooterUtils } from "../../utils/chatFooterUtils";
 
 export default function ChatFooter() {
   const { isLoading } = useChatContext();
@@ -156,24 +157,17 @@ function ResponseDisplayer() {
   const { messages } = useChatContext();
   const { responseId, setResponse } = useChatFooterContext();
   const message = messages?.find((m) => m.id === responseId);
+  if (!me) throw new Error();
 
   if (!message) return null;
 
-  const getReplyAuthorText = (): string => {
-    if (message.author.id === me!.id) return "you";
-    return `${message.author.firstName} ${message.author.lastName}`;
-  };
-
-  const getReplyText = () => {
-    if (message.content) return message.content.substring(0, 50);
-    return `Sent ${message.files.length} file(s).`;
-  };
+  const utils = new ChatFooterUtils(message, me);
 
   return (
     <div className="flex w-full items-center justify-between pb-4">
       <div>
-        <h2 className="font-semibold">Replying to {getReplyAuthorText()}.</h2>
-        <p className="overflow-hidden text-nowrap">{getReplyText()}</p>
+        <h2 className="font-semibold">{utils.getReplyAuthorText()}.</h2>
+        <p className="overflow-hidden text-nowrap">{utils.getReplyText()}</p>
       </div>
       <button onClick={() => setResponse(null)}>
         <RxCross2 size={20} className="transition-all hover:scale-125" />
