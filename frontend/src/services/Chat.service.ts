@@ -63,7 +63,6 @@ export class ChatService {
     if (name) formData.append("name", name);
     if (file) formData.append("file", file?.[0]);
 
-    const ids = users.map((user) => user.id);
     users.forEach((user) => {
       formData.append("users[]", user.id);
     });

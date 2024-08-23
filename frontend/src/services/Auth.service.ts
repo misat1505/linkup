@@ -8,16 +8,14 @@ export class AuthService {
     const {
       data: { user }
     } = await AUTH_API.get("/user");
-    user.lastActive = new Date(user.lastActive);
-    return user as User;
+    return user;
   }
 
   static async login(payload: LoginFormType): Promise<User> {
     const {
       data: { user }
     } = await AUTH_API.post("/login", payload);
-    user.lastActive = new Date(user.lastActive);
-    return user as User;
+    return user;
   }
 
   static async refreshToken(): Promise<AxiosResponse<any>> {
@@ -42,8 +40,7 @@ export class AuthService {
       }
     });
 
-    user.lastActive = new Date(user.lastActive);
-    return user as User;
+    return user;
   }
 
   static async logout(): Promise<any> {
