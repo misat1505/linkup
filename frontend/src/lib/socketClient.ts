@@ -45,7 +45,8 @@ class SocketClient {
 
   onReceiveMessage(callback: (message: Message) => void) {
     this.socket.on(SocketAction.RECEIVE_MESSAGE, (dirtyMessage: any) => {
-      const message = convertDates(dirtyMessage as any) as unknown as Message;
+      const convertedMessage = convertDates(dirtyMessage) as any;
+      const message: Message = convertedMessage;
       callback(message);
     });
   }
