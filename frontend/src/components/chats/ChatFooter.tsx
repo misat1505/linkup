@@ -10,6 +10,7 @@ import { useChatFooterContext } from "../../contexts/ChatFooterProvider";
 import { useAppContext } from "../../contexts/AppProvider";
 import { RxCross2 } from "react-icons/rx";
 import { ChatFooterUtils } from "../../utils/chatFooterUtils";
+import Tooltip from "../common/Tooltip";
 
 export default function ChatFooter() {
   const { isLoading } = useChatContext();
@@ -40,12 +41,16 @@ export default function ChatFooter() {
           {isSubmitting ? (
             <ClipLoader size={20} color="grey" />
           ) : (
-            <IoSend
-              className={cn("text-blue-500 transition-all", {
-                "opacity-40": isLoading,
-                "hover:scale-125": !isLoading
-              })}
-            />
+            <Tooltip content="Send message">
+              <span>
+                <IoSend
+                  className={cn("text-blue-500 transition-all", {
+                    "opacity-40": isLoading,
+                    "hover:scale-125": !isLoading
+                  })}
+                />
+              </span>
+            </Tooltip>
           )}
         </button>
       </div>
@@ -80,7 +85,11 @@ function FileAdder() {
         className="hidden"
       />
       <button onClick={clickInput}>
-        <FaFileAlt className="text-blue-500 transition-all hover:scale-125" />
+        <Tooltip content="Insert file">
+          <span>
+            <FaFileAlt className="text-blue-500 transition-all hover:scale-125" />
+          </span>
+        </Tooltip>
       </button>
     </>
   );
@@ -170,7 +179,11 @@ function ResponseDisplayer() {
         <p className="overflow-hidden text-nowrap">{utils.getReplyText()}</p>
       </div>
       <button onClick={() => setResponse(null)}>
-        <RxCross2 size={20} className="transition-all hover:scale-125" />
+        <Tooltip content="Cancel">
+          <span>
+            <RxCross2 size={20} className="transition-all hover:scale-125" />
+          </span>
+        </Tooltip>
       </button>
     </div>
   );
