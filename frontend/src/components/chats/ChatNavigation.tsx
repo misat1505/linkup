@@ -8,7 +8,7 @@ import Avatar from "../common/Avatar";
 import { ChatUtils } from "../../utils/chatUtils";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { FaUserGroup } from "react-icons/fa6";
-import ChatCreator from "./ChatCreator";
+import ChatCreator from "./chatCreationDialog/ChatCreator";
 
 export default function ChatNavigation() {
   const { chats, isLoading } = useChatPageContext();
