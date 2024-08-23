@@ -17,7 +17,7 @@ export class ChatFooterUtils {
   }
 
   public getReplyText() {
-    if (this.message.content) return this.message.content.substring(0, 50);
+    if (this.message.content) return this.message.content;
     return `Sent ${this.message.files.length} file(s).`;
   }
 }

@@ -165,7 +165,7 @@ function ResponseDisplayer() {
 
   return (
     <div className="flex w-full items-center justify-between pb-4">
-      <div>
+      <div className="w-[95%]">
         <h2 className="font-semibold">{utils.getReplyAuthorText()}.</h2>
         <p className="overflow-hidden text-nowrap">{utils.getReplyText()}</p>
       </div>

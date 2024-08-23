@@ -35,7 +35,7 @@ function Chat() {
     );
 
   return (
-    <div className="flex-grow">
+    <div className="w-[calc(100vw-20rem)] flex-grow">
       <div className="flex h-full w-full flex-col">
         <ChatHeader chatId={chatId} />
         <ChatFooterProvider chatId={chatId}>
