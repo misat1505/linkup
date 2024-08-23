@@ -6,7 +6,7 @@ import ChatPageContent from "../components/chats/ChatPageContent";
 export default function Chats() {
   return (
     <BgGradient>
-      <div className="mt-20 flex h-[calc(100vh-5rem)] w-screen">
+      <div className="mt-20 flex h-[calc(100vh-5rem)] w-screen max-w-screen-lg">
         <ChatPageProvider>
           <ChatPageContent />
         </ChatPageProvider>

@@ -10,7 +10,8 @@ import ChatFooterProvider from "../../contexts/ChatFooterProvider";
 export default function ChatGuard() {
   const { chatId } = useParams();
 
-  if (!chatId) return <div className="flex-grow">No chat selected.</div>;
+  if (!chatId)
+    return <div className="hidden flex-grow md:block">No chat selected.</div>;
 
   return (
     <ChatProvider key={chatId} chatId={chatId}>

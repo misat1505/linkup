@@ -20,7 +20,7 @@ export default function ChatCreator() {
         <button>
           <IoIosAddCircleOutline
             size={20}
-            className="transition-all hover:scale-125 hover:cursor-pointer"
+            className="text-black transition-all hover:scale-125 hover:cursor-pointer md:text-white"
           />
         </button>
       </DialogTrigger>

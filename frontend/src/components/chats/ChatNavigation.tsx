@@ -1,21 +1,25 @@
 import { Chat } from "../../models/Chat";
 import React from "react";
 import { useAppContext } from "../../contexts/AppProvider";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
 import Avatar from "../common/Avatar";
 import { ChatUtils } from "../../utils/chatUtils";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { FaUserGroup } from "react-icons/fa6";
 import ChatCreator from "./chatCreationDialog/ChatCreator";
+import { cn } from "../../lib/utils";
 
 export default function ChatNavigation() {
+  const { chatId } = useParams();
   const { chats, isLoading } = useChatPageContext();
 
-  if (isLoading) return <div className="w-80">loading...</div>;
+  const classnames = cn("w-full md:w-80", { "hidden md:block": !!chatId });
+
+  if (isLoading) return <div className={classnames}>loading...</div>;
 
   return (
-    <div className="w-80">
+    <div className={classnames}>
       <ChatNavigationHeader />
       <div className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto">
         {chats?.map((chat) => <NavigationItem key={chat.id} chat={chat} />)}
@@ -57,7 +61,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
 
   return (
     <button
-      className="mx-4 mb-2 flex w-72 items-center gap-x-4 rounded-md bg-slate-100 px-4 py-2 transition-all hover:cursor-pointer hover:bg-slate-200"
+      className="mx-4 mb-2 flex w-[calc(100%-2rem)] items-center gap-x-4 rounded-md bg-slate-100 px-4 py-2 transition-all hover:cursor-pointer hover:bg-slate-200 md:w-72"
       onClick={() => handleOpenChat(chat.id)}
     >
       <Avatar src={src} alt={alt} lastActive={lastActive} />
