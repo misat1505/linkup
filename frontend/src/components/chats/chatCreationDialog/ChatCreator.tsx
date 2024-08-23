@@ -12,16 +12,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import GroupChatFormProvider from "../../../contexts/GroupChatFormProvider";
 import PrivateChatForm from "./PrivateChatForm";
 import GroupChatForm from "./GroupChatForm";
+import Tooltip from "../../common/Tooltip";
 
 export default function ChatCreator() {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <button>
-          <IoIosAddCircleOutline
-            size={20}
-            className="text-black transition-all hover:scale-125 hover:cursor-pointer md:text-white"
-          />
+          <Tooltip content="Create chat">
+            <span>
+              <IoIosAddCircleOutline
+                size={20}
+                className="text-black transition-all hover:scale-125 hover:cursor-pointer md:text-white"
+              />
+            </span>
+          </Tooltip>
         </button>
       </DialogTrigger>
       <DialogContent className="max-w-[800px]">
