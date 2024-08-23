@@ -36,7 +36,7 @@ function MyMessage({ message }: { message: MessageType }) {
   const tooltipText = `${message.createdAt.toLocaleDateString(
     "en-US",
     tooltipDateFormat
-  )} by you`;
+  )} by You`;
 
   return (
     <div className="group flex items-center justify-end gap-x-4">

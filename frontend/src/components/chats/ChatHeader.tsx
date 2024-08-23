@@ -9,6 +9,7 @@ import { ROUTES } from "../../lib/routes";
 import { getStatus, Status, timeDifference } from "../../utils/timeDifference";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { FaUserGroup } from "react-icons/fa6";
+import Tooltip from "../common/Tooltip";
 
 export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   const { chats } = useChatPageContext();
@@ -48,7 +49,11 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
         </div>
       </div>
       <button onClick={() => navigate(ROUTES.CHATS.path)}>
-        <RxCross1 className="transition-all hover:scale-125" />
+        <Tooltip content="Close chat">
+          <span>
+            <RxCross1 className="transition-all hover:scale-125" />
+          </span>
+        </Tooltip>
       </button>
     </div>
   );
