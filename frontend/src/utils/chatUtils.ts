@@ -41,17 +41,11 @@ export class ChatUtils {
         this.chat.users?.length === 1 &&
         this.chat.users![0].id === this.me.id
       ) {
-        return createFullName({
-          firstName: this.me.firstName,
-          lastName: this.me.lastName
-        });
+        return createFullName(this.me);
       }
       const otherUser = this.getOtherUser();
       if (otherUser) {
-        return createFullName({
-          firstName: otherUser.firstName,
-          lastName: otherUser.lastName
-        });
+        return createFullName(otherUser);
       }
     }
     if (this.chat.type === "GROUP") {
@@ -72,17 +66,11 @@ export class ChatUtils {
         this.chat.users?.length === 1 &&
         this.chat.users![0].id === this.me.id
       ) {
-        return getInitials({
-          firstName: this.me.firstName,
-          lastName: this.me.lastName
-        });
+        return getInitials(this.me);
       }
       const otherUser = this.getOtherUser();
       if (otherUser) {
-        return getInitials({
-          firstName: otherUser.firstName,
-          lastName: otherUser.lastName
-        });
+        return getInitials(otherUser);
       }
     }
     return "";

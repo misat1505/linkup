@@ -15,8 +15,7 @@ export default function Response({ message }: ResponseProps) {
     if (me!.id === message.author.id)
       return `You sent ${message.files.length} file(s).`;
 
-    const { firstName, lastName } = message.author;
-    return `${createFullName({ firstName, lastName })} sent ${message.files.length} file(s).`;
+    return `${createFullName(message.author)} sent ${message.files.length} file(s).`;
   };
 
   const onclick = () => {

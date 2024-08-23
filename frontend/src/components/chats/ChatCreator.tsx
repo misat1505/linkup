@@ -195,8 +195,6 @@ type UserDisplayProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 function UserDisplay({ user, className, ...rest }: UserDisplayProps) {
-  const { firstName, lastName } = user;
-
   return (
     <button
       {...rest}
@@ -207,7 +205,7 @@ function UserDisplay({ user, className, ...rest }: UserDisplayProps) {
     >
       <Avatar
         src={`${API_URL}/files/${user.photoURL!}`}
-        alt={getInitials({ firstName, lastName })}
+        alt={getInitials(user)}
         className="h-8 w-8 text-xs"
       />
       <p>

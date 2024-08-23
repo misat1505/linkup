@@ -62,8 +62,6 @@ function ForeignMessage({ message }: { message: MessageType }) {
   const { messages, messageRefs } = useChatContext();
   const isDisplayingAvatar = isShowingAvatar(messages!, message);
 
-  const { firstName, lastName } = message.author;
-
   return (
     <div
       className={cn("group flex items-center justify-start gap-x-4", {
@@ -85,7 +83,7 @@ function ForeignMessage({ message }: { message: MessageType }) {
             {isDisplayingAvatar && (
               <Avatar
                 src={`${API_URL}/files/${message.author.photoURL}`}
-                alt={getInitials({ firstName, lastName })}
+                alt={getInitials(message.author)}
                 className="h-8 w-8 object-cover text-xs"
               />
             )}

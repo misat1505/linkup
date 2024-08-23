@@ -43,7 +43,7 @@ export default function IncomeMessage({
     >
       <Avatar
         src={`${API_URL}/files/${message.author.photoURL}`}
-        alt={getInitials({ firstName, lastName })}
+        alt={getInitials(message.author)}
         className="h-8 w-8 text-xs"
       />
       <div className="font-semibold">{getText()}</div>

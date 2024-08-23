@@ -115,8 +115,6 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
     navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
   };
 
-  const { firstName, lastName } = user;
-
   return (
     <CommandItem
       key={user.id}
@@ -125,12 +123,10 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
       <div className="flex items-center">
         <Avatar
           src={`${API_URL}/files/${user.photoURL}`}
-          alt={getInitials({ firstName, lastName })}
+          alt={getInitials(user)}
           className="h-8 w-8 text-xs"
         />
-        <span className="ml-4">
-          {createFullName({ firstName, lastName, maxLength: 15 })}
-        </span>
+        <span className="ml-4">{createFullName(user, 15)}</span>
       </div>
       <div className="flex gap-x-2">
         <ActionButton

@@ -17,12 +17,7 @@ export default function NavbarAvatar() {
     );
   }
 
-  const { firstName, lastName } = user;
-
   return (
-    <Avatar
-      src={`${API_URL}/files/${user.photoURL}`}
-      alt={getInitials({ firstName, lastName })}
-    />
+    <Avatar src={`${API_URL}/files/${user.photoURL}`} alt={getInitials(user)} />
   );
 }
