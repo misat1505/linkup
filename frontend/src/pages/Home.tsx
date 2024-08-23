@@ -1,13 +1,13 @@
 import React, { MouseEvent } from "react";
 import Loading from "../components/common/Loading";
 import { API_URL } from "../constants";
-import { logoutUser } from "../api/authAPI";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../contexts/AppProvider";
 import { User } from "../models/User";
 import Image from "../components/common/Image";
 import { ROUTES } from "../lib/routes";
 import { Button } from "../components/ui/button";
+import { AuthService } from "../services/Auth.service";
 
 export default function Home() {
   const { user, setUser } = useAppContext();
@@ -15,7 +15,7 @@ export default function Home() {
 
   const handleLogout = async (e: MouseEvent) => {
     e.preventDefault();
-    await logoutUser();
+    await AuthService.logout();
     setUser(null);
     navigate(ROUTES.LOGIN.path);
   };

@@ -1,5 +1,4 @@
 import { useAppContext } from "../../contexts/AppProvider";
-import { signupUser } from "../../api/authAPI";
 import {
   SignupFormType,
   signupFormSchema
@@ -15,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../components/ui/use-toast";
 import { ROUTES } from "../../lib/routes";
+import { AuthService } from "../../services/Auth.service";
 
 type SignupFormEntries = {
   firstName: string;
@@ -52,7 +52,7 @@ export default function useSignupForm(): useSubmitFormValue {
 
   const onSubmit: SubmitHandler<SignupFormType> = async (data) => {
     try {
-      const user = await signupUser(data);
+      const user = await AuthService.signup(data);
       setUser(user);
       navigate(ROUTES.HOME.path);
     } catch (e: unknown) {

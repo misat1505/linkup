@@ -1,4 +1,4 @@
-import { refreshToken } from "../api/authAPI";
+import { AuthService } from "../services/Auth.service";
 import { User } from "../models/User";
 import { useEffect, useRef } from "react";
 
@@ -11,7 +11,7 @@ export const useRefreshToken = (user: User | null | undefined) => {
 
       try {
         console.log("Trying to refresh the token...");
-        await refreshToken();
+        await AuthService.refreshToken();
         console.log("Token refreshed successfully.");
       } catch (error) {
         console.error("Error refreshing token:", error);

@@ -1,9 +1,9 @@
 import React, { createContext, PropsWithChildren, useContext } from "react";
-import { fetchUser } from "../api/authAPI";
 import { User } from "../models/User";
 import { useQuery, useQueryClient } from "react-query";
 import { queryKeys } from "../lib/queryKeys";
 import { useRefreshToken } from "../hooks/useRefreshToken";
+import { AuthService } from "../services/Auth.service";
 
 type AppContextProps = PropsWithChildren;
 
@@ -21,7 +21,7 @@ export const AppProvider = ({ children }: AppContextProps) => {
   const queryClient = useQueryClient();
   const { isLoading } = useQuery({
     queryKey: queryKeys.me(),
-    queryFn: fetchUser
+    queryFn: AuthService.me
   });
 
   const user = queryClient.getQueryData<User>(queryKeys.me());

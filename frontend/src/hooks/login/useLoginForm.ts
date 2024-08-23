@@ -1,5 +1,4 @@
 import { useAppContext } from "../../contexts/AppProvider";
-import { loginUser } from "../../api/authAPI";
 import {
   LoginFormType,
   loginFormSchema
@@ -15,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../components/ui/use-toast";
 import { ROUTES } from "../../lib/routes";
+import { AuthService } from "../../services/Auth.service";
 
 type LoginFormEntries = {
   login: string;
@@ -44,7 +44,7 @@ export default function useLoginForm(): useLoginFormValue {
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     try {
-      const user = await loginUser(data);
+      const user = await AuthService.login(data);
       setUser(user);
       navigate(ROUTES.HOME.path);
     } catch (e: unknown) {

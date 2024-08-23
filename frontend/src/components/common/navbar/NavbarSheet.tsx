@@ -27,8 +27,8 @@ import {
 import { useAppContext } from "../../../contexts/AppProvider";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../lib/routes";
-import { logoutUser } from "../../../api/authAPI";
 import { useQueryClient } from "react-query";
+import { AuthService } from "../../../services/Auth.service";
 
 export default function NavbarSheet() {
   const { user } = useAppContext();
@@ -168,7 +168,7 @@ function LogoutDialog() {
   const queryClient = useQueryClient();
 
   const handleLogout = async () => {
-    await logoutUser();
+    await AuthService.logout();
     setUser(null);
     queryClient.clear();
     navigate(ROUTES.LOGIN.path);
