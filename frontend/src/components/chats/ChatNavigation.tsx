@@ -5,12 +5,7 @@ import { API_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
 import Avatar from "../common/Avatar";
-import {
-  getChatName,
-  getImageAlt,
-  getImageURL,
-  getLastActive
-} from "../../utils/chatNavigationUtils";
+import { ChatUtils } from "../../utils/chatUtils";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { FaUserGroup } from "react-icons/fa6";
 import ChatCreator from "./ChatCreator";
@@ -45,19 +40,21 @@ function NavigationItem({ chat }: { chat: Chat }) {
 
   if (!me) throw new Error();
 
+  const utils = new ChatUtils(chat, me);
+
   const handleOpenChat = (chatId: Chat["id"]) => {
     navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId }));
   };
 
-  const src = `${API_URL}/files/${getImageURL({ me, chat })!}`;
+  const src = `${API_URL}/files/${utils.getImageURL()}`;
   const alt =
     chat.type === "PRIVATE" ? (
-      getImageAlt({ me, chat })
+      utils.getImageAlt()
     ) : (
       <FaUserGroup className="object-fit h-full w-full pt-4" />
     );
-  const chatName = getChatName({ me, chat });
-  const lastActive = getLastActive({ me, chat });
+  const chatName = utils.getChatName();
+  const lastActive = utils.getLastActive();
 
   return (
     <button
@@ -93,7 +90,7 @@ function LastMessageDisplayer({
     return (
       <>
         <span className="font-semibold">{displayName}: </span>
-        <span>{lastMessage.content?.slice(0, 20)}</span>
+        <span>{lastMessage.content?.substring(0, 20)}</span>
       </>
     );
 

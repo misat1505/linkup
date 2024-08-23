@@ -3,12 +3,7 @@ import Avatar from "../common/Avatar";
 import { Chat } from "../../models/Chat";
 import { useAppContext } from "../../contexts/AppProvider";
 import { API_URL } from "../../constants";
-import {
-  getChatName,
-  getImageAlt,
-  getImageURL,
-  getLastActive
-} from "../../utils/chatNavigationUtils";
+import { ChatUtils } from "../../utils/chatUtils";
 import { RxCross1 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
@@ -25,15 +20,17 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
 
   if (!me || !chat) throw new Error();
 
-  const src = `${API_URL}/files/${getImageURL({ me, chat })!}`;
+  const utils = new ChatUtils(chat, me);
+
+  const src = `${API_URL}/files/${utils.getImageURL()}`;
   const alt =
     chat.type === "PRIVATE" ? (
-      getImageAlt({ me, chat })
+      utils.getImageAlt()
     ) : (
       <FaUserGroup className="object-fit h-full w-full pt-4" />
     );
-  const chatName = getChatName({ me, chat });
-  const lastActive = getLastActive({ me, chat });
+  const chatName = utils.getChatName();
+  const lastActive = utils.getLastActive();
 
   const createStatus = (): string => {
     const result = getStatus(timeDifference(lastActive));
