@@ -1,9 +1,7 @@
 import { Chat } from "../models/Chat";
 
 function getChatLastActivity(chat: Chat): Date {
-  return chat.lastMessage
-    ? new Date(chat.lastMessage.createdAt)
-    : new Date(chat.createdAt);
+  return chat.lastMessage ? chat.lastMessage.createdAt : chat.createdAt;
 }
 
 export function sortChatsByActivity(chats: Chat[]): Chat[] {
