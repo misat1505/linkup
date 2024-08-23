@@ -53,7 +53,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
       const message = await createMessage(chatId, data);
       reset();
       addMessage(message);
-      socketClient.sendMessage(message, chatId);
+      socketClient.sendMessage(message);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({

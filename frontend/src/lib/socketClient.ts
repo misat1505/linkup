@@ -38,8 +38,8 @@ class SocketClient {
     this.socket.emit(SocketAction.LEAVE_ROOM, room);
   }
 
-  sendMessage(message: Message, room: Room) {
-    this.socket.emit(SocketAction.SEND_MESSAGE, message, room);
+  sendMessage(message: Message) {
+    this.socket.emit(SocketAction.SEND_MESSAGE, message, message.chatId);
   }
 
   onReceiveMessage(callback: (message: Message) => void) {
