@@ -12,6 +12,7 @@ import ResponseText from "./ResponseText";
 import MessageControls from "./MessageControls";
 import Tooltip from "../common/Tooltip";
 import { buildFileURL } from "../../utils/buildFileURL";
+import Reactions from "./Reactions";
 
 export default function Message({ message }: { message: MessageType }) {
   const { user: me } = useAppContext();
@@ -59,14 +60,18 @@ function MyMessage({ message }: { message: MessageType }) {
           {message.content && (
             <div
               className={cn(
-                "mb-1 w-fit rounded-b-md bg-blue-500 px-2 py-1 text-white",
+                "w-fit rounded-b-md bg-blue-500 px-2 py-1 text-white",
                 {
-                  "rounded-md": message.files.length === 0
+                  "rounded-md": message.files.length === 0,
+                  "mb-1": message.reactions.length === 0
                 }
               )}
             >
               {message.content}
             </div>
+          )}
+          {message.reactions.length > 0 && (
+            <Reactions reactions={message.reactions} />
           )}
         </div>
       </Tooltip>
@@ -116,18 +121,21 @@ function ForeignMessage({ message }: { message: MessageType }) {
 
               {message.content && (
                 <div
-                  className={cn(
-                    "mb-1 w-fit rounded-b-md bg-slate-200 px-2 py-1",
-                    {
-                      "rounded-md": message.files.length === 0
-                    }
-                  )}
+                  className={cn("w-fit rounded-b-md bg-slate-200 px-2 py-1", {
+                    "rounded-md": message.files.length === 0,
+                    "mb-1": message.reactions.length === 0
+                  })}
                 >
                   {message.content}
                 </div>
               )}
             </div>
           </div>
+          {message.reactions.length > 0 && (
+            <div className="ml-10">
+              <Reactions reactions={message.reactions} />
+            </div>
+          )}
         </div>
       </Tooltip>
       <MessageControls message={message} />
