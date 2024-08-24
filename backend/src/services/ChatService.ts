@@ -43,10 +43,7 @@ export class ChatService {
   }
 
   static async getChatMessages(chatId: Chat["id"]): Promise<Message[]> {
-    const result: (Message & {
-      authorId: User["id"];
-      responseId: Message["id"] | null;
-    })[] = await prisma.message.findMany({
+    const result = await prisma.message.findMany({
       where: {
         chatId,
       },
@@ -60,12 +57,43 @@ export class ChatService {
         files: {
           select: { id: true, url: true },
         },
+        reactions: {
+          include: {
+            user: {
+              select: userSelect,
+            },
+            reaction: true,
+          },
+        },
       },
     });
 
-    const messages: Message[] = result.map(
-      ({ authorId, responseId, ...message }) => ({ ...message })
-    );
+    const messages: Message[] = result.map((message) => ({
+      id: message.id,
+      content: message.content,
+      author: message.author,
+      createdAt: message.createdAt,
+      response: message.response
+        ? {
+            ...message.response,
+            response: null,
+          }
+        : null,
+      chatId: message.chatId,
+      files: message.files,
+      reactions: message.reactions.map((userReaction) => ({
+        id: userReaction.reaction.id,
+        name: userReaction.reaction.name,
+        messageId: userReaction.messageId,
+        user: {
+          id: userReaction.user.id,
+          firstName: userReaction.user.firstName,
+          lastName: userReaction.user.lastName,
+          photoURL: userReaction.user.photoURL,
+          lastActive: userReaction.user.lastActive,
+        },
+      })),
+    }));
 
     return messages;
   }
@@ -106,10 +134,7 @@ export class ChatService {
     files: string[];
     responseId: Message["id"] | null;
   }): Promise<Message> {
-    const result: Message & {
-      authorId: User["id"];
-      responseId: Message["id"] | null;
-    } = await prisma.message.create({
+    const result = await prisma.message.create({
       data: {
         id: uuidv7(),
         content,
@@ -139,9 +164,22 @@ export class ChatService {
       where: { id: chatId },
     });
 
-    const { authorId: _, responseId: rId, ...message } = result;
+    const message: Message = {
+      id: result.id,
+      content: result.content,
+      author: result.author,
+      createdAt: result.createdAt,
+      response: result.response
+        ? {
+            ...result.response,
+          }
+        : null,
+      chatId: result.chatId,
+      files: result.files,
+      reactions: [],
+    };
 
-    return message as Message;
+    return message;
   }
 
   static async getUserChats(userId: User["id"]): Promise<Chat[]> {

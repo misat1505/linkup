@@ -8,5 +8,5 @@ export type Chat = {
   photoURL: string | null;
   type: "PRIVATE" | "GROUP" | "POST";
   users: User[] | null;
-  lastMessage: Omit<Message, "response"> | null;
+  lastMessage: Omit<Message, "response" | "reactions"> | null;
 };

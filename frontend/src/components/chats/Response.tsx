@@ -4,11 +4,13 @@ import React from "react";
 import { useAppContext } from "../../contexts/AppProvider";
 import { useChatContext } from "../../contexts/ChatProvider";
 
-type ResponseProps = { message: Omit<Message, "response"> };
+type ResponseProps = { message: Message["response"] };
 
 export default function Response({ message }: ResponseProps) {
   const { messageRefs } = useChatContext();
   const { user: me } = useAppContext();
+
+  if (!message) throw new Error("Message is required in Response component");
 
   const getText = () => {
     if (message.content) return message.content.substring(0, 20);
