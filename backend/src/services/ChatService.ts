@@ -5,8 +5,29 @@ import { User } from "../models/User";
 import { v7 as uuidv7 } from "uuid";
 import { userSelect } from "../utils/prisma/userSelect";
 import { messageWithoutResponseSelect } from "../utils/prisma/messageWithoutResponseSelect";
+import { Reaction } from "../models/Reaction";
 
 export class ChatService {
+  static async createReactionToMessage(data: {
+    userId: User["id"];
+    reactionId: string;
+    messageId: Message["id"];
+  }): Promise<Reaction> {
+    const reactionRecord = await prisma.userReaction.create({
+      data,
+      include: { user: { select: userSelect }, reaction: true },
+    });
+
+    const reaction: Reaction = {
+      id: reactionRecord.reaction.id,
+      name: reactionRecord.reaction.name,
+      messageId: reactionRecord.messageId,
+      user: reactionRecord.user,
+    };
+
+    return reaction;
+  }
+
   static async isMessageInChat({
     chatId,
     messageId,

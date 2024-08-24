@@ -13,6 +13,7 @@ import morgan from "morgan";
 import { accessLogStream } from "./config/log";
 import { Server } from "socket.io";
 import { setupSocket } from "./lib/sockets";
+import { initReactions } from "./config/reactions";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 if (env.NODE_ENV !== "test") {
+  initReactions();
   const socketServer = https.createServer(credentials, app);
   const io = new Server(socketServer, {
     cors: corsConfig,

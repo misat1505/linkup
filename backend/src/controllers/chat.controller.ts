@@ -2,6 +2,47 @@ import { Request, Response } from "express";
 import { ChatService } from "../services/ChatService";
 import { processAvatar } from "../utils/processAvatar";
 
+export const createReaction = async (req: Request, res: Response) => {
+  try {
+    const {
+      token: { userId },
+      reactionId,
+      messageId,
+    } = req.body;
+    const { chatId } = req.params;
+
+    const isUserAuthorized = await ChatService.isUserInChat({ chatId, userId });
+
+    if (!isUserAuthorized)
+      return res
+        .status(401)
+        .json({
+          message: "You cannot create reaction in chat not belonging to you.",
+        });
+
+    const isMessageInChat = await ChatService.isMessageInChat({
+      chatId,
+      messageId,
+    });
+
+    if (!isMessageInChat)
+      return res.status(401).json({
+        message:
+          "Cannot create reaction to a message that is not in given chat.",
+      });
+
+    const reaction = await ChatService.createReactionToMessage({
+      userId,
+      reactionId,
+      messageId,
+    });
+
+    return res.status(201).json({ reaction });
+  } catch (e) {
+    return res.status(500).json({ message: "Cannot create reaction." });
+  }
+};
+
 export const getChatMessages = async (req: Request, res: Response) => {
   try {
     const { userId } = req.body.token;

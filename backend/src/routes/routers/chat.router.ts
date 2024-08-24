@@ -3,6 +3,7 @@ import {
   createGroupChat,
   createMessage,
   createPrivateChat,
+  createReaction,
   getChatMessages,
   getUserChats,
 } from "../../controllers/chat.controller";
@@ -38,5 +39,6 @@ chatRouter.post(
   createMessage
 );
 chatRouter.get("/:chatId/messages", getChatMessages);
+chatRouter.post("/:chatId/reactions", createReaction);
 
 export default chatRouter;
