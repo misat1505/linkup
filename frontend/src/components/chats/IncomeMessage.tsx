@@ -5,6 +5,7 @@ import { getInitials } from "../../utils/getInitials";
 import styles from "../../styles/incomeMessage.module.css";
 import { cn } from "../../lib/utils";
 import useDelay from "../../hooks/useDelay";
+import { buildFileURL } from "../../utils/buildFileURL";
 
 type IncomeMessageProps = {
   message: Message;
@@ -41,7 +42,7 @@ export default function IncomeMessage({
       )}
     >
       <Avatar
-        src={message.author.photoURL!}
+        src={buildFileURL(message.author.photoURL, "avatar")}
         alt={getInitials(message.author)}
         className="h-8 w-8 text-xs"
       />
