@@ -13,15 +13,64 @@ import MessageControls from "./MessageControls";
 import Tooltip from "../common/Tooltip";
 import { buildFileURL } from "../../utils/buildFileURL";
 import Reactions from "./Reactions";
+import { timeDifference } from "../../utils/timeDifference";
+import moment from "moment";
 
 export default function Message({ message }: { message: MessageType }) {
   const { user: me } = useAppContext();
-  if (!me) throw new Error();
+  const { messages } = useChatContext();
+  if (!me || !messages) throw new Error();
 
   const isMine = message.author.id === me.id;
 
-  if (isMine) return <MyMessage message={message} />;
-  return <ForeignMessage message={message} />;
+  const Component = isMine ? MyMessage : ForeignMessage;
+
+  const compareWithNow = (): string => {
+    const diffWithNow = timeDifference(message.createdAt);
+
+    if (diffWithNow.days === 0)
+      return message.createdAt.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+    if (diffWithNow.days < 7)
+      return message.createdAt.toLocaleDateString("en-US", {
+        weekday: "long",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+    return message.createdAt.toLocaleDateString("en-US", tooltipDateFormat);
+  };
+
+  const getDateText = (): string => {
+    const idx = messages.findIndex((m) => m.id === message.id);
+    if (idx === 0) return compareWithNow();
+
+    const prevMessage = messages[idx - 1];
+    const diff = timeDifference(
+      prevMessage.createdAt,
+      moment(message.createdAt)
+    );
+
+    if (diff.days === 0 && diff.hours === 0) return "";
+
+    return compareWithNow();
+  };
+
+  const dateText = getDateText();
+
+  return (
+    <>
+      {dateText && (
+        <div className="my-2 text-center text-xs font-semibold text-muted-foreground">
+          {dateText}
+        </div>
+      )}
+      <Component message={message} />
+    </>
+  );
 }
 
 const tooltipDateFormat = {
