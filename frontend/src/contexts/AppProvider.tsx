@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { queryKeys } from "../lib/queryKeys";
 import { useRefreshToken } from "../hooks/useRefreshToken";
 import { AuthService } from "../services/Auth.service";
+import { ChatService } from "../services/Chat.service";
 
 type AppContextProps = PropsWithChildren;
 
@@ -22,6 +23,11 @@ export const AppProvider = ({ children }: AppContextProps) => {
   const { isLoading } = useQuery({
     queryKey: queryKeys.me(),
     queryFn: AuthService.me
+  });
+
+  useQuery({
+    queryKey: queryKeys.reactions(),
+    queryFn: ChatService.getReactions
   });
 
   const user = queryClient.getQueryData<User>(queryKeys.me());

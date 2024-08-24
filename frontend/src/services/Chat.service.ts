@@ -7,8 +7,14 @@ import {
   ChatFormType,
   NewGroupChatFormType
 } from "../validators/chat.validators";
+import { Reaction } from "../models/Reaction";
 
 export class ChatService {
+  static async getReactions(): Promise<Reaction[]> {
+    const response = await CHAT_API.get("/reactions");
+    return response.data.reactions;
+  }
+
   static async createPrivateChat(
     user1: User["id"],
     user2: User["id"]
