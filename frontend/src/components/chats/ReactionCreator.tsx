@@ -93,6 +93,7 @@ function ReactionCreatorContentItem({
   reaction: ReactionType;
   messageId: Message["id"];
 }) {
+  const queryClient = useQueryClient();
   const { chat } = useChatContext();
   const component =
     reactionsMap[reaction.name as keyof typeof reactionsMap] || null;
@@ -106,7 +107,17 @@ function ReactionCreatorContentItem({
         reaction.id,
         chat!.id
       );
-      console.log(reactionResponse);
+
+      queryClient.setQueryData<Message[]>(
+        queryKeys.messages(chat!.id),
+        (oldMessages = []) => {
+          const message = oldMessages.find((m) => m.id === messageId);
+          if (!message) return oldMessages;
+
+          message.reactions.push(reactionResponse);
+          return [...oldMessages];
+        }
+      );
     } catch (e) {
       console.error(e);
     }

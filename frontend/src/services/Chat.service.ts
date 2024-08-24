@@ -14,7 +14,7 @@ export class ChatService {
     messageId: Message["id"],
     reactionId: Reaction["id"],
     chatId: Chat["id"]
-  ) {
+  ): Promise<Reaction> {
     const response = await CHAT_API.post(`/${chatId}/reactions`, {
       messageId,
       reactionId
