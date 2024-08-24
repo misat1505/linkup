@@ -8,6 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "../ui/tooltip";
+import ReactionCreator from "./ReactionCreator";
 
 type MessageControlsProps = { message: Message };
 
@@ -16,7 +17,7 @@ export default function MessageControls({ message }: MessageControlsProps) {
 
   return (
     <div className="hidden group-hover:block">
-      <div className="flex items-center gap-x-4">
+      <div className="flex items-center gap-x-2">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
@@ -29,11 +30,7 @@ export default function MessageControls({ message }: MessageControlsProps) {
             <TooltipContent>Reply</TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        {/* <RiReplyFill
-          size={20}
-          className="text-muted-foreground transition-all hover:cursor-pointer hover:text-slate-400"
-          onClick={() => setResponse(message.id)}
-        /> */}
+        <ReactionCreator message={message} />
       </div>
     </div>
   );

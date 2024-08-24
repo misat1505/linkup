@@ -10,6 +10,18 @@ import {
 import { Reaction } from "../models/Reaction";
 
 export class ChatService {
+  static async createReaction(
+    messageId: Message["id"],
+    reactionId: Reaction["id"],
+    chatId: Chat["id"]
+  ) {
+    const response = await CHAT_API.post(`/${chatId}/reactions`, {
+      messageId,
+      reactionId
+    });
+    return response.data.reaction;
+  }
+
   static async getReactions(): Promise<Reaction[]> {
     const response = await CHAT_API.get("/reactions");
     return response.data.reactions;
