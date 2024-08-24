@@ -1,3 +1,4 @@
+import { buildFileURL } from "../../../utils/buildFileURL";
 import Avatar from "../../../components/common/Avatar";
 import { cn } from "../../../lib/utils";
 import { User } from "../../../models/User";
@@ -22,7 +23,7 @@ export default function UserDisplay({
       )}
     >
       <Avatar
-        src={user.photoURL!}
+        src={buildFileURL(user.photoURL, "avatar")}
         alt={getInitials(user)}
         className="h-8 w-8 text-xs"
       />

@@ -26,6 +26,7 @@ import { Chat } from "../../../models/Chat";
 import { UserService } from "../../../services/User.service";
 import { ChatService } from "../../../services/Chat.service";
 import Tooltip from "../Tooltip";
+import { buildFileURL } from "../../../utils/buildFileURL";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -116,7 +117,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
     >
       <div className="flex items-center">
         <Avatar
-          src={user.photoURL!}
+          src={buildFileURL(user.photoURL, "avatar")}
           alt={getInitials(user)}
           className="h-8 w-8 text-xs"
         />

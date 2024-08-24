@@ -10,6 +10,7 @@ import { getStatus, Status, timeDifference } from "../../utils/timeDifference";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { FaUserGroup } from "react-icons/fa6";
 import Tooltip from "../common/Tooltip";
+import { buildFileURL } from "../../utils/buildFileURL";
 
 export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   const { chats } = useChatPageContext();
@@ -42,7 +43,14 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   return (
     <div className="flex items-center justify-between gap-x-4 p-4">
       <div className="flex flex-grow items-center gap-x-4 overflow-hidden">
-        <Avatar src={src} alt={alt} lastActive={lastActive} />
+        <Avatar
+          src={buildFileURL(
+            src,
+            chat.type === "PRIVATE" ? "avatar" : "chat-photo"
+          )}
+          alt={alt}
+          lastActive={lastActive}
+        />
         <div className="overflow-hidden text-nowrap text-white">
           <h2 className="font-semibold">{chatName}</h2>
           <div className="text-sm">{createStatus()}</div>

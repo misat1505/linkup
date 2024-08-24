@@ -3,6 +3,7 @@ import React from "react";
 import { FaUser } from "react-icons/fa";
 import Avatar from "../Avatar";
 import { getInitials } from "../../../utils/getInitials";
+import { buildFileURL } from "../../../utils/buildFileURL";
 
 export default function NavbarAvatar() {
   const { user } = useAppContext();
@@ -15,5 +16,10 @@ export default function NavbarAvatar() {
     );
   }
 
-  return <Avatar src={user.photoURL!} alt={getInitials(user)} />;
+  return (
+    <Avatar
+      src={buildFileURL(user.photoURL, "avatar")}
+      alt={getInitials(user)}
+    />
+  );
 }

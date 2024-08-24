@@ -11,6 +11,7 @@ import Response from "./Response";
 import ResponseText from "./ResponseText";
 import MessageControls from "./MessageControls";
 import Tooltip from "../common/Tooltip";
+import { buildFileURL } from "../../utils/buildFileURL";
 
 export default function Message({ message }: { message: MessageType }) {
   const { user: me } = useAppContext();
@@ -103,7 +104,7 @@ function ForeignMessage({ message }: { message: MessageType }) {
             <div className="h-8 w-8">
               {isDisplayingAvatar && (
                 <Avatar
-                  src={message.author.photoURL!}
+                  src={buildFileURL(message.author.photoURL, "avatar")}
                   alt={getInitials(message.author)}
                   className="h-8 w-8 object-cover text-xs"
                 />

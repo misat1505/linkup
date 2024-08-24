@@ -1,9 +1,9 @@
 import { getFileType } from "../../utils/getFileType";
 import { File } from "../../models/File";
 import React from "react";
-import { API_URL } from "../../constants";
 import Image from "../common/Image";
 import { FaFileAlt } from "react-icons/fa";
+import { buildFileURL } from "../../utils/buildFileURL";
 
 export default function MultimediaDisplay({ files }: { files: File[] }) {
   if (files.length === 0) return null;
@@ -25,7 +25,7 @@ function MultimediaDisplayItem({ file }: { file: File }) {
   if (type === "image")
     return (
       <Image
-        src={file.url}
+        src={buildFileURL(file.url, "chat-message")}
         className={{
           common: "h-40 w-40 object-cover",
           error: "bg-slate-200 font-semibold"
@@ -37,7 +37,7 @@ function MultimediaDisplayItem({ file }: { file: File }) {
   if (type === "video")
     return (
       <video className="h-40 w-40 object-cover" controls>
-        <source src={file.url} />
+        <source src={buildFileURL(file.url, "chat-message")} />
         Your browser does not support the video tag.
       </video>
     );

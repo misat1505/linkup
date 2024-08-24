@@ -7,6 +7,7 @@ import Image from "../components/common/Image";
 import { ROUTES } from "../lib/routes";
 import { Button } from "../components/ui/button";
 import { AuthService } from "../services/Auth.service";
+import { buildFileURL } from "../utils/buildFileURL";
 
 export default function Home() {
   const { user, setUser } = useAppContext();
@@ -44,7 +45,7 @@ function ProfileAvatar({ user }: { user: User }) {
 
   return (
     <Image
-      src={user.photoURL!}
+      src={buildFileURL(user.photoURL, "avatar")}
       className={{
         common: "h-12 w-12 rounded-full",
         img: "object-cover",
