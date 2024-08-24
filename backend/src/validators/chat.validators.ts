@@ -12,4 +12,24 @@ export const createGroupChatRules = [
     .isArray({ min: 1 })
     .withMessage("Users should be an array with at least 1 UUID"),
   body("users.*").isUUID().withMessage("Each user should be a valid UUID"),
+  body("name")
+    .isString()
+    .isLength({ max: 100 })
+    .withMessage(
+      "Name should be a string with a maximum length of 100 characters"
+    ),
+  body("file").optional(),
+];
+
+export const createMessageRules = [
+  body("content")
+    .isString()
+    .isLength({ max: 5000 })
+    .withMessage(
+      "Content should be a string with a maximum length of 5000 characters"
+    ),
+  body("responseId")
+    .optional()
+    .isUUID()
+    .withMessage("Response ID should be a valid UUID"),
 ];

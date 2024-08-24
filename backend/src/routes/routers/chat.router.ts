@@ -9,6 +9,7 @@ import {
 import { validate } from "../../middlewares/validate";
 import {
   createGroupChatRules,
+  createMessageRules,
   createPrivateChatRules,
 } from "../../validators/chat.validators";
 import { upload } from "../../middlewares/multer";
@@ -21,11 +22,18 @@ chatRouter.post(
   validate(createPrivateChatRules),
   createPrivateChat
 );
-chatRouter.post("/group", upload.single("file"), authorize, createGroupChat);
+chatRouter.post(
+  "/group",
+  upload.single("file"),
+  validate(createGroupChatRules),
+  authorize,
+  createGroupChat
+);
 chatRouter.get("/", getUserChats);
 chatRouter.post(
   "/:chatId/messages",
   upload.array("files"),
+  validate(createMessageRules),
   authorize, // multer is overriding req.body
   createMessage
 );
