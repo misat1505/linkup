@@ -1,6 +1,6 @@
 import { queryKeys } from "../lib/queryKeys";
 import { Chat } from "../models/Chat";
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { sortChatsByActivity } from "../utils/sortChatsByActivity";
 import { Message } from "../models/Message";
@@ -16,6 +16,7 @@ type ChatPageContextValue = {
   chats: Chat[] | undefined;
   isLoading: boolean;
   addMessage: (message: Message) => void;
+  createChatTriggerRef: React.RefObject<HTMLDivElement>;
 };
 
 const ChatPageContext = createContext<ChatPageContextValue>(
@@ -25,6 +26,7 @@ const ChatPageContext = createContext<ChatPageContextValue>(
 export const useChatPageContext = () => useContext(ChatPageContext);
 
 export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
+  const createChatTriggerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { data: chats, isLoading } = useQuery({
@@ -89,7 +91,9 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
   }, []);
 
   return (
-    <ChatPageContext.Provider value={{ chats, isLoading, addMessage }}>
+    <ChatPageContext.Provider
+      value={{ chats, isLoading, addMessage, createChatTriggerRef }}
+    >
       {children}
     </ChatPageContext.Provider>
   );

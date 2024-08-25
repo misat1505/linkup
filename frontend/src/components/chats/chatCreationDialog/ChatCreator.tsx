@@ -13,19 +13,22 @@ import GroupChatFormProvider from "../../../contexts/GroupChatFormProvider";
 import PrivateChatForm from "./PrivateChatForm";
 import GroupChatForm from "./GroupChatForm";
 import Tooltip from "../../common/Tooltip";
+import { useChatPageContext } from "../../../contexts/ChatPageProvider";
 
 export default function ChatCreator() {
+  const { createChatTriggerRef } = useChatPageContext();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <button>
           <Tooltip content="Create chat">
-            <span>
+            <div ref={createChatTriggerRef}>
               <IoIosAddCircleOutline
                 size={20}
                 className="text-black transition-all hover:scale-125 hover:cursor-pointer md:text-white"
               />
-            </span>
+            </div>
           </Tooltip>
         </button>
       </DialogTrigger>

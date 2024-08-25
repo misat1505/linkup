@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import { ROUTES } from "../../lib/routes";
 
 export default function ChatGuard() {
+  const { createChatTriggerRef } = useChatPageContext();
   const { chatId } = useParams();
 
   if (!chatId)
@@ -22,7 +23,14 @@ export default function ChatGuard() {
             No chat selected.
           </p>
           <p className="max-w-64">
-            Select existing chat in the menu or create a new one.
+            Select existing chat in the menu or{" "}
+            <span
+              className="text-blue-500 underline hover:cursor-pointer"
+              onClick={() => createChatTriggerRef.current!.click()}
+            >
+              create a new one
+            </span>
+            .
           </p>
         </div>
       </div>
