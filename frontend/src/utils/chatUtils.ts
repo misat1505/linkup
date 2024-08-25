@@ -89,6 +89,16 @@ export class ChatUtils {
         return otherUser.lastActive;
       }
     }
+    if (this.chat.type === "GROUP") {
+      const otherUsers = this.chat.users!.filter((u) => u.id !== this.me.id);
+
+      let lastActive = new Date(1970, 1, 1);
+      for (const user of otherUsers) {
+        if (user.lastActive.getTime() > lastActive.getTime())
+          lastActive = user.lastActive;
+      }
+      return lastActive;
+    }
     return new Date();
   }
 }
