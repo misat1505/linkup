@@ -47,6 +47,7 @@ export const resetDB = async (): Promise<void> => {
         users: {
           connect: [{ id: user.id }],
         },
+        photoURL: "chat-photo.webp",
       },
     });
 
@@ -56,6 +57,11 @@ export const resetDB = async (): Promise<void> => {
         content: "Hello from chat1",
         authorId: user.id,
         chatId: chat1.id,
+        files: {
+          create: {
+            url: "chat-message.webp",
+          },
+        },
       },
     });
 
