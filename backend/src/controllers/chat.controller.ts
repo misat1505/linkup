@@ -14,11 +14,9 @@ export const createReaction = async (req: Request, res: Response) => {
     const isUserAuthorized = await ChatService.isUserInChat({ chatId, userId });
 
     if (!isUserAuthorized)
-      return res
-        .status(401)
-        .json({
-          message: "You cannot create reaction in chat not belonging to you.",
-        });
+      return res.status(401).json({
+        message: "You cannot create reaction in chat not belonging to you.",
+      });
 
     const isMessageInChat = await ChatService.isMessageInChat({
       chatId,
