@@ -9,7 +9,7 @@ import { Message } from "../../src/models/Message";
 const token = JwtHandler.encode({ userId: VALID_USER_ID });
 
 describe("chat router", () => {
-  describe("/chats", () => {
+  describe("[GET] /chats", () => {
     it("should get user chats", async () => {
       const res = await request(app)
         .get("/chats")
@@ -20,7 +20,7 @@ describe("chat router", () => {
     });
   });
 
-  describe("/chats/private", () => {
+  describe("[POST] /chats/private", () => {
     it("should get user chats", async () => {
       const res = await request(app)
         .post("/chats/private")
@@ -41,7 +41,7 @@ describe("chat router", () => {
     });
   });
 
-  describe("/chats/group", () => {
+  describe("[POST] /chats/group", () => {
     it("should create group chat", async () => {
       const res = await request(app)
         .post("/chats/group")

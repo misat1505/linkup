@@ -37,7 +37,7 @@ describe("file router", () => {
     deleteTestFile();
   });
 
-  describe("/:filename", () => {
+  describe("[GET] /:filename", () => {
     it("should return 404 if the file does not exist", async () => {
       const response = await request(app)
         .get("/files/nonexistentfile.txt?filter=avatar")

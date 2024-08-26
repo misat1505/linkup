@@ -7,7 +7,7 @@ import request from "supertest";
 describe("user router", () => {
   const token = JwtHandler.encode({ userId: VALID_USER_ID });
 
-  describe("/search", () => {
+  describe("[GET] /search", () => {
     it("should return users", async () => {
       const users: Omit<User, "lastActive">[] = [USER_WITHOUT_CREDENTIALS].map(
         ({ lastActive, ...rest }) => ({

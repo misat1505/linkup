@@ -6,7 +6,7 @@ import { JwtHandler } from "../../src/lib/JwtHandler";
 import { VALID_USER_ID } from "../utils/constants";
 
 describe("auth router", () => {
-  describe("/login", () => {
+  describe("[POST] /login", () => {
     it("should login", async () => {
       const res = await request(app).post("/auth/login").send({
         login: "login2",
@@ -18,7 +18,7 @@ describe("auth router", () => {
     });
   });
 
-  describe("/signup", () => {
+  describe("[POST] /signup", () => {
     it("should sign up", async () => {
       const login = "valid_login";
       const password = "valid_password";
@@ -62,7 +62,7 @@ describe("auth router", () => {
     });
   });
 
-  describe("/refresh", () => {
+  describe("[POST] /refresh", () => {
     it("should refresh token", async () => {
       const token = JwtHandler.encode({ userId: VALID_USER_ID });
 
@@ -75,7 +75,7 @@ describe("auth router", () => {
     });
   });
 
-  describe("/logout", () => {
+  describe("[POST] /logout", () => {
     it("should logout user", async () => {
       const token = JwtHandler.encode({ userId: VALID_USER_ID });
 
@@ -88,7 +88,7 @@ describe("auth router", () => {
     });
   });
 
-  describe("/user", () => {
+  describe("[GET] /user", () => {
     it("should get user", async () => {
       const token = JwtHandler.encode(
         { userId: VALID_USER_ID },
