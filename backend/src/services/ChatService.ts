@@ -230,10 +230,10 @@ export class ChatService {
     });
 
     if (id1 !== id2) {
-      return result.filter((chat) => chat.users?.length !== 1)?.[0];
+      return result.filter((chat) => chat.users?.length !== 1)?.[0] || null;
     }
 
-    return result.filter((chat) => chat.users?.length === 1)?.[0];
+    return result.filter((chat) => chat.users?.length === 1)?.[0] || null;
   }
 
   static async createPrivateChat(id1: string, id2: string): Promise<Chat> {
