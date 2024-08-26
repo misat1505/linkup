@@ -10,6 +10,8 @@ import { JwtHandler } from "../../src/lib/JwtHandler";
 jest.mock("../../src/services/FileService");
 
 (FileService.isUserAvatar as jest.Mock).mockResolvedValue(true);
+(FileService.isChatMessage as jest.Mock).mockResolvedValue(true);
+(FileService.isChatPhoto as jest.Mock).mockResolvedValue(true);
 
 const app = express();
 app.use(express.json());
@@ -57,9 +59,25 @@ describe("File Controllers", () => {
       expect(response.body).toEqual({ message: "File not found." });
     });
 
-    it("should return the file if it exists", async () => {
+    it("should return avatar file if it exists", async () => {
       const response = await request(app)
         .get("/testfile.txt?filter=avatar")
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(response.status).toBe(200);
+      expect(response.text).toBe("This is a test file");
+    });
+
+    it("should return chat photo if it exists", async () => {
+      const response = await request(app)
+        .get("/testfile.txt?filter=chat-photo")
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(response.status).toBe(200);
+      expect(response.text).toBe("This is a test file");
+    });
+
+    it("should return chat message file if it exists", async () => {
+      const response = await request(app)
+        .get("/testfile.txt?filter=chat-message")
         .send({ token: { userId: VALID_USER_ID } });
       expect(response.status).toBe(200);
       expect(response.text).toBe("This is a test file");
