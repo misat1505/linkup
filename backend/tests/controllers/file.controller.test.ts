@@ -3,8 +3,16 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { getFile } from "../../src/controllers/file.controller";
+import { FileService } from "../../src/services/FileService";
+import { VALID_USER_ID } from "../utils/constants";
+import { JwtHandler } from "../../src/lib/JwtHandler";
+
+jest.mock("../../src/services/FileService");
+
+(FileService.isUserAvatar as jest.Mock).mockResolvedValue(true);
 
 const app = express();
+app.use(express.json());
 app.get("/:filename", getFile);
 
 const testFilePath = path.join(__dirname, "..", "..", "static", "testfile.txt");
@@ -23,6 +31,8 @@ const deleteTestFile = () => {
 };
 
 describe("File Controllers", () => {
+  const token = JwtHandler.encode({ userId: VALID_USER_ID });
+
   describe("getFile", () => {
     beforeAll(() => {
       createTestFile();
@@ -32,14 +42,25 @@ describe("File Controllers", () => {
       deleteTestFile();
     });
 
+    it("shouldn't allow requests without filter", async () => {
+      const response = await request(app)
+        .get("/nonexistentfile.txt")
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(response.status).toBe(400);
+    });
+
     it("should return 404 if the file does not exist", async () => {
-      const response = await request(app).get("/nonexistentfile.txt");
+      const response = await request(app)
+        .get("/nonexistentfile.txt?filter=avatar")
+        .send({ token: { userId: VALID_USER_ID } });
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "File not found." });
     });
 
     it("should return the file if it exists", async () => {
-      const response = await request(app).get("/testfile.txt");
+      const response = await request(app)
+        .get("/testfile.txt?filter=avatar")
+        .send({ token: { userId: VALID_USER_ID } });
       expect(response.status).toBe(200);
       expect(response.text).toBe("This is a test file");
     });

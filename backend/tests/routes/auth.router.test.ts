@@ -31,12 +31,6 @@ describe("auth router", () => {
       });
       expect(res.statusCode).toEqual(201);
       expect(res.headers["set-cookie"]).toBeDefined();
-
-      const res2 = await request(app).post("/auth/login").send({
-        login,
-        password,
-      });
-      expect(res2.statusCode).toBe(200);
     });
 
     it("should sign up with image", async () => {

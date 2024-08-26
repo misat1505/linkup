@@ -4,6 +4,11 @@ import request from "supertest";
 import app from "../../src/app";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { VALID_USER_ID } from "../utils/constants";
+import { FileService } from "../../src/services/FileService";
+
+jest.mock("../../src/services/FileService");
+
+(FileService.isUserAvatar as jest.Mock).mockResolvedValue(true);
 
 const filename = "testfile.txt";
 const testFilePath = path.join(__dirname, "..", "..", "static", filename);
@@ -35,7 +40,7 @@ describe("file router", () => {
   describe("/:filename", () => {
     it("should return 404 if the file does not exist", async () => {
       const response = await request(app)
-        .get("/files/nonexistentfile.txt")
+        .get("/files/nonexistentfile.txt?filter=avatar")
         .set("Cookie", `token=${token}`);
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "File not found." });
@@ -43,14 +48,16 @@ describe("file router", () => {
 
     it("should return the file if it exists", async () => {
       const response = await request(app)
-        .get(`/files/${filename}`)
+        .get(`/files/${filename}?filter=avatar`)
         .set("Cookie", `token=${token}`);
       expect(response.status).toBe(200);
       expect(response.text).toBe("This is a test file");
     });
 
     it("shouldn't allow request without token", async () => {
-      const response = await request(app).get(`/files/${filename}`);
+      const response = await request(app).get(
+        `/files/${filename}?filter=avatar`
+      );
       expect(response.status).toBe(400);
     });
   });
