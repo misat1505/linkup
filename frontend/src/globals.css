@@ -91,6 +91,10 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .scrollbar-dark::-webkit-scrollbar-track {
+    background: #333;
+  }
 }
 
 html,

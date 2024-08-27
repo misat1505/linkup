@@ -36,7 +36,7 @@ export default function IncomeMessage({
     <button
       onClick={handleClick}
       className={cn(
-        "absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-x-4 rounded-md bg-slate-300 p-4 transition-all hover:bg-slate-400",
+        "absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-x-4 rounded-md bg-slate-300 p-4 transition-all hover:bg-slate-400 dark:bg-slate-700 dark:hover:bg-slate-600",
         styles.incomeMessage,
         { hidden: isClicked }
       )}

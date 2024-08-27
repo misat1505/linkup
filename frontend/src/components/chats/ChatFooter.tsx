@@ -26,7 +26,7 @@ export default function ChatFooter() {
   };
 
   return (
-    <form onSubmit={submitForm} className="bg-slate-200 p-4">
+    <form onSubmit={submitForm} className="bg-slate-200 p-4 dark:bg-slate-800">
       <ResponseDisplayer />
       <FileDisplayer />
       <div className="flex items-center gap-x-4">

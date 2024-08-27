@@ -35,7 +35,7 @@ export default function ChatContent() {
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className="max-h-full overflow-auto px-4"
+        className="max-h-full overflow-auto px-4 dark:[color-scheme:dark]"
       >
         {messages.map((message) => (
           <Message key={message.id} message={message} />
