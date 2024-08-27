@@ -1,7 +1,8 @@
-import { isChat } from "../../src/types/Chat";
-import { isMessage } from "../../src/types/Message";
-import { isReaction, Reaction } from "../../src/types/Reaction";
+import { Reaction } from "../../src/types/Reaction";
 import { ChatService } from "../../src/services/ChatService";
+import { isReaction } from "../../src/types/guards/reaction.guard";
+import { isMessage } from "../../src/types/guards/message.guard";
+import { isChat } from "../../src/types/guards/chat.guards";
 
 describe("ChatService", () => {
   describe("createReactionToMessage", () => {

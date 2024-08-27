@@ -1,12 +1,12 @@
-import {
-  isUser,
-  isUserWithCredentials,
-  UserWithCredentials,
-} from "../../src/types/User";
+import { UserWithCredentials } from "../../src/types/User";
 import { UserService } from "../../src/services/UserService";
 import { VALID_USER_ID } from "../utils/constants";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
+import {
+  isUser,
+  isUserWithCredentials,
+} from "../../src/types/guards/user.guard";
 
 describe("UserService", () => {
   describe("searchUsers", () => {

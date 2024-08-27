@@ -4,9 +4,10 @@ import { VALID_USER_ID } from "../utils/constants";
 import request from "supertest";
 import fs from "fs";
 import path from "path";
-import { isMessage, Message } from "../../src/types/Message";
-import { isChat } from "../../src/types/Chat";
-import { isReaction } from "../../src/types/Reaction";
+import { Message } from "../../src/types/Message";
+import { isChat } from "../../src/types/guards/chat.guards";
+import { isMessage } from "../../src/types/guards/message.guard";
+import { isReaction } from "../../src/types/guards/reaction.guard";
 
 const token = JwtHandler.encode({ userId: VALID_USER_ID });
 
