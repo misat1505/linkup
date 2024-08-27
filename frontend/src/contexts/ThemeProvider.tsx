@@ -25,6 +25,7 @@ export const ThemeProvider = ({ children }: ThemeContextProps) => {
 
   const [theme, setTheme] = useState<Theme>(() => {
     const savedTheme = window.localStorage.getItem("theme") as Theme | null;
+    document.body.classList.add("transition-colors");
 
     if (savedTheme) {
       addClassIfDark(savedTheme);
