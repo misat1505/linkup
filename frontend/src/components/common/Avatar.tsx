@@ -23,9 +23,12 @@ export default function Avatar({
       <Image
         src={src}
         className={{
-          common: cn("h-12 w-12 rounded-full bg-slate-200", className),
+          common: cn(
+            "h-12 w-12 rounded-full bg-slate-200 dark:bg-slate-800",
+            className
+          ),
           img: "object-cover",
-          error: "overflow-hidden bg-white font-semibold"
+          error: "overflow-hidden bg-white font-semibold dark:bg-black"
         }}
         errorContent={alt}
       />
