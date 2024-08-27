@@ -1,5 +1,5 @@
-import { Chat } from "../models/Chat";
-import { User } from "../models/User";
+import { Chat } from "../types/Chat";
+import { User } from "../types/User";
 import { createFullName } from "./createFullName";
 import { getInitials } from "./getInitials";
 

@@ -1,6 +1,6 @@
 import { UserService } from "../services/User.service";
 import { queryKeys } from "../lib/queryKeys";
-import { User } from "../models/User";
+import { User } from "../types/User";
 import { useQuery, UseQueryResult } from "react-query";
 import { useDebounce } from "use-debounce";
 

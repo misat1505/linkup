@@ -2,7 +2,7 @@ import React, { MouseEvent } from "react";
 import Loading from "../components/common/Loading";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../contexts/AppProvider";
-import { User } from "../models/User";
+import { User } from "../types/User";
 import Image from "../components/common/Image";
 import { ROUTES } from "../lib/routes";
 import { Button } from "../components/ui/button";

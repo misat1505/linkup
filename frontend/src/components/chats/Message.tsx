@@ -1,5 +1,5 @@
 import { useAppContext } from "../../contexts/AppProvider";
-import { Message as MessageType } from "../../models/Message";
+import { Message as MessageType } from "../../types/Message";
 import React from "react";
 import { cn } from "../../lib/utils";
 import MultimediaDisplay from "./MultimediaDisplay";

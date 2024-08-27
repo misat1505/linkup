@@ -1,6 +1,6 @@
 import { io, Socket } from "socket.io-client";
 import { SOCKET_URL } from "../constants";
-import { Message } from "../models/Message";
+import { Message } from "../types/Message";
 import { convertDates } from "../utils/convertDates";
 
 type Room = string;

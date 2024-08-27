@@ -1,5 +1,5 @@
 import { createFullName } from "../../utils/createFullName";
-import { Message } from "../../models/Message";
+import { Message } from "../../types/Message";
 import React from "react";
 import { useAppContext } from "../../contexts/AppProvider";
 import { useChatContext } from "../../contexts/ChatProvider";

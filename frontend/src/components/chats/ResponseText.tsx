@@ -1,6 +1,6 @@
 import { MessageUtils } from "../../utils/messageUtils";
 import { useAppContext } from "../../contexts/AppProvider";
-import { Message } from "../../models/Message";
+import { Message } from "../../types/Message";
 import React from "react";
 import { RiReplyFill } from "react-icons/ri";
 

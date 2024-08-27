@@ -8,10 +8,10 @@ import {
 } from "react-hook-form";
 import { useToast } from "../../components/ui/use-toast";
 import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
-import { Chat } from "../../models/Chat";
+import { Chat } from "../../types/Chat";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { socketClient } from "../../lib/socketClient";
-import { Message } from "../../models/Message";
+import { Message } from "../../types/Message";
 import { ChatService } from "../../services/Chat.service";
 
 export type ChatFormEntries = {

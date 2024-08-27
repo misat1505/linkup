@@ -1,5 +1,5 @@
-import { Reaction } from "../../models/Reaction";
-import { Message } from "../../models/Message";
+import { Reaction } from "../../types/Reaction";
+import { Message } from "../../types/Message";
 import React from "react";
 import { IoMdHappy, IoMdHeart } from "react-icons/io";
 import { HiOutlineEmojiSad } from "react-icons/hi";

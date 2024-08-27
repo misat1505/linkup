@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Avatar from "../common/Avatar";
-import { Message } from "../../models/Message";
+import { Message } from "../../types/Message";
 import { getInitials } from "../../utils/getInitials";
 import styles from "../../styles/incomeMessage.module.css";
 import { cn } from "../../lib/utils";

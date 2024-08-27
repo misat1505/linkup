@@ -1,5 +1,5 @@
 import { getFileType } from "../../utils/getFileType";
-import { File } from "../../models/File";
+import { File } from "../../types/File";
 import React from "react";
 import Image from "../common/Image";
 import { FaFileAlt } from "react-icons/fa";

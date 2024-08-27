@@ -1,6 +1,6 @@
 import React, { createContext, PropsWithChildren, useContext } from "react";
 import useChatForm, { useChatFormValue } from "../hooks/chats/useChatForm";
-import { Chat } from "../models/Chat";
+import { Chat } from "../types/Chat";
 
 type ChatFooterContextProps = PropsWithChildren & {
   chatId: Chat["id"];

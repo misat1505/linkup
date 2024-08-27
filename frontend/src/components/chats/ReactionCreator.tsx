@@ -8,7 +8,7 @@ import {
 } from "../ui/dialog";
 import Tooltip from "../common/Tooltip";
 import { MdAddReaction } from "react-icons/md";
-import { Message } from "../../models/Message";
+import { Message } from "../../types/Message";
 import { IoMdHappy, IoMdHeart } from "react-icons/io";
 import { HiOutlineEmojiSad } from "react-icons/hi";
 import { TbMoodCry } from "react-icons/tb";

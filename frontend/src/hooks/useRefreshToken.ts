@@ -1,5 +1,5 @@
 import { AuthService } from "../services/Auth.service";
-import { User } from "../models/User";
+import { User } from "../types/User";
 import { useEffect, useRef } from "react";
 
 export const useRefreshToken = (user: User | null | undefined) => {

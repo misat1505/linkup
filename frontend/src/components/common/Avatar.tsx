@@ -2,7 +2,7 @@ import React from "react";
 import Image from "./Image";
 import { cn } from "../../lib/utils";
 import { getStatus, Status, timeDifference } from "../../utils/timeDifference";
-import { User } from "../../models/User";
+import { User } from "../../types/User";
 import { ImCancelCircle } from "react-icons/im";
 
 type AvatarProps = {

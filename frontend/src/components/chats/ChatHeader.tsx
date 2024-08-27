@@ -1,6 +1,6 @@
 import React from "react";
 import Avatar from "../common/Avatar";
-import { Chat } from "../../models/Chat";
+import { Chat } from "../../types/Chat";
 import { useAppContext } from "../../contexts/AppProvider";
 import { ChatUtils } from "../../utils/chatUtils";
 import { RxCross1 } from "react-icons/rx";

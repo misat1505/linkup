@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren, useContext } from "react";
-import { User } from "../models/User";
+import { User } from "../types/User";
 import { useQuery, useQueryClient } from "react-query";
 import { queryKeys } from "../lib/queryKeys";
 import { useRefreshToken } from "../hooks/useRefreshToken";

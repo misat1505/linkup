@@ -1,4 +1,4 @@
-import { Chat } from "../models/Chat";
+import { Chat } from "../types/Chat";
 
 export const queryKeys = {
   searchUsers: (text: string) => ["search-users", { text }] as const,

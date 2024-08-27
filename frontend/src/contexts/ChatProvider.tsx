@@ -1,4 +1,4 @@
-import { Chat } from "../models/Chat";
+import { Chat } from "../types/Chat";
 import React, {
   createContext,
   PropsWithChildren,
@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { useQuery } from "react-query";
 import { useChatPageContext } from "./ChatPageProvider";
-import { Message } from "../models/Message";
+import { Message } from "../types/Message";
 import { queryKeys } from "../lib/queryKeys";
 import { SocketAction, socketClient } from "../lib/socketClient";
 import { ChatService } from "../services/Chat.service";

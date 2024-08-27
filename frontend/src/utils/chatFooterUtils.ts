@@ -1,5 +1,5 @@
-import { Message } from "../models/Message";
-import { User } from "../models/User";
+import { Message } from "../types/Message";
+import { User } from "../types/User";
 
 export class ChatFooterUtils {
   private message: Message;

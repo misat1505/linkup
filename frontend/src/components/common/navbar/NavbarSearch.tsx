@@ -8,7 +8,7 @@ import {
 } from "../../ui/command";
 import { useState, useRef } from "react";
 import { cn } from "../../../lib/utils";
-import { User } from "../../../models/User";
+import { User } from "../../../types/User";
 import { FaUserFriends } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
 import { useDebounce } from "use-debounce";
@@ -22,7 +22,7 @@ import Avatar from "../Avatar";
 import { getInitials } from "../../../utils/getInitials";
 import { createFullName } from "../../../utils/createFullName";
 import { queryKeys } from "../../../lib/queryKeys";
-import { Chat } from "../../../models/Chat";
+import { Chat } from "../../../types/Chat";
 import { UserService } from "../../../services/User.service";
 import { ChatService } from "../../../services/Chat.service";
 import Tooltip from "../Tooltip";

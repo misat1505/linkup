@@ -1,13 +1,13 @@
 import { AxiosError } from "axios";
-import { User } from "../models/User";
+import { User } from "../types/User";
 import { CHAT_API } from "./utils";
-import { Chat } from "../models/Chat";
-import { Message } from "../models/Message";
+import { Chat } from "../types/Chat";
+import { Message } from "../types/Message";
 import {
   ChatFormType,
   NewGroupChatFormType
 } from "../validators/chat.validators";
-import { Reaction } from "../models/Reaction";
+import { Reaction } from "../types/Reaction";
 
 export class ChatService {
   static async createReaction(

@@ -1,5 +1,5 @@
 import { LoginFormType, SignupFormType } from "../validators/auth.validators";
-import { User } from "../models/User";
+import { User } from "../types/User";
 import { AUTH_API } from "./utils";
 import { AxiosResponse } from "axios";
 

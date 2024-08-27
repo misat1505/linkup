@@ -1,4 +1,4 @@
-import { Message } from "../../models/Message";
+import { Message } from "../../types/Message";
 import React from "react";
 import { RiReplyFill } from "react-icons/ri";
 import { useChatFooterContext } from "../../contexts/ChatFooterProvider";

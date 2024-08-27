@@ -2,7 +2,7 @@ import Image from "../../common/Image";
 import { Input } from "../../ui/input";
 import { useGroupChatFormContext } from "../../../contexts/GroupChatFormProvider";
 import useUserSearch from "../../../hooks/useUserSearch";
-import { User } from "../../../models/User";
+import { User } from "../../../types/User";
 import { useMemo, useState } from "react";
 import { FaUserGroup } from "react-icons/fa6";
 import UserDisplay from "./UserDisplay";

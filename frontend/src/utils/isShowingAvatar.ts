@@ -1,4 +1,4 @@
-import { Message } from "../models/Message";
+import { Message } from "../types/Message";
 
 export function isShowingAvatar(
   messages: Message[],

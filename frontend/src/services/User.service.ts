@@ -1,4 +1,4 @@
-import { User } from "../models/User";
+import { User } from "../types/User";
 import { USER_API } from "./utils";
 
 export class UserService {

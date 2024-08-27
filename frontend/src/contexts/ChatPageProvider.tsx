@@ -1,9 +1,9 @@
 import { queryKeys } from "../lib/queryKeys";
-import { Chat } from "../models/Chat";
+import { Chat } from "../types/Chat";
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { sortChatsByActivity } from "../utils/sortChatsByActivity";
-import { Message } from "../models/Message";
+import { Message } from "../types/Message";
 import { SocketAction, socketClient, SocketErrors } from "../lib/socketClient";
 import { useToast } from "../components/ui/use-toast";
 import { ChatService } from "../services/Chat.service";

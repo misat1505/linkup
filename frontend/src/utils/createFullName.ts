@@ -1,4 +1,4 @@
-import { User } from "../models/User";
+import { User } from "../types/User";
 
 export function createFullName(user: User, maxLength = Infinity): string {
   const fullName = `${user.firstName} ${user.lastName}`;

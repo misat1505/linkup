@@ -11,13 +11,13 @@ import {
   newGroupChatFormSchema,
   NewGroupChatFormType
 } from "../../validators/chat.validators";
-import { User } from "../../models/User";
+import { User } from "../../types/User";
 import { useEffect } from "react";
 import { useAppContext } from "../../contexts/AppProvider";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
-import { Chat } from "../../models/Chat";
+import { Chat } from "../../types/Chat";
 import { queryKeys } from "../../lib/queryKeys";
 import { ChatService } from "../../services/Chat.service";
 
