@@ -4,7 +4,9 @@ import { VALID_USER_ID } from "../utils/constants";
 import request from "supertest";
 import fs from "fs";
 import path from "path";
-import { Message } from "../../src/models/Message";
+import { isMessage, Message } from "../../src/models/Message";
+import { isChat } from "../../src/models/Chat";
+import { isReaction } from "../../src/models/Reaction";
 
 const token = JwtHandler.encode({ userId: VALID_USER_ID });
 
@@ -17,6 +19,9 @@ describe("chat router", () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.body.chats.length).toBe(2);
+      res.body.chats.forEach((chat: unknown) => {
+        expect(isChat(chat, { allowStringifiedDates: true })).toBe(true);
+      });
     });
   });
 
@@ -30,7 +35,7 @@ describe("chat router", () => {
         });
 
       expect(res.statusCode).toBe(201);
-      expect(res.body.chat).toBeInstanceOf(Object);
+      expect(isChat(res.body.chat, { allowStringifiedDates: true })).toBe(true);
 
       const res2 = await request(app)
         .get("/chats")
@@ -38,6 +43,9 @@ describe("chat router", () => {
 
       expect(res2.statusCode).toBe(200);
       expect(res2.body.chats.length).toBe(3);
+      res2.body.chats.forEach((chat: unknown) => {
+        expect(isChat(chat, { allowStringifiedDates: true })).toBe(true);
+      });
     });
   });
 
@@ -52,7 +60,7 @@ describe("chat router", () => {
         .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
 
       expect(res.statusCode).toBe(201);
-      expect(res.body.chat).toBeInstanceOf(Object);
+      expect(isChat(res.body.chat, { allowStringifiedDates: true })).toBe(true);
 
       const file = res.body.chat.photoURL;
       const filepath = path.join(__dirname, "..", "..", "static", file);
@@ -64,6 +72,9 @@ describe("chat router", () => {
 
       expect(res2.statusCode).toBe(200);
       expect(res2.body.chats.length).toBe(3);
+      res2.body.chats.forEach((chat: unknown) => {
+        expect(isChat(chat, { allowStringifiedDates: true })).toBe(true);
+      });
 
       fs.unlinkSync(filepath);
     });
@@ -76,8 +87,10 @@ describe("chat router", () => {
         .set("Cookie", `token=${token}`);
 
       expect(res.statusCode).toBe(200);
-      expect(res.body.messages).toBeInstanceOf(Array);
       expect(res.body.messages.length).toBe(1);
+      res.body.messages.forEach((message: unknown) => {
+        expect(isMessage(message, { allowStringifiedDates: true })).toBe(true);
+      });
     });
   });
 
@@ -92,7 +105,9 @@ describe("chat router", () => {
         .set("Cookie", `token=${token}`);
 
       expect(res.statusCode).toBe(201);
-      expect(res.body.message).toBeInstanceOf(Object);
+      expect(isMessage(res.body.message, { allowStringifiedDates: true })).toBe(
+        true
+      );
 
       const paths = (res.body.message as Message).files.map((file) => file.url);
       const filepaths = paths.map((p) =>
@@ -108,6 +123,9 @@ describe("chat router", () => {
 
       expect(res2.statusCode).toBe(200);
       expect(res2.body.messages.length).toBe(2);
+      res2.body.messages.forEach((message: unknown) => {
+        expect(isMessage(message, { allowStringifiedDates: true })).toBe(true);
+      });
 
       filepaths.forEach((filepath) => {
         fs.unlinkSync(filepath);
@@ -131,7 +149,9 @@ describe("chat router", () => {
           messageId: "01918dfc-01b4-70f5-967b-aeecbe07a2b1",
         });
       expect(res2.statusCode).toBe(201);
-      expect(res2.body.reaction).toBeInstanceOf(Object);
+      expect(
+        isReaction(res2.body.reaction, { allowStringifiedDates: true })
+      ).toBe(true);
 
       const res3 = await request(app)
         .get(`/chats/49794983-95cb-4ff1-b90b-8b393e86fd85/messages`)

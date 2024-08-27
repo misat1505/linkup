@@ -1,5 +1,6 @@
 import { Message } from "./Message";
 import { isUser, User } from "./User";
+import { defaultOptions } from "./utils";
 
 export type Reaction = {
   id: string;
@@ -8,11 +9,14 @@ export type Reaction = {
   user: User;
 };
 
-export function isReaction(obj: any): obj is Reaction {
+export function isReaction(
+  obj: any,
+  options = defaultOptions
+): obj is Reaction {
   return (
     typeof obj.id === "string" &&
     typeof obj.name === "string" &&
     typeof obj.messageId === "string" &&
-    isUser(obj.user)
+    isUser(obj.user, options)
   );
 }

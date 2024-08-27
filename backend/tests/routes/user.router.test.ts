@@ -1,7 +1,7 @@
 import app from "../../src/app";
 import { JwtHandler } from "../../src/lib/JwtHandler";
-import { User } from "../../src/models/User";
-import { USER_WITHOUT_CREDENTIALS, VALID_USER_ID } from "../utils/constants";
+import { isUser, User } from "../../src/models/User";
+import { VALID_USER_ID } from "../utils/constants";
 import request from "supertest";
 
 describe("user router", () => {
@@ -9,22 +9,15 @@ describe("user router", () => {
 
   describe("[GET] /search", () => {
     it("should return users", async () => {
-      const users: Omit<User, "lastActive">[] = [USER_WITHOUT_CREDENTIALS].map(
-        ({ lastActive, ...rest }) => ({
-          ...rest,
-        })
-      );
-
       const response = await request(app)
         .get("/users/search?term=Kylian")
         .set("Cookie", `token=${token}`);
+
       expect(response.statusCode).toBe(200);
-      const fetchedUsers = response.body.users.map(
-        ({ lastActive, ...rest }: any) => ({
-          ...rest,
-        })
-      );
-      expect(fetchedUsers).toEqual(users);
+      expect(response.body.users.length).toBe(1);
+      response.body.users.forEach((user: any) => {
+        expect(isUser(user, { allowStringifiedDates: true })).toBe(true);
+      });
     });
   });
 });

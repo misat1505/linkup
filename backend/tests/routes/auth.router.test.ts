@@ -31,6 +31,7 @@ describe("auth router", () => {
         password,
       });
       expect(res.statusCode).toEqual(201);
+      expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(true);
       expect(res.headers["set-cookie"]).toBeDefined();
 
       const res2 = await request(app).post("/auth/login").send({
@@ -39,7 +40,10 @@ describe("auth router", () => {
       });
 
       expect(res2.statusCode).toBe(200);
-      expect(res.headers["set-cookie"]).toBeDefined();
+      expect(isUser(res2.body.user, { allowStringifiedDates: true })).toBe(
+        true
+      );
+      expect(res2.headers["set-cookie"]).toBeDefined();
     });
 
     it("should sign up with image", async () => {
@@ -55,6 +59,7 @@ describe("auth router", () => {
         .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
 
       expect(res.statusCode).toEqual(201);
+      expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(true);
       const { photoURL } = res.body.user;
 
       const pathToImage = path.join(__dirname, "..", "..", "static", photoURL);
@@ -101,7 +106,7 @@ describe("auth router", () => {
         .set("Cookie", `token=${token}`);
 
       expect(res.statusCode).toBe(200);
-      expect(res.body.user).toBeDefined();
+      expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(true);
     });
   });
 });

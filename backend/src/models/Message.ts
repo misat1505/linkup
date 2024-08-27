@@ -30,7 +30,7 @@ export function isMessage(obj: any, options = defaultOptions): obj is Message {
     Array.isArray(obj.files) &&
     obj.files.every(isFile) &&
     Array.isArray(obj.reactions) &&
-    obj.reactions.every(isReaction)
+    obj.reactions.every((reaction: unknown) => isReaction(reaction, options))
   );
 }
 
