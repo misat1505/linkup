@@ -152,7 +152,7 @@ const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
       <button
         ref={ref}
         className={cn(
-          "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200",
+          "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200 dark:bg-background dark:hover:bg-slate-800",
           className
         )}
         {...rest}

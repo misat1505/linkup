@@ -19,10 +19,15 @@ const ThemeContext = createContext<ThemeContextValue>({} as ThemeContextValue);
 export const useThemeContext = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }: ThemeContextProps) => {
+  const addClassIfDark = (theme: Theme) => {
+    if (theme === "dark") document.documentElement.classList.add("dark");
+  };
+
   const [theme, setTheme] = useState<Theme>(() => {
     const savedTheme = window.localStorage.getItem("theme") as Theme | null;
 
     if (savedTheme) {
+      addClassIfDark(savedTheme);
       return savedTheme;
     }
 
@@ -31,6 +36,7 @@ export const ThemeProvider = ({ children }: ThemeContextProps) => {
         .matches
         ? "dark"
         : "light";
+      addClassIfDark(systemTheme);
       return systemTheme;
     }
 

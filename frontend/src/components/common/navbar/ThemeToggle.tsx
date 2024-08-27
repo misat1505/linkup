@@ -16,7 +16,7 @@ export default function ThemeToggle() {
 
   return (
     <div className="bg-blue">
-      <Switch className="" onClick={toggleTheme}>
+      <Switch className="" onClick={toggleTheme} checked={theme === "dark"}>
         <div className="flex h-full w-full items-center justify-center">
           {component}
         </div>
