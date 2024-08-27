@@ -48,7 +48,7 @@ function ActivityStatus({ lastActive }: { lastActive: User["lastActive"] }) {
 
   if (status.status === Status.OFFLINE)
     return (
-      <ImCancelCircle className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-slate-500" />
+      <ImCancelCircle className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-slate-500 dark:text-black" />
     );
 
   const text = status.text;

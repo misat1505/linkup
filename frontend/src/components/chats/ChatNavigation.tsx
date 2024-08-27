@@ -32,7 +32,7 @@ export default function ChatNavigation() {
 
 function ChatNavigationHeader() {
   return (
-    <div className="flex w-full items-center justify-between bg-transparent px-4 py-2 text-white">
+    <div className="flex w-full items-center justify-between bg-transparent px-4 py-2 text-white dark:text-black">
       <h2 className="text-lg font-semibold">Chat with others</h2>
       <ChatCreator />
     </div>
@@ -65,7 +65,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
     <Tooltip content="Open chat">
       <span>
         <button
-          className="mx-4 mb-2 flex w-[calc(100%-2rem)] items-center gap-x-4 rounded-md bg-slate-100 px-4 py-2 shadow-md transition-all hover:cursor-pointer hover:bg-slate-200 md:w-72"
+          className="mx-4 mb-2 flex w-[calc(100%-2rem)] items-center gap-x-4 rounded-md bg-slate-100 px-4 py-2 shadow-md transition-all hover:cursor-pointer hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 md:w-72"
           onClick={() => handleOpenChat(chat.id)}
         >
           <Avatar

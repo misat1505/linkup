@@ -26,7 +26,7 @@ export default function ChatCreator() {
             <div ref={createChatTriggerRef}>
               <IoIosAddCircleOutline
                 size={20}
-                className="text-black transition-all hover:scale-125 hover:cursor-pointer md:text-white"
+                className="text-black transition-all hover:scale-125 hover:cursor-pointer dark:text-white md:text-white dark:md:text-black"
               />
             </div>
           </Tooltip>
