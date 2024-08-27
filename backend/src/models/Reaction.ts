@@ -1,5 +1,5 @@
 import { Message } from "./Message";
-import { User } from "./User";
+import { isUser, User } from "./User";
 
 export type Reaction = {
   id: string;
@@ -7,3 +7,12 @@ export type Reaction = {
   messageId: Message["id"];
   user: User;
 };
+
+export function isReaction(obj: any): obj is Reaction {
+  return (
+    typeof obj.id === "string" &&
+    typeof obj.name === "string" &&
+    typeof obj.messageId === "string" &&
+    isUser(obj.user)
+  );
+}

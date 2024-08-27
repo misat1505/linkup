@@ -1,4 +1,6 @@
-import { Reaction } from "../../src/models/Reaction";
+import { isChat } from "../../src/models/Chat";
+import { isMessage } from "../../src/models/Message";
+import { isReaction, Reaction } from "../../src/models/Reaction";
 import { ChatService } from "../../src/services/ChatService";
 
 describe("ChatService", () => {
@@ -10,6 +12,7 @@ describe("ChatService", () => {
         reactionId: "c3dd47c4-2192-4926-8ec0-b822d14b288d",
       });
 
+      expect(isReaction(reaction)).toBe(true);
       expect(reaction).toEqual({
         id: "c3dd47c4-2192-4926-8ec0-b822d14b288d",
         name: "happy",
@@ -46,10 +49,12 @@ describe("ChatService", () => {
       );
 
       expect(result.length).toBe(1);
+      result.forEach((message) => {
+        expect(isMessage(message)).toBe(true);
+      });
 
       const message = result[0];
       expect(message.id).toBe("01918dfb-ddd4-7e01-84df-1c8321cc9852");
-      expect(message.author).toBeInstanceOf(Object);
       expect(message.reactions.length).toBe(1);
     });
   });
@@ -93,7 +98,7 @@ describe("ChatService", () => {
         responseId: "01918dfc-01b4-70f5-967b-aeecbe07a2b1",
       });
 
-      expect(message).toBeInstanceOf(Object);
+      expect(isMessage(message)).toBe(true);
     });
   });
 
@@ -105,7 +110,7 @@ describe("ChatService", () => {
 
       expect(chats.length).toBe(2);
       chats.forEach((chat) => {
-        expect(chat).toBeInstanceOf(Object);
+        expect(isChat(chat)).toBe(true);
       });
     });
   });
@@ -117,7 +122,7 @@ describe("ChatService", () => {
         "3daf7676-ec0f-4548-85a7-67b4382166d4"
       );
 
-      expect(result).toBeInstanceOf(Object);
+      expect(isChat(result)).toBe(true);
     });
 
     it("should return null if chat doesnt exist", async () => {
@@ -137,7 +142,7 @@ describe("ChatService", () => {
         "3daf7676-ec0f-4548-85a7-67b4382166d4"
       );
 
-      expect(result).toBeInstanceOf(Object);
+      expect(isChat(result)).toBe(true);
       expect(result.type).toBe("PRIVATE");
     });
   });
@@ -150,7 +155,7 @@ describe("ChatService", () => {
         "photo.webp"
       );
 
-      expect(result).toBeInstanceOf(Object);
+      expect(isChat(result)).toBe(true);
       expect(result.name).toBe("name");
       expect(result.photoURL).toBe("photo.webp");
       expect(result.type).toBe("GROUP");

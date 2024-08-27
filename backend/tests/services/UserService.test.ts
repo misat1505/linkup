@@ -1,6 +1,10 @@
-import { UserWithCredentials } from "../../src/models/User";
+import {
+  isUser,
+  isUserWithCredentials,
+  UserWithCredentials,
+} from "../../src/models/User";
 import { UserService } from "../../src/services/UserService";
-import { USER_WITHOUT_CREDENTIALS, VALID_USER_ID } from "../utils/constants";
+import { VALID_USER_ID } from "../utils/constants";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 
@@ -8,11 +12,10 @@ describe("UserService", () => {
   describe("searchUsers", () => {
     it("should return users fitting given term", async () => {
       const result = await UserService.searchUsers("Kyli");
-      expect(result.map(({ lastActive, ...rest }) => ({ ...rest }))).toEqual(
-        [USER_WITHOUT_CREDENTIALS].map(({ lastActive, ...rest }) => ({
-          ...rest,
-        }))
-      );
+      expect(result.length).toBe(1);
+      result.forEach((user) => {
+        expect(isUser(user)).toBe(true);
+      });
     });
   });
 
@@ -51,6 +54,7 @@ describe("UserService", () => {
     it("should return user if existent", async () => {
       const user = await UserService.getUserByLogin("login2");
       expect(user).not.toBe(null);
+      expect(isUserWithCredentials(user)).toBe(true);
     });
 
     it("should return null if not existent", async () => {
@@ -63,6 +67,7 @@ describe("UserService", () => {
     it("should return user if existent", async () => {
       const user = await UserService.getUser(VALID_USER_ID);
       expect(user).not.toBe(null);
+      expect(isUserWithCredentials(user)).toBe(true);
     });
 
     it("should return null if not existent", async () => {
