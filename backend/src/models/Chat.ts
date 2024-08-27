@@ -1,5 +1,6 @@
 import { isPartialMessage, Message } from "./Message";
 import { isUser, User } from "./User";
+import { defaultOptions } from "./utils";
 
 export type Chat = {
   id: string;
@@ -11,17 +12,21 @@ export type Chat = {
   lastMessage: Omit<Message, "response" | "reactions"> | null;
 };
 
-export function isChat(obj: any): obj is Chat {
+export function isChat(obj: any, options = defaultOptions): obj is Chat {
   return (
     obj &&
     typeof obj === "object" &&
     typeof obj.id === "string" &&
-    obj.createdAt instanceof Date &&
+    (obj.createdAt instanceof Date ||
+      (options.allowStringifiedDates &&
+        typeof obj.createdAt === "string" &&
+        !isNaN(Date.parse(obj.createdAt)))) &&
     (typeof obj.name === "string" || obj.name === null) &&
     (typeof obj.photoURL === "string" || obj.photoURL === null) &&
     ["PRIVATE", "GROUP", "POST"].includes(obj.type) &&
     (obj.users === null ||
-      (Array.isArray(obj.users) && obj.users.every(isUser))) &&
-    (obj.lastMessage === null || isPartialMessage(obj.lastMessage))
+      (Array.isArray(obj.users) &&
+        obj.users.every((user: unknown) => isUser(user, options)))) &&
+    (obj.lastMessage === null || isPartialMessage(obj.lastMessage, options))
   );
 }

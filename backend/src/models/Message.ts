@@ -1,6 +1,7 @@
 import { File, isFile } from "./File";
 import { isReaction, Reaction } from "./Reaction";
 import { isUser, User } from "./User";
+import { defaultOptions } from "./utils";
 
 export type Message = {
   id: string;
@@ -13,15 +14,18 @@ export type Message = {
   reactions: Reaction[];
 };
 
-export function isMessage(obj: any): obj is Message {
+export function isMessage(obj: any, options = defaultOptions): obj is Message {
   return (
     obj &&
     typeof obj === "object" &&
     typeof obj.id === "string" &&
     (typeof obj.content === "string" || obj.content === null) &&
-    isUser(obj.author) &&
-    obj.createdAt instanceof Date &&
-    (obj.response === null || isPartialMessage(obj.response)) &&
+    isUser(obj.author, options) &&
+    (obj.createdAt instanceof Date ||
+      (options.allowStringifiedDates &&
+        typeof obj.createdAt === "string" &&
+        !isNaN(Date.parse(obj.createdAt)))) &&
+    (obj.response === null || isPartialMessage(obj.response, options)) &&
     typeof obj.chatId === "string" &&
     Array.isArray(obj.files) &&
     obj.files.every(isFile) &&
@@ -31,15 +35,19 @@ export function isMessage(obj: any): obj is Message {
 }
 
 export function isPartialMessage(
-  obj: any
+  obj: any,
+  options = defaultOptions
 ): obj is Omit<Message, "response" | "reactions"> {
   return (
     obj &&
     typeof obj === "object" &&
     typeof obj.id === "string" &&
     (typeof obj.content === "string" || obj.content === null) &&
-    isUser(obj.author) &&
-    obj.createdAt instanceof Date &&
+    isUser(obj.author, options) &&
+    (obj.createdAt instanceof Date ||
+      (options.allowStringifiedDates &&
+        typeof obj.createdAt === "string" &&
+        !isNaN(Date.parse(obj.createdAt)))) &&
     typeof obj.chatId === "string" &&
     Array.isArray(obj.files) &&
     obj.files.every(isFile)

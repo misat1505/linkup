@@ -1,3 +1,5 @@
+import { defaultOptions } from "./utils";
+
 export type User = {
   id: string;
   firstName: string;
@@ -12,7 +14,9 @@ export type UserWithCredentials = User & {
   salt: string;
 };
 
-export function isUser(obj: any): obj is User {
+export function isUser(obj: any, options = defaultOptions): obj is User {
+  const { allowStringifiedDates } = options;
+
   return (
     obj &&
     typeof obj === "object" &&
@@ -20,15 +24,21 @@ export function isUser(obj: any): obj is User {
     typeof obj.firstName === "string" &&
     typeof obj.lastName === "string" &&
     (typeof obj.photoURL === "string" || obj.photoURL === null) &&
-    obj.lastActive instanceof Date
+    (obj.lastActive instanceof Date ||
+      (allowStringifiedDates &&
+        typeof obj.lastActive === "string" &&
+        !isNaN(Date.parse(obj.lastActive))))
   );
 }
 
-export function isUserWithCredentials(obj: any): obj is UserWithCredentials {
+export function isUserWithCredentials(
+  obj: any,
+  options = defaultOptions
+): obj is UserWithCredentials {
   return (
     typeof obj.login === "string" &&
     typeof obj.password === "string" &&
     typeof obj.salt === "string" &&
-    isUser(obj)
+    isUser(obj, options)
   );
 }

@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { VALID_USER_ID } from "../utils/constants";
+import { isUser } from "../../src/models/User";
 
 describe("auth router", () => {
   describe("[POST] /login", () => {
@@ -13,7 +14,7 @@ describe("auth router", () => {
         password: "pass2",
       });
       expect(res.statusCode).toEqual(200);
-      expect(res.body.user).toBeDefined();
+      expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(true);
       expect(res.headers["set-cookie"]).toBeDefined();
     });
   });
