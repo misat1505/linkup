@@ -4,6 +4,7 @@ import { LOGO_PATH } from "../../../constants";
 import NavbarSearch from "./NavbarSearch";
 import NavbarSheet from "./NavbarSheet";
 import { useAppContext } from "../../../contexts/AppProvider";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   const { user } = useAppContext();
@@ -20,7 +21,10 @@ export default function Navbar() {
           {isLoggedIn && <NavbarSearch />}
         </div>
 
-        <NavbarSheet />
+        <div className="flex items-center gap-x-4">
+          <ThemeToggle />
+          <NavbarSheet />
+        </div>
       </header>
       <div className="h-20"></div>
     </>
