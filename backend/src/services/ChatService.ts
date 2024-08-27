@@ -7,6 +7,13 @@ import { userSelect } from "../utils/prisma/userSelect";
 import { messageWithoutResponseSelect } from "../utils/prisma/messageWithoutResponseSelect";
 import { Reaction } from "../models/Reaction";
 
+function sanitizeChat(chat: any): Chat | null {
+  if (!chat) return null;
+
+  const { lastMessageId, ...sanitizedChat } = chat;
+  return sanitizedChat as Chat;
+}
+
 export class ChatService {
   static async createReactionToMessage(data: {
     userId: User["id"];
@@ -73,12 +80,7 @@ export class ChatService {
       content: message.content,
       author: message.author,
       createdAt: message.createdAt,
-      response: message.response
-        ? {
-            ...message.response,
-            response: null,
-          }
-        : null,
+      response: message.response,
       chatId: message.chatId,
       files: message.files,
       reactions: message.reactions.map((userReaction) => ({
@@ -169,11 +171,7 @@ export class ChatService {
       content: result.content,
       author: result.author,
       createdAt: result.createdAt,
-      response: result.response
-        ? {
-            ...result.response,
-          }
-        : null,
+      response: result.response,
       chatId: result.chatId,
       files: result.files,
       reactions: [],
@@ -201,7 +199,7 @@ export class ChatService {
       },
     });
 
-    return result;
+    return result.map((chat) => sanitizeChat(chat)!);
   }
 
   static async getPrivateChatByUserIds(
@@ -229,11 +227,12 @@ export class ChatService {
       },
     });
 
-    if (id1 !== id2) {
-      return result.filter((chat) => chat.users?.length !== 1)?.[0] || null;
-    }
+    const chat =
+      id1 !== id2
+        ? result.find((chat) => chat.users?.length !== 1)
+        : result.find((chat) => chat.users?.length === 1);
 
-    return result.filter((chat) => chat.users?.length === 1)?.[0] || null;
+    return sanitizeChat(chat);
   }
 
   static async createPrivateChat(id1: string, id2: string): Promise<Chat> {
@@ -254,7 +253,7 @@ export class ChatService {
       },
     });
 
-    return result;
+    return sanitizeChat(result)!;
   }
 
   static async createGroupChat(
@@ -281,6 +280,6 @@ export class ChatService {
       },
     });
 
-    return result;
+    return sanitizeChat(result)!;
   }
 }

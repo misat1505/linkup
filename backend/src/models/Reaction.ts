@@ -1,6 +1,6 @@
 import { Message } from "./Message";
 import { isUser, User } from "./User";
-import { defaultOptions } from "./utils";
+import { defaultOptions, hasOnlyKeys } from "./utils";
 
 export type Reaction = {
   id: string;
@@ -13,7 +13,12 @@ export function isReaction(
   obj: any,
   options = defaultOptions
 ): obj is Reaction {
+  const allowedKeys = ["id", "name", "messageId", "user"];
+
   return (
+    obj &&
+    typeof obj === "object" &&
+    hasOnlyKeys(obj, allowedKeys) &&
     typeof obj.id === "string" &&
     typeof obj.name === "string" &&
     typeof obj.messageId === "string" &&
