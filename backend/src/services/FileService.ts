@@ -1,5 +1,5 @@
 import { prisma } from "../lib/Prisma";
-import { User } from "../models/User";
+import { User } from "../types/User";
 
 export class FileService {
   static async isUserAvatar(photoURL: string): Promise<boolean> {

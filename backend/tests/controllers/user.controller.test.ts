@@ -3,7 +3,7 @@ import { searchUser } from "../../src/controllers/user.controller";
 import { UserService } from "../../src/services/UserService";
 import { USER_WITHOUT_CREDENTIALS } from "../utils/constants";
 import request from "supertest";
-import { User } from "../../src/models/User";
+import { User } from "../../src/types/User";
 
 jest.mock("../../src/services/UserService");
 

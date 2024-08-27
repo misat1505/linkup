@@ -1,11 +1,11 @@
 import { prisma } from "../lib/Prisma";
-import { Chat } from "../models/Chat";
-import { Message } from "../models/Message";
-import { User } from "../models/User";
+import { Chat } from "../types/Chat";
+import { Message } from "../types/Message";
+import { User } from "../types/User";
 import { v7 as uuidv7 } from "uuid";
 import { userSelect } from "../utils/prisma/userSelect";
 import { messageWithoutResponseSelect } from "../utils/prisma/messageWithoutResponseSelect";
-import { Reaction } from "../models/Reaction";
+import { Reaction } from "../types/Reaction";
 
 function sanitizeChat(chat: any): Chat | null {
   if (!chat) return null;

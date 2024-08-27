@@ -2,7 +2,7 @@ import {
   isUser,
   isUserWithCredentials,
   UserWithCredentials,
-} from "../../src/models/User";
+} from "../../src/types/User";
 import { UserService } from "../../src/services/UserService";
 import { VALID_USER_ID } from "../utils/constants";
 import { v4 as uuidv4 } from "uuid";

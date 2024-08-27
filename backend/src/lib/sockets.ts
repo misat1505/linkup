@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { Message } from "../models/Message";
+import { Message } from "../types/Message";
 import { JwtHandler } from "./JwtHandler";
 import { ChatService } from "../services/ChatService";
 

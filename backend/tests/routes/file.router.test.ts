@@ -4,8 +4,8 @@ import request from "supertest";
 import app from "../../src/app";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { VALID_USER_ID } from "../utils/constants";
-import { User } from "../../src/models/User";
-import { Message } from "../../src/models/Message";
+import { User } from "../../src/types/User";
+import { Message } from "../../src/types/Message";
 
 let newlyCreatedUser: User;
 

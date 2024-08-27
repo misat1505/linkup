@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Hasher } from "../lib/Hasher";
-import { UserWithCredentials } from "../models/User";
+import { UserWithCredentials } from "../types/User";
 import { JwtHandler } from "../lib/JwtHandler";
 import { UserService } from "../services/UserService";
 import { jwtCookieOptions } from "../config/jwt-cookie";

@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { VALID_USER_ID } from "../utils/constants";
-import { isUser } from "../../src/models/User";
+import { isUser } from "../../src/types/User";
 
 describe("auth router", () => {
   describe("[POST] /login", () => {

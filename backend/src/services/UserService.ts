@@ -1,4 +1,4 @@
-import { User, UserWithCredentials } from "../models/User";
+import { User, UserWithCredentials } from "../types/User";
 import { prisma } from "../lib/Prisma";
 import { userSelect } from "../utils/prisma/userSelect";
 

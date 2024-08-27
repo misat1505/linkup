@@ -1,6 +1,6 @@
-import { isChat } from "../../src/models/Chat";
-import { isMessage } from "../../src/models/Message";
-import { isReaction, Reaction } from "../../src/models/Reaction";
+import { isChat } from "../../src/types/Chat";
+import { isMessage } from "../../src/types/Message";
+import { isReaction, Reaction } from "../../src/types/Reaction";
 import { ChatService } from "../../src/services/ChatService";
 
 describe("ChatService", () => {

@@ -9,7 +9,7 @@ import {
 } from "../../src/controllers/auth.controller";
 import { UserService } from "../../src/services/UserService";
 import { JwtHandler } from "../../src/lib/JwtHandler";
-import { User, UserWithCredentials } from "../../src/models/User";
+import { User, UserWithCredentials } from "../../src/types/User";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 

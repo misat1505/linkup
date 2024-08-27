@@ -1,6 +1,6 @@
 import app from "../../src/app";
 import { JwtHandler } from "../../src/lib/JwtHandler";
-import { isUser, User } from "../../src/models/User";
+import { isUser, User } from "../../src/types/User";
 import { VALID_USER_ID } from "../utils/constants";
 import request from "supertest";
 
