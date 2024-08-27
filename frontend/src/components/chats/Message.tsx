@@ -170,10 +170,13 @@ function ForeignMessage({ message }: { message: MessageType }) {
 
               {message.content && (
                 <div
-                  className={cn("w-fit rounded-b-md bg-slate-200 px-2 py-1", {
-                    "rounded-md": message.files.length === 0,
-                    "mb-1": message.reactions.length === 0
-                  })}
+                  className={cn(
+                    "w-fit rounded-b-md bg-slate-200 px-2 py-1 dark:bg-slate-800",
+                    {
+                      "rounded-md": message.files.length === 0,
+                      "mb-1": message.reactions.length === 0
+                    }
+                  )}
                 >
                   {message.content}
                 </div>

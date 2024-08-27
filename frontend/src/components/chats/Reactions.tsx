@@ -16,7 +16,7 @@ export default function Reactions({
   reactions: Message["reactions"];
 }) {
   return (
-    <div className="no-scrollbar mb-2 flex max-w-60 items-center gap-x-1 overflow-auto rounded-sm bg-slate-300 p-1">
+    <div className="no-scrollbar mb-2 flex max-w-60 items-center gap-x-1 overflow-auto rounded-sm bg-slate-300 p-1 dark:bg-slate-700">
       {reactions.map((reaction, id) => (
         <ReactionItem reaction={reaction} key={id} />
       ))}

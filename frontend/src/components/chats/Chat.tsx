@@ -17,7 +17,7 @@ export default function ChatGuard() {
   if (!chatId)
     return (
       <div className="relative hidden flex-grow md:block">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-slate-100 p-8 text-muted-foreground">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-slate-100 p-8 text-muted-foreground dark:bg-slate-900">
           <BsChatLeftTextFill className="mx-auto h-64 w-64" />
           <p className="my-4 text-center text-xl font-semibold">
             No chat selected.
@@ -53,7 +53,7 @@ function Chat() {
   if (error || !isUserInChat)
     return (
       <div className="relative flex-grow">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-slate-100 p-8 text-center text-muted-foreground">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-slate-100 p-8 text-center text-muted-foreground dark:bg-slate-900">
           <BsChatLeftTextFill className="mx-auto h-64 w-64 text-red-500" />
           <p className="my-4 text-center text-xl font-semibold">
             Chat unavailable.
