@@ -24,7 +24,7 @@ export default function Home() {
 
   return (
     <div className="flex w-full justify-between">
-      <div className="m-4 flex w-fit items-center gap-x-8 rounded-md bg-slate-200 p-4">
+      <div className="m-4 flex w-fit items-center gap-x-8 rounded-md bg-slate-200 p-4 dark:bg-slate-800">
         <ProfileAvatar user={user} />
         <p className="text-lg font-semibold">
           {user.firstName} {user.lastName}
@@ -49,7 +49,7 @@ function ProfileAvatar({ user }: { user: User }) {
       className={{
         common: "h-12 w-12 rounded-full",
         img: "object-cover",
-        error: "bg-white font-semibold"
+        error: "bg-white font-semibold dark:bg-black"
       }}
       errorContent={initials}
     />

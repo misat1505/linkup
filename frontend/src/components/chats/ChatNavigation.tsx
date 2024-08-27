@@ -32,7 +32,7 @@ export default function ChatNavigation() {
 
 function ChatNavigationHeader() {
   return (
-    <div className="flex w-full items-center justify-between bg-transparent px-4 py-2 text-white dark:text-black">
+    <div className="flex w-full items-center justify-between bg-transparent px-4 py-2 text-white">
       <h2 className="text-lg font-semibold">Chat with others</h2>
       <ChatCreator />
     </div>

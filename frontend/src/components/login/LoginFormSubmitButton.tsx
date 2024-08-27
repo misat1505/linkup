@@ -8,7 +8,12 @@ export default function LoginFormSubmitButton() {
 
   return (
     <div className="mt-4 flex justify-center">
-      <Button variant="blueish" type="submit" disabled={isSubmitting}>
+      <Button
+        variant="blueish"
+        className="dark:text-white"
+        type="submit"
+        disabled={isSubmitting}
+      >
         {isSubmitting ? (
           <div className="flex items-center gap-x-2">
             <ClipLoader size={12} color="whitesmoke" />
