@@ -16,7 +16,7 @@ const sendFileBuilder =
   ) => {
     const result = await fn();
 
-    if (!result) return res.status(404).json({ message: errorMessage });
+    if (!result) return res.status(401).json({ message: errorMessage });
 
     const filepath = path.join(__dirname, "..", "..", "static", filename);
 

@@ -4,61 +4,144 @@ import request from "supertest";
 import app from "../../src/app";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { VALID_USER_ID } from "../utils/constants";
-import { FileService } from "../../src/services/FileService";
+import { User } from "../../src/models/User";
+import { Message } from "../../src/models/Message";
 
-jest.mock("../../src/services/FileService");
+let newlyCreatedUser: User;
 
-(FileService.isUserAvatar as jest.Mock).mockResolvedValue(true);
+const createTestUser = async () => {
+  const login = "valid_login";
+  const password = "valid_password";
 
-const filename = "testfile.txt";
-const testFilePath = path.join(__dirname, "..", "..", "static", filename);
+  const res = await request(app)
+    .post("/auth/signup")
+    .field("firstName", "Melon")
+    .field("lastName", "Muzg")
+    .field("login", login)
+    .field("password", password)
+    .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
 
-const createTestFile = () => {
-  if (!fs.existsSync(path.dirname(testFilePath))) {
-    fs.mkdirSync(path.dirname(testFilePath), { recursive: true });
-  }
-  fs.writeFileSync(testFilePath, "This is a test file");
+  newlyCreatedUser = res.body.user;
 };
 
-const deleteTestFile = () => {
-  if (fs.existsSync(testFilePath)) {
-    fs.unlinkSync(testFilePath);
-  }
+const deleteUserFile = () => {
+  const filepath = path.join(
+    __dirname,
+    "..",
+    "..",
+    "static",
+    newlyCreatedUser.photoURL!
+  );
+  if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
 };
 
 describe("file router", () => {
   const token = JwtHandler.encode({ userId: VALID_USER_ID });
+  let newlyCreatedUserToken: string;
 
-  beforeEach(() => {
-    createTestFile();
+  beforeEach(async () => {
+    await createTestUser();
+    newlyCreatedUserToken = JwtHandler.encode({ userId: newlyCreatedUser.id });
   });
 
   afterEach(() => {
-    deleteTestFile();
+    deleteUserFile();
   });
 
   describe("[GET] /:filename", () => {
-    it("should return 404 if the file does not exist", async () => {
-      const response = await request(app)
-        .get("/files/nonexistentfile.txt?filter=avatar")
+    it("should allow everyone to access avatar", async () => {
+      const res = await request(app)
+        .get(`/files/${newlyCreatedUser.photoURL}?filter=avatar`)
+        .set("Cookie", `token=${newlyCreatedUserToken}`);
+      expect(res.statusCode).toBe(200);
+
+      const res2 = await request(app)
+        .get(`/files/${newlyCreatedUser.photoURL}?filter=avatar`)
         .set("Cookie", `token=${token}`);
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual({ message: "File not found." });
+      expect(res2.statusCode).toBe(200);
     });
 
-    it("should return the file if it exists", async () => {
-      const response = await request(app)
-        .get(`/files/${filename}?filter=avatar`)
-        .set("Cookie", `token=${token}`);
-      expect(response.status).toBe(200);
-      expect(response.text).toBe("This is a test file");
-    });
+    it("should allow only people in chat see chat photo", async () => {
+      const {
+        body: { chat },
+      } = await request(app)
+        .post("/chats/group")
+        .set("Cookie", `token=${token}`)
+        .field("users[0]", VALID_USER_ID)
+        .field("users[1]", "935719fa-05c4-42c4-9b02-2be3fefb6e61")
+        .field("name", "chat name")
+        .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
 
-    it("shouldn't allow request without token", async () => {
-      const response = await request(app).get(
-        `/files/${filename}?filter=avatar`
+      const res = await request(app)
+        .get(`/files/${chat.photoURL}?filter=chat-photo`)
+        .set("Cookie", `token=${token}`);
+      expect(res.statusCode).toBe(200);
+
+      const user2Token = JwtHandler.encode({
+        userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
+      });
+
+      const res2 = await request(app)
+        .get(`/files/${chat.photoURL}?filter=chat-photo`)
+        .set("Cookie", `token=${user2Token}`);
+      expect(res2.statusCode).toBe(200);
+
+      const res3 = await request(app)
+        .get(`/files/${chat.photoURL}?filter=chat-photo`)
+        .set("Cookie", `token=${newlyCreatedUserToken}`);
+      expect(res3.statusCode).toBe(401);
+
+      const filepath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "static",
+        chat.photoURL
       );
-      expect(response.status).toBe(400);
+      if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
+    });
+
+    it("should allow only people in chat see files in chat message", async () => {
+      const {
+        body: { chat },
+      } = await request(app)
+        .post("/chats/group")
+        .set("Cookie", `token=${token}`)
+        .field("users[0]", VALID_USER_ID)
+        .field("name", "")
+        .field("users[1]", "935719fa-05c4-42c4-9b02-2be3fefb6e61");
+
+      const {
+        body: { message },
+      } = await request(app)
+        .post(`/chats/${chat.id}/messages`)
+        .set("Cookie", `token=${token}`)
+        .field("content", "message")
+        .attach("files", Buffer.from("message file"), "file1.txt");
+
+      const filename = (message as Message).files[0].url;
+
+      const res = await request(app)
+        .get(`/files/${filename}?filter=chat-message`)
+        .set("Cookie", `token=${token}`);
+      expect(res.statusCode).toBe(200);
+
+      const user2Token = JwtHandler.encode({
+        userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
+      });
+
+      const res2 = await request(app)
+        .get(`/files/${filename}?filter=chat-message`)
+        .set("Cookie", `token=${user2Token}`);
+      expect(res2.statusCode).toBe(200);
+
+      const res3 = await request(app)
+        .get(`/files/${filename}?filter=chat-message`)
+        .set("Cookie", `token=${newlyCreatedUserToken}`);
+      expect(res3.statusCode).toBe(401);
+
+      const filepath = path.join(__dirname, "..", "..", "static", filename);
+      if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
     });
   });
 });
