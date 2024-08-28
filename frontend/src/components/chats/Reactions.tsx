@@ -6,9 +6,10 @@ import { HiOutlineEmojiSad } from "react-icons/hi";
 import { TbMoodCry } from "react-icons/tb";
 import { FaSkull } from "react-icons/fa";
 import Tooltip from "../common/Tooltip";
-import { createFullName } from "../../utils/createFullName";
 import { useAppContext } from "../../contexts/AppProvider";
 import { cn } from "../../lib/utils";
+import { ChatUtils } from "../../utils/chatUtils";
+import { useChatContext } from "../../contexts/ChatProvider";
 
 export default function Reactions({
   reactions
@@ -35,14 +36,19 @@ export const reactionsMap = {
 };
 
 function ReactionItem({ reaction }: { reaction: Reaction }) {
+  const { chat } = useChatContext();
   const { user: me } = useAppContext();
   const component =
     reactionsMap[reaction.name as keyof typeof reactionsMap] || null;
 
   if (!component) return null;
 
+  const utils = new ChatUtils(chat!, me!);
+
   const tooltipText =
-    reaction.user.id === me!.id ? "You" : createFullName(reaction.user);
+    reaction.user.id === me!.id
+      ? "You"
+      : utils.getDisplayNameById(reaction.user.id);
 
   return (
     <Tooltip content={tooltipText}>
