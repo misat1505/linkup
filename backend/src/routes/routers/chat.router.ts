@@ -6,6 +6,7 @@ import {
   createReaction,
   getChatMessages,
   getUserChats,
+  updateAlias,
 } from "../../controllers/chat.controller";
 import { validate } from "../../middlewares/validate";
 import {
@@ -40,5 +41,6 @@ chatRouter.post(
 );
 chatRouter.get("/:chatId/messages", getChatMessages);
 chatRouter.post("/:chatId/reactions", createReaction);
+chatRouter.put("/:chatId/users/:userId/alias", updateAlias);
 
 export default chatRouter;

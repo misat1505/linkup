@@ -2,6 +2,37 @@ import { Request, Response } from "express";
 import { ChatService } from "../services/ChatService";
 import { processAvatar } from "../utils/processAvatar";
 
+export const updateAlias = async (req: Request, res: Response) => {
+  try {
+    const {
+      token: { userId },
+      alias,
+    } = req.body;
+    const { chatId, userId: userToUpdateId } = req.params;
+
+    const isUserUpdatedInChat = await ChatService.isUserInChat({
+      userId: userToUpdateId,
+      chatId,
+    });
+    if (!isUserUpdatedInChat)
+      return res
+        .status(401)
+        .json({ message: "This user doesn't belong to this chat." });
+
+    const isAuthorized = await ChatService.isUserInChat({ userId, chatId });
+    if (!isAuthorized)
+      return res
+        .status(401)
+        .json({ message: "Cannot set aliases in chat you do not belong to." });
+
+    await ChatService.updateAlias({ userId: userToUpdateId, chatId, alias });
+
+    return res.status(200).json({ alias });
+  } catch (e) {
+    return res.status(500).json({ message: "Cannot update alias." });
+  }
+};
+
 export const createReaction = async (req: Request, res: Response) => {
   try {
     const {
@@ -158,7 +189,6 @@ export const createPrivateChat = async (req: Request, res: Response) => {
 
     return res.status(201).json({ chat: createdChat });
   } catch (e) {
-    console.log(e);
     return res.status(500).json({ message: "Cannot create private chat." });
   }
 };

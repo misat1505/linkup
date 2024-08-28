@@ -1,5 +1,5 @@
 import { prisma } from "../lib/Prisma";
-import { Chat } from "../types/Chat";
+import { Chat, UserInChat } from "../types/Chat";
 import { Message } from "../types/Message";
 import { User } from "../types/User";
 import { v7 as uuidv7 } from "uuid";
@@ -19,6 +19,28 @@ function sanitizeChat(chat: any): Chat | null {
 }
 
 export class ChatService {
+  static async updateAlias({
+    userId,
+    chatId,
+    alias,
+  }: {
+    userId: User["id"];
+    chatId: Chat["id"];
+    alias: UserInChat["alias"];
+  }): Promise<void> {
+    await prisma.userChat.update({
+      where: {
+        userId_chatId: {
+          userId: userId,
+          chatId: chatId,
+        },
+      },
+      data: {
+        alias: alias,
+      },
+    });
+  }
+
   static async createReactionToMessage(data: {
     userId: User["id"];
     reactionId: string;
