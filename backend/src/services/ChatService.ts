@@ -11,6 +11,10 @@ function sanitizeChat(chat: any): Chat | null {
   if (!chat) return null;
 
   const { lastMessageId, ...sanitizedChat } = chat;
+  sanitizedChat.users = sanitizedChat.users.map(({ alias, user }: any) => ({
+    alias,
+    ...user,
+  }));
   return sanitizedChat as Chat;
 }
 
@@ -55,9 +59,7 @@ export class ChatService {
         chatId,
       },
       include: {
-        author: {
-          select: userSelect,
-        },
+        author: { select: userSelect },
         response: {
           select: messageWithoutResponseSelect,
         },
@@ -112,7 +114,7 @@ export class ChatService {
       select: {
         users: {
           where: {
-            id: userId,
+            userId,
           },
         },
       },
@@ -181,17 +183,19 @@ export class ChatService {
   }
 
   static async getUserChats(userId: User["id"]): Promise<Chat[]> {
-    const result: Chat[] = await prisma.chat.findMany({
+    const result = await prisma.chat.findMany({
       where: {
         users: {
           some: {
-            id: userId,
+            userId,
           },
         },
       },
       include: {
         users: {
-          select: userSelect,
+          include: {
+            user: { select: userSelect },
+          },
         },
         lastMessage: {
           select: messageWithoutResponseSelect,
@@ -206,12 +210,12 @@ export class ChatService {
     id1: string,
     id2: string
   ): Promise<Chat | null> {
-    const result: Chat[] = await prisma.chat.findMany({
+    const result = await prisma.chat.findMany({
       where: {
         type: "PRIVATE",
         users: {
           every: {
-            id: {
+            userId: {
               in: [id1, id2],
             },
           },
@@ -219,7 +223,9 @@ export class ChatService {
       },
       include: {
         users: {
-          select: userSelect,
+          include: {
+            user: { select: userSelect },
+          },
         },
         lastMessage: {
           select: messageWithoutResponseSelect,
@@ -236,16 +242,24 @@ export class ChatService {
   }
 
   static async createPrivateChat(id1: string, id2: string): Promise<Chat> {
-    const result: Chat = await prisma.chat.create({
+    const users = [id1, id2];
+
+    const result = await prisma.chat.create({
       data: {
         type: "PRIVATE",
         users: {
-          connect: [{ id: id1 }, { id: id2 }],
+          create: users.map((user) => ({
+            user: {
+              connect: { id: user },
+            },
+          })),
         },
       },
       include: {
         users: {
-          select: userSelect,
+          include: {
+            user: { select: userSelect },
+          },
         },
         lastMessage: {
           select: messageWithoutResponseSelect,
@@ -261,18 +275,24 @@ export class ChatService {
     name: Chat["name"],
     photoURL: Chat["photoURL"]
   ): Promise<Chat> {
-    const result: Chat = await prisma.chat.create({
+    const result = await prisma.chat.create({
       data: {
         type: "GROUP",
         name,
         photoURL,
         users: {
-          connect: users.map((user) => ({ id: user })),
+          create: users.map((user) => ({
+            user: {
+              connect: { id: user },
+            },
+          })),
         },
       },
       include: {
         users: {
-          select: userSelect,
+          include: {
+            user: { select: userSelect },
+          },
         },
         lastMessage: {
           select: messageWithoutResponseSelect,

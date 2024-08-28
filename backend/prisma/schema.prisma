@@ -24,7 +24,7 @@ model User {
   salt        String
 
   posts       Post[]    @relation("UserPosts")
-  chats       Chat[]    @relation("UserChats")
+  chats       UserChat[]
   messages    Message[] @relation("MessageAuthor")
   reactions   UserReaction[]
 
@@ -74,7 +74,7 @@ model Chat {
   type      ChatType
   lastMessageId String? @unique
 
-  users     User[]      @relation("UserChats")
+  users     UserChat[]
   post      Post?       @relation("PostChat")
   messages  Message[]   @relation("MessageChat")
   lastMessage  Message?  @relation("LastMessageInChat", fields: [lastMessageId], references: [id])
@@ -123,4 +123,15 @@ model UserReaction {
   reaction    Reaction  @relation(fields: [reactionId], references: [id])
 
   @@id([userId, messageId])
+}
+
+model UserChat {
+  userId      String
+  chatId      String
+  alias       String?
+
+  user        User      @relation(fields: [userId], references: [id])
+  chat        Chat      @relation(fields: [chatId], references: [id])
+
+  @@id([userId, chatId])
 }

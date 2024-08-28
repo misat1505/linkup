@@ -19,7 +19,7 @@ export class FileService {
         photoURL,
         type: { in: ["GROUP", "PRIVATE"] },
         users: {
-          some: { id: userId },
+          some: { userId },
         },
       },
     });
@@ -35,7 +35,7 @@ export class FileService {
       where: {
         type: { in: ["GROUP", "PRIVATE"] },
         users: {
-          some: { id: userId },
+          some: { userId },
         },
         messages: {
           some: {

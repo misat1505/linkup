@@ -7,6 +7,6 @@ export type Chat = {
   name: string | null;
   photoURL: string | null;
   type: "PRIVATE" | "GROUP" | "POST";
-  users: User[] | null;
+  users: (User & { alias: string | null })[] | null;
   lastMessage: Omit<Message, "response" | "reactions"> | null;
 };
