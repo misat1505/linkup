@@ -73,6 +73,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
               src,
               chat.type === "PRIVATE" ? "avatar" : "chat-photo"
             )}
+            className="min-h-12 min-w-12"
             alt={alt}
             lastActive={lastActive}
           />
@@ -80,8 +81,11 @@ function NavigationItem({ chat }: { chat: Chat }) {
             <div className="overflow-hidden text-nowrap font-semibold">
               {chatName}
             </div>
-            <div className="text-sm">
-              <LastMessageDisplayer lastMessage={chat.lastMessage} />
+            <div className="overflow-hidden text-nowrap text-sm">
+              <LastMessageDisplayer
+                chat={chat}
+                lastMessage={chat.lastMessage}
+              />
             </div>
           </div>
         </button>
@@ -91,16 +95,19 @@ function NavigationItem({ chat }: { chat: Chat }) {
 }
 
 function LastMessageDisplayer({
-  lastMessage
+  lastMessage,
+  chat
 }: {
   lastMessage: Chat["lastMessage"];
+  chat: Chat;
 }) {
   const { user: me } = useAppContext();
 
   if (!lastMessage) return null;
 
-  const displayName =
-    lastMessage.author.id === me!.id ? "You" : lastMessage.author.firstName;
+  const utils = new ChatUtils(chat!, me!);
+
+  const displayName = utils.getNavigationLastMessageDisplayName();
 
   if (lastMessage.content)
     return (

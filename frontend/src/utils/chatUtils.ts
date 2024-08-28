@@ -1,4 +1,4 @@
-import { Chat } from "../types/Chat";
+import { Chat, UserInChat } from "../types/Chat";
 import { User } from "../types/User";
 import { createFullName } from "./createFullName";
 import { getInitials } from "./getInitials";
@@ -12,7 +12,7 @@ export class ChatUtils {
     this.me = me;
   }
 
-  private getOtherUser(): User | null {
+  private getOtherUser(): UserInChat | null {
     if (this.chat.type === "PRIVATE") {
       return this.chat.users?.find((user) => user.id !== this.me.id) || null;
     }
@@ -45,6 +45,7 @@ export class ChatUtils {
       }
       const otherUser = this.getOtherUser();
       if (otherUser) {
+        if (otherUser.alias) return otherUser.alias;
         return createFullName(otherUser);
       }
     }
@@ -100,5 +101,18 @@ export class ChatUtils {
       return lastActive;
     }
     return new Date();
+  }
+
+  public getNavigationLastMessageDisplayName(): string | null {
+    const lastMessage = this.chat.lastMessage;
+    if (!lastMessage) return null;
+
+    if (lastMessage.author.id === this.me.id) return "You";
+    const user =
+      this.chat.users?.find((user) => user.id === lastMessage.author.id) ||
+      null;
+
+    if (user?.alias) return user.alias;
+    return user?.firstName || "";
   }
 }
