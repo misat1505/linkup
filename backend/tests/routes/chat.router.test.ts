@@ -27,7 +27,7 @@ describe("chat router", () => {
   });
 
   describe("[POST] /chats/private", () => {
-    it("should get user chats", async () => {
+    it("should create user chats", async () => {
       const res = await request(app)
         .post("/chats/private")
         .set("Cookie", `token=${token}`)

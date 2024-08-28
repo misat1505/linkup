@@ -9,6 +9,7 @@ export const resetDB = async (): Promise<void> => {
     await prisma.message.deleteMany();
     await prisma.userReaction.deleteMany();
     await prisma.file.deleteMany();
+    await prisma.userChat.deleteMany();
     await prisma.$executeRaw`SET FOREIGN_KEY_CHECKS = 1;`;
 
     const user = await prisma.user.create({
@@ -34,7 +35,10 @@ export const resetDB = async (): Promise<void> => {
         id: "74c78678-40b2-44cf-8436-fdc762480e92",
         type: "PRIVATE",
         users: {
-          connect: [{ id: user.id }, { id: user2.id }],
+          create: [
+            { user: { connect: { id: user.id } } },
+            { user: { connect: { id: user2.id } } },
+          ],
         },
       },
     });
@@ -45,7 +49,7 @@ export const resetDB = async (): Promise<void> => {
         type: "GROUP",
         name: "Group Chat",
         users: {
-          connect: [{ id: user.id }],
+          create: [{ user: { connect: { id: user.id } } }],
         },
         photoURL: "chat-photo.webp",
       },

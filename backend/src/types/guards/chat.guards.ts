@@ -1,6 +1,6 @@
 import { Chat } from "../Chat";
 import { isPartialMessage } from "./message.guard";
-import { isUser } from "./user.guard";
+import { isUserInChat } from "./user.guard";
 import { defaultOptions, hasOnlyKeys } from "./utils";
 
 export function isChat(obj: any, options = defaultOptions): obj is Chat {
@@ -28,7 +28,7 @@ export function isChat(obj: any, options = defaultOptions): obj is Chat {
     ["PRIVATE", "GROUP", "POST"].includes(obj.type) &&
     (obj.users === null ||
       (Array.isArray(obj.users) &&
-        obj.users.every((user: unknown) => isUser(user, options)))) &&
+        obj.users.every((user: unknown) => isUserInChat(user, options)))) &&
     (obj.lastMessage === null || isPartialMessage(obj.lastMessage, options))
   );
 }

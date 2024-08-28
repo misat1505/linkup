@@ -1,3 +1,4 @@
+import { UserInChat } from "../Chat";
 import { User, UserWithCredentials } from "../User";
 import { defaultOptions, hasOnlyKeys } from "./utils";
 
@@ -8,12 +9,15 @@ const userAllowedKeys = [
   "photoURL",
   "lastActive",
 ];
+
 const userWithCredentialsAllowedKeys = [
   ...userAllowedKeys,
   "login",
   "password",
   "salt",
 ];
+
+const userInChatAllowedKeys = [...userAllowedKeys, "alias"];
 
 export function isUser(obj: any, options = defaultOptions): obj is User {
   return (
@@ -50,5 +54,25 @@ export function isUserWithCredentials(
     typeof obj.login === "string" &&
     typeof obj.password === "string" &&
     typeof obj.salt === "string"
+  );
+}
+
+export function isUserInChat(
+  obj: any,
+  options = defaultOptions
+): obj is UserInChat {
+  return (
+    obj &&
+    typeof obj === "object" &&
+    hasOnlyKeys(obj, userInChatAllowedKeys) &&
+    typeof obj.id === "string" &&
+    typeof obj.firstName === "string" &&
+    typeof obj.lastName === "string" &&
+    (typeof obj.alias === "string" || obj.alias === null) &&
+    (typeof obj.photoURL === "string" || obj.photoURL === null) &&
+    (obj.lastActive instanceof Date ||
+      (options.allowStringifiedDates &&
+        typeof obj.lastActive === "string" &&
+        !isNaN(Date.parse(obj.lastActive))))
   );
 }

@@ -242,7 +242,7 @@ export class ChatService {
   }
 
   static async createPrivateChat(id1: string, id2: string): Promise<Chat> {
-    const users = [id1, id2];
+    const users = Array.from(new Set([id1, id2]));
 
     const result = await prisma.chat.create({
       data: {
@@ -275,6 +275,8 @@ export class ChatService {
     name: Chat["name"],
     photoURL: Chat["photoURL"]
   ): Promise<Chat> {
+    users = Array.from(new Set(users));
+
     const result = await prisma.chat.create({
       data: {
         type: "GROUP",

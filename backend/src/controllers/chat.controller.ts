@@ -158,6 +158,7 @@ export const createPrivateChat = async (req: Request, res: Response) => {
 
     return res.status(201).json({ chat: createdChat });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({ message: "Cannot create private chat." });
   }
 };
