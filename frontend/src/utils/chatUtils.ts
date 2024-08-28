@@ -19,6 +19,10 @@ export class ChatUtils {
     return null;
   }
 
+  public getUserById(id: User["id"]): UserInChat | null {
+    return this.chat.users?.find((u) => u.id === id) || null;
+  }
+
   public getImageURL(): User["photoURL"] | null {
     if (this.chat.type === "PRIVATE") {
       if (

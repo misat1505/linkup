@@ -15,6 +15,9 @@ import { buildFileURL } from "../../utils/buildFileURL";
 import Reactions from "./Reactions";
 import { timeDifference } from "../../utils/timeDifference";
 import moment from "moment";
+import { ChatUtils } from "../../utils/chatUtils";
+import { createFullName } from "../../utils/createFullName";
+import { User } from "../../types/User";
 
 export default function Message({ message }: { message: MessageType }) {
   const { user: me } = useAppContext();
@@ -129,13 +132,23 @@ function MyMessage({ message }: { message: MessageType }) {
 }
 
 function ForeignMessage({ message }: { message: MessageType }) {
-  const { messages, messageRefs } = useChatContext();
+  const { user: me } = useAppContext();
+  const { messages, messageRefs, chat } = useChatContext();
   const isDisplayingAvatar = isShowingAvatar(messages!, message);
+
+  if (!chat || !me) throw new Error();
+
+  const utils = new ChatUtils(chat, me);
+  const author = utils.getUserById(message.author.id);
+
+  const authorDispayName = author?.alias
+    ? author.alias
+    : createFullName(author as User);
 
   const tooltipText = `${message.createdAt.toLocaleDateString(
     "en-US",
     tooltipDateFormat
-  )} by ${message.author.firstName} ${message.author.lastName}`;
+  )} by ${authorDispayName}`;
 
   return (
     <div
