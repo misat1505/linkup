@@ -6,6 +6,9 @@ import styles from "../../styles/incomeMessage.module.css";
 import { cn } from "../../lib/utils";
 import useDelay from "../../hooks/useDelay";
 import { buildFileURL } from "../../utils/buildFileURL";
+import { ChatUtils } from "../../utils/chatUtils";
+import { useChatContext } from "../../contexts/ChatProvider";
+import { useAppContext } from "../../contexts/AppProvider";
 
 type IncomeMessageProps = {
   message: Message;
@@ -17,12 +20,18 @@ export default function IncomeMessage({
   onclick
 }: IncomeMessageProps) {
   const [isClicked, setIsClicked] = useState(false);
-  const { firstName, lastName } = message.author;
+  const { user: me } = useAppContext();
+  const { chat } = useChatContext();
+
+  if (!chat || !me) throw new Error();
+
+  const utils = new ChatUtils(chat, me);
+  const displayName = utils.getDisplayNameById(message.author.id);
 
   const getText = (): string => {
     if (message.content)
-      return `${firstName} ${lastName}: ${message.content.substring(0, 20)}`;
-    return `${firstName} ${lastName} sent ${message.files.length} file(s).`;
+      return `${displayName}: ${message.content.substring(0, 20)}`;
+    return `${displayName} sent ${message.files.length} file(s).`;
   };
 
   const handleClick = () => {

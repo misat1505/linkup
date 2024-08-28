@@ -23,6 +23,16 @@ export class ChatUtils {
     return this.chat.users?.find((u) => u.id === id) || null;
   }
 
+  public getDisplayNameById(id: User["id"]): string {
+    const user = this.getUserById(id);
+
+    const userDispayName = user?.alias
+      ? user.alias
+      : createFullName(user as User);
+
+    return userDispayName;
+  }
+
   public getImageURL(): User["photoURL"] | null {
     if (this.chat.type === "PRIVATE") {
       if (

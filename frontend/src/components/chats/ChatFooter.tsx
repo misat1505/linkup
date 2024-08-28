@@ -163,14 +163,14 @@ function FileDisplayerItem({ file }: { file: File }) {
 
 function ResponseDisplayer() {
   const { user: me } = useAppContext();
-  const { messages } = useChatContext();
+  const { messages, chat } = useChatContext();
   const { responseId, setResponse } = useChatFooterContext();
   const message = messages?.find((m) => m.id === responseId);
-  if (!me) throw new Error();
+  if (!me || !chat) throw new Error();
 
   if (!message) return null;
 
-  const utils = new ChatFooterUtils(message, me);
+  const utils = new ChatFooterUtils(chat, message, me);
 
   return (
     <div className="flex w-full items-center justify-between gap-x-4 pb-4">
