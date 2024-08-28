@@ -11,6 +11,7 @@ import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { FaUserGroup } from "react-icons/fa6";
 import Tooltip from "../common/Tooltip";
 import { buildFileURL } from "../../utils/buildFileURL";
+import ChatSettingsDialog from "./chatSettings/ChatSettingsDialog";
 
 export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   const { chats } = useChatPageContext();
@@ -56,13 +57,16 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
           <div className="text-sm">{createStatus()}</div>
         </div>
       </div>
-      <button onClick={() => navigate(ROUTES.CHATS.path)}>
-        <Tooltip content="Close chat">
-          <span>
-            <RxCross1 className="transition-all hover:scale-125" />
-          </span>
-        </Tooltip>
-      </button>
+      <div className="flex items-center gap-x-2">
+        <ChatSettingsDialog />
+        <button onClick={() => navigate(ROUTES.CHATS.path)}>
+          <Tooltip content="Close chat">
+            <span>
+              <RxCross1 className="transition-all hover:scale-125" />
+            </span>
+          </Tooltip>
+        </button>
+      </div>
     </div>
   );
 }

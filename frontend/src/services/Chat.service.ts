@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { User } from "../types/User";
 import { CHAT_API } from "./utils";
-import { Chat } from "../types/Chat";
+import { Chat, UserInChat } from "../types/Chat";
 import { Message } from "../types/Message";
 import {
   ChatFormType,
@@ -10,6 +10,14 @@ import {
 import { Reaction } from "../types/Reaction";
 
 export class ChatService {
+  static async updateAlias(
+    chatId: Chat["id"],
+    userId: User["id"],
+    alias: UserInChat["alias"]
+  ): Promise<void> {
+    await CHAT_API.put(`/${chatId}/users/${userId}/alias`, { alias });
+  }
+
   static async createReaction(
     messageId: Message["id"],
     reactionId: Reaction["id"],
