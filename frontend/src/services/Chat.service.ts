@@ -10,6 +10,14 @@ import {
 import { Reaction } from "../types/Reaction";
 
 export class ChatService {
+  static async addUserToChat(
+    chatId: Chat["id"],
+    userId: User["id"]
+  ): Promise<UserInChat> {
+    const response = await CHAT_API.post(`${chatId}/users`, { userId });
+    return response.data.user;
+  }
+
   static async updateAlias(
     chatId: Chat["id"],
     userId: User["id"],
