@@ -15,7 +15,8 @@ export class MessageUtils {
   }
 
   private getDisplayNameById(id: User["id"]): string {
-    const user = this.chat.users?.find((u) => u.id === id)!;
+    const user = this.chat.users?.find((u) => u.id === id);
+    if (!user) return createFullName(this.message.author);
 
     if (user.alias) return user.alias;
     return createFullName(user as User);
