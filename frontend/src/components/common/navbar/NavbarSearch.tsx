@@ -42,12 +42,14 @@ export default function NavbarSearch() {
   });
 
   return (
-    <Command className="w-60 rounded-lg border shadow-md">
-      <CommandInput
-        placeholder="Search on Link Up..."
-        onInput={(e) => setText(e.currentTarget.value)}
-        onFocus={() => setIsExpanded(true)}
-      />
+    <Command className="w-60 rounded-lg border bg-white shadow-md dark:bg-black">
+      <Tooltip content="Search for users">
+        <CommandInput
+          placeholder="Search on Link Up..."
+          onInput={(e) => setText(e.currentTarget.value)}
+          onFocus={() => setIsExpanded(true)}
+        />
+      </Tooltip>
       <CommandList
         ref={commandListRef}
         className={cn(
