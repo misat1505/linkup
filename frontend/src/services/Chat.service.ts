@@ -10,6 +10,10 @@ import {
 import { Reaction } from "../types/Reaction";
 
 export class ChatService {
+  static async leaveChat(chatId: Chat["id"]): Promise<void> {
+    await CHAT_API.delete(`${chatId}/users`);
+  }
+
   static async addUserToChat(
     chatId: Chat["id"],
     userId: User["id"]

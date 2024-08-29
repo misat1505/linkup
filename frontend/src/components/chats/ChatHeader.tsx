@@ -12,6 +12,7 @@ import { FaUserGroup } from "react-icons/fa6";
 import Tooltip from "../common/Tooltip";
 import { buildFileURL } from "../../utils/buildFileURL";
 import ChatSettingsDialog from "./chatSettings/ChatSettingsDialog";
+import ChatLeaveDialog from "./ChatLeaveDialog";
 
 export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   const { chats } = useChatPageContext();
@@ -58,6 +59,7 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
         </div>
       </div>
       <div className="flex items-center gap-x-2">
+        {chat.type === "GROUP" && <ChatLeaveDialog />}
         <ChatSettingsDialog />
         <button onClick={() => navigate(ROUTES.CHATS.path)}>
           <Tooltip content="Close chat">
