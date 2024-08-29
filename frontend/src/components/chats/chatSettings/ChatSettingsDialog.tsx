@@ -16,6 +16,11 @@ import GroupChatContent from "./GroupChatContent";
 export default function ChatSettingsDialog() {
   const { chat } = useChatContext();
 
+  const privateDescription =
+    "Manage the members of this chat by viewing who's currently part of the conversation. You can update or remove their aliases as needed.";
+  const groupDescription =
+    "Manage the members of this chat by viewing who's currently part of the conversation. You can update or remove their aliases as needed. Additionally, you have the option to invite new users to join the chat.";
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -34,8 +39,7 @@ export default function ChatSettingsDialog() {
         <DialogHeader>
           <DialogTitle>Settings</DialogTitle>
           <DialogDescription>
-            Update users&apos; aliases. To delete an alias clear the input and
-            save.
+            {chat?.type === "PRIVATE" ? privateDescription : groupDescription}
           </DialogDescription>
         </DialogHeader>
         {chat?.type === "PRIVATE" ? (
