@@ -5,10 +5,23 @@ import React, { useState } from "react";
 import { buildFileURL } from "../../../utils/buildFileURL";
 import { createFullName } from "../../../utils/createFullName";
 import { Input } from "../../../components/ui/input";
-import { Button } from "../../../components/ui/button";
 import { ChatService } from "../../../services/Chat.service";
 import { useQueryClient } from "react-query";
 import { queryKeys } from "../../../lib/queryKeys";
+import { getInitials } from "../../../utils/getInitials";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "../../ui/alert-dialog";
+import Tooltip from "../../common/Tooltip";
+import { MdEdit } from "react-icons/md";
 
 export default function ChatMembersDisplayer() {
   const { chat } = useChatContext();
@@ -17,7 +30,7 @@ export default function ChatMembersDisplayer() {
   const users = chat.users!;
 
   return (
-    <div className="w-full">
+    <div className="my-4 w-full">
       {users.map((user) => (
         <ChatMemberDisplayItem key={user.id} user={user} />
       ))}
@@ -26,9 +39,29 @@ export default function ChatMembersDisplayer() {
 }
 
 function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
+  return (
+    <div className="mb-2 flex w-full items-center justify-between gap-x-2 rounded-md bg-slate-100 p-1 dark:bg-slate-900">
+      <div className="flex items-center gap-x-2">
+        <Avatar
+          src={buildFileURL(user.photoURL, "avatar")}
+          alt={getInitials(user)}
+          className="h-8 w-8 text-xs"
+        />
+        <div>
+          <p className="font-semibold">{createFullName(user)}</p>
+          <p className="text-xs">{user.alias || "(no alias)"}</p>
+        </div>
+      </div>
+      <AliasUpdateModal user={user} />
+    </div>
+  );
+}
+
+function AliasUpdateModal({ user }: { user: UserInChat }) {
   const queryClient = useQueryClient();
   const { chatId } = useChatContext();
   const [text, setText] = useState(user.alias);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -54,30 +87,48 @@ function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
 
         return [...oldChats];
       });
+      setIsOpen(false);
     } catch (e) {
       console.error(e);
     }
   };
 
   return (
-    <div className="flex w-full items-center gap-x-2 p-4 text-xs">
-      <Avatar
-        src={buildFileURL(user.photoURL, "avatar")}
-        alt
-        className="h-8 w-8"
-      />
-      <div>
-        <p className="mb-2">{createFullName(user)}</p>
-        <Input
-          value={text || ""}
-          placeholder="Create alias"
-          className="p-1"
-          onChange={handleChange}
-        />
-      </div>
-      <Button variant="blueish" onClick={handleClick}>
-        Save
-      </Button>
-    </div>
+    <AlertDialog open={isOpen}>
+      <AlertDialogTrigger asChild onClick={() => setIsOpen(true)}>
+        <span>
+          <Tooltip content="Update alias">
+            <div className="mr-1 rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
+              <MdEdit size={20} />
+            </div>
+          </Tooltip>
+        </span>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Change alias of {createFullName(user)}
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            You can update the alias for this user. This alias will be displayed
+            in place of their full name in the chat. Please confirm the new
+            alias below. Leave it blank to remove the alias.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <div>
+          <Input
+            value={text || ""}
+            placeholder="Create alias"
+            onChange={handleChange}
+          />
+        </div>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => setIsOpen(false)}>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction onClick={handleClick}>Save</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
