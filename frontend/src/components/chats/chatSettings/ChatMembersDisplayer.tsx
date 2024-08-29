@@ -107,7 +107,7 @@ function AliasUpdateModal({ user }: { user: UserInChat }) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Change alias of {createFullName(user)}
+            Update alias for {createFullName(user)}
           </AlertDialogTitle>
           <AlertDialogDescription>
             You can update the alias for this user. This alias will be displayed

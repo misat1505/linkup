@@ -10,8 +10,12 @@ import {
 } from "../../ui/dialog";
 import React from "react";
 import ChatMembersDisplayer from "./ChatMembersDisplayer";
+import { useChatContext } from "../../../contexts/ChatProvider";
+import GroupChatContent from "./GroupChatContent";
 
 export default function ChatSettingsDialog() {
+  const { chat } = useChatContext();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -34,7 +38,11 @@ export default function ChatSettingsDialog() {
             save.
           </DialogDescription>
         </DialogHeader>
-        <ChatMembersDisplayer />
+        {chat?.type === "PRIVATE" ? (
+          <ChatMembersDisplayer />
+        ) : (
+          <GroupChatContent />
+        )}
       </DialogContent>
     </Dialog>
   );
