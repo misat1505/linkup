@@ -2,6 +2,32 @@ import { Request, Response } from "express";
 import { ChatService } from "../services/ChatService";
 import { processAvatar } from "../utils/processAvatar";
 
+export const deleteUserFromGroupChat = async (req: Request, res: Response) => {
+  try {
+    const { chatId } = req.params;
+    const {
+      token: { userId },
+    } = req.body;
+
+    const chatType = await ChatService.getChatType(chatId);
+    if (chatType !== "GROUP")
+      return res
+        .status(401)
+        .json({ message: "Cannot remove yourself from chat of this type." });
+
+    const iAmInChat = await ChatService.isUserInChat({ userId, chatId });
+    if (!iAmInChat)
+      return res.status(401).json({
+        message: "Cannot remove yourself from chat which you do not belong to.",
+      });
+
+    await ChatService.deleteFromChat({ chatId, userId });
+    return res.status(200).json({ message: "Successfully deleted from chat." });
+  } catch (e) {
+    return res.status(500).json({ message: "Cannot add user to this chat." });
+  }
+};
+
 export const addUserToGroupChat = async (req: Request, res: Response) => {
   try {
     const { chatId } = req.params;

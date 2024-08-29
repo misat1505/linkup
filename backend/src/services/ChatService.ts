@@ -19,6 +19,20 @@ function sanitizeChat(chat: any): Chat | null {
 }
 
 export class ChatService {
+  static async deleteFromChat({
+    chatId,
+    userId,
+  }: {
+    userId: User["id"];
+    chatId: Chat["id"];
+  }): Promise<void> {
+    await prisma.userChat.delete({
+      where: {
+        userId_chatId: { chatId, userId },
+      },
+    });
+  }
+
   static async getChatType(id: Chat["id"]): Promise<Chat["type"] | null> {
     const result = await prisma.chat.findFirst({
       where: { id },

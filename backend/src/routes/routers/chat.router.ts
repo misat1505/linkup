@@ -5,6 +5,7 @@ import {
   createMessage,
   createPrivateChat,
   createReaction,
+  deleteUserFromGroupChat,
   getChatMessages,
   getUserChats,
   updateAlias,
@@ -44,5 +45,6 @@ chatRouter.get("/:chatId/messages", getChatMessages);
 chatRouter.post("/:chatId/reactions", createReaction);
 chatRouter.put("/:chatId/users/:userId/alias", updateAlias);
 chatRouter.post("/:chatId/users", addUserToGroupChat);
+chatRouter.delete("/:chatId/users", deleteUserFromGroupChat);
 
 export default chatRouter;
