@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -22,10 +23,12 @@ import { ChatService } from "../../services/Chat.service";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 export default function ReactionCreator({ message }: { message: Message }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button>
+        <button onClick={() => setIsOpen(true)}>
           <Tooltip content="Create reaction">
             <span>
               <MdAddReaction
@@ -41,7 +44,7 @@ export default function ReactionCreator({ message }: { message: Message }) {
           <DialogTitle>Create your reaction</DialogTitle>
         </DialogHeader>
         <DialogDescription></DialogDescription>
-        <ReactionCreatorContent message={message} />
+        <ReactionCreatorContent message={message} setIsOpen={setIsOpen} />
       </DialogContent>
     </Dialog>
   );
@@ -49,7 +52,13 @@ export default function ReactionCreator({ message }: { message: Message }) {
 
 type ReactionType = { id: string; name: string };
 
-function ReactionCreatorContent({ message }: { message: Message }) {
+function ReactionCreatorContent({
+  message,
+  setIsOpen
+}: {
+  message: Message;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { user: me } = useAppContext();
   const queryClient = useQueryClient();
 
@@ -70,6 +79,7 @@ function ReactionCreatorContent({ message }: { message: Message }) {
           reaction={reaction}
           messageId={message.id}
           key={reaction.id}
+          setIsOpen={setIsOpen}
         />
       ))}
     </div>
@@ -88,10 +98,12 @@ export const reactionsMap = {
 
 function ReactionCreatorContentItem({
   reaction,
-  messageId
+  messageId,
+  setIsOpen
 }: {
   reaction: ReactionType;
   messageId: Message["id"];
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const queryClient = useQueryClient();
   const { chat } = useChatContext();
@@ -118,6 +130,8 @@ function ReactionCreatorContentItem({
           return [...oldMessages];
         }
       );
+
+      setIsOpen(false);
     } catch (e) {
       console.error(e);
     }
@@ -125,7 +139,11 @@ function ReactionCreatorContentItem({
 
   return (
     <Tooltip content={reaction.name}>
-      <button onClick={handleClick}>{component}</button>
+      <span>
+        <DialogFooter>
+          <button onClick={handleClick}>{component}</button>
+        </DialogFooter>
+      </span>
     </Tooltip>
   );
 }
