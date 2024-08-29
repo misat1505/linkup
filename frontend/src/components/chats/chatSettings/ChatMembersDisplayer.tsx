@@ -22,6 +22,10 @@ import {
 } from "../../ui/alert-dialog";
 import Tooltip from "../../common/Tooltip";
 import { MdEdit } from "react-icons/md";
+import { IoIosChatbubbles } from "react-icons/io";
+import { useAppContext } from "../../../contexts/AppProvider";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../lib/routes";
 
 export default function ChatMembersDisplayer() {
   const { chat } = useChatContext();
@@ -39,6 +43,8 @@ export default function ChatMembersDisplayer() {
 }
 
 function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
+  const { chat } = useChatContext();
+
   return (
     <div className="mb-2 flex w-full items-center justify-between gap-x-2 rounded-md bg-slate-100 p-1 dark:bg-slate-900">
       <div className="flex items-center gap-x-2">
@@ -52,8 +58,41 @@ function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
           <p className="text-xs">{user.alias || "(no alias)"}</p>
         </div>
       </div>
-      <AliasUpdateModal user={user} />
+      <div className="flex items-center gap-x-1">
+        {chat?.type === "GROUP" && <CreateMessageButton user={user} />}
+        <AliasUpdateModal user={user} />
+      </div>
     </div>
+  );
+}
+
+function CreateMessageButton({ user }: { user: UserInChat }) {
+  const { user: me } = useAppContext();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const handleClick = async (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    const chat = await ChatService.createPrivateChat(me!.id, user.id);
+    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+      if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
+      return oldChats ? [...oldChats, chat] : [chat];
+    });
+    navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
+  };
+
+  return (
+    <Tooltip content="Send message">
+      <div
+        className="mr-1 rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
+        onClick={handleClick}
+      >
+        <IoIosChatbubbles size={20} />
+      </div>
+    </Tooltip>
   );
 }
 
