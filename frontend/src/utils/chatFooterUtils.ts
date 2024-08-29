@@ -19,7 +19,8 @@ export class ChatFooterUtils {
     const common = "Replying to ";
 
     const chatUtils = new ChatUtils(this.chat, this.me);
-    const author = chatUtils.getUserById(this.message.author.id)!;
+    const author = chatUtils.getUserById(this.message.author.id);
+    if (!author) return common + createFullName(this.message.author);
     if (author.id === this.me.id) return common + "you";
 
     if (author.alias) return `${common}${author.alias}`;
