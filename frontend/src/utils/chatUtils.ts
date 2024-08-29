@@ -23,10 +23,12 @@ export class ChatUtils {
     return this.chat.users?.find((u) => u.id === id) || null;
   }
 
-  public getDisplayNameById(id: User["id"]): string {
+  public getDisplayNameById(id: User["id"]): string | null {
     const user = this.getUserById(id);
 
-    const userDispayName = user?.alias
+    if (!user) return null;
+
+    const userDispayName = user.alias
       ? user.alias
       : createFullName(user as User);
 
@@ -126,7 +128,8 @@ export class ChatUtils {
       this.chat.users?.find((user) => user.id === lastMessage.author.id) ||
       null;
 
-    if (user?.alias) return user.alias;
-    return user?.firstName || "";
+    if (!user) return lastMessage.author.firstName;
+    if (user.alias) return user.alias;
+    return user.firstName;
   }
 }

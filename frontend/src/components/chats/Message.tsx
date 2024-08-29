@@ -139,7 +139,8 @@ function ForeignMessage({ message }: { message: MessageType }) {
   if (!chat || !me) throw new Error();
 
   const utils = new ChatUtils(chat, me);
-  const authorDispayName = utils.getDisplayNameById(message.author.id);
+  const utilsText = utils.getDisplayNameById(message.author.id);
+  const authorDispayName = utilsText || createFullName(message.author);
 
   const tooltipText = `${message.createdAt.toLocaleDateString(
     "en-US",

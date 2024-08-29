@@ -26,7 +26,7 @@ export default function IncomeMessage({
   if (!chat || !me) throw new Error();
 
   const utils = new ChatUtils(chat, me);
-  const displayName = utils.getDisplayNameById(message.author.id);
+  const displayName = utils.getDisplayNameById(message.author.id)!;
 
   const getText = (): string => {
     if (message.content)

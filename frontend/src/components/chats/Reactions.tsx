@@ -10,6 +10,7 @@ import { useAppContext } from "../../contexts/AppProvider";
 import { cn } from "../../lib/utils";
 import { ChatUtils } from "../../utils/chatUtils";
 import { useChatContext } from "../../contexts/ChatProvider";
+import { createFullName } from "../../utils/createFullName";
 
 export default function Reactions({
   reactions
@@ -45,13 +46,15 @@ function ReactionItem({ reaction }: { reaction: Reaction }) {
 
   const utils = new ChatUtils(chat!, me!);
 
-  const tooltipText =
-    reaction.user.id === me!.id
-      ? "You"
-      : utils.getDisplayNameById(reaction.user.id);
+  const getTooltipText = (): string => {
+    if (reaction.user.id === me!.id) return "You";
+
+    const name = utils.getDisplayNameById(reaction.user.id);
+    return name || createFullName(reaction.user);
+  };
 
   return (
-    <Tooltip content={tooltipText}>
+    <Tooltip content={getTooltipText()}>
       <span>{component}</span>
     </Tooltip>
   );
