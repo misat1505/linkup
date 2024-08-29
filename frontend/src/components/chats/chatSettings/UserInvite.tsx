@@ -41,11 +41,24 @@ export default function UserInvite() {
         className="my-2"
         onChange={(e) => setText(e.currentTarget.value)}
       />
-      <div className="no-scrollbar max-h-[340px] overflow-auto">
-        {filteredUsers?.map((user) => (
-          <UserDisplay user={user} key={user.id} />
-        ))}
-      </div>
+      <UserSearchDisplayer users={filteredUsers} />
+    </div>
+  );
+}
+
+function UserSearchDisplayer({ users }: { users: User[] | undefined }) {
+  const classes = "mt-4 w-full text-center text-sm text-muted-foreground";
+
+  if (users === undefined)
+    return <p className={classes}>Write to search for users.</p>;
+
+  if (users.length === 0) return <p className={classes}>No users found.</p>;
+
+  return (
+    <div className="no-scrollbar max-h-[340px] overflow-auto">
+      {users.map((user) => (
+        <UserDisplay user={user} key={user.id} />
+      ))}
     </div>
   );
 }
