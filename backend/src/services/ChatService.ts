@@ -19,6 +19,33 @@ function sanitizeChat(chat: any): Chat | null {
 }
 
 export class ChatService {
+  static async getChatType(id: Chat["id"]): Promise<Chat["type"] | null> {
+    const result = await prisma.chat.findFirst({
+      where: { id },
+      select: { type: true },
+    });
+
+    return result ? result.type : null;
+  }
+
+  static async addUserToChat({
+    chatId,
+    userId,
+  }: {
+    chatId: Chat["id"];
+    userId: User["id"];
+  }): Promise<UserInChat> {
+    const result = await prisma.userChat.create({
+      data: { chatId, userId },
+      include: {
+        user: { select: userSelect },
+      },
+    });
+
+    const user: UserInChat = { ...result.user, alias: null };
+    return user;
+  }
+
   static async updateAlias({
     userId,
     chatId,

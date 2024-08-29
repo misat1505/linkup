@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  addUserToGroupChat,
   createGroupChat,
   createMessage,
   createPrivateChat,
@@ -42,5 +43,6 @@ chatRouter.post(
 chatRouter.get("/:chatId/messages", getChatMessages);
 chatRouter.post("/:chatId/reactions", createReaction);
 chatRouter.put("/:chatId/users/:userId/alias", updateAlias);
+chatRouter.post("/:chatId/users", addUserToGroupChat);
 
 export default chatRouter;

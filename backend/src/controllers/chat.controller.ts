@@ -2,6 +2,37 @@ import { Request, Response } from "express";
 import { ChatService } from "../services/ChatService";
 import { processAvatar } from "../utils/processAvatar";
 
+export const addUserToGroupChat = async (req: Request, res: Response) => {
+  try {
+    const { chatId } = req.params;
+    const {
+      token: { userId: myId },
+      userId,
+    } = req.body;
+
+    const chatType = await ChatService.getChatType(chatId);
+    if (chatType !== "GROUP")
+      return res
+        .status(401)
+        .json({ message: "Cannot add people to chat of this type." });
+
+    const iAmInChat = await ChatService.isUserInChat({ userId: myId, chatId });
+    if (!iAmInChat)
+      return res.status(401).json({
+        message: "Cannot add users to chat to which you do not belong to.",
+      });
+
+    const isOtherInChat = await ChatService.isUserInChat({ userId, chatId });
+    if (isOtherInChat)
+      return res.status(409).json({ message: "User is already in this chat." });
+
+    const user = await ChatService.addUserToChat({ chatId, userId });
+    return res.status(201).json({ user });
+  } catch (e) {
+    return res.status(500).json({ message: "Cannot add user to this chat." });
+  }
+};
+
 export const updateAlias = async (req: Request, res: Response) => {
   try {
     const {
