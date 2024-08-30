@@ -4,7 +4,7 @@ export class FileService {
   static async downloadFile(
     url: string | null,
     filename: string | null
-  ): Promise<Blob | null> {
+  ): Promise<File | null> {
     if (url === null || filename === null) return null;
 
     const result = await fetch(url, {
@@ -14,6 +14,8 @@ export class FileService {
     });
     const blob = await result.blob();
 
-    return blob;
+    const file = new File([blob], filename!, { type: blob.type });
+
+    return file;
   }
 }

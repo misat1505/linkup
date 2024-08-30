@@ -10,6 +10,18 @@ import {
 import { Reaction } from "../types/Reaction";
 
 export class ChatService {
+  static async updateChat(
+    name: string | null,
+    file: File | null
+  ): Promise<void> {
+    const formData = new FormData();
+
+    if (name) formData.append("name", name);
+    if (file) formData.append("file", file);
+
+    formData.forEach((val, key) => console.log(key, val));
+  }
+
   static async leaveChat(chatId: Chat["id"]): Promise<void> {
     await CHAT_API.delete(`${chatId}/users`);
   }

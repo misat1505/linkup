@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { useChatContext } from "../../../contexts/ChatProvider";
 import { FileService } from "../../../services/File.service";
 import { buildFileURL } from "../../../utils/buildFileURL";
 import Image from "../../common/Image";
-import { cn } from "../../../lib/utils";
 import { FaUserGroup } from "react-icons/fa6";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
+import { ChatService } from "../../../services/Chat.service";
+import Loading from "../../common/Loading";
 
 export default function ChatInfoUpdater() {
   const { chat } = useChatContext();
@@ -20,17 +21,17 @@ export default function ChatInfoUpdater() {
       )
   });
 
-  if (isLoading) return <div>loading...</div>;
+  if (isLoading)
+    return (
+      <div className="relative h-32 w-full">
+        <Loading />
+      </div>
+    );
 
-  // if (!data) return <div>no image</div>;
-
-  // const imageUrl = URL.createObjectURL(data);
-
-  const fileData = data ? URL.createObjectURL(data) : null;
-  return <Updater file={fileData} />;
+  return <Updater file={data || null} />;
 }
 
-function Updater({ file }: { file: string | null }) {
+function Updater({ file }: { file: File | null }) {
   const { chat } = useChatContext();
   const [image, setImage] = useState(file);
   const [groupName, setGroupName] = useState(chat?.name);
@@ -45,8 +46,7 @@ function Updater({ file }: { file: string | null }) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      const objectUrl = URL.createObjectURL(selectedFile);
-      setImage(objectUrl);
+      setImage(selectedFile);
     }
   };
 
@@ -56,15 +56,28 @@ function Updater({ file }: { file: string | null }) {
     setGroupName(newValue);
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    await ChatService.updateChat(groupName || null, image);
+  };
+
+  const source = useMemo(() => {
+    return image ? URL.createObjectURL(image) : "";
+  }, [image]);
+
   return (
-    <form className="mx-auto mt-4 flex max-w-60 flex-col items-center gap-4">
+    <form
+      className="mx-auto mt-4 flex max-w-60 flex-col items-center gap-4"
+      onSubmit={handleSubmit}
+    >
       <Input value={groupName || ""} onChange={handleTextChange} />
       <button onClick={handleRemoveFile} className="group relative mt-8">
         <Image
           className={{
             common: "h-32 w-32 overflow-hidden rounded-full object-cover"
           }}
-          src={image!}
+          src={source}
           errorContent={<FaUserGroup className="h-full w-full pt-8" />}
         />
         <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100">
@@ -76,7 +89,7 @@ function Updater({ file }: { file: string | null }) {
         className="hover:cursor-pointer"
         onChange={handleFileChange}
       />
-      <Button variant="blueish" className="self-end">
+      <Button variant="blueish" className="self-end" type="submit">
         Save
       </Button>
     </form>
