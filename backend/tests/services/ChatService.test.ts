@@ -3,8 +3,97 @@ import { ChatService } from "../../src/services/ChatService";
 import { isReaction } from "../../src/types/guards/reaction.guard";
 import { isMessage } from "../../src/types/guards/message.guard";
 import { isChat } from "../../src/types/guards/chat.guards";
+import { USER } from "../utils/constants";
+import { isUserInChat } from "../../src/types/guards/user.guard";
 
 describe("ChatService", () => {
+  describe("updateGroupChat", () => {
+    it("should update group chat", async () => {
+      const chatId = "49794983-95cb-4ff1-b90b-8b393e86fd85";
+      const name = "new name";
+      const file = "path.jpg";
+
+      const result = await ChatService.updateGroupChat({ chatId, name, file });
+
+      expect(isChat(result)).toBe(true);
+      expect(result?.photoURL).toBe(file);
+      expect(result?.name).toBe(name);
+    });
+
+    it("should handle null values", async () => {
+      const chatId = "49794983-95cb-4ff1-b90b-8b393e86fd85";
+      const name = null;
+      const file = null;
+
+      const result = await ChatService.updateGroupChat({ chatId, name, file });
+
+      expect(isChat(result)).toBe(true);
+      expect(result?.photoURL).toBeNull();
+      expect(result?.name).toBeNull();
+    });
+  });
+
+  describe("deleteFromChat", () => {
+    it("should delete user from chat", async () => {
+      const chatId = "49794983-95cb-4ff1-b90b-8b393e86fd85";
+      const userId = USER.id;
+
+      await ChatService.deleteFromChat({ chatId, userId });
+
+      const chats = await ChatService.getUserChats(USER.id);
+      const chat = chats.find((c) => c.id === chatId);
+      expect(chat).toBeUndefined();
+    });
+  });
+
+  describe("getChatType", () => {
+    it("should get chat type", async () => {
+      const chatId = "49794983-95cb-4ff1-b90b-8b393e86fd85";
+
+      const result = await ChatService.getChatType(chatId);
+
+      expect(result).toBe("GROUP");
+    });
+  });
+
+  describe("addUserToChat", () => {
+    it("should add user to chat", async () => {
+      const chatId = "49794983-95cb-4ff1-b90b-8b393e86fd85";
+      const userId = "935719fa-05c4-42c4-9b02-2be3fefb6e61";
+
+      const result = await ChatService.addUserToChat({
+        chatId,
+        userId,
+      });
+
+      expect(isUserInChat(result)).toBe(true);
+
+      const chats = await ChatService.getUserChats(USER.id);
+      const chat = chats.find((c) => c.id === chatId)!;
+      const user = chat.users?.find((u) => u.id === userId);
+      expect(isUserInChat(user)).toBe(true);
+    });
+  });
+
+  describe("updateAlias", () => {
+    it("should update alias", async () => {
+      const chatId = "74c78678-40b2-44cf-8436-fdc762480e92";
+      const alias = "new alias";
+
+      await ChatService.updateAlias({
+        chatId,
+        userId: USER.id,
+        alias,
+      });
+
+      const chats = await ChatService.getUserChats(USER.id);
+      const chat = chats.find((c) => c.id === chatId)!;
+      const user = chat.users?.find((u) => u.id === USER.id);
+      expect(user?.alias).toBe(alias);
+      expect(isUserInChat(user)).toBe(true);
+    });
+  });
+
   describe("createReactionToMessage", () => {
     it("should create a reaction", async () => {
       const reaction: Reaction = await ChatService.createReactionToMessage({
