@@ -1,6 +1,6 @@
 import app from "../../src/app";
 import { JwtHandler } from "../../src/lib/JwtHandler";
-import { VALID_USER_ID } from "../utils/constants";
+import { USER, VALID_USER_ID } from "../utils/constants";
 import request from "supertest";
 import fs from "fs";
 import path from "path";
@@ -8,6 +8,8 @@ import { Message } from "../../src/types/Message";
 import { isChat } from "../../src/types/guards/chat.guards";
 import { isMessage } from "../../src/types/guards/message.guard";
 import { isReaction } from "../../src/types/guards/reaction.guard";
+import { Chat } from "../../src/types/Chat";
+import { isUserInChat } from "../../src/types/guards/user.guard";
 
 const token = JwtHandler.encode({ userId: VALID_USER_ID });
 
@@ -160,6 +162,128 @@ describe("chat router", () => {
       expect((res3.body.messages[0] as Message).reactions.length).toBe(
         initialReactions + 1
       );
+    });
+  });
+
+  describe("[PUT] /chats/:chatId/users/:userId/alias", () => {
+    it("should update alias in chat", async () => {
+      const chatId = "49794983-95cb-4ff1-b90b-8b393e86fd85";
+      const userId = USER.id;
+      const alias = "new alias";
+
+      const res1 = await request(app)
+        .get("/chats")
+        .set("Cookie", `token=${token}`);
+      const chat1 = res1.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
+      const user1 = chat1.users?.find((u) => u.id === userId);
+      expect(user1?.alias).toBeNull();
+
+      const res2 = await request(app)
+        .put(`/chats/${chatId}/users/${userId}/alias`)
+        .set("Cookie", `token=${token}`)
+        .send({ alias });
+      expect(res2.body.alias).toBe(alias);
+
+      const res3 = await request(app)
+        .get("/chats")
+        .set("Cookie", `token=${token}`);
+      const chat3 = res3.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
+      const user3 = chat3.users?.find((u) => u.id === userId);
+      expect(user3?.alias).toBe(alias);
+    });
+  });
+
+  describe("[POST] /chats/:chatId/users", () => {
+    it("should add user to group chat", async () => {
+      const chatId = "49794983-95cb-4ff1-b90b-8b393e86fd85";
+      const userId = "935719fa-05c4-42c4-9b02-2be3fefb6e61";
+
+      const res1 = await request(app)
+        .get("/chats")
+        .set("Cookie", `token=${token}`);
+      const chat1 = res1.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
+      const user1 = chat1.users?.find((u) => u.id === userId);
+      expect(user1).toBeUndefined();
+
+      const res2 = await request(app)
+        .post(`/chats/${chatId}/users`)
+        .set("Cookie", `token=${token}`)
+        .send({ userId });
+      expect(
+        isUserInChat(res2.body.user, { allowStringifiedDates: true })
+      ).toBe(true);
+
+      const res3 = await request(app)
+        .get("/chats")
+        .set("Cookie", `token=${token}`);
+      const chat3 = res3.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
+      const user3 = chat3.users?.find((u) => u.id === userId);
+      expect(isUserInChat(user3, { allowStringifiedDates: true })).toBe(true);
+    });
+  });
+
+  describe("[DELETE] /chats/:chatId/users", () => {
+    it("should delete self from group chat", async () => {
+      const chatId = "49794983-95cb-4ff1-b90b-8b393e86fd85";
+
+      const res1 = await request(app)
+        .get("/chats")
+        .set("Cookie", `token=${token}`);
+      const chat1 = res1.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
+      expect(isChat(chat1, { allowStringifiedDates: true })).toBe(true);
+
+      await request(app)
+        .delete(`/chats/${chatId}/users`)
+        .set("Cookie", `token=${token}`);
+
+      const res3 = await request(app)
+        .get("/chats")
+        .set("Cookie", `token=${token}`);
+      const chat3 = res3.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
+      expect(chat3).toBeUndefined();
+    });
+  });
+
+  describe("[PUT] /chats/:chatId", () => {
+    it("should update group chat", async () => {
+      const chatId = "49794983-95cb-4ff1-b90b-8b393e86fd85";
+
+      const res1 = await request(app)
+        .get("/chats")
+        .set("Cookie", `token=${token}`);
+      const chat1 = res1.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
+      expect(isChat(chat1, { allowStringifiedDates: true })).toBe(true);
+      expect(chat1.name).toBe("Group Chat");
+      expect(chat1.photoURL).toBe("chat-photo.webp");
+
+      const res2 = await request(app)
+        .put(`/chats/${chatId}`)
+        .set("Cookie", `token=${token}`)
+        .field("name", "chat name")
+        .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+
+      expect(res2.statusCode).toBe(201);
+      expect(isChat(res2.body.chat, { allowStringifiedDates: true })).toBe(
+        true
+      );
+
+      const file = res2.body.chat.photoURL;
+      const filepath = path.join(__dirname, "..", "..", "static", file);
+      expect(fs.existsSync(filepath)).toBe(true);
+
+      const res3 = await request(app)
+        .get("/chats")
+        .set("Cookie", `token=${token}`);
+
+      expect(res3.statusCode).toBe(200);
+      res3.body.chats.forEach((chat: unknown) => {
+        expect(isChat(chat, { allowStringifiedDates: true })).toBe(true);
+      });
+      const chat3 = res3.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
+      expect(chat3.name).toBe("chat name");
+      expect(chat3.photoURL).not.toBe("chat-photo.webp");
+
+      fs.unlinkSync(filepath);
     });
   });
 });
