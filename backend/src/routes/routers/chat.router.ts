@@ -9,6 +9,7 @@ import {
   getChatMessages,
   getUserChats,
   updateAlias,
+  updateGroupChat,
 } from "../../controllers/chat.controller";
 import { validate } from "../../middlewares/validate";
 import {
@@ -46,5 +47,6 @@ chatRouter.post("/:chatId/reactions", createReaction);
 chatRouter.put("/:chatId/users/:userId/alias", updateAlias);
 chatRouter.post("/:chatId/users", addUserToGroupChat);
 chatRouter.delete("/:chatId/users", deleteUserFromGroupChat);
+chatRouter.put("/:chatId", upload.single("file"), authorize, updateGroupChat);
 
 export default chatRouter;

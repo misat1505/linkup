@@ -2,6 +2,36 @@ import { Request, Response } from "express";
 import { ChatService } from "../services/ChatService";
 import { processAvatar } from "../utils/processAvatar";
 
+export const updateGroupChat = async (req: Request, res: Response) => {
+  try {
+    const {
+      name,
+      token: { userId },
+    } = req.body;
+    const { chatId } = req.params;
+
+    const isAuthorized = await ChatService.isUserInChat({ chatId, userId });
+    if (!isAuthorized)
+      return res
+        .status(401)
+        .json({ message: "Cannot update chat you do not belong to." });
+
+    const isGroupChat = (await ChatService.getChatType(chatId)) !== "GROUP";
+    if (isGroupChat)
+      return res
+        .status(400)
+        .json({ message: "cannot update chat of this type." });
+
+    const file = await processAvatar(req.file?.path);
+
+    const chat = await ChatService.updateGroupChat({ chatId, file, name });
+
+    return res.status(201).json({ chat });
+  } catch (e) {
+    return res.status(500).json({ message: "Cannot create group chat." });
+  }
+};
+
 export const deleteUserFromGroupChat = async (req: Request, res: Response) => {
   try {
     const { chatId } = req.params;

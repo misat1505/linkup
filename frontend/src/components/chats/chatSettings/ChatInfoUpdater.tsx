@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useChatContext } from "../../../contexts/ChatProvider";
 import { FileService } from "../../../services/File.service";
 import { buildFileURL } from "../../../utils/buildFileURL";
@@ -9,6 +9,9 @@ import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { ChatService } from "../../../services/Chat.service";
 import Loading from "../../common/Loading";
+import { Chat } from "../../../types/Chat";
+import { queryKeys } from "../../../lib/queryKeys";
+import { sortChatsByActivity } from "../../../utils/sortChatsByActivity";
 
 export default function ChatInfoUpdater() {
   const { chat } = useChatContext();
@@ -32,6 +35,7 @@ export default function ChatInfoUpdater() {
 }
 
 function Updater({ file }: { file: File | null }) {
+  const queryClient = useQueryClient();
   const { chat } = useChatContext();
   const [image, setImage] = useState(file);
   const [groupName, setGroupName] = useState(chat?.name);
@@ -59,7 +63,19 @@ function Updater({ file }: { file: File | null }) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await ChatService.updateChat(groupName || null, image);
+    const updatedChat = await ChatService.updateChat(
+      chat!.id,
+      groupName || null,
+      image
+    );
+
+    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+      if (!oldChats) return [];
+
+      const filteredChats = oldChats.filter((c) => c.id !== chat!.id);
+      filteredChats.push(updatedChat);
+      return sortChatsByActivity(filteredChats);
+    });
   };
 
   const source = useMemo(() => {

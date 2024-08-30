@@ -19,6 +19,33 @@ function sanitizeChat(chat: any): Chat | null {
 }
 
 export class ChatService {
+  static async updateGroupChat({
+    chatId,
+    name,
+    file,
+  }: {
+    chatId: Chat["id"];
+    name: Chat["name"];
+    file: Chat["photoURL"];
+  }): Promise<Chat | null> {
+    const result = await prisma.chat.update({
+      data: { name, photoURL: file },
+      where: { id: chatId },
+      include: {
+        users: {
+          include: {
+            user: { select: userSelect },
+          },
+        },
+        lastMessage: {
+          select: messageWithoutResponseSelect,
+        },
+      },
+    });
+
+    return sanitizeChat(result);
+  }
+
   static async deleteFromChat({
     chatId,
     userId,

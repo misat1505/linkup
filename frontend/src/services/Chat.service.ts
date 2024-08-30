@@ -11,15 +11,17 @@ import { Reaction } from "../types/Reaction";
 
 export class ChatService {
   static async updateChat(
+    chatId: Chat["id"],
     name: string | null,
     file: File | null
-  ): Promise<void> {
+  ): Promise<Chat> {
     const formData = new FormData();
 
     if (name) formData.append("name", name);
     if (file) formData.append("file", file);
 
-    formData.forEach((val, key) => console.log(key, val));
+    const response = await CHAT_API.put(`${chatId}`, formData);
+    return response.data.chat;
   }
 
   static async leaveChat(chatId: Chat["id"]): Promise<void> {
