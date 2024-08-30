@@ -43,3 +43,8 @@ export const CHAT_API = createAPIInstance({
   baseURL: `${API_URL}/chats`,
   withCredentials: true
 });
+
+export const FILE_API = createAPIInstance({
+  baseURL: `${API_URL}/files`,
+  withCredentials: true
+});
