@@ -6,20 +6,20 @@ import ChatInfoUpdater from "./ChatInfoUpdater";
 
 export default function GroupChatContent() {
   return (
-    <Tabs defaultValue="members">
+    <Tabs defaultValue="overrall">
       <TabsList className="grid w-full grid-cols-3">
+        <TabsTrigger value="overrall">Overrall</TabsTrigger>
         <TabsTrigger value="members">Members</TabsTrigger>
         <TabsTrigger value="invite">Invite</TabsTrigger>
-        <TabsTrigger value="overrall">Overrall</TabsTrigger>
       </TabsList>
+      <TabsContent value="overrall">
+        <ChatInfoUpdater />
+      </TabsContent>
       <TabsContent value="members">
         <ChatMembersDisplayer />
       </TabsContent>
       <TabsContent value="invite">
         <UserInvite />
-      </TabsContent>
-      <TabsContent value="overrall">
-        <ChatInfoUpdater />
       </TabsContent>
     </Tabs>
   );
