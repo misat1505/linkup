@@ -60,7 +60,11 @@ export default function Settings() {
       <div className="h-full w-full grid-cols-2 px-12 xl:grid">
         <div />
         <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
-          <SignupFormProvider onSubmit={onSubmit} defaultValues={defaultValues}>
+          <SignupFormProvider
+            type="modify"
+            onSubmit={onSubmit}
+            defaultValues={defaultValues}
+          >
             <SignupForm />
           </SignupFormProvider>
         </div>

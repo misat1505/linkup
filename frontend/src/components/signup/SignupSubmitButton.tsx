@@ -4,7 +4,10 @@ import { ClipLoader } from "react-spinners";
 import { Button } from "../ui/button";
 
 export default function SignupSubmitButton() {
-  const { isSubmitting } = useSignupFormContext();
+  const { isSubmitting, type } = useSignupFormContext();
+
+  const loadingText = type === "create" ? "Signing up..." : "Updating...";
+  const text = type === "create" ? "Sign up" : "Update";
 
   return (
     <div className="mt-8 flex justify-center">
@@ -12,10 +15,10 @@ export default function SignupSubmitButton() {
         {isSubmitting ? (
           <div className="flex items-center gap-x-2">
             <ClipLoader size={12} color="whitesmoke" />
-            <p>Signing up...</p>
+            <p>{loadingText}</p>
           </div>
         ) : (
-          <p>Sign up</p>
+          <p>{text}</p>
         )}
       </Button>
     </div>

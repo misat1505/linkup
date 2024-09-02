@@ -40,7 +40,7 @@ export default function Signup() {
       <div className="h-full w-full grid-cols-2 px-12 xl:grid">
         <SignupSlogan />
         <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
-          <SignupFormProvider onSubmit={onSubmit}>
+          <SignupFormProvider type="create" onSubmit={onSubmit}>
             <SignupForm />
           </SignupFormProvider>
           <AlreadyHaveAccount />
