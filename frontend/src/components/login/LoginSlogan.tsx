@@ -13,7 +13,7 @@ export default function LoginSlogan() {
     <div className="col-span-1 mb-12 flex flex-col justify-center xl:mx-20 xl:mb-0">
       <h1
         className={cn(
-          "mx-auto mt-20 text-5xl font-bold text-white sm:text-7xl md:text-8xl xl:text-9xl",
+          "mx-auto mt-20 text-6xl font-bold text-white md:text-8xl xl:text-9xl",
           styles.shadow,
           {
             [styles.title]: isAnimating

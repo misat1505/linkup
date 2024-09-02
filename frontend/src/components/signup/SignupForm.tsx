@@ -9,7 +9,7 @@ export default function SignupForm() {
 
   return (
     <form onSubmit={submitForm}>
-      <div className="grid grid-cols-2 gap-x-4">
+      <div className="grid-cols-2 gap-x-4 md:grid">
         <SignupFormFields />
         <SignupImageFormField />
       </div>

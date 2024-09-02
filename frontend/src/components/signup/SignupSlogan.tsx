@@ -10,10 +10,10 @@ export default function SignupSlogan() {
   );
 
   return (
-    <div className="col-span-1 mx-20 flex flex-col justify-center">
+    <div className="col-span-1 mx-4 flex flex-col justify-center xl:mx-20">
       <h1
         className={cn(
-          "mt-20 text-center text-9xl font-bold text-white",
+          "mx-auto mt-20 text-6xl font-bold text-white md:text-8xl xl:text-9xl",
           styles.shadow,
           {
             [styles.title]: isAnimating
