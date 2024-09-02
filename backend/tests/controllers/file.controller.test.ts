@@ -17,7 +17,14 @@ const app = express();
 app.use(express.json());
 app.get("/:filename", getFile);
 
-const testFilePath = path.join(__dirname, "..", "..", "static", "testfile.txt");
+const testFilePath = path.join(
+  __dirname,
+  "..",
+  "..",
+  "files",
+  "avatar",
+  "testfile.txt"
+);
 
 const createTestFile = () => {
   if (!fs.existsSync(path.dirname(testFilePath))) {

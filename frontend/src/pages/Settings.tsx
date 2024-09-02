@@ -19,7 +19,7 @@ export default function Settings() {
     queryKey: ["files", me!.photoURL],
     queryFn: () =>
       FileService.downloadFile(
-        buildFileURL(me!.photoURL, "avatar"),
+        buildFileURL(me!.photoURL, { type: "avatar" }),
         me!.photoURL
       )
   });

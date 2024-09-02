@@ -18,7 +18,7 @@ const sendFileBuilder =
 
     if (!result) return res.status(401).json({ message: errorMessage });
 
-    const filepath = path.join(__dirname, "..", "..", "static", filename);
+    const filepath = path.join(__dirname, "..", "..", "files", filename);
 
     if (!fs.existsSync(filepath)) {
       return res.status(404).json({ message: "File not found." });
@@ -31,6 +31,7 @@ export const getFile = async (req: Request, res: Response) => {
   try {
     const { filename } = req.params;
     const filter = req.query.filter as Filter;
+    const chatId = req.query.chat;
     const { userId } = req.body.token;
 
     if (!filterArray.includes(filter))
@@ -38,7 +39,11 @@ export const getFile = async (req: Request, res: Response) => {
         message: "Have to apply one of the filters: " + filterArray.join(", "),
       });
 
-    const sendFile = sendFileBuilder(filename, res);
+    if (chatId && typeof chatId !== "string")
+      return res.status(400).json({ message: "Chat has to be a string." });
+
+    const prefix = chatId ? path.join("chats", chatId) : "avatars";
+    const sendFile = sendFileBuilder(path.join(prefix, filename), res);
 
     if (filter === "avatar") {
       const response = await sendFile(

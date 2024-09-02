@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { ChatService } from "../services/ChatService";
 import { processAvatar } from "../utils/processAvatar";
+import path from "path";
+import fs from "fs";
 
 export const updateGroupChat = async (req: Request, res: Response) => {
   try {
@@ -207,6 +209,15 @@ export const createMessage = async (req: Request, res: Response) => {
           message: "Message of responseId does not exist on this chat.",
         });
     }
+
+    files.forEach((file) => {
+      const commonPath = path.join(__dirname, "..", "..", "files");
+      const inPath = path.join(commonPath, "temp", file);
+      const outPath = path.join(commonPath, "chats", chatId, file);
+      fs.mkdirSync(path.dirname(outPath), { recursive: true });
+      fs.copyFileSync(inPath, outPath);
+      fs.unlinkSync(inPath);
+    });
 
     const message = await ChatService.createMessage({
       content,

@@ -4,6 +4,7 @@ import React from "react";
 import Image from "../common/Image";
 import { FaFileAlt } from "react-icons/fa";
 import { buildFileURL } from "../../utils/buildFileURL";
+import { useChatContext } from "../../contexts/ChatProvider";
 
 export default function MultimediaDisplay({ files }: { files: File[] }) {
   if (files.length === 0) return null;
@@ -19,13 +20,14 @@ export default function MultimediaDisplay({ files }: { files: File[] }) {
 
 function MultimediaDisplayItem({ file }: { file: File }) {
   const type = getFileType(file.url);
+  const { chatId } = useChatContext();
 
   if (!type) return null;
 
   if (type === "image")
     return (
       <Image
-        src={buildFileURL(file.url, "chat-message")}
+        src={buildFileURL(file.url, { type: "chat-message", id: chatId })}
         className={{
           common: "h-40 w-40 object-cover",
           error: "bg-slate-200 font-semibold"
@@ -37,7 +39,9 @@ function MultimediaDisplayItem({ file }: { file: File }) {
   if (type === "video")
     return (
       <video className="h-40 w-40 object-cover" controls>
-        <source src={buildFileURL(file.url, "chat-message")} />
+        <source
+          src={buildFileURL(file.url, { type: "chat-message", id: chatId })}
+        />
         Your browser does not support the video tag.
       </video>
     );

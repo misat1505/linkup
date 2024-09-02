@@ -62,7 +62,14 @@ describe("auth router", () => {
       expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(true);
       const { photoURL } = res.body.user;
 
-      const pathToImage = path.join(__dirname, "..", "..", "static", photoURL);
+      const pathToImage = path.join(
+        __dirname,
+        "..",
+        "..",
+        "static",
+        "avatars",
+        photoURL
+      );
       expect(fs.existsSync(pathToImage)).toBe(true);
       fs.unlinkSync(pathToImage);
     });

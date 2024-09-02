@@ -23,7 +23,7 @@ export default function UserDisplay({
       )}
     >
       <Avatar
-        src={buildFileURL(user.photoURL, "avatar")}
+        src={buildFileURL(user.photoURL, { type: "avatar" })}
         alt={getInitials(user)}
         className="h-8 w-8 text-xs"
       />

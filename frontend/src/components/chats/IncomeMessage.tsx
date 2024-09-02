@@ -51,7 +51,7 @@ export default function IncomeMessage({
       )}
     >
       <Avatar
-        src={buildFileURL(message.author.photoURL, "avatar")}
+        src={buildFileURL(message.author.photoURL, { type: "avatar" })}
         alt={getInitials(message.author)}
         className="h-8 w-8 text-xs"
       />

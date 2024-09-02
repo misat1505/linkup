@@ -30,6 +30,7 @@ const deleteUserFile = () => {
     "..",
     "..",
     "static",
+    "avatars",
     newlyCreatedUser.photoURL!
   );
   if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
@@ -96,6 +97,8 @@ describe("file router", () => {
         "..",
         "..",
         "static",
+        "chats",
+        chat.id,
         chat.photoURL
       );
       if (fs.existsSync(filepath)) fs.unlinkSync(filepath);

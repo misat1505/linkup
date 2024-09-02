@@ -10,7 +10,7 @@ import { FaUserGroup } from "react-icons/fa6";
 import ChatCreator from "./chatCreationDialog/ChatCreator";
 import { cn } from "../../lib/utils";
 import Tooltip from "../common/Tooltip";
-import { buildFileURL } from "../../utils/buildFileURL";
+import { buildFileURL, Filter } from "../../utils/buildFileURL";
 
 export default function ChatNavigation() {
   const { chatId } = useParams();
@@ -61,6 +61,11 @@ function NavigationItem({ chat }: { chat: Chat }) {
   const chatName = utils.getChatName();
   const lastActive = utils.getLastActive();
 
+  const buildFilter = (): Filter => {
+    if (chat.type === "PRIVATE") return { type: "avatar" };
+    return { type: "chat-photo", id: chat.id };
+  };
+
   return (
     <Tooltip content="Open chat">
       <span>
@@ -69,10 +74,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
           onClick={() => handleOpenChat(chat.id)}
         >
           <Avatar
-            src={buildFileURL(
-              src,
-              chat.type === "PRIVATE" ? "avatar" : "chat-photo"
-            )}
+            src={buildFileURL(src, buildFilter())}
             className="min-h-12 min-w-12"
             alt={alt}
             lastActive={lastActive}

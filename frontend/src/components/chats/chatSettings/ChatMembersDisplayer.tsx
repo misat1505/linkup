@@ -49,7 +49,7 @@ function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
     <div className="mb-2 flex w-full items-center justify-between gap-x-2 rounded-md bg-slate-100 p-1 dark:bg-slate-900">
       <div className="flex items-center gap-x-2">
         <Avatar
-          src={buildFileURL(user.photoURL, "avatar")}
+          src={buildFileURL(user.photoURL, { type: "avatar" })}
           alt={getInitials(user)}
           className="h-8 w-8 text-xs"
         />

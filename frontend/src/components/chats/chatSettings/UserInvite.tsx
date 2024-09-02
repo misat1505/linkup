@@ -68,7 +68,7 @@ function UserDisplay({ user }: { user: User }) {
     <div className="my-1 flex w-full items-center justify-between gap-x-2 rounded-md bg-slate-100 p-2 transition-all dark:bg-slate-900">
       <div className="flex items-center gap-x-2">
         <Avatar
-          src={buildFileURL(user.photoURL, "avatar")}
+          src={buildFileURL(user.photoURL, { type: "avatar" })}
           alt={getInitials(user)}
           className="h-8 w-8 text-xs"
         />

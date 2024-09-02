@@ -25,7 +25,8 @@ export const processAvatar = async (
     __dirname,
     "..",
     "..",
-    "static",
+    "files",
+    "avatars",
     `${uuidv4()}.webp`
   );
 

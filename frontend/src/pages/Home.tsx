@@ -45,7 +45,7 @@ function ProfileAvatar({ user }: { user: User }) {
 
   return (
     <Image
-      src={buildFileURL(user.photoURL, "avatar")}
+      src={buildFileURL(user.photoURL, { type: "avatar" })}
       className={{
         common: "h-12 w-12 rounded-full",
         img: "object-cover",

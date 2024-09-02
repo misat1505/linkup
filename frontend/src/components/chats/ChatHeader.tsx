@@ -10,7 +10,7 @@ import { getStatus, Status, timeDifference } from "../../utils/timeDifference";
 import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { FaUserGroup } from "react-icons/fa6";
 import Tooltip from "../common/Tooltip";
-import { buildFileURL } from "../../utils/buildFileURL";
+import { buildFileURL, Filter } from "../../utils/buildFileURL";
 import ChatSettingsDialog from "./chatSettings/ChatSettingsDialog";
 import ChatLeaveDialog from "./ChatLeaveDialog";
 
@@ -42,14 +42,16 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
     return result.text + " ago";
   };
 
+  const buildFilter = (): Filter => {
+    if (chat.type === "PRIVATE") return { type: "avatar" };
+    return { type: "chat-photo", id: chat.id };
+  };
+
   return (
     <div className="flex items-center justify-between gap-x-4 p-4">
       <div className="flex flex-grow items-center gap-x-4 overflow-hidden">
         <Avatar
-          src={buildFileURL(
-            src,
-            chat.type === "PRIVATE" ? "avatar" : "chat-photo"
-          )}
+          src={buildFileURL(src, buildFilter())}
           alt={alt}
           lastActive={lastActive}
         />

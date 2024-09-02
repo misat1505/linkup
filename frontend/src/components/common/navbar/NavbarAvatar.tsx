@@ -18,7 +18,7 @@ export default function NavbarAvatar() {
 
   return (
     <Avatar
-      src={buildFileURL(user.photoURL, "avatar")}
+      src={buildFileURL(user.photoURL, { type: "avatar" })}
       alt={getInitials(user)}
     />
   );

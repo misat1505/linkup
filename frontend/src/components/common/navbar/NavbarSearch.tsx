@@ -119,7 +119,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
     >
       <div className="flex items-center">
         <Avatar
-          src={buildFileURL(user.photoURL, "avatar")}
+          src={buildFileURL(user.photoURL, { type: "avatar" })}
           alt={getInitials(user)}
           className="h-8 w-8 text-xs"
         />

@@ -65,8 +65,16 @@ describe("chat router", () => {
       expect(res.statusCode).toBe(201);
       expect(isChat(res.body.chat, { allowStringifiedDates: true })).toBe(true);
 
-      const file = res.body.chat.photoURL;
-      const filepath = path.join(__dirname, "..", "..", "static", file);
+      const { photoURL: file, id } = res.body.chat;
+      const filepath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "static",
+        "chats",
+        id,
+        file
+      );
       expect(fs.existsSync(filepath)).toBe(true);
 
       const res2 = await request(app)
@@ -267,8 +275,8 @@ describe("chat router", () => {
         true
       );
 
-      const file = res2.body.chat.photoURL;
-      const filepath = path.join(__dirname, "..", "..", "static", file);
+      const { photoURL: file, id } = res2.body.chat;
+      const filepath = path.join(__dirname, "..", "..", "static", id, file);
       expect(fs.existsSync(filepath)).toBe(true);
 
       const res3 = await request(app)

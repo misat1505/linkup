@@ -19,7 +19,7 @@ export default function ChatInfoUpdater() {
     queryKey: ["files", chat!.photoURL],
     queryFn: () =>
       FileService.downloadFile(
-        buildFileURL(chat!.photoURL, "chat-photo"),
+        buildFileURL(chat!.photoURL, { type: "chat-photo", id: chat!.id }),
         chat!.photoURL
       )
   });

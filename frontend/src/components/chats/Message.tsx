@@ -168,7 +168,9 @@ function ForeignMessage({ message }: { message: MessageType }) {
             <div className="h-8 w-8">
               {isDisplayingAvatar && (
                 <Avatar
-                  src={buildFileURL(message.author.photoURL, "avatar")}
+                  src={buildFileURL(message.author.photoURL, {
+                    type: "avatar"
+                  })}
                   alt={getInitials(message.author)}
                   className="h-8 w-8 object-cover text-xs"
                 />
