@@ -66,12 +66,12 @@ describe("auth router", () => {
         __dirname,
         "..",
         "..",
-        "static",
+        "files",
         "avatars",
         photoURL
       );
       expect(fs.existsSync(pathToImage)).toBe(true);
-      fs.unlinkSync(pathToImage);
+      fs.rmdirSync(path.dirname(pathToImage), { recursive: true });
     });
   });
 

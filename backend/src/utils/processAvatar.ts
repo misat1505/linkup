@@ -32,7 +32,7 @@ export const processAvatar = async (
     "..",
     "files",
     ...pathChunks,
-    `${filename || uuidv4()}.webp`
+    filename || `${uuidv4()}.webp`
   );
 
   try {

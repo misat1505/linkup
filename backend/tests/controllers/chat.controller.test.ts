@@ -40,7 +40,9 @@ describe("Chat controllers", () => {
   describe("updateGroupChat", () => {
     it("should successfully update group chat", async () => {
       (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.getChatType as jest.Mock).mockResolvedValue("GROUP");
+      (ChatService.getChatById as jest.Mock).mockResolvedValue({
+        type: "GROUP",
+      });
       (processAvatar as jest.Mock).mockResolvedValue("processedAvatarPath");
       (ChatService.updateGroupChat as jest.Mock).mockResolvedValue({
         id: "123",
@@ -67,8 +69,7 @@ describe("Chat controllers", () => {
         chatId: "123",
         userId: "789",
       });
-      expect(ChatService.getChatType).toHaveBeenCalledWith("123");
-      expect(processAvatar).toHaveBeenCalledWith(undefined);
+      expect(ChatService.getChatById).toHaveBeenCalledWith("123");
       expect(ChatService.updateGroupChat).toHaveBeenCalledWith({
         chatId: "123",
         file: "processedAvatarPath",
@@ -101,7 +102,9 @@ describe("Chat controllers", () => {
 
     it("should return 400 if the chat is not of type 'GROUP'", async () => {
       (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.getChatType as jest.Mock).mockResolvedValue("PRIVATE");
+      (ChatService.getChatById as jest.Mock).mockResolvedValue({
+        type: "PRIVATE",
+      });
 
       const response = await request(app)
         .put("/chats/123")
@@ -118,7 +121,6 @@ describe("Chat controllers", () => {
         chatId: "123",
         userId: "789",
       });
-      expect(ChatService.getChatType).toHaveBeenCalledWith("123");
       expect(processAvatar).not.toHaveBeenCalled();
       expect(ChatService.updateGroupChat).not.toHaveBeenCalled();
     });

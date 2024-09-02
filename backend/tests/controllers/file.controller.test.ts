@@ -17,26 +17,46 @@ const app = express();
 app.use(express.json());
 app.get("/:filename", getFile);
 
-const testFilePath = path.join(
+const testAvatarPath = path.join(
   __dirname,
   "..",
   "..",
   "files",
-  "avatar",
+  "avatars",
   "testfile.txt"
 );
 
+const mockChatId = "some-chat-id";
+
+const testChatPath = path.join(
+  __dirname,
+  "..",
+  "..",
+  "files",
+  "chats",
+  mockChatId,
+  "testfile.txt"
+);
+
+const allFiles = [testAvatarPath, testChatPath];
+
 const createTestFile = () => {
-  if (!fs.existsSync(path.dirname(testFilePath))) {
-    fs.mkdirSync(path.dirname(testFilePath), { recursive: true });
-  }
-  fs.writeFileSync(testFilePath, "This is a test file");
+  allFiles.forEach((file) => {
+    if (!fs.existsSync(path.dirname(file))) {
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+    }
+    fs.writeFileSync(file, "This is a test file");
+  });
 };
 
 const deleteTestFile = () => {
-  if (fs.existsSync(testFilePath)) {
-    fs.unlinkSync(testFilePath);
-  }
+  allFiles.forEach((file) => {
+    if (fs.existsSync(file)) {
+      fs.unlinkSync(file);
+    }
+  });
+
+  fs.rmdirSync(path.dirname(testChatPath), { recursive: true });
 };
 
 describe("File Controllers", () => {
@@ -76,7 +96,7 @@ describe("File Controllers", () => {
 
     it("should return chat photo if it exists", async () => {
       const response = await request(app)
-        .get("/testfile.txt?filter=chat-photo")
+        .get(`/testfile.txt?filter=chat-photo&chat=${mockChatId}`)
         .send({ token: { userId: VALID_USER_ID } });
       expect(response.status).toBe(200);
       expect(response.text).toBe("This is a test file");
@@ -84,7 +104,7 @@ describe("File Controllers", () => {
 
     it("should return chat message file if it exists", async () => {
       const response = await request(app)
-        .get("/testfile.txt?filter=chat-message")
+        .get(`/testfile.txt?filter=chat-message&chat=${mockChatId}`)
         .send({ token: { userId: VALID_USER_ID } });
       expect(response.status).toBe(200);
       expect(response.text).toBe("This is a test file");

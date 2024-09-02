@@ -20,6 +20,7 @@ const createTestUser = async () => {
     .field("login", login)
     .field("password", password)
     .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+  console.log(res.body);
 
   newlyCreatedUser = res.body.user;
 };
@@ -29,7 +30,7 @@ const deleteUserFile = () => {
     __dirname,
     "..",
     "..",
-    "static",
+    "files",
     "avatars",
     newlyCreatedUser.photoURL!
   );
@@ -72,9 +73,10 @@ describe("file router", () => {
         .field("users[1]", "935719fa-05c4-42c4-9b02-2be3fefb6e61")
         .field("name", "chat name")
         .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+      console.log(chat);
 
       const res = await request(app)
-        .get(`/files/${chat.photoURL}?filter=chat-photo`)
+        .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
         .set("Cookie", `token=${token}`);
       expect(res.statusCode).toBe(200);
 
@@ -83,12 +85,12 @@ describe("file router", () => {
       });
 
       const res2 = await request(app)
-        .get(`/files/${chat.photoURL}?filter=chat-photo`)
+        .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
         .set("Cookie", `token=${user2Token}`);
       expect(res2.statusCode).toBe(200);
 
       const res3 = await request(app)
-        .get(`/files/${chat.photoURL}?filter=chat-photo`)
+        .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
         .set("Cookie", `token=${newlyCreatedUserToken}`);
       expect(res3.statusCode).toBe(401);
 
@@ -96,12 +98,13 @@ describe("file router", () => {
         __dirname,
         "..",
         "..",
-        "static",
+        "files",
         "chats",
         chat.id,
         chat.photoURL
       );
-      if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
+      if (fs.existsSync(path.dirname(filepath)))
+        fs.rmdirSync(path.dirname(filepath), { recursive: true });
     });
 
     it("should allow only people in chat see files in chat message", async () => {
@@ -125,7 +128,7 @@ describe("file router", () => {
       const filename = (message as Message).files[0].url;
 
       const res = await request(app)
-        .get(`/files/${filename}?filter=chat-message`)
+        .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
         .set("Cookie", `token=${token}`);
       expect(res.statusCode).toBe(200);
 
@@ -134,17 +137,26 @@ describe("file router", () => {
       });
 
       const res2 = await request(app)
-        .get(`/files/${filename}?filter=chat-message`)
+        .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
         .set("Cookie", `token=${user2Token}`);
       expect(res2.statusCode).toBe(200);
 
       const res3 = await request(app)
-        .get(`/files/${filename}?filter=chat-message`)
+        .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
         .set("Cookie", `token=${newlyCreatedUserToken}`);
       expect(res3.statusCode).toBe(401);
 
-      const filepath = path.join(__dirname, "..", "..", "static", filename);
-      if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
+      const filepath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "files",
+        "chats",
+        chat.id,
+        filename
+      );
+      if (fs.existsSync(path.dirname(filepath)))
+        fs.rmdirSync(path.dirname(filepath), { recursive: true });
     });
   });
 });

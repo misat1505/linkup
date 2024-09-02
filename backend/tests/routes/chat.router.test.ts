@@ -61,6 +61,7 @@ describe("chat router", () => {
         .field("users[1]", VALID_USER_ID)
         .field("name", "chat name")
         .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+      console.log(res.body);
 
       expect(res.statusCode).toBe(201);
       expect(isChat(res.body.chat, { allowStringifiedDates: true })).toBe(true);
@@ -70,7 +71,7 @@ describe("chat router", () => {
         __dirname,
         "..",
         "..",
-        "static",
+        "files",
         "chats",
         id,
         file
@@ -87,7 +88,7 @@ describe("chat router", () => {
         expect(isChat(chat, { allowStringifiedDates: true })).toBe(true);
       });
 
-      fs.unlinkSync(filepath);
+      fs.rmdirSync(path.dirname(filepath), { recursive: true });
     });
   });
 
@@ -107,8 +108,9 @@ describe("chat router", () => {
 
   describe("[POST] chats/:chatId/messages", () => {
     it("should create new message", async () => {
+      const chatId = "74c78678-40b2-44cf-8436-fdc762480e92";
       const res = await request(app)
-        .post(`/chats/74c78678-40b2-44cf-8436-fdc762480e92/messages`)
+        .post(`/chats/${chatId}/messages`)
         .field("content", "message")
         .field("responseId", "01918dfb-ddd4-7e01-84df-1c8321cc9852")
         .attach("files", Buffer.from("message file"), "file1.txt")
@@ -122,14 +124,14 @@ describe("chat router", () => {
 
       const paths = (res.body.message as Message).files.map((file) => file.url);
       const filepaths = paths.map((p) =>
-        path.join(__dirname, "..", "..", "static", p)
+        path.join(__dirname, "..", "..", "files", "chats", chatId, p)
       );
       filepaths.forEach((filepath) => {
         expect(fs.existsSync(filepath)).toBe(true);
       });
 
       const res2 = await request(app)
-        .get(`/chats/74c78678-40b2-44cf-8436-fdc762480e92/messages`)
+        .get(`/chats/${chatId}/messages`)
         .set("Cookie", `token=${token}`);
 
       expect(res2.statusCode).toBe(200);
@@ -138,9 +140,7 @@ describe("chat router", () => {
         expect(isMessage(message, { allowStringifiedDates: true })).toBe(true);
       });
 
-      filepaths.forEach((filepath) => {
-        fs.unlinkSync(filepath);
-      });
+      fs.rmdirSync(path.dirname(filepaths[0]), { recursive: true });
     });
   });
 
@@ -269,6 +269,7 @@ describe("chat router", () => {
         .set("Cookie", `token=${token}`)
         .field("name", "chat name")
         .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+      console.log(res2.body);
 
       expect(res2.statusCode).toBe(201);
       expect(isChat(res2.body.chat, { allowStringifiedDates: true })).toBe(
@@ -276,7 +277,15 @@ describe("chat router", () => {
       );
 
       const { photoURL: file, id } = res2.body.chat;
-      const filepath = path.join(__dirname, "..", "..", "static", id, file);
+      const filepath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "files",
+        "chats",
+        id,
+        file
+      );
       expect(fs.existsSync(filepath)).toBe(true);
 
       const res3 = await request(app)
@@ -291,7 +300,7 @@ describe("chat router", () => {
       expect(chat3.name).toBe("chat name");
       expect(chat3.photoURL).not.toBe("chat-photo.webp");
 
-      fs.unlinkSync(filepath);
+      fs.rmdirSync(path.dirname(filepath), { recursive: true });
     });
   });
 });
