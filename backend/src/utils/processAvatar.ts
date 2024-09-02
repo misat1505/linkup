@@ -10,6 +10,9 @@ const processProfileImage = async (
   const imageBuffer = fs.readFileSync(filePath);
   fs.unlinkSync(filePath);
 
+  const outputDir = path.dirname(outputPath);
+  fs.mkdirSync(outputDir, { recursive: true });
+
   await sharp(imageBuffer)
     .resize(100, 100)
     .webp({ quality: 80 })
@@ -17,7 +20,9 @@ const processProfileImage = async (
 };
 
 export const processAvatar = async (
-  filePath: string | undefined
+  filePath: string | undefined,
+  pathChunks: string[] = ["avatars"],
+  filename?: string
 ): Promise<string | null> => {
   if (!filePath) return null;
 
@@ -26,8 +31,8 @@ export const processAvatar = async (
     "..",
     "..",
     "files",
-    "avatars",
-    `${uuidv4()}.webp`
+    ...pathChunks,
+    `${filename || uuidv4()}.webp`
   );
 
   try {

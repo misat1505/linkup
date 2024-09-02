@@ -3,6 +3,7 @@ import { ChatService } from "../services/ChatService";
 import { processAvatar } from "../utils/processAvatar";
 import path from "path";
 import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
 
 export const updateGroupChat = async (req: Request, res: Response) => {
   try {
@@ -24,7 +25,12 @@ export const updateGroupChat = async (req: Request, res: Response) => {
         .status(400)
         .json({ message: "cannot update chat of this type." });
 
-    const file = await processAvatar(req.file?.path);
+    const newFilename = uuidv4();
+    const file = await processAvatar(
+      req.file?.path,
+      ["chats", chatId],
+      newFilename
+    );
 
     const chat = await ChatService.updateGroupChat({ chatId, file, name });
 
@@ -252,14 +258,17 @@ export const createGroupChat = async (req: Request, res: Response) => {
       name,
       token: { userId },
     } = req.body;
-    const file = await processAvatar(req.file?.path);
-
     if (!users.includes(userId))
       return res
         .status(401)
         .json({ message: "Cannot create group chat not belonging to you." });
 
-    const chat = await ChatService.createGroupChat(users, name, file);
+    const originalPath = req.file?.path || null;
+    const newFilename = originalPath ? uuidv4() : null;
+    const chat = await ChatService.createGroupChat(users, name, newFilename);
+
+    if (newFilename)
+      await processAvatar(req.file?.path, ["chats", chat.id], newFilename);
 
     return res.status(201).json({ chat });
   } catch (e) {
