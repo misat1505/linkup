@@ -8,7 +8,10 @@ import { useQuery } from "react-query";
 import { FileService } from "../services/File.service";
 import { buildFileURL } from "../utils/buildFileURL";
 import { SignupFormEntries } from "../hooks/signup/useSignupForm";
-import { DefaultValues } from "react-hook-form";
+import { DefaultValues, SubmitHandler } from "react-hook-form";
+import { SignupFormType } from "../validators/auth.validators";
+import { AxiosError } from "axios";
+import { toast } from "../components/ui/use-toast";
 
 export default function Settings() {
   const { user: me } = useAppContext();
@@ -36,12 +39,28 @@ export default function Settings() {
     file: fileList
   };
 
+  const onSubmit: SubmitHandler<SignupFormType> = async (
+    data: SignupFormEntries
+  ) => {
+    try {
+      console.log(data);
+    } catch (e: unknown) {
+      if (e instanceof AxiosError) {
+        toast({
+          title: "Cannot change settings.",
+          description: e.response?.data.message,
+          variant: "destructive"
+        });
+      }
+    }
+  };
+
   return (
     <BgGradient>
       <div className="h-full w-full grid-cols-2 px-12 xl:grid">
         <div />
         <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
-          <SignupFormProvider defaultValues={defaultValues}>
+          <SignupFormProvider onSubmit={onSubmit} defaultValues={defaultValues}>
             <SignupForm />
           </SignupFormProvider>
         </div>
