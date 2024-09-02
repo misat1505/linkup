@@ -62,8 +62,9 @@ export default function Settings() {
   };
 
   return (
-    <BgGradient>
-      <div className="h-full w-full grid-cols-2 px-12 xl:grid">
+    <>
+      <BgGradient />
+      <div className="relative z-10 my-auto min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-12 xl:grid">
         <div />
         <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
           <SignupFormProvider
@@ -75,6 +76,6 @@ export default function Settings() {
           </SignupFormProvider>
         </div>
       </div>
-    </BgGradient>
+    </>
   );
 }

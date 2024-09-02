@@ -5,12 +5,13 @@ import ChatPageContent from "../components/chats/ChatPageContent";
 
 export default function Chats() {
   return (
-    <BgGradient>
-      <div className="mt-20 flex h-[calc(100vh-5rem)] w-screen">
+    <>
+      <BgGradient />
+      <div className="relative z-10 flex h-[calc(100vh-5rem)] w-screen">
         <ChatPageProvider>
           <ChatPageContent />
         </ChatPageProvider>
       </div>
-    </BgGradient>
+    </>
   );
 }

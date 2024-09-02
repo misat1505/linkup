@@ -16,7 +16,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed z-10 flex h-20 w-full items-center justify-between bg-slate-200 p-4 dark:bg-slate-800">
+      <header className="fixed z-50 flex h-20 w-full items-center justify-between bg-slate-200 p-4 dark:bg-slate-800">
         <div className="flex items-center gap-x-4">
           <Tooltip content="Home">
             <span
