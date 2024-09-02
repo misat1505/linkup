@@ -29,7 +29,7 @@ export const updateGroupChat = async (req: Request, res: Response) => {
     const file = await processAvatar(
       req.file?.path,
       ["chats", chatId],
-      newFilename
+      newFilename + ".webp"
     );
 
     if (oldChat.photoURL) {
@@ -196,7 +196,6 @@ export const getChatMessages = async (req: Request, res: Response) => {
 
     return res.status(200).json({ messages });
   } catch (e) {
-    console.log(e);
     return res.status(500).json({ message: "Cannot get messages." });
   }
 };

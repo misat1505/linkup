@@ -20,7 +20,6 @@ const createTestUser = async () => {
     .field("login", login)
     .field("password", password)
     .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
-  console.log(res.body);
 
   newlyCreatedUser = res.body.user;
 };
@@ -73,7 +72,6 @@ describe("file router", () => {
         .field("users[1]", "935719fa-05c4-42c4-9b02-2be3fefb6e61")
         .field("name", "chat name")
         .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
-      console.log(chat);
 
       const res = await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)

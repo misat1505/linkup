@@ -71,7 +71,7 @@ describe("auth router", () => {
         photoURL
       );
       expect(fs.existsSync(pathToImage)).toBe(true);
-      fs.rmdirSync(path.dirname(pathToImage), { recursive: true });
+      fs.unlinkSync(pathToImage);
     });
   });
 

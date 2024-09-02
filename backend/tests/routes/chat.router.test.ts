@@ -61,7 +61,6 @@ describe("chat router", () => {
         .field("users[1]", VALID_USER_ID)
         .field("name", "chat name")
         .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
-      console.log(res.body);
 
       expect(res.statusCode).toBe(201);
       expect(isChat(res.body.chat, { allowStringifiedDates: true })).toBe(true);
@@ -269,7 +268,6 @@ describe("chat router", () => {
         .set("Cookie", `token=${token}`)
         .field("name", "chat name")
         .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
-      console.log(res2.body);
 
       expect(res2.statusCode).toBe(201);
       expect(isChat(res2.body.chat, { allowStringifiedDates: true })).toBe(
