@@ -7,6 +7,8 @@ import { jwtCookieOptions } from "../config/jwt-cookie";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import { processAvatar } from "../utils/processAvatar";
+import fs from "fs";
+import path from "path";
 
 export const updateUser = async (req: Request, res: Response) => {
   try {
@@ -44,6 +46,18 @@ export const updateUser = async (req: Request, res: Response) => {
     };
 
     await UserService.updateUser(user);
+
+    if (fetchedUser?.photoURL) {
+      const oldPath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "files",
+        "avatars",
+        fetchedUser.photoURL
+      );
+      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+    }
 
     return res.status(201).json({ user: UserService.removeCredentials(user) });
   } catch (e) {

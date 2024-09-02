@@ -19,6 +19,24 @@ function sanitizeChat(chat: any): Chat | null {
 }
 
 export class ChatService {
+  static async getChatById(id: Chat["id"]): Promise<Chat | null> {
+    const result = await prisma.chat.findFirst({
+      where: { id },
+      include: {
+        users: {
+          include: {
+            user: { select: userSelect },
+          },
+        },
+        lastMessage: {
+          select: messageWithoutResponseSelect,
+        },
+      },
+    });
+
+    return sanitizeChat(result);
+  }
+
   static async updateGroupChat({
     chatId,
     name,

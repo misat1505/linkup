@@ -19,8 +19,8 @@ export const updateGroupChat = async (req: Request, res: Response) => {
         .status(401)
         .json({ message: "Cannot update chat you do not belong to." });
 
-    const isGroupChat = (await ChatService.getChatType(chatId)) !== "GROUP";
-    if (isGroupChat)
+    const oldChat = await ChatService.getChatById(chatId);
+    if (!oldChat || oldChat.type !== "GROUP")
       return res
         .status(400)
         .json({ message: "cannot update chat of this type." });
@@ -31,6 +31,19 @@ export const updateGroupChat = async (req: Request, res: Response) => {
       ["chats", chatId],
       newFilename
     );
+
+    if (oldChat.photoURL) {
+      const oldFilePath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "files",
+        "chats",
+        chatId,
+        oldChat.photoURL
+      );
+      if (fs.existsSync(oldFilePath)) fs.unlinkSync(oldFilePath);
+    }
 
     const chat = await ChatService.updateGroupChat({ chatId, file, name });
 
