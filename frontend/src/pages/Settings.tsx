@@ -12,6 +12,7 @@ import { SignupFormType } from "../validators/auth.validators";
 import { AxiosError } from "axios";
 import { toast } from "../components/ui/use-toast";
 import { AuthService } from "../services/Auth.service";
+import Loading from "../components/common/Loading";
 
 export default function Settings() {
   const { user: me, setUser } = useAppContext();
@@ -33,9 +34,9 @@ export default function Settings() {
 
   if (isLoading)
     return (
-      <BgGradient>
-        <div className="pt-20">loading...</div>
-      </BgGradient>
+      <div className="relative h-[calc(100vh-5rem)] w-full">
+        <Loading />
+      </div>
     );
 
   const defaultValues: DefaultValues<SignupFormEntries> = {
@@ -62,20 +63,17 @@ export default function Settings() {
   };
 
   return (
-    <>
-      <BgGradient />
-      <div className="relative z-10 my-auto min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-12 xl:grid">
-        <div />
-        <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
-          <SignupFormProvider
-            type="modify"
-            onSubmit={onSubmit}
-            defaultValues={defaultValues}
-          >
-            <SignupForm />
-          </SignupFormProvider>
-        </div>
+    <div className="my-auto min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-12 xl:grid">
+      <div />
+      <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
+        <SignupFormProvider
+          type="modify"
+          onSubmit={onSubmit}
+          defaultValues={defaultValues}
+        >
+          <SignupForm />
+        </SignupFormProvider>
       </div>
-    </>
+    </div>
   );
 }

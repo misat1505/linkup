@@ -1,5 +1,4 @@
 import SignupSlogan from "../components/signup/SignupSlogan";
-import BgGradient from "../components/common/BgGradient";
 import AlreadyHaveAccount from "../components/signup/AlreadyHaveAccount";
 import SignupForm from "../components/signup/SignupForm";
 import SignupFormProvider from "../contexts/SignupFormProvider";
@@ -36,17 +35,14 @@ export default function Signup() {
   };
 
   return (
-    <>
-      <BgGradient />
-      <div className="relative z-10 min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-12 xl:grid">
-        <SignupSlogan />
-        <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
-          <SignupFormProvider type="create" onSubmit={onSubmit}>
-            <SignupForm />
-          </SignupFormProvider>
-          <AlreadyHaveAccount />
-        </div>
+    <div className="min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-12 xl:grid">
+      <SignupSlogan />
+      <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
+        <SignupFormProvider type="create" onSubmit={onSubmit}>
+          <SignupForm />
+        </SignupFormProvider>
+        <AlreadyHaveAccount />
       </div>
-    </>
+    </div>
   );
 }
