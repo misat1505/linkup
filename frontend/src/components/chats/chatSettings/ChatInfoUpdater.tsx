@@ -88,7 +88,7 @@ function Updater({ file }: { file: File | null }) {
       onSubmit={handleSubmit}
     >
       <Input value={groupName || ""} onChange={handleTextChange} />
-      <button onClick={handleRemoveFile} className="group relative mt-8">
+      <div className="group relative mt-8">
         <Image
           className={{
             common: "h-32 w-32 overflow-hidden rounded-full object-cover"
@@ -96,10 +96,15 @@ function Updater({ file }: { file: File | null }) {
           src={source}
           errorContent={<FaUserGroup className="h-full w-full pt-8" />}
         />
-        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100">
-          Remove
-        </div>
-      </button>
+        {source && (
+          <button
+            onClick={handleRemoveFile}
+            className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100"
+          >
+            Remove
+          </button>
+        )}
+      </div>
       <Input
         type="file"
         className="hover:cursor-pointer"

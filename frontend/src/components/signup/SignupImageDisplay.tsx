@@ -18,12 +18,17 @@ export default function SignupImageDisplay() {
 
   return (
     <Avatar className="mx-auto h-40 w-40">
-      <button onClick={handleRemoveFile} className="group relative">
+      <div className="group relative">
         <AvatarImage className="object-cover" src={file!} />
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100">
-          Remove
-        </div>
-      </button>
+        {file && (
+          <button
+            onClick={handleRemoveFile}
+            className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100"
+          >
+            Remove
+          </button>
+        )}
+      </div>
       <AvatarFallback>
         <FaUser className="h-full flex-grow pt-10 text-slate-600" />
       </AvatarFallback>
