@@ -4,7 +4,7 @@ import { FaUser } from "react-icons/fa";
 import { useSignupFormContext } from "../../contexts/SignupFormProvider";
 
 export default function SignupImageDisplay() {
-  const { file: fileData, removeFile } = useSignupFormContext();
+  const { file: fileData, removeFile, data } = useSignupFormContext();
 
   const file = useMemo(
     () => (fileData ? URL.createObjectURL(fileData) : null),
@@ -15,6 +15,9 @@ export default function SignupImageDisplay() {
     e.preventDefault();
     removeFile();
   };
+
+  const initials =
+    data.firstName?.[0]?.toUpperCase() + data.lastName?.[0]?.toUpperCase();
 
   return (
     <Avatar className="mx-auto h-40 w-40">
@@ -30,7 +33,11 @@ export default function SignupImageDisplay() {
         )}
       </div>
       <AvatarFallback>
-        <FaUser className="h-full flex-grow pt-10 text-slate-600" />
+        {data.firstName && data.lastName ? (
+          <div className="text-7xl font-semibold">{initials}</div>
+        ) : (
+          <FaUser className="h-full flex-grow pt-10 text-slate-600" />
+        )}
       </AvatarFallback>
     </Avatar>
   );

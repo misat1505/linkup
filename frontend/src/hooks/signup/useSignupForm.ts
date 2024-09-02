@@ -28,6 +28,7 @@ export type useSubmitFormValue = {
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
   removeFile: () => void;
+  data: SignupFormEntries;
 };
 
 export type useSignupFormProps = UseFormProps<SignupFormType> & {
@@ -51,7 +52,8 @@ export default function useSignupForm({
 
   const submitForm = handleSubmit(onSubmit);
 
-  const file = watch()?.file?.[0] || null;
+  const data = watch();
+  const file = data.file?.[0] || null;
 
   const removeFile = () => {
     setValue("file", undefined);
@@ -63,6 +65,7 @@ export default function useSignupForm({
     isSubmitting,
     file,
     submitForm,
-    removeFile
+    removeFile,
+    data
   };
 }
