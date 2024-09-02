@@ -1,5 +1,4 @@
 import React from "react";
-import BgGradient from "../components/common/BgGradient";
 import SignupFormProvider from "../contexts/SignupFormProvider";
 import SignupForm from "../components/signup/SignupForm";
 import { useAppContext } from "../contexts/AppProvider";
