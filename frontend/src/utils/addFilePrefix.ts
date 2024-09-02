@@ -21,7 +21,7 @@ export function addFilePrefix(
 
   const newObj: JSONObject = { ...obj };
 
-  for (let key in newObj) {
+  for (const key in newObj) {
     if (!newObj.hasOwnProperty(key)) continue;
 
     if (urlKeys.includes(key) && typeof newObj[key] === "string") {

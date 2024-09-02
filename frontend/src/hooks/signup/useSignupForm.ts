@@ -8,6 +8,7 @@ import { AxiosError } from "axios";
 import {
   FieldErrors,
   SubmitHandler,
+  UseFormProps,
   UseFormRegister,
   useForm
 } from "react-hook-form";
@@ -16,7 +17,7 @@ import { useToast } from "../../components/ui/use-toast";
 import { ROUTES } from "../../lib/routes";
 import { AuthService } from "../../services/Auth.service";
 
-type SignupFormEntries = {
+export type SignupFormEntries = {
   firstName: string;
   lastName: string;
   login: string;
@@ -36,7 +37,11 @@ export type useSubmitFormValue = {
   removeFile: () => void;
 };
 
-export default function useSignupForm(): useSubmitFormValue {
+export type useSignupFormProps = UseFormProps<SignupFormType>;
+
+export default function useSignupForm(
+  formOptions: useSignupFormProps = {}
+): useSubmitFormValue {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { setUser } = useAppContext();
@@ -47,7 +52,8 @@ export default function useSignupForm(): useSubmitFormValue {
     setValue,
     formState: { errors, isSubmitting }
   } = useForm<SignupFormType>({
-    resolver: zodResolver(signupFormSchema)
+    resolver: zodResolver(signupFormSchema),
+    ...formOptions
   });
 
   const onSubmit: SubmitHandler<SignupFormType> = async (data) => {

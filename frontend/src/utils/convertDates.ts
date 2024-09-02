@@ -18,7 +18,7 @@ export function convertDates(
 
   const newObj: JSONObject = { ...obj };
 
-  for (let key in newObj) {
+  for (const key in newObj) {
     if (!newObj.hasOwnProperty(key)) continue;
 
     if (keys.includes(key)) {

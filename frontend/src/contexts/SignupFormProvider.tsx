@@ -1,9 +1,10 @@
 import React, { createContext, useContext } from "react";
 import useSignupForm, {
-  useSubmitFormValue,
+  useSignupFormProps,
+  useSubmitFormValue
 } from "../hooks/signup/useSignupForm";
 
-type SignupFormContextProps = {
+type SignupFormContextProps = useSignupFormProps & {
   children: React.ReactNode;
 };
 
@@ -15,9 +16,12 @@ const SignupFormContext = createContext<SignupContextValue>(
 
 export const useSignupFormContext = () => useContext(SignupFormContext);
 
-export const SignupFormProvider = ({ children }: SignupFormContextProps) => {
+export const SignupFormProvider = ({
+  children,
+  ...props
+}: SignupFormContextProps) => {
   return (
-    <SignupFormContext.Provider value={useSignupForm()}>
+    <SignupFormContext.Provider value={useSignupForm(props)}>
       {children}
     </SignupFormContext.Provider>
   );
