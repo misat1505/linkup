@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import BgGradient from "../components/common/BgGradient";
 import SignupFormProvider from "../contexts/SignupFormProvider";
 import SignupForm from "../components/signup/SignupForm";
@@ -12,9 +11,10 @@ import { DefaultValues, SubmitHandler } from "react-hook-form";
 import { SignupFormType } from "../validators/auth.validators";
 import { AxiosError } from "axios";
 import { toast } from "../components/ui/use-toast";
+import { AuthService } from "../services/Auth.service";
 
 export default function Settings() {
-  const { user: me } = useAppContext();
+  const { user: me, setUser } = useAppContext();
   const { data, isLoading } = useQuery({
     queryKey: ["files", me!.photoURL],
     queryFn: () =>
@@ -24,14 +24,19 @@ export default function Settings() {
       )
   });
 
-  if (isLoading) return <div>loading...</div>;
-
   let fileList = data ? new DataTransfer().files : undefined;
   if (data) {
     const dataTransfer = new DataTransfer();
     dataTransfer.items.add(data);
     fileList = dataTransfer.files;
   }
+
+  if (isLoading)
+    return (
+      <BgGradient>
+        <div className="pt-20">loading...</div>
+      </BgGradient>
+    );
 
   const defaultValues: DefaultValues<SignupFormEntries> = {
     firstName: me!.firstName,
@@ -43,7 +48,8 @@ export default function Settings() {
     data: SignupFormEntries
   ) => {
     try {
-      console.log(data);
+      const updated = await AuthService.updateMe(data);
+      setUser(updated);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({

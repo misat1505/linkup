@@ -3,6 +3,15 @@ import { prisma } from "../lib/Prisma";
 import { userSelect } from "../utils/prisma/userSelect";
 
 export class UserService {
+  static async updateUser(user: UserWithCredentials): Promise<void> {
+    const { id, ...rest } = user;
+
+    await prisma.user.update({
+      data: { ...rest },
+      where: { id },
+    });
+  }
+
   static async searchUsers(term: string): Promise<User[]> {
     const users: User[] = await prisma.user.findMany({
       where: {

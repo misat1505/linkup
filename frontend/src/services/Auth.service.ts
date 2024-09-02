@@ -4,6 +4,27 @@ import { AUTH_API } from "./utils";
 import { AxiosResponse } from "axios";
 
 export class AuthService {
+  static async updateMe(data: SignupFormType): Promise<User> {
+    const formData = new FormData();
+    formData.append("login", data.login);
+    formData.append("password", data.password);
+    formData.append("firstName", data.firstName);
+    formData.append("lastName", data.lastName);
+    if (data.file) {
+      formData.append("file", data.file?.[0]);
+    }
+
+    const {
+      data: { user }
+    } = await AUTH_API.put("/user", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
+
+    return user;
+  }
+
   static async me(): Promise<User> {
     const {
       data: { user }

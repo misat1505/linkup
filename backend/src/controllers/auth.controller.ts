@@ -8,6 +8,49 @@ import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import { processAvatar } from "../utils/processAvatar";
 
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const {
+      firstName,
+      lastName,
+      login,
+      password,
+      token: { userId },
+    } = req.body;
+    const file = await processAvatar(req.file?.path);
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = Hasher.hash(password + salt);
+
+    const fetchedUser = await UserService.getUserByLogin(login);
+
+    if (
+      fetchedUser &&
+      fetchedUser.login === login &&
+      fetchedUser.id !== userId
+    ) {
+      return res.status(409).json({ message: "Login already taken." });
+    }
+
+    const user: UserWithCredentials = {
+      id: userId,
+      firstName,
+      lastName,
+      login,
+      password: hashedPassword,
+      salt,
+      photoURL: file,
+      lastActive: new Date(),
+    };
+
+    await UserService.updateUser(user);
+
+    return res.status(201).json({ user: UserService.removeCredentials(user) });
+  } catch (e) {
+    return res.status(500).json({ message: "Cannot create new user." });
+  }
+};
+
 export const signupUser = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, login, password } = req.body;
