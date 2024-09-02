@@ -30,6 +30,7 @@ import { ROUTES } from "../../../lib/routes";
 import { useQueryClient } from "react-query";
 import { AuthService } from "../../../services/Auth.service";
 import Tooltip from "../../common/Tooltip";
+import { IoIosSettings } from "react-icons/io";
 
 export default function NavbarSheet() {
   const { user } = useAppContext();
@@ -69,6 +70,11 @@ function LoggedInSheet() {
       icon: <PiChatsCircleFill size={20} className="text-blue-500" />,
       text: "Chats",
       onClick: () => navigate(ROUTES.CHATS.path)
+    },
+    {
+      icon: <IoIosSettings size={20} className="text-blue-500" />,
+      text: "Settings",
+      onClick: () => navigate(ROUTES.SETTINGS.path)
     },
     {
       icon: <MdArticle size={20} className="text-blue-500" />,
