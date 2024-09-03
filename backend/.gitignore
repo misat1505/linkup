@@ -5,4 +5,4 @@
 /logs
 /build
 /prisma/migrations
-/src/config/security/
+/src/config/security/*
