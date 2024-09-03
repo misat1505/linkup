@@ -6,12 +6,15 @@ import {
   logoutUser,
   refreshToken,
   signupUser,
+  updateUser,
 } from "../../src/controllers/auth.controller";
 import { UserService } from "../../src/services/UserService";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { User, UserWithCredentials } from "../../src/types/User";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
+import { isUser } from "../../src/types/guards/user.guard";
+import { VALID_USER_ID } from "../utils/constants";
 
 jest.mock("uuid");
 jest.mock("bcryptjs");
@@ -26,6 +29,7 @@ describe("Auth Controllers", () => {
   app.post("/refresh", refreshToken);
   app.post("/logout", logoutUser);
   app.get("/user", getUser);
+  app.put("/user", updateUser);
 
   const removeCredentials = (
     userWithCredentials: UserWithCredentials
@@ -43,6 +47,72 @@ describe("Auth Controllers", () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe("updateUser", () => {
+    it("should update user", async () => {
+      (UserService.getUserByLogin as jest.Mock).mockResolvedValue({
+        id: "some-id",
+        login: "some-login",
+        photoURL: "some-url",
+      });
+
+      const response = await request(app)
+        .put("/user")
+        .send({
+          firstName: "John",
+          lastName: "Doe",
+          login: "login1",
+          password: "pass1",
+          token: { userId: VALID_USER_ID },
+        });
+
+      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
+        true
+      );
+    });
+
+    it("should update user when same id", async () => {
+      (UserService.getUserByLogin as jest.Mock).mockResolvedValue({
+        id: VALID_USER_ID,
+        login: "some-login",
+        photoURL: "some-url",
+      });
+
+      const response = await request(app)
+        .put("/user")
+        .send({
+          firstName: "John",
+          lastName: "Doe",
+          login: "login1",
+          password: "pass1",
+          token: { userId: VALID_USER_ID },
+        });
+
+      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
+        true
+      );
+    });
+
+    it("shouldn't allow 2 users of the same login", async () => {
+      (UserService.getUserByLogin as jest.Mock).mockResolvedValue({
+        id: "some-id",
+        login: "login1",
+        photoURL: "some-url",
+      });
+
+      const response = await request(app)
+        .put("/user")
+        .send({
+          firstName: "John",
+          lastName: "Doe",
+          login: "login1",
+          password: "pass1",
+          token: { userId: VALID_USER_ID },
+        });
+
+      expect(response.statusCode).toBe(409);
+    });
   });
 
   describe("signupUser", () => {
