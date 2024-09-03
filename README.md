@@ -26,3 +26,10 @@ Link Up features a convenient toggle button that allows users to switch effortle
 Link Up employs responsive web design to ensure a seamless user experience across all devices. The platform automatically adjusts its layout and functionality to fit various screen sizes, from desktop monitors to smartphones and tablets. This adaptability provides consistent performance and ease of use, regardless of the device being used.
 
 ![](/docs/chat-phone.png)
+
+## Technologies used
+
+- **Frontend:** Developed with **React** for a dynamic and responsive user interface.
+- **Backend:** Utilizes **Express** as the web server framework for efficient request handling and routing.
+- **Database:** **MySQL** is used for reliable data storage.
+- **ORM:** **Prisma** facilitates seamless interaction between Express and MySQL.
