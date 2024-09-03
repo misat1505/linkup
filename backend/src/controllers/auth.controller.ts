@@ -61,7 +61,6 @@ export const updateUser = async (req: Request, res: Response) => {
 
     return res.status(201).json({ user: UserService.removeCredentials(user) });
   } catch (e) {
-    console.log(e, req.body);
     return res.status(500).json({ message: "Cannot update user." });
   }
 };
