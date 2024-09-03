@@ -34,7 +34,7 @@ describe("Auth Controllers", () => {
   const removeCredentials = (
     userWithCredentials: UserWithCredentials
   ): User => {
-    const { login, password, ...rest } = userWithCredentials;
+    const { login, password, salt, ...rest } = userWithCredentials;
     const user: User = { ...rest };
     return user;
   };
@@ -117,21 +117,8 @@ describe("Auth Controllers", () => {
 
   describe("signupUser", () => {
     it("should sign up a new user", async () => {
-      const id = "fixed-uuid";
-      const salt = "salt";
-      (uuidv4 as jest.Mock).mockReturnValue(id);
-      (bcrypt.genSalt as jest.Mock).mockResolvedValue(salt);
-
-      const mockUser: UserWithCredentials = {
-        id,
-        firstName: "John",
-        lastName: "Doe",
-        login: "john_doe",
-        password: "password123",
-        photoURL: null,
-        salt,
-        lastActive: new Date(),
-      };
+      (uuidv4 as jest.Mock).mockReturnValue("fixed-uuid");
+      (bcrypt.genSalt as jest.Mock).mockResolvedValue("salt");
 
       (UserService.isLoginTaken as jest.Mock).mockResolvedValue(false);
       (JwtHandler.encode as jest.Mock).mockReturnValue("fake_jwt_token");
@@ -143,21 +130,8 @@ describe("Auth Controllers", () => {
         password: "password123",
       });
 
-      response.body.user.lastActive = new Date(response.body.user.lastActive);
-
-      const dateDiff = Math.abs(
-        response.body.user.lastActive.getTime() - mockUser.lastActive.getTime()
-      );
-      expect(dateDiff).toBeLessThan(1000);
-
-      const responseUserWithoutLastActive = { ...response.body.user };
-      const mockUserWithoutLastActive = { ...mockUser };
-      delete responseUserWithoutLastActive.lastActive;
-      delete (mockUserWithoutLastActive as any).lastActive;
-
-      expect(response.status).toBe(201);
-      expect(responseUserWithoutLastActive).toEqual(
-        removeCredentials(mockUserWithoutLastActive)
+      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
+        true
       );
       expect(response.headers["set-cookie"]).toBeDefined();
     });
@@ -202,21 +176,8 @@ describe("Auth Controllers", () => {
         password: "password",
       });
 
-      response.body.user.lastActive = new Date(response.body.user.lastActive);
-
-      const dateDiff = Math.abs(
-        response.body.user.lastActive.getTime() - mockUser.lastActive.getTime()
-      );
-      expect(dateDiff).toBeLessThan(1000);
-
-      const responseUserWithoutLastActive = { ...response.body.user };
-      const mockUserWithoutLastActive = { ...mockUser };
-      delete responseUserWithoutLastActive.lastActive;
-      delete (mockUserWithoutLastActive as any).lastActive;
-
-      expect(response.status).toBe(200);
-      expect(responseUserWithoutLastActive).toEqual(
-        removeCredentials(mockUserWithoutLastActive)
+      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
+        true
       );
       expect(response.headers["set-cookie"]).toBeDefined();
     });
@@ -307,21 +268,8 @@ describe("Auth Controllers", () => {
         .get("/user")
         .send({ token: { userId: id } });
 
-      response.body.user.lastActive = new Date(response.body.user.lastActive);
-
-      const dateDiff = Math.abs(
-        response.body.user.lastActive.getTime() - mockUser.lastActive.getTime()
-      );
-      expect(dateDiff).toBeLessThan(1000);
-
-      const responseUserWithoutLastActive = { ...response.body.user };
-      const mockUserWithoutLastActive = { ...mockUser };
-      delete responseUserWithoutLastActive.lastActive;
-      delete (mockUserWithoutLastActive as any).lastActive;
-
-      expect(response.status).toBe(200);
-      expect(responseUserWithoutLastActive).toEqual(
-        removeCredentials(mockUserWithoutLastActive)
+      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
+        true
       );
     });
 

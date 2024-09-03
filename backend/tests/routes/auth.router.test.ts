@@ -7,6 +7,51 @@ import { VALID_USER_ID } from "../utils/constants";
 import { isUser } from "../../src/types/guards/user.guard";
 
 describe("auth router", () => {
+  describe("[PUT] /user", () => {
+    it("should update user", async () => {
+      const newUser = {
+        login: "login2",
+        password: "pass2",
+        firstName: "new first name",
+        lastName: "new last name",
+      };
+      const res = await request(app)
+        .put("/auth/user")
+        .field("login", newUser.login)
+        .field("password", newUser.password)
+        .field("firstName", newUser.firstName)
+        .field("lastName", newUser.lastName)
+        .attach("file", path.join(__dirname, "..", "utils", "image.jpg"))
+        .set("Cookie", `token=${JwtHandler.encode({ userId: VALID_USER_ID })}`);
+
+      expect(res.statusCode).toEqual(201);
+      expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(true);
+
+      const { photoURL } = res.body.user;
+
+      const pathToImage = path.join(
+        __dirname,
+        "..",
+        "..",
+        "files",
+        "avatars",
+        photoURL
+      );
+      expect(fs.existsSync(pathToImage)).toBe(true);
+
+      const res2 = await request(app)
+        .get("/auth/user")
+        .set("Cookie", `token=${JwtHandler.encode({ userId: VALID_USER_ID })}`);
+
+      const getUser = res2.body.user;
+      expect(isUser(getUser, { allowStringifiedDates: true })).toBe(true);
+      expect(getUser.firstName).toBe(newUser.firstName);
+      expect(getUser.lastName).toBe(newUser.lastName);
+
+      fs.unlinkSync(pathToImage);
+    });
+  });
+
   describe("[POST] /login", () => {
     it("should login", async () => {
       const res = await request(app).post("/auth/login").send({
