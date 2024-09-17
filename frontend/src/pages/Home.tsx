@@ -30,7 +30,7 @@ export default function Home() {
 
   if (!user || isLoading) return <Loading />;
 
-  return <div>{posts?.map((post) => <PostPreview text={post.content} />)}</div>;
+  return <div>{posts?.map((post) => <PostPreview post={post} />)}</div>;
 
   // return (
   //   <div className="flex w-full justify-between">
