@@ -7,6 +7,19 @@ import { userSelect } from "../utils/prisma/userSelect";
 import { ChatType } from "@prisma/client";
 
 export class PostService {
+  static async getPosts(): Promise<Post[]> {
+    const posts: Post[] = await prisma.post.findMany({
+      include: {
+        author: { select: userSelect },
+        files: {
+          select: { id: true, url: true },
+        },
+      },
+    });
+
+    return posts;
+  }
+
   static async createPost({
     content,
     authorId,
