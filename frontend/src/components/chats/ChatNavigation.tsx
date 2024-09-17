@@ -11,6 +11,7 @@ import ChatCreator from "./chatCreationDialog/ChatCreator";
 import { cn } from "../../lib/utils";
 import Tooltip from "../common/Tooltip";
 import { buildFileURL, Filter } from "../../utils/buildFileURL";
+import Loading from "../common/Loading";
 
 export default function ChatNavigation() {
   const { chatId } = useParams();
@@ -18,7 +19,12 @@ export default function ChatNavigation() {
 
   const classnames = cn("w-full md:w-80", { "hidden md:block": !!chatId });
 
-  if (isLoading) return <div className={classnames}>loading...</div>;
+  if (isLoading)
+    return (
+      <div className={cn(classnames, "relative")}>
+        <Loading />
+      </div>
+    );
 
   return (
     <div className={classnames}>
