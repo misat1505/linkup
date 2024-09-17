@@ -48,3 +48,8 @@ export const FILE_API = createAPIInstance({
   baseURL: `${API_URL}/files`,
   withCredentials: true
 });
+
+export const POSTS_API = createAPIInstance({
+  baseURL: `${API_URL}/posts`,
+  withCredentials: true
+});

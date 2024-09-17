@@ -4,6 +4,7 @@ import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
 import React from "react";
 import DOMPurify from "dompurify";
 import { FaSave } from "react-icons/fa";
+import { PostService } from "../../services/Post.service";
 
 export default function Editor({
   markdown,
@@ -18,6 +19,18 @@ export default function Editor({
     textarea.innerHTML = text;
     return textarea.value;
   };
+
+  const customCommands: ICommand[] = [
+    {
+      name: "Save",
+      keyCommand: "Save",
+      buttonProps: { "aria-label": "Save", title: "Save" },
+      icon: <FaSave />,
+      execute: async (state, api) => {
+        console.log(await PostService.createPost(markdown));
+      }
+    }
+  ];
 
   const sanitizeMarkdownWithCodeBlocks = (text: string): string => {
     const codeBlockRegex = /```[\s\S]*?```/g;
@@ -89,13 +102,3 @@ export default function Editor({
     </div>
   );
 }
-
-const customCommands: ICommand[] = [
-  {
-    name: "Save",
-    keyCommand: "Save",
-    buttonProps: { "aria-label": "Save", title: "Save" },
-    icon: <FaSave />,
-    execute: (state, api) => {}
-  }
-];
