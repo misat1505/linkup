@@ -1,7 +1,9 @@
 import { API_URL } from "../../constants";
 import { useThemeContext } from "../../contexts/ThemeProvider";
-import MDEditor from "@uiw/react-md-editor";
+import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
 import React from "react";
+import DOMPurify from "dompurify";
+import { FaSave } from "react-icons/fa";
 
 export default function Editor({
   markdown,
@@ -17,11 +19,36 @@ export default function Editor({
     return textarea.value;
   };
 
+  const sanitizeMarkdownWithCodeBlocks = (text: string): string => {
+    const codeBlockRegex = /```[\s\S]*?```/g;
+
+    const codeBlocks: string[] = [];
+
+    const sanitizedText = text.replace(codeBlockRegex, (match) => {
+      codeBlocks.push(match);
+      return `PLACEHOLDER_CODE_BLOCK_${codeBlocks.length - 1}`;
+    });
+
+    const purifiedText = DOMPurify.sanitize(sanitizedText);
+
+    const finalText = purifiedText.replace(
+      /PLACEHOLDER_CODE_BLOCK_(\d+)/g,
+      (match, index) => {
+        return codeBlocks[parseInt(index, 10)];
+      }
+    );
+
+    return finalText;
+  };
+
   return (
     <div data-color-mode={theme} className="flex-grow">
       <MDEditor
         value={markdown}
-        onChange={(text) => setMarkdown(decodeHTMLEntities(text!))}
+        onChange={(text) =>
+          setMarkdown(decodeHTMLEntities(sanitizeMarkdownWithCodeBlocks(text!)))
+        }
+        extraCommands={[...commands.getExtraCommands(), ...customCommands]}
         className="!h-[calc(100vh-5rem)] flex-grow !overflow-auto"
         highlightEnable={true}
         previewOptions={{
@@ -62,3 +89,13 @@ export default function Editor({
     </div>
   );
 }
+
+const customCommands: ICommand[] = [
+  {
+    name: "Save",
+    keyCommand: "Save",
+    buttonProps: { "aria-label": "Save", title: "Save" },
+    icon: <FaSave />,
+    execute: (state, api) => {}
+  }
+];
