@@ -16,9 +16,12 @@ export default function PostPreview({ post }: { post: Post }) {
   return (
     <div
       data-color-mode={theme}
-      className={cn("m-auto my-4 max-w-[60%] overflow-hidden rounded-md p-4", {
-        "relative max-h-72": !isExpanded
-      })}
+      className={cn(
+        "m-auto my-4 w-[95%] overflow-hidden rounded-md p-4 lg:w-[60%]",
+        {
+          "relative max-h-72": !isExpanded
+        }
+      )}
       style={{ backgroundColor: theme === "light" ? "white" : "#0c1117" }}
     >
       <PostHeader post={post} />
