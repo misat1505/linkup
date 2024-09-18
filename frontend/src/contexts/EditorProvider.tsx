@@ -5,6 +5,7 @@ import {
 } from "../utils/editorUtils";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { PostService } from "../services/Post.service";
+import { useQueryClient } from "react-query";
 
 type EditorContextConfig =
   | {
@@ -36,6 +37,7 @@ export const useEditorContext = () => {
 };
 
 const EditorProvider = ({ children, ...props }: EditorContextProps) => {
+  const queryClient = useQueryClient();
   const [markdown, setMarkdown] = useState(
     props.variant === "update" ? props.post.content : ""
   );
@@ -46,13 +48,19 @@ const EditorProvider = ({ children, ...props }: EditorContextProps) => {
 
   const handleSave = async (): Promise<Post> => {
     if (props.variant === "new") {
-      return await PostService.createPost(markdown);
+      const post = await PostService.createPost(markdown);
+      queryClient.invalidateQueries(["posts"]);
+      queryClient.invalidateQueries(["my-posts"]);
+      return post;
     }
 
-    return await PostService.updatePost({
+    const post = await PostService.updatePost({
       id: props.post.id,
       content: markdown
     });
+    queryClient.invalidateQueries(["posts"]);
+    queryClient.invalidateQueries(["my-posts"]);
+    return post;
   };
 
   return (
