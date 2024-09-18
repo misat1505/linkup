@@ -6,6 +6,27 @@ import { v4 as uuidv4 } from "uuid";
 import { userSelect } from "../utils/prisma/userSelect";
 
 export class PostService {
+  static async updatePost({
+    id,
+    content,
+  }: {
+    id: Post["id"];
+    content: Post["content"];
+  }): Promise<Post | null> {
+    const posts: Post | null = await prisma.post.update({
+      data: { content },
+      where: { id },
+      include: {
+        author: { select: userSelect },
+        files: {
+          select: { id: true, url: true },
+        },
+      },
+    });
+
+    return posts;
+  }
+
   static async getPost(id: Post["id"]): Promise<Post | null> {
     const posts: Post | null = await prisma.post.findFirst({
       where: { id },

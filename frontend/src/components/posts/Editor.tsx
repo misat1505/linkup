@@ -1,61 +1,54 @@
 import { API_URL } from "../../constants";
 import { useThemeContext } from "../../contexts/ThemeProvider";
 import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
-import React, { useState } from "react";
-import DOMPurify from "dompurify";
+import React from "react";
 import { FaSave } from "react-icons/fa";
-import { PostService } from "../../services/Post.service";
+import { useEditorContext } from "../../contexts/EditorProvider";
+import { useToast } from "../ui/use-toast";
 
-export default function Editor({ text }: { text?: string }) {
-  const [markdown, setMarkdown] = useState(text || "");
+export default function Editor() {
+  const { markdown, handleSafeChange, handleSave, variant } =
+    useEditorContext();
+  const { toast } = useToast();
   const { theme } = useThemeContext();
-  const decodeHTMLEntities = (text: string): string => {
-    const textarea = document.createElement("textarea");
-    textarea.innerHTML = text;
-    return textarea.value;
-  };
+
+  const buttonText = variant === "new" ? "Save" : "Update";
+
+  const successText =
+    variant === "new"
+      ? "Post created successfully."
+      : "Post updated successfully.";
+
+  const failureText =
+    variant === "new" ? "Cannot create post." : "Cannot update post.";
 
   const customCommands: ICommand[] = [
     {
-      name: "Save",
-      keyCommand: "Save",
-      buttonProps: { "aria-label": "Save", title: "Save" },
+      name: buttonText,
+      keyCommand: buttonText,
+      buttonProps: { "aria-label": buttonText, title: buttonText },
       icon: <FaSave />,
       execute: async (state, api) => {
-        await PostService.createPost(markdown);
+        try {
+          await handleSave();
+          toast({
+            title: successText
+          });
+        } catch (e) {
+          toast({
+            variant: "destructive",
+            title: failureText
+          });
+        }
       }
     }
   ];
-
-  const sanitizeMarkdownWithCodeBlocks = (text: string): string => {
-    const codeBlockRegex = /```[\s\S]*?```/g;
-
-    const codeBlocks: string[] = [];
-
-    const sanitizedText = text.replace(codeBlockRegex, (match) => {
-      codeBlocks.push(match);
-      return `PLACEHOLDER_CODE_BLOCK_${codeBlocks.length - 1}`;
-    });
-
-    const purifiedText = DOMPurify.sanitize(sanitizedText);
-
-    const finalText = purifiedText.replace(
-      /PLACEHOLDER_CODE_BLOCK_(\d+)/g,
-      (match, index) => {
-        return codeBlocks[parseInt(index, 10)];
-      }
-    );
-
-    return finalText;
-  };
 
   return (
     <div data-color-mode={theme} className="w-full">
       <MDEditor
         value={markdown}
-        onChange={(text) =>
-          setMarkdown(decodeHTMLEntities(sanitizeMarkdownWithCodeBlocks(text!)))
-        }
+        onChange={(text) => handleSafeChange(text || "")}
         extraCommands={[...commands.getExtraCommands(), ...customCommands]}
         className="!h-[calc(100vh-5rem)] flex-grow !overflow-auto"
         highlightEnable={true}

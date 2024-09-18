@@ -5,11 +5,17 @@ import { useQuery } from "react-query";
 import Loading from "../components/common/Loading";
 import { PostService } from "../services/Post.service";
 import { useAppContext } from "../contexts/AppProvider";
+import EditorProvider from "../contexts/EditorProvider";
 
 export default function PostEditor() {
   const { postId } = useParams();
 
-  if (!postId) return <Editor />;
+  if (!postId)
+    return (
+      <EditorProvider variant="new">
+        <Editor />
+      </EditorProvider>
+    );
 
   return <PostEditorExistent />;
 }
@@ -28,5 +34,9 @@ function PostEditorExistent() {
 
   if (post.author.id !== me!.id) return <div>You cannot modify this post.</div>;
 
-  return <Editor text={post.content} />;
+  return (
+    <EditorProvider variant="update" post={post}>
+      <Editor />
+    </EditorProvider>
+  );
 }
