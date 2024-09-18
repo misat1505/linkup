@@ -1,12 +1,14 @@
-import MDEditor from "@uiw/react-md-editor";
 import { useThemeContext } from "../../contexts/ThemeProvider";
-import { Post } from "../../types/Post";
-import React, { useState } from "react";
 import { cn } from "../../lib/utils";
+import { Post } from "../../types/Post";
+import MDEditor from "@uiw/react-md-editor";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import PostHeader from "./PostHeader";
+import { IoPencil } from "react-icons/io5";
+import { FaRegTrashAlt } from "react-icons/fa";
 
-export default function PostPreview({ post }: { post: Post }) {
+export default function MyPostPreview({ post }: { post: Post }) {
   const { theme } = useThemeContext();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -23,14 +25,16 @@ export default function PostPreview({ post }: { post: Post }) {
     >
       <PostHeader post={post} />
       <MDEditor.Markdown source={post.content} />
-      {!isExpanded && (
-        <Button
-          className="absolute bottom-4 left-1/2 -translate-x-1/2"
-          onClick={() => setIsExpanded(true)}
-        >
-          Show more
-        </Button>
-      )}
+      <Button
+        className="absolute bottom-4 left-1/2 -translate-x-1/2"
+        onClick={() => setIsExpanded((prev) => !prev)}
+      >
+        Show {isExpanded ? "less" : "more"}
+      </Button>
+      <div className="absolute right-4 top-4 flex items-center gap-x-4">
+        <IoPencil className="text-white" />
+        <FaRegTrashAlt className="text-white" />
+      </div>
     </div>
   );
 }

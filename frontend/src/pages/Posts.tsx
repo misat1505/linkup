@@ -1,3 +1,4 @@
+import MyPostPreview from "../components/posts/MyPostPreview";
 import Loading from "../components/common/Loading";
 import { PostService } from "../services/Post.service";
 import React from "react";
@@ -16,5 +17,9 @@ export default function Posts() {
       </div>
     );
 
-  return <div>{JSON.stringify(posts)}</div>;
+  return (
+    <div>
+      {posts?.map((post) => <MyPostPreview post={post} key={post.id} />)}
+    </div>
+  );
 }
