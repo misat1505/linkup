@@ -2,7 +2,6 @@ import MDEditor from "@uiw/react-md-editor";
 import { useThemeContext } from "../../contexts/ThemeProvider";
 import { Post } from "../../types/Post";
 import React, { useState } from "react";
-import { User } from "../../types/User";
 import Avatar from "../common/Avatar";
 import { buildFileURL } from "../../utils/buildFileURL";
 import { getInitials } from "../../utils/getInitials";
@@ -22,7 +21,7 @@ export default function PostPreview({ post }: { post: Post }) {
       })}
       style={{ backgroundColor: theme === "light" ? "white" : "#0c1117" }}
     >
-      <PostAuthor user={post.author} />
+      <PostHeader post={post} />
       <MDEditor.Markdown source={post.content} />
       {!isExpanded && (
         <Button
@@ -37,26 +36,28 @@ export default function PostPreview({ post }: { post: Post }) {
   );
 }
 
-function PostAuthor({ user }: { user: User }) {
+function PostHeader({ post }: { post: Post }) {
   const getTimeText = (): string => {
-    const timeDiff = timeDifference(user.lastActive);
+    const timeDiff = timeDifference(post.createdAt);
 
     if (timeDiff.days) return `${timeDiff.days} days ago`;
     else if (timeDiff.hours) return `${timeDiff.hours} hours ago`;
     else if (timeDiff.minutes > 5) return `${timeDiff.minutes} minutes ago`;
-    return "Just now";
+    else return "Just now";
   };
+
+  const { author } = post;
 
   return (
     <div className="flex items-center gap-x-4 py-4">
       <Avatar
         className="border"
-        src={buildFileURL(user.photoURL, { type: "avatar" })}
-        alt={getInitials(user)}
+        src={buildFileURL(author.photoURL, { type: "avatar" })}
+        alt={getInitials(author)}
       />
       <div>
         <h2 className="text-lg font-semibold">
-          {user.firstName} {user.lastName}
+          {author.firstName} {author.lastName}
         </h2>
         <p className="text-md">{getTimeText()}</p>
       </div>
