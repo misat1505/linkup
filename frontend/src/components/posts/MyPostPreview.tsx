@@ -7,10 +7,13 @@ import { Button } from "../ui/button";
 import PostHeader from "./PostHeader";
 import { IoPencil } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../lib/routes";
 
 export default function MyPostPreview({ post }: { post: Post }) {
   const { theme } = useThemeContext();
   const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div
@@ -32,7 +35,12 @@ export default function MyPostPreview({ post }: { post: Post }) {
         Show {isExpanded ? "less" : "more"}
       </Button>
       <div className="absolute right-4 top-4 flex items-center gap-x-4">
-        <IoPencil className="text-white" />
+        <IoPencil
+          className="text-white"
+          onClick={() =>
+            navigate(ROUTES.POST_EDITOR.buildPath({ postId: post.id }))
+          }
+        />
         <FaRegTrashAlt className="text-white" />
       </div>
     </div>

@@ -1,18 +1,13 @@
 import { API_URL } from "../../constants";
 import { useThemeContext } from "../../contexts/ThemeProvider";
 import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
-import React from "react";
+import React, { useState } from "react";
 import DOMPurify from "dompurify";
 import { FaSave } from "react-icons/fa";
 import { PostService } from "../../services/Post.service";
 
-export default function Editor({
-  markdown,
-  setMarkdown
-}: {
-  markdown: string;
-  setMarkdown: React.Dispatch<React.SetStateAction<string>>;
-}) {
+export default function Editor({ text }: { text?: string }) {
+  const [markdown, setMarkdown] = useState(text || "");
   const { theme } = useThemeContext();
   const decodeHTMLEntities = (text: string): string => {
     const textarea = document.createElement("textarea");
@@ -27,7 +22,7 @@ export default function Editor({
       buttonProps: { "aria-label": "Save", title: "Save" },
       icon: <FaSave />,
       execute: async (state, api) => {
-        console.log(await PostService.createPost(markdown));
+        await PostService.createPost(markdown);
       }
     }
   ];
@@ -55,7 +50,7 @@ export default function Editor({
   };
 
   return (
-    <div data-color-mode={theme} className="flex-grow">
+    <div data-color-mode={theme} className="w-full">
       <MDEditor
         value={markdown}
         onChange={(text) =>

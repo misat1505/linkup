@@ -2,6 +2,11 @@ import { Post } from "@/types/Post";
 import { POSTS_API } from "./utils";
 
 export class PostService {
+  static async getPost(id: Post["id"]): Promise<Post | null> {
+    const response = await POSTS_API.get(`/${id}`);
+    return response.data.post;
+  }
+
   static async getMyPosts(): Promise<Post[]> {
     const response = await POSTS_API.get("/mine");
     return response.data.posts;

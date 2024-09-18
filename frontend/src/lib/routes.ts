@@ -7,7 +7,7 @@ const NotFound = lazy(() => import("../pages/NotFound"));
 const Login = lazy(() => import("../pages/Login"));
 const Signup = lazy(() => import("../pages/Signup"));
 const Chats = lazy(() => import("../pages/Chats"));
-const NewPost = lazy(() => import("../pages/NewPost"));
+const PostEditor = lazy(() => import("../pages/PostEditor"));
 const Posts = lazy(() => import("../pages/Posts"));
 
 type RouteType = {
@@ -22,7 +22,7 @@ export const ROUTES = {
   SIGNUP: route("signup"),
   CHATS: route("chats"),
   CHAT_DETAIL: route("chats/:chatId"),
-  NEW_POST: route("posts/new"),
+  POST_EDITOR: route("posts/editor/:postId?"),
   POSTS: route("posts")
 };
 
@@ -44,8 +44,8 @@ export const protectedRoutes: RouteType[] = [
     component: Chats
   },
   {
-    path: ROUTES.NEW_POST.path,
-    component: NewPost
+    path: ROUTES.POST_EDITOR.path,
+    component: PostEditor
   },
   {
     path: ROUTES.POSTS.path,

@@ -1,0 +1,32 @@
+import { useParams } from "react-router-dom";
+import Editor from "../components/posts/Editor";
+import React from "react";
+import { useQuery } from "react-query";
+import Loading from "../components/common/Loading";
+import { PostService } from "../services/Post.service";
+import { useAppContext } from "../contexts/AppProvider";
+
+export default function PostEditor() {
+  const { postId } = useParams();
+
+  if (!postId) return <Editor />;
+
+  return <PostEditorExistent />;
+}
+
+function PostEditorExistent() {
+  const { user: me } = useAppContext();
+  const { postId } = useParams();
+  const { isLoading, data: post } = useQuery({
+    queryKey: ["posts", { postId }],
+    queryFn: () => PostService.getPost(postId!)
+  });
+
+  if (isLoading) return <Loading />;
+
+  if (!post) return <div>Post not found.</div>;
+
+  if (post.author.id !== me!.id) return <div>You cannot modify this post.</div>;
+
+  return <Editor text={post.content} />;
+}
