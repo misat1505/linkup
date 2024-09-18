@@ -79,7 +79,7 @@ function LoggedInSheet() {
     {
       icon: <MdArticle size={20} className="text-blue-500" />,
       text: "Posts",
-      onClick: () => navigate(ROUTES.HOME.path)
+      onClick: () => navigate(ROUTES.POSTS.path)
     },
     {
       icon: <FaUserFriends size={20} className="text-blue-500" />,

@@ -1,0 +1,20 @@
+import Loading from "../components/common/Loading";
+import { PostService } from "../services/Post.service";
+import React from "react";
+import { useQuery } from "react-query";
+
+export default function Posts() {
+  const { data: posts, isLoading } = useQuery({
+    queryKey: ["my-posts"],
+    queryFn: PostService.getMyPosts
+  });
+
+  if (isLoading)
+    return (
+      <div className="relative flex h-[calc(100vh-5rem)] w-screen">
+        <Loading />
+      </div>
+    );
+
+  return <div>{JSON.stringify(posts)}</div>;
+}

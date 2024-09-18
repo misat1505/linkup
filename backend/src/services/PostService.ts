@@ -4,9 +4,22 @@ import { Post } from "../types/Post";
 import { User } from "../types/User";
 import { v4 as uuidv4 } from "uuid";
 import { userSelect } from "../utils/prisma/userSelect";
-import { ChatType } from "@prisma/client";
 
 export class PostService {
+  static async getUserPosts(id: User["id"]): Promise<Post[]> {
+    const posts: Post[] = await prisma.post.findMany({
+      where: { authorId: id },
+      include: {
+        author: { select: userSelect },
+        files: {
+          select: { id: true, url: true },
+        },
+      },
+    });
+
+    return posts;
+  }
+
   static async getPosts(): Promise<Post[]> {
     const posts: Post[] = await prisma.post.findMany({
       include: {

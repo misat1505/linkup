@@ -8,6 +8,7 @@ const Login = lazy(() => import("../pages/Login"));
 const Signup = lazy(() => import("../pages/Signup"));
 const Chats = lazy(() => import("../pages/Chats"));
 const NewPost = lazy(() => import("../pages/NewPost"));
+const Posts = lazy(() => import("../pages/Posts"));
 
 type RouteType = {
   path: string;
@@ -21,7 +22,8 @@ export const ROUTES = {
   SIGNUP: route("signup"),
   CHATS: route("chats"),
   CHAT_DETAIL: route("chats/:chatId"),
-  NEW_POST: route("posts/new")
+  NEW_POST: route("posts/new"),
+  POSTS: route("posts")
 };
 
 export const protectedRoutes: RouteType[] = [
@@ -44,6 +46,10 @@ export const protectedRoutes: RouteType[] = [
   {
     path: ROUTES.NEW_POST.path,
     component: NewPost
+  },
+  {
+    path: ROUTES.POSTS.path,
+    component: Posts
   }
 ];
 
