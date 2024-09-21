@@ -38,6 +38,13 @@ export const updateUser = async (req: Request, res: Response) => {
    *     responses:
    *       201:
    *         description: User updated successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 user:
+   *                   $ref: '#/components/schemas/User'
    *       409:
    *         description: Login already taken
    *       500:
@@ -125,6 +132,13 @@ export const signupUser = async (req: Request, res: Response) => {
    *     responses:
    *       201:
    *         description: User created successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 user:
+   *                   $ref: '#/components/schemas/User'
    *       409:
    *         description: Login already taken
    *       500:
@@ -191,6 +205,13 @@ export const loginUser = async (req: Request, res: Response) => {
    *     responses:
    *       200:
    *         description: User logged in successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 user:
+   *                   $ref: '#/components/schemas/User'
    *       401:
    *         description: Invalid login or password
    *       500:

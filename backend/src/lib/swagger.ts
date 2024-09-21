@@ -1,4 +1,5 @@
 import swaggerJsdoc, { Options } from "swagger-jsdoc";
+import { UserSchema } from "../types/docs/UserDocs";
 
 const options: Options = {
   definition: {
@@ -20,6 +21,9 @@ const options: Options = {
           scheme: "bearer",
           bearerFormat: "JWT",
         },
+      },
+      schemas: {
+        User: UserSchema,
       },
     },
     security: [
