@@ -18,6 +18,7 @@ export default function Avatar({
   lastActive,
   className
 }: AvatarProps) {
+  console.log("avatar", src, src.length);
   return (
     <div className="relative">
       <Image

@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { authorize } from "../middlewares/authorize";
 import authRouterProtected from "./routers/auth.router";
-import fileRouter from "./routers/file.router";
 import { updateLastActive } from "../middlewares/updateLastActive";
 import userRouter from "./routers/user.router";
 import chatRouter from "./routers/chat.router";
+import fileRouter from "./routers/file.router";
 
 const protectedRoutes = Router();
 
