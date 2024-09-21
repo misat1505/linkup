@@ -68,7 +68,7 @@ export const createMessageController = async (req: Request, res: Response) => {
     }
 
     files.forEach((file) => {
-      const commonPath = path.join(__dirname, "..", "..", "files");
+      const commonPath = path.join(__dirname, "..", "..", "..", "files");
       const inPath = path.join(commonPath, "temp", file);
       const outPath = path.join(commonPath, "chats", chatId, file);
       fs.mkdirSync(path.dirname(outPath), { recursive: true });

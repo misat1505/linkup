@@ -88,6 +88,7 @@ export const updateSelfController = async (req: Request, res: Response) => {
         __dirname,
         "..",
         "..",
+        "..",
         "files",
         "avatars",
         fetchedUser.photoURL

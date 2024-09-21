@@ -18,7 +18,7 @@ const sendFileBuilder =
 
     if (!result) return res.status(401).json({ message: errorMessage });
 
-    const filepath = path.join(__dirname, "..", "..", "files", filename);
+    const filepath = path.join(__dirname, "..", "..", "..", "files", filename);
 
     if (!fs.existsSync(filepath)) {
       return res.status(404).json({ message: "File not found." });

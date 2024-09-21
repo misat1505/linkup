@@ -1,13 +1,5 @@
 import request from "supertest";
 import express from "express";
-import {
-  getUser,
-  loginUser,
-  logoutUser,
-  refreshToken,
-  signupUser,
-  updateUser,
-} from "../../src/controllers/auth.controller";
 import { UserService } from "../../src/services/UserService";
 import { JwtHandler } from "../../src/lib/JwtHandler";
 import { User, UserWithCredentials } from "../../src/types/User";
@@ -15,6 +7,12 @@ import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import { isUser } from "../../src/types/guards/user.guard";
 import { VALID_USER_ID } from "../utils/constants";
+import { signupController } from "../../src/controllers/auth/signup.controller";
+import { loginController } from "../../src/controllers/auth/login.controller";
+import { refreshTokenController } from "../../src/controllers/auth/refreshToken.controller";
+import { logoutController } from "../../src/controllers/auth/logout.controller";
+import { getSelfController } from "../../src/controllers/auth/getSelf.controller";
+import { updateSelfController } from "../../src/controllers/auth/updateSelf.controller";
 
 jest.mock("uuid");
 jest.mock("bcryptjs");
@@ -24,12 +22,12 @@ jest.mock("../../src/lib/JwtHandler");
 describe("Auth Controllers", () => {
   const app = express();
   app.use(express.json());
-  app.post("/signup", signupUser);
-  app.post("/login", loginUser);
-  app.post("/refresh", refreshToken);
-  app.post("/logout", logoutUser);
-  app.get("/user", getUser);
-  app.put("/user", updateUser);
+  app.post("/signup", signupController);
+  app.post("/login", loginController);
+  app.post("/refresh", refreshTokenController);
+  app.post("/logout", logoutController);
+  app.get("/user", getSelfController);
+  app.put("/user", updateSelfController);
 
   const removeCredentials = (
     userWithCredentials: UserWithCredentials

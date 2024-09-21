@@ -1,20 +1,18 @@
 import express from "express";
-import {
-  addUserToGroupChat,
-  createGroupChat,
-  createMessage,
-  createPrivateChat,
-  createReaction,
-  deleteUserFromGroupChat,
-  getChatMessages,
-  getUserChats,
-  updateAlias,
-  updateGroupChat,
-} from "../../src/controllers/chat.controller";
 import { ChatService } from "../../src/services/ChatService";
 import request from "supertest";
 import { upload } from "../../src/middlewares/multer";
 import { processAvatar } from "../../src/utils/processAvatar";
+import { createReactionController } from "../../src/controllers/chat/createReaction.controller";
+import { getChatMessagesController } from "../../src/controllers/chat/getChatMessages.controller";
+import { createMessageController } from "../../src/controllers/chat/createMessage.controller";
+import { getSelfChatsController } from "../../src/controllers/chat/getSelfChats.controller";
+import { createGroupChatController } from "../../src/controllers/chat/createGroupChat.controller";
+import { createPrivateChatController } from "../../src/controllers/chat/createPrivateChat.controller";
+import { updateAliasController } from "../../src/controllers/chat/updateUserAlias.controller";
+import { addUserToGroupChatController } from "../../src/controllers/chat/addUserToGroupChat.controller";
+import { deleteSelfFromGroupChatController } from "../../src/controllers/chat/deleteSelfFromGroupChat.controller";
+import { updateGroupChatController } from "../../src/controllers/chat/updateGroupChat.controller";
 
 jest.mock("../../src/services/ChatService");
 jest.mock("../../src/utils/processAvatar");
@@ -22,16 +20,16 @@ jest.mock("../../src/utils/processAvatar");
 describe("Chat controllers", () => {
   const app = express();
   app.use(express.json());
-  app.post("/:chatId/reactions", createReaction);
-  app.get("/:chatId/messages", getChatMessages);
-  app.post("/:chatId/messages", upload.array("files"), createMessage);
-  app.get("/chats", getUserChats);
-  app.post("/chats/group", createGroupChat);
-  app.post("/chats/private", createPrivateChat);
-  app.put(`/chats/:chatId/users/:userId/alias`, updateAlias);
-  app.post("/chats/:chatId/users", addUserToGroupChat);
-  app.delete("/chats/:chatId/users", deleteUserFromGroupChat);
-  app.put("/chats/:chatId", upload.single("file"), updateGroupChat);
+  app.post("/:chatId/reactions", createReactionController);
+  app.get("/:chatId/messages", getChatMessagesController);
+  app.post("/:chatId/messages", upload.array("files"), createMessageController);
+  app.get("/chats", getSelfChatsController);
+  app.post("/chats/group", createGroupChatController);
+  app.post("/chats/private", createPrivateChatController);
+  app.put(`/chats/:chatId/users/:userId/alias`, updateAliasController);
+  app.post("/chats/:chatId/users", addUserToGroupChatController);
+  app.delete("/chats/:chatId/users", deleteSelfFromGroupChatController);
+  app.put("/chats/:chatId", upload.single("file"), updateGroupChatController);
 
   beforeEach(() => {
     jest.clearAllMocks();

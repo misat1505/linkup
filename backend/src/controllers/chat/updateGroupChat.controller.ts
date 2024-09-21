@@ -74,6 +74,7 @@ export const updateGroupChatController = async (
         __dirname,
         "..",
         "..",
+        "..",
         "files",
         "chats",
         chatId,

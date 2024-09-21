@@ -2,10 +2,10 @@ import request from "supertest";
 import express from "express";
 import path from "path";
 import fs from "fs";
-import { getFile } from "../../src/controllers/file.controller";
 import { FileService } from "../../src/services/FileService";
 import { VALID_USER_ID } from "../utils/constants";
 import { JwtHandler } from "../../src/lib/JwtHandler";
+import { getFileController } from "../../src/controllers/file/getFile.controller";
 
 jest.mock("../../src/services/FileService");
 
@@ -15,7 +15,7 @@ jest.mock("../../src/services/FileService");
 
 const app = express();
 app.use(express.json());
-app.get("/:filename", getFile);
+app.get("/:filename", getFileController);
 
 const testAvatarPath = path.join(
   __dirname,
@@ -60,8 +60,6 @@ const deleteTestFile = () => {
 };
 
 describe("File Controllers", () => {
-  const token = JwtHandler.encode({ userId: VALID_USER_ID });
-
   describe("getFile", () => {
     beforeAll(() => {
       createTestFile();
