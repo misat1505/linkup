@@ -6,6 +6,40 @@ import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 
 export const updateGroupChat = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /chats/{chatId}:
+   *   put:
+   *     summary: Update a group chat
+   *     tags: [Chats]
+   *     parameters:
+   *       - name: chatId
+   *         in: path
+   *         required: true
+   *         description: The ID of the chat to update.
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               name:
+   *                 type: string
+   *             required:
+   *               - name
+   *     responses:
+   *       201:
+   *         description: Chat updated successfully
+   *       401:
+   *         description: User not authorized to update this chat
+   *       400:
+   *         description: Cannot update chat of this type
+   *       500:
+   *         description: Server error when updating chat
+   */
   try {
     const {
       name,
@@ -54,6 +88,27 @@ export const updateGroupChat = async (req: Request, res: Response) => {
 };
 
 export const deleteUserFromGroupChat = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /chats/{chatId}/users:
+   *   delete:
+   *     summary: Remove a user from a group chat
+   *     tags: [Chats]
+   *     parameters:
+   *       - name: chatId
+   *         in: path
+   *         required: true
+   *         description: The ID of the chat from which to remove the user.
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Successfully deleted from chat
+   *       401:
+   *         description: User not authorized to remove from this chat
+   *       500:
+   *         description: Server error when removing user from chat
+   */
   try {
     const { chatId } = req.params;
     const {
@@ -80,6 +135,40 @@ export const deleteUserFromGroupChat = async (req: Request, res: Response) => {
 };
 
 export const addUserToGroupChat = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /chats/{chatId}/users:
+   *   post:
+   *     summary: Add a user to a group chat
+   *     tags: [Chats]
+   *     parameters:
+   *       - name: chatId
+   *         in: path
+   *         required: true
+   *         description: The ID of the chat to which to add the user.
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               userId:
+   *                 type: string
+   *             required:
+   *               - userId
+   *     responses:
+   *       201:
+   *         description: User added to chat successfully
+   *       401:
+   *         description: User not authorized to add to this chat
+   *       409:
+   *         description: User is already in this chat
+   *       500:
+   *         description: Server error when adding user to chat
+   */
   try {
     const { chatId } = req.params;
     const {
@@ -111,6 +200,44 @@ export const addUserToGroupChat = async (req: Request, res: Response) => {
 };
 
 export const updateAlias = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /chats/{chatId}/alias/{userId}:
+   *   put:
+   *     summary: Update a user's alias in a group chat
+   *     tags: [Chats]
+   *     parameters:
+   *       - name: chatId
+   *         in: path
+   *         required: true
+   *         description: The ID of the chat where the alias will be updated.
+   *         schema:
+   *           type: string
+   *       - name: userId
+   *         in: path
+   *         required: true
+   *         description: The ID of the user whose alias will be updated.
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               alias:
+   *                 type: string
+   *             required:
+   *               - alias
+   *     responses:
+   *       200:
+   *         description: Alias updated successfully
+   *       401:
+   *         description: User not authorized to update alias
+   *       500:
+   *         description: Server error when updating alias
+   */
   try {
     const {
       token: { userId },
@@ -142,6 +269,41 @@ export const updateAlias = async (req: Request, res: Response) => {
 };
 
 export const createReaction = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /chats/{chatId}/reactions:
+   *   post:
+   *     summary: Create a reaction to a message in a chat
+   *     tags: [Chats]
+   *     parameters:
+   *       - name: chatId
+   *         in: path
+   *         required: true
+   *         description: The ID of the chat where the message exists.
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               reactionId:
+   *                 type: string
+   *               messageId:
+   *                 type: string
+   *             required:
+   *               - reactionId
+   *               - messageId
+   *     responses:
+   *       201:
+   *         description: Reaction created successfully
+   *       401:
+   *         description: User not authorized to create reaction
+   *       500:
+   *         description: Server error when creating reaction
+   */
   try {
     const {
       token: { userId },
@@ -181,6 +343,27 @@ export const createReaction = async (req: Request, res: Response) => {
 };
 
 export const getChatMessages = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /chats/{chatId}/messages:
+   *   get:
+   *     summary: Get messages from a chat
+   *     tags: [Chats]
+   *     parameters:
+   *       - name: chatId
+   *         in: path
+   *         required: true
+   *         description: The ID of the chat from which to retrieve messages.
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Messages retrieved successfully
+   *       401:
+   *         description: User not authorized to read messages from this chat
+   *       500:
+   *         description: Server error when fetching messages
+   */
   try {
     const { userId } = req.body.token;
     const { chatId } = req.params;
@@ -201,6 +384,42 @@ export const getChatMessages = async (req: Request, res: Response) => {
 };
 
 export const createMessage = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /chats/{chatId}/messages:
+   *   post:
+   *     summary: Create a new message in a chat
+   *     tags: [Chats]
+   *     parameters:
+   *       - name: chatId
+   *         in: path
+   *         required: true
+   *         description: The ID of the chat where the message will be sent.
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               content:
+   *                 type: string
+   *               responseId:
+   *                 type: string
+   *             required:
+   *               - content
+   *     responses:
+   *       201:
+   *         description: Message created successfully
+   *       401:
+   *         description: User not authorized to send a message
+   *       400:
+   *         description: Response message does not exist in this chat
+   *       500:
+   *         description: Server error when creating message
+   */
   try {
     const { content, responseId } = req.body;
     const { userId } = req.body.token;
@@ -252,6 +471,18 @@ export const createMessage = async (req: Request, res: Response) => {
 };
 
 export const getUserChats = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /chats:
+   *   get:
+   *     summary: Get all chats for a user
+   *     tags: [Chats]
+   *     responses:
+   *       200:
+   *         description: Chats retrieved successfully
+   *       500:
+   *         description: Server error when fetching user's chats
+   */
   try {
     const { userId } = req.body.token;
 
@@ -264,6 +495,36 @@ export const getUserChats = async (req: Request, res: Response) => {
 };
 
 export const createGroupChat = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /chats/group:
+   *   post:
+   *     summary: Create a new group chat
+   *     tags: [Chats]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               users:
+   *                 type: array
+   *                 items:
+   *                   type: string
+   *               name:
+   *                 type: string
+   *             required:
+   *               - users
+   *               - name
+   *     responses:
+   *       201:
+   *         description: Group chat created successfully
+   *       401:
+   *         description: User not authorized to create group chat
+   *       500:
+   *         description: Server error when creating group chat
+   */
   try {
     const {
       users,
@@ -289,6 +550,35 @@ export const createGroupChat = async (req: Request, res: Response) => {
 };
 
 export const createPrivateChat = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /chats/private:
+   *   post:
+   *     summary: Create a new private chat
+   *     tags: [Chats]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               users:
+   *                 type: array
+   *                 items:
+   *                   type: string
+   *             required:
+   *               - users
+   *     responses:
+   *       201:
+   *         description: Private chat created successfully
+   *       409:
+   *         description: Chat already exists
+   *       401:
+   *         description: User not authorized to create private chat
+   *       500:
+   *         description: Server error when creating private chat
+   */
   try {
     const {
       users,
