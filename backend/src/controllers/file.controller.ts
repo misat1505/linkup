@@ -28,6 +28,49 @@ const sendFileBuilder =
   };
 
 export const getFile = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /files/{filename}:
+   *   get:
+   *     summary: Retrieve a file (avatar, chat photo, or chat message)
+   *     tags: [Files]
+   *     parameters:
+   *       - name: filename
+   *         in: path
+   *         required: true
+   *         description: The name of the file to retrieve.
+   *         schema:
+   *           type: string
+   *       - name: filter
+   *         in: query
+   *         required: true
+   *         description: The type of file to filter (avatar, chat-message, or chat-photo).
+   *         schema:
+   *           type: string
+   *           enum: [avatar, chat-message, chat-photo]
+   *       - name: chat
+   *         in: query
+   *         required: false
+   *         description: Optional chat ID for chat-specific photos or messages.
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: File retrieved successfully
+   *         content:
+   *           application/octet-stream:
+   *             schema:
+   *               type: string
+   *               format: binary
+   *       400:
+   *         description: Invalid request parameters
+   *       401:
+   *         description: Unauthorized access or query failed
+   *       404:
+   *         description: File not found
+   *       500:
+   *         description: Server error when fetching the file
+   */
   try {
     const { filename } = req.params;
     const filter = req.query.filter as Filter;
