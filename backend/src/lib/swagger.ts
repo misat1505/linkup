@@ -1,5 +1,12 @@
 import swaggerJsdoc, { Options } from "swagger-jsdoc";
 import { UserSchema } from "../types/docs/UserDocs";
+import { ReactionSchema } from "../types/docs/ReactionDocs";
+import { FileSchema } from "../types/docs/FileDocs";
+import {
+  MessageResponseSchema,
+  MessageSchema,
+} from "../types/docs/MessageDocs";
+import { ChatSchema, UserInChatSchema } from "../types/docs/ChatDocs";
 
 const options: Options = {
   definition: {
@@ -24,6 +31,12 @@ const options: Options = {
       },
       schemas: {
         User: UserSchema,
+        Reaction: ReactionSchema,
+        File: FileSchema,
+        Message: MessageSchema,
+        Chat: ChatSchema,
+        MessageResponse: MessageResponseSchema,
+        UserInChat: UserInChatSchema,
       },
     },
     security: [
