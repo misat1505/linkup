@@ -14,6 +14,8 @@ import { accessLogStream } from "./config/log";
 import { Server } from "socket.io";
 import { setupSocket } from "./lib/sockets";
 import { initReactions } from "./config/reactions";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./lib/swagger";
 
 const app = express();
 
@@ -24,6 +26,8 @@ app.use(limiter);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/", publicRoutes);
 app.use("/", protectedRoutes);
