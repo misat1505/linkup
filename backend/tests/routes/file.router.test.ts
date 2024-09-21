@@ -53,12 +53,12 @@ describe("file router", () => {
     it("should allow everyone to access avatar", async () => {
       const res = await request(app)
         .get(`/files/${newlyCreatedUser.photoURL}?filter=avatar`)
-        .set("Cookie", `token=${newlyCreatedUserToken}`);
+        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
       expect(res.statusCode).toBe(200);
 
       const res2 = await request(app)
         .get(`/files/${newlyCreatedUser.photoURL}?filter=avatar`)
-        .set("Cookie", `token=${token}`);
+        .set("Authorization", `Bearer ${token}`);
       expect(res2.statusCode).toBe(200);
     });
 
@@ -67,7 +67,7 @@ describe("file router", () => {
         body: { chat },
       } = await request(app)
         .post("/chats/group")
-        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .field("users[0]", VALID_USER_ID)
         .field("users[1]", "935719fa-05c4-42c4-9b02-2be3fefb6e61")
         .field("name", "chat name")
@@ -75,7 +75,7 @@ describe("file router", () => {
 
       const res = await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-        .set("Cookie", `token=${token}`);
+        .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toBe(200);
 
       const user2Token = JwtHandler.encode({
@@ -84,12 +84,12 @@ describe("file router", () => {
 
       const res2 = await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-        .set("Cookie", `token=${user2Token}`);
+        .set("Authorization", `Bearer ${user2Token}`);
       expect(res2.statusCode).toBe(200);
 
       const res3 = await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-        .set("Cookie", `token=${newlyCreatedUserToken}`);
+        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
       expect(res3.statusCode).toBe(401);
 
       const filepath = path.join(
@@ -110,7 +110,7 @@ describe("file router", () => {
         body: { chat },
       } = await request(app)
         .post("/chats/group")
-        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .field("users[0]", VALID_USER_ID)
         .field("name", "")
         .field("users[1]", "935719fa-05c4-42c4-9b02-2be3fefb6e61");
@@ -119,7 +119,7 @@ describe("file router", () => {
         body: { message },
       } = await request(app)
         .post(`/chats/${chat.id}/messages`)
-        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .field("content", "message")
         .attach("files", Buffer.from("message file"), "file1.txt");
 
@@ -127,7 +127,7 @@ describe("file router", () => {
 
       const res = await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-        .set("Cookie", `token=${token}`);
+        .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toBe(200);
 
       const user2Token = JwtHandler.encode({
@@ -136,12 +136,12 @@ describe("file router", () => {
 
       const res2 = await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-        .set("Cookie", `token=${user2Token}`);
+        .set("Authorization", `Bearer ${user2Token}`);
       expect(res2.statusCode).toBe(200);
 
       const res3 = await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-        .set("Cookie", `token=${newlyCreatedUserToken}`);
+        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
       expect(res3.statusCode).toBe(401);
 
       const filepath = path.join(

@@ -18,7 +18,7 @@ describe("authorize middleware", () => {
     const token = JwtHandler.encode({ userId });
     const response = await request(app)
       .post("/test")
-      .set("Cookie", `token=${token}`);
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.body.userId).toBe(userId);
@@ -32,7 +32,7 @@ describe("authorize middleware", () => {
   it("shouldn't allow invalid token", async () => {
     const response = await request(app)
       .post("/test")
-      .set("Cookie", "token=invalid");
+      .set("Authorization", `Bearer invalid`);
     expect(response.statusCode).toBe(401);
   });
 });

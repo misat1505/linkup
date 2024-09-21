@@ -11,7 +11,7 @@ describe("user router", () => {
     it("should return users", async () => {
       const response = await request(app)
         .get("/users/search?term=Kylian")
-        .set("Cookie", `token=${token}`);
+        .set("Authorization", `Bearer ${token}`);
 
       expect(response.statusCode).toBe(200);
       expect(response.body.users.length).toBe(1);

@@ -7,6 +7,8 @@ import { VALID_USER_ID } from "../utils/constants";
 import { isUser } from "../../src/types/guards/user.guard";
 
 describe("auth router", () => {
+  const token = JwtHandler.encode({ userId: VALID_USER_ID });
+
   describe("[PUT] /user", () => {
     it("should update user", async () => {
       const newUser = {
@@ -22,7 +24,7 @@ describe("auth router", () => {
         .field("firstName", newUser.firstName)
         .field("lastName", newUser.lastName)
         .attach("file", path.join(__dirname, "..", "utils", "image.jpg"))
-        .set("Cookie", `token=${JwtHandler.encode({ userId: VALID_USER_ID })}`);
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toEqual(201);
       expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(true);
@@ -139,7 +141,7 @@ describe("auth router", () => {
 
       const res = await request(app)
         .post("/auth/logout")
-        .set("Cookie", `token=${token}`);
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
       expect(res.headers["set-cookie"]).toBeDefined();
