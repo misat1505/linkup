@@ -2,9 +2,23 @@ import { convertDates } from "../utils/convertDates";
 import { API_URL } from "../constants";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { addFilePrefix } from "../utils/addFilePrefix";
+import { getAccessToken } from "../lib/token";
 
 function createAPIInstance(config: AxiosRequestConfig): AxiosInstance {
   const instance = axios.create(config);
+
+  instance.interceptors.request.use(
+    (config) => {
+      const token = getAccessToken();
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   instance.interceptors.response.use(
     (response) => {

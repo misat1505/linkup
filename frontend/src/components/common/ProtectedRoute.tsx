@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import React from "react";
 import Loading from "./Loading";
 import { ROUTES } from "../../lib/routes";
+import { getAccessToken } from "../../lib/token";
 
 export default function ProtectedRoute({
   children
@@ -15,7 +16,7 @@ export default function ProtectedRoute({
     return <Loading />;
   }
 
-  if (!user) {
+  if (!user || !getAccessToken()) {
     return <Navigate to={ROUTES.LOGIN.path} />;
   }
 

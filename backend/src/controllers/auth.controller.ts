@@ -93,8 +93,14 @@ export const signupUser = async (req: Request, res: Response) => {
     await UserService.insertUser(user);
 
     const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
+    const accessToken = JwtHandler.encode(
+      { userId: user.id },
+      { expiresIn: "1h" }
+    );
     res.cookie("token", jwt, jwtCookieOptions);
-    return res.status(201).json({ user: UserService.removeCredentials(user) });
+    return res
+      .status(201)
+      .json({ user: UserService.removeCredentials(user), accessToken });
   } catch (e) {
     return res.status(500).json({ message: "Cannot create new user." });
   }
@@ -116,8 +122,14 @@ export const loginUser = async (req: Request, res: Response) => {
     }
 
     const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
+    const accessToken = JwtHandler.encode(
+      { userId: user.id },
+      { expiresIn: "1h" }
+    );
     res.cookie("token", jwt, jwtCookieOptions);
-    return res.status(200).json({ user: UserService.removeCredentials(user) });
+    return res
+      .status(201)
+      .json({ user: UserService.removeCredentials(user), accessToken });
   } catch (e) {
     return res.status(500).json({ message: "Cannot login." });
   }
@@ -128,8 +140,11 @@ export const refreshToken = (req: Request, res: Response) => {
     const { userId } = req.body.token;
 
     const jwt = JwtHandler.encode({ userId }, { expiresIn: "1h" });
+    const accessToken = JwtHandler.encode({ userId }, { expiresIn: "1h" });
     res.cookie("token", jwt, jwtCookieOptions);
-    return res.status(200).json({ message: "Successfully refreshed token." });
+    return res
+      .status(200)
+      .json({ message: "Successfully refreshed token.", accessToken });
   } catch (e) {
     return res.status(500).json({ message: "Cannot refresh token." });
   }
@@ -157,7 +172,15 @@ export const getUser = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    return res.status(200).json({ user: UserService.removeCredentials(user) });
+    const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
+    const accessToken = JwtHandler.encode(
+      { userId: user.id },
+      { expiresIn: "1h" }
+    );
+    res.cookie("token", jwt, jwtCookieOptions);
+    return res
+      .status(201)
+      .json({ user: UserService.removeCredentials(user), accessToken });
   } catch (e) {
     return res.status(500).json({ message: "Cannot fetch user." });
   }
