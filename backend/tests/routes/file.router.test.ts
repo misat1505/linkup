@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import request from "supertest";
 import app from "../../src/app";
-import { JwtHandler } from "../../src/lib/JwtHandler";
+import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { VALID_USER_ID } from "../utils/constants";
 import { User } from "../../src/types/User";
 import { Message } from "../../src/types/Message";
@@ -37,12 +37,14 @@ const deleteUserFile = () => {
 };
 
 describe("file router", () => {
-  const token = JwtHandler.encode({ userId: VALID_USER_ID });
+  const token = TokenProcessor.encode({ userId: VALID_USER_ID });
   let newlyCreatedUserToken: string;
 
   beforeEach(async () => {
     await createTestUser();
-    newlyCreatedUserToken = JwtHandler.encode({ userId: newlyCreatedUser.id });
+    newlyCreatedUserToken = TokenProcessor.encode({
+      userId: newlyCreatedUser.id,
+    });
   });
 
   afterEach(() => {
@@ -78,7 +80,7 @@ describe("file router", () => {
         .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toBe(200);
 
-      const user2Token = JwtHandler.encode({
+      const user2Token = TokenProcessor.encode({
         userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
       });
 
@@ -130,7 +132,7 @@ describe("file router", () => {
         .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toBe(200);
 
-      const user2Token = JwtHandler.encode({
+      const user2Token = TokenProcessor.encode({
         userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
       });
 

@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { Message } from "../types/Message";
-import { JwtHandler } from "./JwtHandler";
+import { TokenProcessor } from "./TokenProcessor";
 import { ChatService } from "../services/ChatService";
 import { getCookie } from "./getCookie";
 
@@ -15,7 +15,7 @@ export const setupSocket = (io: Server) => {
         const token = getCookie(socket.handshake.headers.cookie, "token");
         if (!token) throw new Error("Token is required to join room.");
 
-        const decoded = JwtHandler.decode(token);
+        const decoded = TokenProcessor.decode(token);
         if (!decoded) throw new Error("Invalid token.");
 
         const { userId } = decoded;

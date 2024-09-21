@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { JwtHandler } from "../lib/JwtHandler";
+import { TokenProcessor } from "../lib/TokenProcessor";
 
 export const authorize = (req: Request, res: Response, next: NextFunction) => {
   /**
@@ -24,7 +24,7 @@ export const authorize = (req: Request, res: Response, next: NextFunction) => {
 
   const token = authorization.split("Bearer ")[1];
 
-  const tokenPayload = JwtHandler.decode(token);
+  const tokenPayload = TokenProcessor.decode(token);
   if (!tokenPayload) {
     return res.status(401).json({ message: "Invalid token" });
   }
@@ -52,7 +52,7 @@ export const authorizeWithRefreshToken = (
     return res.status(400).json({ message: "Invalid request - no token" });
   }
 
-  const tokenPayload = JwtHandler.decode(token);
+  const tokenPayload = TokenProcessor.decode(token);
   if (!tokenPayload) {
     return res.status(401).json({ message: "Invalid token" });
   }

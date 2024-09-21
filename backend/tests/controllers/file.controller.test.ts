@@ -4,7 +4,6 @@ import path from "path";
 import fs from "fs";
 import { FileService } from "../../src/services/FileService";
 import { VALID_USER_ID } from "../utils/constants";
-import { JwtHandler } from "../../src/lib/JwtHandler";
 import { getFileController } from "../../src/controllers/file/getFile.controller";
 
 jest.mock("../../src/services/FileService");

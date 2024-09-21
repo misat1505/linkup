@@ -1,5 +1,5 @@
 import app from "../../src/app";
-import { JwtHandler } from "../../src/lib/JwtHandler";
+import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { USER, VALID_USER_ID } from "../utils/constants";
 import request from "supertest";
 import fs from "fs";
@@ -11,7 +11,7 @@ import { isReaction } from "../../src/types/guards/reaction.guard";
 import { Chat } from "../../src/types/Chat";
 import { isUserInChat } from "../../src/types/guards/user.guard";
 
-const token = JwtHandler.encode({ userId: VALID_USER_ID });
+const token = TokenProcessor.encode({ userId: VALID_USER_ID });
 
 describe("chat router", () => {
   describe("[GET] /chats", () => {

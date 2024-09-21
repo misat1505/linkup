@@ -4,7 +4,7 @@ import { User } from "../types/User";
 
 export type JwtPayload = { userId: User["id"] };
 
-export class JwtHandler {
+export class TokenProcessor {
   private static readonly secret = env.JWT_SECRET;
 
   static encode(payload: JwtPayload, options?: SignOptions): string {

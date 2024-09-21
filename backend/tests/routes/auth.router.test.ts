@@ -2,12 +2,12 @@ import request from "supertest";
 import app from "../../src/app";
 import fs from "fs";
 import path from "path";
-import { JwtHandler } from "../../src/lib/JwtHandler";
+import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { VALID_USER_ID } from "../utils/constants";
 import { isUser } from "../../src/types/guards/user.guard";
 
 describe("auth router", () => {
-  const token = JwtHandler.encode({ userId: VALID_USER_ID });
+  const token = TokenProcessor.encode({ userId: VALID_USER_ID });
 
   describe("[PUT] /user", () => {
     it("should update user", async () => {
@@ -43,7 +43,10 @@ describe("auth router", () => {
 
       const res2 = await request(app)
         .get("/auth/user")
-        .set("Cookie", `token=${JwtHandler.encode({ userId: VALID_USER_ID })}`);
+        .set(
+          "Cookie",
+          `token=${TokenProcessor.encode({ userId: VALID_USER_ID })}`
+        );
 
       const getUser = res2.body.user;
       expect(isUser(getUser, { allowStringifiedDates: true })).toBe(true);
@@ -124,7 +127,7 @@ describe("auth router", () => {
 
   describe("[POST] /refresh", () => {
     it("should refresh token", async () => {
-      const token = JwtHandler.encode({ userId: VALID_USER_ID });
+      const token = TokenProcessor.encode({ userId: VALID_USER_ID });
 
       const res = await request(app)
         .post("/auth/refresh")
@@ -137,7 +140,7 @@ describe("auth router", () => {
 
   describe("[POST] /logout", () => {
     it("should logout user", async () => {
-      const token = JwtHandler.encode({ userId: VALID_USER_ID });
+      const token = TokenProcessor.encode({ userId: VALID_USER_ID });
 
       const res = await request(app)
         .post("/auth/logout")
@@ -150,7 +153,7 @@ describe("auth router", () => {
 
   describe("[GET] /user", () => {
     it("should get user", async () => {
-      const token = JwtHandler.encode(
+      const token = TokenProcessor.encode(
         { userId: VALID_USER_ID },
         { expiresIn: "1h" }
       );

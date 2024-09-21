@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../../services/UserService";
-import { JwtHandler } from "../../lib/JwtHandler";
+import { TokenProcessor } from "../../lib/TokenProcessor";
 import { jwtCookieOptions } from "../../config/jwt-cookie";
 
 export const getSelfController = async (req: Request, res: Response) => {
@@ -28,8 +28,8 @@ export const getSelfController = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
-    const accessToken = JwtHandler.encode(
+    const jwt = TokenProcessor.encode({ userId: user.id }, { expiresIn: "1h" });
+    const accessToken = TokenProcessor.encode(
       { userId: user.id },
       { expiresIn: "1h" }
     );

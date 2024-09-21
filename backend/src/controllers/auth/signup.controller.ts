@@ -3,7 +3,7 @@ import { processAvatar } from "../../utils/processAvatar";
 import { Hasher } from "../../lib/Hasher";
 import { UserService } from "../../services/UserService";
 import { UserWithCredentials } from "../../types/User";
-import { JwtHandler } from "../../lib/JwtHandler";
+import { TokenProcessor } from "../../lib/TokenProcessor";
 import { jwtCookieOptions } from "../../config/jwt-cookie";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
@@ -74,8 +74,8 @@ export const signupController = async (req: Request, res: Response) => {
 
     await UserService.insertUser(user);
 
-    const jwt = JwtHandler.encode({ userId: user.id }, { expiresIn: "1h" });
-    const accessToken = JwtHandler.encode(
+    const jwt = TokenProcessor.encode({ userId: user.id }, { expiresIn: "1h" });
+    const accessToken = TokenProcessor.encode(
       { userId: user.id },
       { expiresIn: "1h" }
     );
