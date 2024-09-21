@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { UserService } from "../services/UserService";
+import { UserService } from "../../services/UserService";
 
-export const searchUser = async (req: Request, res: Response) => {
+export const searchUserController = async (req: Request, res: Response) => {
   /**
    * @swagger
    * /users/search:

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
-import { FileService } from "../services/FileService";
+import { FileService } from "../../services/FileService";
 
 type Filter = "avatar" | "chat-message" | "chat-photo";
 
@@ -27,7 +27,7 @@ const sendFileBuilder =
     return res.status(200).sendFile(filepath);
   };
 
-export const getFile = async (req: Request, res: Response) => {
+export const getFileController = async (req: Request, res: Response) => {
   /**
    * @swagger
    * /files/{filename}:
