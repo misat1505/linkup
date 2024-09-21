@@ -48,13 +48,11 @@ export default function Image({
   const { data, isError, error, isLoading } = useQuery({
     queryKey: ["files", { src }],
     queryFn: async () => {
-      console.log(src);
       const result = await fetch(src as string, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${getAccessToken()}`
-        },
-        credentials: "include"
+        }
       });
       if (!result.ok) throw new Error();
       const blob = await result.blob();

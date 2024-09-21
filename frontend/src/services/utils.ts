@@ -49,16 +49,13 @@ export const AUTH_API = createAPIInstance({
 });
 
 export const USER_API = createAPIInstance({
-  baseURL: `${API_URL}/users`,
-  withCredentials: true
+  baseURL: `${API_URL}/users`
 });
 
 export const CHAT_API = createAPIInstance({
-  baseURL: `${API_URL}/chats`,
-  withCredentials: true
+  baseURL: `${API_URL}/chats`
 });
 
 export const FILE_API = createAPIInstance({
-  baseURL: `${API_URL}/files`,
-  withCredentials: true
+  baseURL: `${API_URL}/files`
 });
