@@ -152,10 +152,7 @@ export const refreshToken = (req: Request, res: Response) => {
 
 export const logoutUser = (req: Request, res: Response) => {
   try {
-    const { userId } = req.body.token;
-
-    const logoutJwt = JwtHandler.encode({ userId }, { expiresIn: "0" });
-    res.cookie("token", logoutJwt, jwtCookieOptions);
+    res.clearCookie("token");
     res.status(200).json({ message: "Successfully logged out." });
   } catch (e) {
     return res.status(500).json({ message: "Cannot log out." });

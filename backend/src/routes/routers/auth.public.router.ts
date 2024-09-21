@@ -12,7 +12,7 @@ import {
 } from "../../controllers/auth.controller";
 import {
   authorize,
-  authorizeOnRefreshToken,
+  authorizeWithRefreshToken,
 } from "../../middlewares/authorize";
 
 const authRouter = Router();
@@ -24,9 +24,9 @@ authRouter.post(
   signupUser
 );
 authRouter.post("/login", validate(loginRules), loginUser);
-authRouter.post("/refresh", authorizeOnRefreshToken, refreshToken);
+authRouter.post("/refresh", authorizeWithRefreshToken, refreshToken);
 authRouter.post("/logout", authorize, logoutUser);
-authRouter.get("/user", authorizeOnRefreshToken, getUser);
+authRouter.get("/user", authorizeWithRefreshToken, getUser);
 authRouter.put(
   "/user",
   upload.single("file"),

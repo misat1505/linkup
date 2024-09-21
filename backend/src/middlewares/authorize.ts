@@ -3,14 +3,13 @@ import { JwtHandler } from "../lib/JwtHandler";
 
 export const authorize = (req: Request, res: Response, next: NextFunction) => {
   /**
-   * Middleware to authorize and verify JWT token from cookies.
+   * Middleware to authorize and verify JWT token from Authorization header.
    *
-   * Checks for a valid JWT token in cookies. If valid, appends the decoded token payload
+   * Checks for a valid JWT token in Authorization header. If valid, appends the decoded token payload
    * to the Request object as req.body.token and passes control to the next function.
    * Terminates the request with an error response if no token is found or if the token is invalid.
    */
 
-  console.log(req.headers.authorization, req.url);
   const authorization = req.headers.authorization;
 
   if (!authorization) {
@@ -34,7 +33,7 @@ export const authorize = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export const authorizeOnRefreshToken = (
+export const authorizeWithRefreshToken = (
   req: Request,
   res: Response,
   next: NextFunction
