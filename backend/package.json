@@ -6,6 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production ts-node src/app.ts",
     "dev": "cross-env NODE_ENV=development nodemon src/app.ts",
+    "e2e": "cross-env NODE_ENV=e2e nodemon src/app.ts",
     "test": "cross-env NODE_ENV=test npx jest --runInBand",
     "test:coverage": "cross-env NODE_ENV=test npx jest --coverage --runInBand",
     "test:load": "npx artillery run ./tests/load-tests/test.yaml",

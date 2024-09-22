@@ -29,12 +29,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use("/", publicRoutes);
-app.use("/", protectedRoutes);
-
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");
 });
+
+app.use("/", publicRoutes);
+app.use("/", protectedRoutes);
 
 if (env.NODE_ENV !== "test") {
   initReactions();
