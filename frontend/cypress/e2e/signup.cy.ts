@@ -17,6 +17,9 @@ describe("signup spec", () => {
     cy.get("[data-testid=cy-signup-form-password]").type("pass4");
     cy.get("[data-testid=cy-signup-form-confirmPassword]").type("pass4");
 
+    // const fileName = "image.jpg";
+    // cy.get('input[type="file"]').attachFile(fileName);
+
     cy.get("[data-testid=cy-signup-form-button]").click();
 
     cy.url().should("eq", `${frontendUrl}/`);
