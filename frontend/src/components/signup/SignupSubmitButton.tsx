@@ -11,7 +11,12 @@ export default function SignupSubmitButton() {
 
   return (
     <div className="mt-8 flex justify-center">
-      <Button variant="blueish" type="submit" disabled={isSubmitting}>
+      <Button
+        variant="blueish"
+        type="submit"
+        disabled={isSubmitting}
+        data-testid="cy-signup-form-button"
+      >
         {isSubmitting ? (
           <div className="flex items-center gap-x-2">
             <ClipLoader size={12} color="whitesmoke" />
