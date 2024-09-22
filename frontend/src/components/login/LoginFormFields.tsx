@@ -16,6 +16,7 @@ export default function LoginFormFields() {
       placeholder={placeholder}
       type={type}
       error={errors[name]?.message}
+      data-testid={`cy-login-form-${name}`}
     />
   );
 
