@@ -29,7 +29,10 @@ export default function ChatNavigation() {
   return (
     <div className={classnames}>
       <ChatNavigationHeader />
-      <div className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto">
+      <div
+        className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto"
+        data-testid="cy-chat-nav"
+      >
         {chats?.map((chat) => <NavigationItem key={chat.id} chat={chat} />)}
       </div>
     </div>

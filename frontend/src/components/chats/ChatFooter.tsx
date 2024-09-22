@@ -36,8 +36,13 @@ export default function ChatFooter() {
           className="z-20 min-h-8"
           placeholder="Type..."
           onKeyDown={handleTextInputKeyDown}
+          data-testid="cy-chat-footer-text-input"
         />
-        <button type="submit" disabled={isDisabled}>
+        <button
+          type="submit"
+          disabled={isDisabled}
+          data-testid="cy-chat-footer-button"
+        >
           {isSubmitting ? (
             <ClipLoader size={20} color="grey" />
           ) : (
