@@ -33,6 +33,13 @@ export const createMessageController = async (req: Request, res: Response) => {
    *     responses:
    *       201:
    *         description: Message created successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   $ref: '#/components/schemas/Message'
    *       401:
    *         description: User not authorized to send a message
    *       400:

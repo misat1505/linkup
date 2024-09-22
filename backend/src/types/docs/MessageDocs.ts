@@ -3,7 +3,11 @@ export const MessageResponseSchema = {
   description:
     "Response to the original message, without nested responses or reactions",
   properties: {
-    id: { type: "string", description: "Message ID", example: "msg124" },
+    id: {
+      type: "string",
+      description: "Message ID",
+      example: "019219a8-eaa3-73ac-93cb-60c2d0d25d8a",
+    },
     content: {
       type: "string",
       nullable: true,
@@ -23,7 +27,7 @@ export const MessageResponseSchema = {
     chatId: {
       type: "string",
       description: "ID of the chat this message belongs to",
-      example: "chat789",
+      example: "81fabe96-a6d8-44f9-93a9-634fbf01ecf3",
     },
     files: {
       type: "array",
@@ -36,7 +40,11 @@ export const MessageResponseSchema = {
 export const MessageSchema = {
   type: "object",
   properties: {
-    id: { type: "string", description: "Message ID", example: "msg123" },
+    id: {
+      type: "string",
+      description: "Message ID",
+      example: "019219a9-15fa-716a-8bbf-6da675e52073",
+    },
     content: {
       type: "string",
       nullable: true,
@@ -61,7 +69,7 @@ export const MessageSchema = {
     chatId: {
       type: "string",
       description: "Chat ID the message belongs to",
-      example: "chat123",
+      example: "f32bb9b7-91c6-4012-a4d3-b2f014cd2beb",
     },
     files: {
       type: "array",

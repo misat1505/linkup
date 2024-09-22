@@ -4,7 +4,7 @@ export const ReactionSchema = {
     id: {
       type: "string",
       description: "The unique ID of the reaction",
-      example: "r27ac12d-78ca-45f2-9c2f-77e2c3d6789a",
+      example: "f32bb9b7-91c6-4012-a4d3-b2f014cd2beb",
     },
     name: {
       type: "string",
@@ -14,7 +14,7 @@ export const ReactionSchema = {
     messageId: {
       type: "string",
       description: "The ID of the message the reaction is attached to",
-      example: "m17bc32c-45cb-43f2-8d2f-67e3c4f6829b",
+      example: "08bcfd50-073e-4b35-a5f6-03549504d18f",
     },
     user: {
       $ref: "#/components/schemas/User",

@@ -27,6 +27,13 @@ export const createPrivateChatController = async (
    *     responses:
    *       201:
    *         description: Private chat created successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 chat:
+   *                   $ref: '#/components/schemas/Chat'
    *       409:
    *         description: Chat already exists
    *       401:

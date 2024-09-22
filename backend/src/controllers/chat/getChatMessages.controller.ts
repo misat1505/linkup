@@ -21,6 +21,15 @@ export const getChatMessagesController = async (
    *     responses:
    *       200:
    *         description: Messages retrieved successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 messages:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/Message'
    *       401:
    *         description: User not authorized to read messages from this chat
    *       500:

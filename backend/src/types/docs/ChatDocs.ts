@@ -1,7 +1,11 @@
 export const UserInChatSchema = {
   type: "object",
   properties: {
-    id: { type: "string", description: "User ID", example: "abc123" },
+    id: {
+      type: "string",
+      description: "User ID",
+      example: "d0683f62-4c30-4eef-9578-7eac5c814c47",
+    },
     firstName: { type: "string", description: "First name", example: "John" },
     lastName: { type: "string", description: "Last name", example: "Doe" },
     photoURL: {
@@ -28,7 +32,11 @@ export const UserInChatSchema = {
 export const ChatSchema = {
   type: "object",
   properties: {
-    id: { type: "string", description: "Chat ID", example: "chat123" },
+    id: {
+      type: "string",
+      description: "Chat ID",
+      example: "a98a7149-30f5-4eea-bfab-eebe063b342f",
+    },
     createdAt: {
       type: "string",
       format: "date-time",

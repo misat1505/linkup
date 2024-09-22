@@ -32,6 +32,13 @@ export const createReactionController = async (req: Request, res: Response) => {
    *     responses:
    *       201:
    *         description: Reaction created successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 reaction:
+   *                   $ref: '#/components/schemas/Reaction'
    *       401:
    *         description: User not authorized to create reaction
    *       500:

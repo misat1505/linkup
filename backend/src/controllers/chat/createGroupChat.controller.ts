@@ -32,6 +32,13 @@ export const createGroupChatController = async (
    *     responses:
    *       201:
    *         description: Group chat created successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 chat:
+   *                   $ref: '#/components/schemas/Chat'
    *       401:
    *         description: User not authorized to create group chat
    *       500:

@@ -11,6 +11,15 @@ export const getSelfChatsController = async (req: Request, res: Response) => {
    *     responses:
    *       200:
    *         description: Chats retrieved successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 chats:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/Chat'
    *       500:
    *         description: Server error when fetching user's chats
    */

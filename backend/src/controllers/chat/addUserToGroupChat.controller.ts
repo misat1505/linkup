@@ -32,6 +32,13 @@ export const addUserToGroupChatController = async (
    *     responses:
    *       201:
    *         description: User added to chat successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 user:
+   *                   $ref: '#/components/schemas/User'
    *       401:
    *         description: User not authorized to add to this chat
    *       409:

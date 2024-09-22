@@ -14,6 +14,13 @@ export const getSelfController = async (req: Request, res: Response) => {
    *     responses:
    *       200:
    *         description: User fetched successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 user:
+   *                   $ref: '#/components/schemas/User'
    *       404:
    *         description: User not found
    *       500:

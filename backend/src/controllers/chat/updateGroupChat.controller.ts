@@ -36,6 +36,13 @@ export const updateGroupChatController = async (
    *     responses:
    *       201:
    *         description: Chat updated successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 chat:
+   *                   $ref: '#/components/schemas/Chat'
    *       401:
    *         description: User not authorized to update this chat
    *       400:
