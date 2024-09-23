@@ -1,6 +1,7 @@
 import React, { HTMLAttributes, ReactNode } from "react";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -38,7 +39,7 @@ export default function NavbarSheet() {
 
   return (
     <Sheet>
-      <SheetTrigger>
+      <SheetTrigger data-testid="cy-nav-trigger">
         <Tooltip content="Show actions">
           <span>
             <NavbarAvatar />
@@ -155,7 +156,8 @@ type SheetItemType = HTMLAttributes<HTMLButtonElement> & {
 const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
   ({ text, className, Icon, ...rest }, ref) => {
     return (
-      <button
+      <SheetClose
+        data-testid={`cy-nav-sheet-item-${text.toLowerCase()}`}
         ref={ref}
         className={cn(
           "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200 dark:bg-background dark:hover:bg-slate-800",
@@ -168,7 +170,7 @@ const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
           {text}
         </div>
         <div></div>
-      </button>
+      </SheetClose>
     );
   }
 );

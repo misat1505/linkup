@@ -16,7 +16,8 @@ describe("login spec", () => {
   });
 
   it("sends message to chat", () => {
-    cy.visit(`${frontendUrl}/chats`);
+    cy.get("[data-testid=cy-nav-trigger]").click();
+    cy.get("[data-testid=cy-nav-sheet-item-chats]").click();
 
     const openChatButton = cy
       .get("[data-testid=cy-chat-nav]")
