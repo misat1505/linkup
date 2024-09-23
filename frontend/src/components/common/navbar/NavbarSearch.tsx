@@ -40,12 +40,14 @@ export default function NavbarSearch() {
     queryFn: () => UserService.search(debouncedText),
     enabled: debouncedText.length > 0
   });
+  console.log(users);
 
   return (
     <Command className="w-60 rounded-lg border bg-white shadow-md dark:bg-black">
       <Tooltip content="Search for users">
         <CommandInput
           placeholder="Search on Link Up..."
+          data-testid="cy-nav-search-input"
           onInput={(e) => setText(e.currentTarget.value)}
           onFocus={() => setIsExpanded(true)}
         />
@@ -76,6 +78,7 @@ export default function NavbarSearch() {
               className={cn({ hidden: users.length === 0 })}
               forceMount={users.length > 0}
               heading="Suggestions"
+              data-testid="cy-nav-search-results"
             >
               {users.map((user) => (
                 <SearchResultItem
