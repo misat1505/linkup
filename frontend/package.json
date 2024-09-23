@@ -23,6 +23,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "cypress-real-events": "^1.13.0",
     "lucide-react": "^0.399.0",
     "mime-type": "^4.0.0",
     "moment": "^2.30.1",

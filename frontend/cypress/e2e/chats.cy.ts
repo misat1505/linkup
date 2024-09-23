@@ -15,6 +15,26 @@ describe("chats spec", () => {
     cy.get("[data-testid=cy-login-form-button]").click();
   });
 
+  const sendMessage = (text: string, withResponse = true) => {
+    const textInput = cy.get("[data-testid=cy-chat-footer-text-input]");
+    textInput.type(text);
+
+    if (withResponse) {
+      const messagesContainer = cy.get("[data-testid=cy-chat-messages]");
+      const responseMessage = messagesContainer.children().eq(1);
+      responseMessage.realHover({ pointer: "mouse" });
+
+      const buttons = responseMessage.children().first().children().first();
+      const replyButton = buttons.children().first();
+      replyButton.click();
+    }
+
+    cy.get("[data-testid=cy-chat-footer-button]").click();
+
+    cy.contains(text).should("be.visible");
+    textInput.should("have.value", "");
+  };
+
   it("sends message to chat", () => {
     cy.get("[data-testid=cy-nav-trigger]").click();
     cy.get("[data-testid=cy-nav-sheet-item-chats]").click();
@@ -28,14 +48,7 @@ describe("chats spec", () => {
 
     openChatButton.click();
 
-    const messageContent = "some message";
-    const textInput = cy.get("[data-testid=cy-chat-footer-text-input]");
-    textInput.type(messageContent);
-
-    cy.get("[data-testid=cy-chat-footer-button]").click();
-
-    cy.contains(messageContent).should("be.visible");
-    textInput.should("have.value", "");
+    sendMessage("some message");
   });
 
   it("sends message to chat - searchbox navigation", () => {
@@ -53,13 +66,6 @@ describe("chats spec", () => {
 
     createChatButton.click();
 
-    const messageContent = "some message";
-    const textInput = cy.get("[data-testid=cy-chat-footer-text-input]");
-    textInput.type(messageContent);
-
-    cy.get("[data-testid=cy-chat-footer-button]").click();
-
-    cy.contains(messageContent).should("be.visible");
-    textInput.should("have.value", "");
+    sendMessage("some message");
   });
 });

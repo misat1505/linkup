@@ -40,7 +40,6 @@ export default function NavbarSearch() {
     queryFn: () => UserService.search(debouncedText),
     enabled: debouncedText.length > 0
   });
-  console.log(users);
 
   return (
     <Command className="w-60 rounded-lg border bg-white shadow-md dark:bg-black">
