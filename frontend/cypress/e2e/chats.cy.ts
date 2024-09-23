@@ -1,5 +1,13 @@
 import axios from "axios";
 
+type Options = {
+  withResponse: boolean;
+};
+
+const defaultOptions: Options = {
+  withResponse: true
+};
+
 describe("chats spec", () => {
   const frontendUrl = "https://localhost:3000";
   const backendUrl = "https://localhost:5500";
@@ -15,12 +23,13 @@ describe("chats spec", () => {
     cy.get("[data-testid=cy-login-form-button]").click();
   });
 
-  const sendMessage = (text: string, withResponse = true) => {
+  const sendMessage = (text: string, options = defaultOptions) => {
     const textInput = cy.get("[data-testid=cy-chat-footer-text-input]");
     textInput.type(text);
 
-    if (withResponse) {
-      const messagesContainer = cy.get("[data-testid=cy-chat-messages]");
+    const messagesContainer = cy.get("[data-testid=cy-chat-messages]");
+
+    if (options.withResponse) {
       const responseMessage = messagesContainer.children().eq(1);
       responseMessage.realHover({ pointer: "mouse" });
 
@@ -31,8 +40,24 @@ describe("chats spec", () => {
 
     cy.get("[data-testid=cy-chat-footer-button]").click();
 
-    cy.contains(text).should("be.visible");
+    cy.contains("[data-testid=cy-chat-messages]", text);
     textInput.should("have.value", "");
+
+    const openChatButton = cy
+      .get("[data-testid=cy-chat-nav]")
+      .children()
+      .first()
+      .children()
+      .first();
+
+    const messageText = openChatButton
+      .children()
+      .eq(1)
+      .children()
+      .eq(1)
+      .children()
+      .eq(1);
+    messageText.should("have.text", text);
   };
 
   it("sends message to chat", () => {
@@ -48,7 +73,7 @@ describe("chats spec", () => {
 
     openChatButton.click();
 
-    sendMessage("some message");
+    sendMessage("some message", { withResponse: false });
   });
 
   it("sends message to chat - searchbox navigation", () => {
@@ -66,6 +91,6 @@ describe("chats spec", () => {
 
     createChatButton.click();
 
-    sendMessage("some message");
+    sendMessage("some message", { withResponse: false });
   });
 });
