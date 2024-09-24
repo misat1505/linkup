@@ -90,7 +90,11 @@ export const updateGroupChatController = async (
       if (fs.existsSync(oldFilePath)) fs.unlinkSync(oldFilePath);
     }
 
-    const chat = await ChatService.updateGroupChat({ chatId, file, name });
+    const chat = await ChatService.updateGroupChat({
+      chatId,
+      file,
+      name: name || null,
+    });
 
     return res.status(201).json({ chat });
   } catch (e) {

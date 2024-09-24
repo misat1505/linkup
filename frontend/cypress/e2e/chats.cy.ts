@@ -13,9 +13,9 @@ describe("chats spec", () => {
   const backendUrl = "https://localhost:5500";
 
   beforeEach(() => {
-    axios.post(`${backendUrl}/reset-db`);
-
     cy.visit(`${frontendUrl}/login`);
+
+    axios.post(`${backendUrl}/reset-db`);
 
     cy.get("[data-testid=cy-login-form-login]").type("login2");
     cy.get("[data-testid=cy-login-form-password]").type("pass2");
