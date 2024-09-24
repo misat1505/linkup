@@ -28,6 +28,7 @@ type ChatContextValue = {
   messageRefs: React.MutableRefObject<
     Record<Message["id"], HTMLDivElement | null>
   >;
+  setIncomeMessageId: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
@@ -75,7 +76,8 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
         chat,
         chatId,
         incomeMessage,
-        messageRefs
+        messageRefs,
+        setIncomeMessageId
       }}
     >
       {children}
