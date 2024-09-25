@@ -58,7 +58,9 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
     queryClient.setQueryData<Message[]>(
       queryKeys.messages(message.chatId),
       (oldMessages) => {
-        return oldMessages ? [...oldMessages, message] : [message];
+        if (!oldMessages) return [message];
+        const isDuplicate = oldMessages.some((m) => m.id === message.id);
+        return isDuplicate ? oldMessages : [...oldMessages, message];
       }
     );
   };

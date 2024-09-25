@@ -109,6 +109,7 @@ function Updater({ file }: { file: File | null }) {
         type="file"
         className="hover:cursor-pointer"
         onChange={handleFileChange}
+        accept=".jpg, .png, .webp"
       />
       <Button variant="blueish" className="self-end" type="submit">
         Save

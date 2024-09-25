@@ -196,11 +196,16 @@ function LogoutDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <SheetItem
-          text={button.text}
-          Icon={button.icon}
-          onClick={button.onClick}
-        />
+        <button
+          data-testid={`cy-nav-sheet-item-${button.text.toLowerCase()}`}
+          className="mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200 dark:bg-background dark:hover:bg-slate-800"
+        >
+          <div className="flex items-center gap-x-4">
+            {button.icon}
+            {button.text}
+          </div>
+          <div></div>
+        </button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
