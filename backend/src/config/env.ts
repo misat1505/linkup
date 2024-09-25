@@ -1,21 +1,33 @@
 import dotenv from "dotenv";
 import { z } from "zod";
 
+const getEnvPath = (): string => {
+  const env = process.env.NODE_ENV!;
+  if (["test", "e2e"].includes(env)) return ".env.test";
+  return ".env";
+};
+
 dotenv.config({
   override: true,
-  path: process.env.NODE_ENV === "test" ? ".env.test" : ".env",
+  path: getEnvPath(),
 });
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(["production", "development", "test"], {
+  NODE_ENV: z.enum(["production", "development", "test", "e2e"], {
     message:
-      "'NODE_ENV' has to be one of: 'production', 'development', 'test'.",
+      "'NODE_ENV' has to be one of: 'production', 'development', 'test', 'e2e'.",
   }),
   PORT: z
     .string()
     .transform((val) => parseInt(val, 10))
     .refine((val) => !isNaN(val), {
       message: "'PORT' must be a number.",
+    }),
+  SOCKET_PORT: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val), {
+      message: "'SOCKET_PORT' must be a number.",
     }),
   JWT_SECRET: z.string().min(20, {
     message: "'JWT_SECRET' needs to be at least 20 characters long.",

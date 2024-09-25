@@ -1,7 +1,17 @@
-import { User, UserWithCredentials } from "../models/User";
+import { User, UserWithCredentials } from "../types/User";
 import { prisma } from "../lib/Prisma";
+import { userSelect } from "../utils/prisma/userSelect";
 
 export class UserService {
+  static async updateUser(user: UserWithCredentials): Promise<void> {
+    const { id, ...rest } = user;
+
+    await prisma.user.update({
+      data: { ...rest },
+      where: { id },
+    });
+  }
+
   static async searchUsers(term: string): Promise<User[]> {
     const users: User[] = await prisma.user.findMany({
       where: {
@@ -18,13 +28,7 @@ export class UserService {
           },
         ],
       },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        photoURL: true,
-        lastActive: true,
-      },
+      select: userSelect,
     });
 
     return users;

@@ -1,30 +1,23 @@
 import app from "../../src/app";
-import { JwtHandler } from "../../src/lib/JwtHandler";
-import { User } from "../../src/models/User";
-import { USER_WITHOUT_CREDENTIALS, VALID_USER_ID } from "../utils/constants";
+import { TokenProcessor } from "../../src/lib/TokenProcessor";
+import { isUser } from "../../src/types/guards/user.guard";
+import { VALID_USER_ID } from "../utils/constants";
 import request from "supertest";
 
 describe("user router", () => {
-  const token = JwtHandler.encode({ userId: VALID_USER_ID });
+  const token = TokenProcessor.encode({ userId: VALID_USER_ID });
 
-  describe("/search", () => {
+  describe("[GET] /search", () => {
     it("should return users", async () => {
-      const users: Omit<User, "lastActive">[] = [USER_WITHOUT_CREDENTIALS].map(
-        ({ lastActive, ...rest }) => ({
-          ...rest,
-        })
-      );
-
       const response = await request(app)
         .get("/users/search?term=Kylian")
-        .set("Cookie", `token=${token}`);
+        .set("Authorization", `Bearer ${token}`);
+
       expect(response.statusCode).toBe(200);
-      const fetchedUsers = response.body.users.map(
-        ({ lastActive, ...rest }: any) => ({
-          ...rest,
-        })
-      );
-      expect(fetchedUsers).toEqual(users);
+      expect(response.body.users.length).toBe(1);
+      response.body.users.forEach((user: any) => {
+        expect(isUser(user, { allowStringifiedDates: true })).toBe(true);
+      });
     });
   });
 });

@@ -6,55 +6,53 @@ import {
   CommandItem,
   CommandList
 } from "../../ui/command";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { cn } from "../../../lib/utils";
-import { User } from "../../../models/User";
-import Image from "../Image";
+import { User } from "../../../types/User";
 import { FaUserFriends } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "../../ui/tooltip";
 import { useDebounce } from "use-debounce";
 import { Skeleton } from "../../ui/skeleton";
-import { useQuery } from "react-query";
-import { searchUsers } from "../../../api/userAPI";
+import { useQuery, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../lib/routes";
+import { useAppContext } from "../../../contexts/AppProvider";
+import useClickOutside from "../../../hooks/useClickOutside";
+import Avatar from "../Avatar";
+import { getInitials } from "../../../utils/getInitials";
+import { createFullName } from "../../../utils/createFullName";
+import { queryKeys } from "../../../lib/queryKeys";
+import { Chat } from "../../../types/Chat";
+import { UserService } from "../../../services/User.service";
+import { ChatService } from "../../../services/Chat.service";
+import Tooltip from "../Tooltip";
+import { buildFileURL } from "../../../utils/buildFileURL";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [text, setText] = useState("");
   const [debouncedText] = useDebounce(text, 300);
+  const commandListRef = useRef<HTMLDivElement>(null);
+  useClickOutside(commandListRef, () => setIsExpanded(false));
 
   const { data: users = [], isFetching } = useQuery({
-    queryKey: ["search-users", { debouncedText }],
-    queryFn: () => searchUsers(debouncedText),
+    queryKey: queryKeys.searchUsers(debouncedText),
+    queryFn: () => UserService.search(debouncedText),
     enabled: debouncedText.length > 0
   });
 
-  const createFullName = (
-    firstName: User["firstName"],
-    lastName: User["lastName"],
-    maxLength = 15
-  ): string => {
-    const fullName = `${firstName} ${lastName}`;
-    if (firstName.length + lastName.length > maxLength) {
-      return `${fullName.substring(0, maxLength)}...`;
-    }
-    return fullName;
-  };
-
   return (
-    <Command className="w-60 rounded-lg border shadow-md">
-      <CommandInput
-        placeholder="Search on Link Up..."
-        onInput={(e) => setText(e.currentTarget.value)}
-        onFocus={() => setIsExpanded(true)}
-        onBlur={() => setIsExpanded(false)}
-      />
+    <Command className="w-60 rounded-lg border bg-white shadow-md dark:bg-black">
+      <Tooltip content="Search for users">
+        <CommandInput
+          placeholder="Search on Link Up..."
+          data-testid="cy-nav-search-input"
+          onInput={(e) => setText(e.currentTarget.value)}
+          onFocus={() => setIsExpanded(true)}
+        />
+      </Tooltip>
       <CommandList
+        ref={commandListRef}
         className={cn(
           "no-scrollbar absolute top-14 w-[238px] bg-white shadow-md",
           {
@@ -79,57 +77,82 @@ export default function NavbarSearch() {
               className={cn({ hidden: users.length === 0 })}
               forceMount={users.length > 0}
               heading="Suggestions"
+              data-testid="cy-nav-search-results"
             >
-              {users.map((user, idx) => (
-                <CommandItem
+              {users.map((user) => (
+                <SearchResultItem
                   key={user.id}
-                  className="flex w-full items-center justify-between"
-                >
-                  <div className="flex items-center">
-                    <Image
-                      src={user.photoURL!}
-                      className={{
-                        common: "h-8 w-8 rounded-full object-cover",
-                        error: "bg-white text-xs font-semibold"
-                      }}
-                      errorContent={`${user.firstName.toUpperCase()[0]}${user.lastName.toUpperCase()[0]}`}
-                    />
-                    <span className="ml-4">
-                      {createFullName(user.firstName, user.lastName)}
-                    </span>
-                  </div>
-                  <div className="flex gap-x-2">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button>
-                            <FaUserFriends className="transition-all hover:scale-125" />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Add Friend</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button>
-                            <IoIosChatbubbles className="transition-all hover:scale-125" />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Send Message</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                </CommandItem>
+                  user={user}
+                  setIsExpanded={setIsExpanded}
+                />
               ))}
             </CommandGroup>
           </>
         )}
       </CommandList>
     </Command>
+  );
+}
+
+type SearchResultItemProps = {
+  user: User;
+  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
+  const { user: me } = useAppContext();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const handleCreateChat = async (userId: User["id"]) => {
+    const chat = await ChatService.createPrivateChat(me!.id, userId);
+    setIsExpanded(false);
+    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+      if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
+      return oldChats ? [...oldChats, chat] : [chat];
+    });
+    navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
+  };
+
+  return (
+    <CommandItem
+      key={user.id}
+      className="flex w-full items-center justify-between"
+    >
+      <div className="flex items-center">
+        <Avatar
+          src={buildFileURL(user.photoURL, { type: "avatar" })}
+          alt={getInitials(user)}
+          className="h-8 w-8 text-xs"
+        />
+        <span className="ml-4">{createFullName(user, 15)}</span>
+      </div>
+      <div className="flex gap-x-2">
+        <ActionButton
+          onClick={() => {}}
+          tooltipText="Add friend"
+          Icon={<FaUserFriends className="transition-all hover:scale-125" />}
+        />
+        <ActionButton
+          onClick={() => handleCreateChat(user.id)}
+          tooltipText="Send Message"
+          Icon={<IoIosChatbubbles className="transition-all hover:scale-125" />}
+        />
+      </div>
+    </CommandItem>
+  );
+}
+
+type ActionButtonProps = {
+  tooltipText: string;
+  onClick: () => void;
+  Icon: JSX.Element;
+};
+
+function ActionButton({ onClick, tooltipText, Icon }: ActionButtonProps) {
+  return (
+    <Tooltip content={tooltipText}>
+      <button onClick={onClick}>{Icon}</button>
+    </Tooltip>
   );
 }

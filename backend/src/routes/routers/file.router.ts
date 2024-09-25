@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getFile } from "../../controllers/file.controller";
+import { getFileController } from "../../controllers/file/getFile.controller";
 
 const fileRouter = Router();
 
-fileRouter.get("/:filename", getFile);
+fileRouter.get("/:filename", getFileController);
 
 export default fileRouter;

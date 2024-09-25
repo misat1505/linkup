@@ -1,21 +1,17 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from "react";
-import { fetchUser, refreshToken } from "../api/authAPI";
-import { User } from "../models/User";
-import { useQuery } from "react-query";
+import React, { createContext, PropsWithChildren, useContext } from "react";
+import { User } from "../types/User";
+import { useQuery, useQueryClient } from "react-query";
+import { queryKeys } from "../lib/queryKeys";
+import { useRefreshToken } from "../hooks/useRefreshToken";
+import { AuthService } from "../services/Auth.service";
+import { ChatService } from "../services/Chat.service";
 
 type AppContextProps = PropsWithChildren;
 
 type AppContextValue = {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  status: "idle" | "error" | "loading" | "success";
+  user: User | null | undefined;
+  setUser: (user: User | null) => void;
+  isLoading: boolean;
 };
 
 const AppContext = createContext<AppContextValue>({} as AppContextValue);
@@ -23,45 +19,30 @@ const AppContext = createContext<AppContextValue>({} as AppContextValue);
 export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children }: AppContextProps) => {
-  const [user, setUser] = useState<User | null>(null);
-  const { status } = useQuery("user", fetchUser, {
-    onSuccess: (d) => setUser(d)
+  const queryClient = useQueryClient();
+  const { isLoading } = useQuery({
+    queryKey: queryKeys.me(),
+    queryFn: AuthService.me
   });
-  const refreshTokenIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const handleRefreshToken = async () => {
-      if (!user) return;
+  useQuery({
+    queryKey: queryKeys.reactions(),
+    queryFn: ChatService.getReactions
+  });
 
-      try {
-        console.log("Trying to refresh the token...");
-        await refreshToken();
-        console.log("Token refreshed successfully.");
-      } catch (error) {
-        console.error("Error refreshing token:", error);
-      }
-    };
+  const user = queryClient.getQueryData<User>(queryKeys.me());
+  const setUser = (user: User | null) => {
+    queryClient.setQueryData(queryKeys.me(), user);
+  };
 
-    handleRefreshToken();
-
-    refreshTokenIntervalRef.current = setInterval(
-      handleRefreshToken,
-      30 * 60 * 1000
-    );
-
-    return () => {
-      if (refreshTokenIntervalRef.current !== null) {
-        clearInterval(refreshTokenIntervalRef.current);
-      }
-    };
-  }, [user]);
+  useRefreshToken(user);
 
   return (
     <AppContext.Provider
       value={{
         user,
         setUser,
-        status
+        isLoading
       }}
     >
       {children}

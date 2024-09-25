@@ -1,22 +1,16 @@
-import { useAppContext } from "../../contexts/AppProvider";
-import { signupUser } from "../../api/authAPI";
 import {
   SignupFormType,
   signupFormSchema
 } from "../../validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
 import {
   FieldErrors,
-  SubmitHandler,
+  UseFormProps,
   UseFormRegister,
   useForm
 } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "../../components/ui/use-toast";
-import { ROUTES } from "../../lib/routes";
 
-type SignupFormEntries = {
+export type SignupFormEntries = {
   firstName: string;
   lastName: string;
   login: string;
@@ -34,12 +28,17 @@ export type useSubmitFormValue = {
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
   removeFile: () => void;
+  data: SignupFormEntries;
 };
 
-export default function useSignupForm(): useSubmitFormValue {
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const { setUser } = useAppContext();
+export type useSignupFormProps = UseFormProps<SignupFormType> & {
+  onSubmit: (data: SignupFormEntries) => void;
+};
+
+export default function useSignupForm({
+  onSubmit,
+  ...formOptions
+}: useSignupFormProps): useSubmitFormValue {
   const {
     register,
     handleSubmit,
@@ -47,28 +46,14 @@ export default function useSignupForm(): useSubmitFormValue {
     setValue,
     formState: { errors, isSubmitting }
   } = useForm<SignupFormType>({
-    resolver: zodResolver(signupFormSchema)
+    resolver: zodResolver(signupFormSchema),
+    ...formOptions
   });
-
-  const onSubmit: SubmitHandler<SignupFormType> = async (data) => {
-    try {
-      const user = await signupUser(data);
-      setUser(user);
-      navigate(ROUTES.HOME.path);
-    } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        toast({
-          title: "Cannot create new account.",
-          description: e.response?.data.message,
-          variant: "destructive"
-        });
-      }
-    }
-  };
 
   const submitForm = handleSubmit(onSubmit);
 
-  const file = watch()?.file?.[0] || null;
+  const data = watch();
+  const file = data.file?.[0] || null;
 
   const removeFile = () => {
     setValue("file", undefined);
@@ -80,6 +65,7 @@ export default function useSignupForm(): useSubmitFormValue {
     isSubmitting,
     file,
     submitForm,
-    removeFile
+    removeFile,
+    data
   };
 }

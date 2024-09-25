@@ -1,11 +1,11 @@
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Loading from "./components/common/Loading";
 import AppProvider from "./contexts/AppProvider";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import { protectedRoutes, publicRoutes } from "./lib/routes";
 import { Toaster } from "./components/ui/toaster";
 import Navbar from "./components/common/navbar/Navbar";
+import Loading from "./components/common/Loading";
 
 export default function App() {
   return (

@@ -3,19 +3,20 @@ import { Navigate } from "react-router-dom";
 import React from "react";
 import Loading from "./Loading";
 import { ROUTES } from "../../lib/routes";
+import { getAccessToken } from "../../lib/token";
 
 export default function ProtectedRoute({
   children
 }: {
   children: JSX.Element;
 }) {
-  const { status, user } = useAppContext();
+  const { isLoading, user } = useAppContext();
 
-  if (status === "loading") {
+  if (isLoading) {
     return <Loading />;
   }
 
-  if (!user) {
+  if (!user || !getAccessToken()) {
     return <Navigate to={ROUTES.LOGIN.path} />;
   }
 

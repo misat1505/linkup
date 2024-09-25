@@ -4,6 +4,8 @@ import "./globals.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ThemeProvider } from "./contexts/ThemeProvider";
+import BgGradient from "./components/common/BgGradient";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,7 +22,12 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <ThemeProvider>
+        <BgGradient />
+        <div className="relative z-10">
+          <App />
+        </div>
+      </ThemeProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

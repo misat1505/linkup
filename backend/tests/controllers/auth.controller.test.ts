@@ -1,36 +1,38 @@
 import request from "supertest";
 import express from "express";
-import {
-  getUser,
-  loginUser,
-  logoutUser,
-  refreshToken,
-  signupUser,
-} from "../../src/controllers/auth.controller";
 import { UserService } from "../../src/services/UserService";
-import { JwtHandler } from "../../src/lib/JwtHandler";
-import { User, UserWithCredentials } from "../../src/models/User";
+import { TokenProcessor } from "../../src/lib/TokenProcessor";
+import { User, UserWithCredentials } from "../../src/types/User";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
+import { isUser } from "../../src/types/guards/user.guard";
+import { VALID_USER_ID } from "../utils/constants";
+import { signupController } from "../../src/controllers/auth/signup.controller";
+import { loginController } from "../../src/controllers/auth/login.controller";
+import { refreshTokenController } from "../../src/controllers/auth/refreshToken.controller";
+import { logoutController } from "../../src/controllers/auth/logout.controller";
+import { getSelfController } from "../../src/controllers/auth/getSelf.controller";
+import { updateSelfController } from "../../src/controllers/auth/updateSelf.controller";
 
 jest.mock("uuid");
 jest.mock("bcryptjs");
 jest.mock("../../src/services/UserService");
-jest.mock("../../src/lib/JwtHandler");
+jest.mock("../../src/lib/TokenProcessor");
 
 describe("Auth Controllers", () => {
   const app = express();
   app.use(express.json());
-  app.post("/signup", signupUser);
-  app.post("/login", loginUser);
-  app.post("/refresh", refreshToken);
-  app.post("/logout", logoutUser);
-  app.get("/user", getUser);
+  app.post("/signup", signupController);
+  app.post("/login", loginController);
+  app.post("/refresh", refreshTokenController);
+  app.post("/logout", logoutController);
+  app.get("/user", getSelfController);
+  app.put("/user", updateSelfController);
 
   const removeCredentials = (
     userWithCredentials: UserWithCredentials
   ): User => {
-    const { login, password, ...rest } = userWithCredentials;
+    const { login, password, salt, ...rest } = userWithCredentials;
     const user: User = { ...rest };
     return user;
   };
@@ -45,26 +47,79 @@ describe("Auth Controllers", () => {
     jest.clearAllMocks();
   });
 
+  describe("updateUser", () => {
+    it("should update user", async () => {
+      (UserService.getUserByLogin as jest.Mock).mockResolvedValue({
+        id: "some-id",
+        login: "some-login",
+        photoURL: "some-url",
+      });
+
+      const response = await request(app)
+        .put("/user")
+        .send({
+          firstName: "John",
+          lastName: "Doe",
+          login: "login1",
+          password: "pass1",
+          token: { userId: VALID_USER_ID },
+        });
+
+      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
+        true
+      );
+    });
+
+    it("should update user when same id", async () => {
+      (UserService.getUserByLogin as jest.Mock).mockResolvedValue({
+        id: VALID_USER_ID,
+        login: "some-login",
+        photoURL: "some-url",
+      });
+
+      const response = await request(app)
+        .put("/user")
+        .send({
+          firstName: "John",
+          lastName: "Doe",
+          login: "login1",
+          password: "pass1",
+          token: { userId: VALID_USER_ID },
+        });
+
+      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
+        true
+      );
+    });
+
+    it("shouldn't allow 2 users of the same login", async () => {
+      (UserService.getUserByLogin as jest.Mock).mockResolvedValue({
+        id: "some-id",
+        login: "login1",
+        photoURL: "some-url",
+      });
+
+      const response = await request(app)
+        .put("/user")
+        .send({
+          firstName: "John",
+          lastName: "Doe",
+          login: "login1",
+          password: "pass1",
+          token: { userId: VALID_USER_ID },
+        });
+
+      expect(response.statusCode).toBe(409);
+    });
+  });
+
   describe("signupUser", () => {
     it("should sign up a new user", async () => {
-      const id = "fixed-uuid";
-      const salt = "salt";
-      (uuidv4 as jest.Mock).mockReturnValue(id);
-      (bcrypt.genSalt as jest.Mock).mockResolvedValue(salt);
-
-      const mockUser: UserWithCredentials = {
-        id,
-        firstName: "John",
-        lastName: "Doe",
-        login: "john_doe",
-        password: "password123",
-        photoURL: null,
-        salt,
-        lastActive: new Date(),
-      };
+      (uuidv4 as jest.Mock).mockReturnValue("fixed-uuid");
+      (bcrypt.genSalt as jest.Mock).mockResolvedValue("salt");
 
       (UserService.isLoginTaken as jest.Mock).mockResolvedValue(false);
-      (JwtHandler.encode as jest.Mock).mockReturnValue("fake_jwt_token");
+      (TokenProcessor.encode as jest.Mock).mockReturnValue("fake_jwt_token");
 
       const response = await request(app).post("/signup").send({
         firstName: "John",
@@ -73,21 +128,8 @@ describe("Auth Controllers", () => {
         password: "password123",
       });
 
-      response.body.user.lastActive = new Date(response.body.user.lastActive);
-
-      const dateDiff = Math.abs(
-        response.body.user.lastActive.getTime() - mockUser.lastActive.getTime()
-      );
-      expect(dateDiff).toBeLessThan(1000);
-
-      const responseUserWithoutLastActive = { ...response.body.user };
-      const mockUserWithoutLastActive = { ...mockUser };
-      delete responseUserWithoutLastActive.lastActive;
-      delete (mockUserWithoutLastActive as any).lastActive;
-
-      expect(response.status).toBe(201);
-      expect(responseUserWithoutLastActive).toEqual(
-        removeCredentials(mockUserWithoutLastActive)
+      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
+        true
       );
       expect(response.headers["set-cookie"]).toBeDefined();
     });
@@ -125,28 +167,15 @@ describe("Auth Controllers", () => {
       };
 
       (UserService.getUserByLogin as jest.Mock).mockResolvedValue(mockUser);
-      (JwtHandler.encode as jest.Mock).mockReturnValue("fake_jwt_token");
+      (TokenProcessor.encode as jest.Mock).mockReturnValue("fake_jwt_token");
 
       const response = await request(app).post("/login").send({
         login: "john_doe",
         password: "password",
       });
 
-      response.body.user.lastActive = new Date(response.body.user.lastActive);
-
-      const dateDiff = Math.abs(
-        response.body.user.lastActive.getTime() - mockUser.lastActive.getTime()
-      );
-      expect(dateDiff).toBeLessThan(1000);
-
-      const responseUserWithoutLastActive = { ...response.body.user };
-      const mockUserWithoutLastActive = { ...mockUser };
-      delete responseUserWithoutLastActive.lastActive;
-      delete (mockUserWithoutLastActive as any).lastActive;
-
-      expect(response.status).toBe(200);
-      expect(responseUserWithoutLastActive).toEqual(
-        removeCredentials(mockUserWithoutLastActive)
+      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
+        true
       );
       expect(response.headers["set-cookie"]).toBeDefined();
     });
@@ -189,7 +218,9 @@ describe("Auth Controllers", () => {
 
   describe("refreshToken", () => {
     it("should refresh a token", async () => {
-      (JwtHandler.encode as jest.Mock).mockReturnValue("new_fake_jwt_token");
+      (TokenProcessor.encode as jest.Mock).mockReturnValue(
+        "new_fake_jwt_token"
+      );
 
       const response = await request(app)
         .post("/refresh")
@@ -203,7 +234,7 @@ describe("Auth Controllers", () => {
 
   describe("logoutUser", () => {
     it("should log out a user", async () => {
-      (JwtHandler.encode as jest.Mock).mockReturnValue("logout_jwt_token");
+      (TokenProcessor.encode as jest.Mock).mockReturnValue("logout_jwt_token");
 
       const response = await request(app)
         .post("/logout")
@@ -237,21 +268,8 @@ describe("Auth Controllers", () => {
         .get("/user")
         .send({ token: { userId: id } });
 
-      response.body.user.lastActive = new Date(response.body.user.lastActive);
-
-      const dateDiff = Math.abs(
-        response.body.user.lastActive.getTime() - mockUser.lastActive.getTime()
-      );
-      expect(dateDiff).toBeLessThan(1000);
-
-      const responseUserWithoutLastActive = { ...response.body.user };
-      const mockUserWithoutLastActive = { ...mockUser };
-      delete responseUserWithoutLastActive.lastActive;
-      delete (mockUserWithoutLastActive as any).lastActive;
-
-      expect(response.status).toBe(200);
-      expect(responseUserWithoutLastActive).toEqual(
-        removeCredentials(mockUserWithoutLastActive)
+      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
+        true
       );
     });
 

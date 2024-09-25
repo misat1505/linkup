@@ -16,6 +16,7 @@ export default function SignupFormFields() {
       placeholder={placeholder}
       type={type}
       error={errors[name]?.message}
+      data-testid={`cy-signup-form-${name}`}
     />
   );
 

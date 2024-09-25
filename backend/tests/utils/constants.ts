@@ -1,4 +1,4 @@
-import { User, UserWithCredentials } from "../../src/models/User";
+import { User, UserWithCredentials } from "../../src/types/User";
 
 export const USER: UserWithCredentials = {
   id: "3daf7676-ec0f-4548-85a7-67b4382166d4",

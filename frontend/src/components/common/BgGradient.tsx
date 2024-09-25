@@ -1,21 +1,7 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
 
-export default function BgGradient({ children }: PropsWithChildren) {
+export default function BgGradient() {
   return (
-    <div className="absolute inset-0 overflow-auto bg-gradient-to-r from-blue-500 to-white">
-      {children}
-    </div>
+    <div className="fixed inset-0 z-0 w-screen overflow-auto bg-gradient-to-r from-blue-500 to-white dark:to-black" />
   );
 }
-
-// export default function BgGradient({ children }: PropsWithChildren) {
-//   return (
-//     <>
-//       <img
-//         src="/assets/bg.webp"
-//         className="absolute inset-0 h-full w-full overflow-auto object-cover"
-//       />
-//       <div className="z-10">{children}</div>
-//     </>
-//   );
-// }

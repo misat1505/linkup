@@ -10,11 +10,15 @@ export default function LoginSlogan() {
   );
 
   return (
-    <div className="col-span-1 mx-20 flex flex-col justify-center">
+    <div className="col-span-1 mb-12 flex flex-col justify-center xl:mx-20 xl:mb-0">
       <h1
-        className={cn("mt-20 text-9xl font-bold text-white", styles.shadow, {
-          [styles.title]: isAnimating
-        })}
+        className={cn(
+          "mx-auto mt-20 text-6xl font-bold text-white md:text-8xl xl:text-9xl",
+          styles.shadow,
+          {
+            [styles.title]: isAnimating
+          }
+        )}
       >
         <div className="text-nowrap">Welcome to</div>
         <div className="text-nowrap">Link Up</div>

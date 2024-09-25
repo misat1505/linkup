@@ -1,6 +1,7 @@
 import React, { HTMLAttributes, ReactNode } from "react";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -27,7 +28,10 @@ import {
 import { useAppContext } from "../../../contexts/AppProvider";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../lib/routes";
-import { logoutUser } from "../../../api/authAPI";
+import { useQueryClient } from "react-query";
+import { AuthService } from "../../../services/Auth.service";
+import Tooltip from "../../common/Tooltip";
+import { IoIosSettings } from "react-icons/io";
 
 export default function NavbarSheet() {
   const { user } = useAppContext();
@@ -35,8 +39,12 @@ export default function NavbarSheet() {
 
   return (
     <Sheet>
-      <SheetTrigger>
-        <NavbarAvatar />
+      <SheetTrigger data-testid="cy-nav-trigger">
+        <Tooltip content="Show actions">
+          <span>
+            <NavbarAvatar />
+          </span>
+        </Tooltip>
       </SheetTrigger>
       {isLoggedIn ? <LoggedInSheet /> : <GuestSheet />}
     </Sheet>
@@ -62,7 +70,12 @@ function LoggedInSheet() {
     {
       icon: <PiChatsCircleFill size={20} className="text-blue-500" />,
       text: "Chats",
-      onClick: () => navigate(ROUTES.HOME.path)
+      onClick: () => navigate(ROUTES.CHATS.path)
+    },
+    {
+      icon: <IoIosSettings size={20} className="text-blue-500" />,
+      text: "Settings",
+      onClick: () => navigate(ROUTES.SETTINGS.path)
     },
     {
       icon: <MdArticle size={20} className="text-blue-500" />,
@@ -143,10 +156,11 @@ type SheetItemType = HTMLAttributes<HTMLButtonElement> & {
 const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
   ({ text, className, Icon, ...rest }, ref) => {
     return (
-      <button
+      <SheetClose
+        data-testid={`cy-nav-sheet-item-${text.toLowerCase()}`}
         ref={ref}
         className={cn(
-          "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200",
+          "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200 dark:bg-background dark:hover:bg-slate-800",
           className
         )}
         {...rest}
@@ -156,7 +170,7 @@ const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
           {text}
         </div>
         <div></div>
-      </button>
+      </SheetClose>
     );
   }
 );
@@ -164,10 +178,12 @@ const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
 function LogoutDialog() {
   const navigate = useNavigate();
   const { setUser } = useAppContext();
+  const queryClient = useQueryClient();
 
   const handleLogout = async () => {
-    await logoutUser();
+    await AuthService.logout();
     setUser(null);
+    queryClient.clear();
     navigate(ROUTES.LOGIN.path);
   };
 
@@ -180,11 +196,16 @@ function LogoutDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <SheetItem
-          text={button.text}
-          Icon={button.icon}
-          onClick={button.onClick}
-        />
+        <button
+          data-testid={`cy-nav-sheet-item-${button.text.toLowerCase()}`}
+          className="mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200 dark:bg-background dark:hover:bg-slate-800"
+        >
+          <div className="flex items-center gap-x-4">
+            {button.icon}
+            {button.text}
+          </div>
+          <div></div>
+        </button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
