@@ -7,6 +7,7 @@ import {
   MessageSchema,
 } from "../types/docs/MessageDocs";
 import { ChatSchema, UserInChatSchema } from "../types/docs/ChatDocs";
+import { PostSchema } from "../types/docs/PostDocs";
 
 const options: Options = {
   definition: {
@@ -35,6 +36,7 @@ const options: Options = {
         File: FileSchema,
         Message: MessageSchema,
         Chat: ChatSchema,
+        Post: PostSchema,
         MessageResponse: MessageResponseSchema,
         UserInChat: UserInChatSchema,
       },
