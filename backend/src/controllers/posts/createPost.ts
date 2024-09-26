@@ -11,7 +11,6 @@ export const createPost = async (req: Request, res: Response) => {
     const post = await PostService.createPost({
       content,
       authorId: userId,
-      files: [],
     });
 
     return res.status(201).json({ post });

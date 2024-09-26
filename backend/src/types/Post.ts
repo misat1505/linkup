@@ -1,5 +1,4 @@
 import { Chat } from "./Chat";
-import { File } from "./File";
 import { User } from "./User";
 
 export type Post = {
@@ -8,5 +7,4 @@ export type Post = {
   createdAt: Date;
   chatId: Chat["id"];
   author: User;
-  files: File[];
 };

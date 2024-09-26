@@ -18,9 +18,6 @@ export class PostService {
       where: { id },
       include: {
         author: { select: userSelect },
-        files: {
-          select: { id: true, url: true },
-        },
       },
     });
 
@@ -32,9 +29,6 @@ export class PostService {
       where: { id },
       include: {
         author: { select: userSelect },
-        files: {
-          select: { id: true, url: true },
-        },
       },
     });
 
@@ -46,9 +40,6 @@ export class PostService {
       where: { authorId: id },
       include: {
         author: { select: userSelect },
-        files: {
-          select: { id: true, url: true },
-        },
       },
     });
 
@@ -59,9 +50,6 @@ export class PostService {
     const posts: Post[] = await prisma.post.findMany({
       include: {
         author: { select: userSelect },
-        files: {
-          select: { id: true, url: true },
-        },
       },
     });
 
@@ -71,11 +59,9 @@ export class PostService {
   static async createPost({
     content,
     authorId,
-    files,
   }: {
     content: Post["content"];
     authorId: User["id"];
-    files: File["url"][];
   }): Promise<Post> {
     const chat = await prisma.chat.create({
       data: { type: "POST" },
@@ -85,19 +71,10 @@ export class PostService {
       data: {
         content,
         authorId,
-        files: {
-          create: files.map((fileUrl) => ({
-            id: uuidv4(),
-            url: fileUrl,
-          })),
-        },
         chatId: chat.id,
       },
       include: {
         author: { select: userSelect },
-        files: {
-          select: { id: true, url: true },
-        },
       },
     });
 

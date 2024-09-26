@@ -44,12 +44,12 @@ function PostActions({ postId }: { postId: Post["id"] }) {
     <div className="absolute right-4 top-4 flex items-center gap-x-4">
       <Tooltip content="Edit">
         <Link to={ROUTES.POST_EDITOR.buildPath({ postId })}>
-          <IoPencil className="text-white hover:cursor-pointer" />
+          <IoPencil className="text-black hover:cursor-pointer dark:text-white" />
         </Link>
       </Tooltip>
       <Tooltip content="Delete">
         <span>
-          <FaRegTrashAlt className="text-white hover:cursor-pointer" />
+          <FaRegTrashAlt className="text-black hover:cursor-pointer dark:text-white" />
         </span>
       </Tooltip>
     </div>
