@@ -2,31 +2,10 @@ import { prisma } from "../lib/Prisma";
 import { Post } from "../types/Post";
 import { User } from "../types/User";
 import { userSelect } from "../utils/prisma/userSelect";
-import { Chat } from "../types/Chat";
-
-const postChatSelect = {
-  id: true,
-  createdAt: true,
-  type: true,
-} as const;
-
-function transformPostChatSelect(selectedChat: {
-  id: Chat["id"];
-  createdAt: Chat["createdAt"];
-  type: Chat["type"];
-}): Chat {
-  const chat: Chat = {
-    id: selectedChat.id,
-    createdAt: selectedChat.createdAt,
-    type: selectedChat.type,
-    name: null,
-    photoURL: null,
-    users: null,
-    lastMessage: null,
-  };
-
-  return chat;
-}
+import {
+  postChatSelect,
+  transformPostChatSelect,
+} from "../utils/prisma/postChatSelect";
 
 function sanitizePost(post: any): Post {
   const { authorId, chatId, ...sanitizedPost } = post;
