@@ -5,6 +5,7 @@ import React from "react";
 import { FaSave } from "react-icons/fa";
 import { useEditorContext } from "../../contexts/EditorProvider";
 import { useToast } from "../ui/use-toast";
+import Image from "../common/Image";
 
 export default function Editor() {
   const { markdown, handleSafeChange, handleSave, variant } =
@@ -76,7 +77,13 @@ export default function Editor() {
               if (!props.src!.startsWith(API_URL)) {
                 return <div>{props.alt || "Image not available"}</div>;
               }
-              return <img {...props} alt={props.alt || "image"} />;
+              return (
+                <Image
+                  src={props.src!}
+                  alt={props.alt || "image"}
+                  unloader={<div>{props.alt}</div>}
+                />
+              );
             },
             ul(props) {
               return <ul {...props} style={{ listStyle: "disc" }}></ul>;

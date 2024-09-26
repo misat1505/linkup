@@ -10,6 +10,8 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
 import Tooltip from "../common/Tooltip";
+import { API_URL } from "../../constants";
+import Image from "../common/Image";
 
 export default function MyPostPreview({ post }: { post: Post }) {
   const { theme } = useThemeContext();
@@ -27,7 +29,43 @@ export default function MyPostPreview({ post }: { post: Post }) {
       style={{ backgroundColor: theme === "light" ? "white" : "#0c1117" }}
     >
       <PostHeader post={post} />
-      <MDEditor.Markdown source={post.content} />
+      <MDEditor.Markdown
+        source={post.content}
+        components={{
+          video({ node, ...props }) {
+            return (
+              <video {...props} key={props.src} controls>
+                {(props?.children as any)?.map((child: any, index: number) => {
+                  if (child.type !== "source") return null;
+                  if (!child.props.src.startsWith(API_URL))
+                    return <div key={index}>Given source is unavailable</div>;
+
+                  return <source key={index} {...child.props} />;
+                })}
+                Your browser does not support the video tag.
+              </video>
+            );
+          },
+          img({ node, ...props }) {
+            if (!props.src!.startsWith(API_URL)) {
+              return <div>{props.alt || "Image not available"}</div>;
+            }
+            return (
+              <Image
+                src={props.src!}
+                alt={props.alt || "image"}
+                unloader={<div>{props.alt}</div>}
+              />
+            );
+          },
+          ul(props) {
+            return <ul {...props} style={{ listStyle: "disc" }}></ul>;
+          },
+          ol(props) {
+            return <ol {...props} style={{ listStyle: "decimal" }}></ol>;
+          }
+        }}
+      />
       <Button
         className="absolute bottom-4 left-1/2 -translate-x-1/2"
         onClick={() => setIsExpanded((prev) => !prev)}
