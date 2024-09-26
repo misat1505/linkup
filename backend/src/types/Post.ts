@@ -5,6 +5,6 @@ export type Post = {
   id: string;
   content: string;
   createdAt: Date;
-  chatId: Chat["id"];
+  chat: Chat;
   author: User;
 };

@@ -1,9 +1,37 @@
 import { prisma } from "../lib/Prisma";
-import { File } from "../types/File";
 import { Post } from "../types/Post";
 import { User } from "../types/User";
-import { v4 as uuidv4 } from "uuid";
 import { userSelect } from "../utils/prisma/userSelect";
+import { Chat } from "../types/Chat";
+
+const postChatSelect = {
+  id: true,
+  createdAt: true,
+  type: true,
+} as const;
+
+function transformPostChatSelect(selectedChat: {
+  id: Chat["id"];
+  createdAt: Chat["createdAt"];
+  type: Chat["type"];
+}): Chat {
+  const chat: Chat = {
+    id: selectedChat.id,
+    createdAt: selectedChat.createdAt,
+    type: selectedChat.type,
+    name: null,
+    photoURL: null,
+    users: null,
+    lastMessage: null,
+  };
+
+  return chat;
+}
+
+function sanitizePost(post: any): Post {
+  const { authorId, chatId, ...sanitizedPost } = post;
+  return { ...sanitizedPost } as Post;
+}
 
 export class PostService {
   static async updatePost({
@@ -13,47 +41,79 @@ export class PostService {
     id: Post["id"];
     content: Post["content"];
   }): Promise<Post | null> {
-    const posts: Post | null = await prisma.post.update({
+    const post = await prisma.post.update({
       data: { content },
       where: { id },
       include: {
         author: { select: userSelect },
+        chat: {
+          select: postChatSelect,
+        },
       },
     });
 
-    return posts;
+    if (!post) return null;
+
+    return sanitizePost({
+      ...post,
+      chat: transformPostChatSelect(post.chat),
+    });
   }
 
   static async getPost(id: Post["id"]): Promise<Post | null> {
-    const posts: Post | null = await prisma.post.findFirst({
+    const post = await prisma.post.findFirst({
       where: { id },
       include: {
         author: { select: userSelect },
+        chat: {
+          select: postChatSelect,
+        },
       },
     });
 
-    return posts;
+    if (!post) return null;
+
+    return sanitizePost({
+      ...post,
+      chat: transformPostChatSelect(post.chat),
+    });
   }
 
   static async getUserPosts(id: User["id"]): Promise<Post[]> {
-    const posts: Post[] = await prisma.post.findMany({
+    const posts = await prisma.post.findMany({
       where: { authorId: id },
       include: {
         author: { select: userSelect },
+        chat: {
+          select: postChatSelect,
+        },
       },
     });
 
-    return posts;
+    return posts.map((post) =>
+      sanitizePost({
+        ...post,
+        chat: transformPostChatSelect(post.chat),
+      })
+    );
   }
 
   static async getPosts(): Promise<Post[]> {
-    const posts: Post[] = await prisma.post.findMany({
+    const posts = await prisma.post.findMany({
       include: {
         author: { select: userSelect },
+        chat: {
+          select: postChatSelect,
+        },
       },
     });
 
-    return posts;
+    return posts.map((post) =>
+      sanitizePost({
+        ...post,
+        chat: transformPostChatSelect(post.chat),
+      })
+    );
   }
 
   static async createPost({
@@ -67,7 +127,7 @@ export class PostService {
       data: { type: "POST" },
     });
 
-    const result: Post = await prisma.post.create({
+    const result = await prisma.post.create({
       data: {
         content,
         authorId,
@@ -75,9 +135,15 @@ export class PostService {
       },
       include: {
         author: { select: userSelect },
+        chat: {
+          select: postChatSelect,
+        },
       },
     });
 
-    return result;
+    return sanitizePost({
+      ...result,
+      chat: transformPostChatSelect(result.chat),
+    });
   }
 }
