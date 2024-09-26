@@ -36,6 +36,8 @@ export const getPost = async (req: Request, res: Response) => {
 
     const post = await PostService.getPost(id);
 
+    if (!post) return res.status(404).json({ message: "Post not found." });
+
     return res.status(200).json({ post });
   } catch (e) {
     return res.status(500).json({ message: "Couldn't get post." });
