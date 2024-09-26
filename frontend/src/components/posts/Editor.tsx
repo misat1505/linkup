@@ -1,11 +1,10 @@
-import { API_URL } from "../../constants";
 import { useThemeContext } from "../../contexts/ThemeProvider";
 import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
 import React from "react";
 import { FaSave } from "react-icons/fa";
 import { useEditorContext } from "../../contexts/EditorProvider";
 import { useToast } from "../ui/use-toast";
-import Image from "../common/Image";
+import { markdownPreviewOptions } from "../../utils/markdownPreviewOptions";
 
 export default function Editor() {
   const { markdown, handleSafeChange, handleSave, variant } =
@@ -54,44 +53,7 @@ export default function Editor() {
         className="!h-[calc(100vh-5rem)] flex-grow !overflow-auto"
         highlightEnable={true}
         previewOptions={{
-          components: {
-            video({ node, ...props }) {
-              return (
-                <video {...props} key={props.src} controls>
-                  {(props?.children as any)?.map(
-                    (child: any, index: number) => {
-                      if (child.type !== "source") return null;
-                      if (!child.props.src.startsWith(API_URL))
-                        return (
-                          <div key={index}>Given source is unavailable</div>
-                        );
-
-                      return <source key={index} {...child.props} />;
-                    }
-                  )}
-                  Your browser does not support the video tag.
-                </video>
-              );
-            },
-            img({ node, ...props }) {
-              if (!props.src!.startsWith(API_URL)) {
-                return <div>{props.alt || "Image not available"}</div>;
-              }
-              return (
-                <Image
-                  src={props.src!}
-                  alt={props.alt || "image"}
-                  unloader={<div>{props.alt}</div>}
-                />
-              );
-            },
-            ul(props) {
-              return <ul {...props} style={{ listStyle: "disc" }}></ul>;
-            },
-            ol(props) {
-              return <ol {...props} style={{ listStyle: "decimal" }}></ol>;
-            }
-          }
+          components: markdownPreviewOptions
         }}
       />
     </div>

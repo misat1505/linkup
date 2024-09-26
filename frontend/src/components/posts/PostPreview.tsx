@@ -5,8 +5,7 @@ import React, { useState } from "react";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import PostHeader from "./PostHeader";
-import { API_URL } from "../../constants";
-import Image from "../common/Image";
+import { markdownPreviewOptions } from "../../utils/markdownPreviewOptions";
 
 export default function PostPreview({ post }: { post: Post }) {
   const { theme } = useThemeContext();
@@ -26,40 +25,7 @@ export default function PostPreview({ post }: { post: Post }) {
       <PostHeader post={post} />
       <MDEditor.Markdown
         source={post.content}
-        components={{
-          video({ node, ...props }) {
-            return (
-              <video {...props} key={props.src} controls>
-                {(props?.children as any)?.map((child: any, index: number) => {
-                  if (child.type !== "source") return null;
-                  if (!child.props.src.startsWith(API_URL))
-                    return <div key={index}>Given source is unavailable</div>;
-
-                  return <source key={index} {...child.props} />;
-                })}
-                Your browser does not support the video tag.
-              </video>
-            );
-          },
-          img({ node, ...props }) {
-            if (!props.src!.startsWith(API_URL)) {
-              return <div>{props.alt || "Image not available"}</div>;
-            }
-            return (
-              <Image
-                src={props.src!}
-                alt={props.alt || "image"}
-                unloader={<div>{props.alt}</div>}
-              />
-            );
-          },
-          ul(props) {
-            return <ul {...props} style={{ listStyle: "disc" }}></ul>;
-          },
-          ol(props) {
-            return <ol {...props} style={{ listStyle: "decimal" }}></ol>;
-          }
-        }}
+        components={markdownPreviewOptions}
       />
       {!isExpanded && (
         <Button
