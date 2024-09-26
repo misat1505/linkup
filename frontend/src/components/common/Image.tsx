@@ -60,7 +60,7 @@ export default function Image({
     }
   });
 
-  if (!src || isError || (!isError && !data)) {
+  if (!src || isError) {
     return (
       unloader || (
         <DefaultError
