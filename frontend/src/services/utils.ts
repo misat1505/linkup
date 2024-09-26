@@ -59,3 +59,8 @@ export const CHAT_API = createAPIInstance({
 export const FILE_API = createAPIInstance({
   baseURL: `${API_URL}/files`
 });
+
+export const POSTS_API = createAPIInstance({
+  baseURL: `${API_URL}/posts`,
+  withCredentials: true
+});
