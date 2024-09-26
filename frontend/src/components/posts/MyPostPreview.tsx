@@ -44,16 +44,19 @@ export default function MyPostPreview({ post }: { post: Post }) {
 }
 
 function PostActions({ postId }: { postId: Post["id"] }) {
+  const classes =
+    "text-black transition-all hover:scale-110 hover:cursor-pointer dark:text-white";
+
   return (
     <div className="absolute right-4 top-4 flex items-center gap-x-4">
       <Tooltip content="Edit">
         <Link to={ROUTES.POST_EDITOR.buildPath({ postId })}>
-          <IoPencil className="text-black hover:cursor-pointer dark:text-white" />
+          <IoPencil className={classes} />
         </Link>
       </Tooltip>
       <Tooltip content="Delete">
         <span>
-          <FaRegTrashAlt className="text-black hover:cursor-pointer dark:text-white" />
+          <FaRegTrashAlt className={classes} />
         </span>
       </Tooltip>
     </div>
