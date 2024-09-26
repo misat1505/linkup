@@ -5,7 +5,7 @@ import request from "supertest";
 import fs from "fs";
 import path from "path";
 import { Message } from "../../src/types/Message";
-import { isChat } from "../../src/types/guards/chat.guards";
+import { isChat } from "../../src/types/guards/chat.guard";
 import { isMessage } from "../../src/types/guards/message.guard";
 import { isReaction } from "../../src/types/guards/reaction.guard";
 import { Chat } from "../../src/types/Chat";

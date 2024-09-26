@@ -10,6 +10,7 @@ export const resetDB = async (): Promise<void> => {
     await prisma.userReaction.deleteMany();
     await prisma.file.deleteMany();
     await prisma.userChat.deleteMany();
+    await prisma.post.deleteMany();
     await prisma.$executeRaw`SET FOREIGN_KEY_CHECKS = 1;`;
 
     const user = await prisma.user.create({
@@ -83,6 +84,19 @@ export const resetDB = async (): Promise<void> => {
         userId: user.id,
         messageId: message1.id,
         reactionId: "c3dd47c4-2192-4926-8ec0-b822d14b288d",
+      },
+    });
+
+    const postChat = await prisma.chat.create({
+      data: { type: "POST" },
+    });
+
+    const post = await prisma.post.create({
+      data: {
+        id: "25776a73-a5c6-40cf-b77f-76288a34cfa7",
+        content: "### hello post",
+        authorId: user.id,
+        chatId: postChat.id,
       },
     });
   });

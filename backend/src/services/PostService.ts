@@ -20,6 +20,12 @@ export class PostService {
     id: Post["id"];
     content: Post["content"];
   }): Promise<Post | null> {
+    const existingPost = await prisma.post.findUnique({
+      where: { id },
+    });
+
+    if (!existingPost) return null;
+
     const post = await prisma.post.update({
       data: { content },
       where: { id },
@@ -30,8 +36,6 @@ export class PostService {
         },
       },
     });
-
-    if (!post) return null;
 
     return sanitizePost({
       ...post,
