@@ -23,15 +23,18 @@ export default function Posts() {
     );
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <Button
+        className="my-4"
         onClick={() =>
           navigate(ROUTES.POST_EDITOR.buildPath({ postId: undefined }))
         }
       >
         Create new post
       </Button>
-      {posts?.map((post) => <MyPostPreview post={post} key={post.id} />)}
+      <div className="flex w-full flex-col items-center">
+        {posts?.map((post) => <MyPostPreview post={post} key={post.id} />)}
+      </div>
     </div>
   );
 }
