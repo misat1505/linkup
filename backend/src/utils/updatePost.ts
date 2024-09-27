@@ -11,6 +11,7 @@ export function handleMarkdownUpdate(
   const urls = extractUrlsFromMarkdown(content);
   const filesInfo = extractFileInfo(urls);
   migrateFiles(filesInfo, userId, postId);
+  removeUnusedFiles(filesInfo, postId);
   return updateUrlsInContent(content, filesInfo, postId);
 }
 
@@ -86,4 +87,23 @@ function updateUrlsInContent(
     }
     return updatedContent;
   }, content);
+}
+
+function removeUnusedFiles(files: FileInfo[], postId: Post["id"]) {
+  const postFilesPath = path.join(
+    __dirname,
+    "..",
+    "..",
+    "files",
+    "posts",
+    postId
+  );
+
+  const filesInDirectory = fs.readdirSync(postFilesPath);
+
+  filesInDirectory.forEach((file) => {
+    const isFileUsed = files.some((f) => f.filename === file);
+
+    if (!isFileUsed) fs.unlinkSync(path.join(postFilesPath, file));
+  });
 }

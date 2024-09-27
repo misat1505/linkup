@@ -157,6 +157,7 @@ function CacheFileUploader() {
         type="file"
         onChange={handleImageUpload}
         className="hidden"
+        accept=".jpg, .png, .webp"
         ref={inputRef}
       />
       <Tooltip content="Upload file">
