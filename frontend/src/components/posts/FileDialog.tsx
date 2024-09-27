@@ -29,6 +29,7 @@ import {
 import { IoMdAdd } from "react-icons/io";
 import { FaCopy } from "react-icons/fa";
 import { useRef } from "react";
+import { useToast } from "../ui/use-toast";
 
 export default function FileDialog() {
   return (
@@ -66,16 +67,18 @@ function FileDialogContent() {
           <h2>Cache</h2>
           <CacheFileUploader />
         </div>
-        {files.map((file, idx) => (
-          <div key={idx} className="relative aspect-square h-32">
-            <FileDialogImageButtons file={file} />
-            <Image
-              key={idx}
-              src={file}
-              className={{ common: "h-full w-full object-cover" }}
-            />
-          </div>
-        ))}
+        <div className="flex flex-wrap items-center gap-2">
+          {files.map((file, idx) => (
+            <div key={idx} className="relative aspect-square h-32">
+              <FileDialogImageButtons file={file} />
+              <Image
+                key={idx}
+                src={file}
+                className={{ common: "h-full w-full object-cover" }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </DialogContent>
   );
@@ -83,9 +86,14 @@ function FileDialogContent() {
 
 function FileDialogImageButtons({ file }: { file: string }) {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const copyFileURLToClipboard = async () => {
     await navigator.clipboard.writeText(file);
+
+    toast({
+      title: "URL copied to clipboard."
+    });
   };
 
   const deleteFile = async () => {
