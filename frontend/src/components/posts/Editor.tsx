@@ -5,6 +5,7 @@ import { FaSave } from "react-icons/fa";
 import { useEditorContext } from "../../contexts/EditorProvider";
 import { useToast } from "../ui/use-toast";
 import { markdownPreviewOptions } from "../../utils/markdownPreviewOptions";
+import FileDialog from "./FileDialog";
 
 export default function Editor() {
   const { markdown, handleSafeChange, handleSave, variant } =
@@ -22,7 +23,7 @@ export default function Editor() {
   const failureText =
     variant === "new" ? "Cannot create post." : "Cannot update post.";
 
-  const customCommands: ICommand[] = [
+  const customExtraCommands: ICommand[] = [
     {
       name: buttonText,
       keyCommand: buttonText,
@@ -44,12 +45,22 @@ export default function Editor() {
     }
   ];
 
+  const customCommands: ICommand[] = [
+    {
+      name: "files",
+      keyCommand: "files",
+      buttonProps: { "aria-label": buttonText, title: "show files" },
+      icon: <FileDialog />
+    }
+  ];
+
   return (
     <div data-color-mode={theme} className="w-full">
       <MDEditor
         value={markdown}
         onChange={(text) => handleSafeChange(text || "")}
-        extraCommands={[...commands.getExtraCommands(), ...customCommands]}
+        commands={[...commands.getCommands(), ...customCommands]}
+        extraCommands={[...commands.getExtraCommands(), ...customExtraCommands]}
         className="!h-[calc(100vh-5rem)] flex-grow !overflow-auto"
         highlightEnable={true}
         previewOptions={{
