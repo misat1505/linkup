@@ -3,9 +3,9 @@ import path from "path";
 import fs from "fs";
 import { FileService } from "../../services/FileService";
 
-type Filter = "avatar" | "chat-message" | "chat-photo";
+type Filter = "avatar" | "chat-message" | "chat-photo" | "cache";
 
-const filterArray = ["avatar", "chat-message", "chat-photo"];
+const filterArray = ["avatar", "chat-message", "chat-photo", "cache"];
 
 const sendFileBuilder =
   (filename: string, res: Response) =>
@@ -44,10 +44,10 @@ export const getFileController = async (req: Request, res: Response) => {
    *       - name: filter
    *         in: query
    *         required: true
-   *         description: The type of file to filter (avatar, chat-message, or chat-photo).
+   *         description: The type of file to filter (avatar, chat-message, chat-photo or cache).
    *         schema:
    *           type: string
-   *           enum: [avatar, chat-message, chat-photo]
+   *           enum: [avatar, chat-message, chat-photo, cache]
    *       - name: chat
    *         in: query
    *         required: false
@@ -106,6 +106,23 @@ export const getFileController = async (req: Request, res: Response) => {
         "Cannot find chat photo of this name."
       );
       return response;
+    } else if (filter === "cache") {
+      const filepath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "..",
+        "files",
+        "cache",
+        userId,
+        filename
+      );
+
+      if (!fs.existsSync(filepath)) {
+        return res.status(404).json({ message: "File not found." });
+      }
+
+      return res.status(200).sendFile(filepath);
     }
   } catch (e) {
     return res.status(500).json({ message: "Cannot fetch file." });
