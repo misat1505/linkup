@@ -100,9 +100,11 @@ export class PostService {
   }
 
   static async createPost({
+    id,
     content,
     authorId,
   }: {
+    id: Post["id"];
     content: Post["content"];
     authorId: User["id"];
   }): Promise<Post> {
@@ -112,6 +114,7 @@ export class PostService {
 
     const result = await prisma.post.create({
       data: {
+        id,
         content,
         authorId,
         chatId: chat.id,
