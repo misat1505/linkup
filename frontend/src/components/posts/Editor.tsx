@@ -6,12 +6,18 @@ import { useEditorContext } from "../../contexts/EditorProvider";
 import { useToast } from "../ui/use-toast";
 import { markdownPreviewOptions } from "../../utils/markdownPreviewOptions";
 import FileDialog from "./FileDialog";
+import { useQueryClient } from "react-query";
+import { Post } from "../../types/Post";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../lib/routes";
 
 export default function Editor() {
   const { markdown, handleSafeChange, handleSave, variant } =
     useEditorContext();
   const { toast } = useToast();
   const { theme } = useThemeContext();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const buttonText = variant === "new" ? "Save" : "Update";
 
@@ -31,7 +37,16 @@ export default function Editor() {
       icon: <FaSave />,
       execute: async (state, api) => {
         try {
-          await handleSave();
+          const post = await handleSave();
+          console.log(post);
+          queryClient.setQueryData<Post>(
+            ["posts", { postId: post.id }],
+            () => ({
+              ...post
+            })
+          );
+          handleSafeChange(post.content);
+          navigate(ROUTES.POST_EDITOR.buildPath({ postId: post.id }));
           toast({
             title: successText
           });

@@ -3,9 +3,9 @@ import path from "path";
 import fs from "fs";
 import { FileService } from "../../services/FileService";
 
-type Filter = "avatar" | "chat-message" | "chat-photo" | "cache";
+type Filter = "avatar" | "chat-message" | "chat-photo" | "cache" | "post";
 
-const filterArray = ["avatar", "chat-message", "chat-photo", "cache"];
+const filterArray = ["avatar", "chat-message", "chat-photo", "cache", "post"];
 
 const sendFileBuilder =
   (filename: string, res: Response) =>
@@ -75,6 +75,7 @@ export const getFileController = async (req: Request, res: Response) => {
     const { filename } = req.params;
     const filter = req.query.filter as Filter;
     const chatId = req.query.chat;
+    const postId = req.query.post;
     const { userId } = req.body.token;
 
     if (!filterArray.includes(filter))
@@ -84,6 +85,9 @@ export const getFileController = async (req: Request, res: Response) => {
 
     if (chatId && typeof chatId !== "string")
       return res.status(400).json({ message: "Chat has to be a string." });
+
+    if (postId && typeof postId !== "string")
+      return res.status(400).json({ message: "Post has to be a string." });
 
     const prefix = chatId ? path.join("chats", chatId) : "avatars";
     const sendFile = sendFileBuilder(path.join(prefix, filename), res);
@@ -115,6 +119,23 @@ export const getFileController = async (req: Request, res: Response) => {
         "files",
         "cache",
         userId,
+        filename
+      );
+
+      if (!fs.existsSync(filepath)) {
+        return res.status(404).json({ message: "File not found." });
+      }
+
+      return res.status(200).sendFile(filepath);
+    } else if (filter === "post") {
+      const filepath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "..",
+        "files",
+        "posts",
+        postId!,
         filename
       );
 

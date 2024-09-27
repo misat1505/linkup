@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PostService } from "../../services/PostService";
+import { handleMarkdownUpdate } from "../../utils/updatePost";
 
 export const updatePost = async (req: Request, res: Response) => {
   /**
@@ -59,7 +60,12 @@ export const updatePost = async (req: Request, res: Response) => {
         .status(401)
         .json({ message: "Cannot edit post not belonging to you." });
 
-    const newPost = await PostService.updatePost({ id, content });
+    const updatedContent = handleMarkdownUpdate(content, userId, id);
+
+    const newPost = await PostService.updatePost({
+      id,
+      content: updatedContent,
+    });
 
     return res.status(200).json({ post: newPost });
   } catch (e) {
