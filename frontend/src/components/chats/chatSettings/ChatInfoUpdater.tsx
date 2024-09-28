@@ -16,7 +16,7 @@ import { sortChatsByActivity } from "../../../utils/sortChatsByActivity";
 export default function ChatInfoUpdater() {
   const { chat } = useChatContext();
   const { data, isLoading } = useQuery({
-    queryKey: ["files", chat!.photoURL],
+    queryKey: queryKeys.downloadFile(chat!.photoURL!),
     queryFn: () =>
       FileService.downloadFile(
         buildFileURL(chat!.photoURL, { type: "chat-photo", id: chat!.id }),

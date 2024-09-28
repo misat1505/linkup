@@ -6,12 +6,13 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../lib/routes";
 import { Button } from "../components/ui/button";
+import { queryKeys } from "../lib/queryKeys";
 
 export default function Posts() {
   const navigate = useNavigate();
 
   const { data: posts, isLoading } = useQuery({
-    queryKey: ["my-posts"],
+    queryKey: queryKeys.myPosts(),
     queryFn: PostService.getMyPosts
   });
 
@@ -30,7 +31,7 @@ export default function Posts() {
           navigate(ROUTES.POST_EDITOR.buildPath({ postId: undefined }))
         }
       >
-        Create new post
+        Create New Post
       </Button>
       <div className="flex w-full flex-col items-center">
         {posts?.map((post) => <MyPostPreview post={post} key={post.id} />)}

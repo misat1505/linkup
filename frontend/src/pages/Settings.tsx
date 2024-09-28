@@ -12,11 +12,12 @@ import { AxiosError } from "axios";
 import { toast } from "../components/ui/use-toast";
 import { AuthService } from "../services/Auth.service";
 import Loading from "../components/common/Loading";
+import { queryKeys } from "../lib/queryKeys";
 
 export default function Settings() {
   const { user: me, setUser } = useAppContext();
   const { data, isLoading } = useQuery({
-    queryKey: ["files", me!.photoURL],
+    queryKey: queryKeys.downloadFile(me!.photoURL!),
     queryFn: () =>
       FileService.downloadFile(
         buildFileURL(me!.photoURL, { type: "avatar" }),

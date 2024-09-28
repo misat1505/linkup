@@ -4,6 +4,7 @@ import { Skeleton } from "../ui/skeleton";
 import { cn } from "../../lib/utils";
 import { useQuery } from "react-query";
 import { getAccessToken } from "../../lib/token";
+import { queryKeys } from "../../lib/queryKeys";
 
 function DefaultLoader({ className }: { className?: string }) {
   return <Skeleton className={cn("h-full w-full", className)} />;
@@ -46,7 +47,7 @@ export default function Image({
   src
 }: ImageProps) {
   const { data, isError, error, isLoading } = useQuery({
-    queryKey: ["files", { src }],
+    queryKey: queryKeys.file(src as string),
     queryFn: async () => {
       const result = await fetch(src as string, {
         method: "GET",

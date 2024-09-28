@@ -6,6 +6,7 @@ import Loading from "../components/common/Loading";
 import { PostService } from "../services/Post.service";
 import { useAppContext } from "../contexts/AppProvider";
 import EditorProvider from "../contexts/EditorProvider";
+import { queryKeys } from "../lib/queryKeys";
 
 export default function PostEditor() {
   const { postId } = useParams();
@@ -24,7 +25,7 @@ function PostEditorExistent() {
   const { user: me } = useAppContext();
   const { postId } = useParams();
   const { isLoading, data: post } = useQuery({
-    queryKey: ["posts", { postId }],
+    queryKey: queryKeys.post(postId!),
     queryFn: () => PostService.getPost(postId!)
   });
 

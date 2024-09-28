@@ -3,10 +3,11 @@ import Loading from "../components/common/Loading";
 import { useQuery } from "react-query";
 import { PostService } from "../services/Post.service";
 import PostPreview from "../components/posts/PostPreview";
+import { queryKeys } from "../lib/queryKeys";
 
 export default function Home() {
   const { data: posts, isLoading } = useQuery({
-    queryKey: ["posts"],
+    queryKey: queryKeys.posts(),
     queryFn: PostService.getPosts
   });
 
