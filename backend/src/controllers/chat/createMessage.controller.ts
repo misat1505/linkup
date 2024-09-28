@@ -55,23 +55,29 @@ export const createMessageController = async (req: Request, res: Response) => {
       (file) => file.filename
     );
 
-    const isUserAuthorized = await ChatService.isUserInChat({ chatId, userId });
+    const checks = [ChatService.isUserInChat({ chatId, userId })];
 
-    if (!isUserAuthorized)
+    if (responseId) {
+      checks.push(
+        ChatService.isMessageInChat({
+          chatId,
+          messageId: responseId,
+        })
+      );
+    }
+
+    const [isUserAuthorized, isResponseInChat] = await Promise.all(checks);
+
+    if (!isUserAuthorized) {
       return res
         .status(401)
         .json({ message: "You cannot send a message to this chat." });
+    }
 
-    if (responseId) {
-      const isResponseInChat = await ChatService.isMessageInChat({
-        chatId,
-        messageId: responseId,
+    if (responseId && !isResponseInChat) {
+      return res.status(400).json({
+        message: "Message of responseId does not exist in this chat.",
       });
-
-      if (!isResponseInChat)
-        return res.status(400).json({
-          message: "Message of responseId does not exist on this chat.",
-        });
     }
 
     files.forEach((file) => {

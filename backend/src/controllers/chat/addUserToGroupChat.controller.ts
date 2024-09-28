@@ -53,19 +53,22 @@ export const addUserToGroupChatController = async (
       userId,
     } = req.body;
 
-    const chatType = await ChatService.getChatType(chatId);
+    const [chatType, iAmInChat, isOtherInChat] = await Promise.all([
+      ChatService.getChatType(chatId),
+      ChatService.isUserInChat({ userId: myId, chatId }),
+      ChatService.isUserInChat({ userId, chatId }),
+    ]);
+
     if (chatType !== "GROUP")
       return res
         .status(401)
         .json({ message: "Cannot add people to chat of this type." });
 
-    const iAmInChat = await ChatService.isUserInChat({ userId: myId, chatId });
     if (!iAmInChat)
       return res.status(401).json({
         message: "Cannot add users to chat to which you do not belong to.",
       });
 
-    const isOtherInChat = await ChatService.isUserInChat({ userId, chatId });
     if (isOtherInChat)
       return res.status(409).json({ message: "User is already in this chat." });
 

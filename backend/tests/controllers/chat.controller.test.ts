@@ -244,7 +244,6 @@ describe("Chat controllers", () => {
         message: "Cannot add people to chat of this type.",
       });
       expect(ChatService.getChatType).toHaveBeenCalledWith("123");
-      expect(ChatService.isUserInChat).not.toHaveBeenCalled();
       expect(ChatService.addUserToChat).not.toHaveBeenCalled();
     });
 
@@ -264,7 +263,6 @@ describe("Chat controllers", () => {
         message: "Cannot add users to chat to which you do not belong to.",
       });
       expect(ChatService.getChatType).toHaveBeenCalledWith("123");
-      expect(ChatService.isUserInChat).toHaveBeenCalledTimes(1);
       expect(ChatService.addUserToChat).not.toHaveBeenCalled();
     });
 

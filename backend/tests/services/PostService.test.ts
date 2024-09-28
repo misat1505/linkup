@@ -7,8 +7,9 @@ describe("PostService", () => {
     it("should create a post", async () => {
       const content = "This is a new post";
       const authorId = USER.id;
+      const id = "123";
 
-      const result = await PostService.createPost({ content, authorId });
+      const result = await PostService.createPost({ id, content, authorId });
 
       expect(isPost(result)).toBe(true);
       expect(result.content).toBe(content);

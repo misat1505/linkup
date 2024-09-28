@@ -49,6 +49,7 @@ describe("Post controllers", () => {
       expect(PostService.createPost).toHaveBeenCalledWith({
         content: postContent,
         authorId: "user-id",
+        id: expect.any(String),
       });
     });
 
