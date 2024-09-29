@@ -4,6 +4,7 @@ import { createContext, PropsWithChildren, useContext, useState } from "react";
 type PostCommentsSectionContextProps = PropsWithChildren & { chat: Chat };
 
 type PostCommentsSectionContextProvidedValues = {
+  chat: Chat;
   isCommentSectionOpen: boolean;
   toggleIsCommentSectionOpen: () => void;
 };
@@ -22,7 +23,8 @@ export const usePostCommentsSectionContext = () => {
 };
 
 const PostCommentsSectionProvider = ({
-  children
+  children,
+  chat
 }: PostCommentsSectionContextProps) => {
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false);
 
@@ -32,6 +34,7 @@ const PostCommentsSectionProvider = ({
   return (
     <PostCommentsSectionContext.Provider
       value={{
+        chat,
         isCommentSectionOpen,
         toggleIsCommentSectionOpen
       }}
