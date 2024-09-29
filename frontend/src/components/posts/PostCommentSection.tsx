@@ -14,7 +14,7 @@ export default function PostCommentSection() {
   return (
     <div>
       <CommentSectionOpenButton />
-      {isCommentSectionOpen && <CommentSection group={null} />}
+      {isCommentSectionOpen && <CommentSection group={null} level={1} />}
     </div>
   );
 }
@@ -28,7 +28,10 @@ function CommentSectionOpenButton() {
   return (
     <Tooltip content={tooltipText}>
       <button
-        className="hover:bg-post-dark/20 dark:hover:bg-post-light/20 mt-4 flex w-full justify-center rounded-md p-4 transition-all hover:opacity-50"
+        className={cn(
+          "hover:bg-post-dark/20 dark:hover:bg-post-light/20 mt-4 flex w-full justify-center rounded-md p-4 transition-all hover:opacity-50",
+          { "my-4": isCommentSectionOpen }
+        )}
         onClick={toggleIsCommentSectionOpen}
       >
         <FaArrowDown className={cn({ "rotate-180": isCommentSectionOpen })} />
@@ -37,7 +40,13 @@ function CommentSectionOpenButton() {
   );
 }
 
-function CommentSection({ group }: { group: string | null }) {
+function CommentSection({
+  group,
+  level
+}: {
+  group: string | null;
+  level: number;
+}) {
   const { chat } = usePostCommentsSectionContext();
   const { isLoading, data: messages = [] } = useQuery({
     queryKey: queryKeys.messages(chat.id, group),
@@ -54,21 +63,24 @@ function CommentSection({ group }: { group: string | null }) {
     });
   };
 
-  if (isLoading) return <div>loading...</div>;
+  // if (isLoading) return <div>loading...</div>;
 
   return (
     <>
       {messages.map((message) => (
         <React.Fragment key={message.id}>
-          <div className="flex items-center justify-between p-2">
-            <p>{message.content}</p>
+          <div className="flex items-center justify-between">
+            <div className="flex gap-x-2">
+              <LevelIndicator level={level} />
+              <Comment message={message} />
+            </div>
             <ToggleSubsectionOpenButton
               isActive={activeMessages.includes(message.id)}
               onclick={() => toggleIsMessageActive(message.id)}
             />
           </div>
           {activeMessages.includes(message.id) && (
-            <CommentSection group={message.id} key={message.id} />
+            <CommentSection group={message.id} level={level + 1} />
           )}
         </React.Fragment>
       ))}
@@ -85,7 +97,7 @@ function ToggleSubsectionOpenButton({
 }) {
   return (
     <Tooltip content={isActive ? "Close replies" : "Show replies"}>
-      <button onClick={onclick}>
+      <button onClick={onclick} className="p-2">
         <FaArrowDown
           className={cn(
             "transition-all hover:text-slate-600 dark:hover:text-slate-400",
@@ -98,4 +110,21 @@ function ToggleSubsectionOpenButton({
       </button>
     </Tooltip>
   );
+}
+
+function LevelIndicator({ level }: { level: number }) {
+  return (
+    <div className="flex gap-x-1 self-stretch">
+      {new Array(level).fill(0).map((_, idx) => (
+        <div
+          key={idx}
+          className="w-0.5 self-stretch bg-slate-400 dark:bg-slate-600"
+        />
+      ))}
+    </div>
+  );
+}
+
+function Comment({ message }: { message: Message }) {
+  return <p className="p-2">{message.content}</p>;
 }
