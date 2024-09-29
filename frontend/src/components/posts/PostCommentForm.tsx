@@ -68,9 +68,9 @@ function ResponseDisplayer() {
 
   return (
     <div className="flex w-full items-center justify-between">
-      <div>
+      <div className="w-[calc(100%-2rem)]">
         <h2 className="my-1 font-semibold">{getReplyText()}</h2>
-        <p>{response?.content}</p>
+        <p className="overflow-hidden text-nowrap">{response?.content}</p>
       </div>
       <Tooltip content="Remove reply">
         <button onClick={() => setResponse(null)}>
@@ -128,7 +128,7 @@ function FileDisplayer() {
   };
 
   return (
-    <div className="mb-4 flex justify-end">
+    <div className="my-4 flex justify-end">
       {files.map((file, id) => (
         <button
           key={id}
