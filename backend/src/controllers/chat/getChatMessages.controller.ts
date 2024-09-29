@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
+import { Message } from "../../types/Message";
 
 export const getChatMessagesController = async (
   req: Request,
@@ -38,6 +39,7 @@ export const getChatMessagesController = async (
   try {
     const { userId } = req.body.token;
     const { chatId } = req.params;
+    const { responseId } = req.query;
 
     const isUserAuthorized = await ChatService.isUserInChat({ chatId, userId });
 
@@ -46,10 +48,23 @@ export const getChatMessagesController = async (
         .status(401)
         .json({ message: "You cannot read messages from this chat." });
 
-    const messages = await ChatService.getChatMessages(chatId);
+    const messages = await ChatService.getChatMessages(
+      chatId,
+      processResponseId(responseId)
+    );
 
     return res.status(200).json({ messages });
   } catch (e) {
     return res.status(500).json({ message: "Cannot get messages." });
   }
+};
+
+const processResponseId = (responseId: any): string | null | undefined => {
+  if (responseId === "null") {
+    return null;
+  }
+  if (typeof responseId === "string") {
+    return responseId;
+  }
+  return undefined;
 };

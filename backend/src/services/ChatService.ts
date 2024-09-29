@@ -161,10 +161,14 @@ export class ChatService {
     return !!result;
   }
 
-  static async getChatMessages(chatId: Chat["id"]): Promise<Message[]> {
+  static async getChatMessages(
+    chatId: Chat["id"],
+    responseId: Message["id"] | null | undefined = undefined
+  ): Promise<Message[]> {
     const result = await prisma.message.findMany({
       where: {
         chatId,
+        responseId,
       },
       include: {
         author: { select: userSelect },
@@ -220,6 +224,7 @@ export class ChatService {
     const chat = await prisma.chat.findUnique({
       where: { id: chatId },
       select: {
+        type: true,
         users: {
           where: {
             userId,
@@ -229,6 +234,8 @@ export class ChatService {
     });
 
     if (!chat) return false;
+
+    if (chat.type === "POST") return true;
 
     return chat.users.length !== 0;
   }
