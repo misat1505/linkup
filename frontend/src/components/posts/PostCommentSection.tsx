@@ -8,6 +8,9 @@ import { queryKeys } from "../../lib/queryKeys";
 import { ChatService } from "../../services/Chat.service";
 import { Message } from "../../types/Message";
 import PostCommentForm from "./PostCommentForm";
+import Avatar from "../common/Avatar";
+import { getInitials } from "../../utils/getInitials";
+import { buildFileURL } from "../../utils/buildFileURL";
 
 export default function PostCommentSection() {
   const { isCommentSectionOpen } = usePostCommentsSectionContext();
@@ -150,5 +153,21 @@ function LevelIndicator({ level }: { level: number }) {
 }
 
 function Comment({ message }: { message: Message }) {
-  return <p className="p-2">{message.content}</p>;
+  return (
+    <div className="flex gap-x-2 p-2">
+      <Avatar
+        src={buildFileURL(message.author.photoURL, { type: "avatar" })}
+        alt={getInitials(message.author)}
+        className="border"
+      />
+      <div className="max-w-[calc(100%-4rem)]">
+        <h2 className="text-nowrap font-semibold">
+          {message.author.firstName} {message.author.lastName} at{" "}
+          {message.createdAt.toLocaleDateString("en-US")}{" "}
+          {message.createdAt.toLocaleTimeString("en-US")}
+        </h2>
+        <p>{message.content}</p>
+      </div>
+    </div>
+  );
 }
