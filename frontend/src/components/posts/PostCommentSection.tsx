@@ -80,20 +80,23 @@ function CommentSection({
               <LevelIndicator level={level} />
               <Comment message={message} />
             </div>
-            <div
+            {/* <div
               className={cn("hidden group-hover:block", {
                 block: activeMessages.includes(message.id)
               })}
-            >
-              <div className="flex items-center gap-x-2">
-                <ResponseSetButton onclick={() => setResponse(message)} />
-                <ToggleSubsectionOpenButton
-                  isActive={activeMessages.includes(message.id)}
-                  onclick={() => toggleIsMessageActive(message.id)}
-                />
-              </div>
+            > */}
+            <div className="flex items-center gap-x-2">
+              <ResponseSetButton
+                isActive={activeMessages.includes(message.id)}
+                onclick={() => setResponse(message)}
+              />
+              <ToggleSubsectionOpenButton
+                isActive={activeMessages.includes(message.id)}
+                onclick={() => toggleIsMessageActive(message.id)}
+              />
             </div>
           </div>
+          {/* </div> */}
           {activeMessages.includes(message.id) && (
             <CommentSection group={message.id} level={level + 1} />
           )}
@@ -103,11 +106,25 @@ function CommentSection({
   );
 }
 
-function ResponseSetButton({ onclick }: { onclick: () => void }) {
+function ResponseSetButton({
+  isActive,
+  onclick
+}: {
+  isActive: boolean;
+  onclick: () => void;
+}) {
   return (
     <Tooltip content="Reply">
       <button onClick={onclick}>
-        <FaReply className="transition-all hover:text-slate-600 dark:hover:text-slate-400" />
+        <FaReply
+          className={cn(
+            "transition-all group-hover:text-slate-600 dark:group-hover:text-slate-400",
+            {
+              "text-slate-600 dark:text-slate-400": isActive,
+              "text-transparent": !isActive
+            }
+          )}
+        />
       </button>
     </Tooltip>
   );
@@ -125,7 +142,22 @@ function ToggleSubsectionOpenButton({
       <button onClick={onclick} className="p-2">
         <FaArrowDown
           className={cn(
-            "transition-all hover:text-slate-600 dark:hover:text-slate-400",
+            "transition-all group-hover:text-slate-600 dark:group-hover:text-slate-400", // Ensure hover styles apply to the group
+            {
+              "rotate-180 text-slate-600 dark:text-slate-400": isActive, // Active styles
+              "text-transparent": !isActive // Transparent when not active
+            }
+          )}
+        />
+      </button>
+    </Tooltip>
+  );
+  return (
+    <Tooltip content={isActive ? "Close replies" : "Show replies"}>
+      <button onClick={onclick} className="p-2">
+        <FaArrowDown
+          className={cn(
+            "text-transparent transition-all hover:text-slate-600 dark:hover:text-slate-400",
             {
               "rotate-180 text-slate-300 hover:text-slate-400 dark:text-slate-600 dark:hover:text-slate-500":
                 isActive
