@@ -56,7 +56,8 @@ function CommentSection({
   const { chat, setResponse } = usePostCommentsSectionContext();
   const { data: messages = [] } = useQuery({
     queryKey: queryKeys.messages(chat.id, group),
-    queryFn: () => ChatService.getMessages(chat.id, group)
+    queryFn: () => ChatService.getMessages(chat.id, group),
+    refetchOnMount: false
   });
 
   const [activeMessages, setActiveMessages] = useState<Message["id"][]>([]);

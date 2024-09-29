@@ -65,6 +65,9 @@ export default function usePostChatForm(
         }
       );
       setResponseInner(null);
+      toast({
+        title: "Comment sent successfully."
+      });
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({

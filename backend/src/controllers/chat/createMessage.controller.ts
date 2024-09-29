@@ -76,7 +76,7 @@ export const createMessageController = async (req: Request, res: Response) => {
 
     if (responseId && !isResponseInChat) {
       return res.status(400).json({
-        message: "Message of responseId does not exist in this chat.",
+        message: "Message of this responseId does not exist in this chat.",
       });
     }
 
