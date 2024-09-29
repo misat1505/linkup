@@ -80,11 +80,6 @@ function CommentSection({
               <LevelIndicator level={level} />
               <Comment message={message} />
             </div>
-            {/* <div
-              className={cn("hidden group-hover:block", {
-                block: activeMessages.includes(message.id)
-              })}
-            > */}
             <div className="flex items-center gap-x-2">
               <ResponseSetButton
                 isActive={activeMessages.includes(message.id)}
@@ -96,7 +91,6 @@ function CommentSection({
               />
             </div>
           </div>
-          {/* </div> */}
           {activeMessages.includes(message.id) && (
             <CommentSection group={message.id} level={level + 1} />
           )}
@@ -118,7 +112,7 @@ function ResponseSetButton({
       <button onClick={onclick}>
         <FaReply
           className={cn(
-            "transition-all group-hover:text-slate-600 dark:group-hover:text-slate-400",
+            "transition-all group-hover:text-slate-600 group-hover:hover:text-slate-400 dark:group-hover:text-slate-400 dark:group-hover:hover:text-slate-600",
             {
               "text-slate-600 dark:text-slate-400": isActive,
               "text-transparent": !isActive
@@ -142,25 +136,11 @@ function ToggleSubsectionOpenButton({
       <button onClick={onclick} className="p-2">
         <FaArrowDown
           className={cn(
-            "transition-all group-hover:text-slate-600 dark:group-hover:text-slate-400", // Ensure hover styles apply to the group
+            "transition-all group-hover:text-slate-600 group-hover:hover:text-slate-400 dark:group-hover:text-slate-400 dark:group-hover:hover:text-slate-600",
             {
-              "rotate-180 text-slate-600 dark:text-slate-400": isActive, // Active styles
-              "text-transparent": !isActive // Transparent when not active
-            }
-          )}
-        />
-      </button>
-    </Tooltip>
-  );
-  return (
-    <Tooltip content={isActive ? "Close replies" : "Show replies"}>
-      <button onClick={onclick} className="p-2">
-        <FaArrowDown
-          className={cn(
-            "text-transparent transition-all hover:text-slate-600 dark:hover:text-slate-400",
-            {
-              "rotate-180 text-slate-300 hover:text-slate-400 dark:text-slate-600 dark:hover:text-slate-500":
-                isActive
+              "rotate-180 text-slate-400 group-hover:text-slate-400 dark:text-slate-600 dark:group-hover:text-slate-600":
+                isActive,
+              "text-transparent": !isActive
             }
           )}
         />
