@@ -31,6 +31,23 @@ export class FileService {
     photoURL: string,
     userId: User["id"]
   ): Promise<boolean> {
+    const postChat = await prisma.chat.findFirst({
+      where: {
+        type: "POST",
+        messages: {
+          some: {
+            files: {
+              some: {
+                url: photoURL,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (postChat) return true;
+
     const result = await prisma.chat.findFirst({
       where: {
         type: { in: ["GROUP", "PRIVATE"] },
