@@ -58,7 +58,7 @@ export default function usePostChatForm(
       const message = await ChatService.createMessage(chatId, data);
       reset();
       queryClient.setQueryData<Message[]>(
-        queryKeys.messages(message.chatId, message.response?.id),
+        queryKeys.messages(message.chatId, message.response?.id || null),
         (oldMessages) => {
           if (!oldMessages) return [message];
           return [...oldMessages, message];
