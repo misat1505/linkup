@@ -7,8 +7,6 @@ import { useQuery } from "react-query";
 import { queryKeys } from "../../lib/queryKeys";
 import { ChatService } from "../../services/Chat.service";
 import { Message } from "../../types/Message";
-import ChatFooter from "../chats/ChatFooter";
-import ChatFooterProvider from "../../contexts/ChatFooterProvider";
 import PostCommentForm from "./PostCommentForm";
 
 export default function PostCommentSection() {
@@ -56,7 +54,7 @@ function CommentSection({
   level: number;
 }) {
   const { chat, setResponse } = usePostCommentsSectionContext();
-  const { isLoading, data: messages = [] } = useQuery({
+  const { data: messages = [] } = useQuery({
     queryKey: queryKeys.messages(chat.id, group),
     queryFn: () => ChatService.getMessages(chat.id, group)
   });
@@ -71,26 +69,28 @@ function CommentSection({
     });
   };
 
-  // if (isLoading) return <div>loading...</div>;
-
   return (
     <>
       {messages.map((message) => (
         <React.Fragment key={message.id}>
-          <div className="group flex items-center justify-between">
+          <div className="group flex items-center justify-between hover:bg-slate-100/50 dark:hover:bg-slate-900/50">
             <div className="flex gap-x-2">
               <LevelIndicator level={level} />
               <Comment message={message} />
             </div>
-            {/* <div className="hidden group-hover:block"> */}
-            <div className="flex items-center gap-x-2">
-              <ResponseSetButton onclick={() => setResponse(message)} />
-              <ToggleSubsectionOpenButton
-                isActive={activeMessages.includes(message.id)}
-                onclick={() => toggleIsMessageActive(message.id)}
-              />
+            <div
+              className={cn("hidden group-hover:block", {
+                block: activeMessages.includes(message.id)
+              })}
+            >
+              <div className="flex items-center gap-x-2">
+                <ResponseSetButton onclick={() => setResponse(message)} />
+                <ToggleSubsectionOpenButton
+                  isActive={activeMessages.includes(message.id)}
+                  onclick={() => toggleIsMessageActive(message.id)}
+                />
+              </div>
             </div>
-            {/* </div> */}
           </div>
           {activeMessages.includes(message.id) && (
             <CommentSection group={message.id} level={level + 1} />
