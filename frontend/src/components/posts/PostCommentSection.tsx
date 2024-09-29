@@ -1,12 +1,12 @@
 import { FaArrowDown } from "react-icons/fa";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { cn } from "../../lib/utils";
 import { usePostCommentsSectionContext } from "../../contexts/PostCommentSectionProvider";
 import Tooltip from "../common/Tooltip";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { queryKeys } from "../../lib/queryKeys";
 import { ChatService } from "../../services/Chat.service";
-import { Message } from "@/types/Message";
+import { Message } from "../../types/Message";
 
 export default function PostCommentSection() {
   const { isCommentSectionOpen } = usePostCommentsSectionContext();
@@ -62,9 +62,10 @@ function CommentSection({ group }: { group: string | null }) {
         <React.Fragment key={message.id}>
           <div className="flex items-center justify-between p-2">
             <p>{message.content}</p>
-            <button onClick={() => toggleIsMessageActive(message.id)}>
-              responses
-            </button>
+            <ToggleSubsectionOpenButton
+              isActive={activeMessages.includes(message.id)}
+              onclick={() => toggleIsMessageActive(message.id)}
+            />
           </div>
           {activeMessages.includes(message.id) && (
             <CommentSection group={message.id} key={message.id} />
@@ -72,5 +73,29 @@ function CommentSection({ group }: { group: string | null }) {
         </React.Fragment>
       ))}
     </>
+  );
+}
+
+function ToggleSubsectionOpenButton({
+  isActive,
+  onclick
+}: {
+  isActive: boolean;
+  onclick: () => void;
+}) {
+  return (
+    <Tooltip content={isActive ? "Close replies" : "Show replies"}>
+      <button onClick={onclick}>
+        <FaArrowDown
+          className={cn(
+            "transition-all hover:text-slate-600 dark:hover:text-slate-400",
+            {
+              "rotate-180 text-slate-300 hover:text-slate-400 dark:text-slate-600 dark:hover:text-slate-500":
+                isActive
+            }
+          )}
+        />
+      </button>
+    </Tooltip>
   );
 }
