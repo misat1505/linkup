@@ -6,6 +6,8 @@ import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import PostHeader from "./PostHeader";
 import { markdownPreviewOptions } from "../../utils/markdownPreviewOptions";
+import PostCommentSection from "./PostCommentSection";
+import PostCommentsSectionProvider from "../../contexts/PostCommentSectionProvider";
 
 export default function PostPreview({ post }: { post: Post }) {
   const { theme } = useThemeContext();
@@ -15,26 +17,28 @@ export default function PostPreview({ post }: { post: Post }) {
     <div
       data-color-mode={theme}
       className={cn(
-        "m-auto my-4 w-[95%] overflow-hidden rounded-md p-4 lg:w-[60%]",
+        "bg-post-light dark:bg-post-dark m-auto my-4 w-[95%] overflow-hidden rounded-md p-4 lg:w-[60%]",
         {
           "relative max-h-72": !isExpanded
         }
       )}
-      style={{ backgroundColor: theme === "light" ? "white" : "#0c1117" }}
     >
-      <PostHeader post={post} />
-      <MDEditor.Markdown
-        source={post.content}
-        components={markdownPreviewOptions}
-      />
-      {!isExpanded && (
+      <div className={cn({ relative: isExpanded })}>
+        <PostHeader post={post} />
+        <MDEditor.Markdown
+          source={post.content}
+          components={markdownPreviewOptions}
+        />
         <Button
           className="absolute bottom-4 left-1/2 -translate-x-1/2"
-          onClick={() => setIsExpanded(true)}
+          onClick={() => setIsExpanded((prev) => !prev)}
         >
-          Show more
+          Show {isExpanded ? "less" : "more"}
         </Button>
-      )}
+      </div>
+      <PostCommentsSectionProvider chat={post.chat}>
+        <PostCommentSection />
+      </PostCommentsSectionProvider>
     </div>
   );
 }
