@@ -1,4 +1,4 @@
-import { FaArrowDown } from "react-icons/fa";
+import { FaArrowDown, FaReply } from "react-icons/fa";
 import React, { useState } from "react";
 import { cn } from "../../lib/utils";
 import { usePostCommentsSectionContext } from "../../contexts/PostCommentSectionProvider";
@@ -7,6 +7,9 @@ import { useQuery } from "react-query";
 import { queryKeys } from "../../lib/queryKeys";
 import { ChatService } from "../../services/Chat.service";
 import { Message } from "../../types/Message";
+import ChatFooter from "../chats/ChatFooter";
+import ChatFooterProvider from "../../contexts/ChatFooterProvider";
+import PostCommentForm from "./PostCommentForm";
 
 export default function PostCommentSection() {
   const { isCommentSectionOpen } = usePostCommentsSectionContext();
@@ -14,7 +17,12 @@ export default function PostCommentSection() {
   return (
     <div>
       <CommentSectionOpenButton />
-      {isCommentSectionOpen && <CommentSection group={null} level={1} />}
+      {isCommentSectionOpen && (
+        <>
+          <CommentSection group={null} level={1} />
+          <PostCommentForm />
+        </>
+      )}
     </div>
   );
 }
@@ -29,7 +37,7 @@ function CommentSectionOpenButton() {
     <Tooltip content={tooltipText}>
       <button
         className={cn(
-          "hover:bg-post-dark/20 dark:hover:bg-post-light/20 mt-4 flex w-full justify-center rounded-md p-4 transition-all hover:opacity-50",
+          "mt-4 flex w-full justify-center rounded-md p-4 transition-all hover:bg-post-dark/20 hover:opacity-50 dark:hover:bg-post-light/20",
           { "my-4": isCommentSectionOpen }
         )}
         onClick={toggleIsCommentSectionOpen}
@@ -47,7 +55,7 @@ function CommentSection({
   group: string | null;
   level: number;
 }) {
-  const { chat } = usePostCommentsSectionContext();
+  const { chat, setResponse } = usePostCommentsSectionContext();
   const { isLoading, data: messages = [] } = useQuery({
     queryKey: queryKeys.messages(chat.id, group),
     queryFn: () => ChatService.getMessages(chat.id, group)
@@ -69,15 +77,20 @@ function CommentSection({
     <>
       {messages.map((message) => (
         <React.Fragment key={message.id}>
-          <div className="flex items-center justify-between">
+          <div className="group flex items-center justify-between">
             <div className="flex gap-x-2">
               <LevelIndicator level={level} />
               <Comment message={message} />
             </div>
-            <ToggleSubsectionOpenButton
-              isActive={activeMessages.includes(message.id)}
-              onclick={() => toggleIsMessageActive(message.id)}
-            />
+            {/* <div className="hidden group-hover:block"> */}
+            <div className="flex items-center gap-x-2">
+              <ResponseSetButton onclick={() => setResponse(message)} />
+              <ToggleSubsectionOpenButton
+                isActive={activeMessages.includes(message.id)}
+                onclick={() => toggleIsMessageActive(message.id)}
+              />
+            </div>
+            {/* </div> */}
           </div>
           {activeMessages.includes(message.id) && (
             <CommentSection group={message.id} level={level + 1} />
@@ -85,6 +98,16 @@ function CommentSection({
         </React.Fragment>
       ))}
     </>
+  );
+}
+
+function ResponseSetButton({ onclick }: { onclick: () => void }) {
+  return (
+    <Tooltip content="Reply">
+      <button onClick={onclick}>
+        <FaReply className="transition-all hover:text-slate-600 dark:hover:text-slate-400" />
+      </button>
+    </Tooltip>
   );
 }
 

@@ -1,9 +1,12 @@
+import usePostChatForm, {
+  usePostChatFormValue
+} from "../hooks/chats/usePostChatForm";
 import { Chat } from "../types/Chat";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 
 type PostCommentsSectionContextProps = PropsWithChildren & { chat: Chat };
 
-type PostCommentsSectionContextProvidedValues = {
+type PostCommentsSectionContextProvidedValues = usePostChatFormValue & {
   chat: Chat;
   isCommentSectionOpen: boolean;
   toggleIsCommentSectionOpen: () => void;
@@ -34,6 +37,7 @@ const PostCommentsSectionProvider = ({
   return (
     <PostCommentsSectionContext.Provider
       value={{
+        ...usePostChatForm(chat.id),
         chat,
         isCommentSectionOpen,
         toggleIsCommentSectionOpen
