@@ -13,18 +13,21 @@ export default function PostCommentForm() {
   const { register, submitForm, response } = usePostCommentsSectionContext();
 
   return (
-    <form
-      onSubmit={submitForm}
-      className="mt-2 rounded-md bg-slate-100 px-4 py-2 dark:bg-slate-900"
-    >
-      {response && <ResponseDisplayer />}
-      <FileDisplayer />
-      <div className="flex items-center gap-x-2 pt-2">
-        <FileAdder />
-        <Input placeholder="Leave your comment..." {...register("content")} />
-        <SubmitFormButton />
-      </div>
-    </form>
+    <>
+      <div className="h-2"></div>
+      <form
+        onSubmit={submitForm}
+        className="sticky bottom-0 z-20 rounded-md bg-slate-100 px-4 py-2 dark:bg-slate-900"
+      >
+        {response && <ResponseDisplayer />}
+        <FileDisplayer />
+        <div className="flex items-center gap-x-2 pt-2">
+          <FileAdder />
+          <Input placeholder="Leave your comment..." {...register("content")} />
+          <SubmitFormButton />
+        </div>
+      </form>
+    </>
   );
 }
 

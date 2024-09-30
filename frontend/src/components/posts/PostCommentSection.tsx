@@ -17,10 +17,10 @@ export default function PostCommentSection() {
     <div>
       <CommentSectionOpenButton />
       {isCommentSectionOpen && (
-        <>
+        <div>
           <CommentSection group={null} level={1} />
           <PostCommentForm />
-        </>
+        </div>
       )}
     </div>
   );

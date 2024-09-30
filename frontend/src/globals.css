@@ -106,5 +106,5 @@ body {
 
 #root {
   min-height: 100vh;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }

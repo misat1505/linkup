@@ -15,15 +15,16 @@ export default function PostPreview({ post }: { post: Post }) {
 
   return (
     <div
-      data-color-mode={theme}
       className={cn(
-        "bg-post-light dark:bg-post-dark m-auto my-4 w-[95%] overflow-hidden rounded-md p-4 lg:w-[60%]",
-        {
-          "relative max-h-72": !isExpanded
-        }
+        "m-auto my-4 w-[95%] rounded-md bg-post-light p-4 dark:bg-post-dark lg:w-[60%]"
       )}
     >
-      <div className={cn({ relative: isExpanded })}>
+      <div
+        className={cn("relative overflow-hidden", {
+          "max-h-72": !isExpanded
+        })}
+        data-color-mode={theme}
+      >
         <PostHeader post={post} />
         <MDEditor.Markdown
           source={post.content}
@@ -36,9 +37,11 @@ export default function PostPreview({ post }: { post: Post }) {
           Show {isExpanded ? "less" : "more"}
         </Button>
       </div>
-      <PostCommentsSectionProvider chat={post.chat}>
-        <PostCommentSection />
-      </PostCommentsSectionProvider>
+      {isExpanded && (
+        <PostCommentsSectionProvider chat={post.chat}>
+          <PostCommentSection />
+        </PostCommentsSectionProvider>
+      )}
     </div>
   );
 }

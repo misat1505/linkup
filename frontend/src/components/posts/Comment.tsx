@@ -16,7 +16,7 @@ export default function Comment({ message }: { message: Message }) {
         alt={getInitials(message.author)}
         className="border"
       />
-      <div className="max-w-[calc(100%-4rem)]">
+      <div className="max-w-[calc(100%-4rem)] overflow-hidden">
         <h2 className="text-nowrap font-semibold">
           {message.author.firstName} {message.author.lastName} at{" "}
           {message.createdAt.toLocaleDateString("en-US")}{" "}
