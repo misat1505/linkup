@@ -76,7 +76,7 @@ function CommentSection({
       {messages.map((message) => (
         <React.Fragment key={message.id}>
           <div className="group flex items-center justify-between hover:bg-slate-100/50 dark:hover:bg-slate-900/50">
-            <div className="flex gap-x-2">
+            <div className="flex gap-x-2 overflow-hidden">
               <LevelIndicator level={level} />
               <Comment message={message} />
             </div>
