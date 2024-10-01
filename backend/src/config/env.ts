@@ -29,8 +29,11 @@ const envSchema = z.object({
     .refine((val) => !isNaN(val), {
       message: "'SOCKET_PORT' must be a number.",
     }),
-  JWT_SECRET: z.string().min(20, {
-    message: "'JWT_SECRET' needs to be at least 20 characters long.",
+  ACCESS_TOKEN_SECRET: z.string().min(20, {
+    message: "'ACCESS_TOKEN_SECRET' needs to be at least 20 characters long.",
+  }),
+  REFRESH_TOKEN_SECRET: z.string().min(20, {
+    message: "'REFRESH_TOKEN_SECRET' needs to be at least 20 characters long.",
   }),
   DATABASE_URL: z.string({ message: "'DATABASE_URL' must be a string" }),
   FRONTEND_URL: z.string().url({

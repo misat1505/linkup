@@ -7,6 +7,7 @@ import { TokenProcessor } from "../../lib/TokenProcessor";
 import { jwtCookieOptions } from "../../config/jwt-cookie";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
+import { env } from "../../config/env";
 
 export const signupController = async (req: Request, res: Response) => {
   /**
@@ -74,9 +75,14 @@ export const signupController = async (req: Request, res: Response) => {
 
     await UserService.insertUser(user);
 
-    const jwt = TokenProcessor.encode({ userId: user.id }, { expiresIn: "1h" });
+    const jwt = TokenProcessor.encode(
+      { userId: user.id },
+      env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "1h" }
+    );
     const accessToken = TokenProcessor.encode(
       { userId: user.id },
+      env.ACCESS_TOKEN_SECRET,
       { expiresIn: "1h" }
     );
     res.cookie("token", jwt, jwtCookieOptions);

@@ -3,6 +3,7 @@ import { UserService } from "../../services/UserService";
 import { Hasher } from "../../lib/Hasher";
 import { TokenProcessor } from "../../lib/TokenProcessor";
 import { jwtCookieOptions } from "../../config/jwt-cookie";
+import { env } from "../../config/env";
 
 export const loginController = async (req: Request, res: Response) => {
   /**
@@ -51,9 +52,14 @@ export const loginController = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid password." });
     }
 
-    const jwt = TokenProcessor.encode({ userId: user.id }, { expiresIn: "1h" });
+    const jwt = TokenProcessor.encode(
+      { userId: user.id },
+      env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "1h" }
+    );
     const accessToken = TokenProcessor.encode(
       { userId: user.id },
+      env.ACCESS_TOKEN_SECRET,
       { expiresIn: "1h" }
     );
     res.cookie("token", jwt, jwtCookieOptions);

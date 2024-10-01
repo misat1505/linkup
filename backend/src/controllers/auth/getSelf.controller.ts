@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "../../services/UserService";
 import { TokenProcessor } from "../../lib/TokenProcessor";
-import { jwtCookieOptions } from "../../config/jwt-cookie";
+import { env } from "../../config/env";
 
 export const getSelfController = async (req: Request, res: Response) => {
   /**
@@ -35,12 +35,11 @@ export const getSelfController = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const jwt = TokenProcessor.encode({ userId: user.id }, { expiresIn: "1h" });
     const accessToken = TokenProcessor.encode(
       { userId: user.id },
+      env.ACCESS_TOKEN_SECRET,
       { expiresIn: "1h" }
     );
-    res.cookie("token", jwt, jwtCookieOptions);
     return res
       .status(200)
       .json({ user: UserService.removeCredentials(user), accessToken });

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { TokenProcessor } from "../../lib/TokenProcessor";
 import { jwtCookieOptions } from "../../config/jwt-cookie";
+import { env } from "../../config/env";
 
 export const refreshTokenController = (req: Request, res: Response) => {
   /**
@@ -19,8 +20,14 @@ export const refreshTokenController = (req: Request, res: Response) => {
   try {
     const { userId } = req.body.token;
 
-    const jwt = TokenProcessor.encode({ userId }, { expiresIn: "1h" });
-    const accessToken = TokenProcessor.encode({ userId }, { expiresIn: "1h" });
+    const jwt = TokenProcessor.encode({ userId }, env.REFRESH_TOKEN_SECRET, {
+      expiresIn: "1h",
+    });
+    const accessToken = TokenProcessor.encode(
+      { userId },
+      env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "1h" }
+    );
     res.cookie("token", jwt, jwtCookieOptions);
     return res
       .status(200)

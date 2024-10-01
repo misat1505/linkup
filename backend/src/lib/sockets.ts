@@ -3,6 +3,7 @@ import { Message } from "../types/Message";
 import { TokenProcessor } from "./TokenProcessor";
 import { ChatService } from "../services/ChatService";
 import { getCookie } from "./getCookie";
+import { env } from "../config/env";
 
 export const setupSocket = (io: Server) => {
   io.on("connection", (socket: Socket) => {
@@ -15,7 +16,7 @@ export const setupSocket = (io: Server) => {
         const token = getCookie(socket.handshake.headers.cookie, "token");
         if (!token) throw new Error("Token is required to join room.");
 
-        const decoded = TokenProcessor.decode(token);
+        const decoded = TokenProcessor.decode(token, env.REFRESH_TOKEN_SECRET);
         if (!decoded) throw new Error("Invalid token.");
 
         const { userId } = decoded;
