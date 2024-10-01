@@ -4,6 +4,8 @@ import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { VALID_USER_ID } from "../utils/constants";
 import { isPost } from "../../src/types/guards/Post.guard";
 import { env } from "../../src/config/env";
+import path from "path";
+import fs from "fs";
 
 describe("posts router", () => {
   const token = TokenProcessor.encode(
@@ -23,6 +25,17 @@ describe("posts router", () => {
       expect(res.statusCode).toEqual(201);
       expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(true);
       expect(res.body.post.content).toBe("This is a new post.");
+
+      const postFilesPath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "files",
+        "posts",
+        res.body.post.id
+      );
+      expect(fs.existsSync(postFilesPath));
+      fs.rmdirSync(postFilesPath, { recursive: true });
     });
   });
 
@@ -83,6 +96,17 @@ describe("posts router", () => {
       expect(res.body.post.content).toBe(
         "This is the updated content of the post."
       );
+
+      const postFilesPath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "files",
+        "posts",
+        res.body.post.id
+      );
+      expect(fs.existsSync(postFilesPath));
+      fs.rmdirSync(postFilesPath, { recursive: true });
     });
   });
 });

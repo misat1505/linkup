@@ -6,8 +6,10 @@ import { getPost } from "../../src/controllers/posts/getPost";
 import { getPosts } from "../../src/controllers/posts/getPosts";
 import { getUserPosts } from "../../src/controllers/posts/getUserPosts";
 import { updatePost } from "../../src/controllers/posts/updatePost";
+import { handleMarkdownUpdate } from "../../src/utils/updatePost";
 
 jest.mock("../../src/services/PostService");
+jest.mock("../../src/utils/updatePost");
 
 describe("Post controllers", () => {
   const app = express();
@@ -21,6 +23,8 @@ describe("Post controllers", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
+  (handleMarkdownUpdate as jest.Mock).mockImplementation((a, b, c) => a);
 
   describe("createPost", () => {
     it("should successfully create a post", async () => {
