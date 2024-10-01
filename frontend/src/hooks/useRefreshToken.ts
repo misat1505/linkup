@@ -22,7 +22,7 @@ export const useRefreshToken = (user: User | null | undefined) => {
 
     refreshTokenIntervalRef.current = setInterval(
       handleRefreshToken,
-      30 * 60 * 1000
+      10 * 60 * 1000
     );
 
     return () => {

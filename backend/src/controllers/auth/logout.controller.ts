@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { refreshTokenCookieName } from "../../config/jwt-cookie";
 
 export const logoutController = (req: Request, res: Response) => {
   /**
@@ -14,7 +15,7 @@ export const logoutController = (req: Request, res: Response) => {
    *         description: Cannot log out
    */
   try {
-    res.clearCookie("token");
+    res.clearCookie(refreshTokenCookieName);
     res.status(200).json({ message: "Successfully logged out." });
   } catch (e) {
     return res.status(500).json({ message: "Cannot log out." });

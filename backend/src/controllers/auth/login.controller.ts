@@ -2,7 +2,12 @@ import { Request, Response } from "express";
 import { UserService } from "../../services/UserService";
 import { Hasher } from "../../lib/Hasher";
 import { TokenProcessor } from "../../lib/TokenProcessor";
-import { jwtCookieOptions } from "../../config/jwt-cookie";
+import {
+  accessTokenSignOptions,
+  refreshTokenCookieName,
+  refreshTokenCookieOptions,
+  refreshTokenSignOptions,
+} from "../../config/jwt-cookie";
 import { env } from "../../config/env";
 
 export const loginController = async (req: Request, res: Response) => {
@@ -52,17 +57,17 @@ export const loginController = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid password." });
     }
 
-    const jwt = TokenProcessor.encode(
+    const refreshToken = TokenProcessor.encode(
       { userId: user.id },
       env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "1h" }
+      refreshTokenSignOptions
     );
     const accessToken = TokenProcessor.encode(
       { userId: user.id },
       env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1h" }
+      accessTokenSignOptions
     );
-    res.cookie("token", jwt, jwtCookieOptions);
+    res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
     return res
       .status(200)
       .json({ user: UserService.removeCredentials(user), accessToken });

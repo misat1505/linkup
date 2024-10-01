@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { TokenProcessor } from "../lib/TokenProcessor";
 import { env } from "../config/env";
+import { refreshTokenCookieName } from "../config/jwt-cookie";
 
 export const authorize = (req: Request, res: Response, next: NextFunction) => {
   /**
@@ -47,7 +48,7 @@ export const authorizeWithRefreshToken = (
    * Terminates the request with an error response if no token is found or if the token is invalid.
    */
 
-  const token = req.cookies.token;
+  const token = req.cookies[refreshTokenCookieName];
 
   if (!token) {
     return res.status(400).json({ message: "Invalid request - no token" });

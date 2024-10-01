@@ -4,7 +4,12 @@ import { Hasher } from "../../lib/Hasher";
 import { UserService } from "../../services/UserService";
 import { UserWithCredentials } from "../../types/User";
 import { TokenProcessor } from "../../lib/TokenProcessor";
-import { jwtCookieOptions } from "../../config/jwt-cookie";
+import {
+  accessTokenSignOptions,
+  refreshTokenCookieName,
+  refreshTokenCookieOptions,
+  refreshTokenSignOptions,
+} from "../../config/jwt-cookie";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import { env } from "../../config/env";
@@ -75,17 +80,17 @@ export const signupController = async (req: Request, res: Response) => {
 
     await UserService.insertUser(user);
 
-    const jwt = TokenProcessor.encode(
+    const refreshToken = TokenProcessor.encode(
       { userId: user.id },
       env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "1h" }
+      refreshTokenSignOptions
     );
     const accessToken = TokenProcessor.encode(
       { userId: user.id },
       env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1h" }
+      accessTokenSignOptions
     );
-    res.cookie("token", jwt, jwtCookieOptions);
+    res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
     return res
       .status(201)
       .json({ user: UserService.removeCredentials(user), accessToken });

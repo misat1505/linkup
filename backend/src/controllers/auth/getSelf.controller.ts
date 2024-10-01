@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UserService } from "../../services/UserService";
 import { TokenProcessor } from "../../lib/TokenProcessor";
 import { env } from "../../config/env";
+import { accessTokenSignOptions } from "../../config/jwt-cookie";
 
 export const getSelfController = async (req: Request, res: Response) => {
   /**
@@ -38,7 +39,7 @@ export const getSelfController = async (req: Request, res: Response) => {
     const accessToken = TokenProcessor.encode(
       { userId: user.id },
       env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1h" }
+      accessTokenSignOptions
     );
     return res
       .status(200)

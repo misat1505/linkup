@@ -4,6 +4,7 @@ import { TokenProcessor } from "./TokenProcessor";
 import { ChatService } from "../services/ChatService";
 import { getCookie } from "./getCookie";
 import { env } from "../config/env";
+import { refreshTokenCookieName } from "../config/jwt-cookie";
 
 export const setupSocket = (io: Server) => {
   io.on("connection", (socket: Socket) => {
@@ -13,7 +14,10 @@ export const setupSocket = (io: Server) => {
 
     socket.on("join-room", async (room: string) => {
       try {
-        const token = getCookie(socket.handshake.headers.cookie, "token");
+        const token = getCookie(
+          socket.handshake.headers.cookie,
+          refreshTokenCookieName
+        );
         if (!token) throw new Error("Token is required to join room.");
 
         const decoded = TokenProcessor.decode(token, env.REFRESH_TOKEN_SECRET);
