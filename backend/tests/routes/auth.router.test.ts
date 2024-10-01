@@ -5,9 +5,13 @@ import path from "path";
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { VALID_USER_ID } from "../utils/constants";
 import { isUser } from "../../src/types/guards/user.guard";
+import { env } from "../../src/config/env";
 
 describe("auth router", () => {
-  const token = TokenProcessor.encode({ userId: VALID_USER_ID });
+  const token = TokenProcessor.encode(
+    { userId: VALID_USER_ID },
+    env.ACCESS_TOKEN_SECRET
+  );
 
   describe("[PUT] /user", () => {
     it("should update user", async () => {
@@ -45,7 +49,10 @@ describe("auth router", () => {
         .get("/auth/user")
         .set(
           "Cookie",
-          `token=${TokenProcessor.encode({ userId: VALID_USER_ID })}`
+          `token=${TokenProcessor.encode(
+            { userId: VALID_USER_ID },
+            env.REFRESH_TOKEN_SECRET
+          )}`
         );
 
       const getUser = res2.body.user;
@@ -127,7 +134,10 @@ describe("auth router", () => {
 
   describe("[POST] /refresh", () => {
     it("should refresh token", async () => {
-      const token = TokenProcessor.encode({ userId: VALID_USER_ID });
+      const token = TokenProcessor.encode(
+        { userId: VALID_USER_ID },
+        env.REFRESH_TOKEN_SECRET
+      );
 
       const res = await request(app)
         .post("/auth/refresh")
@@ -140,7 +150,10 @@ describe("auth router", () => {
 
   describe("[POST] /logout", () => {
     it("should logout user", async () => {
-      const token = TokenProcessor.encode({ userId: VALID_USER_ID });
+      const token = TokenProcessor.encode(
+        { userId: VALID_USER_ID },
+        env.ACCESS_TOKEN_SECRET
+      );
 
       const res = await request(app)
         .post("/auth/logout")
@@ -155,6 +168,7 @@ describe("auth router", () => {
     it("should get user", async () => {
       const token = TokenProcessor.encode(
         { userId: VALID_USER_ID },
+        env.REFRESH_TOKEN_SECRET,
         { expiresIn: "1h" }
       );
 

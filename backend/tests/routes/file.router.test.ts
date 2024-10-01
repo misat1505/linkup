@@ -6,6 +6,7 @@ import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { VALID_USER_ID } from "../utils/constants";
 import { User } from "../../src/types/User";
 import { Message } from "../../src/types/Message";
+import { env } from "../../src/config/env";
 
 let newlyCreatedUser: User;
 
@@ -37,14 +38,20 @@ const deleteUserFile = () => {
 };
 
 describe("file router", () => {
-  const token = TokenProcessor.encode({ userId: VALID_USER_ID });
+  const token = TokenProcessor.encode(
+    { userId: VALID_USER_ID },
+    env.ACCESS_TOKEN_SECRET
+  );
   let newlyCreatedUserToken: string;
 
   beforeEach(async () => {
     await createTestUser();
-    newlyCreatedUserToken = TokenProcessor.encode({
-      userId: newlyCreatedUser.id,
-    });
+    newlyCreatedUserToken = TokenProcessor.encode(
+      {
+        userId: newlyCreatedUser.id,
+      },
+      env.ACCESS_TOKEN_SECRET
+    );
   });
 
   afterEach(() => {
@@ -80,9 +87,12 @@ describe("file router", () => {
         .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toBe(200);
 
-      const user2Token = TokenProcessor.encode({
-        userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
-      });
+      const user2Token = TokenProcessor.encode(
+        {
+          userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
+        },
+        env.ACCESS_TOKEN_SECRET
+      );
 
       const res2 = await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
@@ -132,9 +142,12 @@ describe("file router", () => {
         .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toBe(200);
 
-      const user2Token = TokenProcessor.encode({
-        userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
-      });
+      const user2Token = TokenProcessor.encode(
+        {
+          userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
+        },
+        env.ACCESS_TOKEN_SECRET
+      );
 
       const res2 = await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)

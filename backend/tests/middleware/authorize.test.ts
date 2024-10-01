@@ -4,6 +4,7 @@ import { authorize } from "../../src/middlewares/authorize";
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import cookieParser from "cookie-parser";
 import { v4 as uuidv4 } from "uuid";
+import { env } from "../../src/config/env";
 
 describe("authorize middleware", () => {
   const app = express();
@@ -15,7 +16,7 @@ describe("authorize middleware", () => {
 
   it("should append token on authorized", async () => {
     const userId = uuidv4();
-    const token = TokenProcessor.encode({ userId });
+    const token = TokenProcessor.encode({ userId }, env.ACCESS_TOKEN_SECRET);
     const response = await request(app)
       .post("/test")
       .set("Authorization", `Bearer ${token}`);

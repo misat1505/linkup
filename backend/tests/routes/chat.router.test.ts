@@ -10,8 +10,12 @@ import { isMessage } from "../../src/types/guards/message.guard";
 import { isReaction } from "../../src/types/guards/reaction.guard";
 import { Chat } from "../../src/types/Chat";
 import { isUserInChat } from "../../src/types/guards/user.guard";
+import { env } from "../../src/config/env";
 
-const token = TokenProcessor.encode({ userId: VALID_USER_ID });
+const token = TokenProcessor.encode(
+  { userId: VALID_USER_ID },
+  env.ACCESS_TOKEN_SECRET
+);
 
 describe("chat router", () => {
   describe("[GET] /chats", () => {

@@ -3,9 +3,13 @@ import app from "../../src/app";
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { VALID_USER_ID } from "../utils/constants";
 import { isPost } from "../../src/types/guards/Post.guard";
+import { env } from "../../src/config/env";
 
 describe("posts router", () => {
-  const token = TokenProcessor.encode({ userId: VALID_USER_ID });
+  const token = TokenProcessor.encode(
+    { userId: VALID_USER_ID },
+    env.ACCESS_TOKEN_SECRET
+  );
 
   describe("[POST] /posts", () => {
     it("should create a new post", async () => {
