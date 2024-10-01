@@ -1,7 +1,7 @@
 import { CookieOptions } from "express";
 import { SignOptions } from "jsonwebtoken";
 
-export const refreshTokenCookieName = "token";
+export const refreshTokenCookieName = "refresh-token";
 
 export const refreshTokenCookieOptions: CookieOptions = {
   httpOnly: true,

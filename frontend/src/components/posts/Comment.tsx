@@ -7,6 +7,10 @@ import { File } from "../../types/File";
 import { usePostCommentsSectionContext } from "../../contexts/PostCommentSectionProvider";
 import Image from "../common/Image";
 import { FaFileAlt } from "react-icons/fa";
+import {
+  getReadableCommentUploadDate,
+  timeDifference
+} from "../../utils/timeDifference";
 
 export default function Comment({ message }: { message: Message }) {
   return (
@@ -17,10 +21,13 @@ export default function Comment({ message }: { message: Message }) {
         className="border"
       />
       <div className="max-w-[calc(100%-4rem)]">
-        <h2 className="text-nowrap font-semibold">
-          {message.author.firstName} {message.author.lastName} at{" "}
-          {message.createdAt.toLocaleDateString("en-US")}{" "}
-          {message.createdAt.toLocaleTimeString("en-US")}
+        <h2 className="text-nowrap">
+          <span className="font-semibold">
+            {message.author.firstName} {message.author.lastName}{" "}
+          </span>
+          <span className="italic">
+            {getReadableCommentUploadDate(timeDifference(message.createdAt))}
+          </span>
         </h2>
         <MultimediaDisplay files={message.files} />
         <p>{message.content}</p>

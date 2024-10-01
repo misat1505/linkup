@@ -9,6 +9,7 @@ import { ChatService } from "../../services/Chat.service";
 import { Message } from "../../types/Message";
 import PostCommentForm from "./PostCommentForm";
 import Comment from "./Comment";
+import { useAppContext } from "../../contexts/AppProvider";
 
 export default function PostCommentSection() {
   const { isCommentSectionOpen } = usePostCommentsSectionContext();
@@ -55,6 +56,7 @@ function CommentSection({
   level: number;
 }) {
   const { chat, setResponse } = usePostCommentsSectionContext();
+  const { user: me } = useAppContext();
   const { data: messages = [] } = useQuery({
     queryKey: queryKeys.messages(chat.id, group),
     queryFn: () => ChatService.getMessages(chat.id, group),
@@ -71,26 +73,37 @@ function CommentSection({
     });
   };
 
+  const getTooltipText = (message: Message): string => {
+    const name =
+      message.author.id === me!.id
+        ? "You"
+        : `${message.author.firstName} ${message.author.lastName}`;
+    const fullText = `${name}: ${message.createdAt.toLocaleDateString("en-US")} ${message.createdAt.toLocaleTimeString("en-US")}`;
+    return fullText;
+  };
+
   return (
     <>
       {messages.map((message) => (
         <React.Fragment key={message.id}>
-          <div className="group flex items-center justify-between hover:bg-slate-100/50 dark:hover:bg-slate-900/50">
-            <div className="ml-1 flex gap-x-2 overflow-hidden">
-              <LevelIndicator level={level} />
-              <Comment message={message} />
+          <Tooltip content={getTooltipText(message)}>
+            <div className="group flex items-center justify-between hover:bg-slate-100/50 dark:hover:bg-slate-900/50">
+              <div className="ml-1 flex flex-grow gap-x-2 overflow-hidden">
+                <LevelIndicator level={level} />
+                <Comment message={message} />
+              </div>
+              <div className="flex items-center gap-x-2">
+                <ResponseSetButton
+                  isActive={activeMessages.includes(message.id)}
+                  onclick={() => setResponse(message)}
+                />
+                <ToggleSubsectionOpenButton
+                  isActive={activeMessages.includes(message.id)}
+                  onclick={() => toggleIsMessageActive(message.id)}
+                />
+              </div>
             </div>
-            <div className="flex items-center gap-x-2">
-              <ResponseSetButton
-                isActive={activeMessages.includes(message.id)}
-                onclick={() => setResponse(message)}
-              />
-              <ToggleSubsectionOpenButton
-                isActive={activeMessages.includes(message.id)}
-                onclick={() => toggleIsMessageActive(message.id)}
-              />
-            </div>
-          </div>
+          </Tooltip>
           {activeMessages.includes(message.id) && (
             <CommentSection group={message.id} level={level + 1} />
           )}
