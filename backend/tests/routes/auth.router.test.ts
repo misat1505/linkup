@@ -6,6 +6,7 @@ import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { VALID_USER_ID } from "../utils/constants";
 import { isUser } from "../../src/types/guards/user.guard";
 import { env } from "../../src/config/env";
+import { refreshTokenCookieName } from "../../src/config/jwt-cookie";
 
 describe("auth router", () => {
   const token = TokenProcessor.encode(
@@ -47,13 +48,7 @@ describe("auth router", () => {
 
       const res2 = await request(app)
         .get("/auth/user")
-        .set(
-          "Cookie",
-          `token=${TokenProcessor.encode(
-            { userId: VALID_USER_ID },
-            env.REFRESH_TOKEN_SECRET
-          )}`
-        );
+        .set("Authorization", `Bearer ${token}`);
 
       const getUser = res2.body.user;
       expect(isUser(getUser, { allowStringifiedDates: true })).toBe(true);
@@ -141,7 +136,7 @@ describe("auth router", () => {
 
       const res = await request(app)
         .post("/auth/refresh")
-        .set("Cookie", `token=${token}`);
+        .set("Cookie", `${refreshTokenCookieName}=${token}`);
 
       expect(res.statusCode).toBe(200);
       expect(res.headers["set-cookie"]).toBeDefined();
@@ -150,11 +145,6 @@ describe("auth router", () => {
 
   describe("[POST] /logout", () => {
     it("should logout user", async () => {
-      const token = TokenProcessor.encode(
-        { userId: VALID_USER_ID },
-        env.ACCESS_TOKEN_SECRET
-      );
-
       const res = await request(app)
         .post("/auth/logout")
         .set("Authorization", `Bearer ${token}`);
@@ -166,15 +156,9 @@ describe("auth router", () => {
 
   describe("[GET] /user", () => {
     it("should get user", async () => {
-      const token = TokenProcessor.encode(
-        { userId: VALID_USER_ID },
-        env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "1h" }
-      );
-
       const res = await request(app)
         .get("/auth/user")
-        .set("Cookie", `token=${token}`);
+        .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
       expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(true);

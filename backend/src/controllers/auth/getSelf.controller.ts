@@ -10,7 +10,6 @@ export const getSelfController = async (req: Request, res: Response) => {
    * /auth/user:
    *   get:
    *     summary: Get current user details
-   *     description: This endpoint reads the refresh token from the request to authorize the user and generate a new access token.
    *     tags: [Auth]
    *     responses:
    *       200:
@@ -36,14 +35,7 @@ export const getSelfController = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const accessToken = TokenProcessor.encode(
-      { userId: user.id },
-      env.ACCESS_TOKEN_SECRET,
-      accessTokenSignOptions
-    );
-    return res
-      .status(200)
-      .json({ user: UserService.removeCredentials(user), accessToken });
+    return res.status(200).json({ user: UserService.removeCredentials(user) });
   } catch (e) {
     return res.status(500).json({ message: "Cannot fetch user." });
   }
