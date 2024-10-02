@@ -31,9 +31,17 @@ export default function PostPreview({ post }: { post: Post }) {
     >
       <div className="absolute -top-20" ref={postRef}></div>
       <div className="relative" data-color-mode={theme}>
-        <PostHeader post={post} />
+        <div
+          className={cn({
+            "sticky top-20 z-30 bg-post-light dark:bg-post-dark": isExpanded
+          })}
+        >
+          <PostHeader post={post} />
+        </div>
         <MDEditor.Markdown
-          className={cn({ "max-h-72 overflow-hidden": !isExpanded })}
+          className={cn("overflow-x-auto overflow-y-hidden", {
+            "max-h-72": !isExpanded
+          })}
           source={post.content}
           components={markdownPreviewOptions}
         />
