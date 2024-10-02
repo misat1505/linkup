@@ -65,7 +65,7 @@ export default function Editor() {
       name: "files",
       keyCommand: "files",
       buttonProps: { "aria-label": buttonText, title: "show files" },
-      icon: <FileDialog />
+      icon: <FileDialog content={markdown} />
     }
   ];
 
