@@ -30,19 +30,18 @@ export default function PostPreview({ post }: { post: Post }) {
       )}
     >
       <div className="absolute -top-20" ref={postRef}></div>
-      <div
-        className={cn("relative overflow-hidden", {
-          "max-h-72": !isExpanded
-        })}
-        data-color-mode={theme}
-      >
+      <div className="relative" data-color-mode={theme}>
         <PostHeader post={post} />
         <MDEditor.Markdown
+          className={cn({ "max-h-72 overflow-hidden": !isExpanded })}
           source={post.content}
           components={markdownPreviewOptions}
         />
         <Button
-          className="absolute bottom-4 left-1/2 -translate-x-1/2"
+          className={cn({
+            "absolute bottom-4 left-1/2 -translate-x-1/2": !isExpanded,
+            "sticky bottom-2 left-1/2 mt-4 -translate-x-1/2": isExpanded
+          })}
           onClick={handleToggleExpand}
         >
           Show {isExpanded ? "less" : "more"}
