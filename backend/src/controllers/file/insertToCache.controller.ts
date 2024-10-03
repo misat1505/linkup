@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 
-const CACHE_CAPACITY = 10;
+export const CACHE_CAPACITY = 10;
 
 export const insertToCache = async (req: Request, res: Response) => {
   /**
@@ -77,7 +77,7 @@ export const insertToCache = async (req: Request, res: Response) => {
 
     fs.unlinkSync(file!);
 
-    return res.status(200).json({ file: newFileName });
+    return res.status(201).json({ file: newFileName });
   } catch (e) {
     return res.status(500).json({ message: "Cannot insert to cache." });
   }

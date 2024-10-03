@@ -6,6 +6,15 @@ import { FileService } from "../../src/services/FileService";
 import { USER, VALID_USER_ID } from "../utils/constants";
 import { getFileController } from "../../src/controllers/file/getFile.controller";
 import { getCache } from "../../src/controllers/file/getCache.controller";
+import { upload } from "../../src/middlewares/multer";
+import {
+  CACHE_CAPACITY,
+  insertToCache,
+} from "../../src/controllers/file/insertToCache.controller";
+import { authorize } from "../../src/middlewares/authorize";
+import { TokenProcessor } from "../../src/lib/TokenProcessor";
+import { env } from "../../src/config/env";
+import { deleteFromCache } from "../../src/controllers/file/deleteFromCache.controller";
 
 jest.mock("../../src/services/FileService");
 
@@ -15,7 +24,9 @@ jest.mock("../../src/services/FileService");
 
 const app = express();
 app.use(express.json());
+app.post("/cache", upload.single("file"), authorize, insertToCache);
 app.get("/cache", getCache);
+app.delete("/cache/:filename", deleteFromCache);
 app.get("/:filename", getFileController);
 
 const testAvatarPath = path.join(
@@ -79,21 +90,29 @@ const deleteTestFile = () => {
     }
   });
 
-  fs.rmdirSync(path.dirname(testChatPath), { recursive: true });
-  fs.rmdirSync(path.dirname(testCachePath), { recursive: true });
-  fs.rmdirSync(path.dirname(testPostPath), { recursive: true });
+  if (fs.existsSync(path.dirname(testChatPath)))
+    fs.rmdirSync(path.dirname(testChatPath), { recursive: true });
+  if (fs.existsSync(path.dirname(testCachePath)))
+    fs.rmdirSync(path.dirname(testCachePath), { recursive: true });
+  if (fs.existsSync(path.dirname(testPostPath)))
+    fs.rmdirSync(path.dirname(testPostPath), { recursive: true });
 };
 
+const token = TokenProcessor.encode(
+  { userId: VALID_USER_ID },
+  env.ACCESS_TOKEN_SECRET
+);
+
 describe("File Controllers", () => {
+  beforeAll(() => {
+    createTestFile();
+  });
+
+  afterAll(() => {
+    deleteTestFile();
+  });
+
   describe("getFile", () => {
-    beforeAll(() => {
-      createTestFile();
-    });
-
-    afterAll(() => {
-      deleteTestFile();
-    });
-
     it("shouldn't allow requests without filter", async () => {
       const response = await request(app)
         .get("/nonexistentfile.txt")
@@ -216,6 +235,73 @@ describe("File Controllers", () => {
           .send({ token: { userId: VALID_USER_ID } });
         expect(res2.statusCode).toBe(200);
       });
+    });
+  });
+
+  describe("insertToCache", () => {
+    it("inserts file to cache and returns newly created filename", async () => {
+      const response = await request(app)
+        .post(`/cache`)
+        .set("Authorization", `Bearer ${token}`)
+        .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+      expect(response.status).toBe(201);
+      const file = response.body.file;
+
+      expect(typeof file).toBe("string");
+      const res2 = await request(app)
+        .get(`/${file}?filter=cache`)
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(res2.statusCode).toBe(200);
+    });
+
+    it(`cache can store up to ${CACHE_CAPACITY} files per user`, async () => {
+      deleteTestFile();
+
+      for (let i = 0; i < CACHE_CAPACITY; i++) {
+        const response = await request(app)
+          .post(`/cache`)
+          .set("Authorization", `Bearer ${token}`)
+          .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+
+        expect(response.statusCode).toBe(201);
+      }
+
+      const response = await request(app)
+        .post(`/cache`)
+        .set("Authorization", `Bearer ${token}`)
+        .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+
+      expect(response.statusCode).not.toBe(201);
+    });
+  });
+
+  describe("deleteFromCache", () => {
+    it("deletes file from cache", async () => {
+      const response = await request(app)
+        .get(`/cache`)
+        .send({ token: { userId: VALID_USER_ID } });
+
+      const initialFileNumber = response.body.files.length;
+
+      const res2 = await request(app)
+        .delete(`/cache/${response.body.files[0]}`)
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(res2.statusCode).toBe(200);
+
+      const res3 = await request(app)
+        .get(`/cache`)
+        .send({ token: { userId: VALID_USER_ID } });
+
+      const fileNumberAfterDelete = res3.body.files.length;
+      expect(fileNumberAfterDelete).toBe(initialFileNumber - 1);
+    });
+
+    it("returns 404 if file not found", async () => {
+      const response = await request(app)
+        .delete(`/cache/not-found.tsx`)
+        .send({ token: { userId: VALID_USER_ID } });
+
+      expect(response.statusCode).toBe(404);
     });
   });
 });
