@@ -5,6 +5,7 @@ import fs from "fs";
 import { FileService } from "../../src/services/FileService";
 import { USER, VALID_USER_ID } from "../utils/constants";
 import { getFileController } from "../../src/controllers/file/getFile.controller";
+import { getCache } from "../../src/controllers/file/getCache.controller";
 
 jest.mock("../../src/services/FileService");
 
@@ -14,6 +15,7 @@ jest.mock("../../src/services/FileService");
 
 const app = express();
 app.use(express.json());
+app.get("/cache", getCache);
 app.get("/:filename", getFileController);
 
 const testAvatarPath = path.join(
@@ -194,6 +196,25 @@ describe("File Controllers", () => {
           .get(`/testfile.txt?filter=post`)
           .send({ token: { userId: VALID_USER_ID } });
         expect(response.status).toBe(400);
+      });
+    });
+  });
+
+  describe("getCache", () => {
+    it("returns user's cache", async () => {
+      const response = await request(app)
+        .get(`/cache`)
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(response.status).toBe(200);
+      const filenames = response.body.files;
+      expect(Array.isArray(filenames)).toBe(true);
+
+      filenames.forEach(async (filename: unknown) => {
+        expect(typeof filename).toBe("string");
+        const res2 = await request(app)
+          .get(`/${filename}?filter=cache`)
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(res2.statusCode).toBe(200);
       });
     });
   });
