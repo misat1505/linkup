@@ -99,94 +99,102 @@ describe("File Controllers", () => {
       expect(response.status).toBe(400);
     });
 
-    it("should return 404 if the file does not exist", async () => {
-      const response = await request(app)
-        .get("/nonexistentfile.txt?filter=avatar")
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual({ message: "File not found." });
+    describe("avatar", () => {
+      it("should return 404 if the file does not exist", async () => {
+        const response = await request(app)
+          .get("/nonexistentfile.txt?filter=avatar")
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(response.status).toBe(404);
+        expect(response.body).toEqual({ message: "File not found." });
+      });
+
+      it("should return avatar file if it exists", async () => {
+        const response = await request(app)
+          .get("/testfile.txt?filter=avatar")
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(response.status).toBe(200);
+        expect(response.text).toBe("This is a test file");
+      });
     });
 
-    it("should return avatar file if it exists", async () => {
-      const response = await request(app)
-        .get("/testfile.txt?filter=avatar")
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(200);
-      expect(response.text).toBe("This is a test file");
+    describe("chat", () => {
+      it("should return chat photo if it exists", async () => {
+        const response = await request(app)
+          .get(`/testfile.txt?filter=chat-photo&chat=${mockChatId}`)
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(response.status).toBe(200);
+        expect(response.text).toBe("This is a test file");
+      });
+
+      it("should return chat message file if it exists", async () => {
+        const response = await request(app)
+          .get(`/testfile.txt?filter=chat-message&chat=${mockChatId}`)
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(response.status).toBe(200);
+        expect(response.text).toBe("This is a test file");
+      });
+
+      it("should return 400 if filter is chat message, but no chat given", async () => {
+        const response = await request(app)
+          .get(`/testfile.txt?filter=chat-message`)
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(response.status).toBe(400);
+      });
     });
 
-    it("should return chat photo if it exists", async () => {
-      const response = await request(app)
-        .get(`/testfile.txt?filter=chat-photo&chat=${mockChatId}`)
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(200);
-      expect(response.text).toBe("This is a test file");
+    describe("cache", () => {
+      it("should return file from cache if exists", async () => {
+        const response = await request(app)
+          .get(`/testfile.txt?filter=cache`)
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(response.status).toBe(200);
+        expect(response.text).toBe("This is a test file");
+      });
+
+      it("should return 404 if file from cache doesn't exist", async () => {
+        const response = await request(app)
+          .get(`/non-existent.txt?filter=cache`)
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(response.status).toBe(404);
+      });
+
+      it("shouldn't return file belonging to other user", async () => {
+        const response = await request(app)
+          .get(`/testfile.txt?filter=cache`)
+          .send({ token: { userId: "not-existent" } });
+        expect(response.status).toBe(404);
+      });
     });
 
-    it("should return chat message file if it exists", async () => {
-      const response = await request(app)
-        .get(`/testfile.txt?filter=chat-message&chat=${mockChatId}`)
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(200);
-      expect(response.text).toBe("This is a test file");
-    });
+    describe("post", () => {
+      it("should return file from post if exists", async () => {
+        const response = await request(app)
+          .get(`/testfile.txt?filter=post&post=${mockPostId}`)
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(response.status).toBe(200);
+        expect(response.text).toBe("This is a test file");
+      });
 
-    it("should return 400 if filter is chat message, but no chat given", async () => {
-      const response = await request(app)
-        .get(`/testfile.txt?filter=chat-message`)
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(400);
-    });
+      it("should return 404 if file from post doesn't exist", async () => {
+        const response = await request(app)
+          .get(`/non-existent.txt?filter=post&post=${mockPostId}`)
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(response.status).toBe(404);
+      });
 
-    it("should return file from cache if exists", async () => {
-      const response = await request(app)
-        .get(`/testfile.txt?filter=cache`)
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(200);
-      expect(response.text).toBe("This is a test file");
-    });
+      it("shouldn't return file belonging to other post", async () => {
+        const response = await request(app)
+          .get(`/testfile.txt?filter=post&post=other`)
+          .send({ token: { userId: "not-existent" } });
+        expect(response.status).toBe(404);
+      });
 
-    it("should return 404 if file from cache doesn't exist", async () => {
-      const response = await request(app)
-        .get(`/non-existent.txt?filter=cache`)
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(404);
-    });
-
-    it("shouldn't return file belonging to other user", async () => {
-      const response = await request(app)
-        .get(`/testfile.txt?filter=cache`)
-        .send({ token: { userId: "not-existent" } });
-      expect(response.status).toBe(404);
-    });
-
-    it("should return file from post if exists", async () => {
-      const response = await request(app)
-        .get(`/testfile.txt?filter=post&post=${mockPostId}`)
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(200);
-      expect(response.text).toBe("This is a test file");
-    });
-
-    it("should return 404 if file from post doesn't exist", async () => {
-      const response = await request(app)
-        .get(`/non-existent.txt?filter=post&post=${mockPostId}`)
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(404);
-    });
-
-    it("shouldn't return file belonging to other post", async () => {
-      const response = await request(app)
-        .get(`/testfile.txt?filter=post&post=other`)
-        .send({ token: { userId: "not-existent" } });
-      expect(response.status).toBe(404);
-    });
-
-    it("shouldn't return 400 if filter is post but no post id given", async () => {
-      const response = await request(app)
-        .get(`/testfile.txt?filter=post`)
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(400);
+      it("shouldn't return 400 if filter is post but no post id given", async () => {
+        const response = await request(app)
+          .get(`/testfile.txt?filter=post`)
+          .send({ token: { userId: VALID_USER_ID } });
+        expect(response.status).toBe(400);
+      });
     });
   });
 });

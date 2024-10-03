@@ -32,7 +32,7 @@ export const getFileController = async (req: Request, res: Response) => {
    * @swagger
    * /files/{filename}:
    *   get:
-   *     summary: Retrieve a file (avatar, chat photo, or chat message)
+   *     summary: Retrieve a file
    *     tags: [Files]
    *     parameters:
    *       - name: filename
@@ -44,20 +44,20 @@ export const getFileController = async (req: Request, res: Response) => {
    *       - name: filter
    *         in: query
    *         required: true
-   *         description: The type of file to filter (avatar, chat-message, chat-photo or cache).
+   *         description: The type of file to filter (avatar, chat-message, chat-photo, cache or post).
    *         schema:
    *           type: string
    *           enum: [avatar, chat-message, chat-photo, cache, post]
    *       - name: chat
    *         in: query
    *         required: false
-   *         description: Optional chat ID for chat-specific files.
+   *         description: Optional chat ID for chat-specific files. Required if filter is 'chat-message' or 'chat-photo'.
    *         schema:
    *           type: string
    *       - name: post
    *         in: query
    *         required: false
-   *         description: Optional post ID for post-specific files.
+   *         description: Optional post ID for post-specific files. Required if filter is 'post'.
    *         schema:
    *           type: string
    *     responses:
