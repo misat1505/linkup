@@ -95,7 +95,7 @@ export const getFileController = async (req: Request, res: Response) => {
     )
       return res.status(400).json({ message: "Chat has to be a string." });
 
-    if (postId && typeof postId !== "string")
+    if (filter === "post" && typeof postId !== "string")
       return res.status(400).json({ message: "Post has to be a string." });
 
     const prefix = chatId ? path.join("chats", chatId as string) : "avatars";
@@ -144,7 +144,7 @@ export const getFileController = async (req: Request, res: Response) => {
         "..",
         "files",
         "posts",
-        postId!,
+        postId as string,
         filename
       );
 

@@ -47,7 +47,19 @@ const testCachePath = path.join(
   "testfile.txt"
 );
 
-const allFiles = [testAvatarPath, testChatPath, testCachePath];
+const mockPostId = "post-id";
+
+const testPostPath = path.join(
+  __dirname,
+  "..",
+  "..",
+  "files",
+  "posts",
+  mockPostId,
+  "testfile.txt"
+);
+
+const allFiles = [testAvatarPath, testChatPath, testCachePath, testPostPath];
 
 const createTestFile = () => {
   allFiles.forEach((file) => {
@@ -67,6 +79,7 @@ const deleteTestFile = () => {
 
   fs.rmdirSync(path.dirname(testChatPath), { recursive: true });
   fs.rmdirSync(path.dirname(testCachePath), { recursive: true });
+  fs.rmdirSync(path.dirname(testPostPath), { recursive: true });
 };
 
 describe("File Controllers", () => {
@@ -145,6 +158,35 @@ describe("File Controllers", () => {
         .get(`/testfile.txt?filter=cache`)
         .send({ token: { userId: "not-existent" } });
       expect(response.status).toBe(404);
+    });
+
+    it("should return file from post if exists", async () => {
+      const response = await request(app)
+        .get(`/testfile.txt?filter=post&post=${mockPostId}`)
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(response.status).toBe(200);
+      expect(response.text).toBe("This is a test file");
+    });
+
+    it("should return 404 if file from post doesn't exist", async () => {
+      const response = await request(app)
+        .get(`/non-existent.txt?filter=post&post=${mockPostId}`)
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(response.status).toBe(404);
+    });
+
+    it("shouldn't return file belonging to other post", async () => {
+      const response = await request(app)
+        .get(`/testfile.txt?filter=post&post=other`)
+        .send({ token: { userId: "not-existent" } });
+      expect(response.status).toBe(404);
+    });
+
+    it("shouldn't return 400 if filter is post but no post id given", async () => {
+      const response = await request(app)
+        .get(`/testfile.txt?filter=post`)
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(response.status).toBe(400);
     });
   });
 });
