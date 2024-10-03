@@ -7,7 +7,10 @@ import path from "path";
 import { Message } from "../../src/types/Message";
 import { isChat } from "../../src/types/guards/chat.guard";
 import { isMessage } from "../../src/types/guards/message.guard";
-import { isReaction } from "../../src/types/guards/reaction.guard";
+import {
+  isAvailableReaction,
+  isReaction,
+} from "../../src/types/guards/reaction.guard";
 import { Chat } from "../../src/types/Chat";
 import { isUserInChat } from "../../src/types/guards/user.guard";
 import { env } from "../../src/config/env";
@@ -303,6 +306,19 @@ describe("chat router", () => {
       expect(chat3.photoURL).not.toBe("chat-photo.webp");
 
       fs.rmdirSync(path.dirname(filepath), { recursive: true });
+    });
+  });
+
+  describe("[GET] /chats/reactions", () => {
+    it("should get available reactions", async () => {
+      const res = await request(app).get("/chats/reactions");
+
+      expect(res.statusCode).toBe(200);
+      res.body.reactions.forEach((reaction: unknown) => {
+        expect(
+          isAvailableReaction(reaction, { allowStringifiedDates: true })
+        ).toBe(true);
+      });
     });
   });
 });

@@ -47,11 +47,17 @@ export const getFileController = async (req: Request, res: Response) => {
    *         description: The type of file to filter (avatar, chat-message, chat-photo or cache).
    *         schema:
    *           type: string
-   *           enum: [avatar, chat-message, chat-photo, cache]
+   *           enum: [avatar, chat-message, chat-photo, cache, post]
    *       - name: chat
    *         in: query
    *         required: false
-   *         description: Optional chat ID for chat-specific photos or messages.
+   *         description: Optional chat ID for chat-specific files.
+   *         schema:
+   *           type: string
+   *       - name: post
+   *         in: query
+   *         required: false
+   *         description: Optional post ID for post-specific files.
    *         schema:
    *           type: string
    *     responses:
@@ -83,13 +89,16 @@ export const getFileController = async (req: Request, res: Response) => {
         message: "Have to apply one of the filters: " + filterArray.join(", "),
       });
 
-    if (chatId && typeof chatId !== "string")
+    if (
+      ["chat-message", "chat-photo"].includes(filter) &&
+      typeof chatId !== "string"
+    )
       return res.status(400).json({ message: "Chat has to be a string." });
 
     if (postId && typeof postId !== "string")
       return res.status(400).json({ message: "Post has to be a string." });
 
-    const prefix = chatId ? path.join("chats", chatId) : "avatars";
+    const prefix = chatId ? path.join("chats", chatId as string) : "avatars";
     const sendFile = sendFileBuilder(path.join(prefix, filename), res);
 
     if (filter === "avatar") {

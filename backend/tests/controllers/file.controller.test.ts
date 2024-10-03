@@ -3,7 +3,7 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { FileService } from "../../src/services/FileService";
-import { VALID_USER_ID } from "../utils/constants";
+import { USER, VALID_USER_ID } from "../utils/constants";
 import { getFileController } from "../../src/controllers/file/getFile.controller";
 
 jest.mock("../../src/services/FileService");
@@ -37,7 +37,17 @@ const testChatPath = path.join(
   "testfile.txt"
 );
 
-const allFiles = [testAvatarPath, testChatPath];
+const testCachePath = path.join(
+  __dirname,
+  "..",
+  "..",
+  "files",
+  "cache",
+  VALID_USER_ID,
+  "testfile.txt"
+);
+
+const allFiles = [testAvatarPath, testChatPath, testCachePath];
 
 const createTestFile = () => {
   allFiles.forEach((file) => {
@@ -56,6 +66,7 @@ const deleteTestFile = () => {
   });
 
   fs.rmdirSync(path.dirname(testChatPath), { recursive: true });
+  fs.rmdirSync(path.dirname(testCachePath), { recursive: true });
 };
 
 describe("File Controllers", () => {
@@ -105,6 +116,35 @@ describe("File Controllers", () => {
         .send({ token: { userId: VALID_USER_ID } });
       expect(response.status).toBe(200);
       expect(response.text).toBe("This is a test file");
+    });
+
+    it("should return 400 if filter is chat message, but no chat given", async () => {
+      const response = await request(app)
+        .get(`/testfile.txt?filter=chat-message`)
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(response.status).toBe(400);
+    });
+
+    it("should return file from cache if exists", async () => {
+      const response = await request(app)
+        .get(`/testfile.txt?filter=cache`)
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(response.status).toBe(200);
+      expect(response.text).toBe("This is a test file");
+    });
+
+    it("should return 404 if file from cache doesn't exist", async () => {
+      const response = await request(app)
+        .get(`/non-existent.txt?filter=cache`)
+        .send({ token: { userId: VALID_USER_ID } });
+      expect(response.status).toBe(404);
+    });
+
+    it("shouldn't return file belonging to other user", async () => {
+      const response = await request(app)
+        .get(`/testfile.txt?filter=cache`)
+        .send({ token: { userId: "not-existent" } });
+      expect(response.status).toBe(404);
     });
   });
 });
