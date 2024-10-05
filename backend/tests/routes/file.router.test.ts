@@ -222,4 +222,39 @@ describe("file router", () => {
       fs.rmdirSync(postFilesDir, { recursive: true });
     });
   });
+
+  describe("cache routes", () => {
+    it("handles cache correctly", async () => {
+      const res1 = await request(app)
+        .get("/files/cache")
+        .set("Authorization", `Bearer ${token}`);
+      const initialFilesCount = res1.body.files.length;
+
+      const res2 = await request(app)
+        .post("/files/cache")
+        .set("Authorization", `Bearer ${token}`)
+        .attach("file", Buffer.from("message file"), "file1.txt");
+      const filename1 = res2.body.file;
+
+      const res3 = await request(app)
+        .get("/files/cache")
+        .set("Authorization", `Bearer ${token}`);
+      expect(res3.body.files.length).toBe(initialFilesCount + 1);
+
+      const res4 = await request(app)
+        .get(`/files/${filename1}?filter=cache`)
+        .set("Authorization", `Bearer ${token}`);
+      expect(res4.statusCode).toBe(200);
+
+      const res5 = await request(app)
+        .delete(`/files/cache/${filename1}`)
+        .set("Authorization", `Bearer ${token}`);
+      expect(res5.statusCode).toBe(200);
+
+      const res6 = await request(app)
+        .get("/files/cache")
+        .set("Authorization", `Bearer ${token}`);
+      expect(res6.body.files.length).toBe(initialFilesCount);
+    });
+  });
 });
