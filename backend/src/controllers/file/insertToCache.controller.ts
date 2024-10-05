@@ -65,10 +65,12 @@ export const insertToCache = async (req: Request, res: Response) => {
 
     const files = fs.readdirSync(userCachePath);
 
-    if (files.length >= CACHE_CAPACITY)
+    if (files.length >= CACHE_CAPACITY) {
+      fs.unlinkSync(file!);
       return res.status(500).json({
         message: `Cache limit reached. Maximum number of files in cache: ${CACHE_CAPACITY}`,
       });
+    }
 
     const newFileName = uuidv4() + path.extname(file!);
     const destinationPath = path.join(userCachePath, newFileName);
