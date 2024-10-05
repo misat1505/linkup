@@ -35,7 +35,8 @@ import { Post } from "../../types/Post";
 
 export default function FileDialog({ content }: { content?: Post["content"] }) {
   function extractUrlsFromMarkdown(content: Post["content"]): string[] {
-    const urlRegex = /!\[.*?\]\(\s*(.*?)\s*\)|<img[^>]+src="([^"]+)"/g;
+    const urlRegex =
+      /!\[.*?\]\(\s*(.*?)\s*\)|<img[^>]+src="([^"]+)"|<source[^>]+src="([^"]+)"/g;
     const urls: string[] = [];
     let match;
 
@@ -44,6 +45,8 @@ export default function FileDialog({ content }: { content?: Post["content"] }) {
         urls.push(match[1]);
       } else if (match[2]) {
         urls.push(match[2]);
+      } else if (match[3]) {
+        urls.push(match[3]);
       }
     }
 
@@ -113,7 +116,7 @@ function FileDialogContent({
               {validPreviousURLs.map((file, idx) => (
                 <div key={idx} className="relative aspect-square h-32">
                   <div className="absolute right-4 top-4 flex items-center">
-                    <CopyURLToClipboardButton file={file} />
+                    <CopyElementToClipboardButton file={file} />
                   </div>
                   <Image
                     key={idx}
@@ -160,7 +163,7 @@ function FileDialogImageButtons({ file }: { file: string }) {
 
   return (
     <div className="absolute right-4 top-4 flex items-center gap-x-2">
-      <CopyURLToClipboardButton file={file} />
+      <CopyElementToClipboardButton file={file} />
 
       <AlertDialog>
         <AlertDialogTrigger asChild>
@@ -195,13 +198,25 @@ function FileDialogImageButtons({ file }: { file: string }) {
   );
 }
 
-function CopyURLToClipboardButton({ file }: { file: string }) {
+function CopyElementToClipboardButton({ file }: { file: string }) {
   const { toast } = useToast();
   const copyFileURLToClipboard = async () => {
-    await navigator.clipboard.writeText(file);
+    const noQuery = file.split("?")[0];
+    const splitted = noQuery.split(".");
+    const ext = splitted[splitted.length - 1];
+
+    if (["webp", "png", "jpg"].includes(ext))
+      await navigator.clipboard.writeText(`![image](${file})`);
+
+    if (["mp4"].includes(ext))
+      await navigator.clipboard.writeText(
+        `<video>
+  <source src="${file}" />
+</video>`
+      );
 
     toast({
-      title: "URL copied to clipboard."
+      title: "Element copied to clipboard."
     });
   };
 
@@ -241,7 +256,7 @@ function CacheFileUploader() {
         type="file"
         onChange={handleImageUpload}
         className="hidden"
-        accept=".jpg, .png, .webp"
+        accept=".jpg, .png, .webp, .mp4"
         ref={inputRef}
       />
       <Tooltip content="Upload file">
@@ -255,3 +270,10 @@ function CacheFileUploader() {
     </>
   );
 }
+<video>
+  <source src="https://localhost:5500/files/93a8c573-fb6a-48b7-b2c4-5fa0c1418f22.mp4?filter=cache" />
+</video>;
+
+<video>
+  <source src="https://localhost:5500/files/93a8c573-fb6a-48b7-b2c4-5fa0c1418f22.mp4?filter=cache" />
+</video>;

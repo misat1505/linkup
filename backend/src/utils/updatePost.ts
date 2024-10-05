@@ -16,7 +16,8 @@ export function handleMarkdownUpdate(
 }
 
 function extractUrlsFromMarkdown(content: string): string[] {
-  const urlRegex = /!\[.*?\]\(\s*(.*?)\s*\)|<img[^>]+src="([^"]+)"/g;
+  const urlRegex =
+    /!\[.*?\]\(\s*(.*?)\s*\)|<img[^>]+src="([^"]+)"|<source[^>]+src="([^"]+)"/g;
   const urls: string[] = [];
   let match;
 
@@ -25,6 +26,8 @@ function extractUrlsFromMarkdown(content: string): string[] {
       urls.push(match[1]);
     } else if (match[2]) {
       urls.push(match[2]);
+    } else if (match[3]) {
+      urls.push(match[3]);
     }
   }
 

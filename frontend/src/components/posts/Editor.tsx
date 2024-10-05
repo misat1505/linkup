@@ -38,7 +38,6 @@ export default function Editor() {
       execute: async (state, api) => {
         try {
           const post = await handleSave();
-          console.log(post);
           queryClient.setQueryData<Post>(
             ["posts", { postId: post.id }],
             () => ({
