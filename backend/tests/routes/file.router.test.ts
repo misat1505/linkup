@@ -171,5 +171,55 @@ describe("file router", () => {
       if (fs.existsSync(path.dirname(filepath)))
         fs.rmdirSync(path.dirname(filepath), { recursive: true });
     });
+
+    it("should allow getting file from cache only by user which uploaded the file", async () => {
+      const res1 = await request(app)
+        .post("/files/cache")
+        .set("Authorization", `Bearer ${token}`)
+        .attach("file", Buffer.from("message file"), "file1.txt");
+      const newFileName = res1.body.file;
+
+      const res2 = await request(app)
+        .get(`/files/${newFileName}?filter=cache`)
+        .set("Authorization", `Bearer ${token}`);
+      expect(res2.statusCode).toBe(200);
+
+      const res3 = await request(app)
+        .get(`/files/${newFileName}?filter=cache`)
+        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
+      expect(res3.statusCode).toBe(404);
+    });
+
+    it("should allow everyone to access file from post", async () => {
+      const postId = "post-id";
+      const postFilesDir = path.join(
+        __dirname,
+        "..",
+        "..",
+        "files",
+        "posts",
+        postId
+      );
+
+      const filename = "file.txt";
+
+      fs.mkdirSync(postFilesDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(postFilesDir, filename),
+        Buffer.from("message file")
+      );
+
+      const res2 = await request(app)
+        .get(`/files/${filename}?filter=post&post=${postId}`)
+        .set("Authorization", `Bearer ${token}`);
+      expect(res2.statusCode).toBe(200);
+
+      const res3 = await request(app)
+        .get(`/files/${filename}?filter=post&post=${postId}`)
+        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
+      expect(res3.statusCode).toBe(200);
+
+      fs.rmdirSync(postFilesDir, { recursive: true });
+    });
   });
 });
