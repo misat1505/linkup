@@ -11,6 +11,7 @@ import {
   getReadableCommentUploadDate,
   timeDifference
 } from "../../utils/timeDifference";
+import ProtectedVideo from "../common/ProtectedVideo";
 
 export default function Comment({ message }: { message: Message }) {
   return (
@@ -68,12 +69,9 @@ function MultimediaDisplayItem({ file }: { file: File }) {
 
   if (type === "video")
     return (
-      <video className="h-40 w-40 object-cover" controls>
-        <source
-          src={buildFileURL(file.url, { type: "chat-message", id: chat.id })}
-        />
-        Your browser does not support the video tag.
-      </video>
+      <ProtectedVideo
+        src={buildFileURL(file.url, { type: "chat-message", id: chat.id })}
+      />
     );
 
   return (
