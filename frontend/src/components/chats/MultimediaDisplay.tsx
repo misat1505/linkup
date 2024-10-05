@@ -2,10 +2,10 @@ import { getFileType } from "../../utils/getFileType";
 import { File } from "../../types/File";
 import React from "react";
 import Image from "../common/Image";
-import { FaFileAlt } from "react-icons/fa";
 import { buildFileURL } from "../../utils/buildFileURL";
 import { useChatContext } from "../../contexts/ChatProvider";
 import ProtectedVideo from "../common/ProtectedVideo";
+import ProtectedFile from "../common/ProtectedFile";
 
 export default function MultimediaDisplay({ files }: { files: File[] }) {
   if (files.length === 0) return null;
@@ -45,9 +45,8 @@ function MultimediaDisplayItem({ file }: { file: File }) {
     );
 
   return (
-    <div className="h-40 w-40 overflow-hidden bg-slate-200 px-4 py-8 dark:bg-slate-800">
-      <FaFileAlt size={20} />
-      <p className="mt-2 text-sm font-semibold">{file.url}</p>
-    </div>
+    <ProtectedFile
+      src={buildFileURL(file.url, { type: "chat-message", id: chatId })}
+    />
   );
 }
