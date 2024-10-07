@@ -57,7 +57,11 @@ export const createGroupChatController = async (
 
     const originalPath = req.file?.path || null;
     const newFilename = originalPath ? uuidv4() + ".webp" : null;
-    const chat = await ChatService.createGroupChat(users, name, newFilename);
+    const chat = await ChatService.createGroupChat(
+      users,
+      name || null,
+      newFilename
+    );
 
     if (newFilename)
       await processAvatar(req.file?.path, ["chats", chat.id], newFilename);

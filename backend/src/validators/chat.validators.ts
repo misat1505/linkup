@@ -13,6 +13,7 @@ export const createGroupChatRules = [
     .withMessage("Users should be an array with at least 1 UUID"),
   body("users.*").isUUID().withMessage("Each user should be a valid UUID"),
   body("name")
+    .optional({ nullable: true })
     .isString()
     .isLength({ max: 100 })
     .withMessage(
