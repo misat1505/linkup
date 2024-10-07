@@ -85,7 +85,7 @@ function LoggedInSheet() {
     {
       icon: <FaUserFriends size={20} className="text-blue-500" />,
       text: "Friends",
-      onClick: () => navigate(ROUTES.HOME.path)
+      onClick: () => navigate(ROUTES.FRIENDS.path)
     }
   ];
 

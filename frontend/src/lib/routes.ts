@@ -23,7 +23,8 @@ export const ROUTES = {
   CHATS: route("chats"),
   CHAT_DETAIL: route("chats/:chatId"),
   POST_EDITOR: route("posts/editor/:postId?"),
-  POSTS: route("posts")
+  POSTS: route("posts"),
+  FRIENDS: route("friends")
 };
 
 export const protectedRoutes: RouteType[] = [
