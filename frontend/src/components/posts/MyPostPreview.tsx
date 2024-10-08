@@ -23,6 +23,8 @@ import {
   AlertDialogTrigger
 } from "../ui/alert-dialog";
 import { PostService } from "../../services/Post.service";
+import { useQueryClient } from "react-query";
+import { queryKeys } from "../../lib/queryKeys";
 
 export default function MyPostPreview({ post }: { post: Post }) {
   const { theme } = useThemeContext();
@@ -69,8 +71,22 @@ function PostActions({ postId }: { postId: Post["id"] }) {
 }
 
 function DeletePostDialog({ postId }: { postId: Post["id"] }) {
+  const queryClient = useQueryClient();
+
   const handleClick = async () => {
     await PostService.deletePost(postId);
+
+    const updaterFn = (oldPosts: Post[] | undefined) => {
+      if (!oldPosts) return [];
+      return oldPosts.filter((post) => post.id !== postId);
+    };
+
+    queryClient.setQueryData<Post[]>(queryKeys.myPosts(), (oldPosts) =>
+      updaterFn(oldPosts)
+    );
+    queryClient.setQueryData<Post[]>(queryKeys.posts(), (oldPosts) =>
+      updaterFn(oldPosts)
+    );
     console.log(`Deleting post: ${postId}`);
   };
 
