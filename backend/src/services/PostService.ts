@@ -13,6 +13,12 @@ function sanitizePost(post: any): Post {
 }
 
 export class PostService {
+  static async deletePost(id: Post["id"]) {
+    await prisma.post.delete({
+      where: { id },
+    });
+  }
+
   static async updatePost({
     id,
     content,

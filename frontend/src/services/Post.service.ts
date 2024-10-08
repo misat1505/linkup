@@ -2,6 +2,10 @@ import { Post } from "@/types/Post";
 import { POSTS_API } from "./utils";
 
 export class PostService {
+  static async deletePost(id: Post["id"]): Promise<void> {
+    await POSTS_API.delete(`/${id}`);
+  }
+
   static async updatePost({
     id,
     content
