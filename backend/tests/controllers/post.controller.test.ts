@@ -7,6 +7,7 @@ import { getPosts } from "../../src/controllers/posts/getPosts";
 import { getUserPosts } from "../../src/controllers/posts/getUserPosts";
 import { updatePost } from "../../src/controllers/posts/updatePost";
 import { handleMarkdownUpdate } from "../../src/utils/updatePost";
+import { deletePost } from "../../src/controllers/posts/deletePost";
 
 jest.mock("../../src/services/PostService");
 jest.mock("../../src/utils/updatePost");
@@ -19,6 +20,7 @@ describe("Post controllers", () => {
   app.get("/posts/:id", getPost);
   app.get("/posts", getPosts);
   app.post("/posts", createPost);
+  app.delete("/posts/:id", deletePost);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -257,6 +259,84 @@ describe("Post controllers", () => {
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({ message: "Couldn't get post." });
+    });
+  });
+
+  describe("deletePost", () => {
+    it("should successfully delete a post", async () => {
+      const post = {
+        id: "post-id",
+        content: "Post content.",
+        author: { id: "user-id" },
+        chat: { id: "chat-id" },
+      };
+      (PostService.getPost as jest.Mock).mockResolvedValue(post);
+      (PostService.deletePost as jest.Mock).mockResolvedValue(true);
+
+      const response = await request(app)
+        .delete(`/posts/${post.id}`)
+        .send({
+          token: { userId: "user-id" },
+        });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: "Post deleted successfully." });
+      expect(PostService.getPost).toHaveBeenCalledWith(post.id);
+      expect(PostService.deletePost).toHaveBeenCalledWith(post.id);
+    });
+
+    it("should return a 404 error if post not found", async () => {
+      (PostService.getPost as jest.Mock).mockResolvedValue(null);
+
+      const response = await request(app)
+        .delete("/posts/non-existent-id")
+        .send({
+          token: { userId: "user-id" },
+        });
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ message: "Post not found." });
+    });
+
+    it("should return a 401 error if user is not authorized to delete the post", async () => {
+      const unauthorizedPost = {
+        id: "post-id",
+        content: "Post content.",
+        author: { id: "another-user-id" },
+      };
+      (PostService.getPost as jest.Mock).mockResolvedValue(unauthorizedPost);
+
+      const response = await request(app)
+        .delete(`/posts/${unauthorizedPost.id}`)
+        .send({
+          token: { userId: "user-id" },
+        });
+
+      expect(response.status).toBe(401);
+      expect(response.body).toEqual({
+        message: "Cannot delete post not belonging to you.",
+      });
+    });
+
+    it("should return a 500 error if post deletion fails", async () => {
+      const post = {
+        id: "post-id",
+        content: "Post content.",
+        author: { id: "user-id" },
+      };
+      (PostService.getPost as jest.Mock).mockResolvedValue(post);
+      (PostService.deletePost as jest.Mock).mockRejectedValue(
+        new Error("Error")
+      );
+
+      const response = await request(app)
+        .delete(`/posts/${post.id}`)
+        .send({
+          token: { userId: "user-id" },
+        });
+
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({ message: "Couldn't delete post." });
     });
   });
 });

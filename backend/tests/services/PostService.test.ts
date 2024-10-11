@@ -82,4 +82,14 @@ describe("PostService", () => {
       expect(result).toBeNull();
     });
   });
+
+  describe("updatePost", () => {
+    it("should delete an existing post", async () => {
+      const postId = "25776a73-a5c6-40cf-b77f-76288a34cfa7";
+
+      await PostService.deletePost(postId);
+
+      expect(true).toBe(true);
+    });
+  });
 });

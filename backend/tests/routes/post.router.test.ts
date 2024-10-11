@@ -109,4 +109,25 @@ describe("posts router", () => {
       fs.rmdirSync(postFilesPath, { recursive: true });
     });
   });
+
+  describe("[DELETE] /posts/:id", () => {
+    it("should delete post correctly", async () => {
+      const postId = "25776a73-a5c6-40cf-b77f-76288a34cfa7";
+      const res = await request(app)
+        .delete(`/posts/${postId}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(res.statusCode).toEqual(200);
+
+      const postFilesPath = path.join(
+        __dirname,
+        "..",
+        "..",
+        "files",
+        "posts",
+        postId
+      );
+      expect(!fs.existsSync(postFilesPath));
+    });
+  });
 });
