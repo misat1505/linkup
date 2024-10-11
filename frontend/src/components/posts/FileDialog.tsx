@@ -32,6 +32,7 @@ import { FaCopy } from "react-icons/fa";
 import { useRef } from "react";
 import { useToast } from "../ui/use-toast";
 import { Post } from "../../types/Post";
+import ProtectedVideo from "../common/ProtectedVideo";
 
 export default function FileDialog({ content }: { content?: Post["content"] }) {
   function extractUrlsFromMarkdown(content: Post["content"]): string[] {
@@ -99,6 +100,17 @@ function FileDialogContent({
 
   if (!files) return <div>No files in cache.</div>;
 
+  const isImage = (filename: string): boolean => {
+    const path = filename.split("?")[0];
+    const splitted = path.split("/");
+    const file = splitted[splitted.length - 1];
+    const splittedExt = file.split(".");
+    const ext = splittedExt[splittedExt.length - 1];
+
+    const availableExt = ["webp", "jpg", "jpeg", "png"];
+    return availableExt.includes(ext);
+  };
+
   return (
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
@@ -115,14 +127,20 @@ function FileDialogContent({
             <div className="flex flex-wrap items-center gap-2">
               {validPreviousURLs.map((file, idx) => (
                 <div key={idx} className="relative aspect-square h-32">
+                  {isImage(file) ? (
+                    <Image
+                      key={idx}
+                      src={file}
+                      className={{ common: "h-full w-full object-cover" }}
+                    />
+                  ) : (
+                    <div className="h-32 w-32 overflow-hidden">
+                      <ProtectedVideo src={file} />
+                    </div>
+                  )}
                   <div className="absolute right-4 top-4 flex items-center">
                     <CopyElementToClipboardButton file={file} />
                   </div>
-                  <Image
-                    key={idx}
-                    src={file}
-                    className={{ common: "h-full w-full object-cover" }}
-                  />
                 </div>
               ))}
             </div>
@@ -135,12 +153,18 @@ function FileDialogContent({
         <div className="flex flex-wrap items-center gap-2">
           {files.map((file, idx) => (
             <div key={idx} className="relative aspect-square h-32">
+              {isImage(file) ? (
+                <Image
+                  key={idx}
+                  src={file}
+                  className={{ common: "h-full w-full object-cover" }}
+                />
+              ) : (
+                <div className="h-32 w-32 overflow-hidden">
+                  <ProtectedVideo src={file} />
+                </div>
+              )}
               <FileDialogImageButtons file={file} />
-              <Image
-                key={idx}
-                src={file}
-                className={{ common: "h-full w-full object-cover" }}
-              />
             </div>
           ))}
         </div>
@@ -222,7 +246,7 @@ function CopyElementToClipboardButton({ file }: { file: string }) {
 
   return (
     <button onClick={copyFileURLToClipboard}>
-      <Tooltip content="Copy URL">
+      <Tooltip content="Copy element">
         <span>
           <FaCopy
             className="stroke-black text-white transition-all hover:scale-110 hover:cursor-pointer"
