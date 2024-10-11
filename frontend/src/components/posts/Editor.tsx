@@ -71,6 +71,7 @@ export default function Editor() {
   return (
     <div data-color-mode={theme} className="w-full">
       <MDEditor
+        data-testid="cy-post-editor"
         value={markdown}
         onChange={(text) => handleSafeChange(text || "")}
         commands={[...commands.getCommands(), ...customCommands]}

@@ -27,6 +27,7 @@ export default function Posts() {
     <div className="flex flex-col items-center">
       <Button
         className="my-4"
+        data-testid="cy-redirect-to-create-post-btn"
         onClick={() =>
           navigate(ROUTES.POST_EDITOR.buildPath({ postId: undefined }))
         }
