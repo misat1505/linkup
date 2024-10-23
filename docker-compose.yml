@@ -12,13 +12,19 @@ services:
       - "3307:3306"
     volumes:
       - database-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     volumes:
       - backend-files:/backend/files
     ports:
