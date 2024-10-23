@@ -41,3 +41,12 @@ Link Up employs responsive web design to ensure a seamless user experience acros
 - **Backend:** Utilizes **Express** as the web server framework for efficient request handling and routing.
 - **Database:** **MySQL** is used for reliable data storage.
 - **ORM:** **Prisma** facilitates seamless interaction between Express and MySQL.
+
+## Getting started
+
+1. Ensure you have **Docker** installed on your system.
+2. Run the following command.
+
+- ```
+  docker compose up
+  ```
