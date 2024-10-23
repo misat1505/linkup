@@ -13,12 +13,25 @@ services:
     volumes:
       - database-data:/var/lib/mysql
 
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    volumes:
+      - backend-files:/backend/files
+    ports:
+      - "5500:5500"
+      - "5501:5501"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
 
 volumes:
   database-data:
+  backend-files:

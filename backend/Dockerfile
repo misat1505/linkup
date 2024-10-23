@@ -1,0 +1,20 @@
+FROM node:latest
+
+WORKDIR /backend
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+ENV PORT=5500
+ENV SOCKET_PORT=5501
+ENV ACCESS_TOKEN_SECRET=hf87uyefuyewf87t3287fr328yf2g7632frg3287f6g732vf83287fyt32fg723gf
+ENV REFRESH_TOKEN_SECRET=cen7bffcn87y584c95n4350mc28n0c973257mn3c507n50207mnvc
+ENV FRONTEND_URL=https://localhost:3000
+ENV DATABASE_URL=mysql://root:@database/inzynierka
+
+RUN npx prisma generate
+
+EXPOSE 5500 5501
+
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run dev"]
