@@ -80,4 +80,20 @@ export class FriendshipService {
 
     return updatedFriendship;
   }
+
+  static async deleteFriendship(
+    requesterId: User["id"],
+    acceptorId: User["id"]
+  ): Promise<boolean> {
+    const deletedCount = await prisma.friend.deleteMany({
+      where: {
+        OR: [
+          { requesterId, acceptorId },
+          { requesterId: acceptorId, acceptorId: requesterId },
+        ],
+      },
+    });
+
+    return deletedCount.count > 0;
+  }
 }
