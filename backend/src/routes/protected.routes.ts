@@ -6,6 +6,7 @@ import userRouter from "./routers/user.router";
 import chatRouter from "./routers/chat.router";
 import fileRouter from "./routers/file.router";
 import postRouter from "./routers/post.router";
+import friendshipRouter from "./routers/friendship.router";
 
 const protectedRoutes = Router();
 
@@ -17,5 +18,6 @@ protectedRoutes.use("/files", fileRouter);
 protectedRoutes.use("/users", userRouter);
 protectedRoutes.use("/chats", chatRouter);
 protectedRoutes.use("/posts", postRouter);
+protectedRoutes.use("/friendships", friendshipRouter);
 
 export default protectedRoutes;
