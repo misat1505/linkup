@@ -47,4 +47,37 @@ export class FriendshipService {
 
     return newFriendship;
   }
+
+  static async acceptFriendship(
+    requesterId: User["id"],
+    acceptorId: User["id"]
+  ): Promise<Friendship | null> {
+    const friendship = await prisma.friend.findFirst({
+      where: {
+        requesterId,
+        acceptorId,
+        status: "PENDING",
+      },
+    });
+
+    if (!friendship) return null;
+
+    const updatedFriendship: Friendship = await prisma.friend.update({
+      where: {
+        requesterId_acceptorId: {
+          requesterId,
+          acceptorId,
+        },
+      },
+      data: {
+        status: "ACCEPTED",
+      },
+      include: {
+        requester: { select: userSelect },
+        acceptor: { select: userSelect },
+      },
+    });
+
+    return updatedFriendship;
+  }
 }
