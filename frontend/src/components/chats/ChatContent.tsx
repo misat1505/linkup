@@ -35,6 +35,7 @@ export default function ChatContent() {
       <div
         ref={containerRef}
         onScroll={handleScroll}
+        data-testid="cy-chat-messages"
         className="max-h-full overflow-auto px-4 dark:[color-scheme:dark]"
       >
         {messages.map((message) => (

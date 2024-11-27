@@ -13,6 +13,7 @@ import { useChatPageContext } from "../../contexts/ChatPageProvider";
 import { socketClient } from "../../lib/socketClient";
 import { Message } from "../../types/Message";
 import { ChatService } from "../../services/Chat.service";
+import { useChatContext } from "../../contexts/ChatProvider";
 
 export type ChatFormEntries = {
   content: string;
@@ -36,6 +37,7 @@ export type useChatFormValue = {
 
 export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
   const { addMessage } = useChatPageContext();
+  const { setIncomeMessageId } = useChatContext();
   const { toast } = useToast();
   const {
     register,
@@ -52,6 +54,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     try {
       const message = await ChatService.createMessage(chatId, data);
       reset();
+      setIncomeMessageId(null);
       addMessage(message);
       socketClient.sendMessage(message);
     } catch (e: unknown) {

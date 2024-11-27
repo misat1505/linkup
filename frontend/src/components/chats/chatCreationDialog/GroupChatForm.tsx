@@ -50,6 +50,7 @@ function ChatNameAndImage() {
         <Input
           type="file"
           className="hover:cursor-pointer"
+          accept=".jpg, .png, .webp"
           {...register("file")}
         />
       </div>

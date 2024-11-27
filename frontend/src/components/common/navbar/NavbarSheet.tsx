@@ -1,6 +1,7 @@
 import React, { HTMLAttributes, ReactNode } from "react";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -38,7 +39,7 @@ export default function NavbarSheet() {
 
   return (
     <Sheet>
-      <SheetTrigger>
+      <SheetTrigger data-testid="cy-nav-trigger">
         <Tooltip content="Show actions">
           <span>
             <NavbarAvatar />
@@ -79,12 +80,12 @@ function LoggedInSheet() {
     {
       icon: <MdArticle size={20} className="text-blue-500" />,
       text: "Posts",
-      onClick: () => navigate(ROUTES.HOME.path)
+      onClick: () => navigate(ROUTES.POSTS.path)
     },
     {
       icon: <FaUserFriends size={20} className="text-blue-500" />,
       text: "Friends",
-      onClick: () => navigate(ROUTES.HOME.path)
+      onClick: () => navigate(ROUTES.FRIENDS.path)
     }
   ];
 
@@ -155,7 +156,8 @@ type SheetItemType = HTMLAttributes<HTMLButtonElement> & {
 const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
   ({ text, className, Icon, ...rest }, ref) => {
     return (
-      <button
+      <SheetClose
+        data-testid={`cy-nav-sheet-item-${text.toLowerCase()}`}
         ref={ref}
         className={cn(
           "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200 dark:bg-background dark:hover:bg-slate-800",
@@ -168,7 +170,7 @@ const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
           {text}
         </div>
         <div></div>
-      </button>
+      </SheetClose>
     );
   }
 );
@@ -194,11 +196,16 @@ function LogoutDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <SheetItem
-          text={button.text}
-          Icon={button.icon}
-          onClick={button.onClick}
-        />
+        <button
+          data-testid={`cy-nav-sheet-item-${button.text.toLowerCase()}`}
+          className="mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200 dark:bg-background dark:hover:bg-slate-800"
+        >
+          <div className="flex items-center gap-x-4">
+            {button.icon}
+            {button.text}
+          </div>
+          <div></div>
+        </button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

@@ -15,6 +15,14 @@ Link Up supports real-time chats, enabling users to send and receive messages in
 Link Up manages chat settings and creating new chats with intuitive dialogs.
 ![](/docs/chat-dialog.png)
 
+### Posts
+
+In Link Up, users can create and share posts using Markdown, allowing for rich text formatting, code snippets, and more. This flexibility enables users to craft detailed posts with headings, lists, links, and other elements commonly used in modern content creation. Whether sharing thoughts, updates, or technical content, the Markdown-based system provides an intuitive way to compose posts while maintaining full control over the appearance and structure.
+
+![](/docs/post.png)
+
+![](/docs//post-editor.png)
+
 ### Themes
 
 Link Up features a convenient toggle button that allows users to switch effortlessly between light and dark mode. This option provides a customizable viewing experience, letting users choose the display that best suits their preferences or ambient lighting conditions.
@@ -33,3 +41,12 @@ Link Up employs responsive web design to ensure a seamless user experience acros
 - **Backend:** Utilizes **Express** as the web server framework for efficient request handling and routing.
 - **Database:** **MySQL** is used for reliable data storage.
 - **ORM:** **Prisma** facilitates seamless interaction between Express and MySQL.
+
+## Getting started
+
+1. Ensure you have **Docker** installed on your system.
+2. Run the following command.
+
+- ```
+  docker compose up
+  ```

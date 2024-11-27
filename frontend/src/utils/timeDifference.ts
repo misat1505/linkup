@@ -43,3 +43,32 @@ export function getStatus(difference: TimeDifference): StatusType {
   if (days === 0) return { status: Status.RECENTLY_ONLINE, text: `${hours}hr` };
   return { status: Status.OFFLINE };
 }
+
+export function getReadableCommentUploadDate(diff: TimeDifference): string {
+  const { days, hours, minutes, seconds } = diff;
+
+  if (days >= 365) {
+    const years = Math.floor(days / 365);
+    return years === 1 ? "1 year" : `${years} years`;
+  }
+
+  if (days >= 30) {
+    const months = Math.floor(days / 30);
+    return months === 1 ? "1 month" : `${months} months`;
+  }
+
+  if (days >= 7) {
+    const weeks = Math.floor(days / 7);
+    return weeks === 1 ? "1 week" : `${weeks} weeks`;
+  }
+
+  if (days > 0) return days === 1 ? "1 day" : `${days} days`;
+
+  if (hours > 0) return hours === 1 ? "1 hour" : `${hours} hours`;
+
+  if (minutes > 0) return minutes === 1 ? "1 minute" : `${minutes} minutes`;
+
+  if (seconds > 0) return seconds === 1 ? "1 second" : `${seconds} seconds`;
+
+  return "now";
+}

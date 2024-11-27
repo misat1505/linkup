@@ -1,3 +1,5 @@
+import { API_URL } from "../constants";
+import { getAccessToken } from "../lib/token";
 import { FILE_API } from "./utils";
 
 export class FileService {
@@ -9,7 +11,9 @@ export class FileService {
 
     const result = await fetch(url, {
       method: "GET",
-      headers: {},
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`
+      },
       credentials: "include"
     });
     const blob = await result.blob();
@@ -17,5 +21,30 @@ export class FileService {
     const file = new File([blob], filename!, { type: blob.type });
 
     return file;
+  }
+
+  static async getCache(): Promise<string[]> {
+    const result = await FILE_API.get("/cache");
+    const files = result.data.files as string[];
+    const fileURLs = files.map(
+      (file) => `${API_URL}/files/${file}?filter=cache`
+    );
+    return fileURLs;
+  }
+
+  static async removeFromCache(url: string): Promise<void> {
+    const splitted = url.split("/");
+    const lastPart = splitted[splitted.length - 1];
+    const filename = lastPart.split("?")[0];
+
+    await FILE_API.delete(`/cache/${filename}`);
+  }
+
+  static async insertFileToCache(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const result = await FILE_API.post("/cache", formData);
+    return `${API_URL}/files/${result.data.file}?filter=cache`;
   }
 }

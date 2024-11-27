@@ -2,10 +2,11 @@ import path from "path";
 import fs from "fs";
 import request from "supertest";
 import app from "../../src/app";
-import { JwtHandler } from "../../src/lib/JwtHandler";
+import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { VALID_USER_ID } from "../utils/constants";
 import { User } from "../../src/types/User";
 import { Message } from "../../src/types/Message";
+import { env } from "../../src/config/env";
 
 let newlyCreatedUser: User;
 
@@ -37,12 +38,20 @@ const deleteUserFile = () => {
 };
 
 describe("file router", () => {
-  const token = JwtHandler.encode({ userId: VALID_USER_ID });
+  const token = TokenProcessor.encode(
+    { userId: VALID_USER_ID },
+    env.ACCESS_TOKEN_SECRET
+  );
   let newlyCreatedUserToken: string;
 
   beforeEach(async () => {
     await createTestUser();
-    newlyCreatedUserToken = JwtHandler.encode({ userId: newlyCreatedUser.id });
+    newlyCreatedUserToken = TokenProcessor.encode(
+      {
+        userId: newlyCreatedUser.id,
+      },
+      env.ACCESS_TOKEN_SECRET
+    );
   });
 
   afterEach(() => {
@@ -53,12 +62,12 @@ describe("file router", () => {
     it("should allow everyone to access avatar", async () => {
       const res = await request(app)
         .get(`/files/${newlyCreatedUser.photoURL}?filter=avatar`)
-        .set("Cookie", `token=${newlyCreatedUserToken}`);
+        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
       expect(res.statusCode).toBe(200);
 
       const res2 = await request(app)
         .get(`/files/${newlyCreatedUser.photoURL}?filter=avatar`)
-        .set("Cookie", `token=${token}`);
+        .set("Authorization", `Bearer ${token}`);
       expect(res2.statusCode).toBe(200);
     });
 
@@ -67,7 +76,7 @@ describe("file router", () => {
         body: { chat },
       } = await request(app)
         .post("/chats/group")
-        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .field("users[0]", VALID_USER_ID)
         .field("users[1]", "935719fa-05c4-42c4-9b02-2be3fefb6e61")
         .field("name", "chat name")
@@ -75,21 +84,24 @@ describe("file router", () => {
 
       const res = await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-        .set("Cookie", `token=${token}`);
+        .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toBe(200);
 
-      const user2Token = JwtHandler.encode({
-        userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
-      });
+      const user2Token = TokenProcessor.encode(
+        {
+          userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
+        },
+        env.ACCESS_TOKEN_SECRET
+      );
 
       const res2 = await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-        .set("Cookie", `token=${user2Token}`);
+        .set("Authorization", `Bearer ${user2Token}`);
       expect(res2.statusCode).toBe(200);
 
       const res3 = await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-        .set("Cookie", `token=${newlyCreatedUserToken}`);
+        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
       expect(res3.statusCode).toBe(401);
 
       const filepath = path.join(
@@ -110,7 +122,7 @@ describe("file router", () => {
         body: { chat },
       } = await request(app)
         .post("/chats/group")
-        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .field("users[0]", VALID_USER_ID)
         .field("name", "")
         .field("users[1]", "935719fa-05c4-42c4-9b02-2be3fefb6e61");
@@ -119,7 +131,7 @@ describe("file router", () => {
         body: { message },
       } = await request(app)
         .post(`/chats/${chat.id}/messages`)
-        .set("Cookie", `token=${token}`)
+        .set("Authorization", `Bearer ${token}`)
         .field("content", "message")
         .attach("files", Buffer.from("message file"), "file1.txt");
 
@@ -127,21 +139,24 @@ describe("file router", () => {
 
       const res = await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-        .set("Cookie", `token=${token}`);
+        .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).toBe(200);
 
-      const user2Token = JwtHandler.encode({
-        userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
-      });
+      const user2Token = TokenProcessor.encode(
+        {
+          userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
+        },
+        env.ACCESS_TOKEN_SECRET
+      );
 
       const res2 = await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-        .set("Cookie", `token=${user2Token}`);
+        .set("Authorization", `Bearer ${user2Token}`);
       expect(res2.statusCode).toBe(200);
 
       const res3 = await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-        .set("Cookie", `token=${newlyCreatedUserToken}`);
+        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
       expect(res3.statusCode).toBe(401);
 
       const filepath = path.join(
@@ -155,6 +170,91 @@ describe("file router", () => {
       );
       if (fs.existsSync(path.dirname(filepath)))
         fs.rmdirSync(path.dirname(filepath), { recursive: true });
+    });
+
+    it("should allow getting file from cache only by user which uploaded the file", async () => {
+      const res1 = await request(app)
+        .post("/files/cache")
+        .set("Authorization", `Bearer ${token}`)
+        .attach("file", Buffer.from("message file"), "file1.txt");
+      const newFileName = res1.body.file;
+
+      const res2 = await request(app)
+        .get(`/files/${newFileName}?filter=cache`)
+        .set("Authorization", `Bearer ${token}`);
+      expect(res2.statusCode).toBe(200);
+
+      const res3 = await request(app)
+        .get(`/files/${newFileName}?filter=cache`)
+        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
+      expect(res3.statusCode).toBe(404);
+    });
+
+    it("should allow everyone to access file from post", async () => {
+      const postId = "post-id";
+      const postFilesDir = path.join(
+        __dirname,
+        "..",
+        "..",
+        "files",
+        "posts",
+        postId
+      );
+
+      const filename = "file.txt";
+
+      fs.mkdirSync(postFilesDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(postFilesDir, filename),
+        Buffer.from("message file")
+      );
+
+      const res2 = await request(app)
+        .get(`/files/${filename}?filter=post&post=${postId}`)
+        .set("Authorization", `Bearer ${token}`);
+      expect(res2.statusCode).toBe(200);
+
+      const res3 = await request(app)
+        .get(`/files/${filename}?filter=post&post=${postId}`)
+        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
+      expect(res3.statusCode).toBe(200);
+
+      fs.rmdirSync(postFilesDir, { recursive: true });
+    });
+  });
+
+  describe("cache routes", () => {
+    it("handles cache correctly", async () => {
+      const res1 = await request(app)
+        .get("/files/cache")
+        .set("Authorization", `Bearer ${token}`);
+      const initialFilesCount = res1.body.files.length;
+
+      const res2 = await request(app)
+        .post("/files/cache")
+        .set("Authorization", `Bearer ${token}`)
+        .attach("file", Buffer.from("message file"), "file1.txt");
+      const filename1 = res2.body.file;
+
+      const res3 = await request(app)
+        .get("/files/cache")
+        .set("Authorization", `Bearer ${token}`);
+      expect(res3.body.files.length).toBe(initialFilesCount + 1);
+
+      const res4 = await request(app)
+        .get(`/files/${filename1}?filter=cache`)
+        .set("Authorization", `Bearer ${token}`);
+      expect(res4.statusCode).toBe(200);
+
+      const res5 = await request(app)
+        .delete(`/files/cache/${filename1}`)
+        .set("Authorization", `Bearer ${token}`);
+      expect(res5.statusCode).toBe(200);
+
+      const res6 = await request(app)
+        .get("/files/cache")
+        .set("Authorization", `Bearer ${token}`);
+      expect(res6.body.files.length).toBe(initialFilesCount);
     });
   });
 });

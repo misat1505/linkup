@@ -27,7 +27,7 @@ AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
 
 const MyOverlay = React.forwardRef<HTMLDivElement, {}>((props, ref) => {
   return (
-    <div ref={ref} className="absolute inset-0 z-50 bg-black/80" {...props} />
+    <div ref={ref} className="fixed inset-0 z-50 bg-black/80" {...props} />
   );
 });
 

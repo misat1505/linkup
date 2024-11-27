@@ -1,35 +1,33 @@
 import request from "supertest";
 import express from "express";
-import {
-  getUser,
-  loginUser,
-  logoutUser,
-  refreshToken,
-  signupUser,
-  updateUser,
-} from "../../src/controllers/auth.controller";
 import { UserService } from "../../src/services/UserService";
-import { JwtHandler } from "../../src/lib/JwtHandler";
+import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { User, UserWithCredentials } from "../../src/types/User";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import { isUser } from "../../src/types/guards/user.guard";
 import { VALID_USER_ID } from "../utils/constants";
+import { signupController } from "../../src/controllers/auth/signup.controller";
+import { loginController } from "../../src/controllers/auth/login.controller";
+import { refreshTokenController } from "../../src/controllers/auth/refreshToken.controller";
+import { logoutController } from "../../src/controllers/auth/logout.controller";
+import { getSelfController } from "../../src/controllers/auth/getSelf.controller";
+import { updateSelfController } from "../../src/controllers/auth/updateSelf.controller";
 
 jest.mock("uuid");
 jest.mock("bcryptjs");
 jest.mock("../../src/services/UserService");
-jest.mock("../../src/lib/JwtHandler");
+jest.mock("../../src/lib/TokenProcessor");
 
 describe("Auth Controllers", () => {
   const app = express();
   app.use(express.json());
-  app.post("/signup", signupUser);
-  app.post("/login", loginUser);
-  app.post("/refresh", refreshToken);
-  app.post("/logout", logoutUser);
-  app.get("/user", getUser);
-  app.put("/user", updateUser);
+  app.post("/signup", signupController);
+  app.post("/login", loginController);
+  app.post("/refresh", refreshTokenController);
+  app.post("/logout", logoutController);
+  app.get("/user", getSelfController);
+  app.put("/user", updateSelfController);
 
   const removeCredentials = (
     userWithCredentials: UserWithCredentials
@@ -121,7 +119,7 @@ describe("Auth Controllers", () => {
       (bcrypt.genSalt as jest.Mock).mockResolvedValue("salt");
 
       (UserService.isLoginTaken as jest.Mock).mockResolvedValue(false);
-      (JwtHandler.encode as jest.Mock).mockReturnValue("fake_jwt_token");
+      (TokenProcessor.encode as jest.Mock).mockReturnValue("fake_jwt_token");
 
       const response = await request(app).post("/signup").send({
         firstName: "John",
@@ -169,7 +167,7 @@ describe("Auth Controllers", () => {
       };
 
       (UserService.getUserByLogin as jest.Mock).mockResolvedValue(mockUser);
-      (JwtHandler.encode as jest.Mock).mockReturnValue("fake_jwt_token");
+      (TokenProcessor.encode as jest.Mock).mockReturnValue("fake_jwt_token");
 
       const response = await request(app).post("/login").send({
         login: "john_doe",
@@ -220,7 +218,9 @@ describe("Auth Controllers", () => {
 
   describe("refreshToken", () => {
     it("should refresh a token", async () => {
-      (JwtHandler.encode as jest.Mock).mockReturnValue("new_fake_jwt_token");
+      (TokenProcessor.encode as jest.Mock).mockReturnValue(
+        "new_fake_jwt_token"
+      );
 
       const response = await request(app)
         .post("/refresh")
@@ -234,7 +234,7 @@ describe("Auth Controllers", () => {
 
   describe("logoutUser", () => {
     it("should log out a user", async () => {
-      (JwtHandler.encode as jest.Mock).mockReturnValue("logout_jwt_token");
+      (TokenProcessor.encode as jest.Mock).mockReturnValue("logout_jwt_token");
 
       const response = await request(app)
         .post("/logout")

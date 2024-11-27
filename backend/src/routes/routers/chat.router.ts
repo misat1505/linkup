@@ -1,52 +1,81 @@
 import { Router } from "express";
-import {
-  addUserToGroupChat,
-  createGroupChat,
-  createMessage,
-  createPrivateChat,
-  createReaction,
-  deleteUserFromGroupChat,
-  getChatMessages,
-  getUserChats,
-  updateAlias,
-  updateGroupChat,
-} from "../../controllers/chat.controller";
 import { validate } from "../../middlewares/validate";
 import {
+  addUserToGroupChatRules,
   createGroupChatRules,
   createMessageRules,
   createPrivateChatRules,
+  createReactionRules,
+  updateAliasRules,
+  updateGroupChatRules,
 } from "../../validators/chat.validators";
 import { upload } from "../../middlewares/multer";
 import { authorize } from "../../middlewares/authorize";
+import { createPrivateChatController } from "../../controllers/chat/createPrivateChat.controller";
+import { createGroupChatController } from "../../controllers/chat/createGroupChat.controller";
+import { getSelfChatsController } from "../../controllers/chat/getSelfChats.controller";
+import { createMessageController } from "../../controllers/chat/createMessage.controller";
+import { getChatMessagesController } from "../../controllers/chat/getChatMessages.controller";
+import { createReactionController } from "../../controllers/chat/createReaction.controller";
+import { updateAliasController } from "../../controllers/chat/updateUserAlias.controller";
+import { addUserToGroupChatController } from "../../controllers/chat/addUserToGroupChat.controller";
+import { deleteSelfFromGroupChatController } from "../../controllers/chat/deleteSelfFromGroupChat.controller";
+import { updateGroupChatController } from "../../controllers/chat/updateGroupChat.controller";
 
 const chatRouter = Router();
 
 chatRouter.post(
   "/private",
   validate(createPrivateChatRules),
-  createPrivateChat
+  createPrivateChatController
 );
+
 chatRouter.post(
   "/group",
   upload.single("file"),
   validate(createGroupChatRules),
   authorize,
-  createGroupChat
+  createGroupChatController
 );
-chatRouter.get("/", getUserChats);
+
+chatRouter.get("/", getSelfChatsController);
+
 chatRouter.post(
   "/:chatId/messages",
   upload.array("files"),
   validate(createMessageRules),
   authorize, // multer is overriding req.body
-  createMessage
+  createMessageController
 );
-chatRouter.get("/:chatId/messages", getChatMessages);
-chatRouter.post("/:chatId/reactions", createReaction);
-chatRouter.put("/:chatId/users/:userId/alias", updateAlias);
-chatRouter.post("/:chatId/users", addUserToGroupChat);
-chatRouter.delete("/:chatId/users", deleteUserFromGroupChat);
-chatRouter.put("/:chatId", upload.single("file"), authorize, updateGroupChat);
+
+chatRouter.get("/:chatId/messages", getChatMessagesController);
+
+chatRouter.post(
+  "/:chatId/reactions",
+  validate(createReactionRules),
+  createReactionController
+);
+
+chatRouter.put(
+  "/:chatId/users/:userId/alias",
+  validate(updateAliasRules),
+  updateAliasController
+);
+
+chatRouter.post(
+  "/:chatId/users",
+  validate(addUserToGroupChatRules),
+  addUserToGroupChatController
+);
+
+chatRouter.delete("/:chatId/users", deleteSelfFromGroupChatController);
+
+chatRouter.put(
+  "/:chatId",
+  upload.single("file"),
+  validate(updateGroupChatRules),
+  authorize,
+  updateGroupChatController
+);
 
 export default chatRouter;

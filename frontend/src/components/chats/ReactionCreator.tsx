@@ -106,7 +106,7 @@ function ReactionCreatorContentItem({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const queryClient = useQueryClient();
-  const { chat } = useChatContext();
+  const { chat, setIncomeMessageId } = useChatContext();
   const component =
     reactionsMap[reaction.name as keyof typeof reactionsMap] || null;
 
@@ -132,6 +132,7 @@ function ReactionCreatorContentItem({
       );
 
       setIsOpen(false);
+      setIncomeMessageId(null);
     } catch (e) {
       console.error(e);
     }

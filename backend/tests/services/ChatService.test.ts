@@ -2,7 +2,7 @@ import { Reaction } from "../../src/types/Reaction";
 import { ChatService } from "../../src/services/ChatService";
 import { isReaction } from "../../src/types/guards/reaction.guard";
 import { isMessage } from "../../src/types/guards/message.guard";
-import { isChat } from "../../src/types/guards/chat.guards";
+import { isChat } from "../../src/types/guards/chat.guard";
 import { USER } from "../utils/constants";
 import { isUserInChat } from "../../src/types/guards/user.guard";
 

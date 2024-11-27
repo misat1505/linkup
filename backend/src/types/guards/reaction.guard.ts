@@ -18,3 +18,18 @@ export function isReaction(
     isUser(obj.user, options)
   );
 }
+
+export function isAvailableReaction(
+  obj: any,
+  options = defaultOptions
+): obj is Reaction {
+  const allowedKeys = ["id", "name"];
+
+  return (
+    obj &&
+    typeof obj === "object" &&
+    hasOnlyKeys(obj, allowedKeys) &&
+    typeof obj.id === "string" &&
+    typeof obj.name === "string"
+  );
+}

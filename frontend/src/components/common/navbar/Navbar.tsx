@@ -18,22 +18,26 @@ export default function Navbar() {
     <>
       <header className="fixed z-50 flex h-20 w-full items-center justify-between bg-slate-200 p-4 dark:bg-slate-800">
         <div className="flex items-center gap-x-4">
-          <Tooltip content="Home">
-            <span
-              className="hover:cursor-pointer"
-              onClick={() => navigate(ROUTES.HOME.path)}
-            >
-              <Image
-                src={LOGO_PATH}
-                className={{ common: "h-12 w-12 rounded-full" }}
-              />
-            </span>
-          </Tooltip>
+          <div className="hidden sm:block">
+            <Tooltip content="Home">
+              <span
+                className="hover:cursor-pointer"
+                onClick={() => navigate(ROUTES.HOME.path)}
+              >
+                <Image
+                  src={LOGO_PATH}
+                  className={{ common: "h-12 w-12 rounded-full" }}
+                />
+              </span>
+            </Tooltip>
+          </div>
           {isLoggedIn && <NavbarSearch />}
         </div>
 
         <div className="flex items-center gap-x-4">
-          <ThemeToggle />
+          <div className="hidden sm:block">
+            <ThemeToggle />
+          </div>
           <NavbarSheet />
         </div>
       </header>

@@ -6,17 +6,21 @@ export type Filter =
   | { type: "chat-message"; id: Chat["id"] };
 
 export function buildFileURL(baseUrl: string | null, filter: Filter) {
-  if (!baseUrl) return "";
+  try {
+    if (!baseUrl) return "";
 
-  const url = new URL(baseUrl);
-  const searchParams = new URLSearchParams();
+    const url = new URL(baseUrl);
+    const searchParams = new URLSearchParams();
 
-  searchParams.set("filter", filter.type);
-  if (filter.type === "chat-photo" || filter.type === "chat-message") {
-    searchParams.set("chat", filter.id);
+    searchParams.set("filter", filter.type);
+    if (filter.type === "chat-photo" || filter.type === "chat-message") {
+      searchParams.set("chat", filter.id);
+    }
+
+    url.search = searchParams.toString();
+
+    return url.toString();
+  } catch (e) {
+    return "";
   }
-
-  url.search = searchParams.toString();
-
-  return url.toString();
 }

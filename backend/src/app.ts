@@ -14,6 +14,8 @@ import { accessLogStream } from "./config/log";
 import { Server } from "socket.io";
 import { setupSocket } from "./lib/sockets";
 import { initReactions } from "./config/reactions";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./lib/swagger";
 
 const app = express();
 
@@ -25,12 +27,14 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/", publicRoutes);
-app.use("/", protectedRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");
 });
+
+app.use("/", publicRoutes);
+app.use("/", protectedRoutes);
 
 if (env.NODE_ENV !== "test") {
   initReactions();

@@ -50,14 +50,13 @@ model Friend {
 
 model Post {
   id          String    @id @default(uuid())
-  content     String
+  content     String    @db.Text
   authorId    String
   createdAt   DateTime  @default(now())
   chatId      String    @unique
 
   author      User      @relation("UserPosts", fields: [authorId], references: [id])
   chat        Chat      @relation("PostChat", fields: [chatId], references: [id])
-  files       File[]    @relation("PostFiles")
 }
 
 enum ChatType {
@@ -104,7 +103,6 @@ model File {
   postId      String?
 
   message     Message? @relation("MessageFiles", fields: [messageId], references: [id])
-  post        Post?    @relation("PostFiles", fields: [postId], references: [id])
 }
 
 model Reaction {

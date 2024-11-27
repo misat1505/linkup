@@ -1,16 +1,16 @@
 import express from "express";
-import { searchUser } from "../../src/controllers/user.controller";
 import { UserService } from "../../src/services/UserService";
 import { USER_WITHOUT_CREDENTIALS } from "../utils/constants";
 import request from "supertest";
 import { User } from "../../src/types/User";
+import { searchUserController } from "../../src/controllers/user/searchUser.controller";
 
 jest.mock("../../src/services/UserService");
 
 describe("User controllers", () => {
   const app = express();
   app.use(express.json());
-  app.get("/search", searchUser);
+  app.get("/search", searchUserController);
 
   describe("searchUser", () => {
     it("should return users", async () => {

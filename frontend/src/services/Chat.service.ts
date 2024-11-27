@@ -88,8 +88,17 @@ export class ChatService {
     return response.data.chats;
   }
 
-  static async getMessages(chatId: Chat["id"]): Promise<Message[]> {
-    const response = await CHAT_API.get(`/${chatId}/messages`);
+  static async getMessages(
+    chatId: Chat["id"],
+    responseId?: Message["id"] | null
+  ): Promise<Message[]> {
+    const getResponseQueryParam = (): string => {
+      if (responseId === undefined) return "";
+      return `?responseId=${responseId}`;
+    };
+    const response = await CHAT_API.get(
+      `/${chatId}/messages${getResponseQueryParam()}`
+    );
     return response.data.messages;
   }
 
