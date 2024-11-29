@@ -3,6 +3,13 @@ import { Friendship } from "../types/Friendship";
 import { User } from "../types/User";
 import { userSelect } from "../utils/prisma/userSelect";
 
+function sanitizeFriendship(friendship: any): Friendship | null {
+  if (!friendship) return null;
+
+  const { acceptorId, requesterId, ...sanitizedFriendship } = friendship;
+  return sanitizedFriendship as Friendship;
+}
+
 export class FriendshipService {
   static async getUserFriendships(userId: User["id"]): Promise<Friendship[]> {
     const friendships: Friendship[] = await prisma.friend.findMany({
@@ -15,7 +22,7 @@ export class FriendshipService {
       },
     });
 
-    return friendships;
+    return friendships.map((f) => sanitizeFriendship(f)!);
   }
 
   static async createFriendship(
@@ -45,7 +52,7 @@ export class FriendshipService {
       },
     });
 
-    return newFriendship;
+    return sanitizeFriendship(newFriendship);
   }
 
   static async acceptFriendship(
@@ -78,7 +85,7 @@ export class FriendshipService {
       },
     });
 
-    return updatedFriendship;
+    return sanitizeFriendship(updatedFriendship);
   }
 
   static async deleteFriendship(

@@ -4,6 +4,7 @@ import { USER } from "./constants";
 export const resetDB = async (): Promise<void> => {
   await prisma.$transaction(async (prisma) => {
     await prisma.$executeRaw`SET FOREIGN_KEY_CHECKS = 0;`;
+    await prisma.friend.deleteMany();
     await prisma.user.deleteMany();
     await prisma.chat.deleteMany();
     await prisma.message.deleteMany();
