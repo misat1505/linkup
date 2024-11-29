@@ -95,7 +95,7 @@ export const createFriendship = async (req: Request, res: Response) => {
         .status(409)
         .json({ message: "Friendship already exists between users." });
 
-    return res.status(200).json({ friendship });
+    return res.status(201).json({ friendship });
   } catch (e) {
     return res.status(500).json({ message: "Cannot get user friendships." });
   }

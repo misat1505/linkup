@@ -42,7 +42,7 @@ describe("Friendship controllers", () => {
           acceptorId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
         });
 
-      expect(response.statusCode).toBe(200);
+      expect(response.statusCode).toBe(201);
       expect(response.body).toEqual({ friendship: mockFriendship });
     });
 
