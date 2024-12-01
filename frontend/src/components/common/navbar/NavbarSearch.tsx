@@ -27,6 +27,8 @@ import { UserService } from "../../../services/User.service";
 import { ChatService } from "../../../services/Chat.service";
 import Tooltip from "../Tooltip";
 import { buildFileURL } from "../../../utils/buildFileURL";
+import { Friendship } from "../../../types/Friendship";
+import { FriendService } from "../../../services/Friend.service";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -114,6 +116,28 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
     navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
   };
 
+  const handleAddFriend = async (userId: User["id"]) => {
+    const friendship = await FriendService.createFriendship(me!.id, userId);
+    setIsExpanded(false);
+
+    if (friendship)
+      queryClient.setQueryData<Friendship[]>(
+        queryKeys.friends(),
+        (oldFriends) => {
+          if (
+            oldFriends?.find(
+              (f) =>
+                f.requester.id === friendship.requester.id &&
+                f.acceptor.id === friendship.acceptor.id
+            )
+          )
+            return oldFriends;
+          return oldFriends ? [...oldFriends, friendship] : [friendship];
+        }
+      );
+    navigate(ROUTES.FRIENDS.path);
+  };
+
   return (
     <CommandItem
       key={user.id}
@@ -129,7 +153,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
       </div>
       <div className="flex gap-x-2">
         <ActionButton
-          onClick={() => {}}
+          onClick={() => handleAddFriend(user.id)}
           tooltipText="Add friend"
           Icon={<FaUserFriends className="transition-all hover:scale-125" />}
         />

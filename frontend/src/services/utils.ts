@@ -64,3 +64,8 @@ export const POSTS_API = createAPIInstance({
   baseURL: `${API_URL}/posts`,
   withCredentials: true
 });
+
+export const FRIENDS_API = createAPIInstance({
+  baseURL: `${API_URL}/friendships`,
+  withCredentials: true
+});
