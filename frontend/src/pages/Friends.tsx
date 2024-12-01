@@ -13,6 +13,9 @@ import { createFullName } from "../utils/createFullName";
 import { Input } from "../components/ui/input";
 import { Table } from "../components/ui/table";
 import StatusFilterDropdown from "../components/friends/StatusFilterDropdown";
+import Avatar from "../components/common/Avatar";
+import { buildFileURL } from "../utils/buildFileURL";
+import { getInitials } from "../utils/getInitials";
 
 const users: User[] = [
   {
@@ -33,7 +36,8 @@ const users: User[] = [
     id: "3",
     firstName: "Carol",
     lastName: "Davis",
-    photoURL: "https://example.com/photos/carol.jpg",
+    photoURL:
+      "https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
     lastActive: new Date("2024-11-28T18:45:00Z")
   },
   {
@@ -76,11 +80,20 @@ const columns: ColumnDef<Friendship>[] = [
       const friendship = row.original as Friendship;
 
       const otherUser =
-        friendship.requester.id === users[0].id
+        friendship.requester.id === me.id
           ? friendship.acceptor
           : friendship.requester;
 
-      return <div>{createFullName(otherUser)}</div>;
+      return (
+        <div className="flex items-center space-x-4">
+          <Avatar
+            src={buildFileURL(otherUser.photoURL, { type: "avatar" })}
+            alt={getInitials(otherUser)}
+            className="h-8 w-8 text-xs"
+          />
+          <p className="font-semibold">{createFullName(otherUser)}</p>
+        </div>
+      );
     },
     header: "User",
     accessorKey: "user",
@@ -88,7 +101,7 @@ const columns: ColumnDef<Friendship>[] = [
       const friendship = row.original as Friendship;
 
       const otherUser =
-        friendship.requester.id === users[0].id
+        friendship.requester.id === me.id
           ? friendship.acceptor
           : friendship.requester;
 
