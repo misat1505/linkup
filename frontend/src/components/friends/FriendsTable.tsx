@@ -16,6 +16,16 @@ import {
 } from "../ui/table";
 import { useState } from "react";
 import { Input } from "../ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "../ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -49,6 +59,43 @@ export default function FriendsTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              {(table.getColumn("status")?.getFilterValue() as string) ||
+                "All Statuses"}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() => table.getColumn("status")?.setFilterValue("")}
+            >
+              All
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                table.getColumn("status")?.setFilterValue("Accepted")
+              }
+            >
+              Accepted
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                table.getColumn("status")?.setFilterValue("Awaiting me")
+              }
+            >
+              Awaiting me
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                table.getColumn("status")?.setFilterValue("Awaiting other")
+              }
+            >
+              Awaiting other
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <Table>
         <TableHeader>

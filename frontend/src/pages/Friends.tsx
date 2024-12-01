@@ -101,7 +101,20 @@ export default function Friends() {
 
         return `Awaiting your approve`;
       },
-      header: "Status"
+      header: "Status",
+      accessorKey: "status",
+      filterFn: (row, columnId, filterValue) => {
+        if (!filterValue) return true;
+        const status = row.getValue(columnId);
+        const friendship = row.original as Friendship;
+
+        if (filterValue === "Accepted") return status === "ACCEPTED";
+        if (filterValue === "Awaiting me")
+          return status === "PENDING" && friendship.acceptor.id === me.id;
+        if (filterValue === "Awaiting other")
+          return status === "PENDING" && friendship.requester.id === me.id;
+        return true;
+      }
     }
   ];
 
