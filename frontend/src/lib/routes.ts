@@ -9,6 +9,7 @@ const Signup = lazy(() => import("../pages/Signup"));
 const Chats = lazy(() => import("../pages/Chats"));
 const PostEditor = lazy(() => import("../pages/PostEditor"));
 const Posts = lazy(() => import("../pages/Posts"));
+const Friends = lazy(() => import("../pages/Friends"));
 
 type RouteType = {
   path: string;
@@ -51,6 +52,10 @@ export const protectedRoutes: RouteType[] = [
   {
     path: ROUTES.POSTS.path,
     component: Posts
+  },
+  {
+    path: ROUTES.FRIENDS.path,
+    component: Friends
   }
 ];
 
