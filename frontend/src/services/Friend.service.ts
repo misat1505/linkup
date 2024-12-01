@@ -44,15 +44,19 @@ export class FriendService {
     return response.data.friendship;
   }
 
-  // static async deleteFriendship(
-  //   requesterId: User["id"],
-  //   acceptorId: User["id"]
-  // ): Promise<void> {
-  //   const body = {
-  //     requesterId,
-  //     acceptorId
-  //   };
-  //   await FRIENDS_API.delete("/", body);
-  //   return;
-  // }
+  static async deleteFriendship(
+    requesterId: User["id"],
+    acceptorId: User["id"]
+  ): Promise<void> {
+    const body = {
+      requesterId,
+      acceptorId
+    };
+    await FRIENDS_API.request({
+      url: "/",
+      method: "DELETE",
+      data: body
+    });
+    return;
+  }
 }

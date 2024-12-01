@@ -71,6 +71,24 @@ function StatusDropdown({ friendship }: StatusCellProps) {
     );
   };
 
+  const handleDeleteFriendship = async () => {
+    await FriendService.deleteFriendship(
+      friendship.requester.id,
+      friendship.acceptor.id
+    );
+    queryClient.setQueryData<Friendship[]>(
+      queryKeys.friends(),
+      (oldFriendships) => {
+        if (!oldFriendships) return [];
+        return oldFriendships.filter(
+          (fr) =>
+            fr.acceptor.id !== friendship.acceptor.id ||
+            fr.requester.id !== friendship.requester.id
+        );
+      }
+    );
+  };
+
   if (!isMineRequest && friendship.status === "PENDING")
     dropdownItems.push(
       <>
@@ -83,7 +101,10 @@ function StatusDropdown({ friendship }: StatusCellProps) {
     );
 
   dropdownItems.push(
-    <DropdownMenuItem className="!text-red-500">
+    <DropdownMenuItem
+      onClick={handleDeleteFriendship}
+      className="!text-red-500"
+    >
       <FaTrash />
       <span>Delete</span>
     </DropdownMenuItem>
