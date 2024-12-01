@@ -11,14 +11,8 @@ import {
 } from "@tanstack/react-table";
 import { createFullName } from "../utils/createFullName";
 import { Input } from "../components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from "../components/ui/dropdown-menu";
-import { Button } from "../components/ui/button";
 import { Table } from "../components/ui/table";
+import StatusFilterDropdown from "../components/friends/StatusFilterDropdown";
 
 const users: User[] = [
   {
@@ -158,45 +152,7 @@ export default function Friends() {
           className="max-w-sm"
         />
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost">
-              {(table.getColumn("status")?.getFilterValue() as string) ||
-                "All Statuses"}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => {
-                console.log("ujsdus");
-                table.getColumn("status")?.setFilterValue("");
-              }}
-            >
-              All
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                table.getColumn("status")?.setFilterValue("Accepted")
-              }
-            >
-              Accepted
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                table.getColumn("status")?.setFilterValue("Awaiting me")
-              }
-            >
-              Awaiting me
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                table.getColumn("status")?.setFilterValue("Awaiting other")
-              }
-            >
-              Awaiting other
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <StatusFilterDropdown table={table} />
       </div>
       <Table className="rounded-md border">
         <FriendsTable table={table} />
