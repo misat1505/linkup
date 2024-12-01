@@ -86,7 +86,7 @@ const columns: ColumnDef<Friendship>[] = [
           ? friendship.acceptor
           : friendship.requester;
 
-      return `${otherUser.firstName} ${otherUser.lastName}`;
+      return <div>{createFullName(otherUser)}</div>;
     },
     header: "User",
     accessorKey: "user",
@@ -106,7 +106,8 @@ const columns: ColumnDef<Friendship>[] = [
     cell: ({ row }) => {
       const friendship = row.original as Friendship;
 
-      if (friendship.status === "ACCEPTED") return "Friends";
+      if (friendship.status === "ACCEPTED")
+        return <div className="text-emerald-500">Friends</div>;
 
       const isMineRequest = friendship.requester.id === me.id;
 
@@ -146,7 +147,7 @@ export default function Friends() {
   });
 
   return (
-    <div className="mx-auto my-4 w-1/2 rounded-md bg-slate-900 p-4">
+    <div className="mx-auto my-4 w-1/2 rounded-md bg-slate-100 p-4 dark:bg-slate-900">
       <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter users..."
