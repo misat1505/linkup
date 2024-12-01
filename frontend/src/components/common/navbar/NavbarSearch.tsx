@@ -29,6 +29,8 @@ import Tooltip from "../Tooltip";
 import { buildFileURL } from "../../../utils/buildFileURL";
 import { Friendship } from "../../../types/Friendship";
 import { FriendService } from "../../../services/Friend.service";
+import { useToast } from "../../ui/use-toast";
+import { Button } from "../../ui/button";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -104,6 +106,7 @@ type SearchResultItemProps = {
 function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
   const { user: me } = useAppContext();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   const handleCreateChat = async (userId: User["id"]) => {
@@ -120,22 +123,42 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
     const friendship = await FriendService.createFriendship(me!.id, userId);
     setIsExpanded(false);
 
-    if (friendship)
-      queryClient.setQueryData<Friendship[]>(
-        queryKeys.friends(),
-        (oldFriends) => {
-          if (
-            oldFriends?.find(
-              (f) =>
-                f.requester.id === friendship.requester.id &&
-                f.acceptor.id === friendship.acceptor.id
-            )
+    if (!friendship)
+      return toast({
+        variant: "destructive",
+        title: "Friend request already exists.",
+        description: `There is already a friendship between you and ${createFullName(user)}.`,
+        action: (
+          <Button onClick={() => navigate(ROUTES.FRIENDS.path)}>
+            Show Friends
+          </Button>
+        )
+      });
+
+    queryClient.setQueryData<Friendship[]>(
+      queryKeys.friends(),
+      (oldFriends) => {
+        if (
+          oldFriends?.find(
+            (f) =>
+              f.requester.id === friendship.requester.id &&
+              f.acceptor.id === friendship.acceptor.id
           )
-            return oldFriends;
-          return oldFriends ? [...oldFriends, friendship] : [friendship];
-        }
-      );
-    navigate(ROUTES.FRIENDS.path);
+        )
+          return oldFriends;
+        return oldFriends ? [...oldFriends, friendship] : [friendship];
+      }
+    );
+
+    toast({
+      title: "Friend request sent.",
+      description: `Friend request was sent to ${createFullName(user)}`,
+      action: (
+        <Button onClick={() => navigate(ROUTES.FRIENDS.path)}>
+          Show Friends
+        </Button>
+      )
+    });
   };
 
   return (
