@@ -74,7 +74,19 @@ export default function Friends() {
 
         return `${otherUser.firstName} ${otherUser.lastName}`;
       },
-      header: "User"
+      header: "User",
+      accessorKey: "user",
+      filterFn: (row, columnId, filterValue) => {
+        const friendship = row.original as Friendship;
+
+        const otherUser =
+          friendship.requester.id === users[0].id
+            ? friendship.acceptor
+            : friendship.requester;
+
+        const fullName = `${otherUser.firstName} ${otherUser.lastName}`;
+        return fullName.toLowerCase().includes(filterValue.toLowerCase());
+      }
     },
     {
       cell: ({ row }) => {

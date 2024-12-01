@@ -1,7 +1,9 @@
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   useReactTable
 } from "@tanstack/react-table";
 import {
@@ -12,6 +14,8 @@ import {
   TableHeader,
   TableRow
 } from "../ui/table";
+import { useState } from "react";
+import { Input } from "../ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -22,14 +26,30 @@ export default function FriendsTable<TData, TValue>({
   columns,
   data
 }: DataTableProps<TData, TValue>) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel()
+    getCoreRowModel: getCoreRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters
+    }
   });
 
   return (
     <div className="rounded-md border">
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter users..."
+          value={(table.getColumn("user")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("user")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
