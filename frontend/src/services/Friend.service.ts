@@ -5,11 +5,6 @@ import { FRIENDS_API } from "./utils";
 
 export class FriendService {
   static async getMyFriendships(): Promise<Friendship[]> {
-    await new Promise((res) =>
-      setTimeout(() => {
-        res(null);
-      }, 1000)
-    );
     const response = await FRIENDS_API.get("/");
     return response.data.friendships;
   }
@@ -36,4 +31,28 @@ export class FriendService {
       throw e;
     }
   }
+
+  static async acceptFriendship(
+    requesterId: User["id"],
+    acceptorId: User["id"]
+  ): Promise<Friendship> {
+    const body = {
+      requesterId,
+      acceptorId
+    };
+    const response = await FRIENDS_API.post("/accept", body);
+    return response.data.friendship;
+  }
+
+  // static async deleteFriendship(
+  //   requesterId: User["id"],
+  //   acceptorId: User["id"]
+  // ): Promise<void> {
+  //   const body = {
+  //     requesterId,
+  //     acceptorId
+  //   };
+  //   await FRIENDS_API.delete("/", body);
+  //   return;
+  // }
 }

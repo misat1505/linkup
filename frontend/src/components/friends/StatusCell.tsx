@@ -14,6 +14,9 @@ import { FaTrash } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
 import Tooltip from "../common/Tooltip";
 import { useAppContext } from "../../contexts/AppProvider";
+import { FriendService } from "../../services/Friend.service";
+import { useQueryClient } from "react-query";
+import { queryKeys } from "../../lib/queryKeys";
 
 type StatusCellProps = { friendship: Friendship };
 
@@ -42,14 +45,36 @@ function StatusDisplay({ friendship }: StatusCellProps) {
 
 function StatusDropdown({ friendship }: StatusCellProps) {
   const { user: me } = useAppContext();
+  const queryClient = useQueryClient();
   const dropdownItems: JSX.Element[] = [];
 
   const isMineRequest = friendship.requester.id === me!.id;
 
+  const handleAcceptFriendship = async () => {
+    const newFriendship = await FriendService.acceptFriendship(
+      friendship.requester.id,
+      friendship.acceptor.id
+    );
+    queryClient.setQueryData<Friendship[]>(
+      queryKeys.friends(),
+      (oldFriendships) => {
+        if (!oldFriendships) return [newFriendship];
+        return oldFriendships.map((fr) => {
+          if (
+            fr.acceptor.id === newFriendship.acceptor.id &&
+            fr.requester.id === newFriendship.requester.id
+          )
+            return newFriendship;
+          return fr;
+        });
+      }
+    );
+  };
+
   if (!isMineRequest && friendship.status === "PENDING")
     dropdownItems.push(
       <>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleAcceptFriendship}>
           <TiTick />
           <span>Accept</span>
         </DropdownMenuItem>
