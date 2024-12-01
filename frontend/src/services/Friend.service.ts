@@ -5,7 +5,12 @@ import { FRIENDS_API } from "./utils";
 
 export class FriendService {
   static async getMyFriendships(): Promise<Friendship[]> {
-    const response = await FRIENDS_API.post("/");
+    await new Promise((res) =>
+      setTimeout(() => {
+        res(null);
+      }, 1000)
+    );
+    const response = await FRIENDS_API.get("/");
     return response.data.friendships;
   }
 
