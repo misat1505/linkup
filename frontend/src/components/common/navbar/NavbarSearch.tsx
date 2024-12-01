@@ -31,6 +31,7 @@ import { Friendship } from "../../../types/Friendship";
 import { FriendService } from "../../../services/Friend.service";
 import { useToast } from "../../ui/use-toast";
 import { Button } from "../../ui/button";
+import FocusableSpan from "../FocusableSpan";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -199,16 +200,7 @@ type ActionButtonProps = {
 function ActionButton({ onClick, tooltipText, Icon }: ActionButtonProps) {
   return (
     <Tooltip content={tooltipText}>
-      <button
-        onClick={onClick}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            onClick();
-          }
-        }}
-      >
-        {Icon}
-      </button>
+      <FocusableSpan fn={onClick}>{Icon}</FocusableSpan>
     </Tooltip>
   );
 }

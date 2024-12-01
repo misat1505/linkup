@@ -7,6 +7,7 @@ import {
   TableRow
 } from "../ui/table";
 import { Friendship } from "../../types/Friendship";
+import FocusableSpan from "../common/FocusableSpan";
 
 type FriendsTableProps = {
   table: TableType<Friendship>;
@@ -63,12 +64,12 @@ export default function FriendsTable({ table }: FriendsTableProps) {
               <h2 className="text-lg font-semibold">No results.</h2>
               <p>
                 Search for people using the{" "}
-                <span
-                  onClick={focusNavigationBar}
+                <FocusableSpan
+                  fn={focusNavigationBar}
                   className="text-blue-500 underline hover:cursor-pointer"
                 >
                   navigation bar
-                </span>
+                </FocusableSpan>
                 .
               </p>
             </TableCell>
