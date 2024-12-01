@@ -8,6 +8,8 @@ import {
   DropdownMenuTrigger
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import Tooltip from "../common/Tooltip";
+import useCountStatusCategories from "../../hooks/friends/useCountStatusCategories";
 
 type StatusFilterDropdownProps = {
   table: Table<Friendship>;
@@ -16,38 +18,43 @@ type StatusFilterDropdownProps = {
 export default function StatusFilterDropdown({
   table
 }: StatusFilterDropdownProps) {
+  const counts = useCountStatusCategories();
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost">
-          {(table.getColumn("status")?.getFilterValue() as string) ||
-            "All Statuses"}
-        </Button>
-      </DropdownMenuTrigger>
+      <Tooltip content="Filter statuses">
+        <span>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              {(table.getColumn("status")?.getFilterValue() as string) || "All"}
+            </Button>
+          </DropdownMenuTrigger>
+        </span>
+      </Tooltip>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onClick={() => table.getColumn("status")?.setFilterValue("")}
         >
-          All
+          All ({Object.values(counts).reduce((acc, curr) => acc + curr, 0)})
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => table.getColumn("status")?.setFilterValue("Accepted")}
         >
-          Accepted
+          Accepted ({counts.accepted})
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>
             table.getColumn("status")?.setFilterValue("Awaiting me")
           }
         >
-          Awaiting me
+          Awaiting me ({counts.awaitingMe})
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>
             table.getColumn("status")?.setFilterValue("Awaiting other")
           }
         >
-          Awaiting other
+          Awaiting other ({counts.awaitingOther})
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

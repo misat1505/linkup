@@ -144,15 +144,15 @@ function StatusDropdown({ friendship }: StatusCellProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="p-0">
-          <Tooltip content="Show actions">
-            <span>
+      <Tooltip content="Show actions">
+        <span>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="p-0">
               <MoreVertical />
-            </span>
-          </Tooltip>
-        </Button>
-      </DropdownMenuTrigger>
+            </Button>
+          </DropdownMenuTrigger>
+        </span>
+      </Tooltip>
       <DropdownMenuContent align="end">
         {dropdownItems.map((dropdownItem, idx) => (
           <React.Fragment key={idx}>{dropdownItem}</React.Fragment>
