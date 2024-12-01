@@ -13,6 +13,13 @@ type FriendsTableProps = {
 };
 
 export default function FriendsTable({ table }: FriendsTableProps) {
+  const focusNavigationBar = () => {
+    const navSearch = document.querySelector(
+      "[data-testid=cy-nav-search-input]"
+    ) as HTMLInputElement;
+    navSearch?.focus();
+  };
+
   return (
     <>
       <TableHeader>
@@ -51,9 +58,19 @@ export default function FriendsTable({ table }: FriendsTableProps) {
           <TableRow>
             <TableCell
               colSpan={table.getAllColumns().length}
-              className="h-24 text-center"
+              className="h-32 text-center"
             >
-              No results.
+              <h2 className="text-lg font-semibold">No results.</h2>
+              <p>
+                Search for people using the{" "}
+                <span
+                  onClick={focusNavigationBar}
+                  className="text-blue-500 underline hover:cursor-pointer"
+                >
+                  navigation bar
+                </span>
+                .
+              </p>
             </TableCell>
           </TableRow>
         )}
