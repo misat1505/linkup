@@ -16,6 +16,7 @@ import StatusFilterDropdown from "../components/friends/StatusFilterDropdown";
 import Avatar from "../components/common/Avatar";
 import { buildFileURL } from "../utils/buildFileURL";
 import { getInitials } from "../utils/getInitials";
+import StatusCell from "../components/friends/StatusCell";
 
 const users: User[] = [
   {
@@ -49,7 +50,7 @@ const users: User[] = [
   }
 ];
 
-const me = users[0];
+export const me = users[0];
 
 const friendships: Friendship[] = [
   {
@@ -113,15 +114,7 @@ const columns: ColumnDef<Friendship>[] = [
     cell: ({ row }) => {
       const friendship = row.original as Friendship;
 
-      if (friendship.status === "ACCEPTED")
-        return <div className="text-emerald-500">Friends</div>;
-
-      const isMineRequest = friendship.requester.id === me.id;
-
-      if (isMineRequest)
-        return `Awaiting ${createFullName(friendship.acceptor)} approve`;
-
-      return `Awaiting your approve`;
+      return <StatusCell friendship={friendship} />;
     },
     header: "Status",
     accessorKey: "status",
