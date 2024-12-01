@@ -199,7 +199,16 @@ type ActionButtonProps = {
 function ActionButton({ onClick, tooltipText, Icon }: ActionButtonProps) {
   return (
     <Tooltip content={tooltipText}>
-      <button onClick={onClick}>{Icon}</button>
+      <button
+        onClick={onClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onClick();
+          }
+        }}
+      >
+        {Icon}
+      </button>
     </Tooltip>
   );
 }

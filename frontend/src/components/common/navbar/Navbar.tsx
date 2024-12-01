@@ -23,6 +23,12 @@ export default function Navbar() {
               <span
                 className="hover:cursor-pointer"
                 onClick={() => navigate(ROUTES.HOME.path)}
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    navigate(ROUTES.HOME.path);
+                  }
+                }}
               >
                 <Image
                   src={LOGO_PATH}
