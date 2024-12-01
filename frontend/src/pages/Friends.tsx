@@ -1,7 +1,6 @@
 import { Friendship } from "../types/Friendship";
 import FriendsTable from "../components/friends/FriendsTable";
 import React, { useState } from "react";
-import { User } from "../types/User";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -112,7 +111,7 @@ function FriendsPageInner() {
   });
 
   return (
-    <div className="mx-auto my-4 w-1/2 rounded-md bg-slate-100 p-4 dark:bg-slate-900">
+    <div className="mx-auto my-4 w-[95%] rounded-md bg-slate-100 p-4 dark:bg-slate-900 lg:w-1/2">
       <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter users..."

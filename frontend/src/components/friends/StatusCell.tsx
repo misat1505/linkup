@@ -17,6 +17,7 @@ import { useAppContext } from "../../contexts/AppProvider";
 import { FriendService } from "../../services/Friend.service";
 import { useQueryClient } from "react-query";
 import { queryKeys } from "../../lib/queryKeys";
+import { useToast } from "../ui/use-toast";
 
 type StatusCellProps = { friendship: Friendship };
 
@@ -45,6 +46,7 @@ function StatusDisplay({ friendship }: StatusCellProps) {
 
 function StatusDropdown({ friendship }: StatusCellProps) {
   const { user: me } = useAppContext();
+  const { toast } = useToast();
   const queryClient = useQueryClient();
   const dropdownItems: JSX.Element[] = [];
 
@@ -69,6 +71,17 @@ function StatusDropdown({ friendship }: StatusCellProps) {
         });
       }
     );
+
+    const otherUser = isMineRequest
+      ? friendship.acceptor
+      : friendship.requester;
+
+    const description = `${createFullName(otherUser)} is your friend now.`;
+
+    toast({
+      title: "Friendship accepted.",
+      description
+    });
   };
 
   const handleDeleteFriendship = async () => {
@@ -87,6 +100,25 @@ function StatusDropdown({ friendship }: StatusCellProps) {
         );
       }
     );
+
+    const otherUser = isMineRequest
+      ? friendship.acceptor
+      : friendship.requester;
+
+    const getDescription = (): string => {
+      if (friendship.status === "ACCEPTED")
+        return `${createFullName(otherUser)} is not your friend anymore.`;
+
+      if (isMineRequest)
+        return `Friend request to ${createFullName(otherUser)} is removed.`;
+
+      return `${createFullName(otherUser)} friend request is rejected.`;
+    };
+
+    toast({
+      title: "Friendship deleted.",
+      description: getDescription()
+    });
   };
 
   if (!isMineRequest && friendship.status === "PENDING")
