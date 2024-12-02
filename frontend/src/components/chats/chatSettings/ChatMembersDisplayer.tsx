@@ -72,11 +72,7 @@ function CreateMessageButton({ user }: { user: UserInChat }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const handleClick = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-
+  const handleClick = async () => {
     const chat = await ChatService.createPrivateChat(me!.id, user.id);
     queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
       if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
@@ -87,12 +83,11 @@ function CreateMessageButton({ user }: { user: UserInChat }) {
 
   return (
     <Tooltip content="Send message">
-      <div
-        className="mr-1 rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
-        onClick={handleClick}
-      >
-        <IoIosChatbubbles size={20} />
-      </div>
+      <span className="aspect-square rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
+        <FocusableSpan fn={handleClick}>
+          <IoIosChatbubbles size={20} />
+        </FocusableSpan>
+      </span>
     </Tooltip>
   );
 }
