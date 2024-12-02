@@ -25,7 +25,7 @@ export default function Navbar() {
                 <FocusableSpan fn={() => navigate(ROUTES.HOME.path)}>
                   <Image
                     src={LOGO_PATH}
-                    className={{ common: "h-12 w-12 rounded-full" }}
+                    className={{ common: "h-10 w-10 rounded-full" }}
                   />
                 </FocusableSpan>
               </span>
