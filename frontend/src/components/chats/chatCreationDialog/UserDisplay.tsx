@@ -18,7 +18,7 @@ export default function UserDisplay({
     <button
       {...rest}
       className={cn(
-        "my-1 flex w-full items-center gap-x-2 rounded-md bg-slate-200 p-2 transition-all hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700",
+        "my-1 flex w-full items-center gap-x-2 rounded-md bg-slate-100 p-2 text-sm transition-all hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800",
         className
       )}
     >

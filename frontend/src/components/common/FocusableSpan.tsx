@@ -9,17 +9,24 @@ type FocusableSpanProps = PropsWithChildren<
 
 const FocusableSpan = forwardRef<HTMLSpanElement, FocusableSpanProps>(
   ({ children, className, fn, ...rest }, ref) => {
+    const handleInteraction = (e: React.MouseEvent | React.KeyboardEvent) => {
+      if (
+        e.type === "click" ||
+        (e.type === "keydown" && (e as React.KeyboardEvent).key === "Enter")
+      ) {
+        e.preventDefault();
+        console.log(e.type);
+        fn();
+      }
+    };
+
     return (
       <span
         ref={ref}
-        onClick={fn}
+        onClick={handleInteraction}
         tabIndex={0}
         className={cn("hover:cursor-pointer", className)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            fn();
-          }
-        }}
+        onKeyDown={handleInteraction}
         {...rest}
       >
         {children}

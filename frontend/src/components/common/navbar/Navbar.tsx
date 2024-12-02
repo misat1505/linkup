@@ -21,12 +21,14 @@ export default function Navbar() {
         <div className="flex items-center gap-x-4">
           <div className="hidden sm:block">
             <Tooltip content="Home">
-              <FocusableSpan fn={() => navigate(ROUTES.HOME.path)}>
-                <Image
-                  src={LOGO_PATH}
-                  className={{ common: "h-12 w-12 rounded-full" }}
-                />
-              </FocusableSpan>
+              <span>
+                <FocusableSpan fn={() => navigate(ROUTES.HOME.path)}>
+                  <Image
+                    src={LOGO_PATH}
+                    className={{ common: "h-12 w-12 rounded-full" }}
+                  />
+                </FocusableSpan>
+              </span>
             </Tooltip>
           </div>
           {isLoggedIn && <NavbarSearch />}
