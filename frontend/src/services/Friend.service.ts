@@ -6,7 +6,9 @@ import { FRIENDS_API } from "./utils";
 export class FriendService {
   static async getMyFriendships(): Promise<Friendship[]> {
     const response = await FRIENDS_API.get("/");
-    return response.data.friendships;
+    return response.data.friendships.filter(
+      (fr: Friendship) => fr.requester.id !== fr.acceptor.id
+    );
   }
 
   static async createFriendship(

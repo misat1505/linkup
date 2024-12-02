@@ -176,11 +176,15 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
         <span className="ml-4">{createFullName(user, 15)}</span>
       </div>
       <div className="flex gap-x-2">
-        <ActionButton
-          onClick={() => handleAddFriend(user.id)}
-          tooltipText="Add friend"
-          Icon={<FaUserFriends className="transition-all hover:scale-125" />}
-        />
+        {me!.id !== user.id ? (
+          <ActionButton
+            onClick={() => handleAddFriend(user.id)}
+            tooltipText="Add friend"
+            Icon={<FaUserFriends className="transition-all hover:scale-125" />}
+          />
+        ) : (
+          <div></div>
+        )}
         <ActionButton
           onClick={() => handleCreateChat(user.id)}
           tooltipText="Send Message"
@@ -200,7 +204,9 @@ type ActionButtonProps = {
 function ActionButton({ onClick, tooltipText, Icon }: ActionButtonProps) {
   return (
     <Tooltip content={tooltipText}>
-      <FocusableSpan fn={onClick}>{Icon}</FocusableSpan>
+      <span>
+        <FocusableSpan fn={onClick}>{Icon}</FocusableSpan>
+      </span>
     </Tooltip>
   );
 }

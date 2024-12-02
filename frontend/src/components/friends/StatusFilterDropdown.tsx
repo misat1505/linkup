@@ -10,6 +10,7 @@ import {
 import { Button } from "../ui/button";
 import Tooltip from "../common/Tooltip";
 import useCountStatusCategories from "../../hooks/friends/useCountStatusCategories";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 type StatusFilterDropdownProps = {
   table: Table<Friendship>;
@@ -25,8 +26,15 @@ export default function StatusFilterDropdown({
       <Tooltip content="Filter statuses">
         <span>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost">
-              {(table.getColumn("status")?.getFilterValue() as string) || "All"}
+            <Button
+              variant="ghost"
+              className="flex items-center space-x-4 transition-colors hover:bg-slate-200 dark:hover:bg-slate-800"
+            >
+              <span>
+                {(table.getColumn("status")?.getFilterValue() as string) ||
+                  "All"}
+              </span>
+              <MdKeyboardArrowDown />
             </Button>
           </DropdownMenuTrigger>
         </span>
