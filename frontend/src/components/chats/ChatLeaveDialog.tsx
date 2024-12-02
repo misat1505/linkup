@@ -19,6 +19,7 @@ import Tooltip from "../common/Tooltip";
 import { TbLogout2 } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
+import FocusableSpan from "../common/FocusableSpan";
 
 export default function ChatLeaveDialog() {
   const navigate = useNavigate();
@@ -45,18 +46,13 @@ export default function ChatLeaveDialog() {
 
   return (
     <AlertDialog open={isOpen}>
-      <AlertDialogTrigger asChild onClick={() => setIsOpen(true)}>
-        <span>
-          <Tooltip content="Leave chat">
-            <span>
-              <TbLogout2
-                size={20}
-                className="text-red-500 transition-all hover:scale-125 hover:cursor-pointer"
-              />
-            </span>
-          </Tooltip>
+      <Tooltip content="Leave chat">
+        <span className="aspect-square text-red-500 transition-all hover:scale-125 hover:cursor-pointer">
+          <FocusableSpan fn={() => setIsOpen(true)}>
+            <TbLogout2 size={20} />
+          </FocusableSpan>
         </span>
-      </AlertDialogTrigger>
+      </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Leave chat</AlertDialogTitle>

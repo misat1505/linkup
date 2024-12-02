@@ -17,8 +17,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
+  AlertDialogTitle
 } from "../../ui/alert-dialog";
 import Tooltip from "../../common/Tooltip";
 import { MdEdit } from "react-icons/md";
