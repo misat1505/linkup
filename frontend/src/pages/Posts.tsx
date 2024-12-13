@@ -29,7 +29,7 @@ export default function Posts() {
     return orderBy(
       posts,
       [(post) => new Date(post.createdAt).getTime()],
-      ["desc", "desc"]
+      ["desc"]
     );
   };
 
