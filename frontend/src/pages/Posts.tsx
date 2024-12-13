@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../lib/routes";
 import { Button } from "../components/ui/button";
 import { queryKeys } from "../lib/queryKeys";
+import { orderBy } from "lodash";
+import { Post } from "../types/Post";
 
 export default function Posts() {
   const navigate = useNavigate();
@@ -23,6 +25,14 @@ export default function Posts() {
       </div>
     );
 
+  const getSortedPosts = (): Post[] => {
+    return orderBy(
+      posts,
+      [(post) => new Date(post.createdAt).getTime()],
+      ["desc", "desc"]
+    );
+  };
+
   return (
     <div className="flex flex-col items-center">
       <Button
@@ -35,7 +45,9 @@ export default function Posts() {
         Create New Post
       </Button>
       <div className="flex w-full flex-col items-center">
-        {posts?.map((post) => <MyPostPreview post={post} key={post.id} />)}
+        {getSortedPosts().map((post) => (
+          <MyPostPreview post={post} key={post.id} />
+        ))}
       </div>
     </div>
   );
