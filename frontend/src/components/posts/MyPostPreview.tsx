@@ -25,6 +25,7 @@ import {
 import { PostService } from "../../services/Post.service";
 import { useQueryClient } from "react-query";
 import { queryKeys } from "../../lib/queryKeys";
+import FocusableSpan from "../common/FocusableSpan";
 
 export default function MyPostPreview({ post }: { post: Post }) {
   const { theme } = useThemeContext();
@@ -71,6 +72,7 @@ function PostActions({ postId }: { postId: Post["id"] }) {
 }
 
 function DeletePostDialog({ postId }: { postId: Post["id"] }) {
+  const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const handleClick = async () => {
@@ -87,20 +89,19 @@ function DeletePostDialog({ postId }: { postId: Post["id"] }) {
     queryClient.setQueryData<Post[]>(queryKeys.posts(), (oldPosts) =>
       updaterFn(oldPosts)
     );
-    console.log(`Deleting post: ${postId}`);
+
+    setIsOpen(false);
   };
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <span>
-          <Tooltip content="Delete">
-            <span>
-              <FaRegTrashAlt className="text-black transition-all hover:scale-110 hover:cursor-pointer dark:text-white" />
-            </span>
-          </Tooltip>
+    <AlertDialog open={isOpen}>
+      <Tooltip content="Delete">
+        <span className="text-black transition-all hover:scale-110 hover:cursor-pointer dark:text-white">
+          <FocusableSpan fn={() => setIsOpen(true)}>
+            <FaRegTrashAlt />
+          </FocusableSpan>
         </span>
-      </AlertDialogTrigger>
+      </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -110,7 +111,9 @@ function DeletePostDialog({ postId }: { postId: Post["id"] }) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => setIsOpen(false)}>
+            Cancel
+          </AlertDialogCancel>
           <AlertDialogAction onClick={handleClick}>
             Yes, delete
           </AlertDialogAction>

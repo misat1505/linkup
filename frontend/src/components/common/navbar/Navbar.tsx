@@ -8,6 +8,7 @@ import ThemeToggle from "./ThemeToggle";
 import Tooltip from "../Tooltip";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../lib/routes";
+import FocusableSpan from "../FocusableSpan";
 
 export default function Navbar() {
   const { user } = useAppContext();
@@ -20,14 +21,13 @@ export default function Navbar() {
         <div className="flex items-center gap-x-4">
           <div className="hidden sm:block">
             <Tooltip content="Home">
-              <span
-                className="hover:cursor-pointer"
-                onClick={() => navigate(ROUTES.HOME.path)}
-              >
-                <Image
-                  src={LOGO_PATH}
-                  className={{ common: "h-12 w-12 rounded-full" }}
-                />
+              <span>
+                <FocusableSpan fn={() => navigate(ROUTES.HOME.path)}>
+                  <Image
+                    src={LOGO_PATH}
+                    className={{ common: "h-10 w-10 rounded-full" }}
+                  />
+                </FocusableSpan>
               </span>
             </Tooltip>
           </div>

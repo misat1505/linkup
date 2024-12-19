@@ -17,8 +17,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
+  AlertDialogTitle
 } from "../../ui/alert-dialog";
 import Tooltip from "../../common/Tooltip";
 import { MdEdit } from "react-icons/md";
@@ -26,6 +25,7 @@ import { IoIosChatbubbles } from "react-icons/io";
 import { useAppContext } from "../../../contexts/AppProvider";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../lib/routes";
+import FocusableSpan from "../../common/FocusableSpan";
 
 export default function ChatMembersDisplayer() {
   const { chat } = useChatContext();
@@ -71,11 +71,7 @@ function CreateMessageButton({ user }: { user: UserInChat }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const handleClick = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-
+  const handleClick = async () => {
     const chat = await ChatService.createPrivateChat(me!.id, user.id);
     queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
       if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
@@ -86,12 +82,11 @@ function CreateMessageButton({ user }: { user: UserInChat }) {
 
   return (
     <Tooltip content="Send message">
-      <div
-        className="mr-1 rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
-        onClick={handleClick}
-      >
-        <IoIosChatbubbles size={20} />
-      </div>
+      <span className="aspect-square rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
+        <FocusableSpan fn={handleClick}>
+          <IoIosChatbubbles size={20} />
+        </FocusableSpan>
+      </span>
     </Tooltip>
   );
 }
@@ -134,15 +129,13 @@ function AliasUpdateModal({ user }: { user: UserInChat }) {
 
   return (
     <AlertDialog open={isOpen}>
-      <AlertDialogTrigger asChild onClick={() => setIsOpen(true)}>
-        <span>
-          <Tooltip content="Update alias">
-            <div className="mr-1 rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
-              <MdEdit size={20} />
-            </div>
-          </Tooltip>
+      <Tooltip content="Update alias">
+        <span className="aspect-square rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
+          <FocusableSpan fn={() => setIsOpen(true)}>
+            <MdEdit size={20} />
+          </FocusableSpan>
         </span>
-      </AlertDialogTrigger>
+      </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>

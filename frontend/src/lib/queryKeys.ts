@@ -14,5 +14,6 @@ export const queryKeys = {
   posts: () => ["posts"] as const,
   post: (postId: Post["id"]) => ["posts", { postId }] as const,
   downloadFile: (url: string) => ["download-file", { url }] as const,
-  file: (url: string) => ["file", { url }] as const
+  file: (url: string) => ["file", { url }] as const,
+  friends: () => ["friends"] as const
 };

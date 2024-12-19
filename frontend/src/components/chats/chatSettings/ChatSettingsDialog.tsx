@@ -2,18 +2,21 @@ import { CiSettings } from "react-icons/ci";
 import Tooltip from "../../common/Tooltip";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from "../../ui/dialog";
-import React from "react";
+import React, { useState } from "react";
 import ChatMembersDisplayer from "./ChatMembersDisplayer";
 import { useChatContext } from "../../../contexts/ChatProvider";
 import GroupChatContent from "./GroupChatContent";
+import FocusableSpan from "../../common/FocusableSpan";
 
 export default function ChatSettingsDialog() {
+  const [isOpen, setIsOpen] = useState(false);
   const { chat } = useChatContext();
 
   const privateDescription =
@@ -23,17 +26,17 @@ export default function ChatSettingsDialog() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <button>
+      <DialogTrigger asChild className="aspect-square h-5 w-5">
+        <span>
           <Tooltip content="Settings">
-            <span>
+            <button>
               <CiSettings
                 size={20}
                 className="transition-all hover:scale-125"
               />
-            </span>
+            </button>
           </Tooltip>
-        </button>
+        </span>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

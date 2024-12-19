@@ -27,6 +27,11 @@ import { UserService } from "../../../services/User.service";
 import { ChatService } from "../../../services/Chat.service";
 import Tooltip from "../Tooltip";
 import { buildFileURL } from "../../../utils/buildFileURL";
+import { Friendship } from "../../../types/Friendship";
+import { FriendService } from "../../../services/Friend.service";
+import { useToast } from "../../ui/use-toast";
+import { Button } from "../../ui/button";
+import FocusableSpan from "../FocusableSpan";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -102,6 +107,7 @@ type SearchResultItemProps = {
 function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
   const { user: me } = useAppContext();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   const handleCreateChat = async (userId: User["id"]) => {
@@ -112,6 +118,48 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
       return oldChats ? [...oldChats, chat] : [chat];
     });
     navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
+  };
+
+  const handleAddFriend = async (userId: User["id"]) => {
+    const friendship = await FriendService.createFriendship(me!.id, userId);
+    setIsExpanded(false);
+
+    if (!friendship)
+      return toast({
+        variant: "destructive",
+        title: "Friend request already exists.",
+        description: `There is already a friendship between you and ${createFullName(user)}.`,
+        action: (
+          <Button onClick={() => navigate(ROUTES.FRIENDS.path)}>
+            Show Friends
+          </Button>
+        )
+      });
+
+    queryClient.setQueryData<Friendship[]>(
+      queryKeys.friends(),
+      (oldFriends) => {
+        if (
+          oldFriends?.find(
+            (f) =>
+              f.requester.id === friendship.requester.id &&
+              f.acceptor.id === friendship.acceptor.id
+          )
+        )
+          return oldFriends;
+        return oldFriends ? [...oldFriends, friendship] : [friendship];
+      }
+    );
+
+    toast({
+      title: "Friend request sent.",
+      description: `Friend request was sent to ${createFullName(user)}`,
+      action: (
+        <Button onClick={() => navigate(ROUTES.FRIENDS.path)}>
+          Show Friends
+        </Button>
+      )
+    });
   };
 
   return (
@@ -128,11 +176,15 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
         <span className="ml-4">{createFullName(user, 15)}</span>
       </div>
       <div className="flex gap-x-2">
-        <ActionButton
-          onClick={() => {}}
-          tooltipText="Add friend"
-          Icon={<FaUserFriends className="transition-all hover:scale-125" />}
-        />
+        {me!.id !== user.id ? (
+          <ActionButton
+            onClick={() => handleAddFriend(user.id)}
+            tooltipText="Add friend"
+            Icon={<FaUserFriends className="transition-all hover:scale-125" />}
+          />
+        ) : (
+          <div></div>
+        )}
         <ActionButton
           onClick={() => handleCreateChat(user.id)}
           tooltipText="Send Message"
@@ -152,7 +204,9 @@ type ActionButtonProps = {
 function ActionButton({ onClick, tooltipText, Icon }: ActionButtonProps) {
   return (
     <Tooltip content={tooltipText}>
-      <button onClick={onClick}>{Icon}</button>
+      <span>
+        <FocusableSpan fn={onClick}>{Icon}</FocusableSpan>
+      </span>
     </Tooltip>
   );
 }

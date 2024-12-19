@@ -13,6 +13,7 @@ import Tooltip from "../common/Tooltip";
 import { buildFileURL, Filter } from "../../utils/buildFileURL";
 import ChatSettingsDialog from "./chatSettings/ChatSettingsDialog";
 import ChatLeaveDialog from "./ChatLeaveDialog";
+import FocusableSpan from "../common/FocusableSpan";
 
 export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   const { chats } = useChatPageContext();
@@ -63,13 +64,13 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
       <div className="flex items-center gap-x-2">
         {chat.type === "GROUP" && <ChatLeaveDialog />}
         <ChatSettingsDialog />
-        <button onClick={() => navigate(ROUTES.CHATS.path)}>
-          <Tooltip content="Close chat">
-            <span>
-              <RxCross1 className="transition-all hover:scale-125" />
-            </span>
-          </Tooltip>
-        </button>
+        <Tooltip content="Close chat">
+          <span className="transition-all hover:scale-125">
+            <FocusableSpan fn={() => navigate(ROUTES.CHATS.path)}>
+              <RxCross1 size={16} />
+            </FocusableSpan>
+          </span>
+        </Tooltip>
       </div>
     </div>
   );
