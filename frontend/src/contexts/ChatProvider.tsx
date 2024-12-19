@@ -1,18 +1,18 @@
-import { Chat } from "../types/Chat";
+import { Chat } from "@/types/Chat";
+import { Message } from "@/types/Message";
 import React, {
   createContext,
   PropsWithChildren,
   useContext,
   useEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 import { useQuery } from "react-query";
 import { useChatPageContext } from "./ChatPageProvider";
-import { Message } from "../types/Message";
-import { queryKeys } from "../lib/queryKeys";
-import { SocketAction, socketClient } from "../lib/socketClient";
-import { ChatService } from "../services/Chat.service";
+import { queryKeys } from "@/lib/queryKeys";
+import { ChatService } from "@/services/Chat.service";
+import { SocketAction, socketClient } from "@/lib/socketClient";
 
 type ChatContextProps = PropsWithChildren & {
   chatId: Chat["id"];
@@ -44,11 +44,11 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
   const {
     data: messages,
     isLoading,
-    error
+    error,
   } = useQuery({
     queryKey: queryKeys.messages(chatId),
     queryFn: () => ChatService.getMessages(chatId),
-    refetchOnMount: false
+    refetchOnMount: false,
   });
 
   const incomeMessage =
@@ -77,7 +77,7 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
         chatId,
         incomeMessage,
         messageRefs,
-        setIncomeMessageId
+        setIncomeMessageId,
       }}
     >
       {children}

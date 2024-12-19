@@ -1,10 +1,10 @@
-import React, { createContext, PropsWithChildren, useContext } from "react";
-import { User } from "../types/User";
+import { useRefreshToken } from "@/hooks/useRefreshToken";
+import { queryKeys } from "@/lib/queryKeys";
+import { AuthService } from "@/services/Auth.service";
+import { ChatService } from "@/services/Chat.service";
+import { User } from "@/types/User";
+import { createContext, PropsWithChildren, useContext } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { queryKeys } from "../lib/queryKeys";
-import { useRefreshToken } from "../hooks/useRefreshToken";
-import { AuthService } from "../services/Auth.service";
-import { ChatService } from "../services/Chat.service";
 
 type AppContextProps = PropsWithChildren;
 
@@ -22,12 +22,12 @@ export const AppProvider = ({ children }: AppContextProps) => {
   const queryClient = useQueryClient();
   const { isLoading } = useQuery({
     queryKey: queryKeys.me(),
-    queryFn: AuthService.me
+    queryFn: AuthService.me,
   });
 
   useQuery({
     queryKey: queryKeys.reactions(),
-    queryFn: ChatService.getReactions
+    queryFn: ChatService.getReactions,
   });
 
   const user = queryClient.getQueryData<User>(queryKeys.me());
@@ -42,7 +42,7 @@ export const AppProvider = ({ children }: AppContextProps) => {
       value={{
         user,
         setUser,
-        isLoading
+        isLoading,
       }}
     >
       {children}

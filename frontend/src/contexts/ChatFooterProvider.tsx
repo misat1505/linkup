@@ -1,6 +1,6 @@
-import React, { createContext, PropsWithChildren, useContext } from "react";
-import useChatForm, { useChatFormValue } from "../hooks/chats/useChatForm";
-import { Chat } from "../types/Chat";
+import useChatForm, { useChatFormValue } from "@/hooks/chats/useChatForm";
+import { Chat } from "@/types/Chat";
+import { createContext, PropsWithChildren, useContext } from "react";
 
 type ChatFooterContextProps = PropsWithChildren & {
   chatId: Chat["id"];
@@ -16,7 +16,7 @@ export const useChatFooterContext = () => useContext(ChatFooterContext);
 
 export const ChatFooterProvider = ({
   children,
-  chatId
+  chatId,
 }: ChatFooterContextProps) => {
   return (
     <ChatFooterContext.Provider value={useChatForm(chatId)}>

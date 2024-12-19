@@ -1,12 +1,12 @@
-import { Post } from "../types/Post";
+import { queryKeys } from "@/lib/queryKeys";
+import { PostService } from "@/services/Post.service";
+import { Post } from "@/types/Post";
 import {
   decodeHTMLEntities,
-  sanitizeMarkdownWithCodeBlocks
-} from "../utils/editorUtils";
+  sanitizeMarkdownWithCodeBlocks,
+} from "@/utils/editorUtils";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
-import { PostService } from "../services/Post.service";
 import { useQueryClient } from "react-query";
-import { queryKeys } from "../lib/queryKeys";
 
 type EditorContextConfig =
   | {
@@ -57,7 +57,7 @@ const EditorProvider = ({ children, ...props }: EditorContextProps) => {
 
     const post = await PostService.updatePost({
       id: props.post.id,
-      content: markdown
+      content: markdown,
     });
     queryClient.invalidateQueries(queryKeys.posts());
     queryClient.invalidateQueries(queryKeys.myPosts());
@@ -70,7 +70,7 @@ const EditorProvider = ({ children, ...props }: EditorContextProps) => {
         markdown,
         handleSafeChange,
         variant: props.variant,
-        handleSave
+        handleSave,
       }}
     >
       {children}
