@@ -6,7 +6,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger
+  SheetTrigger,
 } from "../../ui/sheet";
 import NavbarAvatar from "./NavbarAvatar";
 import { cn } from "../../../lib/utils";
@@ -23,7 +23,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
+  AlertDialogTrigger,
 } from "../../ui/alert-dialog";
 import { useAppContext } from "../../../contexts/AppProvider";
 import { useNavigate } from "react-router-dom";
@@ -65,28 +65,28 @@ function LoggedInSheet() {
     {
       icon: <FaHome size={20} className="text-blue-500" />,
       text: "Home",
-      onClick: () => navigate(ROUTES.HOME.path)
+      onClick: () => navigate(ROUTES.HOME.$path()),
     },
     {
       icon: <PiChatsCircleFill size={20} className="text-blue-500" />,
       text: "Chats",
-      onClick: () => navigate(ROUTES.CHATS.path)
+      onClick: () => navigate(ROUTES.CHATS.$path()),
     },
     {
       icon: <IoIosSettings size={20} className="text-blue-500" />,
       text: "Settings",
-      onClick: () => navigate(ROUTES.SETTINGS.path)
+      onClick: () => navigate(ROUTES.SETTINGS.$path()),
     },
     {
       icon: <MdArticle size={20} className="text-blue-500" />,
       text: "Posts",
-      onClick: () => navigate(ROUTES.POSTS.path)
+      onClick: () => navigate(ROUTES.POSTS.$path()),
     },
     {
       icon: <FaUserFriends size={20} className="text-blue-500" />,
       text: "Friends",
-      onClick: () => navigate(ROUTES.FRIENDS.path)
-    }
+      onClick: () => navigate(ROUTES.FRIENDS.$path()),
+    },
   ];
 
   return (
@@ -120,13 +120,13 @@ function GuestSheet() {
     {
       icon: <CiLogin size={20} className="text-emerald-500" />,
       text: "Login",
-      onClick: () => navigate(ROUTES.LOGIN.path)
+      onClick: () => navigate(ROUTES.LOGIN.$path()),
     },
     {
       icon: <MdOutlineSupervisorAccount size={20} />,
       text: "Create new account",
-      onClick: () => navigate(ROUTES.SIGNUP.path)
-    }
+      onClick: () => navigate(ROUTES.SIGNUP.$path()),
+    },
   ];
 
   return (
@@ -184,13 +184,13 @@ function LogoutDialog() {
     await AuthService.logout();
     setUser(null);
     queryClient.clear();
-    navigate(ROUTES.LOGIN.path);
+    navigate(ROUTES.LOGIN.$path());
   };
 
   const button: ButtonsType = {
     text: "Logout",
     icon: <CiLogout size={20} className="text-red-500" />,
-    onClick: () => {}
+    onClick: () => {},
   };
 
   return (

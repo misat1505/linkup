@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ChatHeader from "./ChatHeader";
 import ChatContent from "./ChatContent";
@@ -64,7 +63,7 @@ function Chat() {
           <Button
             variant="blueish"
             className="mx-auto mt-4"
-            onClick={() => navigate(ROUTES.CHATS.path)}
+            onClick={() => navigate(ROUTES.CHATS.$path())}
           >
             Close
           </Button>

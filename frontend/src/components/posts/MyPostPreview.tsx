@@ -2,7 +2,7 @@ import { useThemeContext } from "../../contexts/ThemeProvider";
 import { cn } from "../../lib/utils";
 import { Post } from "../../types/Post";
 import MDEditor from "@uiw/react-md-editor";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import PostHeader from "./PostHeader";
 import { IoPencil } from "react-icons/io5";
@@ -20,7 +20,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
 } from "../ui/alert-dialog";
 import { PostService } from "../../services/Post.service";
 import { useQueryClient } from "react-query";
@@ -37,7 +36,7 @@ export default function MyPostPreview({ post }: { post: Post }) {
       className={cn(
         "relative m-auto my-4 w-[95%] overflow-hidden rounded-md p-4 lg:w-[60%]",
         {
-          "max-h-72": !isExpanded
+          "max-h-72": !isExpanded,
         }
       )}
       style={{ backgroundColor: theme === "light" ? "white" : "#0c1117" }}
@@ -62,7 +61,7 @@ function PostActions({ postId }: { postId: Post["id"] }) {
   return (
     <div className="absolute right-4 top-4 flex items-center gap-x-4">
       <Tooltip content="Edit">
-        <Link to={ROUTES.POST_EDITOR.buildPath({ postId })}>
+        <Link to={ROUTES.POST_EDITOR.$buildPath({ params: { postId } })}>
           <IoPencil className="text-black transition-all hover:scale-110 hover:cursor-pointer dark:text-white" />
         </Link>
       </Tooltip>

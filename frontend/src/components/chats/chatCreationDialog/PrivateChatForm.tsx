@@ -28,7 +28,7 @@ export default function PrivateChatForm() {
         if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
         return oldChats ? [...oldChats, chat] : [chat];
       });
-      navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
+      navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId: chat.id } }));
     };
 
   return (

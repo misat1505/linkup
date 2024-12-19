@@ -13,7 +13,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
 } from "../ui/alert-dialog";
 import Tooltip from "../common/Tooltip";
 import { TbLogout2 } from "react-icons/tb";
@@ -41,7 +40,7 @@ export default function ChatLeaveDialog() {
     });
 
     setIsOpen(false);
-    navigate(ROUTES.CHATS.path);
+    navigate(ROUTES.CHATS.$path());
   };
 
   return (

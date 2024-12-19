@@ -1,15 +1,14 @@
 import { useThemeContext } from "../../contexts/ThemeProvider";
 import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
-import React from "react";
 import { FaSave } from "react-icons/fa";
 import { useEditorContext } from "../../contexts/EditorProvider";
-import { useToast } from "../ui/use-toast";
 import { markdownPreviewOptions } from "../../utils/markdownPreviewOptions";
 import FileDialog from "./FileDialog";
 import { useQueryClient } from "react-query";
 import { Post } from "../../types/Post";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";
+import { useToast } from "../ui/use-toast";
 
 export default function Editor() {
   const { markdown, handleSafeChange, handleSave, variant } =
@@ -41,22 +40,24 @@ export default function Editor() {
           queryClient.setQueryData<Post>(
             ["posts", { postId: post.id }],
             () => ({
-              ...post
+              ...post,
             })
           );
           handleSafeChange(post.content);
-          navigate(ROUTES.POST_EDITOR.buildPath({ postId: post.id }));
+          navigate(
+            ROUTES.POST_EDITOR.$buildPath({ params: { postId: post.id } })
+          );
           toast({
-            title: successText
+            title: successText,
           });
         } catch (e) {
           toast({
             variant: "destructive",
-            title: failureText
+            title: failureText,
           });
         }
-      }
-    }
+      },
+    },
   ];
 
   const customCommands: ICommand[] = [
@@ -64,8 +65,8 @@ export default function Editor() {
       name: "files",
       keyCommand: "files",
       buttonProps: { "aria-label": buttonText, title: "show files" },
-      icon: <FileDialog content={markdown} />
-    }
+      icon: <FileDialog content={markdown} />,
+    },
   ];
 
   return (
@@ -79,7 +80,7 @@ export default function Editor() {
         className="!h-[calc(100vh-5rem)] flex-grow !overflow-auto"
         highlightEnable={true}
         previewOptions={{
-          components: markdownPreviewOptions
+          components: markdownPreviewOptions,
         }}
       />
     </div>

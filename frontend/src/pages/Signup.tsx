@@ -2,16 +2,15 @@ import SignupSlogan from "../components/signup/SignupSlogan";
 import AlreadyHaveAccount from "../components/signup/AlreadyHaveAccount";
 import SignupForm from "../components/signup/SignupForm";
 import SignupFormProvider from "../contexts/SignupFormProvider";
-import React from "react";
 import { SubmitHandler } from "react-hook-form";
 import { SignupFormType } from "../validators/auth.validators";
 import { SignupFormEntries } from "../hooks/signup/useSignupForm";
 import { AuthService } from "../services/Auth.service";
 import { AxiosError } from "axios";
-import { toast } from "../components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../contexts/AppProvider";
 import { ROUTES } from "../lib/routes";
+import { toast } from "@/components/ui/use-toast";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -22,13 +21,13 @@ export default function Signup() {
     try {
       const user = await AuthService.signup(data);
       setUser(user);
-      navigate(ROUTES.HOME.path);
+      navigate(ROUTES.HOME.$path());
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
           title: "Cannot create new account.",
           description: e.response?.data.message,
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }

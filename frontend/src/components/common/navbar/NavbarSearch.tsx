@@ -4,7 +4,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList
+  CommandList,
 } from "../../ui/command";
 import { useState, useRef } from "react";
 import { cn } from "../../../lib/utils";
@@ -29,9 +29,9 @@ import Tooltip from "../Tooltip";
 import { buildFileURL } from "../../../utils/buildFileURL";
 import { Friendship } from "../../../types/Friendship";
 import { FriendService } from "../../../services/Friend.service";
-import { useToast } from "../../ui/use-toast";
 import { Button } from "../../ui/button";
 import FocusableSpan from "../FocusableSpan";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -43,7 +43,7 @@ export default function NavbarSearch() {
   const { data: users = [], isFetching } = useQuery({
     queryKey: queryKeys.searchUsers(debouncedText),
     queryFn: () => UserService.search(debouncedText),
-    enabled: debouncedText.length > 0
+    enabled: debouncedText.length > 0,
   });
 
   return (
@@ -61,7 +61,7 @@ export default function NavbarSearch() {
         className={cn(
           "no-scrollbar absolute top-14 w-[238px] bg-white shadow-md",
           {
-            hidden: !isExpanded
+            hidden: !isExpanded,
           }
         )}
       >
@@ -71,7 +71,7 @@ export default function NavbarSearch() {
           <>
             <div
               className={cn({
-                hidden: users.length > 0 || debouncedText.length === 0
+                hidden: users.length > 0 || debouncedText.length === 0,
               })}
             >
               <CommandEmpty>
@@ -117,7 +117,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
       if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
       return oldChats ? [...oldChats, chat] : [chat];
     });
-    navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
+    navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId: chat.id } }));
   };
 
   const handleAddFriend = async (userId: User["id"]) => {
@@ -128,12 +128,14 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
       return toast({
         variant: "destructive",
         title: "Friend request already exists.",
-        description: `There is already a friendship between you and ${createFullName(user)}.`,
+        description: `There is already a friendship between you and ${createFullName(
+          user
+        )}.`,
         action: (
-          <Button onClick={() => navigate(ROUTES.FRIENDS.path)}>
+          <Button onClick={() => navigate(ROUTES.FRIENDS.$path())}>
             Show Friends
           </Button>
-        )
+        ),
       });
 
     queryClient.setQueryData<Friendship[]>(
@@ -155,10 +157,10 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
       title: "Friend request sent.",
       description: `Friend request was sent to ${createFullName(user)}`,
       action: (
-        <Button onClick={() => navigate(ROUTES.FRIENDS.path)}>
+        <Button onClick={() => navigate(ROUTES.FRIENDS.$path())}>
           Show Friends
         </Button>
-      )
+      ),
     });
   };
 

@@ -1,4 +1,3 @@
-import React from "react";
 import Avatar from "../common/Avatar";
 import { Chat } from "../../types/Chat";
 import { useAppContext } from "../../contexts/AppProvider";
@@ -66,7 +65,7 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
         <ChatSettingsDialog />
         <Tooltip content="Close chat">
           <span className="transition-all hover:scale-125">
-            <FocusableSpan fn={() => navigate(ROUTES.CHATS.path)}>
+            <FocusableSpan fn={() => navigate(ROUTES.CHATS.$path())}>
               <RxCross1 size={16} />
             </FocusableSpan>
           </span>

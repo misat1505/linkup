@@ -1,7 +1,6 @@
 import MyPostPreview from "../components/posts/MyPostPreview";
 import Loading from "../components/common/Loading";
 import { PostService } from "../services/Post.service";
-import React from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../lib/routes";
@@ -15,7 +14,7 @@ export default function Posts() {
 
   const { data: posts, isLoading } = useQuery({
     queryKey: queryKeys.myPosts(),
-    queryFn: PostService.getMyPosts
+    queryFn: PostService.getMyPosts,
   });
 
   if (isLoading)
@@ -39,7 +38,9 @@ export default function Posts() {
         className="my-4"
         data-testid="cy-redirect-to-create-post-btn"
         onClick={() =>
-          navigate(ROUTES.POST_EDITOR.buildPath({ postId: undefined }))
+          navigate(
+            ROUTES.POST_EDITOR.$buildPath({ params: { postId: undefined } })
+          )
         }
       >
         Create New Post

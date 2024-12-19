@@ -1,5 +1,4 @@
 import { Chat } from "../../types/Chat";
-import React from "react";
 import { useAppContext } from "../../contexts/AppProvider";
 import { useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "../../lib/routes";

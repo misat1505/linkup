@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "../Image";
 import { LOGO_PATH } from "../../../constants";
 import NavbarSearch from "./NavbarSearch";
@@ -22,7 +21,7 @@ export default function Navbar() {
           <div className="hidden sm:block">
             <Tooltip content="Home">
               <span>
-                <FocusableSpan fn={() => navigate(ROUTES.HOME.path)}>
+                <FocusableSpan fn={() => navigate(ROUTES.HOME.$path())}>
                   <Image
                     src={LOGO_PATH}
                     className={{ common: "h-10 w-10 rounded-full" }}
