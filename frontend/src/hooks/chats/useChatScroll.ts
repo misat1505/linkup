@@ -1,4 +1,4 @@
-import { useChatContext } from "../../contexts/ChatProvider";
+import { useChatContext } from "@/contexts/ChatProvider";
 import { useLayoutEffect, useRef } from "react";
 
 type useChatScrollValue = {
@@ -52,6 +52,6 @@ export default function useChatScroll(): useChatScrollValue {
     handleScroll,
     bottomRef,
     wasAtBottomRef,
-    scrollToBottom
+    scrollToBottom,
   };
 }

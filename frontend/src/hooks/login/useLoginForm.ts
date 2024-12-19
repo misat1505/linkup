@@ -1,8 +1,8 @@
-import { useAppContext } from "../../contexts/AppProvider";
-import {
-  LoginFormType,
-  loginFormSchema,
-} from "../../validators/auth.validators";
+import { useToast } from "@/components/ui/use-toast";
+import { useAppContext } from "@/contexts/AppProvider";
+import { ROUTES } from "@/lib/routes";
+import { AuthService } from "@/services/Auth.service";
+import { loginFormSchema, LoginFormType } from "@/validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import {
@@ -12,9 +12,6 @@ import {
   useForm,
 } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../lib/routes";
-import { AuthService } from "../../services/Auth.service";
-import { useToast } from "@/components/ui/use-toast";
 
 type LoginFormEntries = {
   login: string;
