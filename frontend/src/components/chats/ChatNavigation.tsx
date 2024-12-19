@@ -33,7 +33,9 @@ export default function ChatNavigation() {
         className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto"
         data-testid="cy-chat-nav"
       >
-        {chats?.map((chat) => <NavigationItem key={chat.id} chat={chat} />)}
+        {chats?.map((chat) => (
+          <NavigationItem key={chat.id} chat={chat} />
+        ))}
       </div>
     </div>
   );
@@ -57,7 +59,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
   const utils = new ChatUtils(chat, me);
 
   const handleOpenChat = (chatId: Chat["id"]) => {
-    navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId }));
+    navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId } }));
   };
 
   const src = utils.getImageURL()!;
@@ -107,7 +109,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
 
 function LastMessageDisplayer({
   lastMessage,
-  chat
+  chat,
 }: {
   lastMessage: Chat["lastMessage"];
   chat: Chat;
