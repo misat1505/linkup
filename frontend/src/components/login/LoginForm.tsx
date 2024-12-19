@@ -1,7 +1,6 @@
-import React from "react";
-import { useLoginFormContext } from "../../contexts/LoginFormProvider";
-import LoginFormSubmitButton from "./LoginFormSubmitButton";
+import { useLoginFormContext } from "@/contexts/LoginFormProvider";
 import LoginFormFields from "./LoginFormFields";
+import LoginFormSubmitButton from "./LoginFormSubmitButton";
 
 export default function LoginForm() {
   const { submitForm } = useLoginFormContext();

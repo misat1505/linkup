@@ -1,7 +1,7 @@
-import React, { MouseEvent, useMemo } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useSignupFormContext } from "@/contexts/SignupFormProvider";
+import { MouseEvent, useMemo } from "react";
 import { FaUser } from "react-icons/fa";
-import { useSignupFormContext } from "../../contexts/SignupFormProvider";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function SignupImageDisplay() {
   const { file: fileData, removeFile, data } = useSignupFormContext();

@@ -1,7 +1,6 @@
-import { useSignupFormContext } from "../../contexts/SignupFormProvider";
-import React from "react";
-import { Input } from "../ui/input";
+import { useSignupFormContext } from "@/contexts/SignupFormProvider";
 import SignupImageDisplay from "./SignupImageDisplay";
+import { Input } from "../ui/input";
 
 export default function SignupImageFormField() {
   const { errors, register } = useSignupFormContext();

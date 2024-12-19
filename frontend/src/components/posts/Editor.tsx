@@ -1,14 +1,14 @@
-import { useThemeContext } from "../../contexts/ThemeProvider";
+import { useEditorContext } from "@/contexts/EditorProvider";
 import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
 import { FaSave } from "react-icons/fa";
-import { useEditorContext } from "../../contexts/EditorProvider";
-import { markdownPreviewOptions } from "../../utils/markdownPreviewOptions";
-import FileDialog from "./FileDialog";
-import { useQueryClient } from "react-query";
-import { Post } from "../../types/Post";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../lib/routes";
 import { useToast } from "../ui/use-toast";
+import { useThemeContext } from "@/contexts/ThemeProvider";
+import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { Post } from "@/types/Post";
+import { ROUTES } from "@/lib/routes";
+import FileDialog from "./FileDialog";
+import { markdownPreviewOptions } from "@/utils/markdownPreviewOptions";
 
 export default function Editor() {
   const { markdown, handleSafeChange, handleSave, variant } =
@@ -34,7 +34,7 @@ export default function Editor() {
       keyCommand: buttonText,
       buttonProps: { "aria-label": buttonText, title: buttonText },
       icon: <FaSave />,
-      execute: async (state, api) => {
+      execute: async (_, __) => {
         try {
           const post = await handleSave();
           queryClient.setQueryData<Post>(

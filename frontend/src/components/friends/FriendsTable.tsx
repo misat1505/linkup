@@ -4,9 +4,9 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "../ui/table";
-import { Friendship } from "../../types/Friendship";
+import { Friendship } from "@/types/Friendship";
 import FocusableSpan from "../common/FocusableSpan";
 
 type FriendsTableProps = {

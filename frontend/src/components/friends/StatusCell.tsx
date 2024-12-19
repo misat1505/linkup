@@ -1,23 +1,23 @@
-import { Friendship } from "../../types/Friendship";
-import { createFullName } from "../../utils/createFullName";
 import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { Friendship } from "@/types/Friendship";
+import { useAppContext } from "@/contexts/AppProvider";
+import { useToast } from "../ui/use-toast";
+import { queryKeys } from "@/lib/queryKeys";
+import { FriendService } from "@/services/Friend.service";
+import { useQueryClient } from "react-query";
+import { createFullName } from "@/utils/createFullName";
+import { FaTrash } from "react-icons/fa";
+import Tooltip from "../common/Tooltip";
 import { Button } from "../ui/button";
 import { MoreVertical } from "lucide-react";
-import { FaTrash } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
-import Tooltip from "../common/Tooltip";
-import { useAppContext } from "../../contexts/AppProvider";
-import { FriendService } from "../../services/Friend.service";
-import { useQueryClient } from "react-query";
-import { queryKeys } from "../../lib/queryKeys";
-import { useToast } from "../ui/use-toast";
 
 type StatusCellProps = { friendship: Friendship };
 
@@ -80,7 +80,7 @@ function StatusDropdown({ friendship }: StatusCellProps) {
 
     toast({
       title: "Friendship accepted.",
-      description
+      description,
     });
   };
 
@@ -117,7 +117,7 @@ function StatusDropdown({ friendship }: StatusCellProps) {
 
     toast({
       title: "Friendship deleted.",
-      description: getDescription()
+      description: getDescription(),
     });
   };
 

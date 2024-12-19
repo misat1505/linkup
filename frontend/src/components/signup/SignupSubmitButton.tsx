@@ -1,7 +1,6 @@
-import React from "react";
-import { useSignupFormContext } from "../../contexts/SignupFormProvider";
-import { ClipLoader } from "react-spinners";
+import { useSignupFormContext } from "@/contexts/SignupFormProvider";
 import { Button } from "../ui/button";
+import { ClipLoader } from "react-spinners";
 
 export default function SignupSubmitButton() {
   const { isSubmitting, type } = useSignupFormContext();

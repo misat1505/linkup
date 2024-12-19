@@ -1,15 +1,15 @@
-import { Message } from "../../types/Message";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { getInitials } from "@/utils/getInitials";
+import { Message } from "@/types/Message";
 import Avatar from "../common/Avatar";
-import { buildFileURL } from "../../utils/buildFileURL";
-import { getInitials } from "../../utils/getInitials";
-import { getFileType } from "../../utils/getFileType";
-import { File } from "../../types/File";
-import { usePostCommentsSectionContext } from "../../contexts/PostCommentSectionProvider";
-import Image from "../common/Image";
 import {
   getReadableCommentUploadDate,
-  timeDifference
-} from "../../utils/timeDifference";
+  timeDifference,
+} from "@/utils/timeDifference";
+import { getFileType } from "@/utils/getFileType";
+import { usePostCommentsSectionContext } from "@/contexts/PostCommentSectionProvider";
+import { File } from "@/types/File";
+import Image from "../common/Image";
 import ProtectedVideo from "../common/ProtectedVideo";
 import ProtectedFile from "../common/ProtectedFile";
 
@@ -61,7 +61,7 @@ function MultimediaDisplayItem({ file }: { file: File }) {
         src={buildFileURL(file.url, { type: "chat-message", id: chat.id })}
         className={{
           common: "h-40 w-40 object-cover",
-          error: "bg-slate-200 font-semibold"
+          error: "bg-slate-200 font-semibold",
         }}
         errorContent="Error loading image."
       />

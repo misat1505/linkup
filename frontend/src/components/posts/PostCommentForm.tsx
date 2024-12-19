@@ -1,13 +1,13 @@
 import React, { useRef } from "react";
-import { Input } from "../ui/input";
-import { usePostCommentsSectionContext } from "../../contexts/PostCommentSectionProvider";
-import { ClipLoader } from "react-spinners";
-import Tooltip from "../common/Tooltip";
 import { IoSend } from "react-icons/io5";
-import { cn } from "../../lib/utils";
-import { useAppContext } from "../../contexts/AppProvider";
 import { MdCancel } from "react-icons/md";
 import { FaFileAlt } from "react-icons/fa";
+import { usePostCommentsSectionContext } from "@/contexts/PostCommentSectionProvider";
+import { Input } from "../ui/input";
+import { ClipLoader } from "react-spinners";
+import Tooltip from "../common/Tooltip";
+import { useAppContext } from "@/contexts/AppProvider";
+import { cn } from "@/lib/utils";
 
 export default function PostCommentForm() {
   const { register, submitForm, response } = usePostCommentsSectionContext();
@@ -50,7 +50,7 @@ function SubmitFormButton() {
             <IoSend
               className={cn("text-blue-500 transition-all", {
                 "opacity-40": isSubmitting,
-                "hover:scale-110": !isSubmitting
+                "hover:scale-110": !isSubmitting,
               })}
             />
           </span>

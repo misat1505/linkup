@@ -2,19 +2,12 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "../ui/dialog";
 import { PiFilesFill } from "react-icons/pi";
 import { useQuery, useQueryClient } from "react-query";
-import { queryKeys } from "../../lib/queryKeys";
-import { FileService } from "../../services/File.service";
-import Loading from "../common/Loading";
-import Image from "../common/Image";
-import Tooltip from "../common/Tooltip";
-import { MdDelete, MdOutlineDelete } from "react-icons/md";
 import { AiFillDelete } from "react-icons/ai";
 import {
   AlertDialog,
@@ -25,14 +18,19 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
+  AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { IoMdAdd } from "react-icons/io";
 import { FaCopy } from "react-icons/fa";
 import { useRef } from "react";
-import { useToast } from "../ui/use-toast";
-import { Post } from "../../types/Post";
+import { Post } from "@/types/Post";
+import { queryKeys } from "@/lib/queryKeys";
+import { FileService } from "@/services/File.service";
+import Loading from "../common/Loading";
+import Image from "../common/Image";
 import ProtectedVideo from "../common/ProtectedVideo";
+import Tooltip from "../common/Tooltip";
+import { useToast } from "../ui/use-toast";
 
 export default function FileDialog({ content }: { content?: Post["content"] }) {
   function extractUrlsFromMarkdown(content: Post["content"]): string[] {
@@ -72,7 +70,7 @@ export default function FileDialog({ content }: { content?: Post["content"] }) {
 }
 
 function FileDialogContent({
-  previousURLs
+  previousURLs,
 }: {
   previousURLs: string[] | null;
 }) {
@@ -93,7 +91,7 @@ function FileDialogContent({
 
   const { isLoading, data: files } = useQuery({
     queryKey: queryKeys.cache(),
-    queryFn: FileService.getCache
+    queryFn: FileService.getCache,
   });
 
   if (isLoading) return <Loading />;
@@ -197,7 +195,7 @@ function FileDialogImageButtons({ file }: { file: string }) {
                 <AiFillDelete
                   className="stroke-black text-white transition-all hover:scale-110 hover:cursor-pointer"
                   style={{
-                    strokeWidth: "32"
+                    strokeWidth: "32",
                   }}
                 />
               </span>
@@ -240,7 +238,7 @@ function CopyElementToClipboardButton({ file }: { file: string }) {
       );
 
     toast({
-      title: "Element copied to clipboard."
+      title: "Element copied to clipboard.",
     });
   };
 
@@ -294,10 +292,3 @@ function CacheFileUploader() {
     </>
   );
 }
-<video>
-  <source src="https://localhost:5500/files/93a8c573-fb6a-48b7-b2c4-5fa0c1418f22.mp4?filter=cache" />
-</video>;
-
-<video>
-  <source src="https://localhost:5500/files/93a8c573-fb6a-48b7-b2c4-5fa0c1418f22.mp4?filter=cache" />
-</video>;

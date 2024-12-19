@@ -1,13 +1,13 @@
+import { useThemeContext } from "@/contexts/ThemeProvider";
+import { cn } from "@/lib/utils";
+import { Post } from "@/types/Post";
 import MDEditor from "@uiw/react-md-editor";
-import { useThemeContext } from "../../contexts/ThemeProvider";
-import { Post } from "../../types/Post";
-import React, { useRef, useState } from "react";
-import { cn } from "../../lib/utils";
-import { Button } from "../ui/button";
+import { useRef, useState } from "react";
 import PostHeader from "./PostHeader";
-import { markdownPreviewOptions } from "../../utils/markdownPreviewOptions";
+import { markdownPreviewOptions } from "@/utils/markdownPreviewOptions";
+import { Button } from "../ui/button";
+import PostCommentsSectionProvider from "@/contexts/PostCommentSectionProvider";
 import PostCommentSection from "./PostCommentSection";
-import PostCommentsSectionProvider from "../../contexts/PostCommentSectionProvider";
 
 export default function PostPreview({ post }: { post: Post }) {
   const { theme } = useThemeContext();
@@ -33,14 +33,14 @@ export default function PostPreview({ post }: { post: Post }) {
       <div className="relative" data-color-mode={theme}>
         <div
           className={cn({
-            "sticky top-20 z-30 bg-post-light dark:bg-post-dark": isExpanded
+            "sticky top-20 z-30 bg-post-light dark:bg-post-dark": isExpanded,
           })}
         >
           <PostHeader post={post} />
         </div>
         <MDEditor.Markdown
           className={cn("overflow-x-auto overflow-y-hidden", {
-            "max-h-72": !isExpanded
+            "max-h-72": !isExpanded,
           })}
           source={post.content}
           components={markdownPreviewOptions}
@@ -48,7 +48,7 @@ export default function PostPreview({ post }: { post: Post }) {
         <Button
           className={cn({
             "absolute bottom-4 left-1/2 -translate-x-1/2": !isExpanded,
-            "sticky bottom-2 left-1/2 mt-4 -translate-x-1/2": isExpanded
+            "sticky bottom-2 left-1/2 mt-4 -translate-x-1/2": isExpanded,
           })}
           onClick={handleToggleExpand}
         >

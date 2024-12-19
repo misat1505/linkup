@@ -1,23 +1,22 @@
-import { Friendship } from "../../types/Friendship";
 import { Table } from "@tanstack/react-table";
-import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import Tooltip from "../common/Tooltip";
-import useCountStatusCategories from "../../hooks/friends/useCountStatusCategories";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { Friendship } from "@/types/Friendship";
+import useCountStatusCategories from "@/hooks/friends/useCountStatusCategories";
+import Tooltip from "../common/Tooltip";
 
 type StatusFilterDropdownProps = {
   table: Table<Friendship>;
 };
 
 export default function StatusFilterDropdown({
-  table
+  table,
 }: StatusFilterDropdownProps) {
   const counts = useCountStatusCategories();
 
