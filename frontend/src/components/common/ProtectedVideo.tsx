@@ -1,6 +1,5 @@
-import { queryKeys } from "../../lib/queryKeys";
-import { getAccessToken } from "../../lib/token";
-import React from "react";
+import { queryKeys } from "@/lib/queryKeys";
+import { getAccessToken } from "@/lib/token";
 import { useQuery } from "react-query";
 
 export default function ProtectedVideo({ src }: { src: string }) {
@@ -10,13 +9,13 @@ export default function ProtectedVideo({ src }: { src: string }) {
       const result = await fetch(src, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${getAccessToken()}`
-        }
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
       });
       if (!result.ok) throw new Error();
       const blob = await result.blob();
       return URL.createObjectURL(blob);
-    }
+    },
   });
 
   return (

@@ -1,4 +1,11 @@
 import React, { HTMLAttributes, ReactNode } from "react";
+import NavbarAvatar from "./NavbarAvatar";
+import { CiLogin, CiLogout } from "react-icons/ci";
+import { MdOutlineSupervisorAccount, MdArticle } from "react-icons/md";
+import { FaHome, FaUserFriends } from "react-icons/fa";
+import { PiChatsCircleFill } from "react-icons/pi";
+import { IoIosSettings } from "react-icons/io";
+import { useAppContext } from "@/contexts/AppProvider";
 import {
   Sheet,
   SheetClose,
@@ -7,13 +14,13 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "../../ui/sheet";
-import NavbarAvatar from "./NavbarAvatar";
-import { cn } from "../../../lib/utils";
-import { CiLogin, CiLogout } from "react-icons/ci";
-import { MdOutlineSupervisorAccount, MdArticle } from "react-icons/md";
-import { FaHome, FaUserFriends } from "react-icons/fa";
-import { PiChatsCircleFill } from "react-icons/pi";
+} from "@/components/ui/sheet";
+import Tooltip from "../Tooltip";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/lib/routes";
+import { cn } from "@/lib/utils";
+import { useQueryClient } from "react-query";
+import { AuthService } from "@/services/Auth.service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,14 +31,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../../ui/alert-dialog";
-import { useAppContext } from "../../../contexts/AppProvider";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../../lib/routes";
-import { useQueryClient } from "react-query";
-import { AuthService } from "../../../services/Auth.service";
-import Tooltip from "../../common/Tooltip";
-import { IoIosSettings } from "react-icons/io";
+} from "@/components/ui/alert-dialog";
 
 export default function NavbarSheet() {
   const { user } = useAppContext();

@@ -1,6 +1,5 @@
-import React from "react";
 import { FaFileAlt } from "react-icons/fa";
-import { getAccessToken } from "../../lib/token";
+import { getAccessToken } from "@/lib/token";
 
 export default function ProtectedFile({ src }: { src: string }) {
   const handleClick = async () => {
@@ -8,8 +7,8 @@ export default function ProtectedFile({ src }: { src: string }) {
       const response = await fetch(src, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${getAccessToken()}`
-        }
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
       });
 
       if (!response.ok) {

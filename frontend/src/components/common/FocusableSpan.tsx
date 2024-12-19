@@ -1,5 +1,5 @@
+import { cn } from "@/lib/utils";
 import React, { PropsWithChildren, forwardRef } from "react";
-import { cn } from "../../lib/utils";
 
 type FocusableSpanProps = PropsWithChildren<
   React.HTMLAttributes<HTMLSpanElement>

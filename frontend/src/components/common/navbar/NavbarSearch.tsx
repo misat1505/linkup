@@ -5,33 +5,33 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "../../ui/command";
-import { useState, useRef } from "react";
-import { cn } from "../../../lib/utils";
-import { User } from "../../../types/User";
+} from "@/components/ui/command";
+import useClickOutside from "@/hooks/useClickOutside";
+import { queryKeys } from "@/lib/queryKeys";
+import { UserService } from "@/services/User.service";
+import { useRef, useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
+import { useDebounce } from "use-debounce";
+import Tooltip from "../Tooltip";
+import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { User } from "@/types/User";
+import { useAppContext } from "@/contexts/AppProvider";
+import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
+import { ChatService } from "@/services/Chat.service";
+import { Chat } from "@/types/Chat";
+import { ROUTES } from "@/lib/routes";
+import { FriendService } from "@/services/Friend.service";
+import { createFullName } from "@/utils/createFullName";
+import { Button } from "@/components/ui/button";
+import { Friendship } from "@/types/Friendship";
+import Avatar from "../Avatar";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { getInitials } from "@/utils/getInitials";
 import { FaUserFriends } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
-import { useDebounce } from "use-debounce";
-import { Skeleton } from "../../ui/skeleton";
-import { useQuery, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../../lib/routes";
-import { useAppContext } from "../../../contexts/AppProvider";
-import useClickOutside from "../../../hooks/useClickOutside";
-import Avatar from "../Avatar";
-import { getInitials } from "../../../utils/getInitials";
-import { createFullName } from "../../../utils/createFullName";
-import { queryKeys } from "../../../lib/queryKeys";
-import { Chat } from "../../../types/Chat";
-import { UserService } from "../../../services/User.service";
-import { ChatService } from "../../../services/Chat.service";
-import Tooltip from "../Tooltip";
-import { buildFileURL } from "../../../utils/buildFileURL";
-import { Friendship } from "../../../types/Friendship";
-import { FriendService } from "../../../services/Friend.service";
-import { Button } from "../../ui/button";
 import FocusableSpan from "../FocusableSpan";
-import { useToast } from "@/components/ui/use-toast";
 
 export default function NavbarSearch() {
   const [isExpanded, setIsExpanded] = useState(false);

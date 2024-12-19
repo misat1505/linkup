@@ -1,8 +1,8 @@
-import { useAppContext } from "../../contexts/AppProvider";
-import { Navigate } from "react-router-dom";
+import { useAppContext } from "@/contexts/AppProvider";
 import Loading from "./Loading";
-import { ROUTES } from "../../lib/routes";
-import { getAccessToken } from "../../lib/token";
+import { getAccessToken } from "@/lib/token";
+import { ROUTES } from "@/lib/routes";
+import { Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({
   children,

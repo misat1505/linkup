@@ -1,13 +1,13 @@
-import Image from "../Image";
-import { LOGO_PATH } from "../../../constants";
-import NavbarSearch from "./NavbarSearch";
-import NavbarSheet from "./NavbarSheet";
-import { useAppContext } from "../../../contexts/AppProvider";
-import ThemeToggle from "./ThemeToggle";
-import Tooltip from "../Tooltip";
+import { useAppContext } from "@/contexts/AppProvider";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../../lib/routes";
+import Tooltip from "../Tooltip";
 import FocusableSpan from "../FocusableSpan";
+import { ROUTES } from "@/lib/routes";
+import Image from "../Image";
+import { LOGO_PATH } from "@/constants";
+import NavbarSearch from "./NavbarSearch";
+import ThemeToggle from "./ThemeToggle";
+import NavbarSheet from "./NavbarSheet";
 
 export default function Navbar() {
   const { user } = useAppContext();

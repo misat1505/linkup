@@ -1,9 +1,8 @@
-import { Switch } from "../../ui/theme-switch";
-import { useThemeContext } from "../../../contexts/ThemeProvider";
-import React from "react";
 import { MdSunny } from "react-icons/md";
 import { IoMoon } from "react-icons/io5";
 import Tooltip from "../Tooltip";
+import { useThemeContext } from "@/contexts/ThemeProvider";
+import { Switch } from "@/components/ui/theme-switch";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useThemeContext();
