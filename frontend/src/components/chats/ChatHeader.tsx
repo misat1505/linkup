@@ -1,18 +1,18 @@
-import Avatar from "../common/Avatar";
-import { Chat } from "../../types/Chat";
-import { useAppContext } from "../../contexts/AppProvider";
-import { ChatUtils } from "../../utils/chatUtils";
-import { RxCross1 } from "react-icons/rx";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../lib/routes";
-import { getStatus, Status, timeDifference } from "../../utils/timeDifference";
-import { useChatPageContext } from "../../contexts/ChatPageProvider";
+import { useAppContext } from "@/contexts/AppProvider";
+import { useChatPageContext } from "@/contexts/ChatPageProvider";
+import { Chat } from "@/types/Chat";
+import { buildFileURL, Filter } from "@/utils/buildFileURL";
+import { ChatUtils } from "@/utils/chatUtils";
+import { getStatus, Status, timeDifference } from "@/utils/timeDifference";
 import { FaUserGroup } from "react-icons/fa6";
-import Tooltip from "../common/Tooltip";
-import { buildFileURL, Filter } from "../../utils/buildFileURL";
-import ChatSettingsDialog from "./chatSettings/ChatSettingsDialog";
+import { useNavigate } from "react-router-dom";
+import Avatar from "../common/Avatar";
 import ChatLeaveDialog from "./ChatLeaveDialog";
+import ChatSettingsDialog from "./chatSettings/ChatSettingsDialog";
+import Tooltip from "../common/Tooltip";
 import FocusableSpan from "../common/FocusableSpan";
+import { RxCross1 } from "react-icons/rx";
+import { ROUTES } from "@/lib/routes";
 
 export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   const { chats } = useChatPageContext();

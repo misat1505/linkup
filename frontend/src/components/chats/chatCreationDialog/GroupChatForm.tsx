@@ -1,12 +1,12 @@
-import Image from "../../common/Image";
-import { Input } from "../../ui/input";
-import { useGroupChatFormContext } from "../../../contexts/GroupChatFormProvider";
-import useUserSearch from "../../../hooks/useUserSearch";
-import { User } from "../../../types/User";
+import Image from "@/components/common/Image";
+import { Input } from "@/components/ui/input";
+import { useGroupChatFormContext } from "@/contexts/GroupChatFormProvider";
+import useUserSearch from "@/hooks/useUserSearch";
+import { User } from "@/types/User";
 import { useMemo, useState } from "react";
 import { FaUserGroup } from "react-icons/fa6";
 import UserDisplay from "./UserDisplay";
-import { Button } from "../../ui/button";
+import { Button } from "@/components/ui/button";
 
 export default function GroupChatForm() {
   const { submitForm } = useGroupChatFormContext();
@@ -43,7 +43,7 @@ function ChatNameAndImage() {
           src={file!}
           className={{
             common:
-              "mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full object-cover"
+              "mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full object-cover",
           }}
           errorContent={<FaUserGroup className="h-full w-full pt-10" />}
         />

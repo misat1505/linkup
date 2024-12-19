@@ -1,19 +1,18 @@
-import React from "react";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import Tooltip from "@/components/common/Tooltip";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from "../../ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import GroupChatFormProvider from "../../../contexts/GroupChatFormProvider";
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useChatPageContext } from "@/contexts/ChatPageProvider";
+import { IoIosAddCircleOutline } from "react-icons/io";
 import PrivateChatForm from "./PrivateChatForm";
+import GroupChatFormProvider from "@/contexts/GroupChatFormProvider";
 import GroupChatForm from "./GroupChatForm";
-import Tooltip from "../../common/Tooltip";
-import { useChatPageContext } from "../../../contexts/ChatPageProvider";
 
 export default function ChatCreator() {
   const { createChatTriggerRef } = useChatPageContext();

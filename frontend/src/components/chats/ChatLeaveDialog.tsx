@@ -1,9 +1,12 @@
-import { useChatContext } from "../../contexts/ChatProvider";
-import { queryKeys } from "../../lib/queryKeys";
-import { ChatService } from "../../services/Chat.service";
-import { Chat } from "../../types/Chat";
 import React, { useState } from "react";
 import { useQueryClient } from "react-query";
+import { TbLogout2 } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { ChatService } from "@/services/Chat.service";
+import { Chat } from "@/types/Chat";
+import { queryKeys } from "@/lib/queryKeys";
+import { ROUTES } from "@/lib/routes";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,9 +18,6 @@ import {
   AlertDialogTitle,
 } from "../ui/alert-dialog";
 import Tooltip from "../common/Tooltip";
-import { TbLogout2 } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../lib/routes";
 import FocusableSpan from "../common/FocusableSpan";
 
 export default function ChatLeaveDialog() {

@@ -1,8 +1,7 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import React from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ChatInfoUpdater from "./ChatInfoUpdater";
 import ChatMembersDisplayer from "./ChatMembersDisplayer";
 import UserInvite from "./UserInvite";
-import ChatInfoUpdater from "./ChatInfoUpdater";
 
 export default function GroupChatContent() {
   return (

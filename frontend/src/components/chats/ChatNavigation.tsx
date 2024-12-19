@@ -1,16 +1,16 @@
-import { Chat } from "../../types/Chat";
-import { useAppContext } from "../../contexts/AppProvider";
-import { useNavigate, useParams } from "react-router-dom";
-import { ROUTES } from "../../lib/routes";
-import Avatar from "../common/Avatar";
-import { ChatUtils } from "../../utils/chatUtils";
-import { useChatPageContext } from "../../contexts/ChatPageProvider";
+import { useChatPageContext } from "@/contexts/ChatPageProvider";
+import { cn } from "@/lib/utils";
 import { FaUserGroup } from "react-icons/fa6";
-import ChatCreator from "./chatCreationDialog/ChatCreator";
-import { cn } from "../../lib/utils";
-import Tooltip from "../common/Tooltip";
-import { buildFileURL, Filter } from "../../utils/buildFileURL";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../common/Loading";
+import ChatCreator from "./chatCreationDialog/ChatCreator";
+import { Chat } from "@/types/Chat";
+import { useAppContext } from "@/contexts/AppProvider";
+import { ChatUtils } from "@/utils/chatUtils";
+import { ROUTES } from "@/lib/routes";
+import { buildFileURL, Filter } from "@/utils/buildFileURL";
+import Tooltip from "../common/Tooltip";
+import Avatar from "../common/Avatar";
 
 export default function ChatNavigation() {
   const { chatId } = useParams();

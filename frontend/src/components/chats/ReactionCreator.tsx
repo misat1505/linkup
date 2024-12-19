@@ -5,22 +5,22 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
+  DialogDescription,
 } from "../ui/dialog";
-import Tooltip from "../common/Tooltip";
-import { MdAddReaction } from "react-icons/md";
-import { Message } from "../../types/Message";
 import { IoMdHappy, IoMdHeart } from "react-icons/io";
 import { HiOutlineEmojiSad } from "react-icons/hi";
 import { TbMoodCry } from "react-icons/tb";
 import { FaSkull } from "react-icons/fa";
-import { cn } from "../../lib/utils";
-import { useAppContext } from "../../contexts/AppProvider";
+import { Message } from "@/types/Message";
+import Tooltip from "../common/Tooltip";
+import { MdAddReaction } from "react-icons/md";
+import { useAppContext } from "@/contexts/AppProvider";
 import { useQueryClient } from "react-query";
-import { queryKeys } from "../../lib/queryKeys";
-import { useChatContext } from "../../contexts/ChatProvider";
-import { ChatService } from "../../services/Chat.service";
-import { DialogDescription } from "@radix-ui/react-dialog";
+import { queryKeys } from "@/lib/queryKeys";
+import { cn } from "@/lib/utils";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { ChatService } from "@/services/Chat.service";
 
 export default function ReactionCreator({ message }: { message: Message }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +54,7 @@ type ReactionType = { id: string; name: string };
 
 function ReactionCreatorContent({
   message,
-  setIsOpen
+  setIsOpen,
 }: {
   message: Message;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -93,13 +93,13 @@ export const reactionsMap = {
   sad: <HiOutlineEmojiSad className={cn("text-yellow-500", commonClasses)} />,
   crying: <TbMoodCry className={cn("text-yellow-500", commonClasses)} />,
   heart: <IoMdHeart className={cn("text-red-500", commonClasses)} />,
-  skull: <FaSkull className={cn("text-black", commonClasses)} />
+  skull: <FaSkull className={cn("text-black", commonClasses)} />,
 };
 
 function ReactionCreatorContentItem({
   reaction,
   messageId,
-  setIsOpen
+  setIsOpen,
 }: {
   reaction: ReactionType;
   messageId: Message["id"];

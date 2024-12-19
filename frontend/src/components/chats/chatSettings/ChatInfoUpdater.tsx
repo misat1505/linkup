@@ -1,17 +1,17 @@
+import Image from "@/components/common/Image";
+import Loading from "@/components/common/Loading";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { queryKeys } from "@/lib/queryKeys";
+import { ChatService } from "@/services/Chat.service";
+import { FileService } from "@/services/File.service";
+import { Chat } from "@/types/Chat";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { sortChatsByActivity } from "@/utils/sortChatsByActivity";
 import React, { useMemo, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
-import { useChatContext } from "../../../contexts/ChatProvider";
-import { FileService } from "../../../services/File.service";
-import { buildFileURL } from "../../../utils/buildFileURL";
-import Image from "../../common/Image";
 import { FaUserGroup } from "react-icons/fa6";
-import { Input } from "../../ui/input";
-import { Button } from "../../ui/button";
-import { ChatService } from "../../../services/Chat.service";
-import Loading from "../../common/Loading";
-import { Chat } from "../../../types/Chat";
-import { queryKeys } from "../../../lib/queryKeys";
-import { sortChatsByActivity } from "../../../utils/sortChatsByActivity";
+import { useQuery, useQueryClient } from "react-query";
 
 export default function ChatInfoUpdater() {
   const { chat } = useChatContext();
@@ -21,7 +21,7 @@ export default function ChatInfoUpdater() {
       FileService.downloadFile(
         buildFileURL(chat!.photoURL, { type: "chat-photo", id: chat!.id }),
         chat!.photoURL
-      )
+      ),
   });
 
   if (isLoading)
@@ -91,7 +91,7 @@ function Updater({ file }: { file: File | null }) {
       <div className="group relative mt-8">
         <Image
           className={{
-            common: "h-32 w-32 overflow-hidden rounded-full object-cover"
+            common: "h-32 w-32 overflow-hidden rounded-full object-cover",
           }}
           src={source}
           errorContent={<FaUserGroup className="h-full w-full pt-8" />}

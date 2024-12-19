@@ -1,13 +1,8 @@
-import { Message } from "../../types/Message";
-import React from "react";
+import { useChatFooterContext } from "@/contexts/ChatFooterProvider";
+import { Message } from "@/types/Message";
+import { Tooltip, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { RiReplyFill } from "react-icons/ri";
-import { useChatFooterContext } from "../../contexts/ChatFooterProvider";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "../ui/tooltip";
+import { TooltipContent } from "@radix-ui/react-tooltip";
 import ReactionCreator from "./ReactionCreator";
 
 type MessageControlsProps = { message: Message };

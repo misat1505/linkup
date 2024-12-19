@@ -1,8 +1,7 @@
-import { createFullName } from "../../utils/createFullName";
-import { Message } from "../../types/Message";
-import React from "react";
-import { useAppContext } from "../../contexts/AppProvider";
-import { useChatContext } from "../../contexts/ChatProvider";
+import { useAppContext } from "@/contexts/AppProvider";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { Message } from "@/types/Message";
+import { createFullName } from "@/utils/createFullName";
 
 type ResponseProps = { message: Message["response"] };
 
@@ -17,7 +16,9 @@ export default function Response({ message }: ResponseProps) {
     if (me!.id === message.author.id)
       return `You sent ${message.files.length} file(s).`;
 
-    return `${createFullName(message.author)} sent ${message.files.length} file(s).`;
+    return `${createFullName(message.author)} sent ${
+      message.files.length
+    } file(s).`;
   };
 
   const onclick = () => {

@@ -1,9 +1,8 @@
-import React from "react";
-import Message from "./Message";
-import { useChatContext } from "../../contexts/ChatProvider";
+import { useChatContext } from "@/contexts/ChatProvider";
+import useChatScroll from "@/hooks/chats/useChatScroll";
 import Loading from "../common/Loading";
+import Message from "./Message";
 import IncomeMessage from "./IncomeMessage";
-import useChatScroll from "../../hooks/chats/useChatScroll";
 
 export default function ChatContent() {
   const { messages, isLoading, incomeMessage } = useChatContext();
@@ -12,7 +11,7 @@ export default function ChatContent() {
     containerRef,
     handleScroll,
     wasAtBottomRef,
-    scrollToBottom
+    scrollToBottom,
   } = useChatScroll();
 
   const styles =

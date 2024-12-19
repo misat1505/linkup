@@ -1,23 +1,21 @@
-import { useAppContext } from "../../contexts/AppProvider";
-import { Message as MessageType } from "../../types/Message";
-import React from "react";
-import { cn } from "../../lib/utils";
-import MultimediaDisplay from "./MultimediaDisplay";
-import Avatar from "../common/Avatar";
-import { useChatContext } from "../../contexts/ChatProvider";
-import { isShowingAvatar } from "../../utils/isShowingAvatar";
-import { getInitials } from "../../utils/getInitials";
-import Response from "./Response";
-import ResponseText from "./ResponseText";
+import { useAppContext } from "@/contexts/AppProvider";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { Message as MessageType } from "@/types/Message";
+import { timeDifference } from "@/utils/timeDifference";
+import moment from "moment";
 import MessageControls from "./MessageControls";
 import Tooltip from "../common/Tooltip";
-import { buildFileURL } from "../../utils/buildFileURL";
+import ResponseText from "./ResponseText";
+import Response from "./Response";
+import MultimediaDisplay from "./MultimediaDisplay";
+import { cn } from "@/lib/utils";
 import Reactions from "./Reactions";
-import { timeDifference } from "../../utils/timeDifference";
-import moment from "moment";
-import { ChatUtils } from "../../utils/chatUtils";
-import { createFullName } from "../../utils/createFullName";
-import { User } from "../../types/User";
+import { isShowingAvatar } from "@/utils/isShowingAvatar";
+import { ChatUtils } from "@/utils/chatUtils";
+import { createFullName } from "@/utils/createFullName";
+import Avatar from "../common/Avatar";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { getInitials } from "@/utils/getInitials";
 
 export default function Message({ message }: { message: MessageType }) {
   const { user: me } = useAppContext();
@@ -34,14 +32,14 @@ export default function Message({ message }: { message: MessageType }) {
     if (diffWithNow.days === 0)
       return message.createdAt.toLocaleTimeString("en-US", {
         hour: "2-digit",
-        minute: "2-digit"
+        minute: "2-digit",
       });
 
     if (diffWithNow.days < 7)
       return message.createdAt.toLocaleDateString("en-US", {
         weekday: "long",
         hour: "2-digit",
-        minute: "2-digit"
+        minute: "2-digit",
       });
 
     return message.createdAt.toLocaleDateString("en-US", tooltipDateFormat);
@@ -81,7 +79,7 @@ const tooltipDateFormat = {
   month: "long",
   day: "numeric",
   hour: "2-digit",
-  minute: "2-digit"
+  minute: "2-digit",
 } as const;
 
 function MyMessage({ message }: { message: MessageType }) {
@@ -115,7 +113,7 @@ function MyMessage({ message }: { message: MessageType }) {
                 "w-fit rounded-b-md bg-blue-500 px-2 py-1 text-white",
                 {
                   "rounded-md": message.files.length === 0,
-                  "mb-1": message.reactions.length === 0
+                  "mb-1": message.reactions.length === 0,
                 }
               )}
             >
@@ -150,7 +148,7 @@ function ForeignMessage({ message }: { message: MessageType }) {
   return (
     <div
       className={cn("group flex items-center justify-start gap-x-4", {
-        "mb-2": isDisplayingAvatar
+        "mb-2": isDisplayingAvatar,
       })}
     >
       <Tooltip content={tooltipText}>
@@ -169,7 +167,7 @@ function ForeignMessage({ message }: { message: MessageType }) {
               {isDisplayingAvatar && (
                 <Avatar
                   src={buildFileURL(message.author.photoURL, {
-                    type: "avatar"
+                    type: "avatar",
                   })}
                   alt={getInitials(message.author)}
                   className="h-8 w-8 object-cover text-xs"
@@ -186,7 +184,7 @@ function ForeignMessage({ message }: { message: MessageType }) {
                     "w-fit rounded-b-md bg-slate-200 px-2 py-1 dark:bg-slate-800",
                     {
                       "rounded-md": message.files.length === 0,
-                      "mb-1": message.reactions.length === 0
+                      "mb-1": message.reactions.length === 0,
                     }
                   )}
                 >
