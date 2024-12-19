@@ -1,12 +1,11 @@
 import { useParams } from "react-router-dom";
-import Editor from "../components/posts/Editor";
-import React from "react";
 import { useQuery } from "react-query";
-import Loading from "../components/common/Loading";
-import { PostService } from "../services/Post.service";
-import { useAppContext } from "../contexts/AppProvider";
-import EditorProvider from "../contexts/EditorProvider";
-import { queryKeys } from "../lib/queryKeys";
+import EditorProvider from "@/contexts/EditorProvider";
+import Editor from "@/components/posts/Editor";
+import { useAppContext } from "@/contexts/AppProvider";
+import { queryKeys } from "@/lib/queryKeys";
+import { PostService } from "@/services/Post.service";
+import Loading from "@/components/common/Loading";
 
 export default function PostEditor() {
   const { postId } = useParams();
@@ -26,7 +25,7 @@ function PostEditorExistent() {
   const { postId } = useParams();
   const { isLoading, data: post } = useQuery({
     queryKey: queryKeys.post(postId!),
-    queryFn: () => PostService.getPost(postId!)
+    queryFn: () => PostService.getPost(postId!),
   });
 
   if (isLoading) return <Loading />;

@@ -4,7 +4,7 @@ import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
-  useForm
+  useForm,
 } from "react-hook-form";
 import { useToast } from "../../components/ui/use-toast";
 import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
@@ -46,9 +46,9 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     formState: { errors, isSubmitting },
     getValues,
     watch,
-    setValue
+    setValue,
   } = useForm<ChatFormType>({
-    resolver: zodResolver(chatFormSchema)
+    resolver: zodResolver(chatFormSchema),
   });
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {
@@ -62,7 +62,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
         toast({
           title: "Cannot send a message.",
           description: e.response?.data.message,
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }
@@ -100,6 +100,6 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     responseId,
     appendFiles,
     removeFile,
-    setResponse
+    setResponse,
   };
 }

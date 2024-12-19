@@ -1,5 +1,5 @@
-import { Chat, UserInChat } from "../types/Chat";
-import { User } from "../types/User";
+import { Chat, UserInChat } from "@/types/Chat";
+import { User } from "@/types/User";
 import { createFullName } from "./createFullName";
 import { getInitials } from "./getInitials";
 

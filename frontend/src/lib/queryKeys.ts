@@ -1,6 +1,6 @@
-import { Post } from "../types/Post";
-import { Chat } from "../types/Chat";
-import { Message } from "../types/Message";
+import { Post } from "@/types/Post";
+import { Chat } from "@/types/Chat";
+import { Message } from "@/types/Message";
 
 export const queryKeys = {
   searchUsers: (text: string) => ["search-users", { text }] as const,
@@ -15,5 +15,5 @@ export const queryKeys = {
   post: (postId: Post["id"]) => ["posts", { postId }] as const,
   downloadFile: (url: string) => ["download-file", { url }] as const,
   file: (url: string) => ["file", { url }] as const,
-  friends: () => ["friends"] as const
+  friends: () => ["friends"] as const,
 };

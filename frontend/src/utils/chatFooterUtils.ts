@@ -1,6 +1,6 @@
-import { Chat } from "../types/Chat";
-import { Message } from "../types/Message";
-import { User } from "../types/User";
+import { Chat } from "@/types/Chat";
+import { Message } from "@/types/Message";
+import { User } from "@/types/User";
 import { ChatUtils } from "./chatUtils";
 import { createFullName } from "./createFullName";
 

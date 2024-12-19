@@ -1,31 +1,31 @@
-import { Friendship } from "../types/Friendship";
-import FriendsTable from "../components/friends/FriendsTable";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
-  useReactTable
+  useReactTable,
 } from "@tanstack/react-table";
-import { createFullName } from "../utils/createFullName";
-import { Input } from "../components/ui/input";
-import { Table } from "../components/ui/table";
-import StatusFilterDropdown from "../components/friends/StatusFilterDropdown";
-import Avatar from "../components/common/Avatar";
-import { buildFileURL } from "../utils/buildFileURL";
-import { getInitials } from "../utils/getInitials";
-import StatusCell from "../components/friends/StatusCell";
-import { useAppContext } from "../contexts/AppProvider";
 import { useQuery, useQueryClient } from "react-query";
-import { queryKeys } from "../lib/queryKeys";
-import { FriendService } from "../services/Friend.service";
-import Loading from "../components/common/Loading";
+import { queryKeys } from "@/lib/queryKeys";
+import { FriendService } from "@/services/Friend.service";
+import Loading from "@/components/common/Loading";
+import { useAppContext } from "@/contexts/AppProvider";
+import { Friendship } from "@/types/Friendship";
+import Avatar from "@/components/common/Avatar";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { getInitials } from "@/utils/getInitials";
+import { createFullName } from "@/utils/createFullName";
+import StatusCell from "@/components/friends/StatusCell";
+import { Input } from "@/components/ui/input";
+import StatusFilterDropdown from "@/components/friends/StatusFilterDropdown";
+import { Table } from "@/components/ui/table";
+import FriendsTable from "@/components/friends/FriendsTable";
 
 export default function Friends() {
   const { isLoading } = useQuery({
     queryKey: queryKeys.friends(),
-    queryFn: FriendService.getMyFriendships
+    queryFn: FriendService.getMyFriendships,
   });
 
   if (isLoading)
@@ -63,7 +63,7 @@ function FriendsPageInner() {
       },
       header: "User",
       accessorKey: "user",
-      filterFn: (row, columnId, filterValue) => {
+      filterFn: (row, _, filterValue) => {
         const friendship = row.original as Friendship;
 
         const otherUser =
@@ -73,7 +73,7 @@ function FriendsPageInner() {
 
         const fullName = `${otherUser.firstName} ${otherUser.lastName}`;
         return fullName.toLowerCase().includes(filterValue.toLowerCase());
-      }
+      },
     },
     {
       cell: ({ row }) => {
@@ -94,8 +94,8 @@ function FriendsPageInner() {
         if (filterValue === "Awaiting other")
           return status === "PENDING" && friendship.requester.id === me!.id;
         return true;
-      }
-    }
+      },
+    },
   ];
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const queryClient = useQueryClient();
@@ -106,8 +106,8 @@ function FriendsPageInner() {
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     state: {
-      columnFilters
-    }
+      columnFilters,
+    },
   });
 
   return (

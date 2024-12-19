@@ -1,8 +1,8 @@
+import Image from "@/components/common/Image";
+import { Button } from "@/components/ui/button";
+import { LOGO_PATH } from "@/constants";
+import { ROUTES } from "@/lib/routes";
 import { useNavigate } from "react-router-dom";
-import Image from "../components/common/Image";
-import { LOGO_PATH } from "../constants";
-import { Button } from "../components/ui/button";
-import { ROUTES } from "../lib/routes";
 
 export default function NotFound() {
   const navigate = useNavigate();

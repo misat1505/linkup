@@ -1,13 +1,13 @@
-import MyPostPreview from "../components/posts/MyPostPreview";
-import Loading from "../components/common/Loading";
-import { PostService } from "../services/Post.service";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../lib/routes";
-import { Button } from "../components/ui/button";
-import { queryKeys } from "../lib/queryKeys";
 import { orderBy } from "lodash";
-import { Post } from "../types/Post";
+import { queryKeys } from "@/lib/queryKeys";
+import { PostService } from "@/services/Post.service";
+import Loading from "@/components/common/Loading";
+import { Post } from "@/types/Post";
+import { Button } from "@/components/ui/button";
+import MyPostPreview from "@/components/posts/MyPostPreview";
+import { ROUTES } from "@/lib/routes";
 
 export default function Posts() {
   const navigate = useNavigate();

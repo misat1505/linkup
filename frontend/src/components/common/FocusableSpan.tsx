@@ -15,7 +15,6 @@ const FocusableSpan = forwardRef<HTMLSpanElement, FocusableSpanProps>(
         (e.type === "keydown" && (e as React.KeyboardEvent).key === "Enter")
       ) {
         e.preventDefault();
-        console.log(e.type);
         fn();
       }
     };

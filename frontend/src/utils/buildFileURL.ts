@@ -1,4 +1,4 @@
-import { Chat } from "../types/Chat";
+import { Chat } from "@/types/Chat";
 
 export type Filter =
   | { type: "avatar" }
