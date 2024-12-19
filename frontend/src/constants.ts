@@ -5,4 +5,4 @@ export const API_URL = import.meta.env.VITE_APP_API_URL!;
 export const SOCKET_URL = import.meta.env.VITE_APP_SOCKET_URL!;
 
 // path to app logo
-export const LOGO_PATH = "/assets/logo.webp";
+export const LOGO_PATH = "/logo.webp";
