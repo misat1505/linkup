@@ -21,11 +21,11 @@ install_dependencies() {
 case "$command" in
     prod)
         echo "Running application in production mode..."
-        docker compose -f docker-compose.yml up
+        docker compose -f ./docker/docker-compose.yml up
         ;;
     test)
         echo "Running application for backend testing..."
-        docker compose -f docker-compose.test.yml up -d
+        docker compose -f ./docker/docker-compose.test.yml up -d
         wait_for_service "Test database" 3307
         install_dependencies backend
         cd backend
@@ -33,7 +33,7 @@ case "$command" in
         ;;
     dev-backend)
         echo "Running application for backend development..."
-        docker-compose -f docker-compose.yml up -d database
+        docker-compose -f ./docker/docker-compose.yml up -d database
         wait_for_service "Database" 3307
         install_dependencies backend
         cd backend
@@ -41,7 +41,7 @@ case "$command" in
         ;;
     dev-frontend)
         echo "Running application for frontend development..."
-        docker-compose -f docker-compose.yml up -d database backend
+        docker-compose -f ./docker/docker-compose.yml up -d database backend
         wait_for_service "Backend" 5500
         install_dependencies frontend
         cd frontend
