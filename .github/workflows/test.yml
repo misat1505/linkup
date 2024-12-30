@@ -20,7 +20,9 @@ jobs:
           node-version: "21"
 
       - name: Make script executable
-        run: chmod +x ./docker-compose.sh
+        run: |
+          chmod +x ./scripts/docker-compose.sh
+          chmod +x ./scripts/wait-for-it.sh
 
       - name: Run Test Script
         run: ./docker-compose.sh test
