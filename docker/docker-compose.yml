@@ -4,7 +4,6 @@ name: link-up
 services:
   database:
     image: mysql:8.0
-    restart: always
     environment:
       MYSQL_DATABASE: inzynierka
       MYSQL_ROOT_PASSWORD: ""

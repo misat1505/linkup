@@ -77,15 +77,30 @@ To set up and run Link Up on your local machine, follow these steps:
      ./docker-compose.sh test
      ```
 
-   - **Run Backend Development Environment:**  
-     Starts the database service in docker and runs the backend locally in development mode:
+- **Run Load Tests for Backend:**  
+   Start the app:
 
-     ```bash
-     ./docker-compose.sh dev-backend
-     ```
+  ```bash
+  ./docker-compose.sh prod
+  ```
 
-   - **Run Frontend Development Environment:**  
-     Starts the database and backend services in docker, then runs the frontend locally in development mode:
-     ```bash
-     ./docker-compose.sh dev-frontend
-     ```
+  And execute following commands:
+
+  ```
+  cd backend
+  npm install
+  npm run test:load:report
+  ```
+
+- **Run Backend Development Environment:**  
+  Starts the database service in docker and runs the backend locally in development mode:
+
+  ```bash
+  ./docker-compose.sh dev-backend
+  ```
+
+- **Run Frontend Development Environment:**  
+  Starts the database and backend services in docker, then runs the frontend locally in development mode:
+  ```bash
+  ./docker-compose.sh dev-frontend
+  ```
