@@ -21,7 +21,7 @@ jobs:
 
       - name: Make script executable
         run: |
-          chmod +x ./scripts/docker-compose.sh
+          chmod +x ./docker-compose.sh
           chmod +x ./scripts/wait-for-it.sh
 
       - name: Run Test Script
