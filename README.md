@@ -42,11 +42,50 @@ Link Up employs responsive web design to ensure a seamless user experience acros
 - **Database:** **MySQL** is used for reliable data storage.
 - **ORM:** **Prisma** facilitates seamless interaction between Express and MySQL.
 
-## Getting started
+## Getting Started
 
-1. Ensure you have **Docker** installed on your system.
-2. Run the following command.
+To set up and run Link Up on your local machine, follow these steps:
 
-- ```
-  docker compose up
-  ```
+1. **Install Prerequisites**  
+   Ensure the following are installed on your system:
+
+   - [Docker](https://www.docker.com/) and Docker Compose
+   - [Node.js](https://nodejs.org/) (if running locally without Docker)
+
+2. **Clone the Repository**  
+   Clone the project repository to your local machine:
+
+   ```bash
+   git clone https://github.com/misat1505/linkup.git
+   cd linkup
+   ```
+
+3. **Run with Docker**  
+   Use the provided `docker-compose.sh` script to manage and run the application. This script supports various modes: production, testing, backend development, and frontend development.
+
+   - **Run Production Environment:**  
+     Starts the application with all services required for production:
+
+     ```bash
+     ./docker-compose.sh prod
+     ```
+
+   - **Run Tests:**  
+     Initializes the test database in docker, then locally installs dependencies, and runs backend tests:
+
+     ```bash
+     ./docker-compose.sh test
+     ```
+
+   - **Run Backend Development Environment:**  
+     Starts the database service in docker and runs the backend locally in development mode:
+
+     ```bash
+     ./docker-compose.sh dev-backend
+     ```
+
+   - **Run Frontend Development Environment:**  
+     Starts the database and backend services in docker, then runs the frontend locally in development mode:
+     ```bash
+     ./docker-compose.sh dev-frontend
+     ```
