@@ -23,6 +23,10 @@ case "$command" in
         echo "Running application in production mode..."
         docker compose -f ./docker/docker-compose.yml up
         ;;
+    e2e)
+        echo "Running application for e2e testing..."
+        docker compose -f ./docker/docker-compose.e2e.yml up
+        ;;
     test)
         echo "Running application for backend testing..."
         docker compose -f ./docker/docker-compose.test.yml up -d
@@ -48,7 +52,7 @@ case "$command" in
         npm run dev
         ;;
     *)
-        echo "Invalid command. Use 'prod', 'test', 'dev-backend', 'dev-frontend'."
+        echo "Invalid command. Use 'prod', 'e2e', 'test', 'dev-backend', 'dev-frontend'."
         exit 1
         ;;
 esac
