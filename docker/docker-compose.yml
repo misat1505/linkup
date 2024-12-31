@@ -5,7 +5,7 @@ services:
   database:
     image: mysql:8.0
     environment:
-      MYSQL_DATABASE: inzynierka
+      MYSQL_DATABASE: linkup
       MYSQL_ROOT_PASSWORD: ""
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
