@@ -2,8 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { TokenProcessor } from "../lib/TokenProcessor";
 import { env } from "../config/env";
 import { refreshTokenCookieName } from "../config/jwt-cookie";
+import { UserService } from "../services/UserService";
 
-export const authorize = (req: Request, res: Response, next: NextFunction) => {
+export const authorize = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * Middleware to authorize and verify JWT token from Authorization header.
    *
@@ -29,6 +34,14 @@ export const authorize = (req: Request, res: Response, next: NextFunction) => {
   const tokenPayload = TokenProcessor.decode(token, env.ACCESS_TOKEN_SECRET);
   if (!tokenPayload) {
     return res.status(401).json({ message: "Invalid token" });
+  }
+
+  const user = await UserService.getUser(tokenPayload.userId);
+
+  if (!user) {
+    return res
+      .status(404)
+      .json({ message: "Invalid request - user not found." });
   }
 
   req.body.token = tokenPayload;
