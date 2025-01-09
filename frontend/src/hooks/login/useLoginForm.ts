@@ -1,20 +1,17 @@
-import { useAppContext } from "../../contexts/AppProvider";
-import {
-  LoginFormType,
-  loginFormSchema
-} from "../../validators/auth.validators";
+import { useToast } from "@/components/ui/use-toast";
+import { useAppContext } from "@/contexts/AppProvider";
+import { ROUTES } from "@/lib/routes";
+import { AuthService } from "@/services/Auth.service";
+import { loginFormSchema, LoginFormType } from "@/validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
-  useForm
+  useForm,
 } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../components/ui/use-toast";
-import { ROUTES } from "../../lib/routes";
-import { AuthService } from "../../services/Auth.service";
 
 type LoginFormEntries = {
   login: string;
@@ -37,22 +34,22 @@ export default function useLoginForm(): useLoginFormValue {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = useForm<LoginFormType>({
-    resolver: zodResolver(loginFormSchema)
+    resolver: zodResolver(loginFormSchema),
   });
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     try {
       const user = await AuthService.login(data);
       setUser(user);
-      navigate(ROUTES.HOME.path);
+      navigate(ROUTES.HOME.$path());
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
           title: "Cannot login.",
           description: e.response?.data.message,
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }
@@ -64,6 +61,6 @@ export default function useLoginForm(): useLoginFormValue {
     register,
     errors,
     isSubmitting,
-    submitForm
+    submitForm,
   };
 }

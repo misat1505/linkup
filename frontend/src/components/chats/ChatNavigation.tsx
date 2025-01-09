@@ -1,17 +1,16 @@
-import { Chat } from "../../types/Chat";
-import React from "react";
-import { useAppContext } from "../../contexts/AppProvider";
-import { useNavigate, useParams } from "react-router-dom";
-import { ROUTES } from "../../lib/routes";
-import Avatar from "../common/Avatar";
-import { ChatUtils } from "../../utils/chatUtils";
-import { useChatPageContext } from "../../contexts/ChatPageProvider";
+import { useChatPageContext } from "@/contexts/ChatPageProvider";
+import { cn } from "@/lib/utils";
 import { FaUserGroup } from "react-icons/fa6";
-import ChatCreator from "./chatCreationDialog/ChatCreator";
-import { cn } from "../../lib/utils";
-import Tooltip from "../common/Tooltip";
-import { buildFileURL, Filter } from "../../utils/buildFileURL";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../common/Loading";
+import ChatCreator from "./chatCreationDialog/ChatCreator";
+import { Chat } from "@/types/Chat";
+import { useAppContext } from "@/contexts/AppProvider";
+import { ChatUtils } from "@/utils/chatUtils";
+import { ROUTES } from "@/lib/routes";
+import { buildFileURL, Filter } from "@/utils/buildFileURL";
+import Tooltip from "../common/Tooltip";
+import Avatar from "../common/Avatar";
 
 export default function ChatNavigation() {
   const { chatId } = useParams();
@@ -33,7 +32,9 @@ export default function ChatNavigation() {
         className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto"
         data-testid="cy-chat-nav"
       >
-        {chats?.map((chat) => <NavigationItem key={chat.id} chat={chat} />)}
+        {chats?.map((chat) => (
+          <NavigationItem key={chat.id} chat={chat} />
+        ))}
       </div>
     </div>
   );
@@ -57,7 +58,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
   const utils = new ChatUtils(chat, me);
 
   const handleOpenChat = (chatId: Chat["id"]) => {
-    navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId }));
+    navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId } }));
   };
 
   const src = utils.getImageURL()!;
@@ -107,7 +108,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
 
 function LastMessageDisplayer({
   lastMessage,
-  chat
+  chat,
 }: {
   lastMessage: Chat["lastMessage"];
   chat: Chat;

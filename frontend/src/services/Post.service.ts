@@ -8,7 +8,7 @@ export class PostService {
 
   static async updatePost({
     id,
-    content
+    content,
   }: {
     id: Post["id"];
     content: Post["content"];

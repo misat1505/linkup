@@ -1,19 +1,19 @@
+import { useToast } from "@/components/ui/use-toast";
+import { useChatPageContext } from "@/contexts/ChatPageProvider";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { socketClient } from "@/lib/socketClient";
+import { ChatService } from "@/services/Chat.service";
+import { Chat } from "@/types/Chat";
+import { Message } from "@/types/Message";
+import { chatFormSchema, ChatFormType } from "@/validators/chat.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
-  useForm
+  useForm,
 } from "react-hook-form";
-import { useToast } from "../../components/ui/use-toast";
-import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
-import { Chat } from "../../types/Chat";
-import { useChatPageContext } from "../../contexts/ChatPageProvider";
-import { socketClient } from "../../lib/socketClient";
-import { Message } from "../../types/Message";
-import { ChatService } from "../../services/Chat.service";
-import { useChatContext } from "../../contexts/ChatProvider";
 
 export type ChatFormEntries = {
   content: string;
@@ -46,9 +46,9 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     formState: { errors, isSubmitting },
     getValues,
     watch,
-    setValue
+    setValue,
   } = useForm<ChatFormType>({
-    resolver: zodResolver(chatFormSchema)
+    resolver: zodResolver(chatFormSchema),
   });
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {
@@ -62,7 +62,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
         toast({
           title: "Cannot send a message.",
           description: e.response?.data.message,
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }
@@ -100,6 +100,6 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     responseId,
     appendFiles,
     removeFile,
-    setResponse
+    setResponse,
   };
 }

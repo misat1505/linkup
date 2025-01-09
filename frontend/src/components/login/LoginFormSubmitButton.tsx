@@ -1,7 +1,6 @@
-import React from "react";
-import { ClipLoader } from "react-spinners";
-import { useLoginFormContext } from "../../contexts/LoginFormProvider";
+import { useLoginFormContext } from "@/contexts/LoginFormProvider";
 import { Button } from "../ui/button";
+import { ClipLoader } from "react-spinners";
 
 export default function LoginFormSubmitButton() {
   const { isSubmitting } = useLoginFormContext();

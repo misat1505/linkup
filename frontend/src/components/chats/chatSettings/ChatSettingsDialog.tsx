@@ -1,22 +1,18 @@
-import { CiSettings } from "react-icons/ci";
-import Tooltip from "../../common/Tooltip";
+import Tooltip from "@/components/common/Tooltip";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from "../../ui/dialog";
-import React, { useState } from "react";
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { CiSettings } from "react-icons/ci";
 import ChatMembersDisplayer from "./ChatMembersDisplayer";
-import { useChatContext } from "../../../contexts/ChatProvider";
 import GroupChatContent from "./GroupChatContent";
-import FocusableSpan from "../../common/FocusableSpan";
 
 export default function ChatSettingsDialog() {
-  const [isOpen, setIsOpen] = useState(false);
   const { chat } = useChatContext();
 
   const privateDescription =

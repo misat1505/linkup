@@ -1,7 +1,6 @@
-import React from "react";
+import { useLoginFormContext } from "@/contexts/LoginFormProvider";
+import { LoginFormType } from "@/validators/auth.validators";
 import FormField from "../common/forms/FormField";
-import { LoginFormType } from "../../validators/auth.validators";
-import { useLoginFormContext } from "../../contexts/LoginFormProvider";
 
 export default function LoginFormFields() {
   const { register, errors } = useLoginFormContext();

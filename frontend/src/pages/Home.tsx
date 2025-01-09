@@ -1,25 +1,24 @@
-import React from "react";
-import Loading from "../components/common/Loading";
 import { useQuery } from "react-query";
-import { PostService } from "../services/Post.service";
-import PostPreview from "../components/posts/PostPreview";
-import { queryKeys } from "../lib/queryKeys";
-import { FriendService } from "../services/Friend.service";
-import { useAppContext } from "../contexts/AppProvider";
-import { User } from "../types/User";
-import { Post } from "../types/Post";
 import orderBy from "lodash/orderBy";
+import { useAppContext } from "@/contexts/AppProvider";
+import { queryKeys } from "@/lib/queryKeys";
+import { PostService } from "@/services/Post.service";
+import { FriendService } from "@/services/Friend.service";
+import Loading from "@/components/common/Loading";
+import { User } from "@/types/User";
+import { Post } from "@/types/Post";
+import PostPreview from "@/components/posts/PostPreview";
 
 export default function Home() {
   const { user: me } = useAppContext();
   const { data: posts, isLoading } = useQuery({
     queryKey: queryKeys.posts(),
-    queryFn: PostService.getPosts
+    queryFn: PostService.getPosts,
   });
 
   const { data: friends, isLoading: isLoadingFriends } = useQuery({
     queryKey: queryKeys.friends(),
-    queryFn: FriendService.getMyFriendships
+    queryFn: FriendService.getMyFriendships,
   });
 
   if (isLoading || isLoadingFriends) return <Loading />;
@@ -39,7 +38,7 @@ export default function Home() {
       posts,
       [
         (post) => isMyFriend(post.author),
-        (post) => new Date(post.createdAt).getTime()
+        (post) => new Date(post.createdAt).getTime(),
       ],
       ["desc", "desc"]
     );

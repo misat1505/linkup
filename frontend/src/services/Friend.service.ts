@@ -1,7 +1,7 @@
+import { Friendship } from "@/types/Friendship";
 import { AxiosError } from "axios";
-import { Friendship } from "../types/Friendship";
-import { User } from "../types/User";
 import { FRIENDS_API } from "./utils";
+import { User } from "@/types/User";
 
 export class FriendService {
   static async getMyFriendships(): Promise<Friendship[]> {
@@ -18,7 +18,7 @@ export class FriendService {
     try {
       const body = {
         requesterId,
-        acceptorId
+        acceptorId,
       };
 
       const response = await FRIENDS_API.post("/", body);
@@ -40,7 +40,7 @@ export class FriendService {
   ): Promise<Friendship> {
     const body = {
       requesterId,
-      acceptorId
+      acceptorId,
     };
     const response = await FRIENDS_API.post("/accept", body);
     return response.data.friendship;
@@ -52,12 +52,12 @@ export class FriendService {
   ): Promise<void> {
     const body = {
       requesterId,
-      acceptorId
+      acceptorId,
     };
     await FRIENDS_API.request({
       url: "/",
       method: "DELETE",
-      data: body
+      data: body,
     });
     return;
   }

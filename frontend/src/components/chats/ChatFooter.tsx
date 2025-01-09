@@ -1,16 +1,15 @@
+import { useChatFooterContext } from "@/contexts/ChatFooterProvider";
+import { useChatContext } from "@/contexts/ChatProvider";
 import React, { useRef } from "react";
 import { FaFileAlt } from "react-icons/fa";
-import { Textarea } from "../ui/textarea";
 import { IoSend } from "react-icons/io5";
-import { Input } from "../ui/input";
-import { useChatContext } from "../../contexts/ChatProvider";
-import { cn } from "../../lib/utils";
-import { ClipLoader } from "react-spinners";
-import { useChatFooterContext } from "../../contexts/ChatFooterProvider";
-import { useAppContext } from "../../contexts/AppProvider";
 import { RxCross2 } from "react-icons/rx";
-import { ChatFooterUtils } from "../../utils/chatFooterUtils";
+import { Input } from "../ui/input";
+import { ClipLoader } from "react-spinners";
 import Tooltip from "../common/Tooltip";
+import { cn } from "@/lib/utils";
+import { useAppContext } from "@/contexts/AppProvider";
+import { ChatFooterUtils } from "@/utils/chatFooterUtils";
 
 export default function ChatFooter() {
   const { isLoading } = useChatContext();
@@ -51,7 +50,7 @@ export default function ChatFooter() {
                 <IoSend
                   className={cn("text-blue-500 transition-all", {
                     "opacity-40": isLoading,
-                    "hover:scale-125": !isLoading
+                    "hover:scale-125": !isLoading,
                   })}
                 />
               </span>

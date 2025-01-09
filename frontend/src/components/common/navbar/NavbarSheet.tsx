@@ -1,4 +1,11 @@
 import React, { HTMLAttributes, ReactNode } from "react";
+import NavbarAvatar from "./NavbarAvatar";
+import { CiLogin, CiLogout } from "react-icons/ci";
+import { MdOutlineSupervisorAccount, MdArticle } from "react-icons/md";
+import { FaHome, FaUserFriends } from "react-icons/fa";
+import { PiChatsCircleFill } from "react-icons/pi";
+import { IoIosSettings } from "react-icons/io";
+import { useAppContext } from "@/contexts/AppProvider";
 import {
   Sheet,
   SheetClose,
@@ -6,14 +13,14 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger
-} from "../../ui/sheet";
-import NavbarAvatar from "./NavbarAvatar";
-import { cn } from "../../../lib/utils";
-import { CiLogin, CiLogout } from "react-icons/ci";
-import { MdOutlineSupervisorAccount, MdArticle } from "react-icons/md";
-import { FaHome, FaUserFriends } from "react-icons/fa";
-import { PiChatsCircleFill } from "react-icons/pi";
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import Tooltip from "../Tooltip";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/lib/routes";
+import { cn } from "@/lib/utils";
+import { useQueryClient } from "react-query";
+import { AuthService } from "@/services/Auth.service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,15 +30,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
-} from "../../ui/alert-dialog";
-import { useAppContext } from "../../../contexts/AppProvider";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../../lib/routes";
-import { useQueryClient } from "react-query";
-import { AuthService } from "../../../services/Auth.service";
-import Tooltip from "../../common/Tooltip";
-import { IoIosSettings } from "react-icons/io";
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function NavbarSheet() {
   const { user } = useAppContext();
@@ -65,28 +65,28 @@ function LoggedInSheet() {
     {
       icon: <FaHome size={20} className="text-blue-500" />,
       text: "Home",
-      onClick: () => navigate(ROUTES.HOME.path)
+      onClick: () => navigate(ROUTES.HOME.$path()),
     },
     {
       icon: <PiChatsCircleFill size={20} className="text-blue-500" />,
       text: "Chats",
-      onClick: () => navigate(ROUTES.CHATS.path)
+      onClick: () => navigate(ROUTES.CHATS.$path()),
     },
     {
       icon: <IoIosSettings size={20} className="text-blue-500" />,
       text: "Settings",
-      onClick: () => navigate(ROUTES.SETTINGS.path)
+      onClick: () => navigate(ROUTES.SETTINGS.$path()),
     },
     {
       icon: <MdArticle size={20} className="text-blue-500" />,
       text: "Posts",
-      onClick: () => navigate(ROUTES.POSTS.path)
+      onClick: () => navigate(ROUTES.POSTS.$path()),
     },
     {
       icon: <FaUserFriends size={20} className="text-blue-500" />,
       text: "Friends",
-      onClick: () => navigate(ROUTES.FRIENDS.path)
-    }
+      onClick: () => navigate(ROUTES.FRIENDS.$path()),
+    },
   ];
 
   return (
@@ -120,13 +120,13 @@ function GuestSheet() {
     {
       icon: <CiLogin size={20} className="text-emerald-500" />,
       text: "Login",
-      onClick: () => navigate(ROUTES.LOGIN.path)
+      onClick: () => navigate(ROUTES.LOGIN.$path()),
     },
     {
       icon: <MdOutlineSupervisorAccount size={20} />,
       text: "Create new account",
-      onClick: () => navigate(ROUTES.SIGNUP.path)
-    }
+      onClick: () => navigate(ROUTES.SIGNUP.$path()),
+    },
   ];
 
   return (
@@ -184,13 +184,13 @@ function LogoutDialog() {
     await AuthService.logout();
     setUser(null);
     queryClient.clear();
-    navigate(ROUTES.LOGIN.path);
+    navigate(ROUTES.LOGIN.$path());
   };
 
   const button: ButtonsType = {
     text: "Logout",
     icon: <CiLogout size={20} className="text-red-500" />,
-    onClick: () => {}
+    onClick: () => {},
   };
 
   return (

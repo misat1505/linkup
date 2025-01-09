@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "./Image";
-import { cn } from "../../lib/utils";
-import { getStatus, Status, timeDifference } from "../../utils/timeDifference";
-import { User } from "../../types/User";
 import { ImCancelCircle } from "react-icons/im";
+import { User } from "@/types/User";
+import { getStatus, Status, timeDifference } from "@/utils/timeDifference";
+import { cn } from "@/lib/utils";
 
 type AvatarProps = {
   src: string;
@@ -16,7 +16,7 @@ export default function Avatar({
   src,
   alt,
   lastActive,
-  className
+  className,
 }: AvatarProps) {
   return (
     <div className="relative">
@@ -28,7 +28,7 @@ export default function Avatar({
             className
           ),
           img: "object-cover",
-          error: "overflow-hidden bg-white font-semibold dark:bg-black"
+          error: "overflow-hidden bg-white font-semibold dark:bg-black",
         }}
         errorContent={alt}
       />

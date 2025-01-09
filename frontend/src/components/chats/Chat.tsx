@@ -1,14 +1,13 @@
-import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { BsChatLeftTextFill } from "react-icons/bs";
+import { useChatPageContext } from "@/contexts/ChatPageProvider";
+import ChatProvider, { useChatContext } from "@/contexts/ChatProvider";
+import { Button } from "../ui/button";
+import { ROUTES } from "@/lib/routes";
 import ChatHeader from "./ChatHeader";
+import ChatFooterProvider from "@/contexts/ChatFooterProvider";
 import ChatContent from "./ChatContent";
 import ChatFooter from "./ChatFooter";
-import ChatProvider, { useChatContext } from "../../contexts/ChatProvider";
-import { useChatPageContext } from "../../contexts/ChatPageProvider";
-import ChatFooterProvider from "../../contexts/ChatFooterProvider";
-import { BsChatLeftTextFill } from "react-icons/bs";
-import { Button } from "../ui/button";
-import { ROUTES } from "../../lib/routes";
 
 export default function ChatGuard() {
   const { createChatTriggerRef } = useChatPageContext();
@@ -64,7 +63,7 @@ function Chat() {
           <Button
             variant="blueish"
             className="mx-auto mt-4"
-            onClick={() => navigate(ROUTES.CHATS.path)}
+            onClick={() => navigate(ROUTES.CHATS.$path())}
           >
             Close
           </Button>

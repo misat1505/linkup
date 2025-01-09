@@ -1,7 +1,6 @@
-import React from "react";
-import styles from "../../styles/slogan.module.css";
-import { cn } from "../../lib/utils";
-import { useLocalStorageAnimation } from "../../hooks/useLocalStorageAnimation";
+import { useLocalStorageAnimation } from "@/hooks/useLocalStorageAnimation";
+import { cn } from "@/lib/utils";
+import styles from "@/styles/slogan.module.css";
 
 export default function SignupSlogan() {
   const isAnimating = useLocalStorageAnimation(
@@ -16,7 +15,7 @@ export default function SignupSlogan() {
           "mx-auto mt-20 text-6xl font-bold text-white md:text-8xl xl:text-9xl",
           styles.shadow,
           {
-            [styles.title]: isAnimating
+            [styles.title]: isAnimating,
           }
         )}
       >
@@ -25,7 +24,7 @@ export default function SignupSlogan() {
       </h1>
       <p
         className={cn("mt-32 text-balance text-center text-2xl font-semibold", {
-          [styles.description]: isAnimating
+          [styles.description]: isAnimating,
         })}
       >
         Start your journey today and discover a world of connections and

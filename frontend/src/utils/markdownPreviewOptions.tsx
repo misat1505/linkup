@@ -1,8 +1,8 @@
+import Image from "@/components/common/Image";
+import { API_URL } from "@/constants";
+import { queryKeys } from "@/lib/queryKeys";
+import { getAccessToken } from "@/lib/token";
 import { useQuery } from "react-query";
-import Image from "../components/common/Image";
-import { API_URL } from "../constants";
-import { queryKeys } from "../lib/queryKeys";
-import { getAccessToken } from "../lib/token";
 
 export const markdownPreviewOptions = {
   video({ node, ...props }: any) {
@@ -37,7 +37,7 @@ export const markdownPreviewOptions = {
   },
   ol(props: any) {
     return <ol {...props} style={{ listStyle: "decimal" }}></ol>;
-  }
+  },
 };
 
 function ProtectedSource({ src }: { src: string }) {
@@ -47,13 +47,13 @@ function ProtectedSource({ src }: { src: string }) {
       const result = await fetch(src, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${getAccessToken()}`
-        }
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
       });
       if (!result.ok) throw new Error();
       const blob = await result.blob();
       return URL.createObjectURL(blob);
-    }
+    },
   });
 
   return <source key={data} src={data} />;

@@ -1,29 +1,29 @@
-import { Input } from "../../ui/input";
-import { useChatContext } from "../../../contexts/ChatProvider";
-import useUserSearch from "../../../hooks/useUserSearch";
-import { User } from "../../../types/User";
-import React, { useState } from "react";
-import Avatar from "../../common/Avatar";
-import { buildFileURL } from "../../../utils/buildFileURL";
-import { getInitials } from "../../../utils/getInitials";
+import Avatar from "@/components/common/Avatar";
+import Tooltip from "@/components/common/Tooltip";
 import {
-  AlertDialog,
   AlertDialogAction,
+  AlertDialog,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
-} from "../../ui/alert-dialog";
-import Tooltip from "../../common/Tooltip";
-import { createFullName } from "../../../utils/createFullName";
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
+import { useChatContext } from "@/contexts/ChatProvider";
+import useUserSearch from "@/hooks/useUserSearch";
+import { queryKeys } from "@/lib/queryKeys";
+import { ChatService } from "@/services/Chat.service";
+import { Chat } from "@/types/Chat";
+import { User } from "@/types/User";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
+import { getInitials } from "@/utils/getInitials";
+import React, { useState } from "react";
 import { HiUserAdd } from "react-icons/hi";
-import { ChatService } from "../../../services/Chat.service";
 import { useQueryClient } from "react-query";
-import { queryKeys } from "../../../lib/queryKeys";
-import { Chat } from "../../../types/Chat";
 
 export default function UserInvite() {
   const [text, setText] = useState("");

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import { useAppContext } from "@/contexts/AppProvider";
+import { useChatContext } from "@/contexts/ChatProvider";
+import useDelay from "@/hooks/useDelay";
+import { cn } from "@/lib/utils";
+import styles from "@/styles/incomeMessage.module.css";
+import { Message } from "@/types/Message";
+import { ChatUtils } from "@/utils/chatUtils";
+import { useState } from "react";
 import Avatar from "../common/Avatar";
-import { Message } from "../../types/Message";
-import { getInitials } from "../../utils/getInitials";
-import styles from "../../styles/incomeMessage.module.css";
-import { cn } from "../../lib/utils";
-import useDelay from "../../hooks/useDelay";
-import { buildFileURL } from "../../utils/buildFileURL";
-import { ChatUtils } from "../../utils/chatUtils";
-import { useChatContext } from "../../contexts/ChatProvider";
-import { useAppContext } from "../../contexts/AppProvider";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { getInitials } from "@/utils/getInitials";
 
 type IncomeMessageProps = {
   message: Message;
@@ -17,7 +17,7 @@ type IncomeMessageProps = {
 
 export default function IncomeMessage({
   message,
-  onclick
+  onclick,
 }: IncomeMessageProps) {
   const [isClicked, setIsClicked] = useState(false);
   const { user: me } = useAppContext();

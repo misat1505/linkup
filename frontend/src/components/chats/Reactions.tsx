@@ -1,19 +1,18 @@
-import { Reaction } from "../../types/Reaction";
-import { Message } from "../../types/Message";
-import React from "react";
 import { IoMdHappy, IoMdHeart } from "react-icons/io";
 import { HiOutlineEmojiSad } from "react-icons/hi";
 import { TbMoodCry } from "react-icons/tb";
 import { FaSkull } from "react-icons/fa";
+import { Message } from "@/types/Message";
+import { cn } from "@/lib/utils";
+import { Reaction } from "@/types/Reaction";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { useAppContext } from "@/contexts/AppProvider";
+import { ChatUtils } from "@/utils/chatUtils";
+import { createFullName } from "@/utils/createFullName";
 import Tooltip from "../common/Tooltip";
-import { useAppContext } from "../../contexts/AppProvider";
-import { cn } from "../../lib/utils";
-import { ChatUtils } from "../../utils/chatUtils";
-import { useChatContext } from "../../contexts/ChatProvider";
-import { createFullName } from "../../utils/createFullName";
 
 export default function Reactions({
-  reactions
+  reactions,
 }: {
   reactions: Message["reactions"];
 }) {
@@ -33,7 +32,7 @@ export const reactionsMap = {
   sad: <HiOutlineEmojiSad className={cn("text-yellow-500", commonClasses)} />,
   crying: <TbMoodCry className={cn("text-yellow-500", commonClasses)} />,
   heart: <IoMdHeart className={cn("text-red-500", commonClasses)} />,
-  skull: <FaSkull className={cn("text-black", commonClasses)} />
+  skull: <FaSkull className={cn("text-black", commonClasses)} />,
 };
 
 function ReactionItem({ reaction }: { reaction: Reaction }) {

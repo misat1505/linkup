@@ -1,9 +1,8 @@
-import React from "react";
-import LoginForm from "../components/login/LoginForm";
-import LoginFormProvider from "../contexts/LoginFormProvider";
-import LoginPageLogo from "../components/login/LoginPageLogo";
-import NoAccount from "../components/login/NoAccount";
-import LoginSlogan from "../components/login/LoginSlogan";
+import LoginForm from "@/components/login/LoginForm";
+import LoginPageLogo from "@/components/login/LoginPageLogo";
+import LoginSlogan from "@/components/login/LoginSlogan";
+import NoAccount from "@/components/login/NoAccount";
+import LoginFormProvider from "@/contexts/LoginFormProvider";
 
 export default function Login() {
   return (

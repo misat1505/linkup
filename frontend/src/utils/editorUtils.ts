@@ -20,7 +20,7 @@ export const sanitizeMarkdownWithCodeBlocks = (text: string): string => {
 
   const finalText = purifiedText.replace(
     /PLACEHOLDER_CODE_BLOCK_(\d+)/g,
-    (match, index) => {
+    (_, index) => {
       return codeBlocks[parseInt(index, 10)];
     }
   );

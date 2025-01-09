@@ -1,12 +1,12 @@
-import { queryKeys } from "../lib/queryKeys";
-import { Chat } from "../types/Chat";
+import { useToast } from "@/components/ui/use-toast";
+import { queryKeys } from "@/lib/queryKeys";
+import { SocketAction, socketClient, SocketErrors } from "@/lib/socketClient";
+import { ChatService } from "@/services/Chat.service";
+import { Chat } from "@/types/Chat";
+import { Message } from "@/types/Message";
+import { sortChatsByActivity } from "@/utils/sortChatsByActivity";
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { sortChatsByActivity } from "../utils/sortChatsByActivity";
-import { Message } from "../types/Message";
-import { SocketAction, socketClient, SocketErrors } from "../lib/socketClient";
-import { useToast } from "../components/ui/use-toast";
-import { ChatService } from "../services/Chat.service";
 
 type ChatPageContextProps = {
   children: React.ReactNode;
@@ -41,7 +41,7 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
       data.forEach((chat) => {
         socketClient.joinRoom(chat.id);
       });
-    }
+    },
   });
 
   const addMessage = (message: Message): void => {
@@ -75,7 +75,7 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
         title: "Cannot join chat room.",
         description:
           "You will not be able to see real time sent messages. Try reloading the page.",
-        variant: "destructive"
+        variant: "destructive",
       });
     });
 

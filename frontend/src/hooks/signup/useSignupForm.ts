@@ -1,13 +1,10 @@
-import {
-  SignupFormType,
-  signupFormSchema
-} from "../../validators/auth.validators";
+import { signupFormSchema, SignupFormType } from "@/validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   FieldErrors,
   UseFormProps,
   UseFormRegister,
-  useForm
+  useForm,
 } from "react-hook-form";
 
 export type SignupFormEntries = {
@@ -44,10 +41,10 @@ export default function useSignupForm({
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = useForm<SignupFormType>({
     resolver: zodResolver(signupFormSchema),
-    ...formOptions
+    ...formOptions,
   });
 
   const submitForm = handleSubmit(onSubmit);
@@ -66,6 +63,6 @@ export default function useSignupForm({
     file,
     submitForm,
     removeFile,
-    data
+    data,
   };
 }

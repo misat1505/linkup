@@ -1,13 +1,13 @@
+import { Chat, UserInChat } from "@/types/Chat";
 import { AxiosError } from "axios";
-import { User } from "../types/User";
 import { CHAT_API } from "./utils";
-import { Chat, UserInChat } from "../types/Chat";
-import { Message } from "../types/Message";
+import { User } from "@/types/User";
+import { Message } from "@/types/Message";
+import { Reaction } from "@/types/Reaction";
 import {
   ChatFormType,
-  NewGroupChatFormType
-} from "../validators/chat.validators";
-import { Reaction } from "../types/Reaction";
+  NewGroupChatFormType,
+} from "@/validators/chat.validators";
 
 export class ChatService {
   static async updateChat(
@@ -51,7 +51,7 @@ export class ChatService {
   ): Promise<Reaction> {
     const response = await CHAT_API.post(`/${chatId}/reactions`, {
       messageId,
-      reactionId
+      reactionId,
     });
     return response.data.reaction;
   }
@@ -67,7 +67,7 @@ export class ChatService {
   ): Promise<Chat> {
     try {
       const body = {
-        users: [user1, user2]
+        users: [user1, user2],
       };
 
       const response = await CHAT_API.post("/private", body);

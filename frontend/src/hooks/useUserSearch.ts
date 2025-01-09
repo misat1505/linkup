@@ -1,6 +1,6 @@
-import { UserService } from "../services/User.service";
-import { queryKeys } from "../lib/queryKeys";
-import { User } from "../types/User";
+import { queryKeys } from "@/lib/queryKeys";
+import { UserService } from "@/services/User.service";
+import { User } from "@/types/User";
 import { useQuery, UseQueryResult } from "react-query";
 import { useDebounce } from "use-debounce";
 
@@ -9,7 +9,7 @@ type useUserSearchOptions = {
 };
 
 const defaultOptions: useUserSearchOptions = {
-  timeout: 300
+  timeout: 300,
 };
 
 export default function useUserSearch(
@@ -21,7 +21,7 @@ export default function useUserSearch(
   const data = useQuery({
     queryKey: queryKeys.searchUsers(debouncedText),
     queryFn: () => UserService.search(debouncedText),
-    enabled: debouncedText.length > 0
+    enabled: debouncedText.length > 0,
   });
 
   return data;

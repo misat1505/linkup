@@ -1,8 +1,8 @@
-import { buildFileURL } from "../../../utils/buildFileURL";
-import Avatar from "../../../components/common/Avatar";
-import { cn } from "../../../lib/utils";
-import { User } from "../../../types/User";
-import { getInitials } from "../../../utils/getInitials";
+import Avatar from "@/components/common/Avatar";
+import { cn } from "@/lib/utils";
+import { User } from "@/types/User";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { getInitials } from "@/utils/getInitials";
 import { ButtonHTMLAttributes } from "react";
 
 type UserDisplayProps = ButtonHTMLAttributes<HTMLButtonElement> & {

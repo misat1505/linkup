@@ -1,11 +1,11 @@
 version: "3.8"
+name: link-up
 
 services:
   database:
     image: mysql:8.0
-    restart: always
     environment:
-      MYSQL_DATABASE: inzynierka
+      MYSQL_DATABASE: linkup
       MYSQL_ROOT_PASSWORD: ""
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
@@ -20,8 +20,8 @@ services:
 
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
     depends_on:
       database:
         condition: service_healthy
@@ -33,8 +33,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
     ports:
       - "3000:3000"
 

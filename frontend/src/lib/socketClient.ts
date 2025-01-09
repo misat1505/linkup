@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
-import { SOCKET_URL } from "../constants";
-import { Message } from "../types/Message";
-import { convertDates } from "../utils/convertDates";
+import { SOCKET_URL } from "@/constants";
+import { Message } from "@/types/Message";
+import { convertDates } from "@/utils/convertDates";
 
 type Room = string;
 
@@ -9,11 +9,11 @@ export enum SocketAction {
   JOIN_ROOM = "join-room",
   LEAVE_ROOM = "leave-room",
   SEND_MESSAGE = "send-message",
-  RECEIVE_MESSAGE = "receive-message"
+  RECEIVE_MESSAGE = "receive-message",
 }
 
 export enum SocketErrors {
-  JOINING_ROOM_ERROR = "joining-room-error"
+  JOINING_ROOM_ERROR = "joining-room-error",
 }
 
 class SocketClient {
@@ -26,7 +26,7 @@ class SocketClient {
       console.log("Connected to socket.");
     });
 
-    this.socket.on("disconnect", (reason: string) => {
+    this.socket.on("disconnect", () => {
       console.log("Disconnected from socket.");
     });
   }

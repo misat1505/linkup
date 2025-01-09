@@ -1,25 +1,25 @@
+import { useToast } from "@/components/ui/use-toast";
+import { useAppContext } from "@/contexts/AppProvider";
+import { queryKeys } from "@/lib/queryKeys";
+import { ROUTES } from "@/lib/routes";
+import { ChatService } from "@/services/Chat.service";
+import { Chat } from "@/types/Chat";
+import { User } from "@/types/User";
+import {
+  newGroupChatFormSchema,
+  NewGroupChatFormType,
+} from "@/validators/chat.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
+import { useEffect } from "react";
 import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
-  useForm
+  useForm,
 } from "react-hook-form";
-import { useToast } from "../../components/ui/use-toast";
-import {
-  newGroupChatFormSchema,
-  NewGroupChatFormType
-} from "../../validators/chat.validators";
-import { User } from "../../types/User";
-import { useEffect } from "react";
-import { useAppContext } from "../../contexts/AppProvider";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../lib/routes";
-import { Chat } from "../../types/Chat";
-import { queryKeys } from "../../lib/queryKeys";
-import { ChatService } from "../../services/Chat.service";
 
 type GroupChatFormEntries = {
   users: User[];
@@ -50,9 +50,9 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = useForm<NewGroupChatFormType>({
-    resolver: zodResolver(newGroupChatFormSchema)
+    resolver: zodResolver(newGroupChatFormSchema),
   });
 
   const onSubmit: SubmitHandler<NewGroupChatFormType> = async (data) => {
@@ -62,13 +62,13 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
         if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
         return oldChats ? [...oldChats, chat] : [chat];
       });
-      navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
+      navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId: chat.id } }));
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
           title: "Cannot create new group chat.",
           description: e.response?.data.message,
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }
@@ -104,6 +104,6 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
     file,
     users,
     appendUser,
-    removeUser
+    removeUser,
   };
 }

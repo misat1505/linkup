@@ -1,21 +1,20 @@
-import MyPostPreview from "../components/posts/MyPostPreview";
-import Loading from "../components/common/Loading";
-import { PostService } from "../services/Post.service";
-import React from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../lib/routes";
-import { Button } from "../components/ui/button";
-import { queryKeys } from "../lib/queryKeys";
 import { orderBy } from "lodash";
-import { Post } from "../types/Post";
+import { queryKeys } from "@/lib/queryKeys";
+import { PostService } from "@/services/Post.service";
+import Loading from "@/components/common/Loading";
+import { Post } from "@/types/Post";
+import { Button } from "@/components/ui/button";
+import MyPostPreview from "@/components/posts/MyPostPreview";
+import { ROUTES } from "@/lib/routes";
 
 export default function Posts() {
   const navigate = useNavigate();
 
   const { data: posts, isLoading } = useQuery({
     queryKey: queryKeys.myPosts(),
-    queryFn: PostService.getMyPosts
+    queryFn: PostService.getMyPosts,
   });
 
   if (isLoading)
@@ -39,7 +38,9 @@ export default function Posts() {
         className="my-4"
         data-testid="cy-redirect-to-create-post-btn"
         onClick={() =>
-          navigate(ROUTES.POST_EDITOR.buildPath({ postId: undefined }))
+          navigate(
+            ROUTES.POST_EDITOR.$buildPath({ params: { postId: undefined } })
+          )
         }
       >
         Create New Post

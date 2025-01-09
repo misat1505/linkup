@@ -1,14 +1,20 @@
-import Avatar from "../../../components/common/Avatar";
-import { useChatContext } from "../../../contexts/ChatProvider";
-import { Chat, UserInChat } from "../../../types/Chat";
 import React, { useState } from "react";
-import { buildFileURL } from "../../../utils/buildFileURL";
-import { createFullName } from "../../../utils/createFullName";
-import { Input } from "../../../components/ui/input";
-import { ChatService } from "../../../services/Chat.service";
+import { MdEdit } from "react-icons/md";
+import { IoIosChatbubbles } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { Chat, UserInChat } from "@/types/Chat";
+import Avatar from "@/components/common/Avatar";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { getInitials } from "@/utils/getInitials";
+import { createFullName } from "@/utils/createFullName";
+import { useAppContext } from "@/contexts/AppProvider";
+import { ChatService } from "@/services/Chat.service";
+import { queryKeys } from "@/lib/queryKeys";
+import { ROUTES } from "@/lib/routes";
+import Tooltip from "@/components/common/Tooltip";
+import FocusableSpan from "@/components/common/FocusableSpan";
 import { useQueryClient } from "react-query";
-import { queryKeys } from "../../../lib/queryKeys";
-import { getInitials } from "../../../utils/getInitials";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,15 +23,9 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
-} from "../../ui/alert-dialog";
-import Tooltip from "../../common/Tooltip";
-import { MdEdit } from "react-icons/md";
-import { IoIosChatbubbles } from "react-icons/io";
-import { useAppContext } from "../../../contexts/AppProvider";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../../../lib/routes";
-import FocusableSpan from "../../common/FocusableSpan";
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
 
 export default function ChatMembersDisplayer() {
   const { chat } = useChatContext();
@@ -77,7 +77,7 @@ function CreateMessageButton({ user }: { user: UserInChat }) {
       if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
       return oldChats ? [...oldChats, chat] : [chat];
     });
-    navigate(ROUTES.CHAT_DETAIL.buildPath({ chatId: chat.id }));
+    navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId: chat.id } }));
   };
 
   return (

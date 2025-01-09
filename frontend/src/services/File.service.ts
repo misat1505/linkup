@@ -1,6 +1,6 @@
-import { API_URL } from "../constants";
-import { getAccessToken } from "../lib/token";
+import { getAccessToken } from "@/lib/token";
 import { FILE_API } from "./utils";
+import { API_URL } from "@/constants";
 
 export class FileService {
   static async downloadFile(
@@ -12,9 +12,9 @@ export class FileService {
     const result = await fetch(url, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${getAccessToken()}`
+        Authorization: `Bearer ${getAccessToken()}`,
       },
-      credentials: "include"
+      credentials: "include",
     });
     const blob = await result.blob();
 

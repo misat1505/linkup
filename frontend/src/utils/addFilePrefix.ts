@@ -1,4 +1,4 @@
-import { API_URL } from "../constants";
+import { API_URL } from "@/constants";
 
 type JSONValue = string | number | boolean | null | JSONObject | JSONArray;
 interface JSONObject {

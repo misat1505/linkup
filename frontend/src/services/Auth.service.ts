@@ -1,8 +1,8 @@
-import { LoginFormType, SignupFormType } from "../validators/auth.validators";
-import { User } from "../types/User";
-import { AUTH_API } from "./utils";
+import { User } from "@/types/User";
+import { LoginFormType, SignupFormType } from "@/validators/auth.validators";
 import { AxiosResponse } from "axios";
-import { getAccessToken, setAccessToken } from "../lib/token";
+import { AUTH_API } from "./utils";
+import { setAccessToken } from "@/lib/token";
 
 export class AuthService {
   static async updateMe(data: SignupFormType): Promise<User> {
@@ -16,11 +16,11 @@ export class AuthService {
     }
 
     const {
-      data: { user }
+      data: { user },
     } = await AUTH_API.put("/user", formData, {
       headers: {
-        "Content-Type": "multipart/form-data"
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
 
     return user;
@@ -28,7 +28,7 @@ export class AuthService {
 
   static async login(payload: LoginFormType): Promise<User> {
     const {
-      data: { user, accessToken }
+      data: { user, accessToken },
     } = await AUTH_API.post("/login", payload);
     setAccessToken(accessToken);
     return user;
@@ -46,7 +46,7 @@ export class AuthService {
     setAccessToken(response.data.accessToken);
 
     const {
-      data: { user }
+      data: { user },
     } = await AUTH_API.get("/user");
     return user;
   }
@@ -62,11 +62,11 @@ export class AuthService {
     }
 
     const {
-      data: { user, accessToken }
+      data: { user, accessToken },
     } = await AUTH_API.post("/signup", formData, {
       headers: {
-        "Content-Type": "multipart/form-data"
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
 
     setAccessToken(accessToken);

@@ -1,9 +1,8 @@
-import { MessageUtils } from "../../utils/messageUtils";
-import { useAppContext } from "../../contexts/AppProvider";
-import { Message } from "../../types/Message";
-import React from "react";
+import { useAppContext } from "@/contexts/AppProvider";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { Message } from "@/types/Message";
+import { MessageUtils } from "@/utils/messageUtils";
 import { RiReplyFill } from "react-icons/ri";
-import { useChatContext } from "../../contexts/ChatProvider";
 
 type ResponseTextProps = { message: Message };
 

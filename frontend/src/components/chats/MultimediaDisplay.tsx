@@ -1,9 +1,8 @@
-import { getFileType } from "../../utils/getFileType";
-import { File } from "../../types/File";
-import React from "react";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { File } from "@/types/File";
+import { getFileType } from "@/utils/getFileType";
 import Image from "../common/Image";
-import { buildFileURL } from "../../utils/buildFileURL";
-import { useChatContext } from "../../contexts/ChatProvider";
+import { buildFileURL } from "@/utils/buildFileURL";
 import ProtectedVideo from "../common/ProtectedVideo";
 import ProtectedFile from "../common/ProtectedFile";
 
@@ -31,7 +30,7 @@ function MultimediaDisplayItem({ file }: { file: File }) {
         src={buildFileURL(file.url, { type: "chat-message", id: chatId })}
         className={{
           common: "h-40 w-40 object-cover",
-          error: "bg-slate-200 font-semibold"
+          error: "bg-slate-200 font-semibold",
         }}
         errorContent="Error loading image."
       />

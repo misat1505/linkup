@@ -1,7 +1,7 @@
 import usePostChatForm, {
-  usePostChatFormValue
-} from "../hooks/chats/usePostChatForm";
-import { Chat } from "../types/Chat";
+  usePostChatFormValue,
+} from "@/hooks/chats/usePostChatForm";
+import { Chat } from "@/types/Chat";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 
 type PostCommentsSectionContextProps = PropsWithChildren & { chat: Chat };
@@ -27,7 +27,7 @@ export const usePostCommentsSectionContext = () => {
 
 const PostCommentsSectionProvider = ({
   children,
-  chat
+  chat,
 }: PostCommentsSectionContextProps) => {
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false);
 
@@ -40,7 +40,7 @@ const PostCommentsSectionProvider = ({
         ...usePostChatForm(chat.id),
         chat,
         isCommentSectionOpen,
-        toggleIsCommentSectionOpen
+        toggleIsCommentSectionOpen,
       }}
     >
       {children}

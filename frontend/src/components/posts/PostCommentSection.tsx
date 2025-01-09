@@ -1,15 +1,15 @@
 import { FaArrowDown, FaReply } from "react-icons/fa";
 import React, { useState } from "react";
-import { cn } from "../../lib/utils";
-import { usePostCommentsSectionContext } from "../../contexts/PostCommentSectionProvider";
-import Tooltip from "../common/Tooltip";
-import { useQuery } from "react-query";
-import { queryKeys } from "../../lib/queryKeys";
-import { ChatService } from "../../services/Chat.service";
-import { Message } from "../../types/Message";
+import { usePostCommentsSectionContext } from "@/contexts/PostCommentSectionProvider";
 import PostCommentForm from "./PostCommentForm";
+import Tooltip from "../common/Tooltip";
+import { cn } from "@/lib/utils";
+import { useAppContext } from "@/contexts/AppProvider";
+import { useQuery } from "react-query";
+import { queryKeys } from "@/lib/queryKeys";
+import { ChatService } from "@/services/Chat.service";
+import { Message } from "@/types/Message";
 import Comment from "./Comment";
-import { useAppContext } from "../../contexts/AppProvider";
 
 export default function PostCommentSection() {
   const { isCommentSectionOpen } = usePostCommentsSectionContext();
@@ -50,7 +50,7 @@ function CommentSectionOpenButton() {
 
 function CommentSection({
   group,
-  level
+  level,
 }: {
   group: string | null;
   level: number;
@@ -60,7 +60,7 @@ function CommentSection({
   const { data: messages = [] } = useQuery({
     queryKey: queryKeys.messages(chat.id, group),
     queryFn: () => ChatService.getMessages(chat.id, group),
-    refetchOnMount: false
+    refetchOnMount: false,
   });
 
   const [activeMessages, setActiveMessages] = useState<Message["id"][]>([]);
@@ -78,7 +78,9 @@ function CommentSection({
       message.author.id === me!.id
         ? "You"
         : `${message.author.firstName} ${message.author.lastName}`;
-    const fullText = `${name}: ${message.createdAt.toLocaleDateString("en-US")} ${message.createdAt.toLocaleTimeString("en-US")}`;
+    const fullText = `${name}: ${message.createdAt.toLocaleDateString(
+      "en-US"
+    )} ${message.createdAt.toLocaleTimeString("en-US")}`;
     return fullText;
   };
 
@@ -115,7 +117,7 @@ function CommentSection({
 
 function ResponseSetButton({
   isActive,
-  onclick
+  onclick,
 }: {
   isActive: boolean;
   onclick: () => void;
@@ -128,7 +130,7 @@ function ResponseSetButton({
             "transition-all group-hover:text-slate-600 group-hover:hover:text-slate-400 dark:group-hover:text-slate-400 dark:group-hover:hover:text-slate-600",
             {
               "text-slate-600 dark:text-slate-400": isActive,
-              "text-transparent": !isActive
+              "text-transparent": !isActive,
             }
           )}
         />
@@ -139,7 +141,7 @@ function ResponseSetButton({
 
 function ToggleSubsectionOpenButton({
   isActive,
-  onclick
+  onclick,
 }: {
   isActive: boolean;
   onclick: () => void;
@@ -153,7 +155,7 @@ function ToggleSubsectionOpenButton({
             {
               "rotate-180 text-slate-400 group-hover:text-slate-400 dark:text-slate-600 dark:group-hover:text-slate-600":
                 isActive,
-              "text-transparent": !isActive
+              "text-transparent": !isActive,
             }
           )}
         />

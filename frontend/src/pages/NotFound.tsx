@@ -1,9 +1,8 @@
+import Image from "@/components/common/Image";
+import { Button } from "@/components/ui/button";
+import { LOGO_PATH } from "@/constants";
+import { ROUTES } from "@/lib/routes";
 import { useNavigate } from "react-router-dom";
-import Image from "../components/common/Image";
-import React from "react";
-import { LOGO_PATH } from "../constants";
-import { Button } from "../components/ui/button";
-import { ROUTES } from "../lib/routes";
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -18,7 +17,7 @@ export default function NotFound() {
         <p className="mb-4 mt-6 text-center text-black dark:text-white">
           Oops. It seems like you didn&apos;t want to go here.
         </p>
-        <Button variant="blueish" onClick={() => navigate(ROUTES.HOME.path)}>
+        <Button variant="blueish" onClick={() => navigate(ROUTES.HOME.$path())}>
           Bring me back home.
         </Button>
       </div>

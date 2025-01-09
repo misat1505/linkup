@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as SwitchPrimitives from "@radix-ui/react-switch";
 import { useThemeContext } from "../../contexts/ThemeProvider";
-import { cn } from "../../lib/utils";
+import { cn } from "@/lib/utils";
 
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root> & React.PropsWithChildren,

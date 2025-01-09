@@ -1,18 +1,17 @@
-import React from "react";
-import SignupFormProvider from "../contexts/SignupFormProvider";
-import SignupForm from "../components/signup/SignupForm";
-import { useAppContext } from "../contexts/AppProvider";
 import { useQuery } from "react-query";
-import { FileService } from "../services/File.service";
-import { buildFileURL } from "../utils/buildFileURL";
-import { SignupFormEntries } from "../hooks/signup/useSignupForm";
 import { DefaultValues, SubmitHandler } from "react-hook-form";
-import { SignupFormType } from "../validators/auth.validators";
 import { AxiosError } from "axios";
-import { toast } from "../components/ui/use-toast";
-import { AuthService } from "../services/Auth.service";
-import Loading from "../components/common/Loading";
-import { queryKeys } from "../lib/queryKeys";
+import { useAppContext } from "@/contexts/AppProvider";
+import { queryKeys } from "@/lib/queryKeys";
+import { FileService } from "@/services/File.service";
+import { buildFileURL } from "@/utils/buildFileURL";
+import Loading from "@/components/common/Loading";
+import { SignupFormEntries } from "@/hooks/signup/useSignupForm";
+import { SignupFormType } from "@/validators/auth.validators";
+import { AuthService } from "@/services/Auth.service";
+import { toast } from "@/components/ui/use-toast";
+import SignupFormProvider from "@/contexts/SignupFormProvider";
+import SignupForm from "@/components/signup/SignupForm";
 
 export default function Settings() {
   const { user: me, setUser } = useAppContext();
@@ -22,7 +21,7 @@ export default function Settings() {
       FileService.downloadFile(
         buildFileURL(me!.photoURL, { type: "avatar" }),
         me!.photoURL
-      )
+      ),
   });
 
   let fileList = data ? new DataTransfer().files : undefined;
@@ -42,7 +41,7 @@ export default function Settings() {
   const defaultValues: DefaultValues<SignupFormEntries> = {
     firstName: me!.firstName,
     lastName: me!.lastName,
-    file: fileList
+    file: fileList,
   };
 
   const onSubmit: SubmitHandler<SignupFormType> = async (
@@ -56,7 +55,7 @@ export default function Settings() {
         toast({
           title: "Cannot change settings.",
           description: e.response?.data.message,
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }

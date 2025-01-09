@@ -1,6 +1,5 @@
-import React from "react";
-import ChatPageProvider from "../contexts/ChatPageProvider";
-import ChatPageContent from "../components/chats/ChatPageContent";
+import ChatPageContent from "@/components/chats/ChatPageContent";
+import ChatPageProvider from "@/contexts/ChatPageProvider";
 
 export default function Chats() {
   return (

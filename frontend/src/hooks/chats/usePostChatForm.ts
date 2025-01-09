@@ -4,16 +4,16 @@ import {
   FieldErrors,
   SubmitHandler,
   UseFormRegister,
-  useForm
+  useForm,
 } from "react-hook-form";
-import { useToast } from "../../components/ui/use-toast";
-import { chatFormSchema, ChatFormType } from "../../validators/chat.validators";
-import { Chat } from "../../types/Chat";
-import { Message } from "../../types/Message";
-import { ChatService } from "../../services/Chat.service";
-import { useQueryClient } from "react-query";
-import { queryKeys } from "../../lib/queryKeys";
 import { useState } from "react";
+import { Message } from "@/types/Message";
+import { useQueryClient } from "react-query";
+import { Chat } from "@/types/Chat";
+import { useToast } from "@/components/ui/use-toast";
+import { chatFormSchema, ChatFormType } from "@/validators/chat.validators";
+import { ChatService } from "@/services/Chat.service";
+import { queryKeys } from "@/lib/queryKeys";
 
 export type PostChatFormEntries = {
   content: string;
@@ -49,9 +49,9 @@ export default function usePostChatForm(
     formState: { errors, isSubmitting },
     getValues,
     watch,
-    setValue
+    setValue,
   } = useForm<ChatFormType>({
-    resolver: zodResolver(chatFormSchema)
+    resolver: zodResolver(chatFormSchema),
   });
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {
@@ -66,14 +66,14 @@ export default function usePostChatForm(
       );
       setResponseInner(null);
       toast({
-        title: "Comment sent successfully."
+        title: "Comment sent successfully.",
       });
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
           title: "Cannot send a message.",
           description: e.response?.data.message,
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }
@@ -113,6 +113,6 @@ export default function usePostChatForm(
     appendFiles,
     removeFile,
     setResponse,
-    response
+    response,
   };
 }

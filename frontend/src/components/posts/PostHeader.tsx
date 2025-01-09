@@ -1,9 +1,8 @@
-import { Post } from "../../types/Post";
-import { timeDifference } from "../../utils/timeDifference";
-import React from "react";
+import { Post } from "@/types/Post";
+import { timeDifference } from "@/utils/timeDifference";
 import Avatar from "../common/Avatar";
-import { buildFileURL } from "../../utils/buildFileURL";
-import { getInitials } from "../../utils/getInitials";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { getInitials } from "@/utils/getInitials";
 
 export default function PostHeader({ post }: { post: Post }) {
   const getTimeText = (): string => {
