@@ -21,7 +21,6 @@ const app = express();
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use(expressStatusMonitor());
 app.use(corsMiddleware);
-app.use(limiter);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
