@@ -45,7 +45,9 @@ if (env.NODE_ENV !== "test") {
 
   setupSocket(io);
 
-  server.listen(env.PORT, "0.0.0.0", () => {
+  const port = process.env.PORT || 4000;
+
+  server.listen(port, () => {
     console.log(`Server and Socket are running on port ${env.PORT}.`);
   });
 }
