@@ -15,6 +15,7 @@ import { setupSocket } from "./lib/sockets";
 import { initReactions } from "./config/reactions";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./lib/swagger";
+import { prisma } from "./lib/Prisma";
 
 const app = express();
 
@@ -27,8 +28,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, World!");
+app.get("/", async (req: Request, res: Response) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
 });
 
 app.use("/", publicRoutes);
