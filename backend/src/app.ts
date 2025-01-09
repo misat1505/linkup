@@ -4,8 +4,7 @@ import express, { Request, Response } from "express";
 import { env } from "./config/env";
 import { limiter } from "./config/rate-limiter";
 import { corsConfig, corsMiddleware } from "./config/cors";
-import { credentials } from "./config/https";
-import https from "https";
+import http from "http";
 import expressStatusMonitor from "express-status-monitor";
 import protectedRoutes from "./routes/protected.routes";
 import publicRoutes from "./routes/public.routes";
@@ -38,7 +37,7 @@ app.use("/", protectedRoutes);
 
 if (env.NODE_ENV !== "test") {
   initReactions();
-  const socketServer = https.createServer(credentials, app);
+  const socketServer = http.createServer(app);
   const io = new Server(socketServer, {
     cors: corsConfig,
   });
@@ -47,8 +46,8 @@ if (env.NODE_ENV !== "test") {
     console.log(`Socket server is running on port ${env.SOCKET_PORT}.`);
   });
 
-  const httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(env.PORT, () => {
+  const httpServer = http.createServer(app);
+  httpServer.listen(env.PORT, () => {
     console.log(`Server is running on port ${env.PORT}.`);
   });
 }
