@@ -19,7 +19,7 @@ const options: Options = {
     },
     servers: [
       {
-        url: "https://localhost:5500",
+        url: "http://localhost:5500",
       },
     ],
     components: {

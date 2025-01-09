@@ -5,12 +5,12 @@ type Options = {
 };
 
 const defaultOptions: Options = {
-  withResponse: true
+  withResponse: true,
 };
 
 describe("chats spec", () => {
-  const frontendUrl = "https://localhost:3000";
-  const backendUrl = "https://localhost:5500";
+  const frontendUrl = "http://localhost:3000";
+  const backendUrl = "http://localhost:5500";
 
   beforeEach(() => {
     cy.visit(`${frontendUrl}/login`);
