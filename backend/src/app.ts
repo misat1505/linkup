@@ -36,18 +36,17 @@ app.use("/", protectedRoutes);
 
 if (env.NODE_ENV !== "test") {
   initReactions();
-  const socketServer = http.createServer(app);
-  const io = new Server(socketServer, {
+
+  const server = http.createServer(app);
+
+  const io = new Server(server, {
     cors: corsConfig,
   });
-  setupSocket(io);
-  socketServer.listen(env.SOCKET_PORT, () => {
-    console.log(`Socket server is running on port ${env.SOCKET_PORT}.`);
-  });
 
-  const httpServer = http.createServer(app);
-  httpServer.listen(env.PORT, () => {
-    console.log(`Server is running on port ${env.PORT}.`);
+  setupSocket(io);
+
+  server.listen(env.PORT, () => {
+    console.log(`Server and Socket are running on port ${env.PORT}.`);
   });
 }
 

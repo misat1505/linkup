@@ -6,3 +6,4 @@
 /build
 /prisma/migrations
 /src/config/security/*
+/.env*
