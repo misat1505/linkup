@@ -79,7 +79,7 @@ describe("chats spec", () => {
   it("sends message to chat - searchbox navigation", () => {
     const navbarInput = cy.get("[data-testid=cy-nav-search-input]");
     navbarInput.click();
-    navbarInput.type("jane");
+    navbarInput.type("Jane");
 
     const results = cy
       .get("[data-testid=cy-nav-search-results]")
