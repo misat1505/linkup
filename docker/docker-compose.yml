@@ -30,6 +30,12 @@ services:
       - backend-files:/backend/files
     ports:
       - "5500:5500"
+
+  socket:
+    build:
+      context: ../socket
+      dockerfile: ../docker/Dockerfile.socket
+    ports:
       - "5501:5501"
 
   frontend:

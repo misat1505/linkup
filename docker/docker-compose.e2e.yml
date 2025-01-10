@@ -30,7 +30,6 @@ services:
       - e2e-backend-files:/backend/files
     ports:
       - "5500:5500"
-      - "5501:5501"
 
   frontend:
     build:
