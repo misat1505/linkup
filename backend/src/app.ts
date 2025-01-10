@@ -2,16 +2,12 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express, { Request, Response } from "express";
 import { env } from "./config/env";
-import { limiter } from "./config/rate-limiter";
-import { corsConfig, corsMiddleware } from "./config/cors";
-import http from "http";
+import { corsMiddleware } from "./config/cors";
 import expressStatusMonitor from "express-status-monitor";
 import protectedRoutes from "./routes/protected.routes";
 import publicRoutes from "./routes/public.routes";
 import morgan from "morgan";
 import { accessLogStream } from "./config/log";
-import { Server } from "socket.io";
-import { setupSocket } from "./lib/sockets";
 import { initReactions } from "./config/reactions";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./lib/swagger";
@@ -39,17 +35,7 @@ app.use("/", protectedRoutes);
 if (env.NODE_ENV !== "test") {
   initReactions();
 
-  const server = http.createServer(app);
-
-  const io = new Server(server, {
-    cors: corsConfig,
-  });
-
-  setupSocket(io);
-
-  const port = process.env.PORT || 4000;
-
-  server.listen(port, () => {
+  app.listen(env.PORT, () => {
     console.log(`Server and Socket are running on port ${env.PORT}.`);
   });
 }

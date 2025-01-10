@@ -20,7 +20,7 @@ class SocketClient {
   private socket: Socket;
 
   constructor(serverUrl: string) {
-    this.socket = io(serverUrl, { withCredentials: true });
+    this.socket = io(serverUrl);
 
     this.socket.on("connect", () => {
       console.log("Connected to socket.");
