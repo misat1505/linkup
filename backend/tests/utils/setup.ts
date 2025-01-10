@@ -1,18 +1,34 @@
 import { prisma } from "../../src/lib/Prisma";
 import { USER } from "./constants";
 
+const tables = [
+  "Friend",
+  "User",
+  "Chat",
+  "Message",
+  "UserReaction",
+  "File",
+  "UserChat",
+  "Post",
+];
+
 export const resetDB = async (): Promise<void> => {
   await prisma.$transaction(async (prisma) => {
-    await prisma.$executeRaw`SET FOREIGN_KEY_CHECKS = 0;`;
-    await prisma.friend.deleteMany();
-    await prisma.user.deleteMany();
-    await prisma.chat.deleteMany();
-    await prisma.message.deleteMany();
-    await prisma.userReaction.deleteMany();
-    await prisma.file.deleteMany();
-    await prisma.userChat.deleteMany();
-    await prisma.post.deleteMany();
-    await prisma.$executeRaw`SET FOREIGN_KEY_CHECKS = 1;`;
+    for (const table of tables) {
+      await prisma.$executeRawUnsafe(
+        `ALTER TABLE "${table}" DISABLE TRIGGER ALL;`
+      );
+    }
+
+    for (const table of tables) {
+      await prisma.$executeRawUnsafe(`DELETE FROM "${table}";`);
+    }
+
+    for (const table of tables) {
+      await prisma.$executeRawUnsafe(
+        `ALTER TABLE "${table}" ENABLE TRIGGER ALL;`
+      );
+    }
 
     const user = await prisma.user.create({
       data: USER,

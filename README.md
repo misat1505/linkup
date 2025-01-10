@@ -71,10 +71,18 @@ To set up and run Link Up on your local machine, follow these steps:
      ```
 
    - **Run Tests:**  
-     Initializes the test database in docker, then locally installs dependencies, and runs backend tests:
+     Initializes the test database in docker:
 
      ```bash
      ./docker-compose.sh test
+     ```
+
+     And execute following commands:
+
+     ```
+     cd backend
+     npm install
+     npm run test
      ```
 
    - **Run Load Tests for Backend:**  
@@ -107,15 +115,26 @@ To set up and run Link Up on your local machine, follow these steps:
      npm run cypress:open
      ```
 
-   - **Run Backend Development Environment:**  
-     Starts the database service in docker and runs the backend locally in development mode:
+   - **Run Development Environment:**
 
-     ```bash
-     ./docker-compose.sh dev-backend
+     Start database for development:
+
+     ```
+     ./docker-compose.sh dev
      ```
 
-   - **Run Frontend Development Environment:**  
-     Starts the database and backend services in docker, then runs the frontend locally in development mode:
-     ```bash
-     ./docker-compose.sh dev-frontend
+     Then to run backend execute the following commands:
+
+     ```
+     cd backend
+     npm install
+     npm run dev
+     ```
+
+     Then to run frontend execute the following commands:
+
+     ```
+     cd frontend
+     npm install
+     npm run dev
      ```

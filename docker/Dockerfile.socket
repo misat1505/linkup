@@ -1,0 +1,14 @@
+FROM node:latest
+
+WORKDIR /socket
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+ENV PORT=5501
+ENV FRONTEND_URL=http://localhost:3000
+
+EXPOSE 5501
+
+CMD ["npm", "start"]

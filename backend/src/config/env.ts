@@ -23,12 +23,6 @@ const envSchema = z.object({
     .refine((val) => !isNaN(val), {
       message: "'PORT' must be a number.",
     }),
-  SOCKET_PORT: z
-    .string()
-    .transform((val) => parseInt(val, 10))
-    .refine((val) => !isNaN(val), {
-      message: "'SOCKET_PORT' must be a number.",
-    }),
   ACCESS_TOKEN_SECRET: z.string().min(20, {
     message: "'ACCESS_TOKEN_SECRET' needs to be at least 20 characters long.",
   }),
