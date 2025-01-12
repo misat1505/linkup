@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { PostService } from "../../services/PostService";
-import path from "path";
-import fs from "fs";
 import fileStorage from "../../lib/FileStorage";
 
 export const deletePost = async (req: Request, res: Response) => {

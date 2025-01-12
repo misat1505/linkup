@@ -22,12 +22,14 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+if (env.NODE_ENV === "development") {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.get("/", async (req: Request, res: Response) => {
-  const users = await prisma.user.findMany();
-  res.json(users);
-});
+  app.get("/", async (req: Request, res: Response) => {
+    const users = await prisma.user.findMany();
+    res.json(users);
+  });
+}
 
 app.use("/", publicRoutes);
 app.use("/", protectedRoutes);
