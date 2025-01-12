@@ -33,6 +33,16 @@ const envSchema = z.object({
   FRONTEND_URL: z.string().url({
     message: "'FRONTEND_URL' must be a valid URL.",
   }),
+
+  AWS_ACCESS_KEY_ID: z.string({
+    message: "'AWS_ACCESS_KEY_ID' must be a string",
+  }),
+  AWS_SECRET_ACCESS_KEY: z.string({
+    message: "'AWS_SECRET_ACCESS_KEY' must be a string",
+  }),
+  AWS_REGION: z.string({ message: "'AWS_REGION' must be a string" }),
+  S3_BUCKET_NAME: z.string({ message: "'S3_BUCKET_NAME' must be a string" }),
+  S3_ENDPOINT: z.string({ message: "'S3_ENDPOINT' must be a string" }),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

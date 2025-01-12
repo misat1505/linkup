@@ -19,7 +19,7 @@ case "$command" in
         ;;
     dev)
         echo "Running application for backend development..."
-        docker compose -f ./docker/docker-compose.yml up database socket --build
+        docker compose -f ./docker/docker-compose.yml up database socket minio --build
         ;;
     *)
         echo "Invalid command. Use 'prod', 'e2e', 'test', 'dev'."
