@@ -52,16 +52,8 @@ export const deletePost = async (req: Request, res: Response) => {
         .status(401)
         .json({ message: "Cannot delete post not belonging to you." });
 
-    await PostService.deletePost(id);
-
-    // const basePath = path.join(__dirname, "..", "..", "..", "files");
-    // const postPath = path.join(basePath, "posts", post.id);
-    // const chatPath = path.join(basePath, "chats", post.chat.id);
-
-    // if (fs.existsSync(postPath)) fs.rmSync(postPath, { recursive: true });
-    // if (fs.existsSync(chatPath)) fs.rmSync(chatPath, { recursive: true });
-
     await Promise.all([
+      PostService.deletePost(id),
       fileStorage.deleteAllFilesInDirectory(`posts/${post.id}`),
       fileStorage.deleteAllFilesInDirectory(`chats/${post.chat.id}`),
     ]);
