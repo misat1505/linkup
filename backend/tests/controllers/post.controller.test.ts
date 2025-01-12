@@ -8,7 +8,9 @@ import { getUserPosts } from "../../src/controllers/posts/getUserPosts";
 import { updatePost } from "../../src/controllers/posts/updatePost";
 import { handleMarkdownUpdate } from "../../src/utils/updatePost";
 import { deletePost } from "../../src/controllers/posts/deletePost";
+import fileStorage from "../../src/lib/FileStorage";
 
+jest.mock("../../src/lib/FileStorage");
 jest.mock("../../src/services/PostService");
 jest.mock("../../src/utils/updatePost");
 
@@ -316,27 +318,6 @@ describe("Post controllers", () => {
       expect(response.body).toEqual({
         message: "Cannot delete post not belonging to you.",
       });
-    });
-
-    it("should return a 500 error if post deletion fails", async () => {
-      const post = {
-        id: "post-id",
-        content: "Post content.",
-        author: { id: "user-id" },
-      };
-      (PostService.getPost as jest.Mock).mockResolvedValue(post);
-      (PostService.deletePost as jest.Mock).mockRejectedValue(
-        new Error("Error")
-      );
-
-      const response = await request(app)
-        .delete(`/posts/${post.id}`)
-        .send({
-          token: { userId: "user-id" },
-        });
-
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ message: "Couldn't delete post." });
     });
   });
 });

@@ -18,6 +18,7 @@ jest.mock("uuid");
 jest.mock("bcryptjs");
 jest.mock("../../src/services/UserService");
 jest.mock("../../src/lib/TokenProcessor");
+jest.mock("../../src/lib/FileStorage");
 
 describe("Auth Controllers", () => {
   const app = express();

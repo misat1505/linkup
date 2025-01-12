@@ -6,6 +6,9 @@ import { isPost } from "../../src/types/guards/Post.guard";
 import { env } from "../../src/config/env";
 import path from "path";
 import fs from "fs";
+import fileStorage from "../../src/lib/FileStorage";
+
+jest.mock("../../src/lib/FileStorage");
 
 describe("posts router", () => {
   const token = TokenProcessor.encode(
@@ -13,8 +16,14 @@ describe("posts router", () => {
     env.ACCESS_TOKEN_SECRET
   );
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("[POST] /posts", () => {
     it("should create a new post", async () => {
+      (fileStorage.listFiles as jest.Mock).mockResolvedValue([]);
+
       const res = await request(app)
         .post("/posts")
         .set("Authorization", `Bearer ${token}`)
@@ -25,17 +34,6 @@ describe("posts router", () => {
       expect(res.statusCode).toEqual(201);
       expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(true);
       expect(res.body.post.content).toBe("This is a new post.");
-
-      const postFilesPath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "files",
-        "posts",
-        res.body.post.id
-      );
-      expect(fs.existsSync(postFilesPath));
-      fs.rmdirSync(postFilesPath, { recursive: true });
     });
   });
 
@@ -83,6 +81,8 @@ describe("posts router", () => {
 
   describe("[PUT] /posts/:id", () => {
     it("should update an existing post", async () => {
+      (fileStorage.listFiles as jest.Mock).mockResolvedValue([]);
+
       const postId = "25776a73-a5c6-40cf-b77f-76288a34cfa7";
       const res = await request(app)
         .put(`/posts/${postId}`)
@@ -96,17 +96,6 @@ describe("posts router", () => {
       expect(res.body.post.content).toBe(
         "This is the updated content of the post."
       );
-
-      const postFilesPath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "files",
-        "posts",
-        res.body.post.id
-      );
-      expect(fs.existsSync(postFilesPath));
-      fs.rmdirSync(postFilesPath, { recursive: true });
     });
   });
 
@@ -118,16 +107,6 @@ describe("posts router", () => {
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.statusCode).toEqual(200);
-
-      const postFilesPath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "files",
-        "posts",
-        postId
-      );
-      expect(!fs.existsSync(postFilesPath));
     });
   });
 });
