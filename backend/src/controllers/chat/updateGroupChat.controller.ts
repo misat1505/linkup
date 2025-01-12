@@ -4,6 +4,7 @@ import { processAvatar } from "../../utils/processAvatar";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import fs from "fs";
+import fileStorage from "../../lib/FileStorage";
 
 export const updateGroupChatController = async (
   req: Request,
@@ -77,17 +78,7 @@ export const updateGroupChatController = async (
     );
 
     if (oldChat.photoURL) {
-      const oldFilePath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "..",
-        "files",
-        "chats",
-        chatId,
-        oldChat.photoURL
-      );
-      if (fs.existsSync(oldFilePath)) fs.unlinkSync(oldFilePath);
+      await fileStorage.deleteFile(`chats/${chatId}/${oldChat.photoURL}`);
     }
 
     const chat = await ChatService.updateGroupChat({
