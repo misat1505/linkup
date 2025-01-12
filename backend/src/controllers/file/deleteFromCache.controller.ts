@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
+import fileStorage from "../../lib/FileStorage";
 
 export const deleteFromCache = async (req: Request, res: Response) => {
   /**
@@ -52,22 +53,7 @@ export const deleteFromCache = async (req: Request, res: Response) => {
     const { userId } = req.body.token;
     const { filename } = req.params;
 
-    const userCachePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "..",
-      "files",
-      "cache",
-      userId,
-      filename
-    );
-
-    if (!fs.existsSync(userCachePath)) {
-      return res.status(404).json({ message: "File not found." });
-    }
-
-    fs.unlinkSync(userCachePath);
+    await fileStorage.deleteFile(`cache/${userId}/${filename}`);
 
     return res.status(200).json({ message: "File deleted successfully." });
   } catch (e) {
