@@ -39,14 +39,14 @@ function ChatNameAndImage() {
         {...register("name")}
       />
       <div>
-        <Image
-          src={file!}
-          className={{
-            common:
-              "mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full object-cover",
-          }}
-          errorContent={<FaUserGroup className="h-full w-full pt-10" />}
-        />
+        {file ? (
+          <img
+            src={file!}
+            className="mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full object-cover"
+          />
+        ) : (
+          <FaUserGroup className="mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full pt-10" />
+        )}
         <Input
           type="file"
           className="hover:cursor-pointer"

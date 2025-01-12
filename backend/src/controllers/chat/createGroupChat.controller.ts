@@ -55,8 +55,8 @@ export const createGroupChatController = async (
         .status(401)
         .json({ message: "Cannot create group chat not belonging to you." });
 
-    const originalPath = req.file?.path || null;
-    const newFilename = originalPath ? uuidv4() + ".webp" : null;
+    const newFilename = req.file ? uuidv4() + ".webp" : null;
+
     const chat = await ChatService.createGroupChat(
       users,
       name || null,

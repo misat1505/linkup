@@ -1,4 +1,3 @@
-import Image from "@/components/common/Image";
 import Loading from "@/components/common/Loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -89,13 +88,14 @@ function Updater({ file }: { file: File | null }) {
     >
       <Input value={groupName || ""} onChange={handleTextChange} />
       <div className="group relative mt-8">
-        <Image
-          className={{
-            common: "h-32 w-32 overflow-hidden rounded-full object-cover",
-          }}
-          src={source}
-          errorContent={<FaUserGroup className="h-full w-full pt-8" />}
-        />
+        {source ? (
+          <img
+            className="h-32 w-32 overflow-hidden rounded-full object-cover"
+            src={source}
+          />
+        ) : (
+          <FaUserGroup className="h-32 w-32 overflow-hidden rounded-full pt-8" />
+        )}
         {source && (
           <button
             onClick={handleRemoveFile}
