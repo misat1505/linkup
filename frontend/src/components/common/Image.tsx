@@ -56,8 +56,8 @@ export default function Image({
         },
       });
       if (!result.ok) throw new Error();
-      const blob = await result.blob();
-      return URL.createObjectURL(blob);
+      const data = await result.json();
+      return data.url;
     },
   });
 

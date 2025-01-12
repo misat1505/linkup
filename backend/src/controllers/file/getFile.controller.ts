@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 import { FileService } from "../../services/FileService";
+import fileStorage from "../../lib/FileStorage";
 
 type Filter = "avatar" | "chat-message" | "chat-photo" | "cache" | "post";
 
@@ -17,6 +18,13 @@ const sendFileBuilder =
     const result = await fn();
 
     if (!result) return res.status(401).json({ message: errorMessage });
+
+    try {
+      const url = await fileStorage.getSignedUrl(filename);
+      return res.status(200).json({ url });
+    } catch (e) {
+      return res.status(404).json({ message: "File not found." });
+    }
 
     const filepath = path.join(__dirname, "..", "..", "..", "files", filename);
 
@@ -99,7 +107,7 @@ export const getFileController = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Post has to be a string." });
 
     const prefix = chatId ? path.join("chats", chatId as string) : "avatars";
-    const sendFile = sendFileBuilder(path.join(prefix, filename), res);
+    const sendFile = sendFileBuilder(`${prefix}/${filename}`, res);
 
     if (filter === "avatar") {
       const response = await sendFile(
