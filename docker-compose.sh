@@ -7,7 +7,7 @@ command=$1
 case "$command" in
     prod)
         echo "Running application in production mode..."
-        docker compose -f ./docker/docker-compose.yml up --build
+        docker compose -f ./docker/docker-compose.yml up
         ;;
     e2e)
         echo "Running application for e2e testing..."
@@ -19,7 +19,7 @@ case "$command" in
         ;;
     dev)
         echo "Running application for backend development..."
-        docker compose -f ./docker/docker-compose.yml up database socket minio --build
+        docker compose -f ./docker/docker-compose.yml up database socket minio
         ;;
     *)
         echo "Invalid command. Use 'prod', 'e2e', 'test', 'dev'."

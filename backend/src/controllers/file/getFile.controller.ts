@@ -120,13 +120,23 @@ export const getFileController = async (req: Request, res: Response) => {
       );
       return response;
     } else if (filter === "cache") {
-      const url = await fileStorage.getSignedUrl(`cache/${userId}/${filename}`);
-
-      return res.status(200).json({ url });
+      try {
+        const url = await fileStorage.getSignedUrl(
+          `cache/${userId}/${filename}`
+        );
+        return res.status(200).json({ url });
+      } catch (e) {
+        return res.status(404).json({ message: "File not found." });
+      }
     } else if (filter === "post") {
-      const url = await fileStorage.getSignedUrl(`posts/${postId}/${filename}`);
-
-      return res.status(200).json({ url });
+      try {
+        const url = await fileStorage.getSignedUrl(
+          `posts/${postId}/${filename}`
+        );
+        return res.status(200).json({ url });
+      } catch (e) {
+        return res.status(404).json({ message: "File not found." });
+      }
     }
   } catch (e) {
     return res.status(500).json({ message: "Cannot fetch file." });
