@@ -60,7 +60,7 @@ export const updatePost = async (req: Request, res: Response) => {
         .status(401)
         .json({ message: "Cannot edit post not belonging to you." });
 
-    const updatedContent = handleMarkdownUpdate(content, userId, id);
+    const updatedContent = await handleMarkdownUpdate(content, userId, id);
 
     const newPost = await PostService.updatePost({
       id,

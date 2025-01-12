@@ -4,6 +4,7 @@ import {
   GetObjectCommand,
   ListObjectsV2Command,
   DeleteObjectCommand,
+  CopyObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dotenv from "dotenv";
@@ -115,6 +116,22 @@ class FileStorage {
       return true;
     } catch (error) {
       console.error("Error deleting file:", error);
+      return false;
+    }
+  }
+
+  async copyFile(sourceKey: string, destinationKey: string): Promise<boolean> {
+    try {
+      const command = new CopyObjectCommand({
+        Bucket: this.bucketName,
+        CopySource: `/${this.bucketName}/${sourceKey}`,
+        Key: destinationKey,
+      });
+
+      await this.s3.send(command);
+      return true;
+    } catch (error) {
+      console.error("Error copying file:", error);
       return false;
     }
   }

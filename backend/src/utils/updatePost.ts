@@ -1,17 +1,16 @@
-import path from "path";
-import fs from "fs";
 import { User } from "../types/User";
 import { Post } from "../types/Post";
+import fileStorage from "../lib/FileStorage";
 
-export function handleMarkdownUpdate(
+export async function handleMarkdownUpdate(
   content: string,
   userId: User["id"],
   postId: Post["id"]
-): string {
+): Promise<string> {
   const urls = extractUrlsFromMarkdown(content);
   const filesInfo = extractFileInfo(urls);
-  migrateFiles(filesInfo, userId, postId);
-  removeUnusedFiles(filesInfo, postId);
+  await migrateFiles(filesInfo, userId, postId);
+  await removeUnusedFiles(filesInfo, postId);
   return updateUrlsInContent(content, filesInfo, postId);
 }
 
@@ -48,33 +47,21 @@ function extractFileInfo(urls: string[]): FileInfo[] {
   });
 }
 
-function migrateFiles(
+async function migrateFiles(
   files: FileInfo[],
   userId: User["id"],
   postId: Post["id"]
 ) {
-  const cachePath = path.join(__dirname, "..", "..", "files", "cache", userId);
-  const postFilesPath = path.join(
-    __dirname,
-    "..",
-    "..",
-    "files",
-    "posts",
-    postId
+  await Promise.all(
+    files.map(async (file) => {
+      if (file.type === "post") return;
+
+      await fileStorage.copyFile(
+        `cache/${userId}/${file.filename}`,
+        `posts/${postId}/${file.filename}`
+      );
+    })
   );
-
-  if (!fs.existsSync(cachePath)) fs.mkdirSync(cachePath, { recursive: true });
-  if (!fs.existsSync(postFilesPath))
-    fs.mkdirSync(postFilesPath, { recursive: true });
-
-  files.forEach((file) => {
-    if (file.type === "post") return;
-
-    const cacheFilePath = path.join(cachePath, file.filename);
-    const postFilePath = path.join(postFilesPath, file.filename);
-
-    fs.copyFileSync(cacheFilePath, postFilePath);
-  });
 }
 
 function updateUrlsInContent(
@@ -92,21 +79,14 @@ function updateUrlsInContent(
   }, content);
 }
 
-function removeUnusedFiles(files: FileInfo[], postId: Post["id"]) {
-  const postFilesPath = path.join(
-    __dirname,
-    "..",
-    "..",
-    "files",
-    "posts",
-    postId
-  );
+async function removeUnusedFiles(files: FileInfo[], postId: Post["id"]) {
+  const paths = await fileStorage.listFiles(`posts/${postId}`);
 
-  const filesInDirectory = fs.readdirSync(postFilesPath);
+  paths.forEach((path) => {
+    const splitted = path.split("/");
+    const filename = splitted[splitted.length - 1];
 
-  filesInDirectory.forEach((file) => {
-    const isFileUsed = files.some((f) => f.filename === file);
-
-    if (!isFileUsed) fs.unlinkSync(path.join(postFilesPath, file));
+    const isFileUsed = files.some((f) => f.filename === filename);
+    if (!isFileUsed) fileStorage.deleteFile(`posts/${postId}/${filename}`);
   });
 }

@@ -124,22 +124,9 @@ export const getFileController = async (req: Request, res: Response) => {
 
       return res.status(200).json({ url });
     } else if (filter === "post") {
-      const filepath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "..",
-        "files",
-        "posts",
-        postId as string,
-        filename
-      );
+      const url = await fileStorage.getSignedUrl(`posts/${postId}/${filename}`);
 
-      if (!fs.existsSync(filepath)) {
-        return res.status(404).json({ message: "File not found." });
-      }
-
-      return res.status(200).sendFile(filepath);
+      return res.status(200).json({ url });
     }
   } catch (e) {
     return res.status(500).json({ message: "Cannot fetch file." });

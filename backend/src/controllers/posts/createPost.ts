@@ -44,7 +44,7 @@ export const createPost = async (req: Request, res: Response) => {
 
     const id = uuidv4();
 
-    const updatedContent = handleMarkdownUpdate(content, userId, id);
+    const updatedContent = await handleMarkdownUpdate(content, userId, id);
 
     const post = await PostService.createPost({
       id,
