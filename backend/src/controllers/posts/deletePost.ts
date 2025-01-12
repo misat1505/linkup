@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { PostService } from "../../services/PostService";
 import path from "path";
 import fs from "fs";
+import fileStorage from "../../lib/FileStorage";
 
 export const deletePost = async (req: Request, res: Response) => {
   /**
@@ -53,12 +54,17 @@ export const deletePost = async (req: Request, res: Response) => {
 
     await PostService.deletePost(id);
 
-    const basePath = path.join(__dirname, "..", "..", "..", "files");
-    const postPath = path.join(basePath, "posts", post.id);
-    const chatPath = path.join(basePath, "chats", post.chat.id);
+    // const basePath = path.join(__dirname, "..", "..", "..", "files");
+    // const postPath = path.join(basePath, "posts", post.id);
+    // const chatPath = path.join(basePath, "chats", post.chat.id);
 
-    if (fs.existsSync(postPath)) fs.rmSync(postPath, { recursive: true });
-    if (fs.existsSync(chatPath)) fs.rmSync(chatPath, { recursive: true });
+    // if (fs.existsSync(postPath)) fs.rmSync(postPath, { recursive: true });
+    // if (fs.existsSync(chatPath)) fs.rmSync(chatPath, { recursive: true });
+
+    await Promise.all([
+      fileStorage.deleteAllFilesInDirectory(`posts/${post.id}`),
+      fileStorage.deleteAllFilesInDirectory(`chats/${post.chat.id}`),
+    ]);
 
     return res.status(200).json({ message: "Post deleted successfully." });
   } catch (e) {

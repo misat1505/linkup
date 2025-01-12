@@ -5,6 +5,7 @@ import {
   ListObjectsV2Command,
   DeleteObjectCommand,
   CopyObjectCommand,
+  DeleteObjectsCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dotenv from "dotenv";
@@ -132,6 +133,36 @@ class FileStorage {
       return true;
     } catch (error) {
       console.error("Error copying file:", error);
+      return false;
+    }
+  }
+
+  async deleteAllFilesInDirectory(directory: string): Promise<boolean> {
+    try {
+      const listCommand = new ListObjectsV2Command({
+        Bucket: this.bucketName,
+        Prefix: directory,
+      });
+      const listedObjects = await this.s3.send(listCommand);
+
+      if (!listedObjects.Contents || listedObjects.Contents.length === 0) {
+        return false;
+      }
+
+      const objectsToDelete = listedObjects.Contents.map((object) => ({
+        Key: object.Key!,
+      }));
+
+      const deleteCommand = new DeleteObjectsCommand({
+        Bucket: this.bucketName,
+        Delete: {
+          Objects: objectsToDelete,
+        },
+      });
+      await this.s3.send(deleteCommand);
+
+      return true;
+    } catch (e) {
       return false;
     }
   }
