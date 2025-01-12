@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
+import fileStorage from "../../lib/FileStorage";
+import { generateNewFilename } from "../../utils/generateNewFilename";
 
 export const CACHE_CAPACITY = 10;
 
@@ -47,39 +49,29 @@ export const insertToCache = async (req: Request, res: Response) => {
    *                   example: "Cache limit reached. Maximum number of files in cache: 10"
    */
   try {
-    const file = req.file?.path;
+    const file = req.file;
     const { userId } = req.body.token;
 
-    const userCachePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "..",
-      "files",
-      "cache",
-      userId
-    );
+    if (!file)
+      return res.status(400).json({ message: "Attach a file to upload it." });
 
-    if (!fs.existsSync(userCachePath))
-      fs.mkdirSync(userCachePath, { recursive: true });
+    const cachePaths = await fileStorage.listFiles(`cache/${userId}`);
 
-    const files = fs.readdirSync(userCachePath);
-
-    if (files.length >= CACHE_CAPACITY) {
-      fs.unlinkSync(file!);
+    if (cachePaths.length >= CACHE_CAPACITY) {
       return res.status(500).json({
         message: `Cache limit reached. Maximum number of files in cache: ${CACHE_CAPACITY}`,
       });
     }
 
-    const newFileName = uuidv4() + path.extname(file!);
-    const destinationPath = path.join(userCachePath, newFileName);
+    const filename = generateNewFilename(file.originalname);
 
-    fs.copyFileSync(file!, destinationPath);
+    await fileStorage.uploadFile(
+      file.buffer,
+      file.mimetype,
+      `cache/${userId}/${filename}`
+    );
 
-    fs.unlinkSync(file!);
-
-    return res.status(201).json({ file: newFileName });
+    return res.status(201).json({ file: filename });
   } catch (e) {
     return res.status(500).json({ message: "Cannot insert to cache." });
   }
