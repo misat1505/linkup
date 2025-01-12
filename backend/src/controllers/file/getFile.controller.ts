@@ -25,14 +25,6 @@ const sendFileBuilder =
     } catch (e) {
       return res.status(404).json({ message: "File not found." });
     }
-
-    const filepath = path.join(__dirname, "..", "..", "..", "files", filename);
-
-    if (!fs.existsSync(filepath)) {
-      return res.status(404).json({ message: "File not found." });
-    }
-
-    return res.status(200).sendFile(filepath);
   };
 
 export const getFileController = async (req: Request, res: Response) => {
@@ -128,22 +120,9 @@ export const getFileController = async (req: Request, res: Response) => {
       );
       return response;
     } else if (filter === "cache") {
-      const filepath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "..",
-        "files",
-        "cache",
-        userId,
-        filename
-      );
+      const url = await fileStorage.getSignedUrl(`cache/${userId}/${filename}`);
 
-      if (!fs.existsSync(filepath)) {
-        return res.status(404).json({ message: "File not found." });
-      }
-
-      return res.status(200).sendFile(filepath);
+      return res.status(200).json({ url });
     } else if (filter === "post") {
       const filepath = path.join(
         __dirname,

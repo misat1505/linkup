@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
+import fileStorage from "../../lib/FileStorage";
 
 export const getCache = async (req: Request, res: Response) => {
   /**
@@ -37,22 +38,14 @@ export const getCache = async (req: Request, res: Response) => {
   try {
     const { userId } = req.body.token;
 
-    const userCachePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "..",
-      "files",
-      "cache",
-      userId
-    );
+    const files = await fileStorage.listFiles(`cache/${userId}`);
 
-    if (!fs.existsSync(userCachePath))
-      fs.mkdirSync(userCachePath, { recursive: true });
+    const filenames = files.map((filename) => {
+      const splitted = filename.split("/");
+      return splitted[splitted.length - 1];
+    });
 
-    const files = fs.readdirSync(userCachePath);
-
-    return res.status(200).json({ files });
+    return res.status(200).json({ files: filenames });
   } catch (e) {
     return res.status(500).json({ message: "Cannot read cache." });
   }
