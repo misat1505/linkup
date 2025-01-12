@@ -55,7 +55,7 @@ export const updateSelfController = async (req: Request, res: Response) => {
       password,
       token: { userId },
     } = req.body;
-    const file = await processAvatar(req.file?.path);
+    const file = await processAvatar(req.file);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = Hasher.hash(password + salt);

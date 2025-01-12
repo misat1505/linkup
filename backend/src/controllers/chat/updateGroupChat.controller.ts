@@ -71,8 +71,8 @@ export const updateGroupChatController = async (
 
     const newFilename = uuidv4();
     const file = await processAvatar(
-      req.file?.path,
-      ["chats", chatId],
+      req.file,
+      `chats/${chatId}/`,
       newFilename + ".webp"
     );
 

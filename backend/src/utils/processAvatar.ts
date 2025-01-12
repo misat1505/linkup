@@ -1,43 +1,26 @@
 import sharp from "sharp";
-import fs from "fs";
-import path from "path";
 import { v4 as uuidv4 } from "uuid";
-
-const processProfileImage = async (
-  filePath: string,
-  outputPath: string
-): Promise<void> => {
-  const imageBuffer = fs.readFileSync(filePath);
-  fs.unlinkSync(filePath);
-
-  const outputDir = path.dirname(outputPath);
-  fs.mkdirSync(outputDir, { recursive: true });
-
-  await sharp(imageBuffer)
-    .resize(100, 100)
-    .webp({ quality: 80 })
-    .toFile(outputPath);
-};
+import fileStorage from "../lib/FileStorage";
 
 export const processAvatar = async (
-  filePath: string | undefined,
-  pathChunks: string[] = ["avatars"],
-  filename?: string
+  file: Express.Multer.File | undefined,
+  path: string = "avatars/",
+  name?: string
 ): Promise<string | null> => {
-  if (!filePath) return null;
+  if (!file) return null;
 
-  const outputPath = path.join(
-    __dirname,
-    "..",
-    "..",
-    "files",
-    ...pathChunks,
-    filename || `${uuidv4()}.webp`
-  );
+  const filename = name || `${uuidv4()}.webp`;
+
+  const key = `${path}${filename}`;
+
+  const processedBuffer = await sharp(file.buffer)
+    .resize(100, 100)
+    .webp({ quality: 80 })
+    .toBuffer();
 
   try {
-    await processProfileImage(filePath, outputPath);
-    return path.basename(outputPath);
+    fileStorage.uploadFile(processedBuffer, file.mimetype, key);
+    return filename;
   } catch {
     return null;
   }

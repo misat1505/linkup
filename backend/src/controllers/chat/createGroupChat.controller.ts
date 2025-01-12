@@ -64,7 +64,7 @@ export const createGroupChatController = async (
     );
 
     if (newFilename)
-      await processAvatar(req.file?.path, ["chats", chat.id], newFilename);
+      await processAvatar(req.file, `chats/${chat.id}/`, newFilename);
 
     return res.status(201).json({ chat });
   } catch (e) {
