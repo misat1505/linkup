@@ -4,8 +4,7 @@ import { Hasher } from "../../lib/Hasher";
 import { UserService } from "../../services/UserService";
 import { UserWithCredentials } from "../../types/User";
 import bcrypt from "bcryptjs";
-import fs from "fs";
-import path from "path";
+import fileStorage from "../../lib/FileStorage";
 
 export const updateSelfController = async (req: Request, res: Response) => {
   /**
@@ -62,11 +61,10 @@ export const updateSelfController = async (req: Request, res: Response) => {
 
     const fetchedUser = await UserService.getUserByLogin(login);
 
-    if (
-      fetchedUser &&
-      fetchedUser.login === login &&
-      fetchedUser.id !== userId
-    ) {
+    const isLoginTaken =
+      fetchedUser && fetchedUser.login === login && fetchedUser.id !== userId;
+
+    if (isLoginTaken) {
       return res.status(409).json({ message: "Login already taken." });
     }
 
@@ -84,16 +82,7 @@ export const updateSelfController = async (req: Request, res: Response) => {
     await UserService.updateUser(user);
 
     if (fetchedUser?.photoURL) {
-      const oldPath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "..",
-        "files",
-        "avatars",
-        fetchedUser.photoURL
-      );
-      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      await fileStorage.deleteFile(`avatars/${fetchedUser.photoURL}`);
     }
 
     return res.status(201).json({ user: UserService.removeCredentials(user) });

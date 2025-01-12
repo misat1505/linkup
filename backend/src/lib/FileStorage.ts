@@ -3,9 +3,11 @@ import {
   PutObjectCommand,
   GetObjectCommand,
   ListObjectsV2Command,
+  DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dotenv from "dotenv";
+import { env } from "../config/env";
 
 dotenv.config();
 
@@ -23,11 +25,11 @@ class FileStorage {
     forcePathStyle?: boolean;
   }) {
     const {
-      region = process.env.AWS_REGION || "",
-      endpoint = process.env.S3_ENDPOINT || "",
-      accessKeyId = process.env.AWS_ACCESS_KEY_ID || "",
-      secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY || "",
-      bucketName = process.env.S3_BUCKET_NAME || "",
+      region = env.AWS_REGION,
+      endpoint = env.S3_ENDPOINT,
+      accessKeyId = env.AWS_ACCESS_KEY_ID,
+      secretAccessKey = env.AWS_SECRET_ACCESS_KEY,
+      bucketName = env.S3_BUCKET_NAME,
       forcePathStyle = true,
     } = config || {};
 
@@ -99,6 +101,21 @@ class FileStorage {
     } catch (error) {
       console.error("Error listing files:", error);
       throw error;
+    }
+  }
+
+  async deleteFile(path: string): Promise<boolean> {
+    try {
+      const command = new DeleteObjectCommand({
+        Bucket: this.bucketName,
+        Key: path,
+      });
+
+      await this.s3.send(command);
+      return true;
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      return false;
     }
   }
 }
