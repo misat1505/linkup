@@ -106,7 +106,7 @@ export const getFileController = async (req: Request, res: Response) => {
     if (filter === "post" && typeof postId !== "string")
       return res.status(400).json({ message: "Post has to be a string." });
 
-    const prefix = chatId ? path.join("chats", chatId as string) : "avatars";
+    const prefix = chatId ? `chats/${chatId}` : "avatars";
     const sendFile = sendFileBuilder(`${prefix}/${filename}`, res);
 
     if (filter === "avatar") {

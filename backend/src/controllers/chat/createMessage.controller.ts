@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
 import path from "path";
 import fs from "fs";
+import { generateNewFilename } from "../../utils/generateNewFilename";
+import fileStorage from "../../lib/FileStorage";
 
 export const createMessageController = async (req: Request, res: Response) => {
   /**
@@ -51,9 +53,7 @@ export const createMessageController = async (req: Request, res: Response) => {
     const { content, responseId } = req.body;
     const { userId } = req.body.token;
     const { chatId } = req.params;
-    const files = (req.files as Express.Multer.File[]).map(
-      (file) => file.filename
-    );
+    const files = req.files as Express.Multer.File[];
 
     const checks = [ChatService.isUserInChat({ chatId, userId })];
 
@@ -80,20 +80,20 @@ export const createMessageController = async (req: Request, res: Response) => {
       });
     }
 
-    files.forEach((file) => {
-      const commonPath = path.join(__dirname, "..", "..", "..", "files");
-      const inPath = path.join(commonPath, "temp", file);
-      const outPath = path.join(commonPath, "chats", chatId, file);
-      fs.mkdirSync(path.dirname(outPath), { recursive: true });
-      fs.copyFileSync(inPath, outPath);
-      fs.unlinkSync(inPath);
-    });
+    const filenames = await Promise.all(
+      files.map(async (file) => {
+        const name = generateNewFilename(file.originalname);
+        const key = `chats/${chatId}/${name}`;
+        await fileStorage.uploadFile(file.buffer, file.mimetype, key);
+        return name;
+      })
+    );
 
     const message = await ChatService.createMessage({
       content,
       authorId: userId,
       chatId,
-      files,
+      files: filenames,
       responseId,
     });
 
