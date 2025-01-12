@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Tooltip from "../Tooltip";
 import FocusableSpan from "../FocusableSpan";
 import { ROUTES } from "@/lib/routes";
-import Image from "../Image";
 import { LOGO_PATH } from "@/constants";
 import NavbarSearch from "./NavbarSearch";
 import ThemeToggle from "./ThemeToggle";
@@ -22,10 +21,7 @@ export default function Navbar() {
             <Tooltip content="Home">
               <span>
                 <FocusableSpan fn={() => navigate(ROUTES.HOME.$path())}>
-                  <Image
-                    src={LOGO_PATH}
-                    className={{ common: "h-10 w-10 rounded-full" }}
-                  />
+                  <img src={LOGO_PATH} className="h-10 w-10 rounded-full" />
                 </FocusableSpan>
               </span>
             </Tooltip>
