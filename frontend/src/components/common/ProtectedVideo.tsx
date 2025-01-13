@@ -1,22 +1,7 @@
-import { queryKeys } from "@/lib/queryKeys";
-import { getAccessToken } from "@/lib/token";
-import { useQuery } from "react-query";
+import { useFetchProtectedURL } from "@/hooks/useFetchProtectedURL";
 
 export default function ProtectedVideo({ src }: { src: string }) {
-  const { data } = useQuery({
-    queryKey: queryKeys.file(src),
-    queryFn: async () => {
-      const result = await fetch(src, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-      });
-      if (!result.ok) throw new Error();
-      const blob = await result.blob();
-      return URL.createObjectURL(blob);
-    },
-  });
+  const { data } = useFetchProtectedURL(src);
 
   return (
     <video className="h-40 w-40 object-cover" controls>

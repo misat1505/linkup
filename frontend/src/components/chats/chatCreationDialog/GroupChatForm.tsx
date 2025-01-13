@@ -1,4 +1,3 @@
-import Image from "@/components/common/Image";
 import { Input } from "@/components/ui/input";
 import { useGroupChatFormContext } from "@/contexts/GroupChatFormProvider";
 import useUserSearch from "@/hooks/useUserSearch";
