@@ -1,20 +1,11 @@
 config:
   target: "http://localhost:5500"
+  http:
+    maxRequestsPerSocket: 50
   phases:
-    - duration: 60
-      arrivalRate: 100
-  tls:
-    rejectUnauthorized: false
-  processor: "./processors.js"
+    - duration: 120
+      arrivalRate: 200
 scenarios:
   - flow:
-      - post:
-          url: "/auth/login"
-          json:
-            login: "login1"
-            password: "pass1"
-          afterResponse: "extractCookie"
       - get:
-          url: "/auth/user"
-          headers:
-            Cookie: "token={{ token }}"
+          url: "/"

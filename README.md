@@ -89,7 +89,7 @@ To set up and run Link Up on your local machine, follow these steps:
      Start the app:
 
      ```bash
-     ./docker-compose.sh prod
+     ./docker-compose.sh dev
      ```
 
      And execute following commands:
