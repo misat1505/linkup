@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx prisma db push && cross-env NODE_ENV=production ts-node src/app.ts",
     "dev": "npx prisma db push && cross-env NODE_ENV=development nodemon src/app.ts",
-    "e2e": "cross-env NODE_ENV=e2e nodemon src/app.ts",
+    "e2e": "npx prisma db push && cross-env NODE_ENV=e2e nodemon src/app.ts",
     "test": "npx dotenv -e .env.test -- npx prisma db push && cross-env NODE_ENV=test npx jest --runInBand --forceExit",
     "test:coverage": "npx dotenv -e .env.test -- npx prisma db push && cross-env NODE_ENV=test npx jest --coverage --runInBand --forceExit",
     "test:load": "npx artillery run ./tests/load-tests/test.yaml",

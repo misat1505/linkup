@@ -12,6 +12,12 @@ ENV REFRESH_TOKEN_SECRET=cen7bffcn87y584c95n4350mc28n0c973257mn3c507n50207mnvc
 ENV FRONTEND_URL=http://localhost:3000
 ENV DATABASE_URL=postgresql://postgres:postgres@database/linkup
 
+ENV AWS_ACCESS_KEY_ID=admin
+ENV AWS_SECRET_ACCESS_KEY=password
+ENV AWS_REGION=us-east-1
+ENV S3_BUCKET_NAME=linkup-bucket
+ENV S3_ENDPOINT=http://localhost:9000
+
 RUN npx prisma generate
 
 EXPOSE 5500
