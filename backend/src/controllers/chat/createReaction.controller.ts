@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
 
-export const createReactionController = async (req: Request, res: Response) => {
+export const createReactionController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /chats/{chatId}/reactions:
@@ -78,6 +82,6 @@ export const createReactionController = async (req: Request, res: Response) => {
 
     return res.status(201).json({ reaction });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot create reaction." });
+    next(new Error("Cannot create reaction."));
   }
 };

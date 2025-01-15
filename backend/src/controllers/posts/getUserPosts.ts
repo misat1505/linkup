@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PostService } from "../../services/PostService";
 
-export const getUserPosts = async (req: Request, res: Response) => {
+export const getUserPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /posts/mine:
@@ -32,6 +36,6 @@ export const getUserPosts = async (req: Request, res: Response) => {
 
     return res.status(200).json({ posts });
   } catch (e) {
-    return res.status(500).json({ message: "Couldn't get user posts." });
+    next(new Error("Couldn't get user posts."));
   }
 };

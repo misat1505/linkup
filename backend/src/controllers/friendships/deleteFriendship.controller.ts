@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { FriendshipService } from "../../services/FriendshipService";
 
-export const deleteFriendship = async (req: Request, res: Response) => {
+export const deleteFriendship = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /friendships:
@@ -87,6 +91,6 @@ export const deleteFriendship = async (req: Request, res: Response) => {
       .status(200)
       .json({ message: "Friendship deleted successfully." });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot get user friendships." });
+    next(new Error("Cannot get user friendships."));
   }
 };

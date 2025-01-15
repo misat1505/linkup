@@ -1,9 +1,13 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PostService } from "../../services/PostService";
 import { v4 as uuidv4 } from "uuid";
 import { handleMarkdownUpdate } from "../../utils/updatePost";
 
-export const createPost = async (req: Request, res: Response) => {
+export const createPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /posts:
@@ -54,6 +58,6 @@ export const createPost = async (req: Request, res: Response) => {
 
     return res.status(201).json({ post });
   } catch (e) {
-    return res.status(500).json({ message: "Couldn't create post." });
+    next(new Error("Couldn't create post."));
   }
 };

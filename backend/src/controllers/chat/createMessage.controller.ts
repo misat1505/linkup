@@ -1,9 +1,13 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
 import { generateNewFilename } from "../../utils/generateNewFilename";
 import fileStorage from "../../lib/FileStorage";
 
-export const createMessageController = async (req: Request, res: Response) => {
+export const createMessageController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /chats/{chatId}/messages:
@@ -97,6 +101,6 @@ export const createMessageController = async (req: Request, res: Response) => {
 
     return res.status(201).json({ message });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot create message." });
+    next(new Error("Cannot create message."));
   }
 };

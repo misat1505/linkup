@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UserService } from "../../services/UserService";
-import { TokenProcessor } from "../../lib/TokenProcessor";
-import { env } from "../../config/env";
-import { accessTokenSignOptions } from "../../config/jwt-cookie";
 
-export const getSelfController = async (req: Request, res: Response) => {
+export const getSelfController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /auth/user:
@@ -37,6 +38,6 @@ export const getSelfController = async (req: Request, res: Response) => {
 
     return res.status(200).json({ user: UserService.removeCredentials(user) });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot fetch user." });
+    next(new Error("Cannot fetch user."));
   }
 };

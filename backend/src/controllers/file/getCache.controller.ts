@@ -1,9 +1,11 @@
-import { Request, Response } from "express";
-import path from "path";
-import fs from "fs";
+import { NextFunction, Request, Response } from "express";
 import fileStorage from "../../lib/FileStorage";
 
-export const getCache = async (req: Request, res: Response) => {
+export const getCache = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /files/cache:
@@ -47,6 +49,6 @@ export const getCache = async (req: Request, res: Response) => {
 
     return res.status(200).json({ files: filenames });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot read cache." });
+    next(new Error("Cannot read cache."));
   }
 };

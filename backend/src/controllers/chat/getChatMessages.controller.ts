@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
-import { Message } from "../../types/Message";
 
 export const getChatMessagesController = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
   /**
    * @swagger
@@ -55,7 +55,7 @@ export const getChatMessagesController = async (
 
     return res.status(200).json({ messages });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot get messages." });
+    next(new Error("Cannot get messages."));
   }
 };
 

@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PostService } from "../../services/PostService";
 import { handleMarkdownUpdate } from "../../utils/updatePost";
 
-export const updatePost = async (req: Request, res: Response) => {
+export const updatePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /posts/{id}:
@@ -69,6 +73,6 @@ export const updatePost = async (req: Request, res: Response) => {
 
     return res.status(200).json({ post: newPost });
   } catch (e) {
-    return res.status(500).json({ message: "Couldn't get post." });
+    next(new Error("Couldn't get post."));
   }
 };

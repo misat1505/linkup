@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PostService } from "../../services/PostService";
 import fileStorage from "../../lib/FileStorage";
 
-export const deletePost = async (req: Request, res: Response) => {
+export const deletePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /posts/{id}:
@@ -33,7 +37,7 @@ export const deletePost = async (req: Request, res: Response) => {
    *       404:
    *         description: Post not found.
    *       500:
-   *         description: Server error. Couldn't delete the post.
+   *         description: Couldn't delete the post.
    */
   try {
     const { id } = req.params;
@@ -58,6 +62,6 @@ export const deletePost = async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: "Post deleted successfully." });
   } catch (e) {
-    return res.status(500).json({ message: "Couldn't delete post." });
+    next(new Error("Couldn't delete post."));
   }
 };

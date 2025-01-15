@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { processAvatar } from "../../utils/processAvatar";
 import { Hasher } from "../../lib/Hasher";
 import { UserService } from "../../services/UserService";
@@ -14,7 +14,11 @@ import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import { env } from "../../config/env";
 
-export const signupController = async (req: Request, res: Response) => {
+export const signupController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /auth/signup:
@@ -95,6 +99,6 @@ export const signupController = async (req: Request, res: Response) => {
       .status(201)
       .json({ user: UserService.removeCredentials(user), accessToken });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot create new user." });
+    next(new Error("Cannot create new user."));
   }
 };

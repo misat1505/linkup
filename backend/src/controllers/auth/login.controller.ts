@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UserService } from "../../services/UserService";
 import { Hasher } from "../../lib/Hasher";
 import { TokenProcessor } from "../../lib/TokenProcessor";
@@ -10,7 +10,11 @@ import {
 } from "../../config/jwt-cookie";
 import { env } from "../../config/env";
 
-export const loginController = async (req: Request, res: Response) => {
+export const loginController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /auth/login:
@@ -72,6 +76,6 @@ export const loginController = async (req: Request, res: Response) => {
       .status(200)
       .json({ user: UserService.removeCredentials(user), accessToken });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot login." });
+    next(new Error("Cannot login."));
   }
 };

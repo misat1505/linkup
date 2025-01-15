@@ -1,6 +1,6 @@
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { env } from "./config/env";
 import { corsMiddleware } from "./config/cors";
 import expressStatusMonitor from "express-status-monitor";
@@ -33,6 +33,10 @@ if (env.NODE_ENV === "development") {
 
 app.use("/", publicRoutes);
 app.use("/", protectedRoutes);
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  return res.status(500).json({ message: err.message });
+});
 
 if (env.NODE_ENV !== "test") {
   initReactions();

@@ -1,13 +1,14 @@
-import { Request, Response } from "express";
-import path from "path";
-import fs from "fs";
-import { v4 as uuidv4 } from "uuid";
+import { NextFunction, Request, Response } from "express";
 import fileStorage from "../../lib/FileStorage";
 import { generateNewFilename } from "../../utils/generateNewFilename";
 
 export const CACHE_CAPACITY = 10;
 
-export const insertToCache = async (req: Request, res: Response) => {
+export const insertToCache = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /files/cache:
@@ -73,6 +74,6 @@ export const insertToCache = async (req: Request, res: Response) => {
 
     return res.status(201).json({ file: filename });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot insert to cache." });
+    next(new Error("Cannot insert to cache."));
   }
 };

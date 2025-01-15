@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
 
-export const getSelfChatsController = async (req: Request, res: Response) => {
+export const getSelfChatsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /chats:
@@ -30,6 +34,6 @@ export const getSelfChatsController = async (req: Request, res: Response) => {
 
     return res.status(200).json({ chats });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot get user's chats." });
+    next(new Error("Cannot get user's chats."));
   }
 };

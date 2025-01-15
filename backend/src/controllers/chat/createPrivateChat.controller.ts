@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
 
 export const createPrivateChatController = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
   /**
    * @swagger
@@ -60,6 +61,6 @@ export const createPrivateChatController = async (
 
     return res.status(201).json({ chat: createdChat });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot create private chat." });
+    next(new Error("Cannot create private chat."));
   }
 };

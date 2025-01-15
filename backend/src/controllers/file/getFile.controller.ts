@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 import { FileService } from "../../services/FileService";
@@ -27,7 +27,11 @@ const sendFileBuilder =
     }
   };
 
-export const getFileController = async (req: Request, res: Response) => {
+export const getFileController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /files/{filename}:
@@ -139,6 +143,6 @@ export const getFileController = async (req: Request, res: Response) => {
       }
     }
   } catch (e) {
-    return res.status(500).json({ message: "Cannot fetch file." });
+    next(new Error("Cannot fetch file."));
   }
 };

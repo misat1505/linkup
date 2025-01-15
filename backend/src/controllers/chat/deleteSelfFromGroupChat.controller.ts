@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
 
 export const deleteSelfFromGroupChatController = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
   /**
    * @swagger
@@ -47,6 +48,6 @@ export const deleteSelfFromGroupChatController = async (
     await ChatService.deleteFromChat({ chatId, userId });
     return res.status(200).json({ message: "Successfully deleted from chat." });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot add user to this chat." });
+    next(new Error("Cannot add user to this chat."));
   }
 };

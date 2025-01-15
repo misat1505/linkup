@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UserService } from "../../services/UserService";
 
-export const searchUserController = async (req: Request, res: Response) => {
+export const searchUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /users/search:
@@ -44,9 +48,8 @@ export const searchUserController = async (req: Request, res: Response) => {
         .json({ message: "'term' query param is required." });
 
     const users = await UserService.searchUsers(term);
-
     return res.status(200).json({ users });
   } catch (e) {
-    return res.status(500).json({ message: "Couldn't search users." });
+    next(new Error("Couldn't search users."));
   }
 };

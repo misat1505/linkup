@@ -1,9 +1,11 @@
-import { Request, Response } from "express";
-import path from "path";
-import fs from "fs";
+import { NextFunction, Request, Response } from "express";
 import fileStorage from "../../lib/FileStorage";
 
-export const deleteFromCache = async (req: Request, res: Response) => {
+export const deleteFromCache = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /files/cache/{filename}:
@@ -57,6 +59,6 @@ export const deleteFromCache = async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: "File deleted successfully." });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot delete file from cache." });
+    next(new Error("Cannot delete file from cache."));
   }
 };

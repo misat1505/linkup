@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { FriendshipService } from "../../services/FriendshipService";
 
-export const createFriendship = async (req: Request, res: Response) => {
+export const createFriendship = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /friendships:
@@ -97,6 +101,6 @@ export const createFriendship = async (req: Request, res: Response) => {
 
     return res.status(201).json({ friendship });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot get user friendships." });
+    next(new Error("Cannot get user friendships."));
   }
 };

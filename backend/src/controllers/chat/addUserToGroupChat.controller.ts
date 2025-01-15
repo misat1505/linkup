@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
 
 export const addUserToGroupChatController = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
   /**
    * @swagger
@@ -75,6 +76,6 @@ export const addUserToGroupChatController = async (
     const user = await ChatService.addUserToChat({ chatId, userId });
     return res.status(201).json({ user });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot add user to this chat." });
+    next(new Error("Cannot add user to this chat."));
   }
 };

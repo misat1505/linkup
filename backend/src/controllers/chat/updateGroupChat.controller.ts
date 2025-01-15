@@ -1,14 +1,13 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
 import { processAvatar } from "../../utils/processAvatar";
 import { v4 as uuidv4 } from "uuid";
-import path from "path";
-import fs from "fs";
 import fileStorage from "../../lib/FileStorage";
 
 export const updateGroupChatController = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
   /**
    * @swagger
@@ -89,6 +88,6 @@ export const updateGroupChatController = async (
 
     return res.status(201).json({ chat });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot create group chat." });
+    next(new Error("Cannot create group chat."));
   }
 };

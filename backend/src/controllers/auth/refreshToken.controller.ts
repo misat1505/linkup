@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { TokenProcessor } from "../../lib/TokenProcessor";
 import {
   accessTokenSignOptions,
@@ -8,7 +8,11 @@ import {
 } from "../../config/jwt-cookie";
 import { env } from "../../config/env";
 
-export const refreshTokenController = (req: Request, res: Response) => {
+export const refreshTokenController = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   /**
    * @swagger
    * /auth/refresh:
@@ -40,6 +44,6 @@ export const refreshTokenController = (req: Request, res: Response) => {
       .status(200)
       .json({ message: "Successfully refreshed token.", accessToken });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot refresh token." });
+    next(new Error("Cannot refresh token."));
   }
 };
