@@ -10,14 +10,16 @@ import friendshipRouter from "./routers/friendship.router";
 
 const protectedRoutes = Router();
 
-protectedRoutes.use(authorize);
-protectedRoutes.use(updateLastActive);
-
-protectedRoutes.use("/auth", authRouterProtected);
-protectedRoutes.use("/files", fileRouter);
-protectedRoutes.use("/users", userRouter);
-protectedRoutes.use("/chats", chatRouter);
-protectedRoutes.use("/posts", postRouter);
-protectedRoutes.use("/friendships", friendshipRouter);
+protectedRoutes.use("/auth", authorize, updateLastActive, authRouterProtected);
+protectedRoutes.use("/files", authorize, updateLastActive, fileRouter);
+protectedRoutes.use("/users", authorize, updateLastActive, userRouter);
+protectedRoutes.use("/chats", authorize, updateLastActive, chatRouter);
+protectedRoutes.use("/posts", authorize, updateLastActive, postRouter);
+protectedRoutes.use(
+  "/friendships",
+  authorize,
+  updateLastActive,
+  friendshipRouter
+);
 
 export default protectedRoutes;
