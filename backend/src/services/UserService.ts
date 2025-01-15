@@ -13,20 +13,26 @@ export class UserService {
   }
 
   static async searchUsers(term: string): Promise<User[]> {
+    const searchTerms = term.trim().toLowerCase().split(/\s+/);
+
     const users: User[] = await prisma.user.findMany({
       where: {
-        OR: [
-          {
-            firstName: {
-              contains: term,
+        OR: searchTerms.map((term) => ({
+          OR: [
+            {
+              firstName: {
+                contains: term,
+                mode: "insensitive",
+              },
             },
-          },
-          {
-            lastName: {
-              contains: term,
+            {
+              lastName: {
+                contains: term,
+                mode: "insensitive",
+              },
             },
-          },
-        ],
+          ],
+        })),
       },
       select: userSelect,
     });
