@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { ChatService } from "../../services/ChatService";
-import path from "path";
-import fs from "fs";
 import { generateNewFilename } from "../../utils/generateNewFilename";
 import fileStorage from "../../lib/FileStorage";
 
@@ -99,7 +97,6 @@ export const createMessageController = async (req: Request, res: Response) => {
 
     return res.status(201).json({ message });
   } catch (e) {
-    console.log(e);
     return res.status(500).json({ message: "Cannot create message." });
   }
 };

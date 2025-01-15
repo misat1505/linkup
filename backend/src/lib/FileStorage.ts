@@ -16,7 +16,6 @@ dotenv.config();
 class FileStorage {
   private s3: S3Client;
   private bucketName: string;
-  private endpoint: string;
 
   constructor(config?: {
     region?: string;
@@ -52,7 +51,6 @@ class FileStorage {
     });
 
     this.bucketName = bucketName;
-    this.endpoint = endpoint;
   }
 
   async uploadFile(
@@ -71,7 +69,6 @@ class FileStorage {
       await this.s3.send(command);
       return path;
     } catch (error) {
-      console.error("Error uploading file:", error);
       return null;
     }
   }
@@ -101,7 +98,6 @@ class FileStorage {
 
       return response.Contents.map((item) => item.Key || "").filter(Boolean);
     } catch (error) {
-      console.error("Error listing files:", error);
       throw error;
     }
   }
@@ -116,7 +112,6 @@ class FileStorage {
       await this.s3.send(command);
       return true;
     } catch (error) {
-      console.error("Error deleting file:", error);
       return false;
     }
   }
@@ -132,7 +127,6 @@ class FileStorage {
       await this.s3.send(command);
       return true;
     } catch (error) {
-      console.error("Error copying file:", error);
       return false;
     }
   }
