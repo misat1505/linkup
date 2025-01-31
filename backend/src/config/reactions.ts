@@ -2,6 +2,13 @@ import { prisma } from "../lib/Prisma";
 
 type Reaction = { id: string; name: string };
 
+/**
+ * A predefined list of reactions to be initialized in the database.
+ *
+ * @remarks
+ * This list contains predefined reactions such as "happy", "sad", and others.
+ * The reactions are stored in an array of objects where each object contains an `id` and a `name`.
+ */
 export const reactions: Reaction[] = [
   {
     id: "c3dd47c4-2192-4926-8ec0-b822d14b288d",
@@ -25,7 +32,15 @@ export const reactions: Reaction[] = [
   },
 ];
 
-export async function initReactions() {
+/**
+ * Initializes predefined reactions in the database.
+ *
+ * @remarks
+ * This function checks if the reactions already exist in the database. If a reaction is not found, it is created in the database.
+ *
+ * @returns {Promise<void>} A promise that resolves when all reactions have been checked and initialized.
+ */
+export async function initReactions(): Promise<void> {
   await Promise.all(
     reactions.map(async (reaction) => {
       const existingReaction = await prisma.reaction.findUnique({
