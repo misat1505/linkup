@@ -18,7 +18,15 @@ function sanitizeChat(chat: any): Chat | null {
   return sanitizedChat as Chat;
 }
 
+/**
+ * Service class responsible for managing chat-related operations in database using Prisma.
+ */
 export class ChatService {
+  /**
+   * Retrieves a chat by its ID.
+   * @param id - The ID of the chat to retrieve.
+   * @returns The chat object, or null if not found.
+   */
   static async getChatById(id: Chat["id"]): Promise<Chat | null> {
     const result = await prisma.chat.findFirst({
       where: { id },
@@ -37,6 +45,13 @@ export class ChatService {
     return sanitizeChat(result);
   }
 
+  /**
+   * Updates the details of a group chat (name and photo URL).
+   * @param chatId - The ID of the chat to update.
+   * @param name - The new name of the chat.
+   * @param file - The new photo URL of the chat.
+   * @returns The updated chat object, or null if not found.
+   */
   static async updateGroupChat({
     chatId,
     name,
@@ -64,6 +79,11 @@ export class ChatService {
     return sanitizeChat(result);
   }
 
+  /**
+   * Removes a user from a chat.
+   * @param chatId - The ID of the chat.
+   * @param userId - The ID of the user to remove.
+   */
   static async deleteFromChat({
     chatId,
     userId,
@@ -78,6 +98,11 @@ export class ChatService {
     });
   }
 
+  /**
+   * Retrieves the type of a chat (e.g., GROUP, PRIVATE).
+   * @param id - The ID of the chat.
+   * @returns The chat type, or null if not found.
+   */
   static async getChatType(id: Chat["id"]): Promise<Chat["type"] | null> {
     const result = await prisma.chat.findFirst({
       where: { id },
@@ -87,6 +112,12 @@ export class ChatService {
     return result ? result.type : null;
   }
 
+  /**
+   * Adds a user to a chat.
+   * @param chatId - The ID of the chat to join.
+   * @param userId - The ID of the user to add to the chat.
+   * @returns The user object that was added to the chat.
+   */
   static async addUserToChat({
     chatId,
     userId,
@@ -105,6 +136,12 @@ export class ChatService {
     return user;
   }
 
+  /**
+   * Updates the alias of a user in a chat.
+   * @param userId - The ID of the user whose alias is being updated.
+   * @param chatId - The ID of the chat.
+   * @param alias - The new alias for the user in the chat.
+   */
   static async updateAlias({
     userId,
     chatId,
@@ -127,6 +164,11 @@ export class ChatService {
     });
   }
 
+  /**
+   * Creates a reaction to a message.
+   * @param data - The user ID, reaction ID, and message ID to create a reaction for.
+   * @returns The created reaction object.
+   */
   static async createReactionToMessage(data: {
     userId: User["id"];
     reactionId: string;
@@ -147,6 +189,12 @@ export class ChatService {
     return reaction;
   }
 
+  /**
+   * Checks if a message belongs to a specific chat.
+   * @param chatId - The ID of the chat.
+   * @param messageId - The ID of the message.
+   * @returns True if the message exists in the chat, otherwise false.
+   */
   static async isMessageInChat({
     chatId,
     messageId,
@@ -161,6 +209,12 @@ export class ChatService {
     return !!result;
   }
 
+  /**
+   * Retrieves all messages in a chat, optionally filtering by response ID.
+   * @param chatId - The ID of the chat to fetch messages for.
+   * @param responseId - Optionally, the ID of the parent message to filter by.
+   * @returns A list of messages in the chat.
+   */
   static async getChatMessages(
     chatId: Chat["id"],
     responseId: Message["id"] | null | undefined = undefined
@@ -214,6 +268,12 @@ export class ChatService {
     return messages;
   }
 
+  /**
+   * Checks if a user is part of a specific chat.
+   * @param userId - The ID of the user to check.
+   * @param chatId - The ID of the chat to check.
+   * @returns True if the user is part of the chat, otherwise false.
+   */
   static async isUserInChat({
     userId,
     chatId,
@@ -240,6 +300,15 @@ export class ChatService {
     return chat.users.length !== 0;
   }
 
+  /**
+   * Creates a new message in a chat.
+   * @param content - The content of the message.
+   * @param authorId - The ID of the user creating the message.
+   * @param chatId - The ID of the chat to send the message to.
+   * @param files - A list of file URLs to associate with the message.
+   * @param responseId - Optionally, the ID of the message being replied to.
+   * @returns The created message object.
+   */
   static async createMessage({
     content,
     authorId,
@@ -297,6 +366,11 @@ export class ChatService {
     return message;
   }
 
+  /**
+   * Retrieves all chats for a user.
+   * @param userId - The ID of the user to retrieve chats for.
+   * @returns A list of chats the user is part of.
+   */
   static async getUserChats(userId: User["id"]): Promise<Chat[]> {
     const result = await prisma.chat.findMany({
       where: {
@@ -321,6 +395,12 @@ export class ChatService {
     return result.map((chat) => sanitizeChat(chat)!);
   }
 
+  /**
+   * Retrieves a private chat between two users by their IDs.
+   * @param id1 - The ID of the first user.
+   * @param id2 - The ID of the second user.
+   * @returns The private chat object, or null if not found.
+   */
   static async getPrivateChatByUserIds(
     id1: string,
     id2: string
@@ -356,6 +436,12 @@ export class ChatService {
     return sanitizeChat(chat);
   }
 
+  /**
+   * Creates a new private chat between two users.
+   * @param id1 The ID of the first user.
+   * @param id2 The ID of the second user.
+   * @returns The created private chat with user details and the last message, sanitized.
+   */
   static async createPrivateChat(id1: string, id2: string): Promise<Chat> {
     const users = Array.from(new Set([id1, id2]));
 
@@ -385,6 +471,13 @@ export class ChatService {
     return sanitizeChat(result)!;
   }
 
+  /**
+   * Creates a new group chat with multiple users.
+   * @param users The array of user IDs to be added to the group chat.
+   * @param name The name of the group chat.
+   * @param photoURL The photo URL for the group chat.
+   * @returns The created group chat with user details and the last message, sanitized.
+   */
   static async createGroupChat(
     users: User["id"][],
     name: Chat["name"],

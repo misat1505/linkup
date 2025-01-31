@@ -10,7 +10,15 @@ function sanitizeFriendship(friendship: any): Friendship | null {
   return sanitizedFriendship as Friendship;
 }
 
+/**
+ * Service class responsible for managing friendship-related operations in the database using Prisma.
+ */
 export class FriendshipService {
+  /**
+   * Retrieves a user's friendships.
+   * @param userId - The ID of the user whose friendships are to be retrieved.
+   * @returns A list of friendships associated with the user.
+   */
   static async getUserFriendships(userId: User["id"]): Promise<Friendship[]> {
     const friendships: Friendship[] = await prisma.friend.findMany({
       where: {
@@ -25,6 +33,12 @@ export class FriendshipService {
     return friendships.map((f) => sanitizeFriendship(f)!);
   }
 
+  /**
+   * Creates a new friendship request.
+   * @param requesterId - The ID of the user sending the friend request.
+   * @param acceptorId - The ID of the user receiving the friend request.
+   * @returns The created friendship object, or `null` if the friendship already exists.
+   */
   static async createFriendship(
     requesterId: User["id"],
     acceptorId: User["id"]
@@ -55,6 +69,12 @@ export class FriendshipService {
     return sanitizeFriendship(newFriendship);
   }
 
+  /**
+   * Accepts a friendship request.
+   * @param requesterId - The ID of the user who sent the friend request.
+   * @param acceptorId - The ID of the user accepting the friend request.
+   * @returns The updated friendship object, or `null` if no pending friendship exists.
+   */
   static async acceptFriendship(
     requesterId: User["id"],
     acceptorId: User["id"]
@@ -88,6 +108,12 @@ export class FriendshipService {
     return sanitizeFriendship(updatedFriendship);
   }
 
+  /**
+   * Deletes a friendship.
+   * @param requesterId - The ID of the user who sent the friend request.
+   * @param acceptorId - The ID of the user accepting or rejecting the friendship.
+   * @returns `true` if the friendship was successfully deleted, otherwise `false`.
+   */
   static async deleteFriendship(
     requesterId: User["id"],
     acceptorId: User["id"]
