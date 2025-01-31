@@ -2,6 +2,16 @@ import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 import fileStorage from "../lib/FileStorage";
 
+/**
+ * Processes an avatar image: resizes, converts to WebP, and uploads it.
+ *
+ * @param file - The uploaded file object (usually from Multer).
+ * @param path - The directory path where the avatar will be stored (default: "avatars/").
+ * @param name - An optional name for the file. If not provided, a UUID will be generated.
+ * @returns The new filename if successful, or null if an error occurs.
+ *
+ * @source
+ */
 export const processAvatar = async (
   file: Express.Multer.File | undefined,
   path: string = "avatars/",

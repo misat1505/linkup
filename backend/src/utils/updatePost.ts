@@ -2,6 +2,18 @@ import { User } from "../types/User";
 import { Post } from "../types/Post";
 import fileStorage from "../lib/FileStorage";
 
+/**
+ * Handles updating a post's content with new file references.
+ * This function extracts URLs from the markdown content, migrates files from the cache to the post directory,
+ * removes unused files, and updates the URLs to reflect their new locations.
+ *
+ * @param content - The markdown content to be updated.
+ * @param userId - The ID of the user making the update.
+ * @param postId - The ID of the post being updated.
+ * @returns The updated content with modified URLs.
+ *
+ * @source
+ */
 export async function handleMarkdownUpdate(
   content: string,
   userId: User["id"],
