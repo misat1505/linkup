@@ -19,6 +19,9 @@ jobs:
         with:
           node-version: "21"
 
+      - name: Copy envs for tests
+        run: cp backend/cicd.env backend/.env.test
+
       - name: Make script executable
         run: chmod +x ./docker-compose.sh
 
