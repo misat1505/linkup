@@ -13,7 +13,7 @@ import { env } from "../config/env";
 
 dotenv.config();
 
-class FileStorage {
+export class FileStorage {
   private s3: S3Client;
   private bucketName: string;
 
@@ -57,20 +57,16 @@ class FileStorage {
     fileBuffer: Buffer,
     contentType: string,
     path: string
-  ): Promise<string | null> {
-    try {
-      const command = new PutObjectCommand({
-        Bucket: this.bucketName,
-        Key: path,
-        Body: fileBuffer,
-        ContentType: contentType,
-      });
+  ): Promise<string> {
+    const command = new PutObjectCommand({
+      Bucket: this.bucketName,
+      Key: path,
+      Body: fileBuffer,
+      ContentType: contentType,
+    });
 
-      await this.s3.send(command);
-      return path;
-    } catch (error) {
-      return null;
-    }
+    await this.s3.send(command);
+    return path;
   }
 
   async getSignedUrl(path: string, expiresIn = 60): Promise<string> {
@@ -84,81 +80,59 @@ class FileStorage {
   }
 
   async listFiles(directory: string): Promise<string[]> {
-    try {
-      const command = new ListObjectsV2Command({
-        Bucket: this.bucketName,
-        Prefix: directory,
-      });
+    const command = new ListObjectsV2Command({
+      Bucket: this.bucketName,
+      Prefix: directory,
+    });
 
-      const response = await this.s3.send(command);
+    const response = await this.s3.send(command);
 
-      if (!response.Contents) {
-        return [];
-      }
-
-      return response.Contents.map((item) => item.Key || "").filter(Boolean);
-    } catch (error) {
-      throw error;
+    if (!response.Contents) {
+      return [];
     }
+
+    return response.Contents.map((item) => item.Key || "").filter(Boolean);
   }
 
-  async deleteFile(path: string): Promise<boolean> {
-    try {
-      const command = new DeleteObjectCommand({
-        Bucket: this.bucketName,
-        Key: path,
-      });
+  async deleteFile(path: string): Promise<void> {
+    const command = new DeleteObjectCommand({
+      Bucket: this.bucketName,
+      Key: path,
+    });
 
-      await this.s3.send(command);
-      return true;
-    } catch (error) {
-      return false;
-    }
+    await this.s3.send(command);
   }
 
-  async copyFile(sourceKey: string, destinationKey: string): Promise<boolean> {
-    try {
-      const command = new CopyObjectCommand({
-        Bucket: this.bucketName,
-        CopySource: `/${this.bucketName}/${sourceKey}`,
-        Key: destinationKey,
-      });
+  async copyFile(sourceKey: string, destinationKey: string): Promise<void> {
+    const command = new CopyObjectCommand({
+      Bucket: this.bucketName,
+      CopySource: `/${this.bucketName}/${sourceKey}`,
+      Key: destinationKey,
+    });
 
-      await this.s3.send(command);
-      return true;
-    } catch (error) {
-      return false;
-    }
+    await this.s3.send(command);
   }
 
-  async deleteAllFilesInDirectory(directory: string): Promise<boolean> {
-    try {
-      const listCommand = new ListObjectsV2Command({
-        Bucket: this.bucketName,
-        Prefix: directory,
-      });
-      const listedObjects = await this.s3.send(listCommand);
+  async deleteAllFilesInDirectory(directory: string): Promise<void> {
+    const listCommand = new ListObjectsV2Command({
+      Bucket: this.bucketName,
+      Prefix: directory,
+    });
+    const listedObjects = await this.s3.send(listCommand);
 
-      if (!listedObjects.Contents || listedObjects.Contents.length === 0) {
-        return false;
-      }
+    if (!listedObjects.Contents || listedObjects.Contents.length === 0) return;
 
-      const objectsToDelete = listedObjects.Contents.map((object) => ({
-        Key: object.Key!,
-      }));
+    const objectsToDelete = listedObjects.Contents.map((object) => ({
+      Key: object.Key!,
+    }));
 
-      const deleteCommand = new DeleteObjectsCommand({
-        Bucket: this.bucketName,
-        Delete: {
-          Objects: objectsToDelete,
-        },
-      });
-      await this.s3.send(deleteCommand);
-
-      return true;
-    } catch (e) {
-      return false;
-    }
+    const deleteCommand = new DeleteObjectsCommand({
+      Bucket: this.bucketName,
+      Delete: {
+        Objects: objectsToDelete,
+      },
+    });
+    await this.s3.send(deleteCommand);
   }
 }
 
