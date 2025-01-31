@@ -27,60 +27,71 @@ const sendFileBuilder =
     }
   };
 
+/**
+ * Controller to retrieve a file based on specified filters and parameters.
+ *
+ * @remarks
+ * This controller handles the logic of fetching a file from storage based on the filter type (`avatar`, `chat-message`, `chat-photo`, `cache`, or `post`) and additional parameters such as `chatId` or `postId`. It performs the necessary validation checks for the request parameters and provides a signed URL for the requested file if the conditions are met. It also includes detailed error handling for various cases like invalid filters or missing parameters.
+ *
+ * @param {Request} req - The Express request object containing the filename, filter, and any optional parameters (`chatId`, `postId`).
+ * @param {Response} res - The Express response object used to send the signed URL or error messages back to the client.
+ * @param {NextFunction} next - The Express next function used for error handling.
+ *
+ * @source
+ *
+ * @swagger
+ * /files/{filename}:
+ *   get:
+ *     summary: Retrieve a file
+ *     tags: [Files]
+ *     parameters:
+ *       - name: filename
+ *         in: path
+ *         required: true
+ *         description: The name of the file to retrieve.
+ *         schema:
+ *           type: string
+ *       - name: filter
+ *         in: query
+ *         required: true
+ *         description: The type of file to filter (avatar, chat-message, chat-photo, cache or post).
+ *         schema:
+ *           type: string
+ *           enum: [avatar, chat-message, chat-photo, cache, post]
+ *       - name: chat
+ *         in: query
+ *         required: false
+ *         description: Optional chat ID for chat-specific files. Required if filter is 'chat-message' or 'chat-photo'.
+ *         schema:
+ *           type: string
+ *       - name: post
+ *         in: query
+ *         required: false
+ *         description: Optional post ID for post-specific files. Required if filter is 'post'.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: File retrieved successfully
+ *         content:
+ *           application/octet-stream:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Invalid request parameters
+ *       401:
+ *         description: Unauthorized access or query failed
+ *       404:
+ *         description: File not found
+ *       500:
+ *         description: Server error when fetching the file
+ */
 export const getFileController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  /**
-   * @swagger
-   * /files/{filename}:
-   *   get:
-   *     summary: Retrieve a file
-   *     tags: [Files]
-   *     parameters:
-   *       - name: filename
-   *         in: path
-   *         required: true
-   *         description: The name of the file to retrieve.
-   *         schema:
-   *           type: string
-   *       - name: filter
-   *         in: query
-   *         required: true
-   *         description: The type of file to filter (avatar, chat-message, chat-photo, cache or post).
-   *         schema:
-   *           type: string
-   *           enum: [avatar, chat-message, chat-photo, cache, post]
-   *       - name: chat
-   *         in: query
-   *         required: false
-   *         description: Optional chat ID for chat-specific files. Required if filter is 'chat-message' or 'chat-photo'.
-   *         schema:
-   *           type: string
-   *       - name: post
-   *         in: query
-   *         required: false
-   *         description: Optional post ID for post-specific files. Required if filter is 'post'.
-   *         schema:
-   *           type: string
-   *     responses:
-   *       200:
-   *         description: File retrieved successfully
-   *         content:
-   *           application/octet-stream:
-   *             schema:
-   *               type: string
-   *               format: binary
-   *       400:
-   *         description: Invalid request parameters
-   *       401:
-   *         description: Unauthorized access or query failed
-   *       404:
-   *         description: File not found
-   *       500:
-   *         description: Server error when fetching the file
-   */
   try {
     const { filename } = req.params;
     const filter = req.query.filter as Filter;
