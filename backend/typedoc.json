@@ -2,6 +2,8 @@
   "entryPoints": ["src"],
   "entryPointStrategy": "expand",
   "out": "docs",
-  "plugin": ["@typhonjs-typedoc/typedoc-theme-dmt"],
-  "theme": "default-modern"
+  "plugin": ["typedoc-plugin-inline-sources", "typedoc-theme-hierarchy"],
+  "theme": "hierarchy",
+  "logLevel": "Error",
+  "name": "LinkUp - backend"
 }

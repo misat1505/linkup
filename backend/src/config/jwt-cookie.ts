@@ -6,6 +6,8 @@ import { SignOptions } from "jsonwebtoken";
  *
  * @remarks
  * This cookie is used to store the refresh token for the user session.
+ *
+ * @source
  */
 export const refreshTokenCookieName = "refresh-token";
 
@@ -14,6 +16,8 @@ export const refreshTokenCookieName = "refresh-token";
  *
  * @remarks
  * This configuration ensures that the cookie is securely set with the appropriate flags for security.
+ *
+ * @source
  */
 export const refreshTokenCookieOptions: CookieOptions = {
   sameSite: "none",
@@ -27,6 +31,8 @@ export const refreshTokenCookieOptions: CookieOptions = {
  *
  * @remarks
  * This configuration specifies the expiration time for the refresh token (7 days).
+ *
+ * @source
  */
 export const refreshTokenSignOptions: SignOptions = {
   expiresIn: "7d",
@@ -37,6 +43,8 @@ export const refreshTokenSignOptions: SignOptions = {
  *
  * @remarks
  * This configuration specifies the expiration time for the access token (15 minutes).
+ *
+ * @source
  */
 export const accessTokenSignOptions: SignOptions = {
   expiresIn: "15m",

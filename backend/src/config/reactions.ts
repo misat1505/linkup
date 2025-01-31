@@ -8,6 +8,8 @@ type Reaction = { id: string; name: string };
  * @remarks
  * This list contains predefined reactions such as "happy", "sad", and others.
  * The reactions are stored in an array of objects where each object contains an `id` and a `name`.
+ *
+ * @source
  */
 export const reactions: Reaction[] = [
   {
@@ -39,6 +41,8 @@ export const reactions: Reaction[] = [
  * This function checks if the reactions already exist in the database. If a reaction is not found, it is created in the database.
  *
  * @returns {Promise<void>} A promise that resolves when all reactions have been checked and initialized.
+ *
+ * @source
  */
 export async function initReactions(): Promise<void> {
   await Promise.all(
