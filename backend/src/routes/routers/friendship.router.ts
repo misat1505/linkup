@@ -4,6 +4,12 @@ import { createFriendship } from "../../controllers/friendships/createFriendship
 import { acceptFriendship } from "../../controllers/friendships/acceptFriendship.controller";
 import { deleteFriendship } from "../../controllers/friendships/deleteFriendship.controller";
 
+/**
+ * Friendship Routes Router.
+ *
+ * This router handles operations related to user friendships, including viewing,
+ * creating, accepting, and deleting friendships.
+ */
 const friendshipRouter = Router();
 
 friendshipRouter.get("/", getUserFriendships);

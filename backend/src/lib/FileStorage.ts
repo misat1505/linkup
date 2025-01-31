@@ -47,8 +47,6 @@ export class FileStorage {
    * @param config.forcePathStyle - Whether to force path style URLs (defaults to `true`).
    *
    * @throws {Error} If any required configuration (region, accessKeyId, secretAccessKey, bucketName) is missing.
-   *
-   * @source
    */
   constructor(config?: {
     region?: string;

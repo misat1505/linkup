@@ -22,6 +22,13 @@ import { addUserToGroupChatController } from "../../controllers/chat/addUserToGr
 import { deleteSelfFromGroupChatController } from "../../controllers/chat/deleteSelfFromGroupChat.controller";
 import { updateGroupChatController } from "../../controllers/chat/updateGroupChat.controller";
 
+/**
+ * Chat Routes Router.
+ *
+ * This router handles all chat-related operations including creating private and group chats,
+ * sending messages, adding reactions, updating user aliases, and managing group chat users.
+ * All routes are protected and require authorization, with file uploads supported for certain endpoints.
+ */
 const chatRouter = Router();
 
 chatRouter.post(

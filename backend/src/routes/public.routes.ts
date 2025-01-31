@@ -4,6 +4,13 @@ import { reactions } from "../config/reactions";
 import { env } from "../config/env";
 import { resetDB } from "../../tests/utils/setup";
 
+/**
+ * Public Routes Router.
+ *
+ * This router contains routes that are publicly accessible and do not require authorization.
+ * The routes include authentication and reactions fetching, and a special route for resetting the database
+ * in the `e2e` (end-to-end) environment.
+ */
 const publicRoutes = Router();
 
 publicRoutes.use("/auth", authRouter);

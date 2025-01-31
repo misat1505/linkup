@@ -8,6 +8,12 @@ import fileRouter from "./routers/file.router";
 import postRouter from "./routers/post.router";
 import friendshipRouter from "./routers/friendship.router";
 
+/**
+ * Protected Routes Router.
+ *
+ * This router contains routes that require authorization and updates the user's last active time.
+ * All requests to these routes will first go through the `authorize` and `updateLastActive` middlewares.
+ */
 const protectedRoutes = Router();
 
 protectedRoutes.use("/auth", authorize, updateLastActive, authRouterProtected);

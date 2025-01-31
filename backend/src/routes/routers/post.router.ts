@@ -6,6 +6,12 @@ import { getPosts } from "../../controllers/posts/getPosts";
 import { createPost } from "../../controllers/posts/createPost";
 import { deletePost } from "../../controllers/posts/deletePost";
 
+/**
+ * Post Routes Router.
+ *
+ * This router handles operations related to posts, including creating, reading,
+ * updating, and deleting posts, as well as retrieving posts specific to the user.
+ */
 const postRouter = Router();
 
 postRouter.put("/:id", updatePost);
