@@ -1,5 +1,15 @@
 import { body } from "express-validator";
 
+/**
+ * Validation rules for login requests.
+ * These rules ensure that the login and password fields are provided,
+ * are strings, and meet the specified length constraints.
+ *
+ * - `login`: Required, must be a string, and must be between 5 and 50 characters.
+ * - `password`: Required, must be a string, and must be at least 5 characters long.
+ *
+ * @constant
+ */
 export const loginRules = [
   body("login")
     .exists()
@@ -21,6 +31,18 @@ export const loginRules = [
     .withMessage("Password must be at least 5 characters long."),
 ];
 
+/**
+ * Validation rules for signup requests.
+ * These rules ensure that the required user fields (first name, last name, login, and password)
+ * are provided, are strings, and meet the specified length constraints.
+ *
+ * - `firstName`: Required, must be a string, not empty, and at most 50 characters long.
+ * - `lastName`: Required, must be a string, not empty, and at most 50 characters long.
+ * - `login`: Required, must be a string, and must be between 5 and 50 characters.
+ * - `password`: Required, must be a string, and must be at least 5 characters long.
+ *
+ * @constant
+ */
 export const signupRules = [
   body("firstName")
     .exists()
