@@ -8,24 +8,37 @@ import {
 } from "../../config/jwt-cookie";
 import { env } from "../../config/env";
 
+/**
+ * Controller to refresh the access token and refresh token using the provided refresh token.
+ *
+ * @remarks
+ * This controller reads the refresh token from the request to authenticate the user. It then
+ * generates and returns a new access token and refresh token. The new refresh token is stored in a
+ * cookie, and both tokens are returned in the response.
+ *
+ * @param {Request} req - The Express request object that contains the user's refresh token.
+ * @param {Response} res - The Express response object used to send the refreshed tokens.
+ * @param {NextFunction} next - The Express next function for error handling.
+ *
+ * @source
+ *
+ * @swagger
+ * /auth/refresh:
+ *   post:
+ *     summary: Refresh access token and refresh token
+ *     description: This endpoint reads the refresh token from the request to authorize the user and generate a new access token.
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Token refreshed successfully
+ *       500:
+ *         description: Cannot refresh token
+ */
 export const refreshTokenController = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  /**
-   * @swagger
-   * /auth/refresh:
-   *   post:
-   *     summary: Refresh access token and refresh token
-   *     description: This endpoint reads the refresh token from the request to authorize the user and generate a new access token.
-   *     tags: [Auth]
-   *     responses:
-   *       200:
-   *         description: Token refreshed successfully
-   *       500:
-   *         description: Cannot refresh token
-   */
   try {
     const { userId } = req.body.token;
 
