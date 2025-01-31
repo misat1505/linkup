@@ -7,3 +7,4 @@
 /prisma/migrations
 /src/config/security/*
 /.env*
+/docs
