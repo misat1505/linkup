@@ -4,6 +4,13 @@ import { reactions } from "../config/reactions";
 import { env } from "../config/env";
 import { resetDB } from "../../tests/utils/setup";
 
+/**
+ * Public Routes Router.
+ *
+ * This router contains routes that are publicly accessible and do not require authorization.
+ * The routes include authentication and reactions fetching, and a special route for resetting the database
+ * in the `e2e` (end-to-end) environment.
+ */
 const publicRoutes = Router();
 
 publicRoutes.use("/auth", authRouter);
@@ -12,12 +19,12 @@ publicRoutes.get("/chats/reactions", (req, res) => {
 });
 
 if (env.NODE_ENV === "e2e") {
-  publicRoutes.post("/reset-db", async (req, res) => {
+  publicRoutes.post("/reset-db", async (req, res, next) => {
     try {
       await resetDB();
       return res.status(200).json({ message: "Successfully reset db." });
     } catch (e) {
-      return res.status(500).json({ message: "Error when resetting db." });
+      next(new Error("Error when resetting db."));
     }
   });
 }

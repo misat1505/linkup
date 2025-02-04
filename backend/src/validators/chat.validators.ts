@@ -1,5 +1,11 @@
 import { body } from "express-validator";
 
+/**
+ * Validation rules for creating a private chat.
+ * - `users`: Should be an array with exactly 2 valid UUIDs.
+ *
+ * @constant
+ */
 export const createPrivateChatRules = [
   body("users")
     .isArray({ min: 2, max: 2 })
@@ -7,6 +13,14 @@ export const createPrivateChatRules = [
   body("users.*").isUUID().withMessage("Each user should be a valid UUID"),
 ];
 
+/**
+ * Validation rules for creating a group chat.
+ * - `users`: Should be an array with at least 1 valid UUID.
+ * - `name`: Optional, should be a string with a maximum length of 100 characters.
+ * - `file`: Optional field for attaching a file.
+ *
+ * @constant
+ */
 export const createGroupChatRules = [
   body("users")
     .isArray({ min: 1 })
@@ -22,6 +36,13 @@ export const createGroupChatRules = [
   body("file").optional(),
 ];
 
+/**
+ * Validation rules for creating a message.
+ * - `content`: Should be a string with a maximum length of 5000 characters.
+ * - `responseId`: Optional, should be a valid UUID if provided.
+ *
+ * @constant
+ */
 export const createMessageRules = [
   body("content")
     .isString()
@@ -35,11 +56,24 @@ export const createMessageRules = [
     .withMessage("Response ID should be a valid UUID"),
 ];
 
+/**
+ * Validation rules for creating a reaction.
+ * - `messageId`: Should be a valid UUID.
+ * - `reactionId`: Should be a valid UUID.
+ *
+ * @constant
+ */
 export const createReactionRules = [
   body("messageId").isUUID().withMessage("messageId should be a valid UUID"),
   body("reactionId").isUUID().withMessage("responseId should be a valid UUID"),
 ];
 
+/**
+ * Validation rules for updating an alias.
+ * - `alias`: Optional, should be a string with a maximum length of 100 characters.
+ *
+ * @constant
+ */
 export const updateAliasRules = [
   body("alias")
     .optional({ nullable: true })
@@ -50,10 +84,23 @@ export const updateAliasRules = [
     ),
 ];
 
+/**
+ * Validation rules for adding a user to a group chat.
+ * - `userId`: Should be a valid UUID.
+ *
+ * @constant
+ */
 export const addUserToGroupChatRules = [
   body("userId").isUUID().withMessage("userId should be a valid UUID"),
 ];
 
+/**
+ * Validation rules for updating a group chat.
+ * - `name`: Optional, should be a string with a maximum length of 100 characters.
+ * - `file`: Optional field for attaching a file.
+ *
+ * @constant
+ */
 export const updateGroupChatRules = [
   body("name")
     .optional({ nullable: true })

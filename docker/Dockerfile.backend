@@ -7,14 +7,19 @@ RUN npm install
 COPY . .
 
 ENV PORT=5500
-ENV SOCKET_PORT=5501
 ENV ACCESS_TOKEN_SECRET=hf87uyefuyewf87t3287fr328yf2g7632frg3287f6g732vf83287fyt32fg723gf
 ENV REFRESH_TOKEN_SECRET=cen7bffcn87y584c95n4350mc28n0c973257mn3c507n50207mnvc
 ENV FRONTEND_URL=http://localhost:3000
-ENV DATABASE_URL=mysql://root:@database/linkup
+ENV DATABASE_URL=postgresql://postgres:postgres@database/linkup
+
+ENV AWS_ACCESS_KEY_ID=admin
+ENV AWS_SECRET_ACCESS_KEY=password
+ENV AWS_REGION=us-east-1
+ENV S3_BUCKET_NAME=linkup-bucket
+ENV S3_ENDPOINT=http://host.docker.internal:9000
 
 RUN npx prisma generate
 
-EXPOSE 5500 5501
+EXPOSE 5500
 
 CMD ["sh", "-c", "npx prisma db push && npm start"]

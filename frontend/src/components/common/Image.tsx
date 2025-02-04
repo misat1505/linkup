@@ -2,9 +2,7 @@ import { ReactNode } from "react";
 import { ImgProps } from "react-image";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
-import { useQuery } from "react-query";
-import { queryKeys } from "@/lib/queryKeys";
-import { getAccessToken } from "@/lib/token";
+import { useFetchProtectedURL } from "@/hooks/useFetchProtectedURL";
 
 function DefaultLoader({ className }: { className?: string }) {
   return <Skeleton className={cn("h-full w-full", className)} />;
@@ -46,20 +44,7 @@ export default function Image({
   unloader,
   src,
 }: ImageProps) {
-  const { data, isError, isLoading } = useQuery({
-    queryKey: queryKeys.file(src as string),
-    queryFn: async () => {
-      const result = await fetch(src as string, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-      });
-      if (!result.ok) throw new Error();
-      const blob = await result.blob();
-      return URL.createObjectURL(blob);
-    },
-  });
+  const { data, isError, isLoading } = useFetchProtectedURL(src as string);
 
   if (!src || isError) {
     return (

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { TokenProcessor } from "../../lib/TokenProcessor";
 import {
   accessTokenSignOptions,
@@ -8,20 +8,37 @@ import {
 } from "../../config/jwt-cookie";
 import { env } from "../../config/env";
 
-export const refreshTokenController = (req: Request, res: Response) => {
-  /**
-   * @swagger
-   * /auth/refresh:
-   *   post:
-   *     summary: Refresh access token and refresh token
-   *     description: This endpoint reads the refresh token from the request to authorize the user and generate a new access token.
-   *     tags: [Auth]
-   *     responses:
-   *       200:
-   *         description: Token refreshed successfully
-   *       500:
-   *         description: Cannot refresh token
-   */
+/**
+ * Controller to refresh the access token and refresh token using the provided refresh token.
+ *
+ * @remarks
+ * This controller reads the refresh token from the request to authenticate the user. It then
+ * generates and returns a new access token and refresh token. The new refresh token is stored in a
+ * cookie, and both tokens are returned in the response.
+ *
+ * @param {Request} req - The Express request object that contains the user's refresh token.
+ * @param {Response} res - The Express response object used to send the refreshed tokens.
+ * @param {NextFunction} next - The Express next function for error handling.
+ *
+ * @source
+ *
+ * @swagger
+ * /auth/refresh:
+ *   post:
+ *     summary: Refresh access token and refresh token
+ *     description: This endpoint reads the refresh token from the request to authorize the user and generate a new access token.
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Token refreshed successfully
+ *       500:
+ *         description: Cannot refresh token
+ */
+export const refreshTokenController = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { userId } = req.body.token;
 
@@ -40,6 +57,6 @@ export const refreshTokenController = (req: Request, res: Response) => {
       .status(200)
       .json({ message: "Successfully refreshed token.", accessToken });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot refresh token." });
+    next(new Error("Cannot refresh token."));
   }
 };

@@ -6,6 +6,13 @@ import { upload } from "../../middlewares/multer";
 import { authorize } from "../../middlewares/authorize";
 import { deleteFromCache } from "../../controllers/file/deleteFromCache.controller";
 
+/**
+ * File Routes Router.
+ *
+ * This router manages file-related operations including uploading files to cache,
+ * retrieving files from cache, and deleting files from cache. It also supports
+ * authorization for file insertions and uses multer for file uploads.
+ */
 const fileRouter = Router();
 
 fileRouter.get("/cache", getCache);

@@ -2,34 +2,45 @@ version: "3.8"
 name: link-up
 
 services:
-  database:
-    image: mysql:8.0
-    environment:
-      MYSQL_DATABASE: linkup_e2e
-      MYSQL_ROOT_PASSWORD: ""
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+  minio:
+    image: minio/minio:latest
     ports:
-      - "3307:3306"
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+      MINIO_DOMAIN: "localhost"
+    command: server /data --console-address ":9001"
     volumes:
-      - e2e-database-data:/var/lib/mysql
+      - e2e-minio-data:/data
+
+  database:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: linkup_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - e2e-database-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  e2e-backend:
-    build:
-      context: ../backend
-      dockerfile: ../docker/Dockerfile.backend.e2e
-    depends_on:
-      database:
-        condition: service_healthy
-    volumes:
-      - e2e-backend-files:/backend/files
-    ports:
-      - "5500:5500"
-      - "5501:5501"
+  # e2e-backend:
+  #   build:
+  #     context: ../backend
+  #     dockerfile: ../docker/Dockerfile.backend.e2e
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy
+  #   ports:
+  #     - "5500:5500"
 
   frontend:
     build:
@@ -40,4 +51,4 @@ services:
 
 volumes:
   e2e-database-data:
-  e2e-backend-files:
+  e2e-minio-data:

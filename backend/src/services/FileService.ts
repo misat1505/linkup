@@ -1,7 +1,15 @@
 import { prisma } from "../lib/Prisma";
 import { User } from "../types/User";
 
+/**
+ * Service class responsible for managing file-related operations in the database using Prisma.
+ */
 export class FileService {
+  /**
+   * Checks if a photo URL is associated with a user's avatar.
+   * @param photoURL - The URL of the photo to check.
+   * @returns `true` if the photo URL matches a user's avatar, otherwise `false`.
+   */
   static async isUserAvatar(photoURL: string): Promise<boolean> {
     const result = await prisma.user.findFirst({
       where: { photoURL },
@@ -10,6 +18,12 @@ export class FileService {
     return !!result;
   }
 
+  /**
+   * Checks if a photo URL is associated with a chat's photo.
+   * @param photoURL - The URL of the photo to check.
+   * @param userId - The ID of the user to check the association for.
+   * @returns `true` if the photo URL is associated with a chat's photo, otherwise `false`.
+   */
   static async isChatPhoto(
     photoURL: string,
     userId: User["id"]
@@ -27,6 +41,12 @@ export class FileService {
     return !!result;
   }
 
+  /**
+   * Checks if a photo URL is associated with any message in a chat.
+   * @param photoURL - The URL of the photo to check.
+   * @param userId - The ID of the user to check the association for.
+   * @returns `true` if the photo URL is associated with a chat message, otherwise `false`.
+   */
   static async isChatMessage(
     photoURL: string,
     userId: User["id"]

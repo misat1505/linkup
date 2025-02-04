@@ -4,19 +4,28 @@ import { env } from "../config/env";
 import { refreshTokenCookieName } from "../config/jwt-cookie";
 import { UserService } from "../services/UserService";
 
+/**
+ * Middleware to authorize and verify JWT token from Authorization header.
+ *
+ * This middleware checks for a valid JWT token in the `Authorization` header.
+ * If a valid token is found, it decodes the token and appends the decoded payload to `req.body.token`.
+ * If no token is found or if the token is invalid, it responds with an error.
+ * After processing, it passes control to the next middleware in the stack.
+ *
+ * @param req - The request object.
+ * @param res - The response object.
+ * @param next - The next middleware function.
+ *
+ * @example
+ * app.use(authorize);
+ *
+ * @source
+ */
 export const authorize = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  /**
-   * Middleware to authorize and verify JWT token from Authorization header.
-   *
-   * Checks for a valid JWT token in Authorization header. If valid, appends the decoded token payload
-   * to the Request object as req.body.token and passes control to the next function.
-   * Terminates the request with an error response if no token is found or if the token is invalid.
-   */
-
   const authorization = req.headers.authorization;
 
   if (!authorization) {
@@ -48,19 +57,28 @@ export const authorize = async (
   next();
 };
 
+/**
+ * Middleware to authorize and verify JWT token from cookies.
+ *
+ * This middleware checks for a valid JWT token in cookies (specifically in the refresh token cookie).
+ * If the token is valid, it decodes the token and appends the decoded payload to `req.body.token`.
+ * If no token is found or if the token is invalid, it responds with an error.
+ * After processing, it passes control to the next middleware in the stack.
+ *
+ * @param req - The request object.
+ * @param res - The response object.
+ * @param next - The next middleware function.
+ *
+ * @example
+ * app.use(authorizeWithRefreshToken);
+ *
+ * @source
+ */
 export const authorizeWithRefreshToken = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  /**
-   * Middleware to authorize and verify JWT token from cookies.
-   *
-   * Checks for a valid JWT token in cookies. If valid, appends the decoded token payload
-   * to the Request object as req.body.token and passes control to the next function.
-   * Terminates the request with an error response if no token is found or if the token is invalid.
-   */
-
   const token = req.cookies[refreshTokenCookieName];
 
   if (!token) {

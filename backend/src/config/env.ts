@@ -23,12 +23,6 @@ const envSchema = z.object({
     .refine((val) => !isNaN(val), {
       message: "'PORT' must be a number.",
     }),
-  SOCKET_PORT: z
-    .string()
-    .transform((val) => parseInt(val, 10))
-    .refine((val) => !isNaN(val), {
-      message: "'SOCKET_PORT' must be a number.",
-    }),
   ACCESS_TOKEN_SECRET: z.string().min(20, {
     message: "'ACCESS_TOKEN_SECRET' needs to be at least 20 characters long.",
   }),
@@ -39,6 +33,16 @@ const envSchema = z.object({
   FRONTEND_URL: z.string().url({
     message: "'FRONTEND_URL' must be a valid URL.",
   }),
+
+  AWS_ACCESS_KEY_ID: z.string({
+    message: "'AWS_ACCESS_KEY_ID' must be a string",
+  }),
+  AWS_SECRET_ACCESS_KEY: z.string({
+    message: "'AWS_SECRET_ACCESS_KEY' must be a string",
+  }),
+  AWS_REGION: z.string({ message: "'AWS_REGION' must be a string" }),
+  S3_BUCKET_NAME: z.string({ message: "'S3_BUCKET_NAME' must be a string" }),
+  S3_ENDPOINT: z.string({ message: "'S3_ENDPOINT' must be a string" }),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

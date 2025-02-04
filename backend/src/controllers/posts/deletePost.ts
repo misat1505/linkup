@@ -1,41 +1,55 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PostService } from "../../services/PostService";
-import path from "path";
-import fs from "fs";
+import fileStorage from "../../lib/FileStorage";
 
-export const deletePost = async (req: Request, res: Response) => {
-  /**
-   * @swagger
-   * /posts/{id}:
-   *   delete:
-   *     summary: Delete a post
-   *     tags: [Posts]
-   *     parameters:
-   *       - name: id
-   *         in: path
-   *         required: true
-   *         description: ID of the post to delete
-   *         schema:
-   *           type: string
-   *           example: "12a627e8-83cb-40c9-a7a2-ca0708be7763"
-   *     responses:
-   *       200:
-   *         description: Post deleted successfully
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 message:
-   *                   type: string
-   *                   example: "Post deleted successfully."
-   *       401:
-   *         description: Unauthorized access. The user is not allowed to delete this post.
-   *       404:
-   *         description: Post not found.
-   *       500:
-   *         description: Server error. Couldn't delete the post.
-   */
+/**
+ * Controller to delete a post.
+ *
+ * @remarks
+ * This controller handles the deletion of a post by checking if the post exists and whether the user requesting the deletion is the post's author. If the post exists and the user is authorized, the post is deleted, along with associated files from file storage. If the post is not found or the user is not authorized, appropriate error messages are returned.
+ *
+ * @param {Request} req - The Express request object containing the post ID from the path and the user token.
+ * @param {Response} res - The Express response object used to send the success message or error response.
+ * @param {NextFunction} next - The Express next function used for error handling.
+ *
+ * @source
+ *
+ * @swagger
+ * /posts/{id}:
+ *   delete:
+ *     summary: Delete a post
+ *     tags: [Posts]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the post to delete
+ *         schema:
+ *           type: string
+ *           example: "12a627e8-83cb-40c9-a7a2-ca0708be7763"
+ *     responses:
+ *       200:
+ *         description: Post deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Post deleted successfully."
+ *       401:
+ *         description: Unauthorized access. The user is not allowed to delete this post.
+ *       404:
+ *         description: Post not found.
+ *       500:
+ *         description: Couldn't delete the post.
+ */
+export const deletePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { id } = req.params;
     const {
@@ -51,17 +65,14 @@ export const deletePost = async (req: Request, res: Response) => {
         .status(401)
         .json({ message: "Cannot delete post not belonging to you." });
 
-    await PostService.deletePost(id);
-
-    const basePath = path.join(__dirname, "..", "..", "..", "files");
-    const postPath = path.join(basePath, "posts", post.id);
-    const chatPath = path.join(basePath, "chats", post.chat.id);
-
-    if (fs.existsSync(postPath)) fs.rmSync(postPath, { recursive: true });
-    if (fs.existsSync(chatPath)) fs.rmSync(chatPath, { recursive: true });
+    await Promise.all([
+      PostService.deletePost(id),
+      fileStorage.deleteAllFilesInDirectory(`posts/${post.id}`),
+      fileStorage.deleteAllFilesInDirectory(`chats/${post.chat.id}`),
+    ]);
 
     return res.status(200).json({ message: "Post deleted successfully." });
   } catch (e) {
-    return res.status(500).json({ message: "Couldn't delete post." });
+    next(new Error("Couldn't delete post."));
   }
 };

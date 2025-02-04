@@ -16,7 +16,12 @@ export class FileService {
       },
       credentials: "include",
     });
-    const blob = await result.blob();
+
+    const data = await result.json();
+
+    const res2 = await fetch(data.url);
+
+    const blob = await res2.blob();
 
     const file = new File([blob], filename!, { type: blob.type });
 

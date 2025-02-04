@@ -1,18 +1,13 @@
-import fs from "fs";
-import path from "path";
 import multer from "multer";
-import { v4 as uuidv4 } from "uuid";
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const destinationPath = path.join(__dirname, "..", "..", "files", "temp");
-    fs.mkdirSync(destinationPath, { recursive: true });
-    cb(null, destinationPath);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `${uuidv4()}${ext}`);
-  },
-});
-
-export const upload = multer({ storage });
+/**
+ * Multer middleware to handle file uploads.
+ *
+ * This middleware uses `multer` to handle file uploads. By default, it stores the files in memory
+ * and doesn't define specific storage options (e.g., disk storage or cloud storage).
+ * The files can be accessed via `req.file` (for single file uploads) or `req.files` (for multiple file uploads).
+ * You can customize the storage settings by providing options to `multer()` such as file size limits and file type restrictions.
+ *
+ * @source
+ */
+export const upload = multer();

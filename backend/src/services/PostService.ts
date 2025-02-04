@@ -12,13 +12,26 @@ function sanitizePost(post: any): Post {
   return { ...sanitizedPost } as Post;
 }
 
+/**
+ * Service class responsible for managing post-related operations in the database using Prisma.
+ */
 export class PostService {
+  /**
+   * Deletes a post by its ID.
+   * @param id - The ID of the post to be deleted.
+   */
   static async deletePost(id: Post["id"]) {
     await prisma.post.delete({
       where: { id },
     });
   }
 
+  /**
+   * Updates the content of an existing post.
+   * @param id - The ID of the post to update.
+   * @param content - The new content of the post.
+   * @returns The updated post object, or `null` if no post was found.
+   */
   static async updatePost({
     id,
     content,
@@ -49,6 +62,11 @@ export class PostService {
     });
   }
 
+  /**
+   * Retrieves a post by its ID.
+   * @param id - The ID of the post to retrieve.
+   * @returns The post object, or `null` if not found.
+   */
   static async getPost(id: Post["id"]): Promise<Post | null> {
     const post = await prisma.post.findFirst({
       where: { id },
@@ -68,6 +86,11 @@ export class PostService {
     });
   }
 
+  /**
+   * Retrieves all posts by a specific user.
+   * @param id - The ID of the user whose posts are to be retrieved.
+   * @returns A list of posts created by the user.
+   */
   static async getUserPosts(id: User["id"]): Promise<Post[]> {
     const posts = await prisma.post.findMany({
       where: { authorId: id },
@@ -87,6 +110,10 @@ export class PostService {
     );
   }
 
+  /**
+   * Retrieves all posts in the database.
+   * @returns A list of all posts.
+   */
   static async getPosts(): Promise<Post[]> {
     const posts = await prisma.post.findMany({
       include: {
@@ -105,6 +132,13 @@ export class PostService {
     );
   }
 
+  /**
+   * Creates a new post with the given data.
+   * @param id - The ID of the new post.
+   * @param content - The content of the new post.
+   * @param authorId - The ID of the user who is creating the post.
+   * @returns The created post object.
+   */
   static async createPost({
     id,
     content,

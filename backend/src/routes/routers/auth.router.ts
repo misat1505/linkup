@@ -7,6 +7,12 @@ import { logoutController } from "../../controllers/auth/logout.controller";
 import { getSelfController } from "../../controllers/auth/getSelf.controller";
 import { updateSelfController } from "../../controllers/auth/updateSelf.controller";
 
+/**
+ * Protected Authentication Routes Router.
+ *
+ * This router manages authentication-related routes that require authorization,
+ * such as logging out, fetching user details, and updating user information.
+ */
 const authRouterProtected = Router();
 
 authRouterProtected.post("/logout", logoutController);

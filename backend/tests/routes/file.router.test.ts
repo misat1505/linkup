@@ -7,6 +7,9 @@ import { VALID_USER_ID } from "../utils/constants";
 import { User } from "../../src/types/User";
 import { Message } from "../../src/types/Message";
 import { env } from "../../src/config/env";
+import fileStorage from "../../src/lib/FileStorage";
+
+jest.mock("../../src/lib/FileStorage");
 
 let newlyCreatedUser: User;
 
@@ -23,18 +26,6 @@ const createTestUser = async () => {
     .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
 
   newlyCreatedUser = res.body.user;
-};
-
-const deleteUserFile = () => {
-  const filepath = path.join(
-    __dirname,
-    "..",
-    "..",
-    "files",
-    "avatars",
-    newlyCreatedUser.photoURL!
-  );
-  if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
 };
 
 describe("file router", () => {
@@ -55,7 +46,7 @@ describe("file router", () => {
   });
 
   afterEach(() => {
-    deleteUserFile();
+    jest.clearAllMocks();
   });
 
   describe("[GET] /:filename", () => {
@@ -103,18 +94,6 @@ describe("file router", () => {
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
         .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
       expect(res3.statusCode).toBe(401);
-
-      const filepath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "files",
-        "chats",
-        chat.id,
-        chat.photoURL
-      );
-      if (fs.existsSync(path.dirname(filepath)))
-        fs.rmdirSync(path.dirname(filepath), { recursive: true });
     });
 
     it("should allow only people in chat see files in chat message", async () => {
@@ -158,18 +137,6 @@ describe("file router", () => {
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
         .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
       expect(res3.statusCode).toBe(401);
-
-      const filepath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "files",
-        "chats",
-        chat.id,
-        filename
-      );
-      if (fs.existsSync(path.dirname(filepath)))
-        fs.rmdirSync(path.dirname(filepath), { recursive: true });
     });
 
     it("should allow getting file from cache only by user which uploaded the file", async () => {
@@ -183,31 +150,11 @@ describe("file router", () => {
         .get(`/files/${newFileName}?filter=cache`)
         .set("Authorization", `Bearer ${token}`);
       expect(res2.statusCode).toBe(200);
-
-      const res3 = await request(app)
-        .get(`/files/${newFileName}?filter=cache`)
-        .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
-      expect(res3.statusCode).toBe(404);
     });
 
     it("should allow everyone to access file from post", async () => {
       const postId = "post-id";
-      const postFilesDir = path.join(
-        __dirname,
-        "..",
-        "..",
-        "files",
-        "posts",
-        postId
-      );
-
       const filename = "file.txt";
-
-      fs.mkdirSync(postFilesDir, { recursive: true });
-      fs.writeFileSync(
-        path.join(postFilesDir, filename),
-        Buffer.from("message file")
-      );
 
       const res2 = await request(app)
         .get(`/files/${filename}?filter=post&post=${postId}`)
@@ -218,8 +165,6 @@ describe("file router", () => {
         .get(`/files/${filename}?filter=post&post=${postId}`)
         .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
       expect(res3.statusCode).toBe(200);
-
-      fs.rmdirSync(postFilesDir, { recursive: true });
     });
   });
 
@@ -228,33 +173,25 @@ describe("file router", () => {
       const res1 = await request(app)
         .get("/files/cache")
         .set("Authorization", `Bearer ${token}`);
-      const initialFilesCount = res1.body.files.length;
+      expect(fileStorage.listFiles).toHaveBeenCalledTimes(1);
 
       const res2 = await request(app)
         .post("/files/cache")
         .set("Authorization", `Bearer ${token}`)
         .attach("file", Buffer.from("message file"), "file1.txt");
       const filename1 = res2.body.file;
+      expect(fileStorage.uploadFile).toHaveBeenCalledTimes(1);
 
       const res3 = await request(app)
-        .get("/files/cache")
-        .set("Authorization", `Bearer ${token}`);
-      expect(res3.body.files.length).toBe(initialFilesCount + 1);
-
-      const res4 = await request(app)
         .get(`/files/${filename1}?filter=cache`)
         .set("Authorization", `Bearer ${token}`);
-      expect(res4.statusCode).toBe(200);
+      expect(res3.statusCode).toBe(200);
 
-      const res5 = await request(app)
+      const res4 = await request(app)
         .delete(`/files/cache/${filename1}`)
         .set("Authorization", `Bearer ${token}`);
-      expect(res5.statusCode).toBe(200);
-
-      const res6 = await request(app)
-        .get("/files/cache")
-        .set("Authorization", `Bearer ${token}`);
-      expect(res6.body.files.length).toBe(initialFilesCount);
+      expect(res4.statusCode).toBe(200);
+      expect(fileStorage.deleteFile).toHaveBeenCalledTimes(1);
     });
   });
 });

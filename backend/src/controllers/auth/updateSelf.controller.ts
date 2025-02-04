@@ -1,52 +1,68 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { processAvatar } from "../../utils/processAvatar";
 import { Hasher } from "../../lib/Hasher";
 import { UserService } from "../../services/UserService";
 import { UserWithCredentials } from "../../types/User";
 import bcrypt from "bcryptjs";
-import fs from "fs";
-import path from "path";
+import fileStorage from "../../lib/FileStorage";
 
-export const updateSelfController = async (req: Request, res: Response) => {
-  /**
-   * @swagger
-   * /auth/user:
-   *   put:
-   *     summary: Update user details
-   *     tags: [Auth]
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         multipart/form-data:
-   *           schema:
-   *             type: object
-   *             properties:
-   *               firstName:
-   *                 type: string
-   *               lastName:
-   *                 type: string
-   *               login:
-   *                 type: string
-   *               password:
-   *                 type: string
-   *               file:
-   *                 type: string
-   *                 format: binary
-   *     responses:
-   *       201:
-   *         description: User updated successfully
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 user:
-   *                   $ref: '#/components/schemas/User'
-   *       409:
-   *         description: Login already taken
-   *       500:
-   *         description: Cannot update user
-   */
+/**
+ * Controller to update the user's details, including login, password, and avatar.
+ *
+ * @remarks
+ * This controller allows the user to update their personal details, including the first name, last name, login,
+ * and password. It also handles avatar updates. If the login is already taken by another user, a conflict response
+ * is returned. The old avatar is deleted if a new one is uploaded.
+ *
+ * @param {Request} req - The Express request object containing the updated user details and avatar file.
+ * @param {Response} res - The Express response object used to return the updated user data.
+ * @param {NextFunction} next - The Express next function used for error handling.
+ *
+ * @source
+ *
+ * @swagger
+ * /auth/user:
+ *   put:
+ *     summary: Update user details
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               login:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       409:
+ *         description: Login already taken
+ *       500:
+ *         description: Cannot update user
+ */
+export const updateSelfController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const {
       firstName,
@@ -55,18 +71,17 @@ export const updateSelfController = async (req: Request, res: Response) => {
       password,
       token: { userId },
     } = req.body;
-    const file = await processAvatar(req.file?.path);
+    const file = await processAvatar(req.file);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = Hasher.hash(password + salt);
 
     const fetchedUser = await UserService.getUserByLogin(login);
 
-    if (
-      fetchedUser &&
-      fetchedUser.login === login &&
-      fetchedUser.id !== userId
-    ) {
+    const isLoginTaken =
+      fetchedUser && fetchedUser.login === login && fetchedUser.id !== userId;
+
+    if (isLoginTaken) {
       return res.status(409).json({ message: "Login already taken." });
     }
 
@@ -84,20 +99,11 @@ export const updateSelfController = async (req: Request, res: Response) => {
     await UserService.updateUser(user);
 
     if (fetchedUser?.photoURL) {
-      const oldPath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "..",
-        "files",
-        "avatars",
-        fetchedUser.photoURL
-      );
-      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      await fileStorage.deleteFile(`avatars/${fetchedUser.photoURL}`);
     }
 
     return res.status(201).json({ user: UserService.removeCredentials(user) });
   } catch (e) {
-    return res.status(500).json({ message: "Cannot update user." });
+    next(new Error("Cannot update user."));
   }
 };

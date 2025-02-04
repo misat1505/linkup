@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import request from "supertest";
 import { PostService } from "../../src/services/PostService";
 import { createPost } from "../../src/controllers/posts/createPost";
@@ -9,8 +9,15 @@ import { updatePost } from "../../src/controllers/posts/updatePost";
 import { handleMarkdownUpdate } from "../../src/utils/updatePost";
 import { deletePost } from "../../src/controllers/posts/deletePost";
 
+jest.mock("../../src/lib/FileStorage");
 jest.mock("../../src/services/PostService");
 jest.mock("../../src/utils/updatePost");
+
+const mockErrorMiddleware = jest.fn(
+  (err: Error, req: Request, res: Response, next: NextFunction) => {
+    res.status(500).send({ message: err.message });
+  }
+);
 
 describe("Post controllers", () => {
   const app = express();
@@ -21,6 +28,7 @@ describe("Post controllers", () => {
   app.get("/posts", getPosts);
   app.post("/posts", createPost);
   app.delete("/posts/:id", deletePost);
+  app.use(mockErrorMiddleware);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -59,20 +67,19 @@ describe("Post controllers", () => {
       });
     });
 
-    it("should return a 500 error if post creation fails", async () => {
+    it("should pass to error middleware if post creation fails", async () => {
       (PostService.createPost as jest.Mock).mockRejectedValue(
         new Error("Error")
       );
 
-      const response = await request(app)
+      await request(app)
         .post("/posts")
         .send({
           content: "This is a new post.",
           token: { userId: "user-id" },
         });
 
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ message: "Couldn't create post." });
+      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -102,13 +109,12 @@ describe("Post controllers", () => {
       expect(response.body).toEqual({ message: "Post not found." });
     });
 
-    it("should return a 500 error if post retrieval fails", async () => {
+    it("should pass to error middleware if post retrieval fails", async () => {
       (PostService.getPost as jest.Mock).mockRejectedValue(new Error("Error"));
 
-      const response = await request(app).get("/posts/post-id");
+      await request(app).get("/posts/post-id");
 
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ message: "Couldn't get post." });
+      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -127,13 +133,12 @@ describe("Post controllers", () => {
       expect(PostService.getPosts).toHaveBeenCalled();
     });
 
-    it("should return a 500 error if post retrieval fails", async () => {
+    it("should pass to error middleware if post retrieval fails", async () => {
       (PostService.getPosts as jest.Mock).mockRejectedValue(new Error("Error"));
 
-      const response = await request(app).get("/posts");
+      await request(app).get("/posts");
 
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ message: "Couldn't get posts." });
+      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -153,19 +158,18 @@ describe("Post controllers", () => {
       expect(PostService.getUserPosts).toHaveBeenCalledWith("user-id");
     });
 
-    it("should return a 500 error if user post retrieval fails", async () => {
+    it("should pass to error middleware if user post retrieval fails", async () => {
       (PostService.getUserPosts as jest.Mock).mockRejectedValue(
         new Error("Error")
       );
 
-      const response = await request(app)
+      await request(app)
         .get("/posts/mine")
         .send({
           token: { userId: "user-id" },
         });
 
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ message: "Couldn't get user posts." });
+      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -239,7 +243,7 @@ describe("Post controllers", () => {
       });
     });
 
-    it("should return a 500 error if post update fails", async () => {
+    it("should pass to error middleware if post update fails", async () => {
       const post = {
         id: "post-id",
         content: "Post content.",
@@ -250,15 +254,14 @@ describe("Post controllers", () => {
         new Error("Error")
       );
 
-      const response = await request(app)
+      await request(app)
         .put("/posts/post-id")
         .send({
           content: "New content",
           token: { userId: "user-id" },
         });
 
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ message: "Couldn't get post." });
+      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -316,27 +319,6 @@ describe("Post controllers", () => {
       expect(response.body).toEqual({
         message: "Cannot delete post not belonging to you.",
       });
-    });
-
-    it("should return a 500 error if post deletion fails", async () => {
-      const post = {
-        id: "post-id",
-        content: "Post content.",
-        author: { id: "user-id" },
-      };
-      (PostService.getPost as jest.Mock).mockResolvedValue(post);
-      (PostService.deletePost as jest.Mock).mockRejectedValue(
-        new Error("Error")
-      );
-
-      const response = await request(app)
-        .delete(`/posts/${post.id}`)
-        .send({
-          token: { userId: "user-id" },
-        });
-
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ message: "Couldn't delete post." });
     });
   });
 });

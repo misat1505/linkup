@@ -1,43 +1,36 @@
 import sharp from "sharp";
-import fs from "fs";
-import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import fileStorage from "../lib/FileStorage";
 
-const processProfileImage = async (
-  filePath: string,
-  outputPath: string
-): Promise<void> => {
-  const imageBuffer = fs.readFileSync(filePath);
-  fs.unlinkSync(filePath);
+/**
+ * Processes an avatar image: resizes, converts to WebP, and uploads it.
+ *
+ * @param file - The uploaded file object (usually from Multer).
+ * @param path - The directory path where the avatar will be stored (default: "avatars/").
+ * @param name - An optional name for the file. If not provided, a UUID will be generated.
+ * @returns The new filename if successful, or null if an error occurs.
+ *
+ * @source
+ */
+export const processAvatar = async (
+  file: Express.Multer.File | undefined,
+  path: string = "avatars/",
+  name?: string
+): Promise<string | null> => {
+  if (!file) return null;
 
-  const outputDir = path.dirname(outputPath);
-  fs.mkdirSync(outputDir, { recursive: true });
+  const filename = name || `${uuidv4()}.webp`;
 
-  await sharp(imageBuffer)
+  const key = `${path}${filename}`;
+
+  const processedBuffer = await sharp(file.buffer)
     .resize(100, 100)
     .webp({ quality: 80 })
-    .toFile(outputPath);
-};
-
-export const processAvatar = async (
-  filePath: string | undefined,
-  pathChunks: string[] = ["avatars"],
-  filename?: string
-): Promise<string | null> => {
-  if (!filePath) return null;
-
-  const outputPath = path.join(
-    __dirname,
-    "..",
-    "..",
-    "files",
-    ...pathChunks,
-    filename || `${uuidv4()}.webp`
-  );
+    .toBuffer();
 
   try {
-    await processProfileImage(filePath, outputPath);
-    return path.basename(outputPath);
+    fileStorage.uploadFile(processedBuffer, file.mimetype, key);
+    return filename;
   } catch {
     return null;
   }

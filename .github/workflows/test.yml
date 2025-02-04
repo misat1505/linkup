@@ -19,10 +19,25 @@ jobs:
         with:
           node-version: "21"
 
-      - name: Make script executable
-        run: |
-          chmod +x ./docker-compose.sh
-          chmod +x ./scripts/wait-for-it.sh
+      - name: Copy envs for tests
+        run: cp backend/cicd.env backend/.env.test
 
-      - name: Run Test Script
-        run: ./docker-compose.sh test
+      - name: Make script executable
+        run: chmod +x ./docker-compose.sh
+
+      - name: Start database
+        run: ./docker-compose.sh test &
+
+      - name: Wait for database to initialize
+        run: |
+          echo "Waiting for database to initialize..."
+          until docker exec $(docker ps -qf "name=database") pg_isready -h localhost -p 5432; do
+            sleep 1
+          done
+          echo "Database is ready."
+
+      - name: Run Tests
+        run: |
+          cd backend
+          npm install
+          npm run test

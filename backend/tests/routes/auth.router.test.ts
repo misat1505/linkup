@@ -1,18 +1,24 @@
 import request from "supertest";
 import app from "../../src/app";
-import fs from "fs";
 import path from "path";
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { VALID_USER_ID } from "../utils/constants";
 import { isUser } from "../../src/types/guards/user.guard";
 import { env } from "../../src/config/env";
 import { refreshTokenCookieName } from "../../src/config/jwt-cookie";
+import fileStorage from "../../src/lib/FileStorage";
+
+jest.mock("../../src/lib/FileStorage");
 
 describe("auth router", () => {
   const token = TokenProcessor.encode(
     { userId: VALID_USER_ID },
     env.ACCESS_TOKEN_SECRET
   );
+
+  afterEach(() => {
+    jest.clearAllMocks;
+  });
 
   describe("[PUT] /user", () => {
     it("should update user", async () => {
@@ -34,17 +40,7 @@ describe("auth router", () => {
       expect(res.statusCode).toEqual(201);
       expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(true);
 
-      const { photoURL } = res.body.user;
-
-      const pathToImage = path.join(
-        __dirname,
-        "..",
-        "..",
-        "files",
-        "avatars",
-        photoURL
-      );
-      expect(fs.existsSync(pathToImage)).toBe(true);
+      expect(fileStorage.uploadFile as jest.Mock).toHaveBeenCalledTimes(1);
 
       const res2 = await request(app)
         .get("/auth/user")
@@ -54,8 +50,6 @@ describe("auth router", () => {
       expect(isUser(getUser, { allowStringifiedDates: true })).toBe(true);
       expect(getUser.firstName).toBe(newUser.firstName);
       expect(getUser.lastName).toBe(newUser.lastName);
-
-      fs.unlinkSync(pathToImage);
     });
   });
 
@@ -72,6 +66,10 @@ describe("auth router", () => {
   });
 
   describe("[POST] /signup", () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
     it("should sign up", async () => {
       const login = "valid_login";
       const password = "valid_password";
@@ -112,18 +110,8 @@ describe("auth router", () => {
 
       expect(res.statusCode).toEqual(201);
       expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(true);
-      const { photoURL } = res.body.user;
 
-      const pathToImage = path.join(
-        __dirname,
-        "..",
-        "..",
-        "files",
-        "avatars",
-        photoURL
-      );
-      expect(fs.existsSync(pathToImage)).toBe(true);
-      fs.unlinkSync(pathToImage);
+      expect(fileStorage.uploadFile as jest.Mock).toHaveBeenCalledTimes(1);
     });
   });
 

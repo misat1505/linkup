@@ -4,55 +4,31 @@ set -e
 
 command=$1
 
-wait_for_service() {
-    local service_name=$1
-    local port=$2
-    echo "Waiting for $service_name to be ready on port $port..."
-    ./scripts/wait-for-it.sh localhost:$port --timeout=60 --strict -- echo "$service_name is up."
-}
-
-install_dependencies() {
-    echo "Installing dependencies in $1..."
-    cd "$1"
-    npm install
-    cd - > /dev/null
-}
-
 case "$command" in
     prod)
         echo "Running application in production mode..."
-        docker compose -f ./docker/docker-compose.yml up --build
+        docker compose -f ./docker/docker-compose.yml up --build -d
+        cd backend
+        npm i
+        npm run start
         ;;
     e2e)
         echo "Running application for e2e testing..."
-        docker compose -f ./docker/docker-compose.e2e.yml up --build
+        docker compose -f ./docker/docker-compose.e2e.yml up --build -d
+        cd backend
+        npm i
+        npm run e2e
         ;;
     test)
         echo "Running application for backend testing..."
-        docker compose -f ./docker/docker-compose.test.yml up -d --build
-        wait_for_service "Test database" 3307
-        install_dependencies backend
-        cd backend
-        npm test
+        docker compose -f ./docker/docker-compose.test.yml up --build
         ;;
-    dev-backend)
+    dev)
         echo "Running application for backend development..."
-        docker-compose -f ./docker/docker-compose.yml up -d database --build
-        wait_for_service "Database" 3307
-        install_dependencies backend
-        cd backend
-        npm run dev
-        ;;
-    dev-frontend)
-        echo "Running application for frontend development..."
-        docker-compose -f ./docker/docker-compose.yml up -d database backend --build
-        wait_for_service "Backend" 5500
-        install_dependencies frontend
-        cd frontend
-        npm run dev
+        docker compose -f ./docker/docker-compose.yml up database socket minio --build
         ;;
     *)
-        echo "Invalid command. Use 'prod', 'e2e', 'test', 'dev-backend', 'dev-frontend'."
+        echo "Invalid command. Use 'prod', 'e2e', 'test', 'dev'."
         exit 1
         ;;
 esac

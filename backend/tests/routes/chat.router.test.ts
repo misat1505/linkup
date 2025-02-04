@@ -14,13 +14,20 @@ import {
 import { Chat } from "../../src/types/Chat";
 import { isUserInChat } from "../../src/types/guards/user.guard";
 import { env } from "../../src/config/env";
+import fileStorage from "../../src/lib/FileStorage";
 
 const token = TokenProcessor.encode(
   { userId: VALID_USER_ID },
   env.ACCESS_TOKEN_SECRET
 );
 
+jest.mock("../../src/lib/FileStorage");
+
 describe("chat router", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("[GET] /chats", () => {
     it("should get user chats", async () => {
       const res = await request(app)
@@ -72,17 +79,7 @@ describe("chat router", () => {
       expect(res.statusCode).toBe(201);
       expect(isChat(res.body.chat, { allowStringifiedDates: true })).toBe(true);
 
-      const { photoURL: file, id } = res.body.chat;
-      const filepath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "files",
-        "chats",
-        id,
-        file
-      );
-      expect(fs.existsSync(filepath)).toBe(true);
+      expect(fileStorage.uploadFile).toHaveBeenCalledTimes(1);
 
       const res2 = await request(app)
         .get("/chats")
@@ -93,8 +90,6 @@ describe("chat router", () => {
       res2.body.chats.forEach((chat: unknown) => {
         expect(isChat(chat, { allowStringifiedDates: true })).toBe(true);
       });
-
-      fs.rmdirSync(path.dirname(filepath), { recursive: true });
     });
   });
 
@@ -128,13 +123,7 @@ describe("chat router", () => {
         true
       );
 
-      const paths = (res.body.message as Message).files.map((file) => file.url);
-      const filepaths = paths.map((p) =>
-        path.join(__dirname, "..", "..", "files", "chats", chatId, p)
-      );
-      filepaths.forEach((filepath) => {
-        expect(fs.existsSync(filepath)).toBe(true);
-      });
+      expect(fileStorage.uploadFile).toHaveBeenCalledTimes(2);
 
       const res2 = await request(app)
         .get(`/chats/${chatId}/messages`)
@@ -145,8 +134,6 @@ describe("chat router", () => {
       res2.body.messages.forEach((message: unknown) => {
         expect(isMessage(message, { allowStringifiedDates: true })).toBe(true);
       });
-
-      fs.rmdirSync(path.dirname(filepaths[0]), { recursive: true });
     });
   });
 
@@ -281,17 +268,7 @@ describe("chat router", () => {
         true
       );
 
-      const { photoURL: file, id } = res2.body.chat;
-      const filepath = path.join(
-        __dirname,
-        "..",
-        "..",
-        "files",
-        "chats",
-        id,
-        file
-      );
-      expect(fs.existsSync(filepath)).toBe(true);
+      expect(fileStorage.uploadFile).toHaveBeenCalledTimes(1);
 
       const res3 = await request(app)
         .get("/chats")
@@ -304,8 +281,6 @@ describe("chat router", () => {
       const chat3 = res3.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
       expect(chat3.name).toBe("chat name");
       expect(chat3.photoURL).not.toBe("chat-photo.webp");
-
-      fs.rmdirSync(path.dirname(filepath), { recursive: true });
     });
   });
 

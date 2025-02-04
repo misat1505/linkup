@@ -2,6 +2,20 @@ version: "3.8"
 name: link-up
 
 services:
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio-data:/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   database:
     image: postgres:15
     restart: always
@@ -19,17 +33,21 @@ services:
       timeout: 5s
       retries: 5
 
-  backend:
+  # backend:
+  #   build:
+  #     context: ../backend
+  #     dockerfile: ../docker/Dockerfile.backend
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy
+  #   ports:
+  #     - "5500:5500"
+
+  socket:
     build:
-      context: ../backend
-      dockerfile: ../docker/Dockerfile.backend
-    depends_on:
-      database:
-        condition: service_healthy
-    volumes:
-      - backend-files:/backend/files
+      context: ../socket
+      dockerfile: ../docker/Dockerfile.socket
     ports:
-      - "5500:5500"
       - "5501:5501"
 
   frontend:
@@ -41,4 +59,4 @@ services:
 
 volumes:
   database-data:
-  backend-files:
+  minio-data:

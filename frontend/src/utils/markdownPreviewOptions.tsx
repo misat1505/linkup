@@ -1,8 +1,6 @@
 import Image from "@/components/common/Image";
 import { API_URL } from "@/constants";
-import { queryKeys } from "@/lib/queryKeys";
-import { getAccessToken } from "@/lib/token";
-import { useQuery } from "react-query";
+import { useFetchProtectedURL } from "@/hooks/useFetchProtectedURL";
 
 export const markdownPreviewOptions = {
   video({ node, ...props }: any) {
@@ -41,20 +39,7 @@ export const markdownPreviewOptions = {
 };
 
 function ProtectedSource({ src }: { src: string }) {
-  const { data } = useQuery({
-    queryKey: queryKeys.file(src),
-    queryFn: async () => {
-      const result = await fetch(src, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-      });
-      if (!result.ok) throw new Error();
-      const blob = await result.blob();
-      return URL.createObjectURL(blob);
-    },
-  });
+  const { data } = useFetchProtectedURL(src);
 
   return <source key={data} src={data} />;
 }
