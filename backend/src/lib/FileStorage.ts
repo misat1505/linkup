@@ -56,13 +56,15 @@ export class FileStorage {
     bucketName?: string;
     forcePathStyle?: boolean;
   }) {
+    const isS3Local = env.S3_ENDPOINT.includes("localhost");
+
     const {
       region = env.AWS_REGION,
-      endpoint = env.S3_ENDPOINT,
+      endpoint = isS3Local ? env.S3_ENDPOINT : undefined,
       accessKeyId = env.AWS_ACCESS_KEY_ID,
       secretAccessKey = env.AWS_SECRET_ACCESS_KEY,
       bucketName = env.S3_BUCKET_NAME,
-      forcePathStyle = true,
+      forcePathStyle = isS3Local,
     } = config || {};
 
     if (!region || !accessKeyId || !secretAccessKey || !bucketName) {
