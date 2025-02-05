@@ -1,13 +1,20 @@
 import ThemeToggle from "../common/navbar/ThemeToggle";
 import SettingCard from "./SettingCard";
+import TooltipSwitch from "./TooltipSwitch";
 
 export default function SettingsCards() {
   const cards = [
     {
-      title: "App Theme",
+      title: "Theme",
       description:
         "Switch between light and dark themes to suit your preference.",
       switchComponent: <ThemeToggle />,
+    },
+    {
+      title: "Tooltips",
+      description:
+        "Enable or disable tooltips for additional guidance in the app.",
+      switchComponent: <TooltipSwitch />,
     },
   ];
 
