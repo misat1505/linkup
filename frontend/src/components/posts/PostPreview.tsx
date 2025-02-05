@@ -26,7 +26,7 @@ export default function PostPreview({ post }: { post: Post }) {
   return (
     <div
       className={cn(
-        "relative m-auto my-4 w-[95%] rounded-md bg-post-light p-4 dark:bg-post-dark lg:w-[60%]"
+        "relative m-auto my-4 w-[95%] bg-post-light p-4 dark:bg-post-dark lg:w-[60%]"
       )}
     >
       <div className="absolute -top-20" ref={postRef}></div>
