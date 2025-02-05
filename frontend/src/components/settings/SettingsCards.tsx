@@ -19,7 +19,7 @@ export default function SettingsCards() {
   ];
 
   return (
-    <div className="max-w-[95vw] md:max-w-[500px] w-full mx-auto my-4 lg:my-auto">
+    <div className="max-w-[95vw] md:max-w-[500px] w-full mx-auto mt-24 mb-4">
       {cards.map((card, idx) => (
         <SettingCard key={idx} {...card} />
       ))}
