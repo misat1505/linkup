@@ -65,7 +65,7 @@ export default function Settings() {
 
   return (
     <div className="my-auto min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-12 xl:grid mb-4 xl:mb-0">
-      <div>
+      <div className="my-auto">
         <SettingsSlogan />
         <SettingsCards />
       </div>
