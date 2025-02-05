@@ -1,13 +1,14 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { BsChatLeftTextFill } from "react-icons/bs";
 import { useChatPageContext } from "@/contexts/ChatPageProvider";
 import ChatProvider, { useChatContext } from "@/contexts/ChatProvider";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { ROUTES } from "@/lib/routes";
 import ChatHeader from "./ChatHeader";
 import ChatFooterProvider from "@/contexts/ChatFooterProvider";
 import ChatContent from "./ChatContent";
 import ChatFooter from "./ChatFooter";
+import { cn } from "@/lib/utils";
 
 export default function ChatGuard() {
   const { createChatTriggerRef } = useChatPageContext();
@@ -16,21 +17,20 @@ export default function ChatGuard() {
   if (!chatId)
     return (
       <div className="relative hidden flex-grow md:block">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-slate-100 p-8 text-muted-foreground dark:bg-slate-900">
-          <BsChatLeftTextFill className="mx-auto h-64 w-64" />
-          <p className="my-4 text-center text-xl font-semibold">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  bg-slate-100 p-8 dark:bg-slate-900 text-center shadow-lg">
+          <BsChatLeftTextFill className="mx-auto h-64 w-64 text-muted-foreground" />
+          <h2 className="my-4 text-center text-xl font-semibold">
             No chat selected.
+          </h2>
+          <p className="max-w-64 text-muted-foreground text-sm text-center">
+            Select existing chat in the menu or
           </p>
-          <p className="max-w-64">
-            Select existing chat in the menu or{" "}
-            <span
-              className="text-blue-500 underline hover:cursor-pointer"
-              onClick={() => createChatTriggerRef.current!.click()}
-            >
-              create a new one
-            </span>
-            .
-          </p>
+          <Button
+            onClick={() => createChatTriggerRef.current!.click()}
+            className="mt-4 mx-auto"
+          >
+            Create new chat
+          </Button>
         </div>
       </div>
     );
@@ -45,28 +45,29 @@ export default function ChatGuard() {
 function Chat() {
   const { error, chatId } = useChatContext();
   const { chats } = useChatPageContext();
-  const navigate = useNavigate();
 
   const isUserInChat = chats?.find((c) => c.id === chatId);
 
   if (error || !isUserInChat)
     return (
       <div className="relative flex-grow">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-slate-100 p-8 text-center text-muted-foreground dark:bg-slate-900">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-100 p-8 text-center dark:bg-slate-900 shadow-lg">
           <BsChatLeftTextFill className="mx-auto h-64 w-64 text-red-500" />
-          <p className="my-4 text-center text-xl font-semibold">
+          <h2 className="my-4 text-center text-xl font-semibold">
             Chat unavailable.
-          </p>
-          <p className="max-w-64 text-left">
+          </h2>
+          <p className="max-w-64 text-left text-muted-foreground text-sm">
             Selected chat does not exist or is not available for you.
           </p>
-          <Button
-            variant="blueish"
-            className="mx-auto mt-4"
-            onClick={() => navigate(ROUTES.CHATS.$path())}
+          <Link
+            className={cn(
+              "mx-auto mt-4",
+              buttonVariants({ variant: "default" })
+            )}
+            to={ROUTES.CHATS.$path()}
           >
             Close
-          </Button>
+          </Link>
         </div>
       </div>
     );
