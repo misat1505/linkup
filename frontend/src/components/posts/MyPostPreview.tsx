@@ -34,7 +34,7 @@ export default function MyPostPreview({ post }: { post: Post }) {
     <div
       data-color-mode={theme}
       className={cn(
-        "relative m-auto my-4 w-[95%] overflow-hidden rounded-md p-4 lg:w-[60%]",
+        "relative m-auto my-4 w-[95%] overflow-hidden p-4 lg:w-[60%]",
         {
           "max-h-72": !isExpanded,
         }

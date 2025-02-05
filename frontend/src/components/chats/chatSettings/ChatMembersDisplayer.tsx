@@ -46,7 +46,7 @@ function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
   const { chat } = useChatContext();
 
   return (
-    <div className="mb-2 flex w-full items-center justify-between gap-x-2 rounded-md bg-slate-100 p-1 dark:bg-slate-900">
+    <div className="mb-2 flex w-full items-center justify-between gap-x-2  bg-slate-100 p-1 dark:bg-slate-900">
       <div className="flex items-center gap-x-2">
         <Avatar
           src={buildFileURL(user.photoURL, { type: "avatar" })}

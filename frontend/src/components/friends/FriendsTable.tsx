@@ -62,7 +62,7 @@ export default function FriendsTable({ table }: FriendsTableProps) {
               className="h-32 text-center"
             >
               <h2 className="text-lg font-semibold">No results.</h2>
-              <p>
+              <p className="text-muted-foreground">
                 Search for people using the{" "}
                 <FocusableSpan
                   fn={focusNavigationBar}

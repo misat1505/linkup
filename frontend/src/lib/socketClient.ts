@@ -2,6 +2,8 @@ import { io, Socket } from "socket.io-client";
 import { SOCKET_URL } from "@/constants";
 import { Message } from "@/types/Message";
 import { convertDates } from "@/utils/convertDates";
+import { Reaction } from "@/types/Reaction";
+import { Chat } from "@/types/Chat";
 
 type Room = string;
 
@@ -10,6 +12,8 @@ export enum SocketAction {
   LEAVE_ROOM = "leave-room",
   SEND_MESSAGE = "send-message",
   RECEIVE_MESSAGE = "receive-message",
+  SEND_REACTION = "send-reaction",
+  RECEIVE_REACTION = "receive-reaction",
 }
 
 export enum SocketErrors {
@@ -48,6 +52,16 @@ class SocketClient {
       const convertedMessage = convertDates(dirtyMessage) as any;
       const message: Message = convertedMessage;
       callback(message);
+    });
+  }
+
+  sendReaction(reaction: Reaction, chatId: Chat["id"]) {
+    this.socket.emit(SocketAction.SEND_REACTION, reaction, chatId);
+  }
+
+  onReceiveReaction(callback: (reaction: Reaction) => void) {
+    this.socket.on(SocketAction.RECEIVE_REACTION, (reaction: any) => {
+      callback(reaction);
     });
   }
 

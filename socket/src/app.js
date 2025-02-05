@@ -21,6 +21,10 @@ io.on("connection", (socket) => {
     socket.to(room).emit("receive-message", message);
   });
 
+  socket.on("send-reaction", (reaction, room) => {
+    socket.to(room).emit("receive-reaction", reaction);
+  });
+
   socket.on("join-room", async (room) => {
     socket.join(room);
   });

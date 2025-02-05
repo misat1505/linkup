@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useChatPageContext } from "./ChatPageProvider";
 import { queryKeys } from "@/lib/queryKeys";
 import { ChatService } from "@/services/Chat.service";
@@ -36,6 +36,7 @@ const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
 export const useChatContext = () => useContext(ChatContext);
 
 export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
+  const queryClient = useQueryClient();
   const messageRefs = useRef<Record<Message["id"], HTMLDivElement | null>>({});
   const [incomeMessageId, setIncomeMessageId] = useState<Message["id"] | null>(
     null
@@ -58,6 +59,21 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
     socketClient.onReceiveMessage((message) => {
       addMessage(message);
       if (message.chatId === chatId) setIncomeMessageId(message.id);
+    });
+
+    socketClient.onReceiveReaction((reaction) => {
+      queryClient.setQueryData<Message[]>(
+        queryKeys.messages(chat!.id),
+        (oldMessages = []) => {
+          const message = oldMessages.find((m) => m.id === reaction.messageId);
+          if (!message) return oldMessages;
+
+          if (message.reactions.some((r) => r.user.id === reaction.user.id))
+            return oldMessages;
+          message.reactions.push(reaction);
+          return [...oldMessages];
+        }
+      );
     });
 
     return () => {

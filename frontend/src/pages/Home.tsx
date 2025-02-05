@@ -8,6 +8,7 @@ import Loading from "@/components/common/Loading";
 import { User } from "@/types/User";
 import { Post } from "@/types/Post";
 import PostPreview from "@/components/posts/PostPreview";
+import EmptyFeed from "@/components/home/EmptyFeed";
 
 export default function Home() {
   const { user: me } = useAppContext();
@@ -43,6 +44,13 @@ export default function Home() {
       ["desc", "desc"]
     );
   };
+
+  if (posts?.length === 0)
+    return (
+      <div className="relative w-full h-[calc(100vh-5rem)]">
+        <EmptyFeed />
+      </div>
+    );
 
   return (
     <div>

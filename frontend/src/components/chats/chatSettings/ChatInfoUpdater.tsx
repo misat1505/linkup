@@ -86,7 +86,11 @@ function Updater({ file }: { file: File | null }) {
       className="mx-auto mt-4 flex max-w-60 flex-col items-center gap-4"
       onSubmit={handleSubmit}
     >
-      <Input value={groupName || ""} onChange={handleTextChange} />
+      <Input
+        value={groupName || ""}
+        onChange={handleTextChange}
+        placeholder="Group name..."
+      />
       <div className="group relative mt-8">
         {source ? (
           <img
@@ -111,7 +115,7 @@ function Updater({ file }: { file: File | null }) {
         onChange={handleFileChange}
         accept=".jpg, .png, .webp"
       />
-      <Button variant="blueish" className="self-end" type="submit">
+      <Button className="self-end" type="submit">
         Save
       </Button>
     </form>

@@ -36,7 +36,7 @@ export default function Signup() {
   return (
     <div className="min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-4 xl:grid xl:px-12">
       <SignupSlogan />
-      <div className="col-span-1 mx-auto mb-4 h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black xl:my-auto">
+      <div className="col-span-1 mx-auto mb-4 h-fit w-fit rounded-md bg-black/10 dark:bg-white/5 p-4 shadow-2xl shadow-black xl:my-auto">
         <SignupFormProvider type="create" onSubmit={onSubmit}>
           <SignupForm />
         </SignupFormProvider>
