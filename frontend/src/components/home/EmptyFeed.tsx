@@ -12,7 +12,7 @@ export default function EmptyFeed() {
         alt="Logo"
       />
       <h2 className="text-xl font-semibold">No Posts Yet</h2>
-      <p className="text-muted-foreground">
+      <p className="text-muted-foreground text-sm">
         Be the first to share something! Create your first post now.
       </p>
       <Link
