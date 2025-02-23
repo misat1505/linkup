@@ -152,6 +152,7 @@ function AliasUpdateModal({ user }: { user: UserInChat }) {
             value={text || ""}
             placeholder="Create alias"
             onChange={handleChange}
+            className="text-sm"
           />
         </div>
         <AlertDialogFooter>
