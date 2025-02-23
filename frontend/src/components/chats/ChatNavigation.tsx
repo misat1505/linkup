@@ -127,7 +127,7 @@ function LastMessageDisplayer({
     return (
       <>
         <span className="font-semibold">{displayName}: </span>
-        <span>{lastMessage.content?.substring(0, 20)}</span>
+        <span>{lastMessage.content}</span>
       </>
     );
 

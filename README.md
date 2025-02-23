@@ -1,4 +1,4 @@
-# Link Up - Bachelor's Degree Project
+# Link Up - Bachelor's Thesis Project
 
 ### Project Overview:
 
