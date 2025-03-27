@@ -191,6 +191,13 @@ export const en: { translation: Translation } = {
       },
       delete: {
         button: { tooltip: "Delete" },
+        dialog: {
+          title: "Are you absolutely sure?",
+          description:
+            "Are you sure you want to delete this post? This will delete your post, it's comments, and all files related with this post.",
+          cancel: "Cancel",
+          confirm: "Yes, delete",
+        },
       },
     },
   },
