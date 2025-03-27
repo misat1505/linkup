@@ -96,9 +96,19 @@ export const pl: { translation: Translation } = {
     },
     common: {
       navbar: {
+        logo: {
+          tooltip: "Strona Główna",
+        },
         search: {
           placeholder: "Szukaj na Link Up...",
           "no-users": "Brak wyników wyszukiwania.",
+          tooltip: "Szukaj Użytkowników",
+          heading: "Wyniki Wyszukiwania",
+          message: {
+            button: {
+              tooltip: "Wyślij Wiadomość",
+            },
+          },
           friendships: {
             button: {
               tooltip: "Dodaj do Przyjaciół",

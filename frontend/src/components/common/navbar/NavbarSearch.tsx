@@ -50,7 +50,7 @@ export default function NavbarSearch() {
 
   return (
     <Command className="w-60 rounded-lg border bg-white shadow-md dark:bg-black">
-      <Tooltip content="Search for users">
+      <Tooltip content={t("common.navbar.search.tooltip")}>
         <CommandInput
           placeholder={t("common.navbar.search.placeholder")}
           data-testid="cy-nav-search-input"
@@ -85,7 +85,7 @@ export default function NavbarSearch() {
             <CommandGroup
               className={cn({ hidden: users.length === 0 })}
               forceMount={users.length > 0}
-              heading="Suggestions"
+              heading={t("common.navbar.search.heading")}
               data-testid="cy-nav-search-results"
             >
               {users.map((user) => (
@@ -204,7 +204,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
         )}
         <ActionButton
           onClick={() => handleCreateChat(user.id)}
-          tooltipText="Send Message"
+          tooltipText={t("common.navbar.search.message.button.tooltip")}
           Icon={<IoIosChatbubbles className="transition-all hover:scale-125" />}
         />
       </div>

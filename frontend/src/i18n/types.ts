@@ -98,9 +98,19 @@ type SettingsTranslations = {
 };
 
 type NavbarTranslations = {
+  logo: {
+    tooltip: string;
+  };
   search: {
     placeholder: string;
     "no-users": string;
+    tooltip: string;
+    heading: string;
+    message: {
+      button: {
+        tooltip: string;
+      };
+    };
     friendships: {
       button: {
         tooltip: string;
