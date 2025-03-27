@@ -10,16 +10,20 @@ import { initReactions } from "./config/reactions";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./lib/swagger";
 import { prisma } from "./lib/Prisma";
+import expressStatusMonitor from "express-status-monitor";
 
 const app = express();
 
 const isSentryActive = !!env.SENTRY_DSN;
 
-if (isSentryActive)
+if (isSentryActive) {
   Sentry.init({
     dsn: env.SENTRY_DSN,
     tracesSampleRate: 1.0,
   });
+
+  app.use(expressStatusMonitor());
+}
 
 app.use(corsMiddleware);
 app.use(cookieParser());
