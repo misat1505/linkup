@@ -15,7 +15,18 @@ export const en: { translation: Translation } = {
           idle: "Sign in",
           pending: "Signing in...",
         },
+        errors: {
+          login: {
+            min: "Login must be at least 5 characters long.",
+            max: "Login must be at most 50 characters long.",
+          },
+          password: {
+            min: "Password must be at least 5 characters long.",
+          },
+        },
       },
+      "no-account": "Don't have an account?",
+      "sign-in-redirect": "Signup",
     },
     settings: {
       theme: {

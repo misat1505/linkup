@@ -15,7 +15,18 @@ export const pl: { translation: Translation } = {
           idle: "Zaloguj się",
           pending: "Trwa logowanie...",
         },
+        errors: {
+          login: {
+            min: "Login musi mieć co najmniej 5 znaków.",
+            max: "Login może mieć maksymalnie 50 znaków.  ",
+          },
+          password: {
+            min: "Hasło musi mieć co najmniej 5 znaków.",
+          },
+        },
       },
+      "no-account": "Nie masz konta?",
+      "sign-in-redirect": "Zarejestruj się",
     },
     settings: {
       theme: {

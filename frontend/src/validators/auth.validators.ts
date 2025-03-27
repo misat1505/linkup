@@ -1,14 +1,19 @@
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-export const loginFormSchema = z.object({
-  login: z
-    .string()
-    .min(5, "Login must be at least 5 characters long.")
-    .max(50, "Login must be at most 50 characters long."),
-  password: z.string().min(5, "Password must be at least 5 characters long."),
-});
+export const useLoginFormSchema = () => {
+  const { t } = useTranslation();
 
-export type LoginFormType = z.infer<typeof loginFormSchema>;
+  return z.object({
+    login: z
+      .string()
+      .min(5, t("login.form.errors.login.min"))
+      .max(50, t("login.form.errors.login.max")),
+    password: z.string().min(5, t("login.form.errors.password.min")),
+  });
+};
+
+export type LoginFormType = z.infer<ReturnType<typeof useLoginFormSchema>>;
 
 export const signupFormSchema = z
   .object({

@@ -2,7 +2,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAppContext } from "@/contexts/AppProvider";
 import { ROUTES } from "@/lib/routes";
 import { AuthService } from "@/services/Auth.service";
-import { loginFormSchema, LoginFormType } from "@/validators/auth.validators";
+import {
+  useLoginFormSchema,
+  LoginFormType,
+} from "@/validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import {
@@ -31,6 +34,7 @@ export default function useLoginForm(): useLoginFormValue {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { setUser } = useAppContext();
+  const loginFormSchema = useLoginFormSchema();
   const {
     register,
     handleSubmit,

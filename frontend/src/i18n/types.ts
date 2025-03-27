@@ -15,7 +15,18 @@ type LoginTranslations = {
       idle: string;
       pending: string;
     };
+    errors: {
+      login: {
+        min: string;
+        max: string;
+      };
+      password: {
+        min: string;
+      };
+    };
   };
+  "no-account": string;
+  "sign-in-redirect": string;
 };
 
 type SettingsTranslations = {
