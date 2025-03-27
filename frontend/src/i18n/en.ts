@@ -96,6 +96,32 @@ export const en: { translation: Translation } = {
     },
     common: {
       navbar: {
+        sheet: {
+          trigger: { tooltip: "Show actions" },
+          title: {
+            "logged-in": "Welcome, {{fullName}}!",
+            anonymous: "Welcome!",
+          },
+          items: {
+            home: "Home",
+            chats: "Chats",
+            settings: "Settings",
+            posts: "Posts",
+            friends: "Friends",
+            login: "Login",
+            signup: "Create New Account",
+            logout: {
+              trigger: "Logout",
+              dialog: {
+                title: "Are you absolutely sure?",
+                description:
+                  "Are you sure you want to log out? This will end your session, and you will need to log in again to access your account.",
+                cancel: "Cancel",
+                confirm: "Yes, logout",
+              },
+            },
+          },
+        },
         logo: {
           tooltip: "Home",
         },

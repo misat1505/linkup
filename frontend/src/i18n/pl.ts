@@ -99,6 +99,32 @@ export const pl: { translation: Translation } = {
         logo: {
           tooltip: "Strona Główna",
         },
+        sheet: {
+          trigger: { tooltip: "Pokaż akcje" },
+          title: {
+            "logged-in": "Witaj, {{fullName}}!",
+            anonymous: "Witaj!",
+          },
+          items: {
+            home: "Strona główna",
+            chats: "Czaty",
+            settings: "Ustawienia",
+            posts: "Posty",
+            friends: "Znajomi",
+            login: "Zaloguj się",
+            signup: "Utwórz nowe konto",
+            logout: {
+              trigger: "Wyloguj się",
+              dialog: {
+                title: "Czy na pewno chcesz to zrobić?",
+                description:
+                  "Czy na pewno chcesz się wylogować? Spowoduje to zakończenie Twojej sesji, a aby uzyskać dostęp do konta, będziesz musiał(a) zalogować się ponownie.",
+                cancel: "Anuluj",
+                confirm: "Tak, wyloguj się",
+              },
+            },
+          },
+        },
         search: {
           placeholder: "Szukaj na Link Up...",
           "no-users": "Brak wyników wyszukiwania.",

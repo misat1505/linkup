@@ -101,6 +101,31 @@ type NavbarTranslations = {
   logo: {
     tooltip: string;
   };
+  sheet: {
+    trigger: { tooltip: string };
+    title: {
+      anonymous: string;
+      "logged-in": string;
+    };
+    items: {
+      home: string;
+      chats: string;
+      settings: string;
+      posts: string;
+      friends: string;
+      login: string;
+      signup: string;
+      logout: {
+        trigger: string;
+        dialog: {
+          title: string;
+          description: string;
+          cancel: string;
+          confirm: string;
+        };
+      };
+    };
+  };
   search: {
     placeholder: string;
     "no-users": string;
