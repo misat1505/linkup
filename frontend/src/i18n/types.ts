@@ -2,9 +2,11 @@ export type Translation = {
   login: LoginTranslations;
   signup: SignupTranslations;
   settings: SettingsTranslations;
+  home: HomeTranslations;
   common: {
     navbar: NavbarTranslations;
     theme: ThemeTranslations;
+    loading: string;
   };
 };
 
@@ -162,5 +164,15 @@ type ThemeTranslations = {
   dark: string;
   switch: {
     tooltip: string;
+  };
+};
+
+type HomeTranslations = {
+  feed: {
+    empty: {
+      title: string;
+      description: string;
+      action: string;
+    };
   };
 };

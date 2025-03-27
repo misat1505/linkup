@@ -95,6 +95,7 @@ export const pl: { translation: Translation } = {
       },
     },
     common: {
+      loading: "Chwileczkę, przygotowujemy aplikację...",
       navbar: {
         logo: {
           tooltip: "Strona Główna",
@@ -161,6 +162,16 @@ export const pl: { translation: Translation } = {
         dark: "ciemny",
         switch: {
           tooltip: "Przełącz na tryb {{mode}}",
+        },
+      },
+    },
+    home: {
+      feed: {
+        empty: {
+          title: "Nic tu jeszcze nie ma",
+          description:
+            "Rozpocznij rozmowę! Podziel się swoimi myślami, dodając pierwszy post.",
+          action: "Napisz post",
         },
       },
     },

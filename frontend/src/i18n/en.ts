@@ -95,6 +95,7 @@ export const en: { translation: Translation } = {
       },
     },
     common: {
+      loading: "Hang tight as we prepare the app...",
       navbar: {
         sheet: {
           trigger: { tooltip: "Show actions" },
@@ -160,6 +161,16 @@ export const en: { translation: Translation } = {
         dark: "dark",
         switch: {
           tooltip: "Switch to {{mode}} mode",
+        },
+      },
+    },
+    home: {
+      feed: {
+        empty: {
+          title: "Nothing here yet",
+          description:
+            "Start the conversation! Share your thoughts by creating the first post.",
+          action: "Write a post",
         },
       },
     },
