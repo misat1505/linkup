@@ -1,4 +1,6 @@
-export const pl = {
+import { Translation } from "./types";
+
+export const pl: { translation: Translation } = {
   translation: {
     login: {
       greeting: "Witamy w",
