@@ -43,6 +43,10 @@ const envSchema = z.object({
   AWS_REGION: z.string({ message: "'AWS_REGION' must be a string" }),
   S3_BUCKET_NAME: z.string({ message: "'S3_BUCKET_NAME' must be a string" }),
   S3_ENDPOINT: z.string({ message: "'S3_ENDPOINT' must be a string" }),
+  SENTRY_DSN: z
+    .string()
+    .url({ message: "'SENTRY_DSN' must be a valid URL." })
+    .optional(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
