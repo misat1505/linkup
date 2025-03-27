@@ -11,7 +11,6 @@ export default function SignupSubmitButton() {
   return (
     <div className="mt-8 flex justify-center">
       <Button
-        variant="blueish"
         type="submit"
         disabled={isSubmitting}
         data-testid="cy-signup-form-button"

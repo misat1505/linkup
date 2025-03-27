@@ -21,7 +21,7 @@ export default function Navbar() {
             <Tooltip content="Home">
               <span>
                 <FocusableSpan fn={() => navigate(ROUTES.HOME.$path())}>
-                  <img src={LOGO_PATH} className="h-10 w-10 rounded-full" />
+                  <img src={LOGO_PATH} className="h-12 w-12 rounded-full" />
                 </FocusableSpan>
               </span>
             </Tooltip>

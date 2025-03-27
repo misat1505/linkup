@@ -12,7 +12,11 @@ export default function ProtectedRoute({
   const { isLoading, user } = useAppContext();
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="relative w-screen h-[calc(100vh-5rem)] text-nowrap">
+        <Loading text="Hang tight as we prepare the app..." />
+      </div>
+    );
   }
 
   if (!user || !getAccessToken()) {

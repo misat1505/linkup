@@ -23,9 +23,12 @@ export default function SignupSlogan() {
         <div className="text-nowrap">Network</div>
       </h1>
       <p
-        className={cn("mt-32 text-balance text-center text-2xl font-semibold", {
-          [styles.description]: isAnimating,
-        })}
+        className={cn(
+          "mt-32 mb-8 text-balance text-center text-2xl font-semibold",
+          {
+            [styles.description]: isAnimating,
+          }
+        )}
       >
         Start your journey today and discover a world of connections and
         opportunities.

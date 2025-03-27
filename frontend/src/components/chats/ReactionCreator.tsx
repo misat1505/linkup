@@ -21,6 +21,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import { cn } from "@/lib/utils";
 import { useChatContext } from "@/contexts/ChatProvider";
 import { ChatService } from "@/services/Chat.service";
+import { socketClient } from "@/lib/socketClient";
 
 export default function ReactionCreator({ message }: { message: Message }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -130,6 +131,8 @@ function ReactionCreatorContentItem({
           return [...oldMessages];
         }
       );
+
+      socketClient.sendReaction(reactionResponse, chat!.id);
 
       setIsOpen(false);
       setIncomeMessageId(null);

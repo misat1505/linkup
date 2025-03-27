@@ -20,7 +20,7 @@ export default function SignupImageDisplay() {
     data.firstName?.[0]?.toUpperCase() + data.lastName?.[0]?.toUpperCase();
 
   return (
-    <Avatar className="mx-auto h-40 w-40">
+    <Avatar className="mx-auto h-40 w-40 mt-4 md:mt-0">
       <div className="group relative">
         <AvatarImage className="object-cover" src={file!} />
         {file && (

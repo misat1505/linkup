@@ -12,6 +12,8 @@ import { AuthService } from "@/services/Auth.service";
 import { toast } from "@/components/ui/use-toast";
 import SignupFormProvider from "@/contexts/SignupFormProvider";
 import SignupForm from "@/components/signup/SignupForm";
+import SettingsCards from "@/components/settings/SettingsCards";
+import SettingsSlogan from "@/components/settings/SettingsSlogan";
 
 export default function Settings() {
   const { user: me, setUser } = useAppContext();
@@ -62,8 +64,11 @@ export default function Settings() {
   };
 
   return (
-    <div className="my-auto min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-12 xl:grid">
-      <div />
+    <div className="my-auto min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-12 xl:grid mb-4 xl:mb-0">
+      <div className="my-auto">
+        <SettingsSlogan />
+        <SettingsCards />
+      </div>
       <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
         <SignupFormProvider
           type="modify"

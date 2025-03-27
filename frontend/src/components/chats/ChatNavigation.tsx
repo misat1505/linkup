@@ -11,6 +11,7 @@ import { ROUTES } from "@/lib/routes";
 import { buildFileURL, Filter } from "@/utils/buildFileURL";
 import Tooltip from "../common/Tooltip";
 import Avatar from "../common/Avatar";
+import NoChats from "./NoChats";
 
 export default function ChatNavigation() {
   const { chatId } = useParams();
@@ -29,9 +30,10 @@ export default function ChatNavigation() {
     <div className={classnames}>
       <ChatNavigationHeader />
       <div
-        className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto"
+        className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto relative"
         data-testid="cy-chat-nav"
       >
+        {chats?.length === 0 && <NoChats />}
         {chats?.map((chat) => (
           <NavigationItem key={chat.id} chat={chat} />
         ))}
@@ -80,7 +82,7 @@ function NavigationItem({ chat }: { chat: Chat }) {
     <Tooltip content="Open chat">
       <span>
         <button
-          className="mx-4 mb-2 flex w-[calc(100%-2rem)] items-center gap-x-4 rounded-md bg-slate-100 px-4 py-2 shadow-md transition-all hover:cursor-pointer hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 md:w-72"
+          className="mx-4 mb-2 flex w-[calc(100%-2rem)] items-center gap-x-4  bg-slate-100 px-4 py-2 shadow-md transition-all hover:cursor-pointer hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 md:w-72"
           onClick={() => handleOpenChat(chat.id)}
         >
           <Avatar
@@ -125,7 +127,7 @@ function LastMessageDisplayer({
     return (
       <>
         <span className="font-semibold">{displayName}: </span>
-        <span>{lastMessage.content?.substring(0, 20)}</span>
+        <span>{lastMessage.content}</span>
       </>
     );
 

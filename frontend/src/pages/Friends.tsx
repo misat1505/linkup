@@ -111,7 +111,7 @@ function FriendsPageInner() {
   });
 
   return (
-    <div className="mx-auto my-4 w-[95%] rounded-md bg-slate-100 p-4 shadow-lg dark:bg-slate-900 lg:w-1/2">
+    <div className="mx-auto my-4 w-[95%] bg-slate-100 p-4 shadow-lg dark:bg-slate-900 lg:w-1/2">
       <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter users..."

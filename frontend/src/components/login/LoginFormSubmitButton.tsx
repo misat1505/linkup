@@ -8,7 +8,6 @@ export default function LoginFormSubmitButton() {
   return (
     <div className="mt-4 flex justify-center">
       <Button
-        variant="blueish"
         type="submit"
         disabled={isSubmitting}
         data-testid="cy-login-form-button"

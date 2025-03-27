@@ -112,9 +112,7 @@ function SelectedUsers() {
 function SubmitFormButton() {
   return (
     <div className="mt-4 flex w-full flex-row-reverse">
-      <Button variant="blueish" type="submit">
-        Create
-      </Button>
+      <Button type="submit">Create</Button>
     </div>
   );
 }
