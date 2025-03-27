@@ -3,8 +3,30 @@ config:
   http:
     maxRequestsPerSocket: 50
   phases:
-    - duration: 120
+    - duration: 10
+      arrivalRate: 100
+    - duration: 10
       arrivalRate: 200
+    - duration: 10
+      arrivalRate: 300
+    - duration: 10
+      arrivalRate: 400
+    - duration: 10
+      arrivalRate: 500
+    - duration: 10
+      arrivalRate: 600
+    - duration: 10
+      arrivalRate: 700
+    - duration: 10
+      arrivalRate: 800
+    - duration: 10
+      arrivalRate: 900
+    - duration: 10
+      arrivalRate: 1000
+    - duration: 10
+      arrivalRate: 1100
+    - duration: 10
+      arrivalRate: 1200
 scenarios:
   - flow:
       - get:
