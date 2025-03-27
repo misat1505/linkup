@@ -1,19 +1,20 @@
+import { useTranslation } from "react-i18next";
 import ThemeToggle from "../common/navbar/ThemeToggle";
 import SettingCard from "./SettingCard";
 import TooltipSwitch from "./TooltipSwitch";
 
 export default function SettingsCards() {
+  const { t } = useTranslation();
+
   const cards = [
     {
-      title: "Theme",
-      description:
-        "Switch between light and dark themes to suit your preference.",
+      title: t("settings.theme.title"),
+      description: t("settings.theme.description"),
       switchComponent: <ThemeToggle />,
     },
     {
-      title: "Tooltips",
-      description:
-        "Enable or disable tooltips for additional guidance in the app.",
+      title: t("settings.tooltips.title"),
+      description: t("settings.tooltips.description"),
       switchComponent: <TooltipSwitch />,
     },
   ];

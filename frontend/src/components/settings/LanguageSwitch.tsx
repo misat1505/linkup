@@ -14,7 +14,7 @@ export default function LanguageSwitch() {
       <Button
         onClick={() => changeLanguage(i18n.language === "en" ? "pl" : "en")}
       >
-        {i18n.language === "en" ? "Polish" : "English"}
+        {i18n.language === "en" ? "Polski" : "English"}
       </Button>
     </div>
   );

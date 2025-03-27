@@ -1,8 +1,11 @@
 import { useLocalStorageAnimation } from "@/hooks/useLocalStorageAnimation";
 import { cn } from "@/lib/utils";
 import styles from "@/styles/slogan.module.css";
+import { useTranslation } from "react-i18next";
 
 export default function SettingsSlogan() {
+  const { t } = useTranslation();
+
   const isAnimating = useLocalStorageAnimation(
     "settings-animation",
     60 * 60 * 1000
@@ -19,16 +22,15 @@ export default function SettingsSlogan() {
           }
         )}
       >
-        <div className="text-nowrap">Personalize</div>
-        <div className="text-nowrap">Your Experience</div>
+        <div className="text-nowrap">{t("settings.header.1")}</div>
+        <div className="text-nowrap">{t("settings.header.2")}</div>
       </h1>
       <p
         className={cn("mt-12 text-balance text-center text-2xl font-semibold", {
           [styles.description]: isAnimating,
         })}
       >
-        Customize your settings to make Link Up truly yours. Toggle themes,
-        tweak preferences, and shape the way you interact with the platform.
+        {t("settings.slogan")}
       </p>
     </div>
   );

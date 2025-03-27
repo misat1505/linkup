@@ -22,7 +22,7 @@ export default function LoginSlogan() {
           }
         )}
       >
-        <div className="text-nowrap">Welcome to</div>
+        <div className="text-nowrap">{t("login.greeting")}</div>
         <div className="text-nowrap">Link Up</div>
       </h1>
       <p
