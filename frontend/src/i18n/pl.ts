@@ -164,6 +164,12 @@ export const pl: { translation: Translation } = {
           tooltip: "Przełącz na tryb {{mode}}",
         },
       },
+      time: {
+        days: "{{count}} dni temu",
+        hours: "{{count}} godzin temu",
+        minutes: "{{count}} minut temu",
+        now: "Przed chwilą",
+      },
     },
     home: {
       feed: {
@@ -179,6 +185,20 @@ export const pl: { translation: Translation } = {
       preview: {
         "show-more": "Pokaż więcej",
         "show-less": "Pokaż mniej",
+      },
+      new: { button: "Utwórz nowy post" },
+      edit: {
+        button: { tooltip: "Edytuj" },
+      },
+      delete: {
+        button: { tooltip: "Usuń" },
+        dialog: {
+          title: "Czy na pewno chcesz to zrobić?",
+          description:
+            "Czy na pewno chcesz usunąć ten post? Usunięcie posta spowoduje usunięcie komentarzy oraz wszystkich plików związanych z tym postem.",
+          cancel: "Anuluj",
+          confirm: "Tak, usuń",
+        },
       },
     },
   },

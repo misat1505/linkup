@@ -8,6 +8,7 @@ export type Translation = {
     navbar: NavbarTranslations;
     theme: ThemeTranslations;
     loading: string;
+    time: TimeAgoTranslations;
   };
 };
 
@@ -183,4 +184,26 @@ type PostsTranslations = {
     "show-more": string;
     "show-less": string;
   };
+  new: {
+    button: string;
+  };
+  edit: {
+    button: { tooltip: string };
+  };
+  delete: {
+    button: { tooltip: string };
+    dialog: {
+      title: string;
+      description: string;
+      cancel: string;
+      confirm: string;
+    };
+  };
+};
+
+type TimeAgoTranslations = {
+  days: string;
+  hours: string;
+  minutes: string;
+  now: string;
 };

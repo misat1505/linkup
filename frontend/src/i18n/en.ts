@@ -163,6 +163,12 @@ export const en: { translation: Translation } = {
           tooltip: "Switch to {{mode}} mode",
         },
       },
+      time: {
+        days: "{{count}} days ago",
+        hours: "{{count}} hours ago",
+        minutes: "{{count}} minutes ago",
+        now: "Just now",
+      },
     },
     home: {
       feed: {
@@ -178,6 +184,13 @@ export const en: { translation: Translation } = {
       preview: {
         "show-more": "Show more",
         "show-less": "Show less",
+      },
+      new: { button: "Create New Post" },
+      edit: {
+        button: { tooltip: "Edit" },
+      },
+      delete: {
+        button: { tooltip: "Delete" },
       },
     },
   },

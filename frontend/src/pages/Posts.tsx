@@ -8,8 +8,10 @@ import { Post } from "@/types/Post";
 import { Button } from "@/components/ui/button";
 import MyPostPreview from "@/components/posts/MyPostPreview";
 import { ROUTES } from "@/lib/routes";
+import { useTranslation } from "react-i18next";
 
 export default function Posts() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { data: posts, isLoading } = useQuery({
@@ -43,7 +45,7 @@ export default function Posts() {
           )
         }
       >
-        Create New Post
+        {t("posts.new.button")}
       </Button>
       <div className="flex w-full flex-col items-center">
         {getSortedPosts().map((post) => (
