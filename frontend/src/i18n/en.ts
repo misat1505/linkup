@@ -87,6 +87,12 @@ export const en: { translation: Translation } = {
         1: "Personalize",
         2: "Your Experience",
       },
+      form: {
+        submit: {
+          idle: "Update",
+          pending: "Updating...",
+        },
+      },
     },
   },
 };

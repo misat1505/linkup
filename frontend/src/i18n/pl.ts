@@ -84,8 +84,14 @@ export const pl: { translation: Translation } = {
       slogan:
         "Dostosuj ustawienia, aby Link Up był naprawdę Twój. Zmieniaj motywy, dostosowuj preferencje i kształtuj sposób, w jaki korzystasz z platformy.",
       header: {
-        1: "Dostosuj",
-        2: "Swoje Doświadczenie",
+        1: "Dostosuj Swoje",
+        2: "Doświadczenie",
+      },
+      form: {
+        submit: {
+          idle: "Zaktualizuj",
+          pending: "Aktualizowanie...",
+        },
       },
     },
   },

@@ -86,4 +86,10 @@ type SettingsTranslations = {
     1: string;
     2: string;
   };
+  form: {
+    submit: {
+      idle: string;
+      pending: string;
+    };
+  };
 };

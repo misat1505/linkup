@@ -8,8 +8,13 @@ export default function SignupSubmitButton() {
   const { isSubmitting, type } = useSignupFormContext();
 
   const loadingText =
-    type === "create" ? t("signup.form.submit.pending") : "Updating...";
-  const text = type === "create" ? t("signup.form.submit.idle") : "Update";
+    type === "create"
+      ? t("signup.form.submit.pending")
+      : t("settings.form.submit.pending");
+  const text =
+    type === "create"
+      ? t("signup.form.submit.idle")
+      : t("settings.form.submit.idle");
 
   return (
     <div className="mt-8 flex justify-center">
