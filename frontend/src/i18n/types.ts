@@ -44,6 +44,29 @@ type SignupTranslations = {
       password: string;
       "confirm-password": string;
     };
+    errors: {
+      firstname: {
+        min: string;
+        max: string;
+      };
+      lastname: {
+        min: string;
+        max: string;
+      };
+      login: {
+        min: string;
+        max: string;
+      };
+      password: {
+        min: string;
+        mismatch: string;
+      };
+    };
+    "remove-image": string;
+    submit: {
+      idle: string;
+      pending: string;
+    };
   };
   "already-have-account": string;
   "login-redirect": string;

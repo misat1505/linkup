@@ -1,4 +1,7 @@
-import { signupFormSchema, SignupFormType } from "@/validators/auth.validators";
+import {
+  useSignupFormSchema,
+  SignupFormType,
+} from "@/validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   FieldErrors,
@@ -36,6 +39,7 @@ export default function useSignupForm({
   onSubmit,
   ...formOptions
 }: useSignupFormProps): useSubmitFormValue {
+  const signupFormSchema = useSignupFormSchema();
   const {
     register,
     handleSubmit,

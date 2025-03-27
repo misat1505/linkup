@@ -43,6 +43,29 @@ export const en: { translation: Translation } = {
           password: "Password",
           "confirm-password": "Confirm Password",
         },
+        errors: {
+          firstname: {
+            min: "First name must not be empty.",
+            max: "First name must be at most 50 characters long.",
+          },
+          lastname: {
+            min: "Last name must not be empty.",
+            max: "Last name must be at most 50 characters long.",
+          },
+          login: {
+            min: "Login must be at least 5 characters long.",
+            max: "Login must be at most 50 characters long.",
+          },
+          password: {
+            min: "Password must be at least 5 characters long.",
+            mismatch: "Passwords don't match.",
+          },
+        },
+        "remove-image": "Remove",
+        submit: {
+          idle: "Sign up",
+          pending: "Signing up...",
+        },
       },
       "already-have-account": "Already have an account?",
       "login-redirect": "Login",

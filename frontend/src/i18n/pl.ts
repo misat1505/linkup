@@ -43,6 +43,29 @@ export const pl: { translation: Translation } = {
           password: "Hasło",
           "confirm-password": "Potwierdź hasło",
         },
+        errors: {
+          firstname: {
+            min: "Imię nie może być puste.",
+            max: "Imię może mieć maksymalnie 50 znaków.",
+          },
+          lastname: {
+            min: "Nazwisko nie może być puste.",
+            max: "Nazwisko może mieć maksymalnie 50 znaków.",
+          },
+          login: {
+            min: "Login musi mieć co najmniej 5 znaków.",
+            max: "Login może mieć maksymalnie 50 znaków.",
+          },
+          password: {
+            min: "Hasło musi mieć co najmniej 5 znaków.",
+            mismatch: "Hasła nie są takie same.",
+          },
+        },
+        "remove-image": "Usuń",
+        submit: {
+          idle: "Zarejestruj się",
+          pending: "Rejestrowanie...",
+        },
       },
       "already-have-account": "Masz już konto?",
       "login-redirect": "Zaloguj się",

@@ -15,29 +15,31 @@ export const useLoginFormSchema = () => {
 
 export type LoginFormType = z.infer<ReturnType<typeof useLoginFormSchema>>;
 
-export const signupFormSchema = z
-  .object({
-    firstName: z
-      .string()
-      .min(1, "First name must not be empty.")
-      .max(50, "First name must be at most 50 characters long."),
-    lastName: z
-      .string()
-      .min(1, "Last name must not be empty.")
-      .max(50, "Last name must be at most 50 characters long."),
-    login: z
-      .string()
-      .min(5, "Login must be at least 5 characters long.")
-      .max(50, "Login must be at most 50 characters long."),
-    password: z.string().min(5, "Password must be at least 5 characters long."),
-    confirmPassword: z
-      .string()
-      .min(5, "Password must be at least 5 characters long."),
-    file: z.optional(z.instanceof(FileList)),
-  })
-  .refine((ctx) => ctx.password === ctx.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+export const useSignupFormSchema = () => {
+  const { t } = useTranslation();
 
-export type SignupFormType = z.infer<typeof signupFormSchema>;
+  return z
+    .object({
+      firstName: z
+        .string()
+        .min(1, t("signup.form.errors.firstname.min"))
+        .max(50, t("signup.form.errors.firstname.max")),
+      lastName: z
+        .string()
+        .min(1, t("signup.form.errors.lastname.min"))
+        .max(50, t("signup.form.errors.lastname.max")),
+      login: z
+        .string()
+        .min(5, t("signup.form.errors.login.min"))
+        .max(50, t("signup.form.errors.login.max")),
+      password: z.string().min(5, t("signup.form.errors.password.min")),
+      confirmPassword: z.string().min(5, t("signup.form.errors.password.min")),
+      file: z.optional(z.instanceof(FileList)),
+    })
+    .refine((ctx) => ctx.password === ctx.confirmPassword, {
+      message: t("signup.form.errors.password.mismatch"),
+      path: ["confirmPassword"],
+    });
+};
+
+export type SignupFormType = z.infer<ReturnType<typeof useSignupFormSchema>>;
