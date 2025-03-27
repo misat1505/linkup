@@ -8,8 +8,10 @@ import { markdownPreviewOptions } from "@/utils/markdownPreviewOptions";
 import { Button } from "../ui/button";
 import PostCommentsSectionProvider from "@/contexts/PostCommentSectionProvider";
 import PostCommentSection from "./PostCommentSection";
+import { useTranslation } from "react-i18next";
 
 export default function PostPreview({ post }: { post: Post }) {
+  const { t } = useTranslation();
   const { theme } = useThemeContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const postRef = useRef<HTMLDivElement>(null);
@@ -52,7 +54,9 @@ export default function PostPreview({ post }: { post: Post }) {
           })}
           onClick={handleToggleExpand}
         >
-          Show {isExpanded ? "less" : "more"}
+          {isExpanded
+            ? t("posts.preview.show-less")
+            : t("posts.preview.show-more")}
         </Button>
       </div>
       {isExpanded && (

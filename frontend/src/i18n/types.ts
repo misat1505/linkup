@@ -3,6 +3,7 @@ export type Translation = {
   signup: SignupTranslations;
   settings: SettingsTranslations;
   home: HomeTranslations;
+  posts: PostsTranslations;
   common: {
     navbar: NavbarTranslations;
     theme: ThemeTranslations;
@@ -174,5 +175,12 @@ type HomeTranslations = {
       description: string;
       action: string;
     };
+  };
+};
+
+type PostsTranslations = {
+  preview: {
+    "show-more": string;
+    "show-less": string;
   };
 };

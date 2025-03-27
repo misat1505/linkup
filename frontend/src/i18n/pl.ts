@@ -175,5 +175,11 @@ export const pl: { translation: Translation } = {
         },
       },
     },
+    posts: {
+      preview: {
+        "show-more": "Pokaż więcej",
+        "show-less": "Pokaż mniej",
+      },
+    },
   },
 };

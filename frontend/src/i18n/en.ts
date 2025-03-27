@@ -174,5 +174,11 @@ export const en: { translation: Translation } = {
         },
       },
     },
+    posts: {
+      preview: {
+        "show-more": "Show more",
+        "show-less": "Show less",
+      },
+    },
   },
 };

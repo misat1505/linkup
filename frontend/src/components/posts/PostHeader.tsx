@@ -3,6 +3,7 @@ import { timeDifference } from "@/utils/timeDifference";
 import Avatar from "../common/Avatar";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { getInitials } from "@/utils/getInitials";
+import { createFullName } from "@/utils/createFullName";
 
 export default function PostHeader({ post }: { post: Post }) {
   const getTimeText = (): string => {
@@ -24,9 +25,7 @@ export default function PostHeader({ post }: { post: Post }) {
         alt={getInitials(author)}
       />
       <div>
-        <h2 className="text-lg font-semibold">
-          {author.firstName} {author.lastName}
-        </h2>
+        <h2 className="text-lg font-semibold">{createFullName(author)}</h2>
         <p className="text-md">{getTimeText()}</p>
       </div>
     </div>
