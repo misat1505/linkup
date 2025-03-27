@@ -28,6 +28,25 @@ export const en: { translation: Translation } = {
       "no-account": "Don't have an account?",
       "sign-in-redirect": "Signup",
     },
+    signup: {
+      header: {
+        1: "Join the",
+        2: "Network",
+      },
+      slogan:
+        "Start your journey today and discover a world of connections and opportunities.",
+      form: {
+        placeholders: {
+          firstname: "First name",
+          lastname: "Last name",
+          login: "Login",
+          password: "Password",
+          "confirm-password": "Confirm Password",
+        },
+      },
+      "already-have-account": "Already have an account?",
+      "login-redirect": "Login",
+    },
     settings: {
       theme: {
         title: "Theme",

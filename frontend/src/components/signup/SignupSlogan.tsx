@@ -1,8 +1,10 @@
 import { useLocalStorageAnimation } from "@/hooks/useLocalStorageAnimation";
 import { cn } from "@/lib/utils";
 import styles from "@/styles/slogan.module.css";
+import { useTranslation } from "react-i18next";
 
 export default function SignupSlogan() {
+  const { t } = useTranslation();
   const isAnimating = useLocalStorageAnimation(
     "signup-animation",
     60 * 60 * 1000
@@ -19,8 +21,8 @@ export default function SignupSlogan() {
           }
         )}
       >
-        <div className="text-nowrap">Join the</div>
-        <div className="text-nowrap">Network</div>
+        <div className="text-nowrap">{t("signup.header.1")}</div>
+        <div className="text-nowrap">{t("signup.header.2")}</div>
       </h1>
       <p
         className={cn(
@@ -30,8 +32,7 @@ export default function SignupSlogan() {
           }
         )}
       >
-        Start your journey today and discover a world of connections and
-        opportunities.
+        {t("signup.slogan")}
       </p>
     </div>
   );

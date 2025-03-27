@@ -1,5 +1,6 @@
 export type Translation = {
   login: LoginTranslations;
+  signup: SignupTranslations;
   settings: SettingsTranslations;
 };
 
@@ -27,6 +28,25 @@ type LoginTranslations = {
   };
   "no-account": string;
   "sign-in-redirect": string;
+};
+
+type SignupTranslations = {
+  header: {
+    1: string;
+    2: string;
+  };
+  slogan: string;
+  form: {
+    placeholders: {
+      firstname: string;
+      lastname: string;
+      login: string;
+      password: string;
+      "confirm-password": string;
+    };
+  };
+  "already-have-account": string;
+  "login-redirect": string;
 };
 
 type SettingsTranslations = {
