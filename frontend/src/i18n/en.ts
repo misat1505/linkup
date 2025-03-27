@@ -94,5 +94,31 @@ export const en: { translation: Translation } = {
         },
       },
     },
+    common: {
+      navbar: {
+        search: {
+          placeholder: "Search on Link Up...",
+          "no-users": "No users found.",
+          friendships: {
+            button: {
+              tooltip: "Add Friend",
+            },
+            toasts: {
+              "already-exists": {
+                title: "Friend request already exists.",
+                description:
+                  "There is already a friendship between you and {{fullName}}.",
+                action: "Show Friends",
+              },
+              "successfully-created": {
+                title: "Friend request sent.",
+                description: "Friend request was sent to {{fullName}}.",
+                action: "Show Friends",
+              },
+            },
+          },
+        },
+      },
+    },
   },
 };

@@ -2,6 +2,9 @@ export type Translation = {
   login: LoginTranslations;
   signup: SignupTranslations;
   settings: SettingsTranslations;
+  common: {
+    navbar: NavbarTranslations;
+  };
 };
 
 type LoginTranslations = {
@@ -90,6 +93,30 @@ type SettingsTranslations = {
     submit: {
       idle: string;
       pending: string;
+    };
+  };
+};
+
+type NavbarTranslations = {
+  search: {
+    placeholder: string;
+    "no-users": string;
+    friendships: {
+      button: {
+        tooltip: string;
+      };
+      toasts: {
+        "already-exists": {
+          title: string;
+          description: string;
+          action: string;
+        };
+        "successfully-created": {
+          title: string;
+          description: string;
+          action: string;
+        };
+      };
     };
   };
 };

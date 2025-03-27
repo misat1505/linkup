@@ -94,5 +94,32 @@ export const pl: { translation: Translation } = {
         },
       },
     },
+    common: {
+      navbar: {
+        search: {
+          placeholder: "Szukaj na Link Up...",
+          "no-users": "Brak wyników wyszukiwania.",
+          friendships: {
+            button: {
+              tooltip: "Dodaj do Przyjaciół",
+            },
+            toasts: {
+              "already-exists": {
+                title: "Zaproszenie do znajomych już istnieje.",
+                description:
+                  "Istnieje już znajomość między tobą a {{fullName}}.",
+                action: "Pokaż przyjaciół",
+              },
+              "successfully-created": {
+                title: "Zaproszenie do znajomych wysłane.",
+                description:
+                  "Zaproszenie do znajomych zostało wysłane do {{fullName}}.",
+                action: "Pokaż przyjaciół",
+              },
+            },
+          },
+        },
+      },
+    },
   },
 };
