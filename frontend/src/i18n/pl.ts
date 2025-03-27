@@ -156,6 +156,13 @@ export const pl: { translation: Translation } = {
           },
         },
       },
+      theme: {
+        light: "jasny",
+        dark: "ciemny",
+        switch: {
+          tooltip: "Przełącz na tryb {{mode}}",
+        },
+      },
     },
   },
 };

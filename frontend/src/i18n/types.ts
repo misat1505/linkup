@@ -4,6 +4,7 @@ export type Translation = {
   settings: SettingsTranslations;
   common: {
     navbar: NavbarTranslations;
+    theme: ThemeTranslations;
   };
 };
 
@@ -153,5 +154,13 @@ type NavbarTranslations = {
         };
       };
     };
+  };
+};
+
+type ThemeTranslations = {
+  light: string;
+  dark: string;
+  switch: {
+    tooltip: string;
   };
 };

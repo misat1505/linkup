@@ -155,6 +155,13 @@ export const en: { translation: Translation } = {
           },
         },
       },
+      theme: {
+        light: "light",
+        dark: "dark",
+        switch: {
+          tooltip: "Switch to {{mode}} mode",
+        },
+      },
     },
   },
 };
