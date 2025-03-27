@@ -1,8 +1,10 @@
 import { useLoginFormContext } from "@/contexts/LoginFormProvider";
 import { Button } from "../ui/button";
 import { ClipLoader } from "react-spinners";
+import { useTranslation } from "react-i18next";
 
 export default function LoginFormSubmitButton() {
+  const { t } = useTranslation();
   const { isSubmitting } = useLoginFormContext();
 
   return (
@@ -15,10 +17,10 @@ export default function LoginFormSubmitButton() {
         {isSubmitting ? (
           <div className="flex items-center gap-x-2">
             <ClipLoader size={12} color="whitesmoke" />
-            <p>Signing in...</p>
+            <p>{t("login.form.submit.pending")}</p>
           </div>
         ) : (
-          <p>Sign in</p>
+          <p>{t("login.form.submit.idle")}</p>
         )}
       </Button>
     </div>

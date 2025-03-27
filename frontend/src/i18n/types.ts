@@ -6,6 +6,16 @@ export type Translation = {
 type LoginTranslations = {
   greeting: string;
   slogan: string;
+  form: {
+    placeholders: {
+      login: string;
+      password: string;
+    };
+    submit: {
+      idle: string;
+      pending: string;
+    };
+  };
 };
 
 type SettingsTranslations = {

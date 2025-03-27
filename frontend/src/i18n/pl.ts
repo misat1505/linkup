@@ -6,6 +6,16 @@ export const pl: { translation: Translation } = {
       greeting: "Witamy w",
       slogan:
         "Zanurz się w sieci społecznościowej, gdzie nawiązywanie kontaktów ze znajomymi, dzielenie się chwilami i odkrywanie nowych społeczności jest na wyciągnięcie ręki.",
+      form: {
+        placeholders: {
+          login: "Login",
+          password: "Hasło",
+        },
+        submit: {
+          idle: "Zaloguj się",
+          pending: "Trwa logowanie...",
+        },
+      },
     },
     settings: {
       theme: {
