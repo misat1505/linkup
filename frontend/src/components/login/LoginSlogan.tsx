@@ -1,8 +1,11 @@
 import { useLocalStorageAnimation } from "@/hooks/useLocalStorageAnimation";
 import { cn } from "@/lib/utils";
 import styles from "@/styles/slogan.module.css";
+import { useTranslation } from "react-i18next";
 
 export default function LoginSlogan() {
+  const { t } = useTranslation();
+
   const isAnimating = useLocalStorageAnimation(
     "login-animation",
     60 * 60 * 1000
@@ -27,9 +30,7 @@ export default function LoginSlogan() {
           [styles.description]: isAnimating,
         })}
       >
-        Immerse yourself in a social network where connecting with friends,
-        sharing your moments, and discovering new communities is just a click
-        away.
+        {t("login.slogan")}
       </p>
     </div>
   );
