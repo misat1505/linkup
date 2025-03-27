@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function AlreadyHaveAccount() {
   const { t } = useTranslation();
+
   return (
     <p className="mt-4 text-center text-sm">
       {t("signup.already-have-account")}{" "}

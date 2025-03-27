@@ -18,7 +18,7 @@ export const pl: { translation: Translation } = {
         errors: {
           login: {
             min: "Login musi mieć co najmniej 5 znaków.",
-            max: "Login może mieć maksymalnie 50 znaków.  ",
+            max: "Login może mieć maksymalnie 50 znaków.",
           },
           password: {
             min: "Hasło musi mieć co najmniej 5 znaków.",
