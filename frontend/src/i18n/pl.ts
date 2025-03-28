@@ -311,6 +311,35 @@ export const pl: { translation: Translation } = {
           "only-file-text": "{{fullName}} wysłał(a) {{count}} plik(ów).",
         },
       },
+      "create-new-chat": {
+        trigger: { tooltip: "Utwórz czat" },
+        dialog: {
+          title: "Utwórz nowy czat",
+          description:
+            "Wyszukaj i zaproś innych użytkowników do nowo utworzonego czatu. Kliknij na użytkownika, aby zaprosić go do czatu.",
+        },
+        tabs: {
+          private: "Prywatny",
+          group: "Grupowy",
+        },
+        private: {
+          form: {
+            input: {
+              placeholder: "Szukaj osób...",
+            },
+          },
+        },
+        group: {
+          form: {
+            inputs: {
+              name: { placeholder: "Nazwa czatu (opcjonalnie)" },
+              search: { placeholder: "Szukaj osób..." },
+            },
+          },
+        },
+        "invited-users": "Zaproszone osoby",
+        submit: "Utwórz czat",
+      },
     },
   },
 };

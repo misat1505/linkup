@@ -308,6 +308,35 @@ export const en: { translation: Translation } = {
           "only-file-text": "{{fullName}} sent {{count}} file(s).",
         },
       },
+      "create-new-chat": {
+        trigger: { tooltip: "Create chat" },
+        dialog: {
+          title: "Create new chat",
+          description:
+            "Search and invite other users to your newly created chat. Click on the user to invite him to the chat.",
+        },
+        tabs: {
+          private: "Private",
+          group: "Group",
+        },
+        private: {
+          form: {
+            input: {
+              placeholder: "Search for people...",
+            },
+          },
+        },
+        group: {
+          form: {
+            inputs: {
+              name: { placeholder: "Chat display name (optional)" },
+              search: { placeholder: "Search for people..." },
+            },
+          },
+        },
+        "invited-users": "Invited people",
+        submit: "Create chat",
+      },
     },
   },
 };

@@ -2,6 +2,7 @@ import Avatar from "@/components/common/Avatar";
 import { cn } from "@/lib/utils";
 import { User } from "@/types/User";
 import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
 import { getInitials } from "@/utils/getInitials";
 import { ButtonHTMLAttributes } from "react";
 
@@ -27,9 +28,7 @@ export default function UserDisplay({
         alt={getInitials(user)}
         className="h-8 w-8 text-xs"
       />
-      <p>
-        {user.firstName} {user.lastName}
-      </p>
+      <p>{createFullName(user)}</p>
     </button>
   );
 }

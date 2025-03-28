@@ -318,4 +318,32 @@ type ChatsTranslations = {
       "only-file-text": string;
     };
   };
+  "create-new-chat": {
+    trigger: { tooltip: string };
+    dialog: {
+      title: string;
+      description: string;
+    };
+    tabs: {
+      private: string;
+      group: string;
+    };
+    private: {
+      form: {
+        input: {
+          placeholder: string;
+        };
+      };
+    };
+    group: {
+      form: {
+        inputs: {
+          name: { placeholder: string };
+          search: { placeholder: string };
+        };
+      };
+    };
+    "invited-users": string;
+    submit: string;
+  };
 };

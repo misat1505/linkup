@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { FaUserGroup } from "react-icons/fa6";
 import UserDisplay from "./UserDisplay";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 export default function GroupChatForm() {
   const { submitForm } = useGroupChatFormContext();
@@ -23,6 +24,7 @@ export default function GroupChatForm() {
 }
 
 function ChatNameAndImage() {
+  const { t } = useTranslation();
   const { register, file: fileData } = useGroupChatFormContext();
 
   const file = useMemo(
@@ -33,7 +35,9 @@ function ChatNameAndImage() {
   return (
     <div className="flex flex-col items-center justify-between">
       <Input
-        placeholder="Chat display name (optional)"
+        placeholder={t(
+          "chats.create-new-chat.group.form.inputs.name.placeholder"
+        )}
         className="my-2"
         {...register("name")}
       />
@@ -58,6 +62,7 @@ function ChatNameAndImage() {
 }
 
 function UserSearch() {
+  const { t } = useTranslation();
   const { appendUser, users } = useGroupChatFormContext();
   const [text, setText] = useState("");
   const { data } = useUserSearch(text);
@@ -75,7 +80,9 @@ function UserSearch() {
   return (
     <div>
       <Input
-        placeholder="Search for people..."
+        placeholder={t(
+          "chats.create-new-chat.group.form.inputs.search.placeholder"
+        )}
         className="my-2"
         onChange={(e) => setText(e.currentTarget.value)}
       />
@@ -89,6 +96,7 @@ function UserSearch() {
 }
 
 function SelectedUsers() {
+  const { t } = useTranslation();
   const { users, removeUser } = useGroupChatFormContext();
 
   const handleClick =
@@ -99,7 +107,9 @@ function SelectedUsers() {
 
   return (
     <div>
-      <h2 className="my-4 text-center font-semibold">Invited people</h2>
+      <h2 className="my-4 text-center font-semibold">
+        {t("chats.create-new-chat.invited-users")}
+      </h2>
       <div className="no-scrollbar h-[340px] overflow-auto">
         {users?.map((user) => (
           <UserDisplay user={user} key={user.id} onClick={handleClick(user)} />
@@ -110,9 +120,11 @@ function SelectedUsers() {
 }
 
 function SubmitFormButton() {
+  const { t } = useTranslation();
+
   return (
     <div className="mt-4 flex w-full flex-row-reverse">
-      <Button type="submit">Create</Button>
+      <Button type="submit">{t("chats.create-new-chat.submit")}</Button>
     </div>
   );
 }

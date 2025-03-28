@@ -13,15 +13,17 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import PrivateChatForm from "./PrivateChatForm";
 import GroupChatFormProvider from "@/contexts/GroupChatFormProvider";
 import GroupChatForm from "./GroupChatForm";
+import { useTranslation } from "react-i18next";
 
 export default function ChatCreator() {
+  const { t } = useTranslation();
   const { createChatTriggerRef } = useChatPageContext();
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <button>
-          <Tooltip content="Create chat">
+          <Tooltip content={t("chats.create-new-chat.trigger.tooltip")}>
             <div ref={createChatTriggerRef}>
               <IoIosAddCircleOutline
                 size={20}
@@ -33,10 +35,9 @@ export default function ChatCreator() {
       </DialogTrigger>
       <DialogContent className="max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Create new chat</DialogTitle>
+          <DialogTitle>{t("chats.create-new-chat.dialog.title")}</DialogTitle>
           <DialogDescription>
-            Search and invite other users to your newly created chat. Click on
-            the user to invite him to the chat.
+            {t("chats.create-new-chat.dialog.description")}
           </DialogDescription>
         </DialogHeader>
         <ChatCreatorDialogContent />
@@ -46,11 +47,17 @@ export default function ChatCreator() {
 }
 
 function ChatCreatorDialogContent() {
+  const { t } = useTranslation();
+
   return (
     <Tabs defaultValue="private" className="h-[500px]">
       <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="private">Private</TabsTrigger>
-        <TabsTrigger value="group">Group</TabsTrigger>
+        <TabsTrigger value="private">
+          {t("chats.create-new-chat.tabs.private")}
+        </TabsTrigger>
+        <TabsTrigger value="group">
+          {t("chats.create-new-chat.tabs.group")}
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="private">
         <PrivateChatForm />
