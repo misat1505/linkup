@@ -340,6 +340,21 @@ export const pl: { translation: Translation } = {
         "invited-users": "Zaproszone osoby",
         submit: "Utwórz czat",
       },
+      form: {
+        inputs: {
+          text: { placeholder: "Napisz..." },
+          file: { tooltip: "Załącz plik", remove: "Usuń plik" },
+        },
+        submit: { tooltip: "Wyślij wiadomość" },
+        reply: {
+          author: {
+            me: "Odpowiadasz do siebie",
+            other: "Odpowiadasz do {{name}}",
+          },
+          "only-files": "Wysłał(a) {{count}} plik(ów).",
+          cancel: { tooltip: "Anuluj" },
+        },
+      },
     },
   },
 };

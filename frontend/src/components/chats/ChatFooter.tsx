@@ -10,8 +10,10 @@ import Tooltip from "../common/Tooltip";
 import { cn } from "@/lib/utils";
 import { useAppContext } from "@/contexts/AppProvider";
 import { ChatFooterUtils } from "@/utils/chatFooterUtils";
+import { useTranslation } from "react-i18next";
 
 export default function ChatFooter() {
+  const { t } = useTranslation();
   const { isLoading } = useChatContext();
   const { register, submitForm, isSubmitting } = useChatFooterContext();
 
@@ -33,7 +35,7 @@ export default function ChatFooter() {
         <Input
           {...register("content")}
           className="z-20 min-h-8"
-          placeholder="Type..."
+          placeholder={t("chats.form.inputs.text.placeholder")}
           onKeyDown={handleTextInputKeyDown}
           data-testid="cy-chat-footer-text-input"
         />
@@ -45,7 +47,7 @@ export default function ChatFooter() {
           {isSubmitting ? (
             <ClipLoader size={20} color="grey" />
           ) : (
-            <Tooltip content="Send message">
+            <Tooltip content={t("chats.form.submit.tooltip")}>
               <span>
                 <IoSend
                   className={cn("text-blue-500 transition-all", {
@@ -63,6 +65,7 @@ export default function ChatFooter() {
 }
 
 function FileAdder() {
+  const { t } = useTranslation();
   const { register, appendFiles } = useChatFooterContext();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -89,7 +92,7 @@ function FileAdder() {
         className="hidden"
       />
       <button onClick={clickInput}>
-        <Tooltip content="Insert file">
+        <Tooltip content={t("chats.form.inputs.file.tooltip")}>
           <span>
             <FaFileAlt className="text-blue-500 transition-all hover:scale-125" />
           </span>
@@ -100,6 +103,7 @@ function FileAdder() {
 }
 
 function FileDisplayer() {
+  const { t } = useTranslation();
   const { files, removeFile } = useChatFooterContext();
   if (files === undefined || files.length === 0) return null;
 
@@ -118,7 +122,7 @@ function FileDisplayer() {
         >
           <FileDisplayerItem file={file} />
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100">
-            Remove File
+            {t("chats.form.inputs.file.remove")}
           </div>
         </button>
       ))}
@@ -166,6 +170,7 @@ function FileDisplayerItem({ file }: { file: File }) {
 }
 
 function ResponseDisplayer() {
+  const { t } = useTranslation();
   const { user: me } = useAppContext();
   const { messages, chat } = useChatContext();
   const { responseId, setResponse } = useChatFooterContext();
@@ -174,7 +179,7 @@ function ResponseDisplayer() {
 
   if (!message) return null;
 
-  const utils = new ChatFooterUtils(chat, message, me);
+  const utils = new ChatFooterUtils(chat, message, me, t);
 
   return (
     <div className="flex w-full items-center justify-between gap-x-4 pb-4">
@@ -183,7 +188,7 @@ function ResponseDisplayer() {
         <p className="overflow-hidden text-nowrap">{utils.getReplyText()}</p>
       </div>
       <button onClick={() => setResponse(null)}>
-        <Tooltip content="Cancel">
+        <Tooltip content={t("chats.form.reply.cancel.tooltip")}>
           <span>
             <RxCross2 size={20} className="transition-all hover:scale-125" />
           </span>

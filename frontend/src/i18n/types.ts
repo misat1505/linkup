@@ -346,4 +346,16 @@ type ChatsTranslations = {
     "invited-users": string;
     submit: string;
   };
+  form: {
+    inputs: {
+      text: { placeholder: string };
+      file: { tooltip: string; remove: string };
+    };
+    submit: { tooltip: string };
+    reply: {
+      author: { me: string; other: string };
+      "only-files": string;
+      cancel: { tooltip: string };
+    };
+  };
 };

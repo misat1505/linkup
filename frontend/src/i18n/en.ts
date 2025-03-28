@@ -337,6 +337,18 @@ export const en: { translation: Translation } = {
         "invited-users": "Invited people",
         submit: "Create chat",
       },
+      form: {
+        inputs: {
+          text: { placeholder: "Type..." },
+          file: { tooltip: "Attach a file", remove: "Remove file" },
+        },
+        submit: { tooltip: "Send message" },
+        reply: {
+          author: { me: "Replying to me", other: "Replying to {{name}}" },
+          "only-files": "Sent {{count}} file(s).",
+          cancel: { tooltip: "Cancel" },
+        },
+      },
     },
   },
 };
