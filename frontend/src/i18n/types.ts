@@ -247,6 +247,19 @@ type TimeAgoTranslations = {
 type FriendsTranslations = {
   filter: {
     input: { placeholder: string };
+    statuses: {
+      input: {
+        placeholder: string;
+        all: string;
+        accepted: string;
+        awaitingMe: string;
+        awaitingOther: string;
+      };
+      all: string;
+      accepted: string;
+      awaitingMe: string;
+      awaitingOther: string;
+    };
   };
   column: {
     user: { title: string };

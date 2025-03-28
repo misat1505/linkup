@@ -237,7 +237,22 @@ export const pl: { translation: Translation } = {
       },
     },
     friends: {
-      filter: { input: { placeholder: "Filtruj użytkowników..." } },
+      filter: {
+        input: { placeholder: "Filtruj użytkowników..." },
+        statuses: {
+          input: {
+            placeholder: "Filtruj użytkowników...",
+            all: "Wszyscy",
+            accepted: "Zaakceptowani",
+            awaitingMe: "Oczekuję na mnie",
+            awaitingOther: "Oczekuję na innych",
+          },
+          all: "Wszyscy ({{count}})",
+          accepted: "Zaakceptowani ({{count}})",
+          awaitingMe: "Oczekuję na mnie ({{count}})",
+          awaitingOther: "Oczekuję na innych ({{count}})",
+        },
+      },
       column: {
         user: { title: "Użytkownik" },
         status: { title: "Status" },
