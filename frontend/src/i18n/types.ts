@@ -244,6 +244,7 @@ type TimeAgoTranslations = {
   hours: string;
   minutes: string;
   now: string;
+  ago: string;
 };
 
 type FriendsTranslations = {
@@ -411,5 +412,16 @@ type ChatsTranslations = {
       cancel: string;
       confirm: string;
     };
+  };
+  "user-activity": {
+    online: string;
+    offline: string;
+    "time-units": {
+      min: string;
+      hr: string;
+    };
+  };
+  close: {
+    tooltip: string;
   };
 };

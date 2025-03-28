@@ -172,6 +172,7 @@ export const en: { translation: Translation } = {
         hours: "{{count}} hours ago",
         minutes: "{{count}} minutes ago",
         now: "Just now",
+        ago: "ago",
       },
     },
     home: {
@@ -417,6 +418,17 @@ export const en: { translation: Translation } = {
           cancel: "Cancel",
           confirm: "Leave",
         },
+      },
+      "user-activity": {
+        online: "Online",
+        offline: "Offline",
+        "time-units": {
+          min: "min",
+          hr: "hr",
+        },
+      },
+      close: {
+        tooltip: "Close chat",
       },
     },
   },

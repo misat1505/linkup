@@ -13,8 +13,10 @@ import Tooltip from "../common/Tooltip";
 import FocusableSpan from "../common/FocusableSpan";
 import { RxCross1 } from "react-icons/rx";
 import { ROUTES } from "@/lib/routes";
+import { useTranslation } from "react-i18next";
 
 export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
+  const { t } = useTranslation();
   const { chats } = useChatPageContext();
   const { user: me } = useAppContext();
   const navigate = useNavigate();
@@ -36,10 +38,11 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   const lastActive = utils.getLastActive();
 
   const createStatus = (): string => {
-    const result = getStatus(timeDifference(lastActive));
-    if (result.status === Status.ONLINE) return "Online";
-    if (result.status === Status.OFFLINE) return "Offline";
-    return result.text + " ago";
+    const result = getStatus(timeDifference(lastActive), t);
+    if (result.status === Status.ONLINE) return t("chats.user-activity.online");
+    if (result.status === Status.OFFLINE)
+      return t("chats.user-activity.offline");
+    return result.text + " " + t("common.time.ago");
   };
 
   const buildFilter = (): Filter => {
@@ -63,7 +66,7 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
       <div className="flex items-center gap-x-2">
         {chat.type === "GROUP" && <ChatLeaveDialog />}
         <ChatSettingsDialog />
-        <Tooltip content="Close chat">
+        <Tooltip content={t("chats.close.tooltip")}>
           <span className="transition-all hover:scale-125">
             <FocusableSpan fn={() => navigate(ROUTES.CHATS.$path())}>
               <RxCross1 size={16} />

@@ -1,3 +1,4 @@
+import { TFunction } from "i18next";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 
@@ -35,13 +36,23 @@ type StatusType =
   | { status: Status.RECENTLY_ONLINE; text: string }
   | { status: Status.OFFLINE };
 
-export function getStatus(difference: TimeDifference): StatusType {
+export function getStatus(
+  difference: TimeDifference,
+  t: TFunction<"translation", undefined>
+): StatusType {
   const { days, hours, minutes } = difference;
   if (days === 0 && hours === 0 && minutes <= 4)
     return { status: Status.ONLINE };
   if (days === 0 && hours === 0)
-    return { status: Status.RECENTLY_ONLINE, text: `${minutes}m` };
-  if (days === 0) return { status: Status.RECENTLY_ONLINE, text: `${hours}hr` };
+    return {
+      status: Status.RECENTLY_ONLINE,
+      text: `${minutes} ${t("chats.user-activity.time-units.min")}`,
+    };
+  if (days === 0)
+    return {
+      status: Status.RECENTLY_ONLINE,
+      text: `${hours} ${t("chats.user-activity.time-units.hr")}`,
+    };
   return { status: Status.OFFLINE };
 }
 

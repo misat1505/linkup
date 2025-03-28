@@ -173,6 +173,7 @@ export const pl: { translation: Translation } = {
         hours: "{{count}} godzin temu",
         minutes: "{{count}} minut temu",
         now: "Przed chwilą",
+        ago: "temu",
       },
     },
     home: {
@@ -423,6 +424,17 @@ export const pl: { translation: Translation } = {
           cancel: "Anuluj",
           confirm: "Opuść",
         },
+      },
+      "user-activity": {
+        online: "Aktywny(a)",
+        offline: "Nieaktywny(a)",
+        "time-units": {
+          min: "min",
+          hr: "godz.",
+        },
+      },
+      close: {
+        tooltip: "Zamknij czat",
       },
     },
   },
