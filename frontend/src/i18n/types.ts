@@ -252,17 +252,48 @@ type FriendsTranslations = {
         placeholder: string;
         all: string;
         accepted: string;
-        awaitingMe: string;
-        awaitingOther: string;
+        "awaiting-me": string;
+        "awaiting-other": string;
       };
       all: string;
       accepted: string;
-      awaitingMe: string;
-      awaitingOther: string;
+      "awaiting-me": string;
+      "awaiting-other": string;
     };
   };
   column: {
     user: { title: string };
     status: { title: string };
+  };
+  "no-result": {
+    title: string;
+    description: string;
+    link: { text: string };
+  };
+  cells: {
+    statuses: {
+      accepted: string;
+      "awaiting-me": string;
+      "awaiting-other": string;
+    };
+    actions: {
+      trigger: { tooltip: string };
+      accept: string;
+      delete: string;
+    };
+  };
+  toasts: {
+    accepted: {
+      title: string;
+      description: string;
+    };
+    deleted: {
+      title: string;
+      description: {
+        accepted: string;
+        "awaiting-me": string;
+        "awaiting-other": string;
+      };
+    };
   };
 };

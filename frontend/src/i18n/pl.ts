@@ -244,18 +244,51 @@ export const pl: { translation: Translation } = {
             placeholder: "Filtruj użytkowników...",
             all: "Wszyscy",
             accepted: "Zaakceptowani",
-            awaitingMe: "Oczekuję na mnie",
-            awaitingOther: "Oczekuję na innych",
+            "awaiting-me": "Oczekuję na mnie",
+            "awaiting-other": "Oczekuję na innych",
           },
           all: "Wszyscy ({{count}})",
           accepted: "Zaakceptowani ({{count}})",
-          awaitingMe: "Oczekuję na mnie ({{count}})",
-          awaitingOther: "Oczekuję na innych ({{count}})",
+          "awaiting-me": "Oczekuję na mnie ({{count}})",
+          "awaiting-other": "Oczekuję na innych ({{count}})",
         },
       },
       column: {
         user: { title: "Użytkownik" },
         status: { title: "Status" },
+      },
+      "no-result": {
+        title: "Brak wyników.",
+        description: "Wyszukaj osoby za pomocą",
+        link: { text: "paska nawigacji" },
+      },
+      cells: {
+        statuses: {
+          accepted: "Znajomi",
+          "awaiting-me": "Oczekuje na twoje zatwierdzenie",
+          "awaiting-other": "Oczekuje na zatwierdzenie przez {{fullName}}",
+        },
+        actions: {
+          trigger: { tooltip: "Pokaż akcje" },
+          accept: "Zaakceptuj",
+          delete: "Usuń",
+        },
+      },
+      toasts: {
+        accepted: {
+          title: "Przyjaźń zaakceptowana.",
+          description: "{{fullName}} jest teraz twoim przyjacielem.",
+        },
+        deleted: {
+          title: "Przyjaźń usunięta.",
+          description: {
+            accepted: "{{fullName}} nie jest już twoim przyjacielem.",
+            "awaiting-me":
+              "Prośba o dodanie do przyjaciół od {{fullName}} została odrzucona.",
+            "awaiting-other":
+              "Prośba o dodanie do przyjaciół {{fullName}} została anulowana.",
+          },
+        },
       },
     },
   },

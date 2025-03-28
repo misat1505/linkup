@@ -28,9 +28,9 @@ export default function StatusFilterDropdown({
     if (filterValue === "Accepted")
       return t("friends.filter.statuses.input.accepted");
     if (filterValue === "Awaiting me")
-      return t("friends.filter.statuses.input.awaitingMe");
+      return t("friends.filter.statuses.input.awaiting-me");
     if (filterValue === "Awaiting other")
-      return t("friends.filter.statuses.input.awaitingOther");
+      return t("friends.filter.statuses.input.awaiting-other");
     return t("friends.filter.statuses.input.all");
   };
 
@@ -67,7 +67,7 @@ export default function StatusFilterDropdown({
             table.getColumn("status")?.setFilterValue("Awaiting me")
           }
         >
-          {t("friends.filter.statuses.awaitingMe", {
+          {t("friends.filter.statuses.awaiting-me", {
             count: counts.awaitingMe,
           })}
         </DropdownMenuItem>
@@ -76,7 +76,7 @@ export default function StatusFilterDropdown({
             table.getColumn("status")?.setFilterValue("Awaiting other")
           }
         >
-          {t("friends.filter.statuses.awaitingOther", {
+          {t("friends.filter.statuses.awaiting-other", {
             count: counts.awaitingOther,
           })}
         </DropdownMenuItem>

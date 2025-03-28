@@ -18,6 +18,7 @@ import Tooltip from "../common/Tooltip";
 import { Button } from "../ui/button";
 import { MoreVertical } from "lucide-react";
 import { TiTick } from "react-icons/ti";
+import { useTranslation } from "react-i18next";
 
 type StatusCellProps = { friendship: Friendship };
 
@@ -31,20 +32,32 @@ export default function StatusCell({ friendship }: StatusCellProps) {
 }
 
 function StatusDisplay({ friendship }: StatusCellProps) {
+  const { t } = useTranslation();
   const { user: me } = useAppContext();
 
   if (friendship.status === "ACCEPTED")
-    return <div className="text-emerald-500">Friends</div>;
+    return (
+      <div className="text-emerald-500">
+        {t("friends.cells.statuses.accepted")}
+      </div>
+    );
 
   const isMineRequest = friendship.requester.id === me!.id;
 
   if (isMineRequest)
-    return <div>Awaiting {createFullName(friendship.acceptor)} approve</div>;
+    return (
+      <div>
+        {t("friends.cells.statuses.awaiting-other", {
+          fullName: createFullName(friendship.acceptor),
+        })}
+      </div>
+    );
 
-  return <div>Awaiting your approve</div>;
+  return <div>{t("friends.cells.statuses.awaiting-me")}</div>;
 }
 
 function StatusDropdown({ friendship }: StatusCellProps) {
+  const { t } = useTranslation();
   const { user: me } = useAppContext();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -76,11 +89,11 @@ function StatusDropdown({ friendship }: StatusCellProps) {
       ? friendship.acceptor
       : friendship.requester;
 
-    const description = `${createFullName(otherUser)} is your friend now.`;
-
     toast({
-      title: "Friendship accepted.",
-      description,
+      title: t("friends.toasts.accepted.title"),
+      description: t("friends.toasts.accepted.description", {
+        fullName: createFullName(otherUser),
+      }),
     });
   };
 
@@ -106,17 +119,21 @@ function StatusDropdown({ friendship }: StatusCellProps) {
       : friendship.requester;
 
     const getDescription = (): string => {
+      const fullName = createFullName(otherUser);
+
       if (friendship.status === "ACCEPTED")
-        return `${createFullName(otherUser)} is not your friend anymore.`;
+        return t("friends.toasts.deleted.description.accepted", { fullName });
 
       if (isMineRequest)
-        return `Friend request to ${createFullName(otherUser)} is removed.`;
+        return t("friends.toasts.deleted.description.awaiting-other", {
+          fullName,
+        });
 
-      return `${createFullName(otherUser)} friend request is rejected.`;
+      return t("friends.toasts.deleted.description.awaiting-me", { fullName });
     };
 
     toast({
-      title: "Friendship deleted.",
+      title: t("friends.toasts.deleted.title"),
       description: getDescription(),
     });
   };
@@ -126,7 +143,7 @@ function StatusDropdown({ friendship }: StatusCellProps) {
       <>
         <DropdownMenuItem onClick={handleAcceptFriendship}>
           <TiTick />
-          <span>Accept</span>
+          <span>{t("friends.cells.actions.accept")}</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
       </>
@@ -138,13 +155,13 @@ function StatusDropdown({ friendship }: StatusCellProps) {
       className="!text-red-500"
     >
       <FaTrash />
-      <span>Delete</span>
+      <span>{t("friends.cells.actions.delete")}</span>
     </DropdownMenuItem>
   );
 
   return (
     <DropdownMenu>
-      <Tooltip content="Show actions">
+      <Tooltip content={t("friends.cells.actions.trigger.tooltip")}>
         <span>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="p-0">

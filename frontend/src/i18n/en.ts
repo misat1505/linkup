@@ -243,18 +243,49 @@ export const en: { translation: Translation } = {
             placeholder: "Filter users...",
             all: "All",
             accepted: "Accepted",
-            awaitingMe: "Awaiting me",
-            awaitingOther: "Awaiting other",
+            "awaiting-me": "Awaiting me",
+            "awaiting-other": "Awaiting other",
           },
           all: "All ({{count}})",
           accepted: "Accepted ({{count}})",
-          awaitingMe: "Awaiting me ({{count}})",
-          awaitingOther: "Awaiting other ({{count}})",
+          "awaiting-me": "Awaiting me ({{count}})",
+          "awaiting-other": "Awaiting other ({{count}})",
         },
       },
       column: {
         user: { title: "User" },
         status: { title: "Status" },
+      },
+      "no-result": {
+        title: "No results.",
+        description: "Search for people using the",
+        link: { text: "navigation bar" },
+      },
+      cells: {
+        statuses: {
+          accepted: "Friends",
+          "awaiting-me": "Awaiting your approve",
+          "awaiting-other": "Awaiting {{fullName}}'s approve",
+        },
+        actions: {
+          trigger: { tooltip: "Show actions" },
+          accept: "Accept",
+          delete: "Delete",
+        },
+      },
+      toasts: {
+        accepted: {
+          title: "Friendship accepted.",
+          description: "{{fullName}} is your friend now.",
+        },
+        deleted: {
+          title: "Friendship deleted.",
+          description: {
+            accepted: "{{fullName}} is not your friend anymore.",
+            "awaiting-me": "{{fullName}} friend request is rejected.",
+            "awaiting-other": "Friend request to {{fullName}} is removed.",
+          },
+        },
       },
     },
   },
