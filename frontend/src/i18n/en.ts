@@ -379,6 +379,23 @@ export const en: { translation: Translation } = {
           mine: "{{date}} by You",
           foreign: "{{date}} by {{name}}",
         },
+        controls: {
+          reply: { tooltip: "Reply" },
+          reaction: {
+            trigger: { tooltip: "Create reaction" },
+            title: "Create your reaction",
+            "already-reacted":
+              "You have already created reaction for this message.",
+            "not-available": "Reacting is not available at the moment.",
+            values: {
+              happy: "happy",
+              sad: "sad",
+              crying: "crying",
+              heart: "heart",
+              skull: "skull",
+            },
+          },
+        },
       },
     },
   },

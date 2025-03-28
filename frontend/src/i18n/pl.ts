@@ -385,6 +385,22 @@ export const pl: { translation: Translation } = {
           mine: "{{date}} przez Ciebie",
           foreign: "{{date}} przez {{name}}",
         },
+        controls: {
+          reply: { tooltip: "Odpowiedz" },
+          reaction: {
+            trigger: { tooltip: "Zareaguj" },
+            title: "Utwórz swoją reakcję",
+            "already-reacted": "Już utworzyłeś reakcję dla tej wiadomości.",
+            "not-available": "Reakcje są niedostępne w tej chwili.",
+            values: {
+              happy: "szczęśliwy",
+              sad: "smutny",
+              crying: "płaczący",
+              heart: "serce",
+              skull: "czaszka",
+            },
+          },
+        },
       },
     },
   },

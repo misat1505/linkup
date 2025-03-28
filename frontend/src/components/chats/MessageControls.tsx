@@ -1,13 +1,19 @@
 import { useChatFooterContext } from "@/contexts/ChatFooterProvider";
 import { Message } from "@/types/Message";
-import { Tooltip, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 import { RiReplyFill } from "react-icons/ri";
-import { TooltipContent } from "@radix-ui/react-tooltip";
 import ReactionCreator from "./ReactionCreator";
+import { useTranslation } from "react-i18next";
 
 type MessageControlsProps = { message: Message };
 
 export default function MessageControls({ message }: MessageControlsProps) {
+  const { t } = useTranslation();
   const { setResponse } = useChatFooterContext();
 
   return (
@@ -22,7 +28,9 @@ export default function MessageControls({ message }: MessageControlsProps) {
                 onClick={() => setResponse(message.id)}
               />
             </TooltipTrigger>
-            <TooltipContent>Reply</TooltipContent>
+            <TooltipContent>
+              {t("chats.message.controls.reply.tooltip")}
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
         <ReactionCreator message={message} />

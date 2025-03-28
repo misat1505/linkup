@@ -375,5 +375,21 @@ type ChatsTranslations = {
       mine: string;
       foreign: string;
     };
+    controls: {
+      reply: { tooltip: string };
+      reaction: {
+        trigger: { tooltip: string };
+        title: string;
+        "already-reacted": string;
+        "not-available": string;
+        values: {
+          happy: string;
+          sad: string;
+          crying: string;
+          heart: string;
+          skull: string;
+        };
+      };
+    };
   };
 };
