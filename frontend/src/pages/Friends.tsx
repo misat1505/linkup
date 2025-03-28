@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import StatusFilterDropdown from "@/components/friends/StatusFilterDropdown";
 import { Table } from "@/components/ui/table";
 import FriendsTable from "@/components/friends/FriendsTable";
+import { useTranslation } from "react-i18next";
 
 export default function Friends() {
   const { isLoading } = useQuery({
@@ -39,6 +40,7 @@ export default function Friends() {
 }
 
 function FriendsPageInner() {
+  const { t } = useTranslation();
   const { user: me } = useAppContext();
   const columns: ColumnDef<Friendship>[] = [
     {
@@ -61,7 +63,7 @@ function FriendsPageInner() {
           </div>
         );
       },
-      header: "User",
+      header: t("friends.column.user.title"),
       accessorKey: "user",
       filterFn: (row, _, filterValue) => {
         const friendship = row.original as Friendship;
@@ -81,7 +83,7 @@ function FriendsPageInner() {
 
         return <StatusCell friendship={friendship} />;
       },
-      header: "Status",
+      header: t("friends.column.status.title"),
       accessorKey: "status",
       filterFn: (row, columnId, filterValue) => {
         if (!filterValue) return true;
@@ -114,7 +116,7 @@ function FriendsPageInner() {
     <div className="mx-auto my-4 w-[95%] bg-slate-100 p-4 shadow-lg dark:bg-slate-900 lg:w-1/2">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Filter users..."
+          placeholder={t("friends.filter.input.placeholder")}
           value={(table.getColumn("user")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("user")?.setFilterValue(event.target.value)

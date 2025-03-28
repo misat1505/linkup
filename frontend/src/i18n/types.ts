@@ -4,6 +4,7 @@ export type Translation = {
   settings: SettingsTranslations;
   home: HomeTranslations;
   posts: PostsTranslations;
+  friends: FriendsTranslations;
   common: {
     navbar: NavbarTranslations;
     theme: ThemeTranslations;
@@ -241,4 +242,14 @@ type TimeAgoTranslations = {
   hours: string;
   minutes: string;
   now: string;
+};
+
+type FriendsTranslations = {
+  filter: {
+    input: { placeholder: string };
+  };
+  column: {
+    user: { title: string };
+    status: { title: string };
+  };
 };

@@ -235,5 +235,12 @@ export const en: { translation: Translation } = {
         },
       },
     },
+    friends: {
+      filter: { input: { placeholder: "Filter users..." } },
+      column: {
+        user: { title: "User" },
+        status: { title: "Status" },
+      },
+    },
   },
 };

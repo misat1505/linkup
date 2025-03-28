@@ -236,5 +236,12 @@ export const pl: { translation: Translation } = {
         },
       },
     },
+    friends: {
+      filter: { input: { placeholder: "Filtruj użytkowników..." } },
+      column: {
+        user: { title: "Użytkownik" },
+        status: { title: "Status" },
+      },
+    },
   },
 };
