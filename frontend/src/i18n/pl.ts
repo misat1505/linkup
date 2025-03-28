@@ -200,6 +200,12 @@ export const pl: { translation: Translation } = {
           confirm: "Tak, usuń",
         },
       },
+      comments: {
+        section: {
+          open: "Otwórz sekcję komentarzy",
+          close: "Zamknij sekcję komentarzy",
+        },
+      },
     },
   },
 };

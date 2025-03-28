@@ -10,6 +10,8 @@ import { queryKeys } from "@/lib/queryKeys";
 import { ChatService } from "@/services/Chat.service";
 import { Message } from "@/types/Message";
 import Comment from "./Comment";
+import { useTranslation } from "react-i18next";
+import { createFullName } from "@/utils/createFullName";
 
 export default function PostCommentSection() {
   const { isCommentSectionOpen } = usePostCommentsSectionContext();
@@ -28,10 +30,13 @@ export default function PostCommentSection() {
 }
 
 function CommentSectionOpenButton() {
+  const { t } = useTranslation();
   const { isCommentSectionOpen, toggleIsCommentSectionOpen } =
     usePostCommentsSectionContext();
 
-  const tooltipText = isCommentSectionOpen ? "Close comments" : "Open comments";
+  const tooltipText = isCommentSectionOpen
+    ? t("posts.comments.section.close")
+    : t("posts.comments.section.open");
 
   return (
     <Tooltip content={tooltipText}>
@@ -77,7 +82,7 @@ function CommentSection({
     const name =
       message.author.id === me!.id
         ? "You"
-        : `${message.author.firstName} ${message.author.lastName}`;
+        : `${createFullName(message.author)}`;
     const fullText = `${name}: ${message.createdAt.toLocaleDateString(
       "en-US"
     )} ${message.createdAt.toLocaleTimeString("en-US")}`;

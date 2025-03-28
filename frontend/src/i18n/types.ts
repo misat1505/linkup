@@ -199,6 +199,12 @@ type PostsTranslations = {
       confirm: string;
     };
   };
+  comments: {
+    section: {
+      open: string;
+      close: string;
+    };
+  };
 };
 
 type TimeAgoTranslations = {

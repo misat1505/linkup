@@ -199,6 +199,12 @@ export const en: { translation: Translation } = {
           confirm: "Yes, delete",
         },
       },
+      comments: {
+        section: {
+          open: "Open comments",
+          close: "Close comments",
+        },
+      },
     },
   },
 };
