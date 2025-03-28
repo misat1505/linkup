@@ -164,6 +164,9 @@ export const en: { translation: Translation } = {
         },
       },
       time: {
+        years: "{{count}} years ago",
+        months: "{{count}} months ago",
+        weeks: "{{count}} weeks ago",
         days: "{{count}} days ago",
         hours: "{{count}} hours ago",
         minutes: "{{count}} minutes ago",
@@ -203,6 +206,16 @@ export const en: { translation: Translation } = {
         section: {
           open: "Open comments",
           close: "Close comments",
+        },
+        tooltip: {
+          you: "You",
+          messageInfo: "{{name}}: {{date}} {{time}}",
+          locale: "en-US",
+        },
+        buttons: {
+          reply: { tooltip: "Reply" },
+          extend: { tooltip: "Show replies" },
+          reduce: { tooltip: "Close replies" },
         },
       },
     },

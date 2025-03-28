@@ -165,6 +165,9 @@ export const pl: { translation: Translation } = {
         },
       },
       time: {
+        years: "{{count}} lat temu",
+        months: "{{count}} miesięcy temu",
+        weeks: "{{count}} tygodni temu",
         days: "{{count}} dni temu",
         hours: "{{count}} godzin temu",
         minutes: "{{count}} minut temu",
@@ -204,6 +207,16 @@ export const pl: { translation: Translation } = {
         section: {
           open: "Otwórz sekcję komentarzy",
           close: "Zamknij sekcję komentarzy",
+        },
+        tooltip: {
+          you: "Ty",
+          messageInfo: "{{name}}: {{date}} {{time}}",
+          locale: "pl-PL",
+        },
+        buttons: {
+          reply: { tooltip: "Odpowiedz" },
+          extend: { tooltip: "Pokaż odpowiedzi" },
+          reduce: { tooltip: "Zamknij odpowiedzi" },
         },
       },
     },

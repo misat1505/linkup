@@ -60,6 +60,7 @@ function CommentSection({
   group: string | null;
   level: number;
 }) {
+  const { t } = useTranslation();
   const { chat, setResponse } = usePostCommentsSectionContext();
   const { user: me } = useAppContext();
   const { data: messages = [] } = useQuery({
@@ -81,12 +82,18 @@ function CommentSection({
   const getTooltipText = (message: Message): string => {
     const name =
       message.author.id === me!.id
-        ? "You"
-        : `${createFullName(message.author)}`;
-    const fullText = `${name}: ${message.createdAt.toLocaleDateString(
-      "en-US"
-    )} ${message.createdAt.toLocaleTimeString("en-US")}`;
-    return fullText;
+        ? t("posts.comments.tooltip.you")
+        : createFullName(message.author);
+
+    return t("posts.comments.tooltip.messageInfo", {
+      name,
+      date: message.createdAt.toLocaleDateString(
+        t("posts.comments.tooltip.locale")
+      ),
+      time: message.createdAt.toLocaleTimeString(
+        t("posts.comments.tooltip.locale")
+      ),
+    });
   };
 
   return (
@@ -127,8 +134,10 @@ function ResponseSetButton({
   isActive: boolean;
   onclick: () => void;
 }) {
+  const { t } = useTranslation();
+
   return (
-    <Tooltip content="Reply">
+    <Tooltip content={t("posts.comments.buttons.reply.tooltip")}>
       <button onClick={onclick}>
         <FaReply
           className={cn(
@@ -151,8 +160,14 @@ function ToggleSubsectionOpenButton({
   isActive: boolean;
   onclick: () => void;
 }) {
+  const { t } = useTranslation();
+
+  const tooltipText = isActive
+    ? t("posts.comments.buttons.reduce.tooltip")
+    : t("posts.comments.buttons.extend.tooltip");
+
   return (
-    <Tooltip content={isActive ? "Close replies" : "Show replies"}>
+    <Tooltip content={tooltipText}>
       <button onClick={onclick} className="p-2">
         <FaArrowDown
           className={cn(

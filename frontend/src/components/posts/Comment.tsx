@@ -3,7 +3,7 @@ import { getInitials } from "@/utils/getInitials";
 import { Message } from "@/types/Message";
 import Avatar from "../common/Avatar";
 import {
-  getReadableCommentUploadDate,
+  useGetReadableCommentUploadDate,
   timeDifference,
 } from "@/utils/timeDifference";
 import { getFileType } from "@/utils/getFileType";
@@ -12,8 +12,13 @@ import { File } from "@/types/File";
 import Image from "../common/Image";
 import ProtectedVideo from "../common/ProtectedVideo";
 import ProtectedFile from "../common/ProtectedFile";
+import { createFullName } from "@/utils/createFullName";
 
 export default function Comment({ message }: { message: Message }) {
+  const uploadDate = useGetReadableCommentUploadDate(
+    timeDifference(message.createdAt)
+  );
+
   return (
     <div className="flex gap-x-2 p-2">
       <Avatar
@@ -24,11 +29,9 @@ export default function Comment({ message }: { message: Message }) {
       <div className="max-w-[calc(100%-4rem)]">
         <h2 className="text-nowrap">
           <span className="font-semibold">
-            {message.author.firstName} {message.author.lastName}{" "}
+            {createFullName(message.author)}{" "}
           </span>
-          <span className="italic">
-            {getReadableCommentUploadDate(timeDifference(message.createdAt))}
-          </span>
+          <span className="italic">{uploadDate}</span>
         </h2>
         <MultimediaDisplay files={message.files} />
         <p>{message.content}</p>

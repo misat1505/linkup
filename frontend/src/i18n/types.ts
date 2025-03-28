@@ -204,10 +204,23 @@ type PostsTranslations = {
       open: string;
       close: string;
     };
+    tooltip: {
+      you: string;
+      messageInfo: string;
+      locale: string;
+    };
+    buttons: {
+      reply: { tooltip: string };
+      extend: { tooltip: string };
+      reduce: { tooltip: string };
+    };
   };
 };
 
 type TimeAgoTranslations = {
+  years: string;
+  months: string;
+  weeks: string;
   days: string;
   hours: string;
   minutes: string;
