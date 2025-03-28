@@ -396,6 +396,16 @@ export const en: { translation: Translation } = {
             },
           },
         },
+        reply: {
+          "only-files": "{{name}} sent {{count}} file(s).",
+          text: {
+            "you-to-you": "You replied to yourself.",
+            "you-to-other": "You replied to {{name}}.",
+            "other-to-you": "{{name}} replied to you.",
+            "other-to-other": "{{name1}} replied to {{name2}}.",
+            "other-to-same": "{{}} replied to themselves.",
+          },
+        },
       },
     },
   },

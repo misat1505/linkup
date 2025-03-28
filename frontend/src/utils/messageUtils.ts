@@ -2,16 +2,24 @@ import { Chat } from "@/types/Chat";
 import { Message } from "@/types/Message";
 import { User } from "@/types/User";
 import { createFullName } from "./createFullName";
+import { TFunction } from "i18next";
 
 export class MessageUtils {
   private chat: Chat;
   private message: Message;
   private me: User;
+  private t: TFunction<"translation", undefined>;
 
-  constructor(chat: Chat, message: Message, me: User) {
+  constructor(
+    chat: Chat,
+    message: Message,
+    me: User,
+    t: TFunction<"translation", undefined>
+  ) {
     this.message = message;
     this.me = me;
     this.chat = chat;
+    this.t = t;
   }
 
   private getDisplayNameById(id: User["id"]): string {
@@ -30,15 +38,25 @@ export class MessageUtils {
     const responseDisplayName = this.getDisplayNameById(responseAuthor.id);
 
     if (messageAuthor.id === this.me.id) {
-      if (responseAuthor.id === this.me.id) return `You replied to yourself.`;
-      return `You replied to ${responseDisplayName}.`;
+      if (responseAuthor.id === this.me.id)
+        return this.t("chats.message.reply.text.you-to-you");
+      return this.t("chats.message.reply.text.you-to-other", {
+        name: responseDisplayName,
+      });
     }
 
     if (responseAuthor.id === this.me.id)
-      return `${messageDisplayName} replied to you.`;
+      return this.t("chats.message.reply.text.other-to-you", {
+        name: messageDisplayName,
+      });
 
     if (responseAuthor.id === messageAuthor.id)
-      return `${messageDisplayName} replied to themselves.`;
-    return `${messageDisplayName} replied to ${responseDisplayName}.`;
+      return this.t("chats.message.reply.text.other-to-same", {
+        name: messageDisplayName,
+      });
+    return this.t("chats.message.reply.text.other-to-other", {
+      name1: messageDisplayName,
+      name2: responseDisplayName,
+    });
   }
 }

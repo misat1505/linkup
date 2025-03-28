@@ -391,5 +391,15 @@ type ChatsTranslations = {
         };
       };
     };
+    reply: {
+      "only-files": string;
+      text: {
+        "you-to-you": string;
+        "you-to-other": string;
+        "other-to-you": string;
+        "other-to-other": string;
+        "other-to-same": string;
+      };
+    };
   };
 };
