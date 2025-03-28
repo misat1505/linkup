@@ -443,6 +443,7 @@ type ChatsTranslations = {
       cancel: string;
       confirm: string;
       input: { placeholder: string };
+      "no-alias": string;
     };
   };
 };

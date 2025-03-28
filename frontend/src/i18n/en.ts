@@ -452,6 +452,7 @@ export const en: { translation: Translation } = {
           cancel: "Cancel",
           confirm: "Save",
           input: { placeholder: "Create alias" },
+          "no-alias": "(No alias)",
         },
       },
     },

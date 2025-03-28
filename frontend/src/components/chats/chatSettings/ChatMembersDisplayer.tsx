@@ -44,6 +44,7 @@ export default function ChatMembersDisplayer() {
 }
 
 function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
+  const { t } = useTranslation();
   const { chat } = useChatContext();
 
   return (
@@ -56,7 +57,9 @@ function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
         />
         <div>
           <p className="font-semibold">{createFullName(user)}</p>
-          <p className="text-xs">{user.alias || "(no alias)"}</p>
+          <p className="text-xs">
+            {user.alias || t("chats.settings.update-alias-dialog.no-alias")}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-x-1">
