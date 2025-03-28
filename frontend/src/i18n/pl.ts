@@ -71,6 +71,10 @@ export const pl: { translation: Translation } = {
       "login-redirect": "Zaloguj się",
     },
     settings: {
+      language: {
+        title: "Język",
+        description: "Wybierz preferowany język interfejsu.",
+      },
       theme: {
         title: "Motyw",
         description:

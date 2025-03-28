@@ -71,6 +71,10 @@ export const en: { translation: Translation } = {
       "login-redirect": "Login",
     },
     settings: {
+      language: {
+        title: "Language",
+        description: "Choose your preferred language for the interface.",
+      },
       theme: {
         title: "Theme",
         description:

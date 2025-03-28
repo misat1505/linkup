@@ -84,6 +84,10 @@ type SignupTranslations = {
 };
 
 type SettingsTranslations = {
+  language: {
+    title: string;
+    description: string;
+  };
   theme: {
     title: string;
     description: string;

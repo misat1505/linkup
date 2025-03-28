@@ -2,11 +2,17 @@ import { useTranslation } from "react-i18next";
 import ThemeToggle from "../common/navbar/ThemeToggle";
 import SettingCard from "./SettingCard";
 import TooltipSwitch from "./TooltipSwitch";
+import LanguageSwitch from "./LanguageSwitch";
 
 export default function SettingsCards() {
   const { t } = useTranslation();
 
   const cards = [
+    {
+      title: t("settings.language.title"),
+      description: t("settings.language.description"),
+      switchComponent: <LanguageSwitch />,
+    },
     {
       title: t("settings.theme.title"),
       description: t("settings.theme.description"),

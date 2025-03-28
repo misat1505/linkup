@@ -14,7 +14,6 @@ import SignupFormProvider from "@/contexts/SignupFormProvider";
 import SignupForm from "@/components/signup/SignupForm";
 import SettingsCards from "@/components/settings/SettingsCards";
 import SettingsSlogan from "@/components/settings/SettingsSlogan";
-import LanguageSwitch from "@/components/settings/LanguageSwitch";
 
 export default function Settings() {
   const { user: me, setUser } = useAppContext();
@@ -79,7 +78,6 @@ export default function Settings() {
           <SignupForm />
         </SignupFormProvider>
       </div>
-      <LanguageSwitch />
     </div>
   );
 }
