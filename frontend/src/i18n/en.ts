@@ -217,6 +217,22 @@ export const en: { translation: Translation } = {
           extend: { tooltip: "Show replies" },
           reduce: { tooltip: "Close replies" },
         },
+        form: {
+          inputs: {
+            text: {
+              placeholder: "Leave your comment...",
+            },
+            file: { tooltip: "Attach a file", remove: "Remove File" },
+          },
+          submit: { tooltip: "Send comment" },
+          reply: {
+            to: {
+              me: "Replying to yourself.",
+              other: "Replying to {{fullName}}.",
+            },
+            remove: { tooltip: "Remove reply" },
+          },
+        },
       },
     },
   },

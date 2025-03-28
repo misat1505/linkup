@@ -218,6 +218,22 @@ export const pl: { translation: Translation } = {
           extend: { tooltip: "Pokaż odpowiedzi" },
           reduce: { tooltip: "Zamknij odpowiedzi" },
         },
+        form: {
+          inputs: {
+            text: {
+              placeholder: "Zostaw komentarz...",
+            },
+            file: { tooltip: "Dodaj plik", remove: "Usuń plik" },
+          },
+          submit: { tooltip: "Wyślij komentarz" },
+          reply: {
+            to: {
+              me: "Odpowiadasz sobie.",
+              other: "Odpowiadasz użytkownikowi {{fullName}}.",
+            },
+            remove: { tooltip: "Usuń odpowiedź" },
+          },
+        },
       },
     },
   },

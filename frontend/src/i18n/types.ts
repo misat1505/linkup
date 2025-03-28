@@ -214,6 +214,22 @@ type PostsTranslations = {
       extend: { tooltip: string };
       reduce: { tooltip: string };
     };
+    form: {
+      inputs: {
+        text: {
+          placeholder: string;
+        };
+        file: { tooltip: string; remove: string };
+      };
+      submit: { tooltip: string };
+      reply: {
+        to: {
+          me: string;
+          other: string;
+        };
+        remove: { tooltip: string };
+      };
+    };
   };
 };
 
