@@ -95,6 +95,7 @@ export const pl: { translation: Translation } = {
       },
     },
     common: {
+      you: "Ty",
       loading: "Chwileczkę, przygotowujemy aplikację...",
       navbar: {
         logo: {
@@ -288,6 +289,26 @@ export const pl: { translation: Translation } = {
             "awaiting-other":
               "Prośba o dodanie do przyjaciół {{fullName}} została anulowana.",
           },
+        },
+      },
+    },
+    chats: {
+      "no-chat-selected": {
+        title: "Brak wybranego czatu.",
+        description: "Wybierz istniejący czat z menu lub",
+        action: "Utwórz nowy czat",
+      },
+      "chat-unavailable": {
+        title: "Czat niedostępny.",
+        description:
+          "Wybrany czat nie istnieje lub nie jest dostępny dla Ciebie.",
+        action: "Zamknij",
+      },
+      navigation: {
+        title: "Czatuj z innymi",
+        items: {
+          tooltip: "Otwórz czat",
+          "only-file-text": "{{fullName}} wysłał(a) {{count}} plik(ów).",
         },
       },
     },

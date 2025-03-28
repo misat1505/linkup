@@ -95,6 +95,7 @@ export const en: { translation: Translation } = {
       },
     },
     common: {
+      you: "You",
       loading: "Hang tight as we prepare the app...",
       navbar: {
         sheet: {
@@ -285,6 +286,26 @@ export const en: { translation: Translation } = {
             "awaiting-me": "{{fullName}} friend request is rejected.",
             "awaiting-other": "Friend request to {{fullName}} is removed.",
           },
+        },
+      },
+    },
+    chats: {
+      "no-chat-selected": {
+        title: "No chat selected.",
+        description: "Select existing chat in the menu or",
+        action: "Create new chat",
+      },
+      "chat-unavailable": {
+        title: "Chat unavailable.",
+        description:
+          "Selected chat does not exist or is not available for you.",
+        action: "Close",
+      },
+      navigation: {
+        title: "Chat with others",
+        items: {
+          tooltip: "Open chat",
+          "only-file-text": "{{fullName}} sent {{count}} file(s).",
         },
       },
     },

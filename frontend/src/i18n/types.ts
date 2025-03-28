@@ -5,10 +5,12 @@ export type Translation = {
   home: HomeTranslations;
   posts: PostsTranslations;
   friends: FriendsTranslations;
+  chats: ChatsTranslations;
   common: {
     navbar: NavbarTranslations;
     theme: ThemeTranslations;
     loading: string;
+    you: string;
     time: TimeAgoTranslations;
   };
 };
@@ -294,6 +296,26 @@ type FriendsTranslations = {
         "awaiting-me": string;
         "awaiting-other": string;
       };
+    };
+  };
+};
+
+type ChatsTranslations = {
+  "no-chat-selected": {
+    title: string;
+    description: string;
+    action: string;
+  };
+  "chat-unavailable": {
+    title: string;
+    description: string;
+    action: string;
+  };
+  navigation: {
+    title: string;
+    items: {
+      tooltip: string;
+      "only-file-text": string;
     };
   };
 };

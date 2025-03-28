@@ -119,11 +119,13 @@ export class ChatUtils {
     return new Date();
   }
 
-  public getNavigationLastMessageDisplayName(): string | null {
+  public getNavigationLastMessageDisplayName(
+    youTranslation?: string
+  ): string | null {
     const lastMessage = this.chat.lastMessage;
     if (!lastMessage) return null;
 
-    if (lastMessage.author.id === this.me.id) return "You";
+    if (lastMessage.author.id === this.me.id) return youTranslation ?? "You";
     const user =
       this.chat.users?.find((user) => user.id === lastMessage.author.id) ||
       null;
