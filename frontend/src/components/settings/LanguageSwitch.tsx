@@ -20,6 +20,7 @@ export default function LanguageSwitch() {
     if (i18n.language === "en") return "English";
     if (i18n.language === "de") return "Deutsch";
     if (i18n.language === "zh") return "中文";
+    if (i18n.language === "ru") return "Русский";
     return "Polski";
   };
 
@@ -40,6 +41,9 @@ export default function LanguageSwitch() {
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => changeLanguage("de")}>
           Deutsch
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => changeLanguage("ru")}>
+          Русский
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => changeLanguage("zh")}>
           中文

@@ -4,6 +4,7 @@ import { en } from "./en";
 import { pl } from "./pl";
 import { de } from "./de";
 import { zh } from "./zh";
+import { ru } from "./ru";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -11,6 +12,7 @@ i18n.use(initReactI18next).init({
     pl,
     de,
     zh,
+    ru,
   },
   lng: localStorage.getItem("lang") || "en",
   fallbackLng: "en",
