@@ -353,6 +353,33 @@ export const en: { translation: Translation } = {
         text: "{{name}}: {{text}}",
         "only-files": "{{name}} sent {{count}} file(s).",
       },
+      "date-seperator": {
+        locale: "en-US",
+        options: {
+          short: JSON.stringify({
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          long: JSON.stringify({
+            weekday: "long",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          "message-tooltip": JSON.stringify({
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      },
+      message: {
+        tooltip: {
+          mine: "{{date}} by You",
+          foreign: "{{date}} by {{name}}",
+        },
+      },
     },
   },
 };

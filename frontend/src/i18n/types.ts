@@ -362,4 +362,18 @@ type ChatsTranslations = {
     text: string;
     "only-files": string;
   };
+  "date-seperator": {
+    locale: string;
+    options: {
+      short: string;
+      long: string;
+      "message-tooltip": string;
+    };
+  };
+  message: {
+    tooltip: {
+      mine: string;
+      foreign: string;
+    };
+  };
 };
