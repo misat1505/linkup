@@ -405,7 +405,7 @@ export const en: { translation: Translation } = {
             "you-to-other": "You replied to {{name}}.",
             "other-to-you": "{{name}} replied to you.",
             "other-to-other": "{{name1}} replied to {{name2}}.",
-            "other-to-same": "{{}} replied to themselves.",
+            "other-to-same": "{{name}} replied to themselves.",
           },
         },
       },

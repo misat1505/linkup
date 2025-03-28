@@ -411,7 +411,7 @@ export const pl: { translation: Translation } = {
             "you-to-other": "Odpowiedziałeś {{name}}.",
             "other-to-you": "{{name}} odpowiedział Ci.",
             "other-to-other": "{{name1}} odpowiedział {{name2}}.",
-            "other-to-same": "{{}} odpowiedział sobie.",
+            "other-to-same": "{{name}} odpowiedział sobie.",
           },
         },
       },
