@@ -355,6 +355,10 @@ export const pl: { translation: Translation } = {
           cancel: { tooltip: "Anuluj" },
         },
       },
+      "income-message": {
+        text: "{{name}}: {{text}}",
+        "only-files": "{{name}} wysłał(a) {{count}} plik(ów).",
+      },
     },
   },
 };

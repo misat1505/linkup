@@ -9,6 +9,7 @@ import { useState } from "react";
 import Avatar from "../common/Avatar";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { getInitials } from "@/utils/getInitials";
+import { useTranslation } from "react-i18next";
 
 type IncomeMessageProps = {
   message: Message;
@@ -19,6 +20,7 @@ export default function IncomeMessage({
   message,
   onclick,
 }: IncomeMessageProps) {
+  const { t } = useTranslation();
   const [isClicked, setIsClicked] = useState(false);
   const { user: me } = useAppContext();
   const { chat } = useChatContext();
@@ -30,8 +32,14 @@ export default function IncomeMessage({
 
   const getText = (): string => {
     if (message.content)
-      return `${displayName}: ${message.content.substring(0, 20)}`;
-    return `${displayName} sent ${message.files.length} file(s).`;
+      return t("chats.income-message.text", {
+        name: displayName,
+        text: message.content.substring(0, 20),
+      });
+    return t("chats.income-message.only-files", {
+      name: displayName,
+      count: message.files.length,
+    });
   };
 
   const handleClick = () => {

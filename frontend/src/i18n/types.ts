@@ -358,4 +358,8 @@ type ChatsTranslations = {
       cancel: { tooltip: string };
     };
   };
+  "income-message": {
+    text: string;
+    "only-files": string;
+  };
 };

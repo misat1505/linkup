@@ -349,6 +349,10 @@ export const en: { translation: Translation } = {
           cancel: { tooltip: "Cancel" },
         },
       },
+      "income-message": {
+        text: "{{name}}: {{text}}",
+        "only-files": "{{name}} sent {{count}} file(s).",
+      },
     },
   },
 };
