@@ -445,5 +445,31 @@ type ChatsTranslations = {
       input: { placeholder: string };
       "no-alias": string;
     };
+    group: {
+      tabs: {
+        general: string;
+        members: string;
+        invite: string;
+      };
+      info: {
+        input: {
+          name: { placeholder: string };
+          file: { remove: string };
+        };
+        submit: string;
+      };
+      invite: {
+        search: { placeholder: string };
+        empty: string;
+        "no-result": string;
+        trigger: { tooltip: string };
+        dialog: {
+          title: string;
+          description: string;
+          cancel: string;
+          confirm: string;
+        };
+      };
+    };
   };
 };

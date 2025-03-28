@@ -9,6 +9,7 @@ import { Chat } from "@/types/Chat";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { sortChatsByActivity } from "@/utils/sortChatsByActivity";
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FaUserGroup } from "react-icons/fa6";
 import { useQuery, useQueryClient } from "react-query";
 
@@ -34,6 +35,7 @@ export default function ChatInfoUpdater() {
 }
 
 function Updater({ file }: { file: File | null }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { chat } = useChatContext();
   const [image, setImage] = useState(file);
@@ -89,7 +91,7 @@ function Updater({ file }: { file: File | null }) {
       <Input
         value={groupName || ""}
         onChange={handleTextChange}
-        placeholder="Group name..."
+        placeholder={t("chats.settings.group.info.input.name.placeholder")}
       />
       <div className="group relative mt-8">
         {source ? (
@@ -105,7 +107,7 @@ function Updater({ file }: { file: File | null }) {
             onClick={handleRemoveFile}
             className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100"
           >
-            Remove
+            {t("chats.settings.group.info.input.file.remove")}
           </button>
         )}
       </div>
@@ -116,7 +118,7 @@ function Updater({ file }: { file: File | null }) {
         accept=".jpg, .png, .webp"
       />
       <Button className="self-end" type="submit">
-        Save
+        {t("chats.settings.group.info.submit")}
       </Button>
     </form>
   );

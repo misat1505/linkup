@@ -22,10 +22,12 @@ import { buildFileURL } from "@/utils/buildFileURL";
 import { createFullName } from "@/utils/createFullName";
 import { getInitials } from "@/utils/getInitials";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { HiUserAdd } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 
 export default function UserInvite() {
+  const { t } = useTranslation();
   const [text, setText] = useState("");
   const { data } = useUserSearch(text);
   const { chat } = useChatContext();
@@ -37,7 +39,7 @@ export default function UserInvite() {
   return (
     <div>
       <Input
-        placeholder="Search for people..."
+        placeholder={t("chats.settings.group.invite.search.placeholder")}
         className="my-2"
         onChange={(e) => setText(e.currentTarget.value)}
       />
@@ -47,12 +49,16 @@ export default function UserInvite() {
 }
 
 function UserSearchDisplayer({ users }: { users: User[] | undefined }) {
+  const { t } = useTranslation();
   const classes = "mt-4 w-full text-center text-sm text-muted-foreground";
 
   if (users === undefined)
-    return <p className={classes}>Write to search for users.</p>;
+    return <p className={classes}>{t("chats.settings.group.invite.empty")}</p>;
 
-  if (users.length === 0) return <p className={classes}>No users found.</p>;
+  if (users.length === 0)
+    return (
+      <p className={classes}>{t("chats.settings.group.invite.no-result")}</p>
+    );
 
   return (
     <div className="no-scrollbar max-h-[340px] overflow-auto">
@@ -72,9 +78,7 @@ function UserDisplay({ user }: { user: User }) {
           alt={getInitials(user)}
           className="h-8 w-8 text-xs"
         />
-        <p className="font-semibold">
-          {user.firstName} {user.lastName}
-        </p>
+        <p className="font-semibold">{createFullName(user)}</p>
       </div>
       <UserAddDialog user={user} />
     </div>
@@ -82,6 +86,7 @@ function UserDisplay({ user }: { user: User }) {
 }
 
 function UserAddDialog({ user }: { user: User }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { chatId } = useChatContext();
   const [isOpen, setIsOpen] = useState(false);
@@ -105,7 +110,11 @@ function UserAddDialog({ user }: { user: User }) {
     <AlertDialog open={isOpen}>
       <AlertDialogTrigger asChild onClick={() => setIsOpen(true)}>
         <span>
-          <Tooltip content={`Invite ${createFullName(user)} to this chat`}>
+          <Tooltip
+            content={t("chats.settings.group.invite.trigger.tooltip", {
+              name: createFullName(user),
+            })}
+          >
             <div className="mr-1 rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
               <HiUserAdd size={20} />
             </div>
@@ -115,20 +124,24 @@ function UserAddDialog({ user }: { user: User }) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Invite {createFullName(user)} to this chat
+            {t("chats.settings.group.invite.dialog.title", {
+              name: createFullName(user),
+            })}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to invite {createFullName(user)} to this chat?
-            Once invited, they will be able to view and participate in the
-            conversation. Confirm your action below.
+            {t("chats.settings.group.invite.dialog.description", {
+              name: createFullName(user),
+            })}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
           <AlertDialogCancel onClick={() => setIsOpen(false)}>
-            Cancel
+            {t("chats.settings.group.invite.dialog.cancel")}
           </AlertDialogCancel>
-          <AlertDialogAction onClick={handleClick}>Invite</AlertDialogAction>
+          <AlertDialogAction onClick={handleClick}>
+            {t("chats.settings.group.invite.dialog.confirm")}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

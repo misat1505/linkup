@@ -460,6 +460,33 @@ export const pl: { translation: Translation } = {
           input: { placeholder: "Utwórz alias" },
           "no-alias": "(Brak aliasu)",
         },
+        group: {
+          tabs: {
+            general: "Ogólne",
+            members: "Członkowie",
+            invite: "Zaproś",
+          },
+          info: {
+            input: {
+              name: { placeholder: "Nazwa grupy..." },
+              file: { remove: "Usuń" },
+            },
+            submit: "Zapisz",
+          },
+          invite: {
+            search: { placeholder: "Szukaj osób..." },
+            empty: "Napisz, aby wyszukać użytkowników.",
+            "no-result": "Nie znaleziono użytkowników.",
+            trigger: { tooltip: "Zaproś {{name}} do tego czatu" },
+            dialog: {
+              title: "Zaproś {{name}} do tego czatu",
+              description:
+                "Czy na pewno chcesz zaprosić {{name}} do tego czatu? Po zaproszeniu będzie mógł/mogła przeglądać i uczestniczyć w rozmowie. Potwierdź swoją decyzję poniżej.",
+              cancel: "Anuluj",
+              confirm: "Zaproś",
+            },
+          },
+        },
       },
     },
   },

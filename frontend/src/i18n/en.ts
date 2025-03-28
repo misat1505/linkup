@@ -454,6 +454,33 @@ export const en: { translation: Translation } = {
           input: { placeholder: "Create alias" },
           "no-alias": "(No alias)",
         },
+        group: {
+          tabs: {
+            general: "General",
+            members: "Members",
+            invite: "Invite",
+          },
+          info: {
+            input: {
+              name: { placeholder: "Group name..." },
+              file: { remove: "Remove" },
+            },
+            submit: "Save",
+          },
+          invite: {
+            search: { placeholder: "Search for people..." },
+            empty: "Write to search for users.",
+            "no-result": "No users found.",
+            trigger: { tooltip: "Invite {{name}} to this chat" },
+            dialog: {
+              title: "Invite {{name}} to this chat",
+              description:
+                "Are you sure you want to invite {{name}} to this chat?  invited, they will be able to view and participate in the conversation. Confirm your action below.",
+              cancel: "Cancel",
+              confirm: "Invite",
+            },
+          },
+        },
       },
     },
   },
