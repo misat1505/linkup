@@ -290,6 +290,7 @@ export const en: { translation: Translation } = {
       },
     },
     chats: {
+      "no-chats": "No conversations yet. Start a chat and connect with others!",
       "no-chat-selected": {
         title: "No chat selected.",
         description: "Select existing chat in the menu or",
@@ -405,6 +406,16 @@ export const en: { translation: Translation } = {
             "other-to-other": "{{name1}} replied to {{name2}}.",
             "other-to-same": "{{}} replied to themselves.",
           },
+        },
+      },
+      leave: {
+        trigger: { tooltip: "Leave chat" },
+        dialog: {
+          title: "Leave chat",
+          description:
+            "Are you sure you want to leave this chat? By leaving, you will no longer have access to the ongoing conversation. If you’re sure about your decision, please confirm below.",
+          cancel: "Cancel",
+          confirm: "Leave",
         },
       },
     },

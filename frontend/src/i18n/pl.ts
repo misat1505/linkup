@@ -293,6 +293,8 @@ export const pl: { translation: Translation } = {
       },
     },
     chats: {
+      "no-chats": "Brak rozmów. Rozpocznij czat i połącz się z innymi!",
+
       "no-chat-selected": {
         title: "Brak wybranego czatu.",
         description: "Wybierz istniejący czat z menu lub",
@@ -410,6 +412,16 @@ export const pl: { translation: Translation } = {
             "other-to-other": "{{name1}} odpowiedział {{name2}}.",
             "other-to-same": "{{}} odpowiedział sobie.",
           },
+        },
+      },
+      leave: {
+        trigger: { tooltip: "Opuść chat" },
+        dialog: {
+          title: "Opuszcz chat",
+          description:
+            "Czy na pewno chcesz opuścić ten chat? Po opuszczeniu nie będziesz miał dostępu do trwającej rozmowy. Jeśli jesteś pewny swojej decyzji, proszę potwierdź poniżej.",
+          cancel: "Anuluj",
+          confirm: "Opuść",
         },
       },
     },

@@ -301,6 +301,7 @@ type FriendsTranslations = {
 };
 
 type ChatsTranslations = {
+  "no-chats": string;
   "no-chat-selected": {
     title: string;
     description: string;
@@ -400,6 +401,15 @@ type ChatsTranslations = {
         "other-to-other": string;
         "other-to-same": string;
       };
+    };
+  };
+  leave: {
+    trigger: { tooltip: string };
+    dialog: {
+      title: string;
+      description: string;
+      cancel: string;
+      confirm: string;
     };
   };
 };
