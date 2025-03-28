@@ -436,6 +436,30 @@ export const pl: { translation: Translation } = {
       close: {
         tooltip: "Zamknij czat",
       },
+      settings: {
+        trigger: { tooltip: "Ustawienia" },
+        title: "Ustawienia",
+        description: {
+          private:
+            "Zarządzaj uczestnikami tego czatu, sprawdzając, kto jest obecnie częścią rozmowy. Możesz aktualizować lub usuwać ich aliasy według potrzeby.",
+          group:
+            "Zarządzaj uczestnikami tego czatu, sprawdzając, kto jest obecnie częścią rozmowy. Możesz aktualizować lub usuwać ich aliasy według potrzeby. Dodatkowo masz możliwość zapraszania nowych użytkowników do czatu.",
+        },
+        users: {
+          actions: {
+            "send-message": { tooltip: "Wyślij wiadomość" },
+            "update-alias": { tooltip: "Zaktualizuj alias" },
+          },
+        },
+        "update-alias-dialog": {
+          title: "Zaktualizuj alias dla {{name}}",
+          description:
+            "Możesz zaktualizować alias dla tego użytkownika. Alias będzie wyświetlany zamiast jego pełnego imienia w czacie. Potwierdź nowy alias poniżej. Pozostaw puste, aby usunąć alias.",
+          cancel: "Anuluj",
+          confirm: "Zapisz",
+          input: { placeholder: "Utwórz alias" },
+        },
+      },
     },
   },
 };

@@ -430,6 +430,30 @@ export const en: { translation: Translation } = {
       close: {
         tooltip: "Close chat",
       },
+      settings: {
+        trigger: { tooltip: "Settings" },
+        title: "Settings",
+        description: {
+          private:
+            "Manage the members of this chat by viewing who's currently part of the conversation. You can update or remove their aliases as needed.",
+          group:
+            "Manage the members of this chat by viewing who's currently part of the conversation. You can update or remove their aliases as needed. Additionally, you have the option to invite new users to join the chat.",
+        },
+        users: {
+          actions: {
+            "send-message": { tooltip: "Send message" },
+            "update-alias": { tooltip: "Update alias" },
+          },
+        },
+        "update-alias-dialog": {
+          title: "Update alias for {{name}}",
+          description:
+            "You can update the alias for this user. This alias will be displayed in place of their full name in the chat. Please confirm the new alias below. Leave it blank to remove the alias.",
+          cancel: "Cancel",
+          confirm: "Save",
+          input: { placeholder: "Create alias" },
+        },
+      },
     },
   },
 };

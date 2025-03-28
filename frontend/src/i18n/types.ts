@@ -424,4 +424,25 @@ type ChatsTranslations = {
   close: {
     tooltip: string;
   };
+  settings: {
+    trigger: { tooltip: string };
+    title: string;
+    description: {
+      private: string;
+      group: string;
+    };
+    users: {
+      actions: {
+        "send-message": { tooltip: string };
+        "update-alias": { tooltip: string };
+      };
+    };
+    "update-alias-dialog": {
+      title: string;
+      description: string;
+      cancel: string;
+      confirm: string;
+      input: { placeholder: string };
+    };
+  };
 };
