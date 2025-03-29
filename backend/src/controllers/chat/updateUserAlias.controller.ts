@@ -69,18 +69,22 @@ export const updateAliasController = async (
     if (!isUserUpdatedInChat)
       return res
         .status(401)
-        .json({ message: "This user doesn't belong to this chat." });
+        .json({
+          message: req.t("chats.controllers.update-alias.user-not-in-chat"),
+        });
 
     const isAuthorized = await ChatService.isUserInChat({ userId, chatId });
     if (!isAuthorized)
       return res
         .status(401)
-        .json({ message: "Cannot set aliases in chat you do not belong to." });
+        .json({
+          message: req.t("chats.controllers.update-alias.unauthorized"),
+        });
 
     await ChatService.updateAlias({ userId: userToUpdateId, chatId, alias });
 
     return res.status(200).json({ alias });
   } catch (e) {
-    next(new Error("Cannot update alias."));
+    next(new Error(req.t("chats.controllers.update-alias.failure")));
   }
 };

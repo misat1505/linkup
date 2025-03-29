@@ -56,6 +56,6 @@ export const getSelfController = async (
 
     return res.status(200).json({ user: UserService.removeCredentials(user) });
   } catch (e) {
-    next(new Error(req.t("auth.controllers.get-self.cannot-fetch-user")));
+    next(new Error(req.t("auth.controllers.get-self.failure")));
   }
 };

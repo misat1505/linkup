@@ -97,6 +97,6 @@ export const loginController = async (
       .status(200)
       .json({ user: UserService.removeCredentials(user), accessToken });
   } catch (e) {
-    next(new Error(req.t("auth.controllers.login.login-failed")));
+    next(new Error(req.t("auth.controllers.login.failure")));
   }
 };

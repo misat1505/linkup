@@ -4,11 +4,11 @@
       "login": {
         "invalid-login": "Invalid login.",
         "invalid-password": "Invalid password.",
-        "login-failed": "Cannot login."
+        "failure": "Cannot login."
       },
       "get-self": {
         "user-not-found": "User not found.",
-        "cannot-fetch-user": "Cannot fetch user."
+        "failure": "Cannot fetch user."
       },
       "logout": {
         "success": "Successfully logged out.",
@@ -25,6 +25,57 @@
       "update": {
         "login-already-exists": "Login already taken.",
         "failure": "Cannot update user."
+      }
+    }
+  },
+  "chats": {
+    "controllers": {
+      "add-user-to-group-chat": {
+        "bad-chat-type": "Cannot add people to chat of this type.",
+        "i-am-not-in-chat": "Cannot add users to chat to which you do not belong to.",
+        "user-already-in-chat": "User is already in this chat.",
+        "failure": "Cannot add user to this chat."
+      },
+      "create-group-chat": {
+        "not-belonging-to-you": "Cannot create group chat not belonging to you.",
+        "failure": "Cannot create group chat."
+      },
+      "create-message": {
+        "user-not-belonging-to-chat": "You cannot send a message to this chat.",
+        "response-not-existent": "Message of this responseId does not exist in this chat.",
+        "failure": "Cannot create message."
+      },
+      "create-private-chat": {
+        "not-belonging-to-you": "Cannot create private chat not belonging to you.",
+        "failure": "Cannot create private chat."
+      },
+      "create-reaction": {
+        "bad-chat": "You cannot create reaction in chat not belonging to you.",
+        "bad-message": "Cannot create reaction to a message that is not in given chat.",
+        "failure": "Cannot create reaction."
+      },
+      "delete-self-from-chat": {
+        "success": "Successfully deleted from chat.",
+        "failure": "Cannot exit this chat.",
+        "bad-chat-type": "Cannot remove yourself from chat of this type.",
+        "not-belonging-to-you": "Cannot remove yourself from chat which you do not belong to."
+      },
+      "get-messages": {
+        "unauthorized": "You cannot read messages from this chat.",
+        "failure": "Cannot get messages."
+      },
+      "get-self-chats": {
+        "failure": "Cannot get user's chats."
+      },
+      "update-group-chat": {
+        "unauthorized": "Cannot update chat you do not belong to.",
+        "failure": "Cannot create group chat.",
+        "bad-type": "Cannot update chat of this type."
+      },
+      "update-alias": {
+        "unauthorized": "Cannot set aliases in chat you do not belong to.",
+        "failure": "Cannot update alias.",
+        "user-not-in-chat": "This user doesn't belong to this chat."
       }
     }
   }

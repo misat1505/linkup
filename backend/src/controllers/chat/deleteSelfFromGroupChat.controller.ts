@@ -48,17 +48,27 @@ export const deleteSelfFromGroupChatController = async (
     if (chatType !== "GROUP")
       return res
         .status(401)
-        .json({ message: "Cannot remove yourself from chat of this type." });
+        .json({
+          message: req.t(
+            "chats.controllers.delete-self-from-chat.bad-chat-type"
+          ),
+        });
 
     const iAmInChat = await ChatService.isUserInChat({ userId, chatId });
     if (!iAmInChat)
       return res.status(401).json({
-        message: "Cannot remove yourself from chat which you do not belong to.",
+        message: req.t(
+          "chats.controllers.delete-self-from-chat.not-belonging-to-you"
+        ),
       });
 
     await ChatService.deleteFromChat({ chatId, userId });
-    return res.status(200).json({ message: "Successfully deleted from chat." });
+    return res
+      .status(200)
+      .json({
+        message: req.t("chats.controllers.delete-self-from-chat.success"),
+      });
   } catch (e) {
-    next(new Error("Cannot add user to this chat."));
+    next(new Error(req.t("chats.controllers.delete-self-from-chat.failure")));
   }
 };

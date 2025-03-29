@@ -57,7 +57,9 @@ export const getChatMessagesController = async (
     if (!isUserAuthorized)
       return res
         .status(401)
-        .json({ message: "You cannot read messages from this chat." });
+        .json({
+          message: req.t("chats.controllers.get-messages.unauthorized"),
+        });
 
     const messages = await ChatService.getChatMessages(
       chatId,
@@ -66,7 +68,7 @@ export const getChatMessagesController = async (
 
     return res.status(200).json({ messages });
   } catch (e) {
-    next(new Error("Cannot get messages."));
+    next(new Error(req.t("chats.controllers.get-messages.failure")));
   }
 };
 

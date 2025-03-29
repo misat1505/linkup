@@ -67,7 +67,11 @@ export const createGroupChatController = async (
     if (!users.includes(userId))
       return res
         .status(401)
-        .json({ message: "Cannot create group chat not belonging to you." });
+        .json({
+          message: req.t(
+            "chats.controllers.create-group-chat.not-belonging-to-you"
+          ),
+        });
 
     const newFilename = req.file ? uuidv4() + ".webp" : null;
 
@@ -82,6 +86,6 @@ export const createGroupChatController = async (
 
     return res.status(201).json({ chat });
   } catch (e) {
-    next(new Error("Cannot create group chat."));
+    next(new Error(req.t("chats.controllers.create-group-chat.failure")));
   }
 };

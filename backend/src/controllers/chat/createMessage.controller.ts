@@ -86,12 +86,18 @@ export const createMessageController = async (
     if (!isUserAuthorized) {
       return res
         .status(401)
-        .json({ message: "You cannot send a message to this chat." });
+        .json({
+          message: req.t(
+            "chats.controllers.create-message.user-not-belonging-to-chat"
+          ),
+        });
     }
 
     if (responseId && !isResponseInChat) {
       return res.status(400).json({
-        message: "Message of this responseId does not exist in this chat.",
+        message: req.t(
+          "chats.controllers.create-message.response-not-existent"
+        ),
       });
     }
 
@@ -114,6 +120,6 @@ export const createMessageController = async (
 
     return res.status(201).json({ message });
   } catch (e) {
-    next(new Error("Cannot create message."));
+    next(new Error(req.t("chats.controllers.create-message.failure")));
   }
 };

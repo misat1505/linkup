@@ -71,7 +71,7 @@ export const createReactionController = async (
 
     if (!isUserAuthorized)
       return res.status(401).json({
-        message: "You cannot create reaction in chat not belonging to you.",
+        message: req.t("chats.controllers.create-reaction.bad-chat"),
       });
 
     const isMessageInChat = await ChatService.isMessageInChat({
@@ -81,8 +81,7 @@ export const createReactionController = async (
 
     if (!isMessageInChat)
       return res.status(401).json({
-        message:
-          "Cannot create reaction to a message that is not in given chat.",
+        message: req.t("chats.controllers.create-reaction.bad-message"),
       });
 
     const reaction = await ChatService.createReactionToMessage({
@@ -93,6 +92,6 @@ export const createReactionController = async (
 
     return res.status(201).json({ reaction });
   } catch (e) {
-    next(new Error("Cannot create reaction."));
+    next(new Error(req.t("chats.controllers.create-reaction.failure")));
   }
 };

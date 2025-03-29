@@ -64,7 +64,11 @@ export const createPrivateChatController = async (
     if (!users.includes(userId))
       return res
         .status(401)
-        .json({ message: "Cannot create private chat not belonging to you." });
+        .json({
+          message: req.t(
+            "chats.controllers.create-private-chat.not-belonging-to-you"
+          ),
+        });
 
     const chat = await ChatService.getPrivateChatByUserIds(users[0], users[1]);
 
@@ -74,6 +78,6 @@ export const createPrivateChatController = async (
 
     return res.status(201).json({ chat: createdChat });
   } catch (e) {
-    next(new Error("Cannot create private chat."));
+    next(new Error(req.t("chats.controllers.create-private-chat.failure")));
   }
 };

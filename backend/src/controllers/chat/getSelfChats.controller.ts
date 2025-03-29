@@ -45,6 +45,6 @@ export const getSelfChatsController = async (
 
     return res.status(200).json({ chats });
   } catch (e) {
-    next(new Error("Cannot get user's chats."));
+    next(new Error(req.t("chats.controllers.get-self-chats.failure")));
   }
 };

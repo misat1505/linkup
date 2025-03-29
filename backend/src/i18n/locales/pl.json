@@ -4,11 +4,11 @@
       "login": {
         "invalid-login": "Nieprawidłowe dane logowania.",
         "invalid-password": "Nieprawidłowe hasło.",
-        "login-failed": "Nie udało się zalogować."
+        "failure": "Nie udało się zalogować."
       },
       "get-self": {
         "user-not-found": "Nie znaleziono użytkownika.",
-        "cannot-fetch-user": "Nie udało się pobrać danych użytkownika."
+        "failure": "Nie udało się pobrać danych użytkownika."
       },
       "logout": {
         "success": "Pomyślnie wylogowano.",
@@ -25,6 +25,57 @@
       "update": {
         "login-already-exists": "Login już zajęty.",
         "failure": "Nie udało się zaktualizować użytkownika."
+      }
+    }
+  },
+  "chats": {
+    "controllers": {
+      "add-user-to-group-chat": {
+        "bad-chat-type": "Nie można dodać osób do czatu tego typu.",
+        "i-am-not-in-chat": "Nie możesz dodać użytkowników do czatu, do którego nie należysz.",
+        "user-already-in-chat": "Użytkownik jest już w tym czacie.",
+        "failure": "Nie można dodać użytkownika do tego czatu."
+      },
+      "create-group-chat": {
+        "not-belonging-to-you": "Nie można utworzyć czatu grupowego, który do Ciebie nie należy.",
+        "failure": "Nie można utworzyć czatu grupowego."
+      },
+      "create-message": {
+        "user-not-belonging-to-chat": "Nie możesz wysłać wiadomości do tego czatu.",
+        "response-not-existent": "Wiadomość o podanym responseId nie istnieje w tym czacie.",
+        "failure": "Nie można utworzyć wiadomości."
+      },
+      "create-private-chat": {
+        "not-belonging-to-you": "Nie można utworzyć czatu prywatnego, który do Ciebie nie należy.",
+        "failure": "Nie można utworzyć czatu prywatnego."
+      },
+      "create-reaction": {
+        "bad-chat": "Nie możesz dodać reakcji w czacie, do którego nie należysz.",
+        "bad-message": "Nie można dodać reakcji do wiadomości, która nie znajduje się w danym czacie.",
+        "failure": "Nie można dodać reakcji."
+      },
+      "delete-self-from-chat": {
+        "success": "Pomyślnie usunięto z czatu.",
+        "failure": "Nie można opuścić tego czatu.",
+        "bad-chat-type": "Nie można usunąć się z czatu tego typu.",
+        "not-belonging-to-you": "Nie możesz opuścić czatu, do którego nie należysz."
+      },
+      "get-messages": {
+        "unauthorized": "Nie możesz czytać wiadomości z tego czatu.",
+        "failure": "Nie można pobrać wiadomości."
+      },
+      "get-self-chats": {
+        "failure": "Nie można pobrać czatów użytkownika."
+      },
+      "update-group-chat": {
+        "unauthorized": "Nie możesz zaktualizować czatu, do którego nie należysz.",
+        "failure": "Nie można zaktualizować czatu grupowego.",
+        "bad-type": "Nie można zaktualizować czatu tego typu."
+      },
+      "update-alias": {
+        "unauthorized": "Nie możesz ustawić aliasów w czacie, do którego nie należysz.",
+        "failure": "Nie można zaktualizować aliasu.",
+        "user-not-in-chat": "Ten użytkownik nie należy do tego czatu."
       }
     }
   }

@@ -76,19 +76,31 @@ export const addUserToGroupChatController = async (
     if (chatType !== "GROUP")
       return res
         .status(401)
-        .json({ message: "Cannot add people to chat of this type." });
+        .json({
+          message: req.t(
+            "chats.controllers.add-user-to-group-chat.bad-chat-type"
+          ),
+        });
 
     if (!iAmInChat)
       return res.status(401).json({
-        message: "Cannot add users to chat to which you do not belong to.",
+        message: req.t(
+          "chats.controllers.add-user-to-group-chat.i-am-not-in-chat"
+        ),
       });
 
     if (isOtherInChat)
-      return res.status(409).json({ message: "User is already in this chat." });
+      return res
+        .status(409)
+        .json({
+          message: req.t(
+            "chats.controllers.add-user-to-group-chat.user-already-in-chat"
+          ),
+        });
 
     const user = await ChatService.addUserToChat({ chatId, userId });
     return res.status(201).json({ user });
   } catch (e) {
-    next(new Error("Cannot add user to this chat."));
+    next(new Error(req.t("chats.controllers.add-user-to-group-chat.failure")));
   }
 };
