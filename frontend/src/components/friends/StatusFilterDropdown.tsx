@@ -10,6 +10,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { Friendship } from "@/types/Friendship";
 import useCountStatusCategories from "@/hooks/friends/useCountStatusCategories";
 import Tooltip from "../common/Tooltip";
+import { useTranslation } from "react-i18next";
 
 type StatusFilterDropdownProps = {
   table: Table<Friendship>;
@@ -18,21 +19,31 @@ type StatusFilterDropdownProps = {
 export default function StatusFilterDropdown({
   table,
 }: StatusFilterDropdownProps) {
+  const { t } = useTranslation();
   const counts = useCountStatusCategories();
+
+  const getButtonText = (): string => {
+    const filterValue = table.getColumn("status")?.getFilterValue() as string;
+
+    if (filterValue === "Accepted")
+      return t("friends.filter.statuses.input.accepted");
+    if (filterValue === "Awaiting me")
+      return t("friends.filter.statuses.input.awaiting-me");
+    if (filterValue === "Awaiting other")
+      return t("friends.filter.statuses.input.awaiting-other");
+    return t("friends.filter.statuses.input.all");
+  };
 
   return (
     <DropdownMenu>
-      <Tooltip content="Filter statuses">
+      <Tooltip content={t("friends.filter.statuses.input.placeholder")}>
         <span>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               className="flex items-center space-x-4 transition-colors hover:bg-slate-200 dark:hover:bg-slate-800"
             >
-              <span>
-                {(table.getColumn("status")?.getFilterValue() as string) ||
-                  "All"}
-              </span>
+              <span>{getButtonText()}</span>
               <MdKeyboardArrowDown />
             </Button>
           </DropdownMenuTrigger>
@@ -42,26 +53,32 @@ export default function StatusFilterDropdown({
         <DropdownMenuItem
           onClick={() => table.getColumn("status")?.setFilterValue("")}
         >
-          All ({Object.values(counts).reduce((acc, curr) => acc + curr, 0)})
+          {t("friends.filter.statuses.all", {
+            count: Object.values(counts).reduce((acc, curr) => acc + curr, 0),
+          })}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => table.getColumn("status")?.setFilterValue("Accepted")}
         >
-          Accepted ({counts.accepted})
+          {t("friends.filter.statuses.accepted", { count: counts.accepted })}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>
             table.getColumn("status")?.setFilterValue("Awaiting me")
           }
         >
-          Awaiting me ({counts.awaitingMe})
+          {t("friends.filter.statuses.awaiting-me", {
+            count: counts.awaitingMe,
+          })}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>
             table.getColumn("status")?.setFilterValue("Awaiting other")
           }
         >
-          Awaiting other ({counts.awaitingOther})
+          {t("friends.filter.statuses.awaiting-other", {
+            count: counts.awaitingOther,
+          })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

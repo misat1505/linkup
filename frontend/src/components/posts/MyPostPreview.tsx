@@ -25,8 +25,10 @@ import { queryKeys } from "@/lib/queryKeys";
 import FocusableSpan from "../common/FocusableSpan";
 import { useThemeContext } from "@/contexts/ThemeProvider";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export default function MyPostPreview({ post }: { post: Post }) {
+  const { t } = useTranslation();
   const { theme } = useThemeContext();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -50,7 +52,9 @@ export default function MyPostPreview({ post }: { post: Post }) {
         className="absolute bottom-4 left-1/2 -translate-x-1/2"
         onClick={() => setIsExpanded((prev) => !prev)}
       >
-        Show {isExpanded ? "less" : "more"}
+        {isExpanded
+          ? t("posts.preview.show-less")
+          : t("posts.preview.show-more")}
       </Button>
       <PostActions postId={post.id} />
     </div>
@@ -58,9 +62,11 @@ export default function MyPostPreview({ post }: { post: Post }) {
 }
 
 function PostActions({ postId }: { postId: Post["id"] }) {
+  const { t } = useTranslation();
+
   return (
     <div className="absolute right-4 top-4 flex items-center gap-x-4">
-      <Tooltip content="Edit">
+      <Tooltip content={t("posts.edit.button.tooltip")}>
         <Link to={ROUTES.POST_EDITOR.$buildPath({ params: { postId } })}>
           <IoPencil className="text-black transition-all hover:scale-110 hover:cursor-pointer dark:text-white" />
         </Link>
@@ -71,6 +77,7 @@ function PostActions({ postId }: { postId: Post["id"] }) {
 }
 
 function DeletePostDialog({ postId }: { postId: Post["id"] }) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -94,7 +101,7 @@ function DeletePostDialog({ postId }: { postId: Post["id"] }) {
 
   return (
     <AlertDialog open={isOpen}>
-      <Tooltip content="Delete">
+      <Tooltip content={t("posts.delete.button.tooltip")}>
         <span className="text-black transition-all hover:scale-110 hover:cursor-pointer dark:text-white">
           <FocusableSpan fn={() => setIsOpen(true)}>
             <FaRegTrashAlt />
@@ -103,18 +110,17 @@ function DeletePostDialog({ postId }: { postId: Post["id"] }) {
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>{t("posts.delete.dialog.title")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete this post? This will delete your
-            post, it&apos;s comments, and all files related with this post.
+            {t("posts.delete.dialog.description")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={() => setIsOpen(false)}>
-            Cancel
+            {t("posts.delete.dialog.cancel")}
           </AlertDialogCancel>
           <AlertDialogAction onClick={handleClick}>
-            Yes, delete
+            {t("posts.delete.dialog.confirm")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

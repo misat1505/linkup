@@ -10,6 +10,8 @@ import { queryKeys } from "@/lib/queryKeys";
 import { ChatService } from "@/services/Chat.service";
 import { Message } from "@/types/Message";
 import Comment from "./Comment";
+import { useTranslation } from "react-i18next";
+import { createFullName } from "@/utils/createFullName";
 
 export default function PostCommentSection() {
   const { isCommentSectionOpen } = usePostCommentsSectionContext();
@@ -28,10 +30,13 @@ export default function PostCommentSection() {
 }
 
 function CommentSectionOpenButton() {
+  const { t } = useTranslation();
   const { isCommentSectionOpen, toggleIsCommentSectionOpen } =
     usePostCommentsSectionContext();
 
-  const tooltipText = isCommentSectionOpen ? "Close comments" : "Open comments";
+  const tooltipText = isCommentSectionOpen
+    ? t("posts.comments.section.close")
+    : t("posts.comments.section.open");
 
   return (
     <Tooltip content={tooltipText}>
@@ -55,6 +60,7 @@ function CommentSection({
   group: string | null;
   level: number;
 }) {
+  const { t } = useTranslation();
   const { chat, setResponse } = usePostCommentsSectionContext();
   const { user: me } = useAppContext();
   const { data: messages = [] } = useQuery({
@@ -76,12 +82,18 @@ function CommentSection({
   const getTooltipText = (message: Message): string => {
     const name =
       message.author.id === me!.id
-        ? "You"
-        : `${message.author.firstName} ${message.author.lastName}`;
-    const fullText = `${name}: ${message.createdAt.toLocaleDateString(
-      "en-US"
-    )} ${message.createdAt.toLocaleTimeString("en-US")}`;
-    return fullText;
+        ? t("posts.comments.tooltip.you")
+        : createFullName(message.author);
+
+    return t("posts.comments.tooltip.messageInfo", {
+      name,
+      date: message.createdAt.toLocaleDateString(
+        t("posts.comments.tooltip.locale")
+      ),
+      time: message.createdAt.toLocaleTimeString(
+        t("posts.comments.tooltip.locale")
+      ),
+    });
   };
 
   return (
@@ -122,8 +134,10 @@ function ResponseSetButton({
   isActive: boolean;
   onclick: () => void;
 }) {
+  const { t } = useTranslation();
+
   return (
-    <Tooltip content="Reply">
+    <Tooltip content={t("posts.comments.buttons.reply.tooltip")}>
       <button onClick={onclick}>
         <FaReply
           className={cn(
@@ -146,8 +160,14 @@ function ToggleSubsectionOpenButton({
   isActive: boolean;
   onclick: () => void;
 }) {
+  const { t } = useTranslation();
+
+  const tooltipText = isActive
+    ? t("posts.comments.buttons.reduce.tooltip")
+    : t("posts.comments.buttons.extend.tooltip");
+
   return (
-    <Tooltip content={isActive ? "Close replies" : "Show replies"}>
+    <Tooltip content={tooltipText}>
       <button onClick={onclick} className="p-2">
         <FaArrowDown
           className={cn(

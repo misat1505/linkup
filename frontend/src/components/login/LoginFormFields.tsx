@@ -1,8 +1,10 @@
 import { useLoginFormContext } from "@/contexts/LoginFormProvider";
 import { LoginFormType } from "@/validators/auth.validators";
 import FormField from "../common/forms/FormField";
+import { useTranslation } from "react-i18next";
 
 export default function LoginFormFields() {
+  const { t } = useTranslation();
   const { register, errors } = useLoginFormContext();
 
   const renderFormField = (
@@ -21,8 +23,12 @@ export default function LoginFormFields() {
 
   return (
     <div>
-      {renderFormField("login", "Login")}
-      {renderFormField("password", "Password", "password")}
+      {renderFormField("login", t("login.form.placeholders.login"))}
+      {renderFormField(
+        "password",
+        t("login.form.placeholders.password"),
+        "password"
+      )}
     </div>
   );
 }

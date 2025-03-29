@@ -3,9 +3,11 @@ import { IoMoon } from "react-icons/io5";
 import Tooltip from "../Tooltip";
 import { useThemeContext } from "@/contexts/ThemeProvider";
 import { Switch } from "@/components/ui/theme-switch";
+import { useTranslation } from "react-i18next";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useThemeContext();
+  const { t } = useTranslation();
 
   const component =
     theme === "light" ? (
@@ -14,7 +16,9 @@ export default function ThemeToggle() {
       <IoMoon className="text-black" />
     );
 
-  const tooltipText = `Switch to ${theme === "light" ? "dark" : "light"} mode`;
+  const tooltipText = t("common.theme.switch.tooltip", {
+    mode: theme === "light" ? t("common.theme.dark") : t("common.theme.light"),
+  });
 
   return (
     <Tooltip content={tooltipText}>

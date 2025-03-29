@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ThemeProvider } from "./contexts/ThemeProvider.tsx";
 import BgGradient from "./components/common/BgGradient.tsx";
+import LanguageProvider from "./contexts/LanguageProvider.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,9 +21,11 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <BgGradient />
-        <div className="relative z-10">
-          <App />
-        </div>
+        <LanguageProvider>
+          <div className="relative z-10">
+            <App />
+          </div>
+        </LanguageProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>

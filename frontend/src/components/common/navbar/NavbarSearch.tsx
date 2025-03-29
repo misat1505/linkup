@@ -32,8 +32,10 @@ import { getInitials } from "@/utils/getInitials";
 import { FaUserFriends } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
 import FocusableSpan from "../FocusableSpan";
+import { useTranslation } from "react-i18next";
 
 export default function NavbarSearch() {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const [text, setText] = useState("");
   const [debouncedText] = useDebounce(text, 300);
@@ -48,9 +50,9 @@ export default function NavbarSearch() {
 
   return (
     <Command className="w-60 rounded-lg border bg-white shadow-md dark:bg-black">
-      <Tooltip content="Search for users">
+      <Tooltip content={t("common.navbar.search.tooltip")}>
         <CommandInput
-          placeholder="Search on Link Up..."
+          placeholder={t("common.navbar.search.placeholder")}
           data-testid="cy-nav-search-input"
           onInput={(e) => setText(e.currentTarget.value)}
           onFocus={() => setIsExpanded(true)}
@@ -75,13 +77,15 @@ export default function NavbarSearch() {
               })}
             >
               <CommandEmpty>
-                <p className="text-muted-foreground">No users found.</p>
+                <p className="text-muted-foreground">
+                  {t("common.navbar.search.no-users")}
+                </p>
               </CommandEmpty>
             </div>
             <CommandGroup
               className={cn({ hidden: users.length === 0 })}
               forceMount={users.length > 0}
-              heading="Suggestions"
+              heading={t("common.navbar.search.heading")}
               data-testid="cy-nav-search-results"
             >
               {users.map((user) => (
@@ -105,6 +109,7 @@ type SearchResultItemProps = {
 };
 
 function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
+  const { t } = useTranslation();
   const { user: me } = useAppContext();
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -127,13 +132,16 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
     if (!friendship)
       return toast({
         variant: "destructive",
-        title: "Friend request already exists.",
-        description: `There is already a friendship between you and ${createFullName(
-          user
-        )}.`,
+        title: t(
+          "common.navbar.search.friendships.toasts.already-exists.title"
+        ),
+        description: t(
+          "common.navbar.search.friendships.toasts.already-exists.description",
+          { fullName: createFullName(user) }
+        ),
         action: (
           <Button onClick={() => navigate(ROUTES.FRIENDS.$path())}>
-            Show Friends
+            {t("common.navbar.search.friendships.toasts.already-exists.action")}
           </Button>
         ),
       });
@@ -154,11 +162,18 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
     );
 
     toast({
-      title: "Friend request sent.",
-      description: `Friend request was sent to ${createFullName(user)}`,
+      title: t(
+        "common.navbar.search.friendships.toasts.successfully-created.title"
+      ),
+      description: t(
+        "common.navbar.search.friendships.toasts.successfully-created.description",
+        { fullName: createFullName(user) }
+      ),
       action: (
         <Button onClick={() => navigate(ROUTES.FRIENDS.$path())}>
-          Show Friends
+          {t(
+            "common.navbar.search.friendships.toasts.successfully-created.action"
+          )}
         </Button>
       ),
     });
@@ -181,7 +196,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
         {me!.id !== user.id ? (
           <ActionButton
             onClick={() => handleAddFriend(user.id)}
-            tooltipText="Add friend"
+            tooltipText={t("common.navbar.search.friendships.button.tooltip")}
             Icon={<FaUserFriends className="transition-all hover:scale-125" />}
           />
         ) : (
@@ -189,7 +204,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
         )}
         <ActionButton
           onClick={() => handleCreateChat(user.id)}
-          tooltipText="Send Message"
+          tooltipText={t("common.navbar.search.message.button.tooltip")}
           Icon={<IoIosChatbubbles className="transition-all hover:scale-125" />}
         />
       </div>

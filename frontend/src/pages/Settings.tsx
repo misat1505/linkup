@@ -14,8 +14,10 @@ import SignupFormProvider from "@/contexts/SignupFormProvider";
 import SignupForm from "@/components/signup/SignupForm";
 import SettingsCards from "@/components/settings/SettingsCards";
 import SettingsSlogan from "@/components/settings/SettingsSlogan";
+import { useTranslation } from "react-i18next";
 
 export default function Settings() {
+  const { t } = useTranslation();
   const { user: me, setUser } = useAppContext();
   const { data, isLoading } = useQuery({
     queryKey: queryKeys.downloadFile(me!.photoURL!),
@@ -55,7 +57,7 @@ export default function Settings() {
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
-          title: "Cannot change settings.",
+          title: t("settings.form.error.toast.title"),
           description: e.response?.data.message,
           variant: "destructive",
         });

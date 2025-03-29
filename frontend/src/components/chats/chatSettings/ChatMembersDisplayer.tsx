@@ -26,6 +26,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 
 export default function ChatMembersDisplayer() {
   const { chat } = useChatContext();
@@ -43,6 +44,7 @@ export default function ChatMembersDisplayer() {
 }
 
 function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
+  const { t } = useTranslation();
   const { chat } = useChatContext();
 
   return (
@@ -55,7 +57,9 @@ function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
         />
         <div>
           <p className="font-semibold">{createFullName(user)}</p>
-          <p className="text-xs">{user.alias || "(no alias)"}</p>
+          <p className="text-xs">
+            {user.alias || t("chats.settings.update-alias-dialog.no-alias")}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-x-1">
@@ -67,6 +71,7 @@ function ChatMemberDisplayItem({ user }: { user: UserInChat }) {
 }
 
 function CreateMessageButton({ user }: { user: UserInChat }) {
+  const { t } = useTranslation();
   const { user: me } = useAppContext();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -81,7 +86,7 @@ function CreateMessageButton({ user }: { user: UserInChat }) {
   };
 
   return (
-    <Tooltip content="Send message">
+    <Tooltip content={t("chats.settings.users.actions.send-message.tooltip")}>
       <span className="aspect-square rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
         <FocusableSpan fn={handleClick}>
           <IoIosChatbubbles size={20} />
@@ -92,6 +97,7 @@ function CreateMessageButton({ user }: { user: UserInChat }) {
 }
 
 function AliasUpdateModal({ user }: { user: UserInChat }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { chatId } = useChatContext();
   const [text, setText] = useState(user.alias);
@@ -129,7 +135,7 @@ function AliasUpdateModal({ user }: { user: UserInChat }) {
 
   return (
     <AlertDialog open={isOpen}>
-      <Tooltip content="Update alias">
+      <Tooltip content={t("chats.settings.users.actions.update-alias.tooltip")}>
         <span className="aspect-square rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
           <FocusableSpan fn={() => setIsOpen(true)}>
             <MdEdit size={20} />
@@ -139,27 +145,31 @@ function AliasUpdateModal({ user }: { user: UserInChat }) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Update alias for {createFullName(user)}
+            {t("chats.settings.update-alias-dialog.title", {
+              name: createFullName(user),
+            })}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            You can update the alias for this user. This alias will be displayed
-            in place of their full name in the chat. Please confirm the new
-            alias below. Leave it blank to remove the alias.
+            {t("chats.settings.update-alias-dialog.description")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div>
           <Input
             value={text || ""}
-            placeholder="Create alias"
+            placeholder={t(
+              "chats.settings.update-alias-dialog.input.placeholder"
+            )}
             onChange={handleChange}
             className="text-sm"
           />
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={() => setIsOpen(false)}>
-            Cancel
+            {t("chats.settings.update-alias-dialog.cancel")}
           </AlertDialogCancel>
-          <AlertDialogAction onClick={handleClick}>Save</AlertDialogAction>
+          <AlertDialogAction onClick={handleClick}>
+            {t("chats.settings.update-alias-dialog.confirm")}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -2,7 +2,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAppContext } from "@/contexts/AppProvider";
 import { ROUTES } from "@/lib/routes";
 import { AuthService } from "@/services/Auth.service";
-import { loginFormSchema, LoginFormType } from "@/validators/auth.validators";
+import {
+  useLoginFormSchema,
+  LoginFormType,
+} from "@/validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import {
@@ -11,6 +14,7 @@ import {
   UseFormRegister,
   useForm,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 type LoginFormEntries = {
@@ -28,9 +32,11 @@ export type useLoginFormValue = {
 };
 
 export default function useLoginForm(): useLoginFormValue {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { setUser } = useAppContext();
+  const loginFormSchema = useLoginFormSchema();
   const {
     register,
     handleSubmit,
@@ -47,7 +53,7 @@ export default function useLoginForm(): useLoginFormValue {
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
-          title: "Cannot login.",
+          title: t("login.error.toast.title"),
           description: e.response?.data.message,
           variant: "destructive",
         });

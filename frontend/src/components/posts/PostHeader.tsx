@@ -3,15 +3,24 @@ import { timeDifference } from "@/utils/timeDifference";
 import Avatar from "../common/Avatar";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { getInitials } from "@/utils/getInitials";
+import { createFullName } from "@/utils/createFullName";
+import { useTranslation } from "react-i18next";
 
 export default function PostHeader({ post }: { post: Post }) {
+  const { t } = useTranslation();
+
   const getTimeText = (): string => {
     const timeDiff = timeDifference(post.createdAt);
 
-    if (timeDiff.days) return `${timeDiff.days} days ago`;
-    else if (timeDiff.hours) return `${timeDiff.hours} hours ago`;
-    else if (timeDiff.minutes > 5) return `${timeDiff.minutes} minutes ago`;
-    else return "Just now";
+    if (timeDiff.days) {
+      return t("common.time.days", { count: timeDiff.days });
+    } else if (timeDiff.hours) {
+      return t("common.time.hours", { count: timeDiff.hours });
+    } else if (timeDiff.minutes > 5) {
+      return t("common.time.minutes", { count: timeDiff.minutes });
+    } else {
+      return t("common.time.now");
+    }
   };
 
   const { author } = post;
@@ -24,9 +33,7 @@ export default function PostHeader({ post }: { post: Post }) {
         alt={getInitials(author)}
       />
       <div>
-        <h2 className="text-lg font-semibold">
-          {author.firstName} {author.lastName}
-        </h2>
+        <h2 className="text-lg font-semibold">{createFullName(author)}</h2>
         <p className="text-md">{getTimeText()}</p>
       </div>
     </div>

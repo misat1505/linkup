@@ -8,12 +8,14 @@ import {
 } from "../ui/table";
 import { Friendship } from "@/types/Friendship";
 import FocusableSpan from "../common/FocusableSpan";
+import { useTranslation } from "react-i18next";
 
 type FriendsTableProps = {
   table: TableType<Friendship>;
 };
 
 export default function FriendsTable({ table }: FriendsTableProps) {
+  const { t } = useTranslation();
   const focusNavigationBar = () => {
     const navSearch = document.querySelector(
       "[data-testid=cy-nav-search-input]"
@@ -61,14 +63,16 @@ export default function FriendsTable({ table }: FriendsTableProps) {
               colSpan={table.getAllColumns().length}
               className="h-32 text-center"
             >
-              <h2 className="text-lg font-semibold">No results.</h2>
+              <h2 className="text-lg font-semibold">
+                {t("friends.no-result.title")}
+              </h2>
               <p className="text-muted-foreground">
-                Search for people using the{" "}
+                {t("friends.no-result.description")}{" "}
                 <FocusableSpan
                   fn={focusNavigationBar}
                   className="text-blue-500 underline hover:cursor-pointer"
                 >
-                  navigation bar
+                  {t("friends.no-result.link.text")}
                 </FocusableSpan>
                 .
               </p>

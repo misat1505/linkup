@@ -14,6 +14,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { chatFormSchema, ChatFormType } from "@/validators/chat.validators";
 import { ChatService } from "@/services/Chat.service";
 import { queryKeys } from "@/lib/queryKeys";
+import { useTranslation } from "react-i18next";
 
 export type PostChatFormEntries = {
   content: string;
@@ -39,6 +40,7 @@ export type usePostChatFormValue = {
 export default function usePostChatForm(
   chatId: Chat["id"]
 ): usePostChatFormValue {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [response, setResponseInner] = useState<Message | null>(null);
   const { toast } = useToast();
@@ -66,12 +68,12 @@ export default function usePostChatForm(
       );
       setResponseInner(null);
       toast({
-        title: "Comment sent successfully.",
+        title: t("posts.comments.form.toasts.success.title"),
       });
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
-          title: "Cannot send a message.",
+          title: t("posts.comments.form.toasts.error.title"),
           description: e.response?.data.message,
           variant: "destructive",
         });

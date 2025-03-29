@@ -9,8 +9,10 @@ import ChatFooterProvider from "@/contexts/ChatFooterProvider";
 import ChatContent from "./ChatContent";
 import ChatFooter from "./ChatFooter";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export default function ChatGuard() {
+  const { t } = useTranslation();
   const { createChatTriggerRef } = useChatPageContext();
   const { chatId } = useParams();
 
@@ -20,16 +22,16 @@ export default function ChatGuard() {
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  bg-slate-100 p-8 dark:bg-slate-900 text-center shadow-lg">
           <BsChatLeftTextFill className="mx-auto h-64 w-64 text-muted-foreground" />
           <h2 className="my-4 text-center text-xl font-semibold">
-            No chat selected.
+            {t("chats.no-chat-selected.title")}
           </h2>
           <p className="max-w-64 text-muted-foreground text-sm text-center">
-            Select existing chat in the menu or
+            {t("chats.no-chat-selected.description")}
           </p>
           <Button
             onClick={() => createChatTriggerRef.current!.click()}
             className="mt-4 mx-auto"
           >
-            Create new chat
+            {t("chats.no-chat-selected.action")}
           </Button>
         </div>
       </div>
@@ -43,6 +45,7 @@ export default function ChatGuard() {
 }
 
 function Chat() {
+  const { t } = useTranslation();
   const { error, chatId } = useChatContext();
   const { chats } = useChatPageContext();
 
@@ -54,10 +57,10 @@ function Chat() {
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-100 p-8 text-center dark:bg-slate-900 shadow-lg">
           <BsChatLeftTextFill className="mx-auto h-64 w-64 text-red-500" />
           <h2 className="my-4 text-center text-xl font-semibold">
-            Chat unavailable.
+            {t("chats.chat-unavailable.title")}
           </h2>
           <p className="max-w-64 text-left text-muted-foreground text-sm">
-            Selected chat does not exist or is not available for you.
+            {t("chats.chat-unavailable.description")}
           </p>
           <Link
             className={cn(
@@ -66,7 +69,7 @@ function Chat() {
             )}
             to={ROUTES.CHATS.$path()}
           >
-            Close
+            {t("chats.chat-unavailable.action")}
           </Link>
         </div>
       </div>

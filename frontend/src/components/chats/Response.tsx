@@ -2,10 +2,12 @@ import { useAppContext } from "@/contexts/AppProvider";
 import { useChatContext } from "@/contexts/ChatProvider";
 import { Message } from "@/types/Message";
 import { createFullName } from "@/utils/createFullName";
+import { useTranslation } from "react-i18next";
 
 type ResponseProps = { message: Message["response"] };
 
 export default function Response({ message }: ResponseProps) {
+  const { t } = useTranslation();
   const { messageRefs } = useChatContext();
   const { user: me } = useAppContext();
 
@@ -14,11 +16,15 @@ export default function Response({ message }: ResponseProps) {
   const getText = () => {
     if (message.content) return message.content.substring(0, 20);
     if (me!.id === message.author.id)
-      return `You sent ${message.files.length} file(s).`;
+      return t("chats.message.reply.only-files", {
+        name: t("common.you"),
+        count: message.files.length,
+      });
 
-    return `${createFullName(message.author)} sent ${
-      message.files.length
-    } file(s).`;
+    return t("chats.message.reply.only-files", {
+      name: createFullName(message.author),
+      count: message.files.length,
+    });
   };
 
   const onclick = () => {

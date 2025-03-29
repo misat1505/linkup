@@ -1,8 +1,10 @@
 import { useSignupFormContext } from "@/contexts/SignupFormProvider";
 import { SignupFormType } from "@/validators/auth.validators";
 import FormField from "../common/forms/FormField";
+import { useTranslation } from "react-i18next";
 
 export default function SignupFormFields() {
+  const { t } = useTranslation();
   const { register, errors } = useSignupFormContext();
 
   const renderFormField = (
@@ -21,11 +23,19 @@ export default function SignupFormFields() {
 
   return (
     <div>
-      {renderFormField("firstName", "First name")}
-      {renderFormField("lastName", "Last name")}
-      {renderFormField("login", "Login")}
-      {renderFormField("password", "Password", "password")}
-      {renderFormField("confirmPassword", "Confirm Password", "password")}
+      {renderFormField("firstName", t("signup.form.placeholders.firstname"))}
+      {renderFormField("lastName", t("signup.form.placeholders.lastname"))}
+      {renderFormField("login", t("signup.form.placeholders.login"))}
+      {renderFormField(
+        "password",
+        t("signup.form.placeholders.password"),
+        "password"
+      )}
+      {renderFormField(
+        "confirmPassword",
+        t("signup.form.placeholders.confirm-password"),
+        "password"
+      )}
     </div>
   );
 }

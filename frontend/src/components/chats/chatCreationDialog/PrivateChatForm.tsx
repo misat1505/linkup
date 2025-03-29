@@ -10,8 +10,10 @@ import { Chat } from "@/types/Chat";
 import { queryKeys } from "@/lib/queryKeys";
 import { ROUTES } from "@/lib/routes";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 
 export default function PrivateChatForm() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [text, setText] = useState("");
@@ -34,7 +36,7 @@ export default function PrivateChatForm() {
   return (
     <div className="mx-auto max-w-72">
       <Input
-        placeholder="Search for people..."
+        placeholder={t("chats.create-new-chat.private.form.input.placeholder")}
         className="mb-2 mt-4"
         onChange={(e) => setText(e.currentTarget.value)}
       />

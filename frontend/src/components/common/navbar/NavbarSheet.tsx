@@ -32,15 +32,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useTranslation } from "react-i18next";
+import { createFullName } from "@/utils/createFullName";
 
 export default function NavbarSheet() {
+  const { t } = useTranslation();
   const { user } = useAppContext();
   const isLoggedIn = !!user;
 
   return (
     <Sheet>
       <SheetTrigger data-testid="cy-nav-trigger">
-        <Tooltip content="Show actions">
+        <Tooltip content={t("common.navbar.sheet.trigger.tooltip")}>
           <span>
             <NavbarAvatar />
           </span>
@@ -58,33 +61,34 @@ type ButtonsType = {
 };
 
 function LoggedInSheet() {
+  const { t } = useTranslation();
   const { user } = useAppContext();
   const navigate = useNavigate();
 
   const buttons: ButtonsType[] = [
     {
       icon: <FaHome size={20} className="text-blue-500" />,
-      text: "Home",
+      text: t("common.navbar.sheet.items.home"),
       onClick: () => navigate(ROUTES.HOME.$path()),
     },
     {
       icon: <PiChatsCircleFill size={20} className="text-blue-500" />,
-      text: "Chats",
+      text: t("common.navbar.sheet.items.chats"),
       onClick: () => navigate(ROUTES.CHATS.$path()),
     },
     {
       icon: <IoIosSettings size={20} className="text-blue-500" />,
-      text: "Settings",
+      text: t("common.navbar.sheet.items.settings"),
       onClick: () => navigate(ROUTES.SETTINGS.$path()),
     },
     {
       icon: <MdArticle size={20} className="text-blue-500" />,
-      text: "Posts",
+      text: t("common.navbar.sheet.items.posts"),
       onClick: () => navigate(ROUTES.POSTS.$path()),
     },
     {
       icon: <FaUserFriends size={20} className="text-blue-500" />,
-      text: "Friends",
+      text: t("common.navbar.sheet.items.friends"),
       onClick: () => navigate(ROUTES.FRIENDS.$path()),
     },
   ];
@@ -93,7 +97,9 @@ function LoggedInSheet() {
     <SheetContent>
       <SheetHeader>
         <SheetTitle>
-          Welcome {user?.firstName} {user?.lastName}!
+          {t("common.navbar.sheet.title.logged-in", {
+            fullName: createFullName(user!),
+          })}
         </SheetTitle>
       </SheetHeader>
       <SheetDescription className="flex h-full flex-col justify-between pb-8 pt-4 text-sm text-muted-foreground">
@@ -114,17 +120,18 @@ function LoggedInSheet() {
 }
 
 function GuestSheet() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const buttons: ButtonsType[] = [
     {
       icon: <CiLogin size={20} className="text-emerald-500" />,
-      text: "Login",
+      text: t("common.navbar.sheet.items.login"),
       onClick: () => navigate(ROUTES.LOGIN.$path()),
     },
     {
       icon: <MdOutlineSupervisorAccount size={20} />,
-      text: "Create new account",
+      text: t("common.navbar.sheet.items.signup"),
       onClick: () => navigate(ROUTES.SIGNUP.$path()),
     },
   ];
@@ -132,7 +139,7 @@ function GuestSheet() {
   return (
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Welcome Guest!</SheetTitle>
+        <SheetTitle>{t("common.navbar.sheet.title.anonymous")}</SheetTitle>
       </SheetHeader>
       <SheetDescription className="flex h-full flex-col justify-end pb-8 pt-4">
         {buttons.map((button, idx) => (
@@ -176,6 +183,7 @@ const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
 );
 
 function LogoutDialog() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { setUser } = useAppContext();
   const queryClient = useQueryClient();
@@ -188,7 +196,7 @@ function LogoutDialog() {
   };
 
   const button: ButtonsType = {
-    text: "Logout",
+    text: t("common.navbar.sheet.items.logout.trigger"),
     icon: <CiLogout size={20} className="text-red-500" />,
     onClick: () => {},
   };
@@ -209,16 +217,19 @@ function LogoutDialog() {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t("common.navbar.sheet.items.logout.dialog.title")}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to log out? This will end your session, and
-            you will need to log in again to access your account.
+            {t("common.navbar.sheet.items.logout.dialog.description")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>
+            {t("common.navbar.sheet.items.logout.dialog.cancel")}
+          </AlertDialogCancel>
           <AlertDialogAction onClick={() => handleLogout()}>
-            Yes, logout
+            {t("common.navbar.sheet.items.logout.dialog.confirm")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

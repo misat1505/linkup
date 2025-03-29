@@ -16,8 +16,10 @@ import { createFullName } from "@/utils/createFullName";
 import Avatar from "../common/Avatar";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { getInitials } from "@/utils/getInitials";
+import { useTranslation } from "react-i18next";
 
 export default function Message({ message }: { message: MessageType }) {
+  const { t } = useTranslation();
   const { user: me } = useAppContext();
   const { messages } = useChatContext();
   if (!me || !messages) throw new Error();
@@ -30,19 +32,21 @@ export default function Message({ message }: { message: MessageType }) {
     const diffWithNow = timeDifference(message.createdAt);
 
     if (diffWithNow.days === 0)
-      return message.createdAt.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+      return message.createdAt.toLocaleTimeString(
+        t("chats.date-seperator.locale"),
+        JSON.parse(t("chats.date-seperator.options.short"))
+      );
 
     if (diffWithNow.days < 7)
-      return message.createdAt.toLocaleDateString("en-US", {
-        weekday: "long",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+      return message.createdAt.toLocaleDateString(
+        t("chats.date-seperator.locale"),
+        JSON.parse(t("chats.date-seperator.options.long"))
+      );
 
-    return message.createdAt.toLocaleDateString("en-US", tooltipDateFormat);
+    return message.createdAt.toLocaleDateString(
+      t("chats.date-seperator.locale"),
+      JSON.parse(t("chats.date-seperator.options.message-tooltip"))
+    );
   };
 
   const getDateText = (): string => {
@@ -74,21 +78,18 @@ export default function Message({ message }: { message: MessageType }) {
   );
 }
 
-const tooltipDateFormat = {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-} as const;
-
 function MyMessage({ message }: { message: MessageType }) {
+  const { t } = useTranslation();
   const { messageRefs } = useChatContext();
 
-  const tooltipText = `${message.createdAt.toLocaleDateString(
-    "en-US",
-    tooltipDateFormat
-  )} by You`;
+  const date = message.createdAt.toLocaleDateString(
+    t("chats.date-seperator.locale"),
+    JSON.parse(t("chats.date-seperator.options.message-tooltip"))
+  );
+
+  const tooltipText = t("chats.message.tooltip.mine", {
+    date,
+  });
 
   return (
     <div className="group flex items-center justify-end gap-x-4">
@@ -130,6 +131,7 @@ function MyMessage({ message }: { message: MessageType }) {
 }
 
 function ForeignMessage({ message }: { message: MessageType }) {
+  const { t } = useTranslation();
   const { user: me } = useAppContext();
   const { messages, messageRefs, chat } = useChatContext();
   const isDisplayingAvatar = isShowingAvatar(messages!, message);
@@ -138,12 +140,17 @@ function ForeignMessage({ message }: { message: MessageType }) {
 
   const utils = new ChatUtils(chat, me);
   const utilsText = utils.getDisplayNameById(message.author.id);
-  const authorDispayName = utilsText || createFullName(message.author);
+  const authorDisplayName = utilsText || createFullName(message.author);
 
-  const tooltipText = `${message.createdAt.toLocaleDateString(
-    "en-US",
-    tooltipDateFormat
-  )} by ${authorDispayName}`;
+  const date = message.createdAt.toLocaleDateString(
+    t("chats.date-seperator.locale"),
+    JSON.parse(t("chats.date-seperator.options.message-tooltip"))
+  );
+
+  const tooltipText = t("chats.message.tooltip.foreign", {
+    date,
+    name: authorDisplayName,
+  });
 
   return (
     <div

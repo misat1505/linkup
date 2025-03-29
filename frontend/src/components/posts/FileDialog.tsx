@@ -31,6 +31,7 @@ import Image from "../common/Image";
 import ProtectedVideo from "../common/ProtectedVideo";
 import Tooltip from "../common/Tooltip";
 import { useToast } from "../ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 export default function FileDialog({ content }: { content?: Post["content"] }) {
   function extractUrlsFromMarkdown(content: Post["content"]): string[] {
@@ -74,6 +75,8 @@ function FileDialogContent({
 }: {
   previousURLs: string[] | null;
 }) {
+  const { t } = useTranslation();
+
   const getValidURLs = (): string[] | null => {
     if (!previousURLs) return null;
     const validURLs: string[] = [];
@@ -96,7 +99,7 @@ function FileDialogContent({
 
   if (isLoading) return <Loading />;
 
-  if (!files) return <div>No files in cache.</div>;
+  if (!files) return <div>{t("editor.file-dialog.cache-empty")}</div>;
 
   const isImage = (filename: string): boolean => {
     const path = filename.split("?")[0];
@@ -112,15 +115,15 @@ function FileDialogContent({
   return (
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Browse files</DialogTitle>
+        <DialogTitle>{t("editor.file-dialog.title")}</DialogTitle>
         <DialogDescription>
-          Copy urls from files from your cache to input them to your post.
+          {t("editor.file-dialog.description")}
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
         {validPreviousURLs && (
           <>
-            <h2>Used files</h2>
+            <h2>{t("editor.file-dialog.used-files")}</h2>
 
             <div className="flex flex-wrap items-center gap-2">
               {validPreviousURLs.map((file, idx) => (
@@ -145,7 +148,7 @@ function FileDialogContent({
           </>
         )}
         <div className="flex items-center gap-x-2">
-          <h2>Cache</h2>
+          <h2>{t("editor.file-dialog.cache")}</h2>
           <CacheFileUploader />
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -172,6 +175,7 @@ function FileDialogContent({
 }
 
 function FileDialogImageButtons({ file }: { file: string }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const deleteFile = async () => {
@@ -190,7 +194,9 @@ function FileDialogImageButtons({ file }: { file: string }) {
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <button className="border-none">
-            <Tooltip content="Remove file">
+            <Tooltip
+              content={t("editor.file-dialog.item.remove.trigger.tooltip")}
+            >
               <span>
                 <AiFillDelete
                   className="stroke-black text-white transition-all hover:scale-110 hover:cursor-pointer"
@@ -204,15 +210,20 @@ function FileDialogImageButtons({ file }: { file: string }) {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t("editor.file-dialog.item.remove.dialog.title")}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              file from our servers.
+              {t("editor.file-dialog.item.remove.dialog.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={deleteFile}>Continue</AlertDialogAction>
+            <AlertDialogCancel>
+              {t("editor.file-dialog.item.remove.dialog.cancel")}
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={deleteFile}>
+              {t("editor.file-dialog.item.remove.dialog.confirm")}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -221,7 +232,9 @@ function FileDialogImageButtons({ file }: { file: string }) {
 }
 
 function CopyElementToClipboardButton({ file }: { file: string }) {
+  const { t } = useTranslation();
   const { toast } = useToast();
+
   const copyFileURLToClipboard = async () => {
     const noQuery = file.split("?")[0];
     const splitted = noQuery.split(".");
@@ -238,13 +251,13 @@ function CopyElementToClipboardButton({ file }: { file: string }) {
       );
 
     toast({
-      title: "Element copied to clipboard.",
+      title: t("editor.file-dialog.item.copy-to-clipboard.toast"),
     });
   };
 
   return (
     <button onClick={copyFileURLToClipboard}>
-      <Tooltip content="Copy element">
+      <Tooltip content={t("editor.file-dialog.item.copy-to-clipboard.tooltip")}>
         <span>
           <FaCopy
             className="stroke-black text-white transition-all hover:scale-110 hover:cursor-pointer"
@@ -257,6 +270,7 @@ function CopyElementToClipboardButton({ file }: { file: string }) {
 }
 
 function CacheFileUploader() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -281,7 +295,7 @@ function CacheFileUploader() {
         accept=".jpg, .png, .webp, .mp4"
         ref={inputRef}
       />
-      <Tooltip content="Upload file">
+      <Tooltip content={t("editor.file-dialog.file-upload.tooltip")}>
         <span>
           <IoMdAdd
             onClick={() => inputRef.current?.click()}

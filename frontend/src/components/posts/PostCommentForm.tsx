@@ -8,8 +8,11 @@ import { ClipLoader } from "react-spinners";
 import Tooltip from "../common/Tooltip";
 import { useAppContext } from "@/contexts/AppProvider";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
+import { createFullName } from "@/utils/createFullName";
 
 export default function PostCommentForm() {
+  const { t } = useTranslation();
   const { register, submitForm, response } = usePostCommentsSectionContext();
 
   return (
@@ -23,7 +26,10 @@ export default function PostCommentForm() {
         <FileDisplayer />
         <div className="flex items-center gap-x-2 pt-2">
           <FileAdder />
-          <Input placeholder="Leave your comment..." {...register("content")} />
+          <Input
+            placeholder={t("posts.comments.form.inputs.text.placeholder")}
+            {...register("content")}
+          />
           <SubmitFormButton />
         </div>
       </form>
@@ -32,6 +38,7 @@ export default function PostCommentForm() {
 }
 
 function SubmitFormButton() {
+  const { t } = useTranslation();
   const { isSubmitting } = usePostCommentsSectionContext();
 
   const isDisabled = isSubmitting;
@@ -45,7 +52,7 @@ function SubmitFormButton() {
       {isSubmitting ? (
         <ClipLoader size={20} color="grey" />
       ) : (
-        <Tooltip content="Send message">
+        <Tooltip content={t("posts.comments.form.submit.tooltip")}>
           <span>
             <IoSend
               className={cn("text-blue-500 transition-all", {
@@ -61,12 +68,16 @@ function SubmitFormButton() {
 }
 
 function ResponseDisplayer() {
+  const { t } = useTranslation();
   const { user: me } = useAppContext();
   const { response, setResponse } = usePostCommentsSectionContext();
 
   const getReplyText = (): string => {
-    if (response!.author.id === me!.id) return "Replying to yourself.";
-    return `Replying to ${response?.author.firstName} ${response?.author.lastName}.`;
+    if (response!.author.id === me!.id)
+      return t("posts.comments.form.reply.to.me");
+    return t("posts.comments.form.reply.to.other", {
+      fullName: createFullName(response!.author),
+    });
   };
 
   return (
@@ -75,7 +86,7 @@ function ResponseDisplayer() {
         <h2 className="my-1 font-semibold">{getReplyText()}</h2>
         <p className="overflow-hidden text-nowrap">{response?.content}</p>
       </div>
-      <Tooltip content="Remove reply">
+      <Tooltip content={t("posts.comments.form.reply.remove.tooltip")}>
         <button onClick={() => setResponse(null)}>
           <MdCancel className="transition-all hover:scale-110" />
         </button>
@@ -85,6 +96,7 @@ function ResponseDisplayer() {
 }
 
 function FileAdder() {
+  const { t } = useTranslation();
   const { register, appendFiles } = usePostCommentsSectionContext();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -111,7 +123,7 @@ function FileAdder() {
         className="hidden"
       />
       <button onClick={clickInput}>
-        <Tooltip content="Insert file">
+        <Tooltip content={t("posts.comments.form.inputs.file.tooltip")}>
           <span>
             <FaFileAlt className="text-blue-500 transition-all hover:scale-125" />
           </span>
@@ -122,6 +134,7 @@ function FileAdder() {
 }
 
 function FileDisplayer() {
+  const { t } = useTranslation();
   const { files, removeFile } = usePostCommentsSectionContext();
   if (files === undefined || files.length === 0) return null;
 
@@ -140,7 +153,7 @@ function FileDisplayer() {
         >
           <FileDisplayerItem file={file} />
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100">
-            Remove File
+            {t("posts.comments.form.inputs.file.remove")}
           </div>
         </button>
       ))}

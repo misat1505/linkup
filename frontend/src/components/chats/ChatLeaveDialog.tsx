@@ -19,8 +19,10 @@ import {
 } from "../ui/alert-dialog";
 import Tooltip from "../common/Tooltip";
 import FocusableSpan from "../common/FocusableSpan";
+import { useTranslation } from "react-i18next";
 
 export default function ChatLeaveDialog() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { chatId } = useChatContext();
@@ -45,7 +47,7 @@ export default function ChatLeaveDialog() {
 
   return (
     <AlertDialog open={isOpen}>
-      <Tooltip content="Leave chat">
+      <Tooltip content={t("chats.leave.trigger.tooltip")}>
         <span className="aspect-square text-red-500 transition-all hover:scale-125 hover:cursor-pointer">
           <FocusableSpan fn={() => setIsOpen(true)}>
             <TbLogout2 size={20} />
@@ -54,19 +56,19 @@ export default function ChatLeaveDialog() {
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Leave chat</AlertDialogTitle>
+          <AlertDialogTitle>{t("chats.leave.dialog.title")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to leave this chat? By leaving, you will no
-            longer have access to the ongoing conversation. If you’re sure about
-            your decision, please confirm below.
+            {t("chats.leave.dialog.description")}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
           <AlertDialogCancel onClick={() => setIsOpen(false)}>
-            Cancel
+            {t("chats.leave.dialog.cancel")}
           </AlertDialogCancel>
-          <AlertDialogAction onClick={handleClick}>Leave</AlertDialogAction>
+          <AlertDialogAction onClick={handleClick}>
+            {t("chats.leave.dialog.confirm")}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
