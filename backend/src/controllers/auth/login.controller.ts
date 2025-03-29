@@ -70,7 +70,7 @@ export const loginController = async (
     const user = await UserService.getUserByLogin(login);
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid login." });
+      return res.status(401).json({ message: req.t("invalid-login") });
     }
 
     const hashedPassword = Hasher.hash(password + user.salt);

@@ -11,6 +11,8 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./lib/swagger";
 import { prisma } from "./lib/Prisma";
 import expressStatusMonitor from "express-status-monitor";
+import i18next from "./i18n";
+import middleware from "i18next-http-middleware";
 
 const app = express();
 
@@ -29,6 +31,7 @@ app.use(corsMiddleware);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(middleware.handle(i18next));
 
 if (env.NODE_ENV === "development") {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
