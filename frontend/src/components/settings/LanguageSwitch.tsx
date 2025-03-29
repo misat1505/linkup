@@ -8,14 +8,11 @@ import {
 import { Button } from "../ui/button";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Flag from "react-world-flags";
+import { useLanguageContext } from "@/contexts/LanguageProvider";
 
 export default function LanguageSwitch() {
+  const { changeLanguage } = useLanguageContext();
   const { i18n } = useTranslation();
-
-  const changeLanguage = (lng: string) => {
-    localStorage.setItem("lang", lng);
-    i18n.changeLanguage(lng);
-  };
 
   const languages: Language[] = [
     {
