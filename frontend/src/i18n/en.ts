@@ -502,6 +502,31 @@ export const en: { translation: Translation } = {
           title: "Cannot update post.",
         },
       },
+      "file-dialog": {
+        title: "Browse files",
+        description:
+          "Copy urls from files from your cache to input them to your post.",
+        "cache-empty": "No files in cache.",
+        "used-files": "Used files",
+        "file-upload": { tooltip: "Upload file" },
+        cache: "Cache",
+        item: {
+          "copy-to-clipboard": {
+            tooltip: "Copy element",
+            toast: "Element copied to clipboard.",
+          },
+          remove: {
+            trigger: { tooltip: "Remove file" },
+            dialog: {
+              title: "Are you absolutely sure?",
+              description:
+                "This action cannot be undone. This will permanently delete your file from our servers.",
+              cancel: "Cancel",
+              confirm: "Continue",
+            },
+          },
+        },
+      },
     },
   },
 };

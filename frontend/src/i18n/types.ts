@@ -494,4 +494,27 @@ type EditorTranslations = {
       title: string;
     };
   };
+  "file-dialog": {
+    title: string;
+    description: string;
+    "cache-empty": string;
+    "used-files": string;
+    "file-upload": { tooltip: string };
+    cache: string;
+    item: {
+      "copy-to-clipboard": {
+        tooltip: string;
+        toast: string;
+      };
+      remove: {
+        trigger: { tooltip: string };
+        dialog: {
+          title: string;
+          description: string;
+          cancel: string;
+          confirm: string;
+        };
+      };
+    };
+  };
 };

@@ -508,6 +508,31 @@ export const pl: { translation: Translation } = {
           title: "Nie można zaktualizować posta.",
         },
       },
+      "file-dialog": {
+        title: "Przeglądaj pliki",
+        description:
+          "Skopiuj adresy URL plików z pamięci podręcznej, aby dodać je do swojego posta.",
+        "cache-empty": "Brak plików w pamięci podręcznej.",
+        "used-files": "Użyte pliki",
+        "file-upload": { tooltip: "Prześlij plik" },
+        cache: "Pamięć podręczna",
+        item: {
+          "copy-to-clipboard": {
+            tooltip: "Kopiuj element",
+            toast: "Element skopiowany do schowka.",
+          },
+          remove: {
+            trigger: { tooltip: "Usuń plik" },
+            dialog: {
+              title: "Czy na pewno chcesz to zrobić?",
+              description:
+                "Tej operacji nie można cofnąć. Spowoduje to trwałe usunięcie pliku z naszych serwerów.",
+              cancel: "Anuluj",
+              confirm: "Kontynuuj",
+            },
+          },
+        },
+      },
     },
   },
 };
