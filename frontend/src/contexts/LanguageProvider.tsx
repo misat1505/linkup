@@ -34,7 +34,7 @@ const LanguageProvider = ({ children }: LanguageContextProps) => {
       return module.translation;
     } catch (error) {
       console.error(`Error loading language file for ${lng}:`, error);
-      return {};
+      return loadLanguage("en");
     }
   };
 
