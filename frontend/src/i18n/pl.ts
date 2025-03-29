@@ -493,5 +493,21 @@ export const pl: { translation: Translation } = {
         },
       },
     },
+    editor: {
+      toasts: {
+        "created-successfully": {
+          title: "Post został pomyślnie utworzony.",
+        },
+        "updated-successfully": {
+          title: "Post został pomyślnie zaktualizowany.",
+        },
+        "create-error": {
+          title: "Nie można utworzyć posta.",
+        },
+        "update-error": {
+          title: "Nie można zaktualizować posta.",
+        },
+      },
+    },
   },
 };

@@ -4,6 +4,7 @@ export type Translation = {
   settings: SettingsTranslations;
   home: HomeTranslations;
   posts: PostsTranslations;
+  editor: EditorTranslations;
   friends: FriendsTranslations;
   chats: ChatsTranslations;
   common: {
@@ -474,6 +475,23 @@ type ChatsTranslations = {
           confirm: string;
         };
       };
+    };
+  };
+};
+
+type EditorTranslations = {
+  toasts: {
+    "created-successfully": {
+      title: string;
+    };
+    "updated-successfully": {
+      title: string;
+    };
+    "create-error": {
+      title: string;
+    };
+    "update-error": {
+      title: string;
     };
   };
 };

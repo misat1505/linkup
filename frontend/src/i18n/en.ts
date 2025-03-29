@@ -487,5 +487,21 @@ export const en: { translation: Translation } = {
         },
       },
     },
+    editor: {
+      toasts: {
+        "created-successfully": {
+          title: "Post created successfully.",
+        },
+        "updated-successfully": {
+          title: "Post updated successfully.",
+        },
+        "create-error": {
+          title: "Cannot create post.",
+        },
+        "update-error": {
+          title: "Cannot update post.",
+        },
+      },
+    },
   },
 };

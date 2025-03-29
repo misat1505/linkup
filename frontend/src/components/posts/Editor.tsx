@@ -9,8 +9,10 @@ import { Post } from "@/types/Post";
 import { ROUTES } from "@/lib/routes";
 import FileDialog from "./FileDialog";
 import { markdownPreviewOptions } from "@/utils/markdownPreviewOptions";
+import { useTranslation } from "react-i18next";
 
 export default function Editor() {
+  const { t } = useTranslation();
   const { markdown, handleSafeChange, handleSave, variant } =
     useEditorContext();
   const { toast } = useToast();
@@ -22,11 +24,13 @@ export default function Editor() {
 
   const successText =
     variant === "new"
-      ? "Post created successfully."
-      : "Post updated successfully.";
+      ? t("editor.toasts.created-successfully.title")
+      : t("editor.toasts.updated-successfully.title");
 
   const failureText =
-    variant === "new" ? "Cannot create post." : "Cannot update post.";
+    variant === "new"
+      ? t("editor.toasts.create-error.title")
+      : t("editor.toasts.update-error.title");
 
   const customExtraCommands: ICommand[] = [
     {
