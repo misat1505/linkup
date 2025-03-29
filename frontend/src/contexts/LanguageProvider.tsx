@@ -30,8 +30,8 @@ const LanguageProvider = ({ children }: LanguageContextProps) => {
 
   const loadLanguage = async (lng: string) => {
     try {
-      const module = await import(`../i18n/${lng}.ts`);
-      return module[lng].translation;
+      const module = await import(`../i18n/locales/${lng}.json`);
+      return module.translation;
     } catch (error) {
       console.error(`Error loading language file for ${lng}:`, error);
       return {};
