@@ -15,6 +15,8 @@ import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { env } from "../../src/config/env";
 import { deleteFromCache } from "../../src/controllers/file/deleteFromCache.controller";
 import fileStorage from "../../src/lib/FileStorage";
+import i18next from "../../src/i18n";
+import middleware from "i18next-http-middleware";
 
 jest.mock("../../src/services/FileService");
 jest.mock("../../src/lib/FileStorage");
@@ -25,6 +27,7 @@ jest.mock("../../src/lib/FileStorage");
 
 const app = express();
 app.use(express.json());
+app.use(middleware.handle(i18next));
 app.post("/cache", upload.single("file"), authorize, insertToCache);
 app.get("/cache", getCache);
 app.delete("/cache/:filename", deleteFromCache);

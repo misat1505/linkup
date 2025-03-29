@@ -78,5 +78,31 @@
         "user-not-in-chat": "This user doesn't belong to this chat."
       }
     }
+  },
+  "files": {
+    "controllers": {
+      "delete-from-cache": {
+        "success": "File deleted successfully.",
+        "failure": "Cannot delete file from cache."
+      },
+      "get-cache": {
+        "failure": "Cannot read cache."
+      },
+      "get-file": {
+        "failure": "Cannot fetch file.",
+        "default-error-message": "Query failed",
+        "not-found": "File not found.",
+        "wrong-filter": "Have to apply one of the filters: ",
+        "bad-chat": "Chat has to be a string.",
+        "bad-post": "Post has to be a string.",
+        "avatar-not-found": "Cannot find avatar of this name.",
+        "group-photo-not-found": "Cannot find chat photo of this name."
+      },
+      "insert-to-cache": {
+        "failure": "Cannot insert to cache.",
+        "no-file": "Attach a file to upload it.",
+        "limit-reached": "Cache limit reached. Maximum number of files in cache: {{count}}"
+      }
+    }
   }
 }

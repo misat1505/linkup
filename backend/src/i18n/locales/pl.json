@@ -78,5 +78,31 @@
         "user-not-in-chat": "Ten użytkownik nie należy do tego czatu."
       }
     }
+  },
+  "files": {
+    "controllers": {
+      "delete-from-cache": {
+        "success": "Plik został pomyślnie usunięty.",
+        "failure": "Nie można usunąć pliku z pamięci podręcznej."
+      },
+      "get-cache": {
+        "failure": "Nie można odczytać pamięci podręcznej."
+      },
+      "get-file": {
+        "failure": "Nie można pobrać pliku.",
+        "default-error-message": "Zapytanie nie powiodło się.",
+        "not-found": "Plik nie został znaleziony.",
+        "wrong-filter": "Należy zastosować jeden z filtrów: ",
+        "bad-chat": "Czat musi być ciągiem znaków.",
+        "bad-post": "Post musi być ciągiem znaków.",
+        "avatar-not-found": "Nie można znaleźć awatara o tej nazwie.",
+        "group-photo-not-found": "Nie można znaleźć zdjęcia czatu o tej nazwie."
+      },
+      "insert-to-cache": {
+        "failure": "Nie można dodać do pamięci podręcznej.",
+        "no-file": "Dołącz plik, aby go przesłać.",
+        "limit-reached": "Osiągnięto limit pamięci podręcznej. Maksymalna liczba plików w pamięci podręcznej: {{count}}"
+      }
+    }
   }
 }

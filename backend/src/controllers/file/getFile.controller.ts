@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import path from "path";
-import fs from "fs";
 import { FileService } from "../../services/FileService";
 import fileStorage from "../../lib/FileStorage";
 
@@ -9,11 +7,11 @@ type Filter = "avatar" | "chat-message" | "chat-photo" | "cache" | "post";
 const filterArray = ["avatar", "chat-message", "chat-photo", "cache", "post"];
 
 const sendFileBuilder =
-  (filename: string, res: Response) =>
+  (filename: string, req: Request, res: Response) =>
   async (
     fn: () => Promise<boolean>,
 
-    errorMessage = "Query failed"
+    errorMessage = req.t("files.controllers.get-file.default-error-message")
   ) => {
     const result = await fn();
 
@@ -23,7 +21,9 @@ const sendFileBuilder =
       const url = await fileStorage.getSignedUrl(filename);
       return res.status(200).json({ url });
     } catch (e) {
-      return res.status(404).json({ message: "File not found." });
+      return res
+        .status(404)
+        .json({ message: req.t("files.controllers.get-file.not-found") });
     }
   };
 
@@ -101,37 +101,43 @@ export const getFileController = async (
 
     if (!filterArray.includes(filter))
       return res.status(400).json({
-        message: "Have to apply one of the filters: " + filterArray.join(", "),
+        message:
+          req.t("files.controllers.get-file.wrong-filter") +
+          filterArray.join(", "),
       });
 
     if (
       ["chat-message", "chat-photo"].includes(filter) &&
       typeof chatId !== "string"
     )
-      return res.status(400).json({ message: "Chat has to be a string." });
+      return res
+        .status(400)
+        .json({ message: req.t("files.controllers.get-file.bad-chat") });
 
     if (filter === "post" && typeof postId !== "string")
-      return res.status(400).json({ message: "Post has to be a string." });
+      return res
+        .status(400)
+        .json({ message: req.t("files.controllers.get-file.bad-post") });
 
     const prefix = chatId ? `chats/${chatId}` : "avatars";
-    const sendFile = sendFileBuilder(`${prefix}/${filename}`, res);
+    const sendFile = sendFileBuilder(`${prefix}/${filename}`, req, res);
 
     if (filter === "avatar") {
       const response = await sendFile(
         () => FileService.isUserAvatar(filename),
-        "Cannot find avatar of this name."
+        req.t("files.controllers.get-file.avatar-not-found")
       );
       return response;
     } else if (filter === "chat-photo") {
       const response = await sendFile(
         () => FileService.isChatPhoto(filename, userId),
-        "Cannot find chat photo of this name."
+        req.t("files.controllers.get-file.group-photo-not-found")
       );
       return response;
     } else if (filter === "chat-message") {
       const response = await sendFile(
         () => FileService.isChatMessage(filename, userId),
-        "Cannot find chat photo of this name."
+        req.t("files.controllers.get-file.group-photo-not-found")
       );
       return response;
     } else if (filter === "cache") {
@@ -141,7 +147,9 @@ export const getFileController = async (
         );
         return res.status(200).json({ url });
       } catch (e) {
-        return res.status(404).json({ message: "File not found." });
+        return res
+          .status(404)
+          .json({ message: req.t("files.controllers.get-file.not-found") });
       }
     } else if (filter === "post") {
       try {
@@ -150,10 +158,12 @@ export const getFileController = async (
         );
         return res.status(200).json({ url });
       } catch (e) {
-        return res.status(404).json({ message: "File not found." });
+        return res
+          .status(404)
+          .json({ message: req.t("files.controllers.get-file.not-found") });
       }
     }
   } catch (e) {
-    next(new Error("Cannot fetch file."));
+    next(new Error(req.t("files.controllers.get-file.failure")));
   }
 };

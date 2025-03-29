@@ -13,6 +13,7 @@ type Unauthorized = {
 export type Translations = {
   auth: AuthTranslations;
   chats: ChatsTranslations;
+  files: FilesTranslations;
 };
 
 type AuthTranslations = {
@@ -70,5 +71,25 @@ type ChatsTranslations = {
       Unauthorized & {
         "user-not-in-chat": string;
       };
+  };
+};
+
+type FilesTranslations = {
+  controllers: {
+    "delete-from-cache": SuccessOrFailure;
+    "get-cache": Failure;
+    "get-file": Failure & {
+      "default-error-message": string;
+      "not-found": string;
+      "wrong-filter": string;
+      "bad-chat": string;
+      "bad-post": string;
+      "avatar-not-found": string;
+      "group-photo-not-found": string;
+    };
+    "insert-to-cache": Failure & {
+      "no-file": string;
+      "limit-reached": string;
+    };
   };
 };

@@ -65,13 +65,17 @@ export const insertToCache = async (
     const { userId } = req.body.token;
 
     if (!file)
-      return res.status(400).json({ message: "Attach a file to upload it." });
+      return res
+        .status(400)
+        .json({ message: req.t("files.controllers.insert-to-cache.no-file") });
 
     const cachePaths = await fileStorage.listFiles(`cache/${userId}`);
 
     if (cachePaths.length >= CACHE_CAPACITY) {
       return res.status(500).json({
-        message: `Cache limit reached. Maximum number of files in cache: ${CACHE_CAPACITY}`,
+        message: req.t("files.controllers.insert-to-cache.limit-reached", {
+          count: CACHE_CAPACITY,
+        }),
       });
     }
 
@@ -85,6 +89,6 @@ export const insertToCache = async (
 
     return res.status(201).json({ file: filename });
   } catch (e) {
-    next(new Error("Cannot insert to cache."));
+    next(new Error(req.t("files.controllers.insert-to-cache.failure")));
   }
 };
