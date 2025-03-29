@@ -3,9 +3,14 @@ import { Translation } from "./types";
 export const de: { translation: Translation } = {
   translation: {
     login: {
+      error: {
+        toast: {
+          title: "Anmeldung nicht möglich.",
+        },
+      },
       greeting: "Willkommen bei",
       slogan:
-        "Tauche ein in ein soziales Netzwerk, in dem du mit Freunden in Kontakt bleiben, deine Momente teilen und neue Gemeinschaften entdecken kannst – alles nur einen Klick entfernt.",
+        "Tauche ein in ein soziales Netzwerk, in dem du mit Freunden in Kontakt bleibst, deine Momente teilst und neue Gemeinschaften entdeckst – alles nur einen Klick entfernt.",
       form: {
         placeholders: {
           login: "Anmeldename",
@@ -34,7 +39,7 @@ export const de: { translation: Translation } = {
         2: "Netzwerk bei",
       },
       slogan:
-        "Starte noch heute deine Reise und entdecke eine Welt voller Verbindungen und Möglichkeiten.",
+        "Beginne noch heute deine Reise und entdecke eine Welt voller Verbindungen und Möglichkeiten.",
       form: {
         placeholders: {
           firstname: "Vorname",
@@ -60,6 +65,9 @@ export const de: { translation: Translation } = {
             min: "Das Passwort muss mindestens 5 Zeichen lang sein.",
             mismatch: "Die Passwörter stimmen nicht überein.",
           },
+          toast: {
+            title: "Neues Konto kann nicht erstellt werden.",
+          },
         },
         "remove-image": "Entfernen",
         submit: {
@@ -77,17 +85,17 @@ export const de: { translation: Translation } = {
           "Wähle deine bevorzugte Sprache für die Benutzeroberfläche.",
       },
       theme: {
-        title: "Design",
+        title: "Thema",
         description:
-          "Wechsle zwischen hellem und dunklem Design nach deinen Vorlieben.",
+          "Wechsle zwischen hellem und dunklem Thema nach deinen Vorlieben.",
       },
       tooltips: {
         title: "Tooltips",
         description:
-          "Aktiviere oder deaktiviere Tooltips für zusätzliche Hinweise in der App.",
+          "Aktiviere oder deaktiviere Tooltips für zusätzliche Anleitungen in der App.",
       },
       slogan:
-        "Passe deine Einstellungen an, um Link Up ganz nach deinem Geschmack zu gestalten. Wechsle Designs, ändere Vorlieben und bestimme, wie du mit der Plattform interagierst.",
+        "Passe deine Einstellungen an, um Link Up wirklich zu deinem zu machen. Schalte Themen um, ändere Vorlieben und gestalte die Art und Weise, wie du mit der Plattform interagierst.",
       header: {
         1: "Personalisiere",
         2: "Dein Erlebnis",
@@ -96,6 +104,11 @@ export const de: { translation: Translation } = {
         submit: {
           idle: "Aktualisieren",
           pending: "Wird aktualisiert...",
+        },
+        error: {
+          toast: {
+            title: "Einstellungen können nicht geändert werden.",
+          },
         },
       },
     },
@@ -122,7 +135,7 @@ export const de: { translation: Translation } = {
               dialog: {
                 title: "Bist du absolut sicher?",
                 description:
-                  "Möchtest du dich wirklich abmelden? Damit wird deine Sitzung beendet und du musst dich erneut anmelden, um auf dein Konto zuzugreifen.",
+                  "Bist du sicher, dass du dich abmelden möchtest? Dies beendet deine Sitzung, und du musst dich erneut anmelden, um auf dein Konto zuzugreifen.",
                 cancel: "Abbrechen",
                 confirm: "Ja, abmelden",
               },
@@ -156,7 +169,7 @@ export const de: { translation: Translation } = {
               "successfully-created": {
                 title: "Freundschaftsanfrage gesendet.",
                 description:
-                  "Die Freundschaftsanfrage wurde an {{fullName}} gesendet.",
+                  "Freundschaftsanfrage wurde an {{fullName}} gesendet.",
                 action: "Freunde anzeigen",
               },
             },
@@ -171,14 +184,14 @@ export const de: { translation: Translation } = {
         },
       },
       time: {
-        years: "vor {{count}} Jahren",
-        months: "vor {{count}} Monaten",
-        weeks: "vor {{count}} Wochen",
-        days: "vor {{count}} Tagen",
-        hours: "vor {{count}} Stunden",
-        minutes: "vor {{count}} Minuten",
+        years: "Vor {{count}} Jahren",
+        months: "Vor {{count}} Monaten",
+        weeks: "Vor {{count}} Wochen",
+        days: "Vor {{count}} Tagen",
+        hours: "Vor {{count}} Stunden",
+        minutes: "Vor {{count}} Minuten",
         now: "Gerade eben",
-        ago: "vor",
+        ago: "vorher",
       },
     },
     home: {
@@ -186,7 +199,7 @@ export const de: { translation: Translation } = {
         empty: {
           title: "Hier ist noch nichts",
           description:
-            "Starte die Unterhaltung! Teile deine Gedanken, indem du den ersten Beitrag erstellst.",
+            "Starte die Konversation! Teile deine Gedanken, indem du den ersten Beitrag erstellst.",
           action: "Beitrag schreiben",
         },
       },
@@ -205,7 +218,7 @@ export const de: { translation: Translation } = {
         dialog: {
           title: "Bist du absolut sicher?",
           description:
-            "Möchtest du diesen Beitrag wirklich löschen? Dadurch werden dein Beitrag, seine Kommentare und alle damit verbundenen Dateien gelöscht.",
+            "Bist du sicher, dass du diesen Beitrag löschen möchtest? Dies löscht deinen Beitrag, seine Kommentare und alle damit verbundenen Dateien.",
           cancel: "Abbrechen",
           confirm: "Ja, löschen",
         },
@@ -226,6 +239,10 @@ export const de: { translation: Translation } = {
           reduce: { tooltip: "Antworten schließen" },
         },
         form: {
+          toasts: {
+            success: { title: "Kommentar erfolgreich gesendet." },
+            error: { title: "Nachricht kann nicht gesendet werden." },
+          },
           inputs: {
             text: {
               placeholder: "Hinterlasse deinen Kommentar...",
@@ -266,7 +283,7 @@ export const de: { translation: Translation } = {
       },
       "no-result": {
         title: "Keine Ergebnisse.",
-        description: "Suche nach Personen über die",
+        description: "Suche nach Personen mit der",
         link: { text: "Navigationsleiste" },
       },
       cells: {
@@ -290,15 +307,24 @@ export const de: { translation: Translation } = {
           title: "Freundschaft gelöscht.",
           description: {
             accepted: "{{fullName}} ist nicht mehr dein Freund.",
-            "awaiting-me":
-              "Die Freundschaftsanfrage von {{fullName}} wurde abgelehnt.",
-            "awaiting-other":
-              "Die Freundschaftsanfrage an {{fullName}} wurde entfernt.",
+            "awaiting-me": "Freundschaftsanfrage von {{fullName}} abgelehnt.",
+            "awaiting-other": "Freundschaftsanfrage an {{fullName}} entfernt.",
           },
         },
       },
     },
     chats: {
+      sockets: {
+        errors: {
+          connection: {
+            toast: {
+              title: "Chatraum kann nicht beigetreten werden.",
+              description:
+                "Du kannst keine in Echtzeit gesendeten Nachrichten sehen. Versuche, die Seite neu zu laden.",
+            },
+          },
+        },
+      },
       "no-chats":
         "Noch keine Unterhaltungen. Starte einen Chat und verbinde dich mit anderen!",
       "no-chat-selected": {
@@ -324,7 +350,7 @@ export const de: { translation: Translation } = {
         dialog: {
           title: "Neuen Chat erstellen",
           description:
-            "Suche und lade andere Benutzer zu deinem neu erstellten Chat ein. Klicke auf den Benutzer, um ihn in den Chat einzuladen.",
+            "Suche und lade andere Benutzer in deinen neu erstellten Chat ein. Klicke auf den Benutzer, um ihn in den Chat einzuladen.",
         },
         tabs: {
           private: "Privat",
@@ -344,11 +370,19 @@ export const de: { translation: Translation } = {
               search: { placeholder: "Nach Personen suchen..." },
             },
           },
+          error: {
+            toast: { title: "Neuer Gruppenchat kann nicht erstellt werden." },
+          },
         },
-        "invited-users": " Eingeladene Personen",
+        "invited-users": "Eingeladene Personen",
         submit: "Chat erstellen",
       },
       form: {
+        error: {
+          toast: {
+            title: "Nachricht kann nicht gesendet werden.",
+          },
+        },
         inputs: {
           text: { placeholder: "Tippen..." },
           file: { tooltip: "Datei anhängen", remove: "Datei entfernen" },
@@ -397,7 +431,7 @@ export const de: { translation: Translation } = {
             title: "Erstelle deine Reaktion",
             "already-reacted":
               "Du hast bereits eine Reaktion für diese Nachricht erstellt.",
-            "not-available": "Reagieren ist momentan nicht verfügbar.",
+            "not-available": "Reagieren ist derzeit nicht verfügbar.",
             values: {
               happy: "glücklich",
               sad: "traurig",
@@ -423,7 +457,7 @@ export const de: { translation: Translation } = {
         dialog: {
           title: "Chat verlassen",
           description:
-            "Bist du sicher, dass du diesen Chat verlassen möchtest? Wenn du gehst, hast du keinen Zugriff mehr auf die laufende Unterhaltung. Bitte bestätige deine Entscheidung unten.",
+            "Bist du sicher, dass du diesen Chat verlassen möchtest? Wenn du gehst, hast du keinen Zugriff mehr auf die laufende Unterhaltung. Wenn du sicher bist, bestätige dies bitte unten.",
           cancel: "Abbrechen",
           confirm: "Verlassen",
         },
@@ -446,7 +480,7 @@ export const de: { translation: Translation } = {
           private:
             "Verwalte die Mitglieder dieses Chats, indem du siehst, wer aktuell an der Unterhaltung teilnimmt. Du kannst ihre Aliase nach Bedarf aktualisieren oder entfernen.",
           group:
-            "Verwalte die Mitglieder dieses Chats, indem du siehst, wer aktuell an der Unterhaltung teilnimmt. Du kannst ihre Aliase nach Bedarf aktualisieren oder entfernen. Außerdem kannst du neue Benutzer einladen, dem Chat beizutreten.",
+            "Verwalte die Mitglieder dieses Chats, indem du siehst, wer aktuell an der Unterhaltung teilnimmt. Du kannst ihre Aliase nach Bedarf aktualisieren oder entfernen. Außerdem hast du die Möglichkeit, neue Benutzer in den Chat einzuladen.",
         },
         users: {
           actions: {
@@ -457,7 +491,7 @@ export const de: { translation: Translation } = {
         "update-alias-dialog": {
           title: "Alias für {{name}} aktualisieren",
           description:
-            "Du kannst den Alias für diesen Benutzer aktualisieren. Dieser Alias wird anstelle des vollständigen Namens im Chat angezeigt. Bitte bestätige den neuen Alias unten. Lass es leer, um den Alias zu entfernen.",
+            "Du kannst den Alias für diesen Benutzer aktualisieren. Dieser Alias wird anstelle seines vollständigen Namens im Chat angezeigt. Bitte bestätige den neuen Alias unten. Lass es leer, um den Alias zu entfernen.",
           cancel: "Abbrechen",
           confirm: "Speichern",
           input: { placeholder: "Alias erstellen" },
@@ -480,13 +514,54 @@ export const de: { translation: Translation } = {
             search: { placeholder: "Nach Personen suchen..." },
             empty: "Schreibe, um nach Benutzern zu suchen.",
             "no-result": "Keine Benutzer gefunden.",
-            trigger: { tooltip: "{{name}} zu diesem Chat einladen" },
+            trigger: { tooltip: "{{name}} in diesen Chat einladen" },
             dialog: {
-              title: "{{name}} zu diesem Chat einladen",
+              title: "{{name}} in diesen Chat einladen",
               description:
-                "Bist du sicher, dass du {{name}} zu diesem Chat einladen möchtest? Einmal eingeladen, kann die Person die Unterhaltung sehen und daran teilnehmen. Bestätige deine Aktion unten.",
+                "Bist du sicher, dass du {{name}} in diesen Chat einladen möchtest? Einmal eingeladen, können sie die Unterhaltung sehen und daran teilnehmen. Bestätige deine Aktion unten.",
               cancel: "Abbrechen",
               confirm: "Einladen",
+            },
+          },
+        },
+      },
+    },
+    editor: {
+      toasts: {
+        "created-successfully": {
+          title: "Beitrag erfolgreich erstellt.",
+        },
+        "updated-successfully": {
+          title: "Beitrag erfolgreich aktualisiert.",
+        },
+        "create-error": {
+          title: "Beitrag kann nicht erstellt werden.",
+        },
+        "update-error": {
+          title: "Beitrag kann nicht aktualisiert werden.",
+        },
+      },
+      "file-dialog": {
+        title: "Dateien durchsuchen",
+        description:
+          "Kopiere URLs von Dateien aus deinem Cache, um sie in deinen Beitrag einzufügen.",
+        "cache-empty": "Keine Dateien im Cache.",
+        "used-files": "Verwendete Dateien",
+        "file-upload": { tooltip: "Datei hochladen" },
+        cache: "Cache",
+        item: {
+          "copy-to-clipboard": {
+            tooltip: "Element kopieren",
+            toast: "Element in die Zwischenablage kopiert.",
+          },
+          remove: {
+            trigger: { tooltip: "Datei entfernen" },
+            dialog: {
+              title: "Bist du absolut sicher?",
+              description:
+                "Diese Aktion kann nicht rückgängig gemacht werden. Dies löscht deine Datei dauerhaft von unseren Servern.",
+              cancel: "Abbrechen",
+              confirm: "Fortfahren",
             },
           },
         },

@@ -3,9 +3,14 @@ import { Translation } from "./types";
 export const zh: { translation: Translation } = {
   translation: {
     login: {
-      greeting: "欢迎体验",
+      error: {
+        toast: {
+          title: "无法登录。",
+        },
+      },
+      greeting: "欢迎来到",
       slogan:
-        "沉浸在一个社交网络中，与朋友联系、分享你的时刻、发现新社区只需轻轻一点。",
+        "沉浸在一个社交网络中，与朋友联系、分享你的时刻、发现新社区只需点击一下。",
       form: {
         placeholders: {
           login: "用户名",
@@ -13,15 +18,15 @@ export const zh: { translation: Translation } = {
         },
         submit: {
           idle: "登录",
-          pending: "登录中...",
+          pending: "正在登录...",
         },
         errors: {
           login: {
-            min: "用户名必须至少5个字符。",
-            max: "用户名最多不能超过50个字符。",
+            min: "用户名必须至少包含5个字符。",
+            max: "用户名最多只能包含50个字符。",
           },
           password: {
-            min: "密码必须至少5个字符。",
+            min: "密码必须至少包含5个字符。",
           },
         },
       },
@@ -33,7 +38,7 @@ export const zh: { translation: Translation } = {
         1: "加入",
         2: "网络",
       },
-      slogan: "今天就开始你的旅程，发现一个充满联系和机会的世界。",
+      slogan: "今天开始你的旅程，探索连接与机会的世界。",
       form: {
         placeholders: {
           firstname: "名字",
@@ -45,25 +50,28 @@ export const zh: { translation: Translation } = {
         errors: {
           firstname: {
             min: "名字不能为空。",
-            max: "名字最多不能超过50个字符。",
+            max: "名字最多只能包含50个字符。",
           },
           lastname: {
             min: "姓氏不能为空。",
-            max: "姓氏最多不能超过50个字符。",
+            max: "姓氏最多只能包含50个字符。",
           },
           login: {
-            min: "用户名必须至少5个字符。",
-            max: "用户名最多不能超过50个字符。",
+            min: "用户名必须至少包含5个字符。",
+            max: "用户名最多只能包含50个字符。",
           },
           password: {
-            min: "密码必须至少5个字符。",
+            min: "密码必须至少包含5个字符。",
             mismatch: "密码不匹配。",
+          },
+          toast: {
+            title: "无法创建新账户。",
           },
         },
         "remove-image": "移除",
         submit: {
           idle: "注册",
-          pending: "注册中...",
+          pending: "正在注册...",
         },
       },
       "already-have-account": "已有账户？",
@@ -76,14 +84,14 @@ export const zh: { translation: Translation } = {
       },
       theme: {
         title: "主题",
-        description: "在明亮和黑暗主题之间切换，以适应你的喜好。",
+        description: "在浅色和深色主题之间切换，以适应你的偏好。",
       },
       tooltips: {
         title: "提示",
-        description: "启用或禁用提示，以在应用中获得额外的指导。",
+        description: "启用或禁用提示，以在应用中获得额外指导。",
       },
       slogan:
-        "自定义你的设置，让Link Up真正属于你。切换主题、调整偏好，塑造你与平台互动的方式。",
+        "自定义你的设置，让 Link Up 真正属于你。切换主题、调整偏好，塑造你与平台互动的方式。",
       header: {
         1: "个性化",
         2: "你的体验",
@@ -91,13 +99,18 @@ export const zh: { translation: Translation } = {
       form: {
         submit: {
           idle: "更新",
-          pending: "更新中...",
+          pending: "正在更新...",
+        },
+        error: {
+          toast: {
+            title: "无法更改设置。",
+          },
         },
       },
     },
     common: {
       you: "你",
-      loading: "请稍候，我们正在准备应用...",
+      loading: "请稍等，我们正在准备应用...",
       navbar: {
         sheet: {
           trigger: { tooltip: "显示操作" },
@@ -106,7 +119,7 @@ export const zh: { translation: Translation } = {
             anonymous: "欢迎！",
           },
           items: {
-            home: "首页",
+            home: "主页",
             chats: "聊天",
             settings: "设置",
             posts: "帖子",
@@ -116,7 +129,7 @@ export const zh: { translation: Translation } = {
             logout: {
               trigger: "退出",
               dialog: {
-                title: "你确定吗？",
+                title: "你完全确定吗？",
                 description:
                   "你确定要退出吗？这将结束你的会话，你需要再次登录才能访问你的账户。",
                 cancel: "取消",
@@ -126,10 +139,10 @@ export const zh: { translation: Translation } = {
           },
         },
         logo: {
-          tooltip: "首页",
+          tooltip: "主页",
         },
         search: {
-          placeholder: "在Link Up上搜索...",
+          placeholder: "在 Link Up 上搜索...",
           "no-users": "未找到用户。",
           tooltip: "搜索用户",
           heading: "搜索结果",
@@ -145,32 +158,32 @@ export const zh: { translation: Translation } = {
             toasts: {
               "already-exists": {
                 title: "好友请求已存在。",
-                description: "你和{{fullName}}之间已存在好友关系。",
-                action: "查看好友",
+                description: "你与 {{fullName}} 之间已经存在友谊。",
+                action: "查看朋友",
               },
               "successfully-created": {
                 title: "好友请求已发送。",
-                description: "好友请求已发送给{{fullName}}。",
-                action: "查看好友",
+                description: "好友请求已发送给 {{fullName}}。",
+                action: "查看朋友",
               },
             },
           },
         },
       },
       theme: {
-        light: "明亮",
-        dark: "黑暗",
+        light: "浅色",
+        dark: "深色",
         switch: {
-          tooltip: "切换到{{mode}}模式",
+          tooltip: "切换到 {{mode}} 模式",
         },
       },
       time: {
-        years: "{{count}}年前",
-        months: "{{count}}个月前",
-        weeks: "{{count}}周前",
-        days: "{{count}}天前",
-        hours: "{{count}}小时前",
-        minutes: "{{count}}分钟前",
+        years: "{{count}} 年前",
+        months: "{{count}} 个月前",
+        weeks: "{{count}} 周前",
+        days: "{{count}} 天前",
+        hours: "{{count}} 小时前",
+        minutes: "{{count}} 分钟前",
         now: "刚刚",
         ago: "前",
       },
@@ -179,7 +192,7 @@ export const zh: { translation: Translation } = {
       feed: {
         empty: {
           title: "这里还没有内容",
-          description: "开始对话吧！通过创建第一个帖子分享你的想法。",
+          description: "开始对话吧！通过创建第一篇帖子分享你的想法。",
           action: "写帖子",
         },
       },
@@ -187,7 +200,7 @@ export const zh: { translation: Translation } = {
     posts: {
       preview: {
         "show-more": "显示更多",
-        "show-less": "收起",
+        "show-less": "显示更少",
       },
       new: { button: "创建新帖子" },
       edit: {
@@ -196,9 +209,9 @@ export const zh: { translation: Translation } = {
       delete: {
         button: { tooltip: "删除" },
         dialog: {
-          title: "你确定吗？",
+          title: "你完全确定吗？",
           description:
-            "你确定要删除这个帖子吗？这将删除你的帖子、评论以及所有相关文件。",
+            "你确定要删除这篇帖子吗？这将删除你的帖子、其评论以及所有相关文件。",
           cancel: "取消",
           confirm: "是的，删除",
         },
@@ -210,15 +223,19 @@ export const zh: { translation: Translation } = {
         },
         tooltip: {
           you: "你",
-          messageInfo: "{{name}}：{{date}} {{time}}",
+          messageInfo: "{{name}}: {{date}} {{time}}",
           locale: "zh-CN",
         },
         buttons: {
           reply: { tooltip: "回复" },
           extend: { tooltip: "显示回复" },
-          reduce: { tooltip: "收起回复" },
+          reduce: { tooltip: "关闭回复" },
         },
         form: {
+          toasts: {
+            success: { title: "评论发送成功。" },
+            error: { title: "无法发送消息。" },
+          },
           inputs: {
             text: {
               placeholder: "留下你的评论...",
@@ -229,7 +246,7 @@ export const zh: { translation: Translation } = {
           reply: {
             to: {
               me: "回复自己。",
-              other: "回复{{fullName}}。",
+              other: "回复 {{fullName}}。",
             },
             remove: { tooltip: "移除回复" },
           },
@@ -238,19 +255,19 @@ export const zh: { translation: Translation } = {
     },
     friends: {
       filter: {
-        input: { placeholder: "筛选用户..." },
+        input: { placeholder: "过滤用户..." },
         statuses: {
           input: {
-            placeholder: "筛选用户...",
+            placeholder: "过滤用户...",
             all: "全部",
             accepted: "已接受",
             "awaiting-me": "等待我",
-            "awaiting-other": "等待对方",
+            "awaiting-other": "等待其他",
           },
           all: "全部 ({{count}})",
           accepted: "已接受 ({{count}})",
           "awaiting-me": "等待我 ({{count}})",
-          "awaiting-other": "等待对方 ({{count}})",
+          "awaiting-other": "等待其他 ({{count}})",
         },
       },
       column: {
@@ -266,7 +283,7 @@ export const zh: { translation: Translation } = {
         statuses: {
           accepted: "朋友",
           "awaiting-me": "等待你的批准",
-          "awaiting-other": "等待{{fullName}}的批准",
+          "awaiting-other": "等待 {{fullName}} 的批准",
         },
         actions: {
           trigger: { tooltip: "显示操作" },
@@ -276,20 +293,30 @@ export const zh: { translation: Translation } = {
       },
       toasts: {
         accepted: {
-          title: "好友关系已接受。",
-          description: "{{fullName}}现在是你的朋友。",
+          title: "友谊已接受。",
+          description: "{{fullName}} 现在是你的朋友。",
         },
         deleted: {
-          title: "好友关系已删除。",
+          title: "友谊已删除。",
           description: {
-            accepted: "{{fullName}}不再是你的朋友。",
-            "awaiting-me": "{{fullName}}的好友请求已被拒绝。",
-            "awaiting-other": "发送给{{fullName}}的好友请求已被移除。",
+            accepted: "{{fullName}} 不再是你的朋友。",
+            "awaiting-me": "{{fullName}} 的好友请求已被拒绝。",
+            "awaiting-other": "对 {{fullName}} 的好友请求已移除。",
           },
         },
       },
     },
     chats: {
+      sockets: {
+        errors: {
+          connection: {
+            toast: {
+              title: "无法加入聊天室。",
+              description: "你将无法看到实时发送的消息。请尝试刷新页面。",
+            },
+          },
+        },
+      },
       "no-chats": "还没有对话。开始聊天，与他人联系吧！",
       "no-chat-selected": {
         title: "未选择聊天。",
@@ -305,7 +332,7 @@ export const zh: { translation: Translation } = {
         title: "与他人聊天",
         items: {
           tooltip: "打开聊天",
-          "only-file-text": "{{fullName}}发送了{{count}}个文件。",
+          "only-file-text": "{{fullName}} 发送了 {{count}} 个文件。",
         },
       },
       "create-new-chat": {
@@ -313,11 +340,11 @@ export const zh: { translation: Translation } = {
         dialog: {
           title: "创建新聊天",
           description:
-            "搜索并邀请其他用户加入你新建的聊天。点击用户以邀请他们加入聊天。",
+            "搜索并邀请其他用户加入你新创建的聊天。点击用户以邀请他加入聊天。",
         },
         tabs: {
-          private: "私人",
-          group: "群组",
+          private: "私聊",
+          group: "群聊",
         },
         private: {
           form: {
@@ -333,25 +360,33 @@ export const zh: { translation: Translation } = {
               search: { placeholder: "搜索用户..." },
             },
           },
+          error: {
+            toast: { title: "无法创建新群聊。" },
+          },
         },
-        "invited-users": "已邀请的用户",
+        "invited-users": "已邀请的人",
         submit: "创建聊天",
       },
       form: {
+        error: {
+          toast: {
+            title: "无法发送消息。",
+          },
+        },
         inputs: {
           text: { placeholder: "输入..." },
           file: { tooltip: "附加文件", remove: "移除文件" },
         },
         submit: { tooltip: "发送消息" },
         reply: {
-          author: { me: "回复自己", other: "回复{{name}}" },
-          "only-files": "发送了{{count}}个文件。",
+          author: { me: "回复自己", other: "回复 {{name}}" },
+          "only-files": "发送了 {{count}} 个文件。",
           cancel: { tooltip: "取消" },
         },
       },
       "income-message": {
-        text: "{{name}}：{{text}}",
-        "only-files": "{{name}}发送了{{count}}个文件。",
+        text: "{{name}}: {{text}}",
+        "only-files": "{{name}} 发送了 {{count}} 个文件。",
       },
       "date-seperator": {
         locale: "zh-CN",
@@ -376,8 +411,8 @@ export const zh: { translation: Translation } = {
       },
       message: {
         tooltip: {
-          mine: "{{date}} 由你发送",
-          foreign: "{{date}} 由{{name}}发送",
+          mine: "{{date}} 由你",
+          foreign: "{{date}} 由 {{name}}",
         },
         controls: {
           reply: { tooltip: "回复" },
@@ -388,21 +423,21 @@ export const zh: { translation: Translation } = {
             "not-available": "目前无法反应。",
             values: {
               happy: "开心",
-              sad: "难过",
+              sad: "悲伤",
               crying: "哭泣",
-              heart: "爱心",
+              heart: "心",
               skull: "骷髅",
             },
           },
         },
         reply: {
-          "only-files": "{{name}}发送了{{count}}个文件。",
+          "only-files": "{{name}} 发送了 {{count}} 个文件。",
           text: {
             "you-to-you": "你回复了自己。",
-            "you-to-other": "你回复了{{name}}。",
-            "other-to-you": "{{name}}回复了你。",
-            "other-to-other": "{{name1}}回复了{{name2}}。",
-            "other-to-same": "{{name}}回复了自己。",
+            "you-to-other": "你回复了 {{name}}。",
+            "other-to-you": "{{name}} 回复了你。",
+            "other-to-other": "{{name1}} 回复了 {{name2}}。",
+            "other-to-same": "{{name}} 回复了自己。",
           },
         },
       },
@@ -432,9 +467,9 @@ export const zh: { translation: Translation } = {
         title: "设置",
         description: {
           private:
-            "管理此聊天的成员，查看当前参与对话的人员。你可以根据需要更新或移除他们的别名。",
+            "管理此聊天的成员，查看当前参与对话的人员。你可以根据需要更新或删除他们的别名。",
           group:
-            "管理此聊天的成员，查看当前参与对话的人员。你可以根据需要更新或移除他们的别名。此外，你还可以邀请新用户加入聊天。",
+            "管理此聊天的成员，查看当前参与对话的人员。你可以根据需要更新或删除他们的别名。此外，你还可以邀请新用户加入聊天。",
         },
         users: {
           actions: {
@@ -443,9 +478,9 @@ export const zh: { translation: Translation } = {
           },
         },
         "update-alias-dialog": {
-          title: "更新{{name}}的别名",
+          title: "更新 {{name}} 的别名",
           description:
-            "你可以为该用户更新别名。此别名将代替他们在聊天中的全名显示。请在下方确认新别名，留空以移除别名。",
+            "你可以为此用户更新别名。此别名将在聊天中显示，代替他们的全名。请在下方确认新别名。留空以删除别名。",
           cancel: "取消",
           confirm: "保存",
           input: { placeholder: "创建别名" },
@@ -468,13 +503,53 @@ export const zh: { translation: Translation } = {
             search: { placeholder: "搜索用户..." },
             empty: "输入以搜索用户。",
             "no-result": "未找到用户。",
-            trigger: { tooltip: "邀请{{name}}加入此聊天" },
+            trigger: { tooltip: "邀请 {{name}} 加入此聊天" },
             dialog: {
-              title: "邀请{{name}}加入此聊天",
+              title: "邀请 {{name}} 加入此聊天",
               description:
-                "你确定要邀请{{name}}加入此聊天吗？一旦被邀请，他们将能够查看并参与对话。请在下方确认你的操作。",
+                "你确定要邀请 {{name}} 加入此聊天吗？一旦受邀，他们将能够查看并参与对话。请在下方确认你的操作。",
               cancel: "取消",
               confirm: "邀请",
+            },
+          },
+        },
+      },
+    },
+    editor: {
+      toasts: {
+        "created-successfully": {
+          title: "帖子创建成功。",
+        },
+        "updated-successfully": {
+          title: "帖子更新成功。",
+        },
+        "create-error": {
+          title: "无法创建帖子。",
+        },
+        "update-error": {
+          title: "无法更新帖子。",
+        },
+      },
+      "file-dialog": {
+        title: "浏览文件",
+        description: "从你的缓存中复制文件 URL 以输入到你的帖子中。",
+        "cache-empty": "缓存中没有文件。",
+        "used-files": "已使用的文件",
+        "file-upload": { tooltip: "上传文件" },
+        cache: "缓存",
+        item: {
+          "copy-to-clipboard": {
+            tooltip: "复制元素",
+            toast: "元素已复制到剪贴板。",
+          },
+          remove: {
+            trigger: { tooltip: "移除文件" },
+            dialog: {
+              title: "你完全确定吗？",
+              description:
+                "此操作无法撤销。这将永久从我们的服务器上删除你的文件。",
+              cancel: "取消",
+              confirm: "继续",
             },
           },
         },
