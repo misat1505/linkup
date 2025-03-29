@@ -3,6 +3,11 @@ import { Translation } from "./types";
 export const en: { translation: Translation } = {
   translation: {
     login: {
+      error: {
+        toast: {
+          title: "Cannot login.",
+        },
+      },
       greeting: "Welcome to",
       slogan:
         "Immerse yourself in a social network where connecting with friends, sharing your moments, and discovering new communities is just a click away.",
@@ -60,6 +65,9 @@ export const en: { translation: Translation } = {
             min: "Password must be at least 5 characters long.",
             mismatch: "Passwords don't match.",
           },
+          toast: {
+            title: "Cannot create new account.",
+          },
         },
         "remove-image": "Remove",
         submit: {
@@ -95,6 +103,11 @@ export const en: { translation: Translation } = {
         submit: {
           idle: "Update",
           pending: "Updating...",
+        },
+        error: {
+          toast: {
+            title: "Cannot change settings.",
+          },
         },
       },
     },
@@ -224,6 +237,10 @@ export const en: { translation: Translation } = {
           reduce: { tooltip: "Close replies" },
         },
         form: {
+          toasts: {
+            success: { title: "Comment sent successfully." },
+            error: { title: "Cannot send a message." },
+          },
           inputs: {
             text: {
               placeholder: "Leave your comment...",
@@ -295,6 +312,17 @@ export const en: { translation: Translation } = {
       },
     },
     chats: {
+      sockets: {
+        errors: {
+          connection: {
+            toast: {
+              title: "Cannot join chat room.",
+              description:
+                "You will not be able to see real time sent messages. Try reloading the page.",
+            },
+          },
+        },
+      },
       "no-chats": "No conversations yet. Start a chat and connect with others!",
       "no-chat-selected": {
         title: "No chat selected.",
@@ -339,11 +367,19 @@ export const en: { translation: Translation } = {
               search: { placeholder: "Search for people..." },
             },
           },
+          error: {
+            toast: { title: "Cannot create new group chat." },
+          },
         },
         "invited-users": "Invited people",
         submit: "Create chat",
       },
       form: {
+        error: {
+          toast: {
+            title: "Cannot send a message.",
+          },
+        },
         inputs: {
           text: { placeholder: "Type..." },
           file: { tooltip: "Attach a file", remove: "Remove file" },

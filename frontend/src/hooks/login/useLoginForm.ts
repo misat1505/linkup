@@ -14,6 +14,7 @@ import {
   UseFormRegister,
   useForm,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 type LoginFormEntries = {
@@ -31,6 +32,7 @@ export type useLoginFormValue = {
 };
 
 export default function useLoginForm(): useLoginFormValue {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { setUser } = useAppContext();
@@ -51,7 +53,7 @@ export default function useLoginForm(): useLoginFormValue {
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
-          title: "Cannot login.",
+          title: t("login.error.toast.title"),
           description: e.response?.data.message,
           variant: "destructive",
         });

@@ -14,6 +14,7 @@ import {
   UseFormRegister,
   useForm,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 export type ChatFormEntries = {
   content: string;
@@ -36,6 +37,7 @@ export type useChatFormValue = {
 };
 
 export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
+  const { t } = useTranslation();
   const { addMessage } = useChatPageContext();
   const { setIncomeMessageId } = useChatContext();
   const { toast } = useToast();
@@ -60,7 +62,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
-          title: "Cannot send a message.",
+          title: t("chats.form.error.toast.title"),
           description: e.response?.data.message,
           variant: "destructive",
         });

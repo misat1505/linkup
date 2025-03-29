@@ -11,8 +11,10 @@ import SignupSlogan from "@/components/signup/SignupSlogan";
 import SignupFormProvider from "@/contexts/SignupFormProvider";
 import SignupForm from "@/components/signup/SignupForm";
 import AlreadyHaveAccount from "@/components/signup/AlreadyHaveAccount";
+import { useTranslation } from "react-i18next";
 
 export default function Signup() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { setUser } = useAppContext();
   const onSubmit: SubmitHandler<SignupFormType> = async (
@@ -25,7 +27,7 @@ export default function Signup() {
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
-          title: "Cannot create new account.",
+          title: t("signup.form.errors.toast.title"),
           description: e.response?.data.message,
           variant: "destructive",
         });

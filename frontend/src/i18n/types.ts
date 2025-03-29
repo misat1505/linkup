@@ -40,6 +40,11 @@ type LoginTranslations = {
   };
   "no-account": string;
   "sign-in-redirect": string;
+  error: {
+    toast: {
+      title: string;
+    };
+  };
 };
 
 type SignupTranslations = {
@@ -72,6 +77,9 @@ type SignupTranslations = {
       password: {
         min: string;
         mismatch: string;
+      };
+      toast: {
+        title: string;
       };
     };
     "remove-image": string;
@@ -106,6 +114,11 @@ type SettingsTranslations = {
     submit: {
       idle: string;
       pending: string;
+    };
+    error: {
+      toast: {
+        title: string;
+      };
     };
   };
 };
@@ -223,6 +236,10 @@ type PostsTranslations = {
       reduce: { tooltip: string };
     };
     form: {
+      toasts: {
+        success: { title: string };
+        error: { title: string };
+      };
       inputs: {
         text: {
           placeholder: string;
@@ -307,6 +324,16 @@ type FriendsTranslations = {
 };
 
 type ChatsTranslations = {
+  sockets: {
+    errors: {
+      connection: {
+        toast: {
+          title: string;
+          description: string;
+        };
+      };
+    };
+  };
   "no-chats": string;
   "no-chat-selected": {
     title: string;
@@ -349,6 +376,9 @@ type ChatsTranslations = {
           search: { placeholder: string };
         };
       };
+      error: {
+        toast: { title: string };
+      };
     };
     "invited-users": string;
     submit: string;
@@ -363,6 +393,11 @@ type ChatsTranslations = {
       author: { me: string; other: string };
       "only-files": string;
       cancel: { tooltip: string };
+    };
+    error: {
+      toast: {
+        title: string;
+      };
     };
   };
   "income-message": {

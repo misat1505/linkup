@@ -3,6 +3,11 @@ import { Translation } from "./types";
 export const pl: { translation: Translation } = {
   translation: {
     login: {
+      error: {
+        toast: {
+          title: "Nie można się zalogować.",
+        },
+      },
       greeting: "Witamy w",
       slogan:
         "Zanurz się w sieci społecznościowej, gdzie nawiązywanie kontaktów ze znajomymi, dzielenie się chwilami i odkrywanie nowych społeczności jest na wyciągnięcie ręki.",
@@ -60,6 +65,9 @@ export const pl: { translation: Translation } = {
             min: "Hasło musi mieć co najmniej 5 znaków.",
             mismatch: "Hasła nie są takie same.",
           },
+          toast: {
+            title: "Nie można utworzyć nowego konta.",
+          },
         },
         "remove-image": "Usuń",
         submit: {
@@ -95,6 +103,11 @@ export const pl: { translation: Translation } = {
         submit: {
           idle: "Zaktualizuj",
           pending: "Aktualizowanie...",
+        },
+        error: {
+          toast: {
+            title: "Nie można zmienić ustawień.",
+          },
         },
       },
     },
@@ -225,6 +238,10 @@ export const pl: { translation: Translation } = {
           reduce: { tooltip: "Zamknij odpowiedzi" },
         },
         form: {
+          toasts: {
+            success: { title: "Komentarz został wysłany pomyślnie." },
+            error: { title: "Nie można wysłać wiadomości." },
+          },
           inputs: {
             text: {
               placeholder: "Zostaw komentarz...",
@@ -298,8 +315,18 @@ export const pl: { translation: Translation } = {
       },
     },
     chats: {
+      sockets: {
+        errors: {
+          connection: {
+            toast: {
+              title: "Nie można dołączyć do pokoju czatu.",
+              description:
+                "Nie będziesz mógł zobaczyć wiadomości wysyłanych w czasie rzeczywistym. Spróbuj ponownie załadować stronę.",
+            },
+          },
+        },
+      },
       "no-chats": "Brak rozmów. Rozpocznij czat i połącz się z innymi!",
-
       "no-chat-selected": {
         title: "Brak wybranego czatu.",
         description: "Wybierz istniejący czat z menu lub",
@@ -343,11 +370,21 @@ export const pl: { translation: Translation } = {
               search: { placeholder: "Szukaj osób..." },
             },
           },
+          error: {
+            toast: {
+              title: "Nie można utworzyć nowej rozmowy grupowej.",
+            },
+          },
         },
         "invited-users": "Zaproszone osoby",
         submit: "Utwórz czat",
       },
       form: {
+        error: {
+          toast: {
+            title: "Nie można wysłać wiadomości.",
+          },
+        },
         inputs: {
           text: { placeholder: "Napisz..." },
           file: { tooltip: "Załącz plik", remove: "Usuń plik" },

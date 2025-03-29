@@ -18,6 +18,7 @@ import {
   UseFormRegister,
   useForm,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -41,6 +42,7 @@ export type useNewGroupChatFormValue = {
 };
 
 export default function useNewGroupChatForm(): useNewGroupChatFormValue {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { user: me } = useAppContext();
@@ -66,7 +68,7 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
-          title: "Cannot create new group chat.",
+          title: t("chats.create-new-chat.group.error.toast.title"),
           description: e.response?.data.message,
           variant: "destructive",
         });
