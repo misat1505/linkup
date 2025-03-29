@@ -1,3 +1,31 @@
 {
-  "invalid-login": "Invalid login."
+  "auth": {
+    "controllers": {
+      "login": {
+        "invalid-login": "Invalid login.",
+        "invalid-password": "Invalid password.",
+        "login-failed": "Cannot login."
+      },
+      "get-self": {
+        "user-not-found": "User not found.",
+        "cannot-fetch-user": "Cannot fetch user."
+      },
+      "logout": {
+        "success": "Successfully logged out.",
+        "failure": "Cannot log out."
+      },
+      "refresh": {
+        "success": "Successfully refreshed token.",
+        "failure": "Cannot refresh token."
+      },
+      "signup": {
+        "login-already-exists": "Login already taken.",
+        "failure": "Cannot create new user."
+      },
+      "update": {
+        "login-already-exists": "Login already taken.",
+        "failure": "Cannot update user."
+      }
+    }
+  }
 }

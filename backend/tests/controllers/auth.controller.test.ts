@@ -13,6 +13,8 @@ import { refreshTokenController } from "../../src/controllers/auth/refreshToken.
 import { logoutController } from "../../src/controllers/auth/logout.controller";
 import { getSelfController } from "../../src/controllers/auth/getSelf.controller";
 import { updateSelfController } from "../../src/controllers/auth/updateSelf.controller";
+import i18next from "../../src/i18n";
+import middleware from "i18next-http-middleware";
 
 jest.mock("uuid");
 jest.mock("bcryptjs");
@@ -23,6 +25,7 @@ jest.mock("../../src/lib/FileStorage");
 describe("Auth Controllers", () => {
   const app = express();
   app.use(express.json());
+  app.use(middleware.handle(i18next));
   app.post("/signup", signupController);
   app.post("/login", loginController);
   app.post("/refresh", refreshTokenController);

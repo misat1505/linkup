@@ -70,12 +70,16 @@ export const loginController = async (
     const user = await UserService.getUserByLogin(login);
 
     if (!user) {
-      return res.status(401).json({ message: req.t("invalid-login") });
+      return res
+        .status(401)
+        .json({ message: req.t("auth.controllers.login.invalid-login") });
     }
 
     const hashedPassword = Hasher.hash(password + user.salt);
     if (hashedPassword !== user.password) {
-      return res.status(401).json({ message: "Invalid password." });
+      return res
+        .status(401)
+        .json({ message: req.t("auth.controllers.login.invalid-password") });
     }
 
     const refreshToken = TokenProcessor.encode(
@@ -93,6 +97,6 @@ export const loginController = async (
       .status(200)
       .json({ user: UserService.removeCredentials(user), accessToken });
   } catch (e) {
-    next(new Error("Cannot login."));
+    next(new Error(req.t("auth.controllers.login.login-failed")));
   }
 };

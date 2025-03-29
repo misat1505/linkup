@@ -55,8 +55,11 @@ export const refreshTokenController = (
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
     return res
       .status(200)
-      .json({ message: "Successfully refreshed token.", accessToken });
+      .json({
+        message: req.t("auth.controllers.refresh.success"),
+        accessToken,
+      });
   } catch (e) {
-    next(new Error("Cannot refresh token."));
+    next(new Error(req.t("auth.controllers.refresh.failure")));
   }
 };

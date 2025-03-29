@@ -82,7 +82,11 @@ export const updateSelfController = async (
       fetchedUser && fetchedUser.login === login && fetchedUser.id !== userId;
 
     if (isLoginTaken) {
-      return res.status(409).json({ message: "Login already taken." });
+      return res
+        .status(409)
+        .json({
+          message: req.t("auth.controllers.update.login-already-exists"),
+        });
     }
 
     const user: UserWithCredentials = {
@@ -104,6 +108,6 @@ export const updateSelfController = async (
 
     return res.status(201).json({ user: UserService.removeCredentials(user) });
   } catch (e) {
-    next(new Error("Cannot update user."));
+    next(new Error(req.t("auth.controllers.update.failure")));
   }
 };

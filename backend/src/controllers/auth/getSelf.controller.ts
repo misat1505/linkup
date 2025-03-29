@@ -49,11 +49,13 @@ export const getSelfController = async (
     const user = await UserService.getUser(userId);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found." });
+      return res
+        .status(404)
+        .json({ message: req.t("auth.controllers.get-self.user-not-found") });
     }
 
     return res.status(200).json({ user: UserService.removeCredentials(user) });
   } catch (e) {
-    next(new Error("Cannot fetch user."));
+    next(new Error(req.t("auth.controllers.get-self.cannot-fetch-user")));
   }
 };

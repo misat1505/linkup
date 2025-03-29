@@ -1,3 +1,31 @@
 {
-  "invalid-login": "Błędny login."
+  "auth": {
+    "controllers": {
+      "login": {
+        "invalid-login": "Nieprawidłowe dane logowania.",
+        "invalid-password": "Nieprawidłowe hasło.",
+        "login-failed": "Nie udało się zalogować."
+      },
+      "get-self": {
+        "user-not-found": "Nie znaleziono użytkownika.",
+        "cannot-fetch-user": "Nie udało się pobrać danych użytkownika."
+      },
+      "logout": {
+        "success": "Pomyślnie wylogowano.",
+        "failure": "Nie udało się wylogować."
+      },
+      "refresh": {
+        "success": "Pomyślnie odświeżono token.",
+        "failure": "Nie udało się odświeżyć tokenu."
+      },
+      "signup": {
+        "login-already-exists": "Login już zajęty.",
+        "failure": "Nie udało się utworzyć nowego użytkownika."
+      },
+      "update": {
+        "login-already-exists": "Login już zajęty.",
+        "failure": "Nie udało się zaktualizować użytkownika."
+      }
+    }
+  }
 }

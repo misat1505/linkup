@@ -12,6 +12,8 @@ function createAPIInstance(config: AxiosRequestConfig): AxiosInstance {
       const token = getAccessToken();
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
+        config.headers["Accept-Language"] =
+          localStorage.getItem("lang") || "en";
       }
       return config;
     },

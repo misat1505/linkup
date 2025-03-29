@@ -36,8 +36,8 @@ export const logoutController = (
 ) => {
   try {
     res.clearCookie(refreshTokenCookieName);
-    res.status(200).json({ message: "Successfully logged out." });
+    res.status(200).json({ message: req.t("auth.controllers.logout.success") });
   } catch (e) {
-    next(new Error("Cannot log out."));
+    next(new Error(req.t("auth.controllers.logout.failure")));
   }
 };
