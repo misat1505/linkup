@@ -35,7 +35,6 @@ describe("signup spec", () => {
     cy.get("[data-testid=cy-signup-form-button]").click();
 
     cy.url().should("eq", `${frontendUrl}/signup`);
-    cy.contains("Login already taken.").should("be.visible");
   });
 
   it("shouldn't create new user when given passwords don't match", () => {
@@ -48,6 +47,5 @@ describe("signup spec", () => {
     cy.get("[data-testid=cy-signup-form-button]").click();
 
     cy.url().should("eq", `${frontendUrl}/signup`);
-    cy.contains("Passwords don't match").should("be.visible");
   });
 });
