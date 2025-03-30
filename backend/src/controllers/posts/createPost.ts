@@ -69,6 +69,6 @@ export const createPost = async (
 
     return res.status(201).json({ post });
   } catch (e) {
-    next(new Error("Couldn't create post."));
+    next(new Error(req.t("posts.controllers.create.failure")));
   }
 };

@@ -127,5 +127,41 @@
         "failure": "Nie można pobrać znajomości użytkownika."
       }
     }
+  },
+  "posts": {
+    "controllers": {
+      "create": {
+        "failure": "Nie można utworzyć posta."
+      },
+      "delete": {
+        "unauthorized": "Nie możesz usunąć posta, który do Ciebie nie należy.",
+        "success": "Post został pomyślnie usunięty.",
+        "failure": "Nie można usunąć posta.",
+        "not-found": "Post nie został znaleziony."
+      },
+      "get-single": {
+        "failure": "Nie można pobrać posta.",
+        "not-found": "Post nie został znaleziony."
+      },
+      "get-all": {
+        "failure": "Nie można pobrać postów."
+      },
+      "get-users": {
+        "failure": "Nie można pobrać postów użytkownika."
+      },
+      "update": {
+        "unauthorized": "Nie możesz edytować posta, który do Ciebie nie należy.",
+        "failure": "Nie można zaktualizować posta.",
+        "not-found": "Post nie został znaleziony."
+      }
+    }
+  },
+  "users": {
+    "controllers": {
+      "search": {
+        "failure": "Nie można wyszukać użytkowników.",
+        "term-required": "Parametr zapytania 'term' jest wymagany."
+      }
+    }
   }
 }

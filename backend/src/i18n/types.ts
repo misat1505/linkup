@@ -15,6 +15,8 @@ export type Translations = {
   chats: ChatsTranslations;
   files: FilesTranslations;
   friends: FriendsTranslations;
+  posts: PostsTranslations;
+  users: UsersTranslations;
 };
 
 type AuthTranslations = {
@@ -110,5 +112,32 @@ type FriendsTranslations = {
         "not-found": string;
       };
     get: Failure;
+  };
+};
+
+type PostsTranslations = {
+  controllers: {
+    create: Failure;
+    delete: SuccessOrFailure &
+      Unauthorized & {
+        "not-found": string;
+      };
+    "get-single": Failure & {
+      "not-found": string;
+    };
+    "get-all": Failure;
+    "get-users": Failure;
+    update: Failure &
+      Unauthorized & {
+        "not-found": string;
+      };
+  };
+};
+
+type UsersTranslations = {
+  controllers: {
+    search: Failure & {
+      "term-required": string;
+    };
   };
 };

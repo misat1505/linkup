@@ -127,5 +127,41 @@
         "failure": "Cannot get user friendships."
       }
     }
+  },
+  "posts": {
+    "controllers": {
+      "create": {
+        "failure": "Couldn't create post."
+      },
+      "delete": {
+        "unauthorized": "Cannot delete post not belonging to you.",
+        "success": "Post deleted successfully.",
+        "failure": "Couldn't delete post.",
+        "not-found": "Post not found."
+      },
+      "get-single": {
+        "failure": "Couldn't get post.",
+        "not-found": "Post not found."
+      },
+      "get-all": {
+        "failure": "Couldn't get posts."
+      },
+      "get-users": {
+        "failure": "Couldn't get user posts."
+      },
+      "update": {
+        "unauthorized": "Cannot edit post not belonging to you.",
+        "failure": "Couldn't update post.",
+        "not-found": "Post not found."
+      }
+    }
+  },
+  "users": {
+    "controllers": {
+      "search": {
+        "failure": "Couldn't search users.",
+        "term-required": "'term' query param is required."
+      }
+    }
   }
 }

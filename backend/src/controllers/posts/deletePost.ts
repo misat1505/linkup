@@ -58,12 +58,15 @@ export const deletePost = async (
 
     const post = await PostService.getPost(id);
 
-    if (!post) return res.status(404).json({ message: "Post not found." });
+    if (!post)
+      return res
+        .status(404)
+        .json({ message: req.t("posts.controllers.delete.not-found") });
 
     if (post.author.id !== userId)
       return res
         .status(401)
-        .json({ message: "Cannot delete post not belonging to you." });
+        .json({ message: req.t("posts.controllers.delete.unauthorized") });
 
     await Promise.all([
       PostService.deletePost(id),
@@ -71,8 +74,10 @@ export const deletePost = async (
       fileStorage.deleteAllFilesInDirectory(`chats/${post.chat.id}`),
     ]);
 
-    return res.status(200).json({ message: "Post deleted successfully." });
+    return res
+      .status(200)
+      .json({ message: req.t("posts.controllers.delete.success") });
   } catch (e) {
-    next(new Error("Couldn't delete post."));
+    next(new Error(req.t("posts.controllers.delete.failure")));
   }
 };
