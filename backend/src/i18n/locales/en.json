@@ -1,5 +1,43 @@
 {
   "auth": {
+    "validators": {
+      "login": {
+        "login": {
+          "empty": "Login must be provided.",
+          "not-string": "Login has to be a string.",
+          "bad-length": "Login must be between 5 and 50 characters long."
+        },
+        "password": {
+          "empty": "Password must be provided.",
+          "not-string": "Password has to be a string.",
+          "bad-length": "Password must be at least 5 characters long."
+        }
+      },
+      "signup": {
+        "firstName": {
+          "not-exists": "First name must be provided.",
+          "not-string": "First name must be a string.",
+          "empty": "First name must not be empty.",
+          "bad-length": "First name must be at most 50 characters long."
+        },
+        "lastName": {
+          "not-exists": "Last name must be provided.",
+          "not-string": "Last name must be a string.",
+          "empty": "Last name must not be empty.",
+          "bad-length": "Last name must be at most 50 characters long."
+        },
+        "login": {
+          "empty": "Login must be provided.",
+          "not-string": "Login has to be a string.",
+          "bad-length": "Login must be at least 5 characters long."
+        },
+        "password": {
+          "empty": "Password must be provided.",
+          "not-string": "Password has to be a string.",
+          "bad-length": "Password must be at least 5 characters long."
+        }
+      }
+    },
     "controllers": {
       "login": {
         "invalid-login": "Invalid login.",

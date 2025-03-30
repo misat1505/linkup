@@ -1,5 +1,43 @@
 {
   "auth": {
+    "validators": {
+      "login": {
+        "login": {
+          "empty": "Login musi zostać podany.",
+          "not-string": "Login musi być ciągiem znaków.",
+          "bad-length": "Login musi mieć od 5 do 50 znaków."
+        },
+        "password": {
+          "empty": "Hasło musi zostać podane.",
+          "not-string": "Hasło musi być ciągiem znaków.",
+          "bad-length": "Hasło musi mieć co najmniej 5 znaków."
+        }
+      },
+      "signup": {
+        "firstName": {
+          "not-exists": "Imię musi zostać podane.",
+          "not-string": "Imię musi być ciągiem znaków.",
+          "empty": "Imię nie może być puste.",
+          "bad-length": "Imię może mieć maksymalnie 50 znaków."
+        },
+        "lastName": {
+          "not-exists": "Nazwisko musi zostać podane.",
+          "not-string": "Nazwisko musi być ciągiem znaków.",
+          "empty": "Nazwisko nie może być puste.",
+          "bad-length": "Nazwisko może mieć maksymalnie 50 znaków."
+        },
+        "login": {
+          "empty": "Login musi zostać podany.",
+          "not-string": "Login musi być ciągiem znaków.",
+          "bad-length": "Login musi mieć co najmniej 5 znaków."
+        },
+        "password": {
+          "empty": "Hasło musi zostać podane.",
+          "not-string": "Hasło musi być ciągiem znaków.",
+          "bad-length": "Hasło musi mieć co najmniej 5 znaków."
+        }
+      }
+    },
     "controllers": {
       "login": {
         "invalid-login": "Nieprawidłowe dane logowania.",

@@ -11,10 +11,13 @@ import {
 import { ValidationChain } from "express-validator";
 import { validate } from "../../src/middlewares/validate";
 import request from "supertest";
+import i18next from "../../src/i18n";
+import middleware from "i18next-http-middleware";
 
 const createTestServer = (validations: ValidationChain[]) => {
   const app = express();
   app.use(express.json());
+  app.use(middleware.handle(i18next));
   app.post("/test", validate(validations), (req, res) => {
     res.status(200).send("Validation passed");
   });

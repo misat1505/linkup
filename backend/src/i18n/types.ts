@@ -41,6 +41,44 @@ type AuthTranslations = {
       "login-already-exists": string;
     };
   };
+  validators: {
+    login: {
+      login: {
+        empty: string;
+        "not-string": string;
+        "bad-length": string;
+      };
+      password: {
+        empty: string;
+        "not-string": string;
+        "bad-length": string;
+      };
+    };
+    signup: {
+      firstName: {
+        "not-exists": string;
+        "not-string": string;
+        empty: string;
+        "bad-length": string;
+      };
+      lastName: {
+        "not-exists": string;
+        "not-string": string;
+        empty: string;
+        "bad-length": string;
+      };
+      login: {
+        empty: string;
+        "not-string": string;
+        "bad-length": string;
+      };
+      password: {
+        empty: string;
+        "not-string": string;
+        "bad-length": string;
+      };
+    };
+  };
 };
 
 type ChatsTranslations = {
