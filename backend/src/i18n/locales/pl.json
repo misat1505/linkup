@@ -67,6 +67,58 @@
     }
   },
   "chats": {
+    "validators": {
+      "create-private-chat": {
+        "users": {
+          "not-2": "Użytkownicy powinni być tablicą zawierającą dokładnie 2 UUID",
+          "each": {
+            "is-not-uuid": "Każdy użytkownik powinien być poprawnym UUID"
+          }
+        }
+      },
+      "create-group-chat": {
+        "users": {
+          "empty": "Użytkownicy powinni być tablicą zawierającą co najmniej 1 UUID",
+          "each": {
+            "is-not-uuid": "Każdy użytkownik powinien być poprawnym UUID"
+          }
+        },
+        "name": {
+          "bad-length": "Nazwa powinna być ciągiem znaków o maksymalnej długości 100 znaków"
+        }
+      },
+      "create-message": {
+        "content": {
+          "bad-length": "Treść powinna być ciągiem znaków o maksymalnej długości 5000 znaków"
+        },
+        "responseId": {
+          "is-not-uuid": "ID odpowiedzi powinno być poprawnym UUID"
+        }
+      },
+      "create-reaction": {
+        "messageId": {
+          "is-not-uuid": "messageId powinno być poprawnym UUID"
+        },
+        "reactionId": {
+          "is-not-uuid": "reactionId powinno być poprawnym UUID"
+        }
+      },
+      "update-alias": {
+        "alias": {
+          "bad-length": "Alias powinien być nullem lub ciągiem znaków o maksymalnej długości 100 znaków"
+        }
+      },
+      "add-user-to-group-chat": {
+        "userId": {
+          "is-not-uuid": "userId powinno być poprawnym UUID"
+        }
+      },
+      "update-group-chat": {
+        "name": {
+          "bad-length": "Nazwa powinna być ciągiem znaków o maksymalnej długości 100 znaków"
+        }
+      }
+    },
     "controllers": {
       "add-user-to-group-chat": {
         "bad-chat-type": "Nie można dodać osób do czatu tego typu.",

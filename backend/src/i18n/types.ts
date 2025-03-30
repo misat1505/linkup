@@ -82,6 +82,44 @@ type AuthTranslations = {
 };
 
 type ChatsTranslations = {
+  validators: {
+    "create-private-chat": {
+      users: {
+        "not-2": string;
+        each: {
+          "is-not-uuid": string;
+        };
+      };
+    };
+    "create-group-chat": {
+      users: {
+        empty: string;
+        each: {
+          "is-not-uuid": string;
+        };
+      };
+      name: { "bad-length": string };
+    };
+    "create-message": {
+      content: { "bad-length": string };
+      responseId: { "is-not-uuid": string };
+    };
+    "create-reaction": {
+      messageId: { "is-not-uuid": string };
+      reactionId: { "is-not-uuid": string };
+    };
+    "update-alias": {
+      alias: {
+        "bad-length": string;
+      };
+    };
+    "add-user-to-group-chat": {
+      userId: { "is-not-uuid": string };
+    };
+    "update-group-chat": {
+      name: { "bad-length": string };
+    };
+  };
   controllers: {
     "add-user-to-group-chat": Failure & {
       "bad-chat-type": string;

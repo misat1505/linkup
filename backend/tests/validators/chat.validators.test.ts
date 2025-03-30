@@ -215,7 +215,7 @@ describe("Chat validators", () => {
       expect(res.body.errors).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            msg: "responseId should be a valid UUID",
+            msg: "reactionId should be a valid UUID",
           }),
         ])
       );

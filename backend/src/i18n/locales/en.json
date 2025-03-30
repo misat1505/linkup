@@ -67,6 +67,50 @@
     }
   },
   "chats": {
+    "validators": {
+      "create-private-chat": {
+        "users": {
+          "not-2": "Users should be an array with exactly 2 UUIDs",
+          "each": {
+            "is-not-uuid": "Each user should be a valid UUID"
+          }
+        }
+      },
+      "create-group-chat": {
+        "users": {
+          "empty": "Users should be an array with at least 1 UUID",
+          "each": {
+            "is-not-uuid": "Each user should be a valid UUID"
+          }
+        },
+        "name": {
+          "bad-length": "Name should be a string with a maximum length of 100 characters"
+        }
+      },
+      "create-message": {
+        "content": {
+          "bad-length": "Content should be a string with a maximum length of 5000 characters"
+        },
+        "responseId": { "is-not-uuid": "Response ID should be a valid UUID" }
+      },
+      "create-reaction": {
+        "messageId": { "is-not-uuid": "messageId should be a valid UUID" },
+        "reactionId": { "is-not-uuid": "reactionId should be a valid UUID" }
+      },
+      "update-alias": {
+        "alias": {
+          "bad-length": "alias should be null or a string of maximum length of 100 characters"
+        }
+      },
+      "add-user-to-group-chat": {
+        "userId": { "is-not-uuid": "userId should be a valid UUID" }
+      },
+      "update-group-chat": {
+        "name": {
+          "bad-length": "Name should be a string with a maximum length of 100 characters"
+        }
+      }
+    },
     "controllers": {
       "add-user-to-group-chat": {
         "bad-chat-type": "Cannot add people to chat of this type.",
