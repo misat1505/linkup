@@ -104,5 +104,28 @@
         "limit-reached": "Osiągnięto limit pamięci podręcznej. Maksymalna liczba plików w pamięci podręcznej: {{count}}"
       }
     }
+  },
+  "friends": {
+    "controllers": {
+      "accept": {
+        "unauthorized": "Nie możesz zaakceptować znajomości, która nie jest przeznaczona do zaakceptowania przez Ciebie.",
+        "failure": "Nie można pobrać znajomości użytkownika.",
+        "not-found": "Znajomość między użytkownikami nie istnieje."
+      },
+      "create": {
+        "unauthorized": "Nie możesz utworzyć znajomości, której nie zażądałeś.",
+        "failure": "Nie można utworzyć znajomości.",
+        "already-exists": "Znajomość między użytkownikami już istnieje."
+      },
+      "delete": {
+        "unauthorized": "Nie możesz usunąć znajomości, która do Ciebie nie należy.",
+        "success": "Znajomość została pomyślnie usunięta.",
+        "failure": "Nie można usunąć znajomości.",
+        "not-found": "Znajomość nie została znaleziona."
+      },
+      "get": {
+        "failure": "Nie można pobrać znajomości użytkownika."
+      }
+    }
   }
 }

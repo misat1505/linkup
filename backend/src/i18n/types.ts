@@ -14,6 +14,7 @@ export type Translations = {
   auth: AuthTranslations;
   chats: ChatsTranslations;
   files: FilesTranslations;
+  friends: FriendsTranslations;
 };
 
 type AuthTranslations = {
@@ -91,5 +92,23 @@ type FilesTranslations = {
       "no-file": string;
       "limit-reached": string;
     };
+  };
+};
+
+type FriendsTranslations = {
+  controllers: {
+    accept: Failure &
+      Unauthorized & {
+        "not-found": string;
+      };
+    create: Failure &
+      Unauthorized & {
+        "already-exists": string;
+      };
+    delete: SuccessOrFailure &
+      Unauthorized & {
+        "not-found": string;
+      };
+    get: Failure;
   };
 };

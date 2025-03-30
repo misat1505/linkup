@@ -104,5 +104,28 @@
         "limit-reached": "Cache limit reached. Maximum number of files in cache: {{count}}"
       }
     }
+  },
+  "friends": {
+    "controllers": {
+      "accept": {
+        "unauthorized": "Cannot accept friendship not being meant to be accepted by you.",
+        "failure": "Cannot get user friendships.",
+        "not-found": "Friendship between users doesn't exist."
+      },
+      "create": {
+        "unauthorized": "Cannot create friendship not requested by you.",
+        "failure": "Cannot create friendship.",
+        "already-exists": "Friendship already exists between users."
+      },
+      "delete": {
+        "unauthorized": "Cannot delete friendship not belonging to you.",
+        "success": "Friendship deleted successfully.",
+        "failure": "Cannot delete friendship.",
+        "not-found": "Friendship not found."
+      },
+      "get": {
+        "failure": "Cannot get user friendships."
+      }
+    }
   }
 }

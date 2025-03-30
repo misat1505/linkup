@@ -96,8 +96,7 @@ export const acceptFriendship = async (
 
     if (userId !== acceptorId)
       return res.status(400).json({
-        message:
-          "Cannot accept friendship not being meant to be accepted by you.",
+        message: req.t("friends.controllers.accept.unauthorized"),
       });
 
     const friendship = await FriendshipService.acceptFriendship(
@@ -108,10 +107,10 @@ export const acceptFriendship = async (
     if (!friendship)
       return res
         .status(409)
-        .json({ message: "Friendship between users doesn't exist." });
+        .json({ message: req.t("friends.controllers.accept.not-found") });
 
     return res.status(200).json({ friendship });
   } catch (e) {
-    next(new Error("Cannot get user friendships."));
+    next(new Error(req.t("friends.controllers.accept.failure")));
   }
 };

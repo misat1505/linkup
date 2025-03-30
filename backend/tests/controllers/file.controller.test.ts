@@ -2,7 +2,7 @@ import request from "supertest";
 import express from "express";
 import path from "path";
 import { FileService } from "../../src/services/FileService";
-import { USER, VALID_USER_ID } from "../utils/constants";
+import { VALID_USER_ID } from "../utils/constants";
 import { getFileController } from "../../src/controllers/file/getFile.controller";
 import { getCache } from "../../src/controllers/file/getCache.controller";
 import { upload } from "../../src/middlewares/multer";

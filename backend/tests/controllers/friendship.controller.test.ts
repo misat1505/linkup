@@ -5,12 +5,15 @@ import { createFriendship } from "../../src/controllers/friendships/createFriend
 import { acceptFriendship } from "../../src/controllers/friendships/acceptFriendship.controller";
 import { getUserFriendships } from "../../src/controllers/friendships/getUserFriendships.controller";
 import { deleteFriendship } from "../../src/controllers/friendships/deleteFriendship.controller";
+import i18next from "../../src/i18n";
+import middleware from "i18next-http-middleware";
 
 jest.mock("../../src/services/FriendshipService");
 
 describe("Friendship controllers", () => {
   const app = express();
   app.use(express.json());
+  app.use(middleware.handle(i18next));
   app.post("/friendships", createFriendship);
   app.post("/friendships/accept", acceptFriendship);
   app.get("/friendships", getUserFriendships);

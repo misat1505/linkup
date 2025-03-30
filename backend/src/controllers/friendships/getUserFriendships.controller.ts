@@ -64,6 +64,6 @@ export const getUserFriendships = async (
 
     return res.status(200).json({ friendships });
   } catch (e) {
-    next(new Error("Cannot get user friendships."));
+    next(new Error(req.t("friends.controllers.get.failure")));
   }
 };
