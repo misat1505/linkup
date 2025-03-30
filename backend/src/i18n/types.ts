@@ -10,6 +10,10 @@ type Unauthorized = {
   unauthorized: string;
 };
 
+type NotFound = {
+  "not-found": string;
+};
+
 export type Translations = {
   auth: AuthTranslations;
   chats: ChatsTranslations;
@@ -81,15 +85,15 @@ type FilesTranslations = {
   controllers: {
     "delete-from-cache": SuccessOrFailure;
     "get-cache": Failure;
-    "get-file": Failure & {
-      "default-error-message": string;
-      "not-found": string;
-      "wrong-filter": string;
-      "bad-chat": string;
-      "bad-post": string;
-      "avatar-not-found": string;
-      "group-photo-not-found": string;
-    };
+    "get-file": Failure &
+      NotFound & {
+        "default-error-message": string;
+        "wrong-filter": string;
+        "bad-chat": string;
+        "bad-post": string;
+        "avatar-not-found": string;
+        "group-photo-not-found": string;
+      };
     "insert-to-cache": Failure & {
       "no-file": string;
       "limit-reached": string;
@@ -99,18 +103,12 @@ type FilesTranslations = {
 
 type FriendsTranslations = {
   controllers: {
-    accept: Failure &
-      Unauthorized & {
-        "not-found": string;
-      };
+    accept: Failure & Unauthorized & NotFound;
     create: Failure &
       Unauthorized & {
         "already-exists": string;
       };
-    delete: SuccessOrFailure &
-      Unauthorized & {
-        "not-found": string;
-      };
+    delete: SuccessOrFailure & Unauthorized & NotFound;
     get: Failure;
   };
 };
@@ -118,19 +116,11 @@ type FriendsTranslations = {
 type PostsTranslations = {
   controllers: {
     create: Failure;
-    delete: SuccessOrFailure &
-      Unauthorized & {
-        "not-found": string;
-      };
-    "get-single": Failure & {
-      "not-found": string;
-    };
+    delete: SuccessOrFailure & Unauthorized & NotFound;
+    "get-single": Failure & NotFound;
     "get-all": Failure;
     "get-users": Failure;
-    update: Failure &
-      Unauthorized & {
-        "not-found": string;
-      };
+    update: Failure & Unauthorized & NotFound;
   };
 };
 
