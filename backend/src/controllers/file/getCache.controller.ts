@@ -60,6 +60,6 @@ export const getCache = async (
 
     return res.status(200).json({ files: filenames });
   } catch (e) {
-    next(new Error("Cannot read cache."));
+    next(new Error(req.t("files.controllers.get-cache.failure")));
   }
 };

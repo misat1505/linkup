@@ -2,7 +2,7 @@ import request from "supertest";
 import express from "express";
 import path from "path";
 import { FileService } from "../../src/services/FileService";
-import { USER, VALID_USER_ID } from "../utils/constants";
+import { VALID_USER_ID } from "../utils/constants";
 import { getFileController } from "../../src/controllers/file/getFile.controller";
 import { getCache } from "../../src/controllers/file/getCache.controller";
 import { upload } from "../../src/middlewares/multer";
@@ -15,6 +15,8 @@ import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { env } from "../../src/config/env";
 import { deleteFromCache } from "../../src/controllers/file/deleteFromCache.controller";
 import fileStorage from "../../src/lib/FileStorage";
+import i18next from "../../src/i18n";
+import middleware from "i18next-http-middleware";
 
 jest.mock("../../src/services/FileService");
 jest.mock("../../src/lib/FileStorage");
@@ -25,6 +27,7 @@ jest.mock("../../src/lib/FileStorage");
 
 const app = express();
 app.use(express.json());
+app.use(middleware.handle(i18next));
 app.post("/cache", upload.single("file"), authorize, insertToCache);
 app.get("/cache", getCache);
 app.delete("/cache/:filename", deleteFromCache);

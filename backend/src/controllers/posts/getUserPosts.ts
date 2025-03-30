@@ -48,6 +48,6 @@ export const getUserPosts = async (
 
     return res.status(200).json({ posts });
   } catch (e) {
-    next(new Error("Couldn't get user posts."));
+    next(new Error(req.t("posts.controllers.get-users.failure")));
   }
 };

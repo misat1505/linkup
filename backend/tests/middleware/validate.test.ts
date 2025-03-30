@@ -2,6 +2,8 @@ import express from "express";
 import request from "supertest";
 import { body } from "express-validator";
 import { validate } from "../../src/middlewares/validate";
+import i18next from "../../src/i18n";
+import middleware from "i18next-http-middleware";
 
 describe("validate middleware", () => {
   const validationRules = [
@@ -10,6 +12,7 @@ describe("validate middleware", () => {
 
   const app = express();
   app.use(express.json());
+  app.use(middleware.handle(i18next));
   app.post("/test", validate(validationRules), (req, res) => {
     res.status(200).send({ message: "Success" });
   });

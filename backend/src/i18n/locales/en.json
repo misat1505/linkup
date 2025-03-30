@@ -1,0 +1,249 @@
+{
+  "auth": {
+    "validators": {
+      "login": {
+        "login": {
+          "empty": "Login must be provided.",
+          "not-string": "Login has to be a string.",
+          "bad-length": "Login must be between 5 and 50 characters long."
+        },
+        "password": {
+          "empty": "Password must be provided.",
+          "not-string": "Password has to be a string.",
+          "bad-length": "Password must be at least 5 characters long."
+        }
+      },
+      "signup": {
+        "firstName": {
+          "not-exists": "First name must be provided.",
+          "not-string": "First name must be a string.",
+          "empty": "First name must not be empty.",
+          "bad-length": "First name must be at most 50 characters long."
+        },
+        "lastName": {
+          "not-exists": "Last name must be provided.",
+          "not-string": "Last name must be a string.",
+          "empty": "Last name must not be empty.",
+          "bad-length": "Last name must be at most 50 characters long."
+        },
+        "login": {
+          "empty": "Login must be provided.",
+          "not-string": "Login has to be a string.",
+          "bad-length": "Login must be at least 5 characters long."
+        },
+        "password": {
+          "empty": "Password must be provided.",
+          "not-string": "Password has to be a string.",
+          "bad-length": "Password must be at least 5 characters long."
+        }
+      }
+    },
+    "controllers": {
+      "login": {
+        "invalid-login": "Invalid login.",
+        "invalid-password": "Invalid password.",
+        "failure": "Cannot login."
+      },
+      "get-self": {
+        "user-not-found": "User not found.",
+        "failure": "Cannot fetch user."
+      },
+      "logout": {
+        "success": "Successfully logged out.",
+        "failure": "Cannot log out."
+      },
+      "refresh": {
+        "success": "Successfully refreshed token.",
+        "failure": "Cannot refresh token."
+      },
+      "signup": {
+        "login-already-exists": "Login already taken.",
+        "failure": "Cannot create new user."
+      },
+      "update": {
+        "login-already-exists": "Login already taken.",
+        "failure": "Cannot update user."
+      }
+    }
+  },
+  "chats": {
+    "validators": {
+      "create-private-chat": {
+        "users": {
+          "not-2": "Users should be an array with exactly 2 UUIDs",
+          "each": {
+            "is-not-uuid": "Each user should be a valid UUID"
+          }
+        }
+      },
+      "create-group-chat": {
+        "users": {
+          "empty": "Users should be an array with at least 1 UUID",
+          "each": {
+            "is-not-uuid": "Each user should be a valid UUID"
+          }
+        },
+        "name": {
+          "bad-length": "Name should be a string with a maximum length of 100 characters"
+        }
+      },
+      "create-message": {
+        "content": {
+          "bad-length": "Content should be a string with a maximum length of 5000 characters"
+        },
+        "responseId": { "is-not-uuid": "Response ID should be a valid UUID" }
+      },
+      "create-reaction": {
+        "messageId": { "is-not-uuid": "messageId should be a valid UUID" },
+        "reactionId": { "is-not-uuid": "reactionId should be a valid UUID" }
+      },
+      "update-alias": {
+        "alias": {
+          "bad-length": "alias should be null or a string of maximum length of 100 characters"
+        }
+      },
+      "add-user-to-group-chat": {
+        "userId": { "is-not-uuid": "userId should be a valid UUID" }
+      },
+      "update-group-chat": {
+        "name": {
+          "bad-length": "Name should be a string with a maximum length of 100 characters"
+        }
+      }
+    },
+    "controllers": {
+      "add-user-to-group-chat": {
+        "bad-chat-type": "Cannot add people to chat of this type.",
+        "i-am-not-in-chat": "Cannot add users to chat to which you do not belong to.",
+        "user-already-in-chat": "User is already in this chat.",
+        "failure": "Cannot add user to this chat."
+      },
+      "create-group-chat": {
+        "not-belonging-to-you": "Cannot create group chat not belonging to you.",
+        "failure": "Cannot create group chat."
+      },
+      "create-message": {
+        "user-not-belonging-to-chat": "You cannot send a message to this chat.",
+        "response-not-existent": "Message of this responseId does not exist in this chat.",
+        "failure": "Cannot create message."
+      },
+      "create-private-chat": {
+        "not-belonging-to-you": "Cannot create private chat not belonging to you.",
+        "failure": "Cannot create private chat."
+      },
+      "create-reaction": {
+        "bad-chat": "You cannot create reaction in chat not belonging to you.",
+        "bad-message": "Cannot create reaction to a message that is not in given chat.",
+        "failure": "Cannot create reaction."
+      },
+      "delete-self-from-chat": {
+        "success": "Successfully deleted from chat.",
+        "failure": "Cannot exit this chat.",
+        "bad-chat-type": "Cannot remove yourself from chat of this type.",
+        "not-belonging-to-you": "Cannot remove yourself from chat which you do not belong to."
+      },
+      "get-messages": {
+        "unauthorized": "You cannot read messages from this chat.",
+        "failure": "Cannot get messages."
+      },
+      "get-self-chats": {
+        "failure": "Cannot get user's chats."
+      },
+      "update-group-chat": {
+        "unauthorized": "Cannot update chat you do not belong to.",
+        "failure": "Cannot create group chat.",
+        "bad-type": "Cannot update chat of this type."
+      },
+      "update-alias": {
+        "unauthorized": "Cannot set aliases in chat you do not belong to.",
+        "failure": "Cannot update alias.",
+        "user-not-in-chat": "This user doesn't belong to this chat."
+      }
+    }
+  },
+  "files": {
+    "controllers": {
+      "delete-from-cache": {
+        "success": "File deleted successfully.",
+        "failure": "Cannot delete file from cache."
+      },
+      "get-cache": {
+        "failure": "Cannot read cache."
+      },
+      "get-file": {
+        "failure": "Cannot fetch file.",
+        "default-error-message": "Query failed",
+        "not-found": "File not found.",
+        "wrong-filter": "Have to apply one of the filters: ",
+        "bad-chat": "Chat has to be a string.",
+        "bad-post": "Post has to be a string.",
+        "avatar-not-found": "Cannot find avatar of this name.",
+        "group-photo-not-found": "Cannot find chat photo of this name."
+      },
+      "insert-to-cache": {
+        "failure": "Cannot insert to cache.",
+        "no-file": "Attach a file to upload it.",
+        "limit-reached": "Cache limit reached. Maximum number of files in cache: {{count}}"
+      }
+    }
+  },
+  "friends": {
+    "controllers": {
+      "accept": {
+        "unauthorized": "Cannot accept friendship not being meant to be accepted by you.",
+        "failure": "Cannot get user friendships.",
+        "not-found": "Friendship between users doesn't exist."
+      },
+      "create": {
+        "unauthorized": "Cannot create friendship not requested by you.",
+        "failure": "Cannot create friendship.",
+        "already-exists": "Friendship already exists between users."
+      },
+      "delete": {
+        "unauthorized": "Cannot delete friendship not belonging to you.",
+        "success": "Friendship deleted successfully.",
+        "failure": "Cannot delete friendship.",
+        "not-found": "Friendship not found."
+      },
+      "get": {
+        "failure": "Cannot get user friendships."
+      }
+    }
+  },
+  "posts": {
+    "controllers": {
+      "create": {
+        "failure": "Couldn't create post."
+      },
+      "delete": {
+        "unauthorized": "Cannot delete post not belonging to you.",
+        "success": "Post deleted successfully.",
+        "failure": "Couldn't delete post.",
+        "not-found": "Post not found."
+      },
+      "get-single": {
+        "failure": "Couldn't get post.",
+        "not-found": "Post not found."
+      },
+      "get-all": {
+        "failure": "Couldn't get posts."
+      },
+      "get-users": {
+        "failure": "Couldn't get user posts."
+      },
+      "update": {
+        "unauthorized": "Cannot edit post not belonging to you.",
+        "failure": "Couldn't update post.",
+        "not-found": "Post not found."
+      }
+    }
+  },
+  "users": {
+    "controllers": {
+      "search": {
+        "failure": "Couldn't search users.",
+        "term-required": "'term' query param is required."
+      }
+    }
+  }
+}

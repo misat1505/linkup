@@ -68,8 +68,10 @@ export const deleteFromCache = async (
 
     await fileStorage.deleteFile(`cache/${userId}/${filename}`);
 
-    return res.status(200).json({ message: "File deleted successfully." });
+    return res
+      .status(200)
+      .json({ message: req.t("files.controllers.delete-from-cache.success") });
   } catch (e) {
-    next(new Error("Cannot delete file from cache."));
+    next(new Error(req.t("files.controllers.delete-from-cache.failure")));
   }
 };

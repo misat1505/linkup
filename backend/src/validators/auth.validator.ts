@@ -13,22 +13,22 @@ import { body } from "express-validator";
 export const loginRules = [
   body("login")
     .exists()
-    .withMessage("Login must be provided.")
+    .withMessage("auth.validators.login.login.empty")
     .bail()
     .isString()
-    .withMessage("Login has to be a string.")
+    .withMessage("auth.validators.login.login.not-string")
     .bail()
     .isLength({ min: 5, max: 50 })
-    .withMessage("Login must be between 5 and 50 characters long."),
+    .withMessage("auth.validators.login.login.bad-length"),
   body("password")
     .exists()
-    .withMessage("Password must be provided.")
+    .withMessage("auth.validators.login.password.empty")
     .bail()
     .isString()
-    .withMessage("Password has to be a string.")
+    .withMessage("auth.validators.login.password.not-string")
     .bail()
     .isLength({ min: 5 })
-    .withMessage("Password must be at least 5 characters long."),
+    .withMessage("auth.validators.login.password.bad-length"),
 ];
 
 /**
@@ -46,44 +46,44 @@ export const loginRules = [
 export const signupRules = [
   body("firstName")
     .exists()
-    .withMessage("First name must be provided.")
+    .withMessage("auth.validators.signup.firstName.not-exists")
     .bail()
     .isString()
-    .withMessage("First name must be a string.")
+    .withMessage("auth.validators.signup.firstName.not-string")
     .bail()
     .notEmpty()
-    .withMessage("First name must not be empty.")
+    .withMessage("auth.validators.signup.firstName.empty")
     .bail()
     .isLength({ max: 50 })
-    .withMessage("First name must be at most 50 characters long."),
+    .withMessage("auth.validators.signup.firstName.bad-length"),
   body("lastName")
     .exists()
-    .withMessage("Last name must be provided.")
+    .withMessage("auth.validators.signup.lastName.not-exists")
     .bail()
     .isString()
-    .withMessage("Last name must be a string.")
+    .withMessage("auth.validators.signup.lastName.not-string")
     .bail()
     .notEmpty()
-    .withMessage("Last name must not be empty.")
+    .withMessage("auth.validators.signup.lastName.empty")
     .bail()
     .isLength({ max: 50 })
-    .withMessage("Last name must be at most 50 characters long."),
+    .withMessage("auth.validators.signup.lastName.bad-length"),
   body("login")
     .exists()
-    .withMessage("Login must be provided.")
+    .withMessage("auth.validators.signup.login.empty")
     .bail()
     .isString()
-    .withMessage("Login has to be a string.")
+    .withMessage("auth.validators.signup.login.not-string")
     .bail()
     .isLength({ min: 5, max: 50 })
-    .withMessage("Login must be at least 5 characters long."),
+    .withMessage("auth.validators.signup.login.bad-length"),
   body("password")
     .exists()
-    .withMessage("Password must be provided.")
+    .withMessage("auth.validators.signup.password.empty")
     .bail()
     .isString()
-    .withMessage("Password has to be a string.")
+    .withMessage("auth.validators.signup.password.not-string")
     .bail()
     .isLength({ min: 5 })
-    .withMessage("Password must be at least 5 characters long."),
+    .withMessage("auth.validators.signup.password.bad-length"),
 ];

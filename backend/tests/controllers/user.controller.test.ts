@@ -4,12 +4,15 @@ import { USER_WITHOUT_CREDENTIALS } from "../utils/constants";
 import request from "supertest";
 import { User } from "../../src/types/User";
 import { searchUserController } from "../../src/controllers/user/searchUser.controller";
+import i18next from "../../src/i18n";
+import middleware from "i18next-http-middleware";
 
 jest.mock("../../src/services/UserService");
 
 describe("User controllers", () => {
   const app = express();
   app.use(express.json());
+  app.use(middleware.handle(i18next));
   app.get("/search", searchUserController);
 
   describe("searchUser", () => {

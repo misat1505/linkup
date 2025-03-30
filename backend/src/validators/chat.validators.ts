@@ -9,8 +9,10 @@ import { body } from "express-validator";
 export const createPrivateChatRules = [
   body("users")
     .isArray({ min: 2, max: 2 })
-    .withMessage("Users should be an array with exactly 2 UUIDs"),
-  body("users.*").isUUID().withMessage("Each user should be a valid UUID"),
+    .withMessage("chats.validators.create-private-chat.users.not-2"),
+  body("users.*")
+    .isUUID()
+    .withMessage("chats.validators.create-private-chat.users.each.is-not-uuid"),
 ];
 
 /**
@@ -24,15 +26,15 @@ export const createPrivateChatRules = [
 export const createGroupChatRules = [
   body("users")
     .isArray({ min: 1 })
-    .withMessage("Users should be an array with at least 1 UUID"),
-  body("users.*").isUUID().withMessage("Each user should be a valid UUID"),
+    .withMessage("chats.validators.create-group-chat.users.empty"),
+  body("users.*")
+    .isUUID()
+    .withMessage("chats.validators.create-group-chat.users.each.is-not-uuid"),
   body("name")
     .optional({ nullable: true })
     .isString()
     .isLength({ max: 100 })
-    .withMessage(
-      "Name should be a string with a maximum length of 100 characters"
-    ),
+    .withMessage("chats.validators.create-group-chat.name.bad-length"),
   body("file").optional(),
 ];
 
@@ -47,13 +49,11 @@ export const createMessageRules = [
   body("content")
     .isString()
     .isLength({ max: 5000 })
-    .withMessage(
-      "Content should be a string with a maximum length of 5000 characters"
-    ),
+    .withMessage("chats.validators.create-message.content.bad-length"),
   body("responseId")
     .optional()
     .isUUID()
-    .withMessage("Response ID should be a valid UUID"),
+    .withMessage("chats.validators.create-message.responseId.is-not-uuid"),
 ];
 
 /**
@@ -64,8 +64,12 @@ export const createMessageRules = [
  * @constant
  */
 export const createReactionRules = [
-  body("messageId").isUUID().withMessage("messageId should be a valid UUID"),
-  body("reactionId").isUUID().withMessage("responseId should be a valid UUID"),
+  body("messageId")
+    .isUUID()
+    .withMessage("chats.validators.create-reaction.messageId.is-not-uuid"),
+  body("reactionId")
+    .isUUID()
+    .withMessage("chats.validators.create-reaction.reactionId.is-not-uuid"),
 ];
 
 /**
@@ -79,9 +83,7 @@ export const updateAliasRules = [
     .optional({ nullable: true })
     .isString()
     .isLength({ max: 100 })
-    .withMessage(
-      "alias should be null or a string of maximum length of 100 characters"
-    ),
+    .withMessage("chats.validators.update-alias.alias.bad-length"),
 ];
 
 /**
@@ -91,7 +93,9 @@ export const updateAliasRules = [
  * @constant
  */
 export const addUserToGroupChatRules = [
-  body("userId").isUUID().withMessage("userId should be a valid UUID"),
+  body("userId")
+    .isUUID()
+    .withMessage("chats.validators.add-user-to-group-chat.userId.is-not-uuid"),
 ];
 
 /**
@@ -106,8 +110,6 @@ export const updateGroupChatRules = [
     .optional({ nullable: true })
     .isString()
     .isLength({ max: 100 })
-    .withMessage(
-      "Name should be a string with a maximum length of 100 characters"
-    ),
+    .withMessage("chats.validators.update-group-chat.name.bad-length"),
   body("file").optional(),
 ];

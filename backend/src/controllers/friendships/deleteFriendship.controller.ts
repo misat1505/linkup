@@ -73,7 +73,7 @@ import { FriendshipService } from "../../services/FriendshipService";
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Cannot get user friendships."
+ *                   example: "Cannot delete friendship."
  */
 export const deleteFriendship = async (
   req: Request,
@@ -87,7 +87,7 @@ export const deleteFriendship = async (
     if (![requesterId, acceptorId].includes(userId))
       return res
         .status(400)
-        .json({ message: "Cannot delete friendship not belonging to you." });
+        .json({ message: req.t("friends.controllers.delete.unauthorized") });
 
     const isDeleted = await FriendshipService.deleteFriendship(
       requesterId,
@@ -95,12 +95,14 @@ export const deleteFriendship = async (
     );
 
     if (!isDeleted)
-      return res.status(404).json({ message: "Friendship not found." });
+      return res
+        .status(404)
+        .json({ message: req.t("friends.controllers.delete.not-found") });
 
     return res
       .status(200)
-      .json({ message: "Friendship deleted successfully." });
+      .json({ message: req.t("friends.controllers.delete.success") });
   } catch (e) {
-    next(new Error("Cannot get user friendships."));
+    next(new Error(req.t("friends.controllers.delete.failure")));
   }
 };

@@ -8,6 +8,8 @@ import { getUserPosts } from "../../src/controllers/posts/getUserPosts";
 import { updatePost } from "../../src/controllers/posts/updatePost";
 import { handleMarkdownUpdate } from "../../src/utils/updatePost";
 import { deletePost } from "../../src/controllers/posts/deletePost";
+import i18next from "../../src/i18n";
+import middleware from "i18next-http-middleware";
 
 jest.mock("../../src/lib/FileStorage");
 jest.mock("../../src/services/PostService");
@@ -22,6 +24,7 @@ const mockErrorMiddleware = jest.fn(
 describe("Post controllers", () => {
   const app = express();
   app.use(express.json());
+  app.use(middleware.handle(i18next));
   app.put("/posts/:id", updatePost);
   app.get("/posts/mine", getUserPosts);
   app.get("/posts/:id", getPost);

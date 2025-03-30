@@ -71,12 +71,15 @@ export const updatePost = async (
 
     const post = await PostService.getPost(id);
 
-    if (!post) return res.status(404).json({ message: "Post not found." });
+    if (!post)
+      return res
+        .status(404)
+        .json({ message: req.t("posts.controllers.update.not-found") });
 
     if (post.author.id !== userId)
       return res
         .status(401)
-        .json({ message: "Cannot edit post not belonging to you." });
+        .json({ message: req.t("posts.controllers.update.unauthorized") });
 
     const updatedContent = await handleMarkdownUpdate(content, userId, id);
 
@@ -87,6 +90,6 @@ export const updatePost = async (
 
     return res.status(200).json({ post: newPost });
   } catch (e) {
-    next(new Error("Couldn't get post."));
+    next(new Error(req.t("posts.controllers.update.failure")));
   }
 };

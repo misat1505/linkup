@@ -60,11 +60,11 @@ export const searchUserController = async (
     if (!term || typeof term !== "string")
       return res
         .status(400)
-        .json({ message: "'term' query param is required." });
+        .json({ message: req.t("users.controllers.search.term-required") });
 
     const users = await UserService.searchUsers(term);
     return res.status(200).json({ users });
   } catch (e) {
-    next(new Error("Couldn't search users."));
+    next(new Error(req.t("users.controllers.search.failure")));
   }
 };

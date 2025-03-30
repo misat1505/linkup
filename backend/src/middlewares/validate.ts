@@ -28,6 +28,11 @@ export const validate = (validations: ValidationChain[]) => {
       return next();
     }
 
-    res.status(400).json({ errors: errors.array() });
+    const i18nErrors = errors.array().map((err) => ({
+      ...err,
+      msg: req.t(err.msg),
+    }));
+
+    res.status(400).json({ errors: i18nErrors });
   };
 };

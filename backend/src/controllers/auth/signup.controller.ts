@@ -81,7 +81,11 @@ export const signupController = async (
     const isLoginTaken = await UserService.isLoginTaken(login);
 
     if (isLoginTaken) {
-      return res.status(409).json({ message: "Login already taken." });
+      return res
+        .status(409)
+        .json({
+          message: req.t("auth.controllers.signup.login-already-exists"),
+        });
     }
 
     const user: UserWithCredentials = {
@@ -112,6 +116,6 @@ export const signupController = async (
       .status(201)
       .json({ user: UserService.removeCredentials(user), accessToken });
   } catch (e) {
-    next(new Error("Cannot create new user."));
+    next(new Error(req.t("auth.controllers.signup.failure")));
   }
 };

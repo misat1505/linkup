@@ -13,6 +13,8 @@ import { updateAliasController } from "../../src/controllers/chat/updateUserAlia
 import { addUserToGroupChatController } from "../../src/controllers/chat/addUserToGroupChat.controller";
 import { deleteSelfFromGroupChatController } from "../../src/controllers/chat/deleteSelfFromGroupChat.controller";
 import { updateGroupChatController } from "../../src/controllers/chat/updateGroupChat.controller";
+import i18next from "../../src/i18n";
+import middleware from "i18next-http-middleware";
 
 jest.mock("../../src/services/ChatService");
 jest.mock("../../src/utils/processAvatar");
@@ -20,6 +22,7 @@ jest.mock("../../src/utils/processAvatar");
 describe("Chat controllers", () => {
   const app = express();
   app.use(express.json());
+  app.use(middleware.handle(i18next));
   app.post("/:chatId/reactions", createReactionController);
   app.get("/:chatId/messages", getChatMessagesController);
   app.post("/:chatId/messages", upload.array("files"), createMessageController);
@@ -113,7 +116,7 @@ describe("Chat controllers", () => {
 
       expect(response.status).toBe(400);
       expect(response.body).toEqual({
-        message: "cannot update chat of this type.",
+        message: "Cannot update chat of this type.",
       });
       expect(ChatService.isUserInChat).toHaveBeenCalledWith({
         chatId: "123",

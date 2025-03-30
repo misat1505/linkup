@@ -1,0 +1,257 @@
+{
+  "auth": {
+    "validators": {
+      "login": {
+        "login": {
+          "empty": "Login musi zostać podany.",
+          "not-string": "Login musi być ciągiem znaków.",
+          "bad-length": "Login musi mieć od 5 do 50 znaków."
+        },
+        "password": {
+          "empty": "Hasło musi zostać podane.",
+          "not-string": "Hasło musi być ciągiem znaków.",
+          "bad-length": "Hasło musi mieć co najmniej 5 znaków."
+        }
+      },
+      "signup": {
+        "firstName": {
+          "not-exists": "Imię musi zostać podane.",
+          "not-string": "Imię musi być ciągiem znaków.",
+          "empty": "Imię nie może być puste.",
+          "bad-length": "Imię może mieć maksymalnie 50 znaków."
+        },
+        "lastName": {
+          "not-exists": "Nazwisko musi zostać podane.",
+          "not-string": "Nazwisko musi być ciągiem znaków.",
+          "empty": "Nazwisko nie może być puste.",
+          "bad-length": "Nazwisko może mieć maksymalnie 50 znaków."
+        },
+        "login": {
+          "empty": "Login musi zostać podany.",
+          "not-string": "Login musi być ciągiem znaków.",
+          "bad-length": "Login musi mieć co najmniej 5 znaków."
+        },
+        "password": {
+          "empty": "Hasło musi zostać podane.",
+          "not-string": "Hasło musi być ciągiem znaków.",
+          "bad-length": "Hasło musi mieć co najmniej 5 znaków."
+        }
+      }
+    },
+    "controllers": {
+      "login": {
+        "invalid-login": "Nieprawidłowe dane logowania.",
+        "invalid-password": "Nieprawidłowe hasło.",
+        "failure": "Nie udało się zalogować."
+      },
+      "get-self": {
+        "user-not-found": "Nie znaleziono użytkownika.",
+        "failure": "Nie udało się pobrać danych użytkownika."
+      },
+      "logout": {
+        "success": "Pomyślnie wylogowano.",
+        "failure": "Nie udało się wylogować."
+      },
+      "refresh": {
+        "success": "Pomyślnie odświeżono token.",
+        "failure": "Nie udało się odświeżyć tokenu."
+      },
+      "signup": {
+        "login-already-exists": "Login już zajęty.",
+        "failure": "Nie udało się utworzyć nowego użytkownika."
+      },
+      "update": {
+        "login-already-exists": "Login już zajęty.",
+        "failure": "Nie udało się zaktualizować użytkownika."
+      }
+    }
+  },
+  "chats": {
+    "validators": {
+      "create-private-chat": {
+        "users": {
+          "not-2": "Użytkownicy powinni być tablicą zawierającą dokładnie 2 UUID",
+          "each": {
+            "is-not-uuid": "Każdy użytkownik powinien być poprawnym UUID"
+          }
+        }
+      },
+      "create-group-chat": {
+        "users": {
+          "empty": "Użytkownicy powinni być tablicą zawierającą co najmniej 1 UUID",
+          "each": {
+            "is-not-uuid": "Każdy użytkownik powinien być poprawnym UUID"
+          }
+        },
+        "name": {
+          "bad-length": "Nazwa powinna być ciągiem znaków o maksymalnej długości 100 znaków"
+        }
+      },
+      "create-message": {
+        "content": {
+          "bad-length": "Treść powinna być ciągiem znaków o maksymalnej długości 5000 znaków"
+        },
+        "responseId": {
+          "is-not-uuid": "ID odpowiedzi powinno być poprawnym UUID"
+        }
+      },
+      "create-reaction": {
+        "messageId": {
+          "is-not-uuid": "messageId powinno być poprawnym UUID"
+        },
+        "reactionId": {
+          "is-not-uuid": "reactionId powinno być poprawnym UUID"
+        }
+      },
+      "update-alias": {
+        "alias": {
+          "bad-length": "Alias powinien być nullem lub ciągiem znaków o maksymalnej długości 100 znaków"
+        }
+      },
+      "add-user-to-group-chat": {
+        "userId": {
+          "is-not-uuid": "userId powinno być poprawnym UUID"
+        }
+      },
+      "update-group-chat": {
+        "name": {
+          "bad-length": "Nazwa powinna być ciągiem znaków o maksymalnej długości 100 znaków"
+        }
+      }
+    },
+    "controllers": {
+      "add-user-to-group-chat": {
+        "bad-chat-type": "Nie można dodać osób do czatu tego typu.",
+        "i-am-not-in-chat": "Nie możesz dodać użytkowników do czatu, do którego nie należysz.",
+        "user-already-in-chat": "Użytkownik jest już w tym czacie.",
+        "failure": "Nie można dodać użytkownika do tego czatu."
+      },
+      "create-group-chat": {
+        "not-belonging-to-you": "Nie można utworzyć czatu grupowego, który do Ciebie nie należy.",
+        "failure": "Nie można utworzyć czatu grupowego."
+      },
+      "create-message": {
+        "user-not-belonging-to-chat": "Nie możesz wysłać wiadomości do tego czatu.",
+        "response-not-existent": "Wiadomość o podanym responseId nie istnieje w tym czacie.",
+        "failure": "Nie można utworzyć wiadomości."
+      },
+      "create-private-chat": {
+        "not-belonging-to-you": "Nie można utworzyć czatu prywatnego, który do Ciebie nie należy.",
+        "failure": "Nie można utworzyć czatu prywatnego."
+      },
+      "create-reaction": {
+        "bad-chat": "Nie możesz dodać reakcji w czacie, do którego nie należysz.",
+        "bad-message": "Nie można dodać reakcji do wiadomości, która nie znajduje się w danym czacie.",
+        "failure": "Nie można dodać reakcji."
+      },
+      "delete-self-from-chat": {
+        "success": "Pomyślnie usunięto z czatu.",
+        "failure": "Nie można opuścić tego czatu.",
+        "bad-chat-type": "Nie można usunąć się z czatu tego typu.",
+        "not-belonging-to-you": "Nie możesz opuścić czatu, do którego nie należysz."
+      },
+      "get-messages": {
+        "unauthorized": "Nie możesz czytać wiadomości z tego czatu.",
+        "failure": "Nie można pobrać wiadomości."
+      },
+      "get-self-chats": {
+        "failure": "Nie można pobrać czatów użytkownika."
+      },
+      "update-group-chat": {
+        "unauthorized": "Nie możesz zaktualizować czatu, do którego nie należysz.",
+        "failure": "Nie można zaktualizować czatu grupowego.",
+        "bad-type": "Nie można zaktualizować czatu tego typu."
+      },
+      "update-alias": {
+        "unauthorized": "Nie możesz ustawić aliasów w czacie, do którego nie należysz.",
+        "failure": "Nie można zaktualizować aliasu.",
+        "user-not-in-chat": "Ten użytkownik nie należy do tego czatu."
+      }
+    }
+  },
+  "files": {
+    "controllers": {
+      "delete-from-cache": {
+        "success": "Plik został pomyślnie usunięty.",
+        "failure": "Nie można usunąć pliku z pamięci podręcznej."
+      },
+      "get-cache": {
+        "failure": "Nie można odczytać pamięci podręcznej."
+      },
+      "get-file": {
+        "failure": "Nie można pobrać pliku.",
+        "default-error-message": "Zapytanie nie powiodło się.",
+        "not-found": "Plik nie został znaleziony.",
+        "wrong-filter": "Należy zastosować jeden z filtrów: ",
+        "bad-chat": "Czat musi być ciągiem znaków.",
+        "bad-post": "Post musi być ciągiem znaków.",
+        "avatar-not-found": "Nie można znaleźć awatara o tej nazwie.",
+        "group-photo-not-found": "Nie można znaleźć zdjęcia czatu o tej nazwie."
+      },
+      "insert-to-cache": {
+        "failure": "Nie można dodać do pamięci podręcznej.",
+        "no-file": "Dołącz plik, aby go przesłać.",
+        "limit-reached": "Osiągnięto limit pamięci podręcznej. Maksymalna liczba plików w pamięci podręcznej: {{count}}"
+      }
+    }
+  },
+  "friends": {
+    "controllers": {
+      "accept": {
+        "unauthorized": "Nie możesz zaakceptować znajomości, która nie jest przeznaczona do zaakceptowania przez Ciebie.",
+        "failure": "Nie można pobrać znajomości użytkownika.",
+        "not-found": "Znajomość między użytkownikami nie istnieje."
+      },
+      "create": {
+        "unauthorized": "Nie możesz utworzyć znajomości, której nie zażądałeś.",
+        "failure": "Nie można utworzyć znajomości.",
+        "already-exists": "Znajomość między użytkownikami już istnieje."
+      },
+      "delete": {
+        "unauthorized": "Nie możesz usunąć znajomości, która do Ciebie nie należy.",
+        "success": "Znajomość została pomyślnie usunięta.",
+        "failure": "Nie można usunąć znajomości.",
+        "not-found": "Znajomość nie została znaleziona."
+      },
+      "get": {
+        "failure": "Nie można pobrać znajomości użytkownika."
+      }
+    }
+  },
+  "posts": {
+    "controllers": {
+      "create": {
+        "failure": "Nie można utworzyć posta."
+      },
+      "delete": {
+        "unauthorized": "Nie możesz usunąć posta, który do Ciebie nie należy.",
+        "success": "Post został pomyślnie usunięty.",
+        "failure": "Nie można usunąć posta.",
+        "not-found": "Post nie został znaleziony."
+      },
+      "get-single": {
+        "failure": "Nie można pobrać posta.",
+        "not-found": "Post nie został znaleziony."
+      },
+      "get-all": {
+        "failure": "Nie można pobrać postów."
+      },
+      "get-users": {
+        "failure": "Nie można pobrać postów użytkownika."
+      },
+      "update": {
+        "unauthorized": "Nie możesz edytować posta, który do Ciebie nie należy.",
+        "failure": "Nie można zaktualizować posta.",
+        "not-found": "Post nie został znaleziony."
+      }
+    }
+  },
+  "users": {
+    "controllers": {
+      "search": {
+        "failure": "Nie można wyszukać użytkowników.",
+        "term-required": "Parametr zapytania 'term' jest wymagany."
+      }
+    }
+  }
+}

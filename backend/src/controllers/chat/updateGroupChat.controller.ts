@@ -72,13 +72,17 @@ export const updateGroupChatController = async (
     if (!isAuthorized)
       return res
         .status(401)
-        .json({ message: "Cannot update chat you do not belong to." });
+        .json({
+          message: req.t("chats.controllers.update-group-chat.unauthorized"),
+        });
 
     const oldChat = await ChatService.getChatById(chatId);
     if (!oldChat || oldChat.type !== "GROUP")
       return res
         .status(400)
-        .json({ message: "cannot update chat of this type." });
+        .json({
+          message: req.t("chats.controllers.update-group-chat.bad-type"),
+        });
 
     const newFilename = uuidv4();
     const file = await processAvatar(
@@ -99,6 +103,6 @@ export const updateGroupChatController = async (
 
     return res.status(201).json({ chat });
   } catch (e) {
-    next(new Error("Cannot create group chat."));
+    next(new Error(req.t("chats.controllers.update-group-chat.failure")));
   }
 };

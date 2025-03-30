@@ -83,7 +83,7 @@ import { FriendshipService } from "../../services/FriendshipService";
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Cannot get user friendships."
+ *                   example: "Cannot create friendship."
  */
 export const createFriendship = async (
   req: Request,
@@ -97,7 +97,7 @@ export const createFriendship = async (
     if (userId !== requesterId)
       return res
         .status(400)
-        .json({ message: "Cannot create friendship not requested by you." });
+        .json({ message: req.t("friends.controllers.create.unauthorized") });
 
     const friendship = await FriendshipService.createFriendship(
       requesterId,
@@ -107,10 +107,10 @@ export const createFriendship = async (
     if (!friendship)
       return res
         .status(409)
-        .json({ message: "Friendship already exists between users." });
+        .json({ message: req.t("friends.controllers.create.already-exists") });
 
     return res.status(201).json({ friendship });
   } catch (e) {
-    next(new Error("Cannot get user friendships."));
+    next(new Error(req.t("friends.controllers.create.failure")));
   }
 };

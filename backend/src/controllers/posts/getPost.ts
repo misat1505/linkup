@@ -51,10 +51,13 @@ export const getPost = async (
 
     const post = await PostService.getPost(id);
 
-    if (!post) return res.status(404).json({ message: "Post not found." });
+    if (!post)
+      return res
+        .status(404)
+        .json({ message: req.t("posts.controllers.get-single.not-found") });
 
     return res.status(200).json({ post });
   } catch (e) {
-    next(new Error("Couldn't get post."));
+    next(new Error(req.t("posts.controllers.get-single.failure")));
   }
 };
