@@ -1,0 +1,249 @@
+{
+  "auth": {
+    "validators": {
+      "login": {
+        "login": {
+          "empty": "必须提供登录名。",
+          "not-string": "登录名必须是字符串。",
+          "bad-length": "登录名必须介于5到50个字符之间。"
+        },
+        "password": {
+          "empty": "必须提供密码。",
+          "not-string": "密码必须是字符串。",
+          "bad-length": "密码必须至少有5个字符。"
+        }
+      },
+      "signup": {
+        "firstName": {
+          "not-exists": "必须提供名字。",
+          "not-string": "名字必须是字符串。",
+          "empty": "名字不能为空。",
+          "bad-length": "名字最多不能超过50个字符。"
+        },
+        "lastName": {
+          "not-exists": "必须提供姓氏。",
+          "not-string": "姓氏必须是字符串。",
+          "empty": "姓氏不能为空。",
+          "bad-length": "姓氏最多不能超过50个字符。"
+        },
+        "login": {
+          "empty": "必须提供登录名。",
+          "not-string": "登录名必须是字符串。",
+          "bad-length": "登录名必须至少有5个字符。"
+        },
+        "password": {
+          "empty": "必须提供密码。",
+          "not-string": "密码必须是字符串。",
+          "bad-length": "密码必须至少有5个字符。"
+        }
+      }
+    },
+    "controllers": {
+      "login": {
+        "invalid-login": "无效的登录名。",
+        "invalid-password": "无效的密码。",
+        "failure": "无法登录。"
+      },
+      "get-self": {
+        "user-not-found": "用户未找到。",
+        "failure": "无法获取用户信息。"
+      },
+      "logout": {
+        "success": "成功退出登录。",
+        "failure": "无法退出登录。"
+      },
+      "refresh": {
+        "success": "成功刷新令牌。",
+        "failure": "无法刷新令牌。"
+      },
+      "signup": {
+        "login-already-exists": "登录名已被占用。",
+        "failure": "无法创建新用户。"
+      },
+      "update": {
+        "login-already-exists": "登录名已被占用。",
+        "failure": "无法更新用户。"
+      }
+    }
+  },
+  "chats": {
+    "validators": {
+      "create-private-chat": {
+        "users": {
+          "not-2": "用户必须是包含正好2个UUID的数组。",
+          "each": {
+            "is-not-uuid": "每个用户必须是有效的UUID。"
+          }
+        }
+      },
+      "create-group-chat": {
+        "users": {
+          "empty": "用户必须是包含至少1个UUID的数组。",
+          "each": {
+            "is-not-uuid": "每个用户必须是有效的UUID。"
+          }
+        },
+        "name": {
+          "bad-length": "名称必须是最大长度为100个字符的字符串。"
+        }
+      },
+      "create-message": {
+        "content": {
+          "bad-length": "内容必须是最大长度为5000个字符的字符串。"
+        },
+        "responseId": { "is-not-uuid": "回复ID必须是有效的UUID。" }
+      },
+      "create-reaction": {
+        "messageId": { "is-not-uuid": "messageId必须是有效的UUID。" },
+        "reactionId": { "is-not-uuid": "reactionId必须是有效的UUID。" }
+      },
+      "update-alias": {
+        "alias": {
+          "bad-length": "别名必须是null或最大长度为100个字符的字符串。"
+        }
+      },
+      "add-user-to-group-chat": {
+        "userId": { "is-not-uuid": "userId必须是有效的UUID。" }
+      },
+      "update-group-chat": {
+        "name": {
+          "bad-length": "名称必须是最大长度为100个字符的字符串。"
+        }
+      }
+    },
+    "controllers": {
+      "add-user-to-group-chat": {
+        "bad-chat-type": "无法将人员添加到此类型的聊天。",
+        "i-am-not-in-chat": "您无法将用户添加到您不属于的聊天。",
+        "user-already-in-chat": "用户已在此聊天中。",
+        "failure": "无法将用户添加到此聊天。"
+      },
+      "create-group-chat": {
+        "not-belonging-to-you": "您无法创建不属于您的群聊。",
+        "failure": "无法创建群聊。"
+      },
+      "create-message": {
+        "user-not-belonging-to-chat": "您无法向此聊天发送消息。",
+        "response-not-existent": "此responseId的消息在此聊天中不存在。",
+        "failure": "无法创建消息。"
+      },
+      "create-private-chat": {
+        "not-belonging-to-you": "您无法创建不属于您的私人聊天。",
+        "failure": "无法创建私人聊天。"
+      },
+      "create-reaction": {
+        "bad-chat": "您无法在不属于您的聊天中创建反应。",
+        "bad-message": "无法对不在指定聊天中的消息创建反应。",
+        "failure": "无法创建反应。"
+      },
+      "delete-self-from-chat": {
+        "success": "成功从聊天中删除。",
+        "failure": "无法退出此聊天。",
+        "bad-chat-type": "您无法从此类型的聊天中移除自己。",
+        "not-belonging-to-you": "您无法从您不属于的聊天中移除自己。"
+      },
+      "get-messages": {
+        "unauthorized": "您无法从此聊天中读取消息。",
+        "failure": "无法获取消息。"
+      },
+      "get-self-chats": {
+        "failure": "无法获取用户的聊天。"
+      },
+      "update-group-chat": {
+        "unauthorized": "您无法更新不属于您的聊天。",
+        "failure": "无法创建群聊。",
+        "bad-type": "无法更新此类型的聊天。"
+      },
+      "update-alias": {
+        "unauthorized": "您无法在不属于您的聊天中设置别名。",
+        "failure": "无法更新别名。",
+        "user-not-in-chat": "此用户不属于此聊天。"
+      }
+    }
+  },
+  "files": {
+    "controllers": {
+      "delete-from-cache": {
+        "success": "文件删除成功。",
+        "failure": "无法从缓存中删除文件。"
+      },
+      "get-cache": {
+        "failure": "无法读取缓存。"
+      },
+      "get-file": {
+        "failure": "无法获取文件。",
+        "default-error-message": "查询失败。",
+        "not-found": "文件未找到。",
+        "wrong-filter": "必须应用以下之一的过滤器：",
+        "bad-chat": "聊天必须是字符串。",
+        "bad-post": "帖子必须是字符串。",
+        "avatar-not-found": "无法找到此名称的头像。",
+        "group-photo-not-found": "无法找到此名称的聊天照片。"
+      },
+      "insert-to-cache": {
+        "failure": "无法插入到缓存。",
+        "no-file": "请附加文件以进行上传。",
+        "limit-reached": "缓存限制已达到。缓存中文件的最大数量：{{count}}"
+      }
+    }
+  },
+  "friends": {
+    "controllers": {
+      "accept": {
+        "unauthorized": "您无法接受不是为您准备的友谊。",
+        "failure": "无法获取用户的友谊。",
+        "not-found": "用户之间的友谊不存在。"
+      },
+      "create": {
+        "unauthorized": "您无法创建您未请求的友谊。",
+        "failure": "无法创建友谊。",
+        "already-exists": "用户之间已存在友谊。"
+      },
+      "delete": {
+        "unauthorized": "您无法删除不属于您的友谊。",
+        "success": "友谊删除成功。",
+        "failure": "无法删除友谊。",
+        "not-found": "友谊未找到。"
+      },
+      "get": {
+        "failure": "无法获取用户的友谊。"
+      }
+    }
+  },
+  "posts": {
+    "controllers": {
+      "create": {
+        "failure": "无法创建帖子。"
+      },
+      "delete": {
+        "unauthorized": "您无法删除不属于您的帖子。",
+        "success": "帖子删除成功。",
+        "failure": "无法删除帖子。",
+        "not-found": "帖子未找到。"
+      },
+      "get-single": {
+        "failure": "无法获取帖子。",
+        "not-found": "帖子未找到。"
+      },
+      "get-all": {
+        "failure": "无法获取帖子。"
+      },
+      "get-users": {
+        "failure": "无法获取用户帖子。"
+      },
+      "update": {
+        "unauthorized": "您无法编辑不属于您的帖子。",
+        "failure": "无法更新帖子。",
+        "not-found": "帖子未找到。"
+      }
+    }
+  },
+  "users": {
+    "controllers": {
+      "search": {
+        "failure": "无法搜索用户。",
+        "term-required": "'term' 查询参数是必需的。"
+      }
+    }
+  }
+}

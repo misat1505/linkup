@@ -1,0 +1,253 @@
+{
+  "auth": {
+    "validators": {
+      "login": {
+        "login": {
+          "empty": "El inicio de sesión debe ser proporcionado.",
+          "not-string": "El inicio de sesión debe ser una cadena.",
+          "bad-length": "El inicio de sesión debe tener entre 5 y 50 caracteres."
+        },
+        "password": {
+          "empty": "La contraseña debe ser proporcionada.",
+          "not-string": "La contraseña debe ser una cadena.",
+          "bad-length": "La contraseña debe tener al menos 5 caracteres."
+        }
+      },
+      "signup": {
+        "firstName": {
+          "not-exists": "El nombre debe ser proporcionado.",
+          "not-string": "El nombre debe ser una cadena.",
+          "empty": "El nombre no debe estar vacío.",
+          "bad-length": "El nombre debe tener como máximo 50 caracteres."
+        },
+        "lastName": {
+          "not-exists": "El apellido debe ser proporcionado.",
+          "not-string": "El apellido debe ser una cadena.",
+          "empty": "El apellido no debe estar vacío.",
+          "bad-length": "El apellido debe tener como máximo 50 caracteres."
+        },
+        "login": {
+          "empty": "El inicio de sesión debe ser proporcionado.",
+          "not-string": "El inicio de sesión debe ser una cadena.",
+          "bad-length": "El inicio de sesión debe tener al menos 5 caracteres."
+        },
+        "password": {
+          "empty": "La contraseña debe ser proporcionada.",
+          "not-string": "La contraseña debe ser una cadena.",
+          "bad-length": "La contraseña debe tener al menos 5 caracteres."
+        }
+      }
+    },
+    "controllers": {
+      "login": {
+        "invalid-login": "Inicio de sesión inválido.",
+        "invalid-password": "Contraseña inválida.",
+        "failure": "No se puede iniciar sesión."
+      },
+      "get-self": {
+        "user-not-found": "Usuario no encontrado.",
+        "failure": "No se puede obtener el usuario."
+      },
+      "logout": {
+        "success": "Sesión cerrada exitosamente.",
+        "failure": "No se puede cerrar sesión."
+      },
+      "refresh": {
+        "success": "Token actualizado exitosamente.",
+        "failure": "No se puede actualizar el token."
+      },
+      "signup": {
+        "login-already-exists": "El inicio de sesión ya está en uso.",
+        "failure": "No se puede crear un nuevo usuario."
+      },
+      "update": {
+        "login-already-exists": "El inicio de sesión ya está en uso.",
+        "failure": "No se puede actualizar el usuario."
+      }
+    }
+  },
+  "chats": {
+    "validators": {
+      "create-private-chat": {
+        "users": {
+          "not-2": "Los usuarios deben ser un arreglo con exactamente 2 UUIDs.",
+          "each": {
+            "is-not-uuid": "Cada usuario debe ser un UUID válido."
+          }
+        }
+      },
+      "create-group-chat": {
+        "users": {
+          "empty": "Los usuarios deben ser un arreglo con al menos 1 UUID.",
+          "each": {
+            "is-not-uuid": "Cada usuario debe ser un UUID válido."
+          }
+        },
+        "name": {
+          "bad-length": "El nombre debe ser una cadena con una longitud máxima de 100 caracteres."
+        }
+      },
+      "create-message": {
+        "content": {
+          "bad-length": "El contenido debe ser una cadena con una longitud máxima de 5000 caracteres."
+        },
+        "responseId": {
+          "is-not-uuid": "El ID de respuesta debe ser un UUID válido."
+        }
+      },
+      "create-reaction": {
+        "messageId": { "is-not-uuid": "El messageId debe ser un UUID válido." },
+        "reactionId": {
+          "is-not-uuid": "El reactionId debe ser un UUID válido."
+        }
+      },
+      "update-alias": {
+        "alias": {
+          "bad-length": "El alias debe ser nulo o una cadena de longitud máxima de 100 caracteres."
+        }
+      },
+      "add-user-to-group-chat": {
+        "userId": { "is-not-uuid": "El userId debe ser un UUID válido." }
+      },
+      "update-group-chat": {
+        "name": {
+          "bad-length": "El nombre debe ser una cadena con una longitud máxima de 100 caracteres."
+        }
+      }
+    },
+    "controllers": {
+      "add-user-to-group-chat": {
+        "bad-chat-type": "No se pueden añadir personas a un chat de este tipo.",
+        "i-am-not-in-chat": "No puedes añadir usuarios a un chat al que no perteneces.",
+        "user-already-in-chat": "El usuario ya está en este chat.",
+        "failure": "No se puede añadir al usuario a este chat."
+      },
+      "create-group-chat": {
+        "not-belonging-to-you": "No puedes crear un chat grupal que no te pertenezca.",
+        "failure": "No se puede crear el chat grupal."
+      },
+      "create-message": {
+        "user-not-belonging-to-chat": "No puedes enviar un mensaje a este chat.",
+        "response-not-existent": "El mensaje con este responseId no existe en este chat.",
+        "failure": "No se puede crear el mensaje."
+      },
+      "create-private-chat": {
+        "not-belonging-to-you": "No puedes crear un chat privado que no te pertenezca.",
+        "failure": "No se puede crear el chat privado."
+      },
+      "create-reaction": {
+        "bad-chat": "No puedes crear una reacción en un chat que no te pertenece.",
+        "bad-message": "No se puede crear una reacción a un mensaje que no está en el chat dado.",
+        "failure": "No se puede crear la reacción."
+      },
+      "delete-self-from-chat": {
+        "success": "Eliminado del chat exitosamente.",
+        "failure": "No se puede salir de este chat.",
+        "bad-chat-type": "No puedes eliminarte de un chat de este tipo.",
+        "not-belonging-to-you": "No puedes eliminarte de un chat al que no perteneces."
+      },
+      "get-messages": {
+        "unauthorized": "No puedes leer mensajes de este chat.",
+        "failure": "No se pueden obtener los mensajes."
+      },
+      "get-self-chats": {
+        "failure": "No se pueden obtener los chats del usuario."
+      },
+      "update-group-chat": {
+        "unauthorized": "No puedes actualizar un chat al que no perteneces.",
+        "failure": "No se puede crear el chat grupal.",
+        "bad-type": "No se puede actualizar un chat de este tipo."
+      },
+      "update-alias": {
+        "unauthorized": "No puedes establecer alias en un chat al que no perteneces.",
+        "failure": "No se puede actualizar el alias.",
+        "user-not-in-chat": "Este usuario no pertenece a este chat."
+      }
+    }
+  },
+  "files": {
+    "controllers": {
+      "delete-from-cache": {
+        "success": "Archivo eliminado exitosamente.",
+        "failure": "No se puede eliminar el archivo del caché."
+      },
+      "get-cache": {
+        "failure": "No se puede leer el caché."
+      },
+      "get-file": {
+        "failure": "No se puede obtener el archivo.",
+        "default-error-message": "La consulta falló.",
+        "not-found": "Archivo no encontrado.",
+        "wrong-filter": "Debes aplicar uno de los filtros: ",
+        "bad-chat": "El chat debe ser una cadena.",
+        "bad-post": "El post debe ser una cadena.",
+        "avatar-not-found": "No se puede encontrar el avatar con este nombre.",
+        "group-photo-not-found": "No se puede encontrar la foto del chat con este nombre."
+      },
+      "insert-to-cache": {
+        "failure": "No se puede insertar en el caché.",
+        "no-file": "Adjunta un archivo para subirlo.",
+        "limit-reached": "Límite de caché alcanzado. Número máximo de archivos en caché: {{count}}"
+      }
+    }
+  },
+  "friends": {
+    "controllers": {
+      "accept": {
+        "unauthorized": "No puedes aceptar una amistad que no está destinada a ser aceptada por ti.",
+        "failure": "No se pueden obtener las amistades del usuario.",
+        "not-found": "La amistad entre usuarios no existe."
+      },
+      "create": {
+        "unauthorized": "No puedes crear una amistad que no hayas solicitado.",
+        "failure": "No se puede crear la amistad.",
+        "already-exists": "La amistad ya existe entre los usuarios."
+      },
+      "delete": {
+        "unauthorized": "No puedes eliminar una amistad que no te pertenece.",
+        "success": "Amistad eliminada exitosamente.",
+        "failure": "No se puede eliminar la amistad.",
+        "not-found": "Amistad no encontrada."
+      },
+      "get": {
+        "failure": "No se pueden obtener las amistades del usuario."
+      }
+    }
+  },
+  "posts": {
+    "controllers": {
+      "create": {
+        "failure": "No se pudo crear el post."
+      },
+      "delete": {
+        "unauthorized": "No puedes eliminar un post que no te pertenece.",
+        "success": "Post eliminado exitosamente.",
+        "failure": "No se pudo eliminar el post.",
+        "not-found": "Post no encontrado."
+      },
+      "get-single": {
+        "failure": "No se pudo obtener el post.",
+        "not-found": "Post no encontrado."
+      },
+      "get-all": {
+        "failure": "No se pudieron obtener los posts."
+      },
+      "get-users": {
+        "failure": "No se pudieron obtener los posts del usuario."
+      },
+      "update": {
+        "unauthorized": "No puedes editar un post que no te pertenece.",
+        "failure": "No se pudo actualizar el post.",
+        "not-found": "Post no encontrado."
+      }
+    }
+  },
+  "users": {
+    "controllers": {
+      "search": {
+        "failure": "No se pudo buscar usuarios.",
+        "term-required": "El parámetro de consulta 'term' es requerido."
+      }
+    }
+  }
+}
