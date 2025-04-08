@@ -54,7 +54,7 @@ export default function Home() {
 
       {hasNextPage && <div ref={bottomRef} className="h-6" />}
 
-      {hasNextPage && (
+      {isFetchingNextPage && (
         <div className="relative text-center py-4">
           <Loading />
         </div>

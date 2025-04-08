@@ -47,7 +47,7 @@ export const getPosts = async (
       queryLimit && typeof queryLimit === "string" ? parseInt(queryLimit) : 10;
 
     if (limit > 10) {
-      res.status(403).json({ message: `Maximum limit is 10 - given ${limit}` });
+      res.status(400).json({ message: `Maximum limit is 10 - given ${limit}` });
     }
 
     const getLastPostId = (): Post["id"] | null => {
