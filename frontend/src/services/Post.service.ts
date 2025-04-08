@@ -27,8 +27,15 @@ export class PostService {
     return response.data.posts;
   }
 
-  static async getPosts(): Promise<Post[]> {
-    const response = await POSTS_API.get("/");
+  static async getRecommendedPosts(
+    lastPostId: Post["id"] | null,
+    limit: number
+  ): Promise<Post[]> {
+    const params = new URLSearchParams();
+    params.set("lastPostId", lastPostId || "null");
+    params.set("limit", limit.toString());
+
+    const response = await POSTS_API.get("/", { params });
     return response.data.posts;
   }
 

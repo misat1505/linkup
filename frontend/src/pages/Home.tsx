@@ -1,49 +1,43 @@
-import { useQuery } from "react-query";
-import orderBy from "lodash/orderBy";
-import { useAppContext } from "@/contexts/AppProvider";
+import { useInfiniteQuery } from "react-query";
 import { queryKeys } from "@/lib/queryKeys";
 import { PostService } from "@/services/Post.service";
-import { FriendService } from "@/services/Friend.service";
 import Loading from "@/components/common/Loading";
-import { User } from "@/types/User";
-import { Post } from "@/types/Post";
 import PostPreview from "@/components/posts/PostPreview";
 import EmptyFeed from "@/components/home/EmptyFeed";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 export default function Home() {
-  const { user: me } = useAppContext();
-  const { data: posts, isLoading } = useQuery({
-    queryKey: queryKeys.posts(),
-    queryFn: PostService.getPosts,
-  });
-
-  const { data: friends, isLoading: isLoadingFriends } = useQuery({
-    queryKey: queryKeys.friends(),
-    queryFn: FriendService.getMyFriendships,
-  });
-
-  if (isLoading || isLoadingFriends) return <Loading />;
-
-  const isMyFriend = (user: User): boolean => {
-    if (user.id === me!.id) return false;
-    return friends!.some((fr) => {
-      const isUserFriendship =
-        fr.acceptor.id === user!.id || fr.requester.id === user!.id;
-      const isAccepted = fr.status === "ACCEPTED";
-      return isUserFriendship && isAccepted;
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: queryKeys.posts(),
+      queryFn: ({ pageParam }) =>
+        PostService.getRecommendedPosts(
+          pageParam || null,
+          parseInt(localStorage.getItem("posts-limit")!) || 10
+        ),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.length > 0) {
+          return lastPage[lastPage.length - 1].id;
+        }
+        return undefined;
+      },
     });
-  };
 
-  const getSortedPosts = (): Post[] => {
-    return orderBy(
-      posts,
-      [
-        (post) => isMyFriend(post.author),
-        (post) => new Date(post.createdAt).getTime(),
-      ],
-      ["desc", "desc"]
-    );
-  };
+  const { ref: bottomRef, inView: bottomInView } = useInView({
+    threshold: 0,
+    rootMargin: "100px",
+  });
+
+  useEffect(() => {
+    if (bottomInView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [bottomInView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  if (isLoading || !data) return <Loading />;
+
+  const posts = data?.pages.flatMap((page) => page) || [];
 
   if (posts?.length === 0)
     return (
@@ -54,9 +48,17 @@ export default function Home() {
 
   return (
     <div>
-      {getSortedPosts().map((post) => (
+      {posts!.map((post) => (
         <PostPreview post={post} key={post.id} />
       ))}
+
+      {hasNextPage && <div ref={bottomRef} className="h-6" />}
+
+      {hasNextPage && (
+        <div className="relative text-center py-4">
+          <Loading />
+        </div>
+      )}
     </div>
   );
 }

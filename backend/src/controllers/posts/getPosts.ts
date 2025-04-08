@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { PostService } from "../../services/PostService";
+import { Post } from "../../types/Post";
 
 /**
  * Controller to retrieve a list of posts.
@@ -39,7 +40,23 @@ export const getPosts = async (
   next: NextFunction
 ) => {
   try {
-    const posts = await PostService.getPosts();
+    const { userId } = req.body.token;
+    const { lastPostId: queryLastPostId, limit: queryLimit } = req.query;
+
+    const limit =
+      queryLimit && typeof queryLimit === "string" ? parseInt(queryLimit) : 10;
+
+    const getLastPostId = (): Post["id"] | null => {
+      if (!queryLastPostId || typeof queryLastPostId !== "string") return null;
+      if (queryLastPostId === "null") return null;
+      return queryLastPostId;
+    };
+
+    const posts = await PostService.getRecommendedPosts(
+      userId,
+      getLastPostId(),
+      limit
+    );
 
     return res.status(200).json({ posts });
   } catch (e) {
