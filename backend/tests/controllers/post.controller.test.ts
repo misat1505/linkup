@@ -127,17 +127,21 @@ describe("Post controllers", () => {
         { id: "post-id-1", content: "Post 1" },
         { id: "post-id-2", content: "Post 2" },
       ];
-      (PostService.getPosts as jest.Mock).mockResolvedValue(posts);
+      (PostService.getRecommendedPosts as jest.Mock).mockResolvedValue(posts);
 
-      const response = await request(app).get("/posts");
+      const response = await request(app)
+        .get("/posts")
+        .send({ token: { userId: "user-id" } });
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ posts });
-      expect(PostService.getPosts).toHaveBeenCalled();
+      expect(PostService.getRecommendedPosts).toHaveBeenCalled();
     });
 
     it("should pass to error middleware if post retrieval fails", async () => {
-      (PostService.getPosts as jest.Mock).mockRejectedValue(new Error("Error"));
+      (PostService.getRecommendedPosts as jest.Mock).mockRejectedValue(
+        new Error("Error")
+      );
 
       await request(app).get("/posts");
 

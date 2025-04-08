@@ -17,9 +17,9 @@ describe("PostService", () => {
     });
   });
 
-  describe("getPosts", () => {
+  describe("getRecommendedPosts", () => {
     it("should return all posts", async () => {
-      const result = await PostService.getPosts();
+      const result = await PostService.getRecommendedPosts(USER.id, null, 10);
 
       expect(Array.isArray(result)).toBe(true);
       result.forEach((post) => {
