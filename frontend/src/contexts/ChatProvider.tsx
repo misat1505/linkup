@@ -18,6 +18,7 @@ import { useChatPageContext } from "./ChatPageProvider";
 import { queryKeys } from "@/lib/queryKeys";
 import { ChatService } from "@/services/Chat.service";
 import { SocketAction, socketClient } from "@/lib/socketClient";
+import { Reaction } from "@/types/Reaction";
 
 type ChatContextProps = PropsWithChildren & {
   chatId: Chat["id"];
@@ -39,6 +40,7 @@ type ChatContextValue = {
   ) => Promise<InfiniteQueryObserverResult<Message, unknown>>;
   hasNextPage?: boolean;
   isFetchingNextPage: boolean;
+  addReaction: (reaction: Reaction) => void;
 };
 
 const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
@@ -82,25 +84,60 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
   const incomeMessage =
     messages?.find((message) => message.id === incomeMessageId) || null;
 
+  const addReaction = (reaction: Reaction) => {
+    queryClient.setQueryData(queryKeys.messages(chat!.id), (oldData: any) => {
+      if (!oldData) return oldData;
+
+      const newPages = oldData.pages.map((page: any) => [...page]);
+
+      let messageFound = false;
+      for (const page of newPages) {
+        const message = page.find((m: Message) => m.id === reaction.messageId);
+        if (message) {
+          if (
+            !message.reactions.some(
+              (r: Reaction) => r.user.id === reaction.user.id
+            )
+          ) {
+            message.reactions.push(reaction);
+          }
+          messageFound = true;
+          break;
+        }
+      }
+
+      if (!messageFound) return oldData;
+
+      return {
+        pages: newPages,
+        pageParams: [...oldData.pageParams],
+      };
+    });
+  };
+
   useEffect(() => {
     socketClient.onReceiveMessage((message) => {
       addMessage(message);
       if (message.chatId === chatId) setIncomeMessageId(message.id);
     });
 
-    socketClient.onReceiveReaction((reaction) => {
-      queryClient.setQueryData<Message[]>(
-        queryKeys.messages(chat!.id),
-        (oldMessages = []) => {
-          const message = oldMessages.find((m) => m.id === reaction.messageId);
-          if (!message) return oldMessages;
+    // socketClient.onReceiveReaction((reaction) => {
+    //   queryClient.setQueryData<Message[]>(
+    //     queryKeys.messages(chat!.id),
+    //     (oldMessages = []) => {
+    //       const message = oldMessages.find((m) => m.id === reaction.messageId);
+    //       if (!message) return oldMessages;
 
-          if (message.reactions.some((r) => r.user.id === reaction.user.id))
-            return oldMessages;
-          message.reactions.push(reaction);
-          return [...oldMessages];
-        }
-      );
+    //       if (message.reactions.some((r) => r.user.id === reaction.user.id))
+    //         return oldMessages;
+    //       message.reactions.push(reaction);
+    //       return [...oldMessages];
+    //     }
+    //   );
+    // });
+
+    socketClient.onReceiveReaction((reaction) => {
+      addReaction(reaction);
     });
 
     return () => {
@@ -124,6 +161,7 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
+        addReaction,
       }}
     >
       {children}
