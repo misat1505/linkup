@@ -34,7 +34,7 @@ export default function ChatContent() {
       inView &&
       hasNextPage &&
       !isFetchingNextPage &&
-      now - lastFetchRef.current > 500
+      now - lastFetchRef.current > 1000
     ) {
       lastFetchRef.current = now;
       fetchNextPage();

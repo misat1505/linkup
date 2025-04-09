@@ -98,7 +98,7 @@ export class ChatService {
       params.set("responseId", responseId || "null");
     if (lastMessageId !== undefined) {
       params.set("lastMessageId", lastMessageId || "null");
-      params.set("limit", localStorage.getItem("messages-limit") || "10");
+      params.set("limit", localStorage.getItem("messages-limit") || "20");
     }
 
     const response = await CHAT_API.get(`/${chatId}/messages`, { params });

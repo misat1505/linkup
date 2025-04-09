@@ -28,28 +28,11 @@ export default function useChatScroll(): useChatScrollValue {
     }
   };
 
-  // useLayoutEffect(() => {
-  //   const container = containerRef.current;
-  //   if (container) {
-  //     if (isInitialMount.current) {
-  //       bottomRef.current?.scrollIntoView();
-  //       isInitialMount.current = false;
-  //     } else {
-  //       if (wasAtBottomRef.current) {
-  //         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  //       } else {
-  //         container.scrollTop = scrollTopRef.current;
-  //       }
-  //     }
-  //   }
-  // }, [messages]);
-
   useLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     if (isInitialMount.current) {
-      // On first mount, scroll to bottom
       bottomRef.current?.scrollIntoView();
       isInitialMount.current = false;
       prevScrollHeightRef.current = container.scrollHeight;
