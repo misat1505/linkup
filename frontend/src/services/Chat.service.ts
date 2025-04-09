@@ -90,15 +90,18 @@ export class ChatService {
 
   static async getMessages(
     chatId: Chat["id"],
-    responseId?: Message["id"] | null
+    responseId?: Message["id"] | null,
+    lastMessageId?: Message["id"] | null
   ): Promise<Message[]> {
-    const getResponseQueryParam = (): string => {
-      if (responseId === undefined) return "";
-      return `?responseId=${responseId}`;
-    };
-    const response = await CHAT_API.get(
-      `/${chatId}/messages${getResponseQueryParam()}`
-    );
+    const params = new URLSearchParams();
+    if (responseId !== undefined)
+      params.set("responseId", responseId || "null");
+    if (lastMessageId !== undefined) {
+      params.set("lastMessageId", lastMessageId || "null");
+      params.set("limit", localStorage.getItem("messages-limit") || "10");
+    }
+
+    const response = await CHAT_API.get(`/${chatId}/messages`, { params });
     return response.data.messages;
   }
 

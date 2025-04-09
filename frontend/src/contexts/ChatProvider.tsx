@@ -8,7 +8,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import {
+  FetchNextPageOptions,
+  InfiniteQueryObserverResult,
+  useInfiniteQuery,
+  useQueryClient,
+} from "react-query";
 import { useChatPageContext } from "./ChatPageProvider";
 import { queryKeys } from "@/lib/queryKeys";
 import { ChatService } from "@/services/Chat.service";
@@ -29,6 +34,11 @@ type ChatContextValue = {
     Record<Message["id"], HTMLDivElement | null>
   >;
   setIncomeMessageId: React.Dispatch<React.SetStateAction<string | null>>;
+  fetchNextPage: (
+    options?: FetchNextPageOptions
+  ) => Promise<InfiniteQueryObserverResult<Message, unknown>>;
+  hasNextPage?: boolean;
+  isFetchingNextPage: boolean;
 };
 
 const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
@@ -42,15 +52,32 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
     null
   );
   const { chats, addMessage } = useChatPageContext();
+
   const {
-    data: messages,
+    data,
     isLoading,
     error,
-  } = useQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: queryKeys.messages(chatId),
-    queryFn: () => ChatService.getMessages(chatId),
+    queryFn: ({ pageParam }) =>
+      ChatService.getMessages(chatId, undefined, pageParam || null),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.length > 0) {
+        return lastPage[lastPage.length - 1].id;
+      }
+      return undefined;
+    },
+    select: (data) => ({
+      pages: data.pages.flatMap((page) => page),
+      pageParams: data.pageParams,
+    }),
     refetchOnMount: false,
   });
+
+  const messages = data?.pages || [];
 
   const incomeMessage =
     messages?.find((message) => message.id === incomeMessageId) || null;
@@ -94,6 +121,9 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
         incomeMessage,
         messageRefs,
         setIncomeMessageId,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
       }}
     >
       {children}

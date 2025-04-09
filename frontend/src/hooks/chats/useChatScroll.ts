@@ -15,7 +15,8 @@ export default function useChatScroll(): useChatScrollValue {
   const scrollTopRef = useRef<number>(0);
   const isInitialMount = useRef<boolean>(true);
   const wasAtBottomRef = useRef<boolean>(true);
-  const { messages } = useChatContext();
+  const { messages, isFetchingNextPage } = useChatContext();
+  const prevScrollHeightRef = useRef<number>(0);
 
   const handleScroll = () => {
     if (containerRef.current) {
@@ -27,21 +28,50 @@ export default function useChatScroll(): useChatScrollValue {
     }
   };
 
+  // useLayoutEffect(() => {
+  //   const container = containerRef.current;
+  //   if (container) {
+  //     if (isInitialMount.current) {
+  //       bottomRef.current?.scrollIntoView();
+  //       isInitialMount.current = false;
+  //     } else {
+  //       if (wasAtBottomRef.current) {
+  //         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  //       } else {
+  //         container.scrollTop = scrollTopRef.current;
+  //       }
+  //     }
+  //   }
+  // }, [messages]);
+
   useLayoutEffect(() => {
     const container = containerRef.current;
-    if (container) {
-      if (isInitialMount.current) {
-        bottomRef.current?.scrollIntoView();
-        isInitialMount.current = false;
-      } else {
-        if (wasAtBottomRef.current) {
-          bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-        } else {
-          container.scrollTop = scrollTopRef.current;
-        }
-      }
+    if (!container) return;
+
+    if (isInitialMount.current) {
+      // On first mount, scroll to bottom
+      bottomRef.current?.scrollIntoView();
+      isInitialMount.current = false;
+      prevScrollHeightRef.current = container.scrollHeight;
+      return;
     }
-  }, [messages]);
+
+    if (isFetchingNextPage) {
+      prevScrollHeightRef.current = container.scrollHeight;
+      return;
+    }
+
+    const newScrollHeight = container.scrollHeight;
+    const heightDiff = newScrollHeight - prevScrollHeightRef.current;
+
+    if (heightDiff > 0 && !wasAtBottomRef.current) {
+      container.scrollTop = scrollTopRef.current + heightDiff;
+    } else if (wasAtBottomRef.current) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    prevScrollHeightRef.current = newScrollHeight;
+  }, [messages, isFetchingNextPage]);
 
   const scrollToBottom = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
