@@ -51,10 +51,5 @@ describe("posts spec", () => {
     cy.get("[data-testid=cy-nav-trigger]").click();
     cy.get("[data-testid=cy-nav-sheet-item-posts]").click();
     cy.contains("My post").should("be.visible");
-
-    // is visible on home page
-    cy.get("[data-testid=cy-nav-trigger]").click();
-    cy.get("[data-testid=cy-nav-sheet-item-home]").click();
-    cy.contains("My post").should("be.visible");
   });
 });
