@@ -304,6 +304,10 @@
       }
     },
     "chats": {
+      "chat-start": {
+        "created-at": "Este chat fue creado el {{date}}.",
+        "greeting": "La sala está en silencio por ahora… ¡sé el primero en decir algo y romper el hielo!"
+      },
       "sockets": {
         "errors": {
           "connection": {

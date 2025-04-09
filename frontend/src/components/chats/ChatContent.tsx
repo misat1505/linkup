@@ -5,6 +5,7 @@ import Message from "./Message";
 import IncomeMessage from "./IncomeMessage";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useRef } from "react";
+import ChatStarted from "./ChatStarted";
 
 export default function ChatContent() {
   const {
@@ -65,6 +66,7 @@ export default function ChatContent() {
         className="max-h-full overflow-auto px-4 dark:[color-scheme:dark]"
       >
         <div ref={topRef} className="h-2"></div>
+        {!hasNextPage && <ChatStarted />}
         {[...messages].reverse().map((message) => (
           <Message key={message.id} message={message} />
         ))}

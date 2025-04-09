@@ -301,6 +301,10 @@
       }
     },
     "chats": {
+      "chat-start": {
+        "created-at": "该聊天创建 {{date}}.",
+        "greeting": "房间里暂时很安静……快来说点什么，打破沉默吧！"
+      },
       "sockets": {
         "errors": {
           "connection": {

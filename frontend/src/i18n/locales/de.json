@@ -301,6 +301,10 @@
       }
     },
     "chats": {
+      "chat-start": {
+        "created-at": "Dieser Chat wurde erstellt am {{date}}.",
+        "greeting": "Der Raum ist noch still … sei der Erste, der etwas sagt und das Schweigen bricht!"
+      },
       "sockets": {
         "errors": {
           "connection": {

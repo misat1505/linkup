@@ -324,6 +324,10 @@ type FriendsTranslations = {
 };
 
 type ChatsTranslations = {
+  "chat-start": {
+    "created-at": string;
+    greeting: string;
+  };
   sockets: {
     errors: {
       connection: {

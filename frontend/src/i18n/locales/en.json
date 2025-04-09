@@ -301,6 +301,10 @@
       }
     },
     "chats": {
+      "chat-start": {
+        "created-at": "This chat was created on {{date}}.",
+        "greeting": "The room's quiet for now… be the first to say something and break the silence!"
+      },
       "sockets": {
         "errors": {
           "connection": {
