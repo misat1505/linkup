@@ -51,9 +51,9 @@ export default function Message({ message }: { message: MessageType }) {
 
   const getDateText = (): string => {
     const idx = messages.findIndex((m) => m.id === message.id);
-    if (idx === 0) return compareWithNow();
+    if (idx === messages.length - 1) return compareWithNow();
 
-    const prevMessage = messages[idx - 1];
+    const prevMessage = messages[idx + 1];
     const diff = timeDifference(
       prevMessage.createdAt,
       moment(message.createdAt)

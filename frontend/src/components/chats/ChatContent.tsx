@@ -4,7 +4,7 @@ import Loading from "../common/Loading";
 import Message from "./Message";
 import IncomeMessage from "./IncomeMessage";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export default function ChatContent() {
   const {
@@ -25,8 +25,18 @@ export default function ChatContent() {
 
   const { ref: topRef, inView } = useInView();
 
+  const lastFetchRef = useRef(0);
+
   useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
+    const now = Date.now();
+
+    if (
+      inView &&
+      hasNextPage &&
+      !isFetchingNextPage &&
+      now - lastFetchRef.current > 500
+    ) {
+      lastFetchRef.current = now;
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);

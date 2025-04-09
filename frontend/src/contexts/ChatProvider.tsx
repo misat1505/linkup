@@ -121,21 +121,6 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
       if (message.chatId === chatId) setIncomeMessageId(message.id);
     });
 
-    // socketClient.onReceiveReaction((reaction) => {
-    //   queryClient.setQueryData<Message[]>(
-    //     queryKeys.messages(chat!.id),
-    //     (oldMessages = []) => {
-    //       const message = oldMessages.find((m) => m.id === reaction.messageId);
-    //       if (!message) return oldMessages;
-
-    //       if (message.reactions.some((r) => r.user.id === reaction.user.id))
-    //         return oldMessages;
-    //       message.reactions.push(reaction);
-    //       return [...oldMessages];
-    //     }
-    //   );
-    // });
-
     socketClient.onReceiveReaction((reaction) => {
       addReaction(reaction);
     });
