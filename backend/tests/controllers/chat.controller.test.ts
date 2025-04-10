@@ -429,6 +429,87 @@ describe("Chat controllers", () => {
       expect(response.status).toBe(401);
       expect(response.body.message).toBeDefined();
     });
+
+    it("should return chat messages when no responseId is provided", async () => {
+      const messages = [{ id: "message1" }, { id: "message2" }];
+      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
+      (ChatService.getChatMessages as jest.Mock).mockResolvedValue(messages);
+
+      const response = await request(app)
+        .get("/someId/messages")
+        .query({ lastMessageId: "message1", limit: 5 })
+        .send({ token: { userId: "userId" } });
+
+      expect(response.status).toBe(200);
+      expect(response.body.messages).toEqual(messages);
+      expect(ChatService.getChatMessages).toHaveBeenCalledWith(
+        "someId",
+        "message1",
+        5
+      );
+    });
+
+    it("should return chat messages for a specific responseId", async () => {
+      const messages = [{ id: "message1" }, { id: "message2" }];
+      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
+      (ChatService.getPostChatMessages as jest.Mock).mockResolvedValue(
+        messages
+      );
+
+      const response = await request(app)
+        .get("/someId/messages")
+        .query({ responseId: "response123" })
+        .send({ token: { userId: "userId" } });
+
+      expect(response.status).toBe(200);
+      expect(response.body.messages).toEqual(messages);
+      expect(ChatService.getPostChatMessages).toHaveBeenCalledWith(
+        "someId",
+        "response123"
+      );
+    });
+
+    it("should return 500 if limit is not a number", async () => {
+      const response = await request(app)
+        .get("/someId/messages")
+        .query({ limit: "not-a-number" })
+        .send({ token: { userId: "userId" } });
+
+      expect(response.status).toBe(500);
+    });
+
+    it("should treat 'null' as a valid responseId and return null", async () => {
+      const messages = [{ id: "message1" }, { id: "message2" }];
+      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
+      (ChatService.getPostChatMessages as jest.Mock).mockResolvedValue(
+        messages
+      );
+
+      const response = await request(app)
+        .get("/someId/messages")
+        .query({ responseId: "null" })
+        .send({ token: { userId: "userId" } });
+
+      expect(response.status).toBe(200);
+      expect(response.body.messages).toEqual(messages);
+      expect(ChatService.getPostChatMessages).toHaveBeenCalledWith(
+        "someId",
+        null
+      );
+    });
+
+    it("should pass to error middleware if an error occurs", async () => {
+      const errorMessage = "Error in processing request";
+      (ChatService.isUserInChat as jest.Mock).mockRejectedValue(
+        new Error(errorMessage)
+      );
+
+      const response = await request(app)
+        .get("/someId/messages")
+        .send({ token: { userId: "userId" } });
+
+      expect(response.statusCode).toBe(500);
+    });
   });
 
   describe("createMessage", () => {

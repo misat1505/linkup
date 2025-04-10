@@ -26,6 +26,26 @@ import { Message } from "../../types/Message";
  *         description: The ID of the chat from which to retrieve messages.
  *         schema:
  *           type: string
+ *       - name: responseId
+ *         in: query
+ *         required: false
+ *         description: The ID of the response message to filter messages by. If provided, only messages responding to the given response ID are returned.
+ *         schema:
+ *           type: string
+ *       - name: lastMessageId
+ *         in: query
+ *         required: false
+ *         description: The ID of the last message to use for pagination. If provided, messages after the given message ID will be returned.
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         required: false
+ *         description: The maximum number of messages to retrieve. Defaults to 10 if not provided. Maximum value is 10.
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *           maximum: 10
  *     responses:
  *       200:
  *         description: Messages retrieved successfully
