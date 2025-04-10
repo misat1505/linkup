@@ -193,6 +193,21 @@
       }
     },
     "posts": {
+      "report": {
+        "dialog": {
+          "trigger": {
+            "tooltip": "Reportar contenido"
+          },
+          "title": "Reportar publicación",
+          "description": "¿Estás seguro de que deseas reportar esta publicación? Esta acción marcará la publicación para que sea revisada por nuestros moderadores.",
+          "cancel": "Cancelar",
+          "confirm": "Confirmar reporte"
+        },
+        "toast": {
+          "title": "Publicación reportada",
+          "description": "Gracias. Nuestro equipo de moderación la revisará pronto."
+        }
+      },
       "preview": {
         "show-more": "Mostrar más",
         "show-less": "Mostrar menos"

@@ -193,6 +193,21 @@
       }
     },
     "posts": {
+      "report": {
+        "dialog": {
+          "trigger": {
+            "tooltip": "Inhalt melden"
+          },
+          "title": "Beitrag melden",
+          "description": "Bist du sicher, dass du diesen Beitrag melden möchtest? Diese Aktion markiert den Beitrag zur Überprüfung durch unsere Moderatoren.",
+          "cancel": "Abbrechen",
+          "confirm": "Meldung bestätigen"
+        },
+        "toast": {
+          "title": "Beitrag gemeldet",
+          "description": "Vielen Dank. Unser Moderationsteam wird den Beitrag in Kürze überprüfen."
+        }
+      },
       "preview": {
         "show-more": "Mehr anzeigen",
         "show-less": "Weniger anzeigen"

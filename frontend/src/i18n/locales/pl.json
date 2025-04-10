@@ -193,6 +193,21 @@
       }
     },
     "posts": {
+      "report": {
+        "dialog": {
+          "trigger": {
+            "tooltip": "Zgłoś treść"
+          },
+          "title": "Zgłoś post",
+          "description": "Czy na pewno chcesz zgłosić ten post? Ta akcja oznaczy go do sprawdzenia przez naszych moderatorów.",
+          "cancel": "Anuluj",
+          "confirm": "Potwierdź zgłoszenie"
+        },
+        "toast": {
+          "title": "Post zgłoszony",
+          "description": "Dziękujemy. Nasz zespół moderatorów wkrótce go przeanalizuje."
+        }
+      },
       "preview": {
         "show-more": "Pokaż więcej",
         "show-less": "Pokaż mniej"

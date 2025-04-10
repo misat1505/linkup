@@ -201,6 +201,21 @@ type HomeTranslations = {
 };
 
 type PostsTranslations = {
+  report: {
+    dialog: {
+      trigger: {
+        tooltip: string;
+      };
+      title: string;
+      description: string;
+      cancel: string;
+      confirm: string;
+    };
+    toast: {
+      title: string;
+      description: string;
+    };
+  };
   preview: {
     "show-more": string;
     "show-less": string;

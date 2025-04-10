@@ -193,6 +193,21 @@
       }
     },
     "posts": {
+      "report": {
+        "dialog": {
+          "trigger": {
+            "tooltip": "舉報內容"
+          },
+          "title": "舉報帖子",
+          "description": "您確定要舉報這個帖子嗎？此操作將把帖子標註為供我們的版主審核。",
+          "cancel": "取消",
+          "confirm": "確認舉報"
+        },
+        "toast": {
+          "title": "帖子已舉報",
+          "description": "謝謝您，我們的版主團隊將很快審核它。"
+        }
+      },
       "preview": {
         "show-more": "显示更多",
         "show-less": "显示更少"

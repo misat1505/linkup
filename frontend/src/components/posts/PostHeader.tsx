@@ -95,20 +95,21 @@ export default function PostHeader({ post }: { post: Post }) {
 }
 
 function ReportPost({ post }: { post: Post }) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
 
   const handleClick = () => {
     setIsOpen(false);
     toast({
-      title: "Post reported",
-      description: "Thank you. Our moderation team will review it shortly.",
+      title: t("posts.report.toast.title"),
+      description: t("posts.report.toast.description"),
     });
   };
 
   return (
     <AlertDialog open={isOpen}>
-      <Tooltip content={"Report content"}>
+      <Tooltip content={t("posts.report.dialog.trigger.tooltip")}>
         <span className="aspect-square text-red-500 transition-all hover:scale-110 hover:cursor-pointer mr-4">
           <FocusableSpan fn={() => setIsOpen(true)}>
             <MdOutlineReport size={20} />
@@ -117,19 +118,18 @@ function ReportPost({ post }: { post: Post }) {
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Report Post</AlertDialogTitle>
+          <AlertDialogTitle>{t("posts.report.dialog.title")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to report this post? This action will flag the
-            post for review by our moderators.
+            {t("posts.report.dialog.description")}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
           <AlertDialogCancel onClick={() => setIsOpen(false)}>
-            Cancel
+            {t("posts.report.dialog.cancel")}
           </AlertDialogCancel>
           <AlertDialogAction onClick={handleClick}>
-            Confirm Report
+            {t("posts.report.dialog.confirm")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

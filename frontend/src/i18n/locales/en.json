@@ -193,6 +193,21 @@
       }
     },
     "posts": {
+      "report": {
+        "dialog": {
+          "trigger": {
+            "tooltip": "Report content"
+          },
+          "title": "Report Post",
+          "description": "Are you sure you want to report this post? This action will flag the post for review by our moderators.",
+          "cancel": "Cancel",
+          "confirm": "Confirm Report"
+        },
+        "toast": {
+          "title": "Post reported",
+          "description": "Thank you. Our moderation team will review it shortly."
+        }
+      },
       "preview": {
         "show-more": "Show more",
         "show-less": "Show less"
