@@ -15,6 +15,21 @@ import { queryKeys } from "@/lib/queryKeys";
 import { ROUTES } from "@/lib/routes";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
+import Tooltip from "../common/Tooltip";
+import FocusableSpan from "../common/FocusableSpan";
+import { MdOutlineReport } from "react-icons/md";
+import { useToast } from "../ui/use-toast";
 
 export default function PostHeader({ post }: { post: Post }) {
   const queryClient = useQueryClient();
@@ -37,6 +52,7 @@ export default function PostHeader({ post }: { post: Post }) {
   };
 
   const { author } = post;
+  const isMine = author.id === me!.id;
 
   const handleCreateChat = async (userId: User["id"]) => {
     const chat = await ChatService.createPrivateChat(me!.id, userId);
@@ -58,20 +74,65 @@ export default function PostHeader({ post }: { post: Post }) {
         <div>
           <div className="flex items-center gap-x-4">
             <h2 className="text-lg font-semibold">{createFullName(author)}</h2>
-            <ActionButton
-              onClick={() => handleCreateChat(post.author.id)}
-              tooltipText={t("common.navbar.search.message.button.tooltip")}
-              Icon={
-                <IoIosChatbubbles className="transition-all hover:scale-110" />
-              }
-            />
+            {!isMine && (
+              <ActionButton
+                onClick={() => handleCreateChat(post.author.id)}
+                tooltipText={t("common.navbar.search.message.button.tooltip")}
+                Icon={
+                  <IoIosChatbubbles className="transition-all hover:scale-110" />
+                }
+              />
+            )}
           </div>
           <p className="text-sm text-muted-foreground mt-[-0.25rem]">
             {getTimeText()}
           </p>
         </div>
       </div>
-      <div>hsdusau</div>
+      {!isMine && <ReportPost post={post} />}
     </div>
+  );
+}
+
+function ReportPost({ post }: { post: Post }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const { toast } = useToast();
+
+  const handleClick = () => {
+    setIsOpen(false);
+    toast({
+      title: "Post reported",
+      description: "Thank you. Our moderation team will review it shortly.",
+    });
+  };
+
+  return (
+    <AlertDialog open={isOpen}>
+      <Tooltip content={"Report content"}>
+        <span className="aspect-square text-red-500 transition-all hover:scale-110 hover:cursor-pointer mr-4">
+          <FocusableSpan fn={() => setIsOpen(true)}>
+            <MdOutlineReport size={20} />
+          </FocusableSpan>
+        </span>
+      </Tooltip>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Report Post</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to report this post? This action will flag the
+            post for review by our moderators.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => setIsOpen(false)}>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction onClick={handleClick}>
+            Confirm Report
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
