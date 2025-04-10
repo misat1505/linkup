@@ -1,5 +1,9 @@
 {
   "translation": {
+    "not-found": {
+      "description": "Ups. Wygląda na to, że nie chciałeś tutaj trafić.",
+      "button": "Zabierz mnie na stronę główną."
+    },
     "login": {
       "error": {
         "toast": {

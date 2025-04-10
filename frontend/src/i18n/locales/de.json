@@ -1,5 +1,9 @@
 {
   "translation": {
+    "not-found": {
+      "description": "Hoppla. Es scheint, als wolltest du hier nicht hin.",
+      "button": "Bringe mich zurück nach Hause."
+    },
     "login": {
       "error": {
         "toast": {

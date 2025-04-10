@@ -1,4 +1,5 @@
 export type Translation = {
+  "not-found": NotFoundTranslations;
   login: LoginTranslations;
   signup: SignupTranslations;
   settings: SettingsTranslations;
@@ -14,6 +15,11 @@ export type Translation = {
     you: string;
     time: TimeAgoTranslations;
   };
+};
+
+type NotFoundTranslations = {
+  description: string;
+  button: string;
 };
 
 type LoginTranslations = {
