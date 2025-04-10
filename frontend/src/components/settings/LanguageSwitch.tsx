@@ -93,8 +93,16 @@ type Language = {
 };
 
 function LanguageSwitchItem({ onclick, flagCode, displayLang }: Language) {
+  const { t } = useTranslation();
+  const handleClick = () => {
+    onclick();
+    setTimeout(() => {
+      document.title = `LinkUp - ${t("tabs.settings")}`;
+    }, 100);
+  };
+
   return (
-    <DropdownMenuItem onClick={onclick}>
+    <DropdownMenuItem onClick={handleClick}>
       <div className="flex gap-x-2 items-center">
         <Flag code={flagCode} width={26} />
         <span>{displayLang}</span>
