@@ -10,9 +10,11 @@ import { handleMarkdownUpdate } from "../../src/utils/updatePost";
 import { deletePost } from "../../src/controllers/posts/deletePost";
 import i18next from "../../src/i18n";
 import middleware from "i18next-http-middleware";
+import { PostRecommendationService } from "../../src/services/PostRecommendationService";
 
 jest.mock("../../src/lib/FileStorage");
 jest.mock("../../src/services/PostService");
+jest.mock("../../src/services/PostRecommendationService");
 jest.mock("../../src/utils/updatePost");
 
 const mockErrorMiddleware = jest.fn(
@@ -127,7 +129,9 @@ describe("Post controllers", () => {
         { id: "post-id-1", content: "Post 1" },
         { id: "post-id-2", content: "Post 2" },
       ];
-      (PostService.getRecommendedPosts as jest.Mock).mockResolvedValue(posts);
+      (
+        PostRecommendationService.getRecommendedPosts as jest.Mock
+      ).mockResolvedValue(posts);
 
       const response = await request(app)
         .get("/posts")
@@ -135,13 +139,13 @@ describe("Post controllers", () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ posts });
-      expect(PostService.getRecommendedPosts).toHaveBeenCalled();
+      expect(PostRecommendationService.getRecommendedPosts).toHaveBeenCalled();
     });
 
     it("should pass to error middleware if post retrieval fails", async () => {
-      (PostService.getRecommendedPosts as jest.Mock).mockRejectedValue(
-        new Error("Error")
-      );
+      (
+        PostRecommendationService.getRecommendedPosts as jest.Mock
+      ).mockRejectedValue(new Error("Error"));
 
       await request(app).get("/posts");
 
