@@ -1,11 +1,13 @@
 import { buttonVariants } from "@/components/ui/button";
 import { LOGO_PATH } from "@/constants";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
 import { ROUTES } from "@/lib/routes";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export default function NotFound() {
   const { t } = useTranslation();
+  useChangeTabTitle(t("tabs.not-found"));
 
   return (
     <div className="relative h-[calc(100vh-5rem)]">

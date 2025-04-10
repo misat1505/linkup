@@ -1,5 +1,17 @@
 {
   "translation": {
+    "tabs": {
+      "close-chat": "Chats",
+      "chats": "Chats - {{name}}",
+      "friends": "Friends",
+      "home": "",
+      "login": "Login",
+      "not-found": "Not Found",
+      "editor": "Editor",
+      "posts": "My Posts",
+      "settings": "Settings",
+      "signup": "Signup"
+    },
     "not-found": {
       "description": "Oops. It seems like you didn't want to go here.",
       "button": "Bring me back home."

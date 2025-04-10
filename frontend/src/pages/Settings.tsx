@@ -15,9 +15,11 @@ import SignupForm from "@/components/signup/SignupForm";
 import SettingsCards from "@/components/settings/SettingsCards";
 import SettingsSlogan from "@/components/settings/SettingsSlogan";
 import { useTranslation } from "react-i18next";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
 
 export default function Settings() {
   const { t } = useTranslation();
+  useChangeTabTitle(t("tabs.settings"));
   const { user: me, setUser } = useAppContext();
   const { data, isLoading } = useQuery({
     queryKey: queryKeys.downloadFile(me!.photoURL!),

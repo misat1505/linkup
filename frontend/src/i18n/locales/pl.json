@@ -1,5 +1,17 @@
 {
   "translation": {
+    "tabs": {
+      "close-chat": "Czaty",
+      "chats": "Czaty - {{name}}",
+      "friends": "Znajomi",
+      "home": "",
+      "login": "Logowanie",
+      "not-found": "Nie znaleziono",
+      "editor": "Edytor",
+      "posts": "Moje posty",
+      "settings": "Ustawienia",
+      "signup": "Rejestracja"
+    },
     "not-found": {
       "description": "Ups. Wygląda na to, że nie chciałeś tutaj trafić.",
       "button": "Zabierz mnie na stronę główną."

@@ -9,9 +9,11 @@ import { Button } from "@/components/ui/button";
 import MyPostPreview from "@/components/posts/MyPostPreview";
 import { ROUTES } from "@/lib/routes";
 import { useTranslation } from "react-i18next";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
 
 export default function Posts() {
   const { t } = useTranslation();
+  useChangeTabTitle(t("tabs.posts"));
   const navigate = useNavigate();
 
   const { data: posts, isLoading } = useQuery({

@@ -12,9 +12,11 @@ import SignupFormProvider from "@/contexts/SignupFormProvider";
 import SignupForm from "@/components/signup/SignupForm";
 import AlreadyHaveAccount from "@/components/signup/AlreadyHaveAccount";
 import { useTranslation } from "react-i18next";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
 
 export default function Signup() {
   const { t } = useTranslation();
+  useChangeTabTitle(t("tabs.signup"));
   const navigate = useNavigate();
   const { setUser } = useAppContext();
   const onSubmit: SubmitHandler<SignupFormType> = async (

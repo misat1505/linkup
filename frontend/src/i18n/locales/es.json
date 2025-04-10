@@ -1,5 +1,17 @@
 {
   "translation": {
+    "tabs": {
+      "close-chat": "Chats",
+      "chats": "Chats - {{name}}",
+      "friends": "Amigos",
+      "home": "",
+      "login": "Iniciar sesión",
+      "not-found": "No encontrado",
+      "editor": "Editor",
+      "posts": "Mis publicaciones",
+      "settings": "Configuración",
+      "signup": "Registrarse"
+    },
     "not-found": {
       "description": "Vaya. Parece que no querías venir aquí.",
       "button": "Llévame de vuelta a casa."

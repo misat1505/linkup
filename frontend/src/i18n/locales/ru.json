@@ -1,5 +1,17 @@
 {
   "translation": {
+    "tabs": {
+      "close-chat": "Чаты",
+      "chats": "Чаты - {{name}}",
+      "friends": "Друзья",
+      "home": "",
+      "login": "Вход",
+      "not-found": "Не найдено",
+      "editor": "Редактор",
+      "posts": "Мои посты",
+      "settings": "Настройки",
+      "signup": "Регистрация"
+    },
     "not-found": {
       "description": "Упс. Похоже, ты не хотел сюда попасть.",
       "button": "Верни меня домой."

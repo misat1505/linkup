@@ -1,5 +1,17 @@
 {
   "translation": {
+    "tabs": {
+      "close-chat": "Chats",
+      "chats": "Chats - {{name}}",
+      "friends": "Freunde",
+      "home": "",
+      "login": "Anmelden",
+      "not-found": "Nicht gefunden",
+      "editor": "Editor",
+      "posts": "Meine Beiträge",
+      "settings": "Einstellungen",
+      "signup": "Registrieren"
+    },
     "not-found": {
       "description": "Hoppla. Es scheint, als wolltest du hier nicht hin.",
       "button": "Bringe mich zurück nach Hause."

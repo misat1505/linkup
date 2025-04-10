@@ -6,8 +6,14 @@ import IncomeMessage from "./IncomeMessage";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useRef } from "react";
 import ChatStarted from "./ChatStarted";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
+import { ChatUtils } from "@/utils/chatUtils";
+import { useAppContext } from "@/contexts/AppProvider";
+import { useTranslation } from "react-i18next";
 
 export default function ChatContent() {
+  const { t } = useTranslation();
+  const { user: me } = useAppContext();
   const {
     messages,
     isLoading,
@@ -15,6 +21,7 @@ export default function ChatContent() {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
+    chat,
   } = useChatContext();
   const {
     bottomRef,
@@ -41,6 +48,10 @@ export default function ChatContent() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const utils = new ChatUtils(chat!, me!);
+
+  useChangeTabTitle(t("tabs.chats", { name: utils.getChatName() }));
 
   const styles =
     "flex-grow overflow-hidden bg-slate-100 dark:bg-slate-900 pt-2 relative";

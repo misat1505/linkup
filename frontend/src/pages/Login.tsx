@@ -3,8 +3,13 @@ import LoginPageLogo from "@/components/login/LoginPageLogo";
 import LoginSlogan from "@/components/login/LoginSlogan";
 import NoAccount from "@/components/login/NoAccount";
 import LoginFormProvider from "@/contexts/LoginFormProvider";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
+  const { t } = useTranslation();
+  useChangeTabTitle(t("tabs.login"));
+
   return (
     <div className="min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-4 xl:grid xl:px-12">
       <LoginSlogan />

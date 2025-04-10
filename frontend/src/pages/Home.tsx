@@ -6,8 +6,13 @@ import PostPreview from "@/components/posts/PostPreview";
 import EmptyFeed from "@/components/home/EmptyFeed";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
+  const { t } = useTranslation();
+  useChangeTabTitle(t("tabs.home"));
+
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: queryKeys.posts(),

@@ -1,4 +1,5 @@
 export type Translation = {
+  tabs: TabsTranslations;
   "not-found": NotFoundTranslations;
   login: LoginTranslations;
   signup: SignupTranslations;
@@ -15,6 +16,19 @@ export type Translation = {
     you: string;
     time: TimeAgoTranslations;
   };
+};
+
+type TabsTranslations = {
+  "close-chat": string;
+  chats: string;
+  friends: string;
+  home: string;
+  login: string;
+  "not-found": string;
+  editor: string;
+  posts: string;
+  settings: string;
+  signup: string;
 };
 
 type NotFoundTranslations = {

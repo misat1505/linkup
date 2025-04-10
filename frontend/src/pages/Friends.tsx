@@ -22,8 +22,12 @@ import StatusFilterDropdown from "@/components/friends/StatusFilterDropdown";
 import { Table } from "@/components/ui/table";
 import FriendsTable from "@/components/friends/FriendsTable";
 import { useTranslation } from "react-i18next";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
 
 export default function Friends() {
+  const { t } = useTranslation();
+  useChangeTabTitle(t("tabs.friends"));
+
   const { isLoading } = useQuery({
     queryKey: queryKeys.friends(),
     queryFn: FriendService.getMyFriendships,
