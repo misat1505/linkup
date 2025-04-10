@@ -10,6 +10,12 @@ import { PostService } from "./PostService";
  * Service class responsible for recommending post for a specific user.
  */
 export class PostRecommendationService {
+  /**
+   * Retrieves the last post based on the provided post ID.
+   * @param postId - The ID of the post to retrieve the last post for.
+   * @returns The last post if found, or null if no post ID is provided.
+   * @throws Throws an error if the last post is not found.
+   */
   static async getLastPost(postId: Post["id"] | null): Promise<Post | null> {
     if (!postId) return null;
     const lastPost = await PostService.getPost(postId);
@@ -17,6 +23,11 @@ export class PostRecommendationService {
     return lastPost;
   }
 
+  /**
+   * Retrieves the list of friends for a specific user.
+   * @param userId - The ID of the user whose friends are to be retrieved.
+   * @returns A list of IDs of the user's friends.
+   */
   static async getUserFriends(userId: User["id"]): Promise<User["id"][]> {
     const friendships = await FriendshipService.getUserFriendships(userId);
 
@@ -30,6 +41,14 @@ export class PostRecommendationService {
     return friends;
   }
 
+  /**
+   * Fetches posts made by users who are not friends with the specified user.
+   * @param deadline - The cutoff date for posts to be fetched.
+   * @param friends - A list of user IDs representing the user's friends.
+   * @param userId - The ID of the user for whom to exclude their own posts.
+   * @param limit - The maximum number of posts to fetch.
+   * @returns A list of posts made by non-friends, excluding the user's own posts.
+   */
   static async fetchNonFriendsPostsOnly(
     deadline: Date | undefined,
     friends: User["id"][],
@@ -52,6 +71,13 @@ export class PostRecommendationService {
     return posts.map(PostService.sanitizePost);
   }
 
+  /**
+   * Fetches posts made by friends of the specified user.
+   * @param lastPost - The last post to compare the date for fetching new posts.
+   * @param friends - A list of user IDs representing the user's friends.
+   * @param limit - The maximum number of posts to fetch.
+   * @returns A list of posts made by the user's friends.
+   */
   static async fetchFriendsPostsOnly(
     lastPost: Post | null,
     friends: User["id"][],
@@ -81,6 +107,13 @@ export class PostRecommendationService {
     return friendsPosts.map(PostService.sanitizePost);
   }
 
+  /**
+   * Determines the filter for fetching posts that are not from friends.
+   * @param lastPost - The last post to compare the date for fetching new posts.
+   * @param friendsPosts - A list of posts from friends.
+   * @param friends - A list of user IDs representing the user's friends.
+   * @returns A date filter for fetching non-friend posts based on the last post.
+   */
   static getOthersPostsCreatedAtFilter(
     lastPost: Post | null,
     friendsPosts: Post[],
@@ -99,6 +132,13 @@ export class PostRecommendationService {
     return { lt: lastPost!.createdAt };
   }
 
+  /**
+   * Retrieves a list of recommended posts for a user, based on their last post and friendships.
+   * @param userId - The ID of the user for whom posts are being recommended.
+   * @param lastPostId - The ID of the last post to use for determining recommendations.
+   * @param limit - The maximum number of recommended posts to fetch.
+   * @returns A list of recommended posts for the user.
+   */
   static async getRecommendedPosts(
     userId: User["id"],
     lastPostId: Post["id"] | null,
