@@ -142,6 +142,37 @@ describe("Post controllers", () => {
       expect(PostRecommendationService.getRecommendedPosts).toHaveBeenCalled();
     });
 
+    it("should return 400 if limit exceeds 10", async () => {
+      const response = await request(app)
+        .get("/posts?limit=20")
+        .send({ token: { userId: "user-id" } });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        message: "Maximum limit is 10 - given 20",
+      });
+    });
+
+    it("should successfully retrieve a list of posts with a valid limit and lastPostId", async () => {
+      const posts = [
+        { id: "post-id-1", content: "Post 1" },
+        { id: "post-id-2", content: "Post 2" },
+      ];
+      (
+        PostRecommendationService.getRecommendedPosts as jest.Mock
+      ).mockResolvedValue(posts);
+
+      const response = await request(app)
+        .get("/posts?lastPostId=post-id-5&limit=5")
+        .send({ token: { userId: "user-id" } });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ posts });
+      expect(
+        PostRecommendationService.getRecommendedPosts
+      ).toHaveBeenCalledWith("user-id", "post-id-5", 5);
+    });
+
     it("should pass to error middleware if post retrieval fails", async () => {
       (
         PostRecommendationService.getRecommendedPosts as jest.Mock
@@ -150,6 +181,66 @@ describe("Post controllers", () => {
       await request(app).get("/posts");
 
       expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
+    });
+
+    it("should handle invalid lastPostId", async () => {
+      const posts = [
+        { id: "post-id-1", content: "Post 1" },
+        { id: "post-id-2", content: "Post 2" },
+      ];
+      (
+        PostRecommendationService.getRecommendedPosts as jest.Mock
+      ).mockResolvedValue(posts);
+
+      const response = await request(app)
+        .get("/posts?lastPostId=invalid-id&limit=5")
+        .send({ token: { userId: "user-id" } });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ posts });
+      expect(
+        PostRecommendationService.getRecommendedPosts
+      ).toHaveBeenCalledWith("user-id", "invalid-id", 5);
+    });
+
+    it("should handle missing or invalid limit query parameter", async () => {
+      const posts = [
+        { id: "post-id-1", content: "Post 1" },
+        { id: "post-id-2", content: "Post 2" },
+      ];
+      (
+        PostRecommendationService.getRecommendedPosts as jest.Mock
+      ).mockResolvedValue(posts);
+
+      const response = await request(app)
+        .get("/posts?limit=invalid")
+        .send({ token: { userId: "user-id" } });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ posts });
+      expect(
+        PostRecommendationService.getRecommendedPosts
+      ).toHaveBeenCalledWith("user-id", null, 10);
+    });
+
+    it("should return null for lastPostId if 'null' is passed as query", async () => {
+      const posts = [
+        { id: "post-id-1", content: "Post 1" },
+        { id: "post-id-2", content: "Post 2" },
+      ];
+      (
+        PostRecommendationService.getRecommendedPosts as jest.Mock
+      ).mockResolvedValue(posts);
+
+      const response = await request(app)
+        .get("/posts?lastPostId=null&limit=5")
+        .send({ token: { userId: "user-id" } });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ posts });
+      expect(
+        PostRecommendationService.getRecommendedPosts
+      ).toHaveBeenCalledWith("user-id", null, 5);
     });
   });
 

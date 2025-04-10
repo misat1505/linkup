@@ -19,6 +19,21 @@ import { PostRecommendationService } from "../../services/PostRecommendationServ
  *   get:
  *     summary: Retrieve a list of posts
  *     tags: [Posts]
+ *     parameters:
+ *       - name: lastPostId
+ *         in: query
+ *         description: The ID of the last post, used for pagination.
+ *         required: false
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         description: The number of posts to retrieve.
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *           maximum: 10
  *     responses:
  *       200:
  *         description: A list of posts retrieved successfully
@@ -31,6 +46,8 @@ import { PostRecommendationService } from "../../services/PostRecommendationServ
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Post'
+ *       400:
+ *         description: Invalid query parameter (e.g., limit exceeds 10)
  *       500:
  *         description: Server error, could not retrieve posts
  */
@@ -43,22 +60,15 @@ export const getPosts = async (
     const { userId } = req.body.token;
     const { lastPostId: queryLastPostId, limit: queryLimit } = req.query;
 
-    const limit =
-      queryLimit && typeof queryLimit === "string" ? parseInt(queryLimit) : 10;
+    const limit = processLimit(queryLimit);
 
     if (limit > 10) {
       res.status(400).json({ message: `Maximum limit is 10 - given ${limit}` });
     }
 
-    const getLastPostId = (): Post["id"] | null => {
-      if (!queryLastPostId || typeof queryLastPostId !== "string") return null;
-      if (queryLastPostId === "null") return null;
-      return queryLastPostId;
-    };
-
     const posts = await PostRecommendationService.getRecommendedPosts(
       userId,
-      getLastPostId(),
+      processLastPostId(queryLastPostId),
       limit
     );
 
@@ -66,4 +76,18 @@ export const getPosts = async (
   } catch (e) {
     next(new Error(req.t("posts.controllers.get-all.failure")));
   }
+};
+
+const processLimit = (queryLimit: unknown): number => {
+  const defaultLimit = 10;
+  if (!queryLimit || typeof queryLimit !== "string") return defaultLimit;
+  const parsed = parseInt(queryLimit);
+  if (isNaN(parsed)) return 10;
+  return parsed;
+};
+
+const processLastPostId = (queryLastPostId: unknown): Post["id"] | null => {
+  if (!queryLastPostId || typeof queryLastPostId !== "string") return null;
+  if (queryLastPostId === "null") return null;
+  return queryLastPostId;
 };
