@@ -48,7 +48,7 @@ export default function Home() {
 
   return (
     <div>
-      {posts!.map((post) => (
+      {[posts![3]].map((post) => (
         <PostPreview post={post} key={post.id} />
       ))}
 
