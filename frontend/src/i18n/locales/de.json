@@ -103,7 +103,7 @@
         "title": "Tooltips",
         "description": "Aktiviere oder deaktiviere Tooltips für zusätzliche Anleitungen in der App."
       },
-      "slogan": "Passe deine Einstellungen an, um Link Up wirklich zu deinem zu machen. Schalte Themen um, ändere Vorlieben und gestalte die Art und Weise, wie du mit der Plattform interagierst.",
+      "slogan": "Passe deine Einstellungen an, um LinkUp wirklich zu deinem zu machen. Schalte Themen um, ändere Vorlieben und gestalte die Art und Weise, wie du mit der Plattform interagierst.",
       "header": {
         "1": "Personalisiere",
         "2": "Dein Erlebnis"
@@ -153,7 +153,7 @@
           "tooltip": "Startseite"
         },
         "search": {
-          "placeholder": "Auf Link Up suchen...",
+          "placeholder": "Auf LinkUp suchen...",
           "no-users": "Keine Benutzer gefunden.",
           "tooltip": "Nach Benutzern suchen",
           "heading": "Suchergebnis",

@@ -103,7 +103,7 @@
         "title": "Consejos",
         "description": "Habilita o deshabilita los consejos para obtener orientación adicional en la aplicación."
       },
-      "slogan": "Personaliza tus ajustes para hacer de Link Up algo realmente tuyo. Cambia temas, ajusta preferencias y define cómo interactúas con la plataforma.",
+      "slogan": "Personaliza tus ajustes para hacer de LinkUp algo realmente tuyo. Cambia temas, ajusta preferencias y define cómo interactúas con la plataforma.",
       "header": {
         "1": "Personaliza",
         "2": "Tu experiencia"
@@ -153,7 +153,7 @@
           "tooltip": "Inicio"
         },
         "search": {
-          "placeholder": "Buscar en Link Up...",
+          "placeholder": "Buscar en LinkUp...",
           "no-users": "No se encontraron usuarios.",
           "tooltip": "Buscar usuarios",
           "heading": "Resultado de búsqueda",

@@ -103,7 +103,7 @@
         "title": "Tooltips",
         "description": "Enable or disable tooltips for additional guidance in the app."
       },
-      "slogan": "Customize your settings to make Link Up truly yours. Toggle themes, tweak preferences, and shape the way you interact with the platform.",
+      "slogan": "Customize your settings to make LinkUp truly yours. Toggle themes, tweak preferences, and shape the way you interact with the platform.",
       "header": {
         "1": "Personalize",
         "2": "Your Experience"
@@ -153,7 +153,7 @@
           "tooltip": "Home"
         },
         "search": {
-          "placeholder": "Search on Link Up...",
+          "placeholder": "Search on LinkUp...",
           "no-users": "No users found.",
           "tooltip": "Search for Users",
           "heading": "Search result",
