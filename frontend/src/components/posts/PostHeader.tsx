@@ -101,6 +101,7 @@ function ReportPost({ post }: { post: Post }) {
 
   const handleClick = () => {
     setIsOpen(false);
+    console.log(post);
     toast({
       title: t("posts.report.toast.title"),
       description: t("posts.report.toast.description"),

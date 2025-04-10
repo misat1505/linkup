@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { PostService } from "../../services/PostService";
 import { Post } from "../../types/Post";
+import { PostRecommendationService } from "../../services/PostRecommendationService";
 
 /**
  * Controller to retrieve a list of posts.
@@ -56,7 +56,7 @@ export const getPosts = async (
       return queryLastPostId;
     };
 
-    const posts = await PostService.getRecommendedPosts(
+    const posts = await PostRecommendationService.getRecommendedPosts(
       userId,
       getLastPostId(),
       limit
