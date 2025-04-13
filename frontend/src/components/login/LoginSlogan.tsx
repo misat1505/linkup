@@ -23,7 +23,7 @@ export default function LoginSlogan() {
         )}
       >
         <div className="text-nowrap">{t("login.greeting")}</div>
-        <div className="text-nowrap">Link Up</div>
+        <div className="text-nowrap">LinkUp</div>
       </h1>
       <p
         className={cn("mt-32 text-balance text-center text-2xl font-semibold", {
