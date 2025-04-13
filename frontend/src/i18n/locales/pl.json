@@ -222,6 +222,9 @@
         "toast": {
           "title": "Post zgłoszony",
           "description": "Dziękujemy. Nasz zespół moderatorów wkrótce go przeanalizuje."
+        },
+        "fail-toast": {
+          "title": "Nie udało się zgłosić posta."
         }
       },
       "preview": {

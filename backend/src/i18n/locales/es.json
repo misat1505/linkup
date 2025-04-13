@@ -239,6 +239,11 @@
         "unauthorized": "No puedes editar un post que no te pertenece.",
         "failure": "No se pudo actualizar el post.",
         "not-found": "Post no encontrado."
+      },
+      "report": {
+        "success": "Publicación reportada con éxito.",
+        "failure": "No se pudo reportar la publicación.",
+        "already-reported": "Ya has reportado esta publicación."
       }
     }
   },

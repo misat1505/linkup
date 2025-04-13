@@ -235,6 +235,11 @@
         "unauthorized": "Cannot edit post not belonging to you.",
         "failure": "Couldn't update post.",
         "not-found": "Post not found."
+      },
+      "report": {
+        "success": "Post reported successfully.",
+        "failure": "Couldn't report post.",
+        "already-reported": "This post had been previously reported by you."
       }
     }
   },

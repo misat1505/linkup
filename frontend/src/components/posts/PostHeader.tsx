@@ -112,7 +112,7 @@ function ReportPost({ post }: { post: Post }) {
       if (e instanceof AxiosError)
         toast({
           variant: "destructive",
-          title: "Failed to report the post.",
+          title: t("posts.report.fail-toast.title"),
           description: e.response?.data.message,
         });
     } finally {

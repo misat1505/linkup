@@ -222,6 +222,9 @@
         "toast": {
           "title": "Post reported",
           "description": "Thank you. Our moderation team will review it shortly."
+        },
+        "fail-toast": {
+          "title": "Failed to report the post."
         }
       },
       "preview": {

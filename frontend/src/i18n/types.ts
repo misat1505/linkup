@@ -235,6 +235,9 @@ type PostsTranslations = {
       title: string;
       description: string;
     };
+    "fail-toast": {
+      title: string;
+    };
   };
   preview: {
     "show-more": string;
