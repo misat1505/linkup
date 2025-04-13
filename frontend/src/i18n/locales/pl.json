@@ -1,5 +1,21 @@
 {
   "translation": {
+    "tabs": {
+      "close-chat": "Czaty",
+      "chats": "Czaty - {{name}}",
+      "friends": "Znajomi",
+      "home": "",
+      "login": "Logowanie",
+      "not-found": "Nie znaleziono",
+      "editor": "Edytor",
+      "posts": "Moje posty",
+      "settings": "Ustawienia",
+      "signup": "Rejestracja"
+    },
+    "not-found": {
+      "description": "Ups. Wygląda na to, że nie chciałeś tutaj trafić.",
+      "button": "Zabierz mnie na stronę główną."
+    },
     "login": {
       "error": {
         "toast": {
@@ -87,7 +103,7 @@
         "title": "Podpowiedzi",
         "description": "Włącz lub wyłącz podpowiedzi, aby uzyskać dodatkowe wskazówki w aplikacji."
       },
-      "slogan": "Dostosuj ustawienia, aby Link Up był naprawdę Twój. Zmieniaj motywy, dostosowuj preferencje i kształtuj sposób, w jaki korzystasz z platformy.",
+      "slogan": "Dostosuj ustawienia, aby LinkUp był naprawdę Twój. Zmieniaj motywy, dostosowuj preferencje i kształtuj sposób, w jaki korzystasz z platformy.",
       "header": {
         "1": "Dostosuj Swoje",
         "2": "Doświadczenie"
@@ -137,7 +153,7 @@
           }
         },
         "search": {
-          "placeholder": "Szukaj na Link Up...",
+          "placeholder": "Szukaj na LinkUp...",
           "no-users": "Brak wyników wyszukiwania.",
           "tooltip": "Szukaj Użytkowników",
           "heading": "Wyniki Wyszukiwania",
@@ -193,6 +209,21 @@
       }
     },
     "posts": {
+      "report": {
+        "dialog": {
+          "trigger": {
+            "tooltip": "Zgłoś treść"
+          },
+          "title": "Zgłoś post",
+          "description": "Czy na pewno chcesz zgłosić ten post? Ta akcja oznaczy go do sprawdzenia przez naszych moderatorów.",
+          "cancel": "Anuluj",
+          "confirm": "Potwierdź zgłoszenie"
+        },
+        "toast": {
+          "title": "Post zgłoszony",
+          "description": "Dziękujemy. Nasz zespół moderatorów wkrótce go przeanalizuje."
+        }
+      },
       "preview": {
         "show-more": "Pokaż więcej",
         "show-less": "Pokaż mniej"
@@ -301,6 +332,10 @@
       }
     },
     "chats": {
+      "chat-start": {
+        "created-at": "Ten czat został utworzony {{date}}.",
+        "greeting": "W pokoju na razie cisza… napisz coś jako pierwszy i przełam milczenie!"
+      },
       "sockets": {
         "errors": {
           "connection": {

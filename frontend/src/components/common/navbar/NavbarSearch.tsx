@@ -218,7 +218,11 @@ type ActionButtonProps = {
   Icon: JSX.Element;
 };
 
-function ActionButton({ onClick, tooltipText, Icon }: ActionButtonProps) {
+export function ActionButton({
+  onClick,
+  tooltipText,
+  Icon,
+}: ActionButtonProps) {
   return (
     <Tooltip content={tooltipText}>
       <span>

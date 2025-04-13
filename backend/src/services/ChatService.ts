@@ -209,15 +209,39 @@ export class ChatService {
     return !!result;
   }
 
+  private static sanitizeMessages(data: any): Message[] {
+    return data.map((message: any) => ({
+      id: message.id,
+      content: message.content,
+      author: message.author,
+      createdAt: message.createdAt,
+      response: message.response,
+      chatId: message.chatId,
+      files: message.files,
+      reactions: message.reactions.map((userReaction: any) => ({
+        id: userReaction.reaction.id,
+        name: userReaction.reaction.name,
+        messageId: userReaction.messageId,
+        user: {
+          id: userReaction.user.id,
+          firstName: userReaction.user.firstName,
+          lastName: userReaction.user.lastName,
+          photoURL: userReaction.user.photoURL,
+          lastActive: userReaction.user.lastActive,
+        },
+      })),
+    }));
+  }
+
   /**
    * Retrieves all messages in a chat, optionally filtering by response ID.
    * @param chatId - The ID of the chat to fetch messages for.
    * @param responseId - Optionally, the ID of the parent message to filter by.
    * @returns A list of messages in the chat.
    */
-  static async getChatMessages(
+  static async getPostChatMessages(
     chatId: Chat["id"],
-    responseId: Message["id"] | null | undefined = undefined
+    responseId: Message["id"] | null
   ): Promise<Message[]> {
     const result = await prisma.message.findMany({
       where: {
@@ -243,29 +267,50 @@ export class ChatService {
       },
     });
 
-    const messages: Message[] = result.map((message) => ({
-      id: message.id,
-      content: message.content,
-      author: message.author,
-      createdAt: message.createdAt,
-      response: message.response,
-      chatId: message.chatId,
-      files: message.files,
-      reactions: message.reactions.map((userReaction) => ({
-        id: userReaction.reaction.id,
-        name: userReaction.reaction.name,
-        messageId: userReaction.messageId,
-        user: {
-          id: userReaction.user.id,
-          firstName: userReaction.user.firstName,
-          lastName: userReaction.user.lastName,
-          photoURL: userReaction.user.photoURL,
-          lastActive: userReaction.user.lastActive,
-        },
-      })),
-    }));
+    return this.sanitizeMessages(result);
+  }
 
-    return messages;
+  static async getChatMessages(
+    chatId: Chat["id"],
+    lastMessageId: Message["id"] | undefined = undefined,
+    limit: number | undefined = undefined
+  ): Promise<Message[]> {
+    const lastMessage = lastMessageId
+      ? await prisma.message.findFirst({
+          where: { id: lastMessageId },
+        })
+      : null;
+
+    if (lastMessage && lastMessage.chatId !== chatId)
+      throw new Error("Message not in chat.");
+
+    const result = await prisma.message.findMany({
+      where: {
+        chatId,
+        createdAt: lastMessage ? { lt: lastMessage.createdAt } : undefined,
+      },
+      include: {
+        author: { select: userSelect },
+        response: {
+          select: messageWithoutResponseSelect,
+        },
+        files: {
+          select: { id: true, url: true },
+        },
+        reactions: {
+          include: {
+            user: {
+              select: userSelect,
+            },
+            reaction: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      take: limit,
+    });
+
+    return this.sanitizeMessages(result);
   }
 
   /**

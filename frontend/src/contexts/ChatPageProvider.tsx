@@ -57,12 +57,29 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
       return sortChatsByActivity(updatedChats);
     });
 
-    queryClient.setQueryData<Message[]>(
+    queryClient.setQueryData(
       queryKeys.messages(message.chatId),
-      (oldMessages) => {
-        if (!oldMessages) return [message];
-        const isDuplicate = oldMessages.some((m) => m.id === message.id);
-        return isDuplicate ? oldMessages : [...oldMessages, message];
+      (oldData: any) => {
+        if (!oldData) {
+          return {
+            pages: [[message]],
+            pageParams: [undefined],
+          };
+        }
+
+        const allMessages = oldData.pages.flat();
+        const isDuplicate = allMessages.some(
+          (m: Message) => m.id === message.id
+        );
+
+        if (isDuplicate) {
+          return oldData;
+        }
+
+        return {
+          pages: [[message], ...oldData.pages],
+          pageParams: [undefined, ...oldData.pageParams],
+        };
       }
     );
   };

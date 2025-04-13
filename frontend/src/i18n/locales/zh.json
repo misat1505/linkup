@@ -1,5 +1,21 @@
 {
   "translation": {
+    "tabs": {
+      "close-chat": "聊天",
+      "chats": "聊天 - {{name}}",
+      "friends": "朋友",
+      "home": "",
+      "login": "登录",
+      "not-found": "未找到",
+      "editor": "编辑器",
+      "posts": "我的帖子",
+      "settings": "设置",
+      "signup": "注册"
+    },
+    "not-found": {
+      "description": "哎呀。看起来你不想来这里。",
+      "button": "带我回家。"
+    },
     "login": {
       "error": {
         "toast": {
@@ -87,7 +103,7 @@
         "title": "提示",
         "description": "启用或禁用提示，以在应用中获得额外指导。"
       },
-      "slogan": "自定义你的设置，让 Link Up 真正属于你。切换主题、调整偏好，塑造你与平台互动的方式。",
+      "slogan": "自定义你的设置，让 LinkUp 真正属于你。切换主题、调整偏好，塑造你与平台互动的方式。",
       "header": {
         "1": "个性化",
         "2": "你的体验"
@@ -137,7 +153,7 @@
           "tooltip": "主页"
         },
         "search": {
-          "placeholder": "在 Link Up 上搜索...",
+          "placeholder": "在 LinkUp 上搜索...",
           "no-users": "未找到用户。",
           "tooltip": "搜索用户",
           "heading": "搜索结果",
@@ -193,6 +209,21 @@
       }
     },
     "posts": {
+      "report": {
+        "dialog": {
+          "trigger": {
+            "tooltip": "舉報內容"
+          },
+          "title": "舉報帖子",
+          "description": "您確定要舉報這個帖子嗎？此操作將把帖子標註為供我們的版主審核。",
+          "cancel": "取消",
+          "confirm": "確認舉報"
+        },
+        "toast": {
+          "title": "帖子已舉報",
+          "description": "謝謝您，我們的版主團隊將很快審核它。"
+        }
+      },
       "preview": {
         "show-more": "显示更多",
         "show-less": "显示更少"
@@ -301,6 +332,10 @@
       }
     },
     "chats": {
+      "chat-start": {
+        "created-at": "该聊天创建 {{date}}.",
+        "greeting": "房间里暂时很安静……快来说点什么，打破沉默吧！"
+      },
       "sockets": {
         "errors": {
           "connection": {

@@ -1,5 +1,21 @@
 {
   "translation": {
+    "tabs": {
+      "close-chat": "Chats",
+      "chats": "Chats - {{name}}",
+      "friends": "Freunde",
+      "home": "",
+      "login": "Anmelden",
+      "not-found": "Nicht gefunden",
+      "editor": "Editor",
+      "posts": "Meine Beiträge",
+      "settings": "Einstellungen",
+      "signup": "Registrieren"
+    },
+    "not-found": {
+      "description": "Hoppla. Es scheint, als wolltest du hier nicht hin.",
+      "button": "Bringe mich zurück nach Hause."
+    },
     "login": {
       "error": {
         "toast": {
@@ -87,7 +103,7 @@
         "title": "Tooltips",
         "description": "Aktiviere oder deaktiviere Tooltips für zusätzliche Anleitungen in der App."
       },
-      "slogan": "Passe deine Einstellungen an, um Link Up wirklich zu deinem zu machen. Schalte Themen um, ändere Vorlieben und gestalte die Art und Weise, wie du mit der Plattform interagierst.",
+      "slogan": "Passe deine Einstellungen an, um LinkUp wirklich zu deinem zu machen. Schalte Themen um, ändere Vorlieben und gestalte die Art und Weise, wie du mit der Plattform interagierst.",
       "header": {
         "1": "Personalisiere",
         "2": "Dein Erlebnis"
@@ -137,7 +153,7 @@
           "tooltip": "Startseite"
         },
         "search": {
-          "placeholder": "Auf Link Up suchen...",
+          "placeholder": "Auf LinkUp suchen...",
           "no-users": "Keine Benutzer gefunden.",
           "tooltip": "Nach Benutzern suchen",
           "heading": "Suchergebnis",
@@ -193,6 +209,21 @@
       }
     },
     "posts": {
+      "report": {
+        "dialog": {
+          "trigger": {
+            "tooltip": "Inhalt melden"
+          },
+          "title": "Beitrag melden",
+          "description": "Bist du sicher, dass du diesen Beitrag melden möchtest? Diese Aktion markiert den Beitrag zur Überprüfung durch unsere Moderatoren.",
+          "cancel": "Abbrechen",
+          "confirm": "Meldung bestätigen"
+        },
+        "toast": {
+          "title": "Beitrag gemeldet",
+          "description": "Vielen Dank. Unser Moderationsteam wird den Beitrag in Kürze überprüfen."
+        }
+      },
       "preview": {
         "show-more": "Mehr anzeigen",
         "show-less": "Weniger anzeigen"
@@ -301,6 +332,10 @@
       }
     },
     "chats": {
+      "chat-start": {
+        "created-at": "Dieser Chat wurde erstellt am {{date}}.",
+        "greeting": "Der Raum ist noch still … sei der Erste, der etwas sagt und das Schweigen bricht!"
+      },
       "sockets": {
         "errors": {
           "connection": {

@@ -114,8 +114,7 @@ function ReactionCreatorContentItem({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const { chat, setIncomeMessageId } = useChatContext();
+  const { chat, setIncomeMessageId, addReaction } = useChatContext();
   const component =
     reactionsMap[reaction.name as keyof typeof reactionsMap] || null;
 
@@ -129,16 +128,7 @@ function ReactionCreatorContentItem({
         chat!.id
       );
 
-      queryClient.setQueryData<Message[]>(
-        queryKeys.messages(chat!.id),
-        (oldMessages = []) => {
-          const message = oldMessages.find((m) => m.id === messageId);
-          if (!message) return oldMessages;
-
-          message.reactions.push(reactionResponse);
-          return [...oldMessages];
-        }
-      );
+      addReaction(reactionResponse);
 
       socketClient.sendReaction(reactionResponse, chat!.id);
 

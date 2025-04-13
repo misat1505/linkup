@@ -1,5 +1,21 @@
 {
   "translation": {
+    "tabs": {
+      "close-chat": "Chats",
+      "chats": "Chats - {{name}}",
+      "friends": "Friends",
+      "home": "",
+      "login": "Login",
+      "not-found": "Not Found",
+      "editor": "Editor",
+      "posts": "My Posts",
+      "settings": "Settings",
+      "signup": "Signup"
+    },
+    "not-found": {
+      "description": "Oops. It seems like you didn't want to go here.",
+      "button": "Bring me back home."
+    },
     "login": {
       "error": {
         "toast": {
@@ -87,7 +103,7 @@
         "title": "Tooltips",
         "description": "Enable or disable tooltips for additional guidance in the app."
       },
-      "slogan": "Customize your settings to make Link Up truly yours. Toggle themes, tweak preferences, and shape the way you interact with the platform.",
+      "slogan": "Customize your settings to make LinkUp truly yours. Toggle themes, tweak preferences, and shape the way you interact with the platform.",
       "header": {
         "1": "Personalize",
         "2": "Your Experience"
@@ -137,7 +153,7 @@
           "tooltip": "Home"
         },
         "search": {
-          "placeholder": "Search on Link Up...",
+          "placeholder": "Search on LinkUp...",
           "no-users": "No users found.",
           "tooltip": "Search for Users",
           "heading": "Search result",
@@ -193,6 +209,21 @@
       }
     },
     "posts": {
+      "report": {
+        "dialog": {
+          "trigger": {
+            "tooltip": "Report content"
+          },
+          "title": "Report Post",
+          "description": "Are you sure you want to report this post? This action will flag the post for review by our moderators.",
+          "cancel": "Cancel",
+          "confirm": "Confirm Report"
+        },
+        "toast": {
+          "title": "Post reported",
+          "description": "Thank you. Our moderation team will review it shortly."
+        }
+      },
       "preview": {
         "show-more": "Show more",
         "show-less": "Show less"
@@ -301,6 +332,10 @@
       }
     },
     "chats": {
+      "chat-start": {
+        "created-at": "This chat was created on {{date}}.",
+        "greeting": "The room's quiet for now… be the first to say something and break the silence!"
+      },
       "sockets": {
         "errors": {
           "connection": {

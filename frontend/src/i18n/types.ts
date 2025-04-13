@@ -1,4 +1,6 @@
 export type Translation = {
+  tabs: TabsTranslations;
+  "not-found": NotFoundTranslations;
   login: LoginTranslations;
   signup: SignupTranslations;
   settings: SettingsTranslations;
@@ -14,6 +16,24 @@ export type Translation = {
     you: string;
     time: TimeAgoTranslations;
   };
+};
+
+type TabsTranslations = {
+  "close-chat": string;
+  chats: string;
+  friends: string;
+  home: string;
+  login: string;
+  "not-found": string;
+  editor: string;
+  posts: string;
+  settings: string;
+  signup: string;
+};
+
+type NotFoundTranslations = {
+  description: string;
+  button: string;
 };
 
 type LoginTranslations = {
@@ -201,6 +221,21 @@ type HomeTranslations = {
 };
 
 type PostsTranslations = {
+  report: {
+    dialog: {
+      trigger: {
+        tooltip: string;
+      };
+      title: string;
+      description: string;
+      cancel: string;
+      confirm: string;
+    };
+    toast: {
+      title: string;
+      description: string;
+    };
+  };
   preview: {
     "show-more": string;
     "show-less": string;
@@ -324,6 +359,10 @@ type FriendsTranslations = {
 };
 
 type ChatsTranslations = {
+  "chat-start": {
+    "created-at": string;
+    greeting: string;
+  };
   sockets: {
     errors: {
       connection: {

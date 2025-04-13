@@ -4,8 +4,6 @@ import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { VALID_USER_ID } from "../utils/constants";
 import { isPost } from "../../src/types/guards/Post.guard";
 import { env } from "../../src/config/env";
-import path from "path";
-import fs from "fs";
 import fileStorage from "../../src/lib/FileStorage";
 
 jest.mock("../../src/lib/FileStorage");
@@ -13,6 +11,11 @@ jest.mock("../../src/lib/FileStorage");
 describe("posts router", () => {
   const token = TokenProcessor.encode(
     { userId: VALID_USER_ID },
+    env.ACCESS_TOKEN_SECRET
+  );
+
+  const otherUserToken = TokenProcessor.encode(
+    { userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61" },
     env.ACCESS_TOKEN_SECRET
   );
 
@@ -41,7 +44,7 @@ describe("posts router", () => {
     it("should retrieve a list of posts", async () => {
       const res = await request(app)
         .get("/posts")
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${otherUserToken}`);
 
       expect(res.statusCode).toEqual(200);
       expect(Array.isArray(res.body.posts)).toBe(true);

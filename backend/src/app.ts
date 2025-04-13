@@ -46,7 +46,7 @@ app.use("/", publicRoutes);
 app.use("/", protectedRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err);
+  if (env.NODE_ENV !== "test") console.error(err);
   if (isSentryActive) Sentry.captureException(err);
   return res.status(500).json({ message: err.message });
 });

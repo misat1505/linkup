@@ -17,6 +17,17 @@ function sanitizePost(post: any): Post {
  */
 export class PostService {
   /**
+   * Sanitizes post
+   * @param post - data to be sanitized
+   */
+  static sanitizePost(post: any): Post {
+    return sanitizePost({
+      ...post,
+      chat: transformPostChatSelect(post.chat),
+    });
+  }
+
+  /**
    * Deletes a post by its ID.
    * @param id - The ID of the post to be deleted.
    */
@@ -56,10 +67,7 @@ export class PostService {
       },
     });
 
-    return sanitizePost({
-      ...post,
-      chat: transformPostChatSelect(post.chat),
-    });
+    return this.sanitizePost(post);
   }
 
   /**
@@ -80,10 +88,7 @@ export class PostService {
 
     if (!post) return null;
 
-    return sanitizePost({
-      ...post,
-      chat: transformPostChatSelect(post.chat),
-    });
+    return this.sanitizePost(post);
   }
 
   /**
@@ -102,34 +107,7 @@ export class PostService {
       },
     });
 
-    return posts.map((post) =>
-      sanitizePost({
-        ...post,
-        chat: transformPostChatSelect(post.chat),
-      })
-    );
-  }
-
-  /**
-   * Retrieves all posts in the database.
-   * @returns A list of all posts.
-   */
-  static async getPosts(): Promise<Post[]> {
-    const posts = await prisma.post.findMany({
-      include: {
-        author: { select: userSelect },
-        chat: {
-          select: postChatSelect,
-        },
-      },
-    });
-
-    return posts.map((post) =>
-      sanitizePost({
-        ...post,
-        chat: transformPostChatSelect(post.chat),
-      })
-    );
+    return posts.map(this.sanitizePost);
   }
 
   /**
@@ -167,9 +145,6 @@ export class PostService {
       },
     });
 
-    return sanitizePost({
-      ...result,
-      chat: transformPostChatSelect(result.chat),
-    });
+    return this.sanitizePost(result);
   }
 }

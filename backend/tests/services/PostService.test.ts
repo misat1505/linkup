@@ -17,17 +17,6 @@ describe("PostService", () => {
     });
   });
 
-  describe("getPosts", () => {
-    it("should return all posts", async () => {
-      const result = await PostService.getPosts();
-
-      expect(Array.isArray(result)).toBe(true);
-      result.forEach((post) => {
-        expect(isPost(post)).toBe(true);
-      });
-    });
-  });
-
   describe("getUserPosts", () => {
     it("should return posts for a specific user", async () => {
       const userId = USER.id;

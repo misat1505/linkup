@@ -6,8 +6,12 @@ import { useAppContext } from "@/contexts/AppProvider";
 import { queryKeys } from "@/lib/queryKeys";
 import { PostService } from "@/services/Post.service";
 import Loading from "@/components/common/Loading";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
+import { useTranslation } from "react-i18next";
 
 export default function PostEditor() {
+  const { t } = useTranslation();
+  useChangeTabTitle(t("tabs.editor"));
   const { postId } = useParams();
 
   if (!postId)
