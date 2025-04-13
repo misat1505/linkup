@@ -30,6 +30,8 @@ import Tooltip from "../common/Tooltip";
 import FocusableSpan from "../common/FocusableSpan";
 import { MdOutlineReport } from "react-icons/md";
 import { useToast } from "../ui/use-toast";
+import { PostService } from "@/services/Post.service";
+import { AxiosError } from "axios";
 
 export default function PostHeader({ post }: { post: Post }) {
   const queryClient = useQueryClient();
@@ -99,13 +101,23 @@ function ReportPost({ post }: { post: Post }) {
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
 
-  const handleClick = () => {
-    setIsOpen(false);
-    console.log(post);
-    toast({
-      title: t("posts.report.toast.title"),
-      description: t("posts.report.toast.description"),
-    });
+  const handleClick = async () => {
+    try {
+      await PostService.reportPost(post.id);
+      toast({
+        title: t("posts.report.toast.title"),
+        description: t("posts.report.toast.description"),
+      });
+    } catch (e) {
+      if (e instanceof AxiosError)
+        toast({
+          variant: "destructive",
+          title: "Failed to report the post.",
+          description: e.response?.data.message,
+        });
+    } finally {
+      setIsOpen(false);
+    }
   };
 
   return (

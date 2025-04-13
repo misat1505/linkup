@@ -147,4 +147,10 @@ export class PostService {
 
     return this.sanitizePost(result);
   }
+
+  static async reportPost(userId: User["id"], postId: Post["id"]) {
+    await prisma.postReport.create({
+      data: { userId, postId },
+    });
+  }
 }

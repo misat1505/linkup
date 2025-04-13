@@ -43,4 +43,8 @@ export class PostService {
     const response = await POSTS_API.post("/", { content });
     return response.data.post;
   }
+
+  static async reportPost(postId: Post["id"]): Promise<void> {
+    await POSTS_API.post(`/${postId}/report`);
+  }
 }
