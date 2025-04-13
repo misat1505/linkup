@@ -112,4 +112,15 @@ describe("posts router", () => {
       expect(res.statusCode).toEqual(200);
     });
   });
+
+  describe("[POST] /posts/:id/report", () => {
+    it("should report post correctly", async () => {
+      const postId = "25776a73-a5c6-40cf-b77f-76288a34cfa7";
+      const res = await request(app)
+        .post(`/posts/${postId}/report`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(res.statusCode).toEqual(200);
+    });
+  });
 });

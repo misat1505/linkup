@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { PostService } from "../../src/services/PostService";
 import { isPost } from "../../src/types/guards/Post.guard";
 import { USER } from "../utils/constants";
@@ -79,6 +80,34 @@ describe("PostService", () => {
       await PostService.deletePost(postId);
 
       expect(true).toBe(true);
+    });
+  });
+
+  describe("reportPost", () => {
+    it("should report post", async () => {
+      await PostService.reportPost(
+        USER.id,
+        "25776a73-a5c6-40cf-b77f-76288a34cfa7"
+      );
+      expect(true).toBe(true);
+    });
+
+    it("should throw error if user already reported this post", async () => {
+      await PostService.reportPost(
+        USER.id,
+        "25776a73-a5c6-40cf-b77f-76288a34cfa7"
+      );
+      expect(true).toBe(true);
+
+      try {
+        await PostService.reportPost(
+          USER.id,
+          "25776a73-a5c6-40cf-b77f-76288a34cfa7"
+        );
+        expect(true).toBe(true);
+      } catch (e) {
+        expect(e).toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
+      }
     });
   });
 });

@@ -243,6 +243,11 @@
         "unauthorized": "Nie możesz edytować posta, który do Ciebie nie należy.",
         "failure": "Nie można zaktualizować posta.",
         "not-found": "Post nie został znaleziony."
+      },
+      "report": {
+        "success": "Post został pomyślnie zgłoszony.",
+        "failure": "Nie udało się zgłosić posta.",
+        "already-reported": "Ten post został już przez Ciebie zgłoszony."
       }
     }
   },

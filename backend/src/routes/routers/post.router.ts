@@ -5,6 +5,7 @@ import { getPost } from "../../controllers/posts/getPost";
 import { getPosts } from "../../controllers/posts/getPosts";
 import { createPost } from "../../controllers/posts/createPost";
 import { deletePost } from "../../controllers/posts/deletePost";
+import { reportPost } from "../../controllers/posts/reportPost";
 
 /**
  * Post Routes Router.
@@ -19,6 +20,7 @@ postRouter.get("/mine", getUserPosts);
 postRouter.get("/:id", getPost);
 postRouter.delete("/:id", deletePost);
 postRouter.get("/", getPosts);
+postRouter.post("/:id/report", reportPost);
 postRouter.post("/", createPost);
 
 export default postRouter;

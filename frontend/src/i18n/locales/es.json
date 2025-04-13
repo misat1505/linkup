@@ -222,6 +222,9 @@
         "toast": {
           "title": "Publicación reportada",
           "description": "Gracias. Nuestro equipo de moderación la revisará pronto."
+        },
+        "fail-toast": {
+          "title": "No se pudo reportar la publicación."
         }
       },
       "preview": {

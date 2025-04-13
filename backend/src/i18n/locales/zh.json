@@ -235,6 +235,11 @@
         "unauthorized": "您无法编辑不属于您的帖子。",
         "failure": "无法更新帖子。",
         "not-found": "帖子未找到。"
+      },
+      "report": {
+        "success": "帖子已成功举报。",
+        "failure": "无法举报该帖子。",
+        "already-reported": "你已举报过此帖子。"
       }
     }
   },

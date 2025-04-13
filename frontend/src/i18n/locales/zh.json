@@ -222,6 +222,9 @@
         "toast": {
           "title": "帖子已舉報",
           "description": "謝謝您，我們的版主團隊將很快審核它。"
+        },
+        "fail-toast": {
+          "title": "举报帖子失败。"
         }
       },
       "preview": {

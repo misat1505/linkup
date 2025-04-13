@@ -222,6 +222,9 @@
         "toast": {
           "title": "Beitrag gemeldet",
           "description": "Vielen Dank. Unser Moderationsteam wird den Beitrag in Kürze überprüfen."
+        },
+        "fail-toast": {
+          "title": "Der Beitrag konnte nicht gemeldet werden."
         }
       },
       "preview": {

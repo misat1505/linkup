@@ -241,6 +241,11 @@
         "unauthorized": "Sie können keinen Post bearbeiten, der Ihnen nicht gehört.",
         "failure": "Post konnte nicht aktualisiert werden.",
         "not-found": "Post nicht gefunden."
+      },
+      "report": {
+        "success": "Beitrag wurde erfolgreich gemeldet.",
+        "failure": "Beitrag konnte nicht gemeldet werden.",
+        "already-reported": "Du hast diesen Beitrag bereits gemeldet."
       }
     }
   },

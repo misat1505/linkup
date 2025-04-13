@@ -23,10 +23,11 @@ model User {
   password    String
   salt        String
 
-  posts       Post[]    @relation("UserPosts")
-  chats       UserChat[]
-  messages    Message[] @relation("MessageAuthor")
-  reactions   UserReaction[]
+  posts         Post[]    @relation("UserPosts")
+  chats         UserChat[]
+  messages      Message[] @relation("MessageAuthor")
+  reactions     UserReaction[]
+  reportedPosts PostReport[]
 
   sentRequests      Friend[] @relation("UserSentRequests")
   receivedRequests  Friend[] @relation("UserReceivedRequests")
@@ -49,14 +50,26 @@ model Friend {
 }
 
 model Post {
-  id          String    @id @default(uuid())
-  content     String    @db.Text
-  authorId    String
-  createdAt   DateTime  @default(now())
-  chatId      String    @unique
+  id              String    @id @default(uuid())
+  content         String    @db.Text
+  authorId        String
+  createdAt       DateTime  @default(now())
+  chatId          String    @unique
+
+  reports PostReport[]
 
   author      User      @relation("UserPosts", fields: [authorId], references: [id])
   chat        Chat      @relation("PostChat", fields: [chatId], references: [id])
+}
+
+model PostReport {
+  userId   String
+  postId   String
+
+  user     User   @relation(fields: [userId], references: [id])
+  post     Post   @relation(fields: [postId], references: [id])
+
+  @@id([userId, postId])
 }
 
 enum ChatType {

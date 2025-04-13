@@ -147,4 +147,15 @@ export class PostService {
 
     return this.sanitizePost(result);
   }
+
+  /**
+   * Reports a post.
+   * @param userId - The ID of the user that reports the post.
+   * @param postId - The ID of the post being reported.
+   */
+  static async reportPost(userId: User["id"], postId: Post["id"]) {
+    await prisma.postReport.create({
+      data: { userId, postId },
+    });
+  }
 }

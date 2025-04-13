@@ -197,6 +197,9 @@ type PostsTranslations = {
     "get-all": Failure;
     "get-users": Failure;
     update: Failure & Unauthorized & NotFound;
+    report: SuccessOrFailure & {
+      "already-reported": string;
+    };
   };
 };
 
