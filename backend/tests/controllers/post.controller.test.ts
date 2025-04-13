@@ -11,6 +11,8 @@ import { deletePost } from "../../src/controllers/posts/deletePost";
 import i18next from "../../src/i18n";
 import middleware from "i18next-http-middleware";
 import { PostRecommendationService } from "../../src/services/PostRecommendationService";
+import { reportPost } from "../../src/controllers/posts/reportPost";
+import { Prisma } from "@prisma/client";
 
 jest.mock("../../src/lib/FileStorage");
 jest.mock("../../src/services/PostService");
@@ -33,6 +35,7 @@ describe("Post controllers", () => {
   app.get("/posts", getPosts);
   app.post("/posts", createPost);
   app.delete("/posts/:id", deletePost);
+  app.post("/posts/:id/report", reportPost);
   app.use(mockErrorMiddleware);
 
   beforeEach(() => {
@@ -421,6 +424,64 @@ describe("Post controllers", () => {
       expect(response.body).toEqual({
         message: "Cannot delete post not belonging to you.",
       });
+    });
+  });
+
+  describe("reportPost", () => {
+    const postId = "123";
+    const userId = "user-id";
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it("should successfully report a post", async () => {
+      (PostService.reportPost as jest.Mock).mockResolvedValue(undefined);
+
+      const response = await request(app)
+        .post(`/posts/${postId}/report`)
+        .send({ token: { userId } });
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe("Post reported successfully.");
+      expect(PostService.reportPost).toHaveBeenCalledWith(userId, postId);
+    });
+
+    it("should return 409 if post is already reported", async () => {
+      (PostService.reportPost as jest.Mock).mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError("Unique constraint", {
+          clientVersion: "4.0.0",
+          code: "P2002",
+        } as any)
+      );
+
+      const response = await request(app)
+        .post(`/posts/${postId}/report`)
+        .send({ token: { userId } });
+
+      expect(response.status).toBe(409);
+      expect(response.body.message).toBe(
+        "This post had been previously reported by you."
+      );
+    });
+
+    it("should pass to error middleware if reporting fails for another reason", async () => {
+      const error = new Error("Unexpected error");
+      (PostService.reportPost as jest.Mock).mockRejectedValue(error);
+
+      await request(app)
+        .post(`/posts/${postId}/report`)
+        .send({ token: { userId } });
+
+      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
+      expect(mockErrorMiddleware).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.any(String),
+        }),
+        expect.anything(),
+        expect.anything(),
+        expect.anything()
+      );
     });
   });
 });

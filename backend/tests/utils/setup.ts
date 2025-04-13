@@ -10,6 +10,7 @@ const tables = [
   "File",
   "UserChat",
   "Post",
+  "PostReport",
 ];
 
 export const resetDB = async (): Promise<void> => {
