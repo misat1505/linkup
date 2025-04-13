@@ -40,6 +40,8 @@ import { Prisma } from "@prisma/client";
  *                   type: string
  *       400:
  *         description: Post reported successfully.
+ *       409:
+ *         description: This post had been previously reported by you.
  *       500:
  *         description: Couldn't report post.
  */
@@ -62,8 +64,12 @@ export const reportPost = async (
       e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002";
 
     if (violatedUniqueConstraint) {
-      next(new Error(req.t("posts.controllers.report.already-reported")));
+      res
+        .status(409)
+        .json({ message: req.t("posts.controllers.report.already-reported") });
+      return;
     }
+
     next(new Error(req.t("posts.controllers.report.failure")));
   }
 };
