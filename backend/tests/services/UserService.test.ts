@@ -57,7 +57,7 @@ describe("UserService", () => {
         };
 
         await userService.insertUser(user);
-        expect(true).toBe(true); // check if no error})
+        expect(true).toBe(true); // check if no error
       });
     });
   });

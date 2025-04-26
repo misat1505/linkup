@@ -1,113 +1,133 @@
 import { Prisma } from "@prisma/client";
 import { PostService } from "../../src/services/PostService";
 import { isPost } from "../../src/types/guards/Post.guard";
-import { USER } from "../utils/constants";
+import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("PostService", () => {
   describe("createPost", () => {
     it("should create a post", async () => {
-      const content = "This is a new post";
-      const authorId = USER.id;
-      const id = "123";
+      await testWithTransaction(async ({ tx, seed }) => {
+        const postService = new PostService(tx);
+        const content = "This is a new post";
+        const authorId = seed.users[0].id;
+        const id = "123";
 
-      const result = await PostService.createPost({ id, content, authorId });
+        const result = await postService.createPost({ id, content, authorId });
 
-      expect(isPost(result)).toBe(true);
-      expect(result.content).toBe(content);
-      expect(result.author.id).toBe(authorId);
+        expect(isPost(result)).toBe(true);
+        expect(result.content).toBe(content);
+        expect(result.author.id).toBe(authorId);
+      });
     });
   });
 
   describe("getUserPosts", () => {
     it("should return posts for a specific user", async () => {
-      const userId = USER.id;
+      await testWithTransaction(async ({ tx, seed }) => {
+        const postService = new PostService(tx);
+        const userId = seed.users[0].id;
 
-      const result = await PostService.getUserPosts(userId);
+        const result = await postService.getUserPosts(userId);
 
-      expect(Array.isArray(result)).toBe(true);
-      result.forEach((post) => {
-        expect(isPost(post)).toBe(true);
-        expect(post.author.id).toBe(userId);
+        expect(Array.isArray(result)).toBe(true);
+        result.forEach((post) => {
+          expect(isPost(post)).toBe(true);
+          expect(post.author.id).toBe(userId);
+        });
       });
     });
   });
 
   describe("getPost", () => {
     it("should return a post by ID", async () => {
-      const result = await PostService.getPost(
-        "25776a73-a5c6-40cf-b77f-76288a34cfa7"
-      );
+      await testWithTransaction(async ({ tx, seed }) => {
+        const postService = new PostService(tx);
+        const postId = seed.posts[0].id;
+        const result = await postService.getPost(postId);
 
-      expect(isPost(result)).toBe(true);
-      expect(result!.id).toBe("25776a73-a5c6-40cf-b77f-76288a34cfa7");
+        expect(isPost(result)).toBe(true);
+        expect(result!.id).toBe(postId);
+      });
     });
 
     it("should return null for a non-existent post", async () => {
-      const result = await PostService.getPost("non-existent-id");
+      await testWithTransaction(async ({ tx }) => {
+        const postService = new PostService(tx);
+        const result = await postService.getPost("non-existent-id");
 
-      expect(result).toBeNull();
+        expect(result).toBeNull();
+      });
     });
   });
 
   describe("updatePost", () => {
     it("should update an existing post", async () => {
-      const postId = "25776a73-a5c6-40cf-b77f-76288a34cfa7";
-      const newContent = "Updated post content";
+      await testWithTransaction(async ({ tx, seed }) => {
+        const postService = new PostService(tx);
+        const postId = seed.posts[0].id;
+        const newContent = "Updated post content";
 
-      const result = await PostService.updatePost({
-        id: postId,
-        content: newContent,
+        const result = await postService.updatePost({
+          id: postId,
+          content: newContent,
+        });
+
+        expect(isPost(result)).toBe(true);
+        expect(result!.content).toBe(newContent);
       });
-
-      expect(isPost(result)).toBe(true);
-      expect(result!.content).toBe(newContent);
     });
 
     it("should return null for a non-existent post update", async () => {
-      const result = await PostService.updatePost({
-        id: "non-existent-id",
-        content: "Content",
-      });
+      await testWithTransaction(async ({ tx }) => {
+        const postService = new PostService(tx);
+        const result = await postService.updatePost({
+          id: "non-existent-id",
+          content: "Content",
+        });
 
-      expect(result).toBeNull();
+        expect(result).toBeNull();
+      });
     });
   });
 
   describe("updatePost", () => {
     it("should delete an existing post", async () => {
-      const postId = "25776a73-a5c6-40cf-b77f-76288a34cfa7";
+      await testWithTransaction(async ({ tx, seed }) => {
+        const postService = new PostService(tx);
+        const postId = seed.posts[0].id;
 
-      await PostService.deletePost(postId);
+        await postService.deletePost(postId);
 
-      expect(true).toBe(true);
+        expect(true).toBe(true);
+      });
     });
   });
 
   describe("reportPost", () => {
     it("should report post", async () => {
-      await PostService.reportPost(
-        USER.id,
-        "25776a73-a5c6-40cf-b77f-76288a34cfa7"
-      );
-      expect(true).toBe(true);
+      await testWithTransaction(async ({ tx, seed }) => {
+        const postService = new PostService(tx);
+        await postService.reportPost(seed.users[0].id, seed.posts[0].id);
+        expect(true).toBe(true);
+      });
     });
 
     it("should throw error if user already reported this post", async () => {
-      await PostService.reportPost(
-        USER.id,
-        "25776a73-a5c6-40cf-b77f-76288a34cfa7"
-      );
-      expect(true).toBe(true);
+      await testWithTransaction(async ({ tx, seed }) => {
+        const postService = new PostService(tx);
+        const userId = seed.users[0].id;
+        const postId = seed.posts[0].id;
 
-      try {
-        await PostService.reportPost(
-          USER.id,
-          "25776a73-a5c6-40cf-b77f-76288a34cfa7"
-        );
+        await postService.reportPost(userId, postId);
         expect(true).toBe(true);
-      } catch (e) {
-        expect(e).toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
-      }
+
+        try {
+          await postService.reportPost(userId, postId);
+          expect(true).toBe(true);
+        } catch (e) {
+          expect(e).toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
+        }
+      });
     });
   });
 });
