@@ -22,6 +22,17 @@ export async function seedDatabase(prisma: PrismaClient): Promise<TestSeed> {
   await prisma.user.createMany({
     data: [
       {
+        id: "3daf7676-ec0f-4548-85a7-67b4382166d4",
+        login: "login2",
+        password:
+          "37b4a40ef177c39863a3fa75de835f4ab276c18f00ba4e909e54b039215143d0", // "pass2"
+        firstName: "Kylian",
+        lastName: "Mekambe",
+        photoURL: "65ee3504-123f-4ccb-b6c9-97f8e302b40d.webp",
+        lastActive: new Date(),
+        salt: "$2a$10$MeDYRqv3QH3jcggJCtiRoe",
+      },
+      {
         id: "935719fa-05c4-42c4-9b02-2be3fefb6e61",
         firstName: "Jane",
         lastName: "Doe",
