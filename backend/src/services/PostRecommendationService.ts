@@ -1,5 +1,5 @@
-import { prisma } from "../lib/Prisma";
 import { Post } from "../types/Post";
+import { PrismaClientOrTransaction } from "../types/Prisma";
 import { User } from "../types/User";
 import { postChatSelect } from "../utils/prisma/postChatSelect";
 import { userSelect } from "../utils/prisma/userSelect";
@@ -10,15 +10,28 @@ import { PostService } from "./PostService";
  * Service class responsible for recommending post for a specific user.
  */
 export class PostRecommendationService {
+  private prisma: PrismaClientOrTransaction;
+  private postService: PostService;
+  private friendshipService: FriendshipService;
+
+  constructor(
+    prisma: PrismaClientOrTransaction,
+    postService: PostService,
+    friendshipService: FriendshipService
+  ) {
+    this.prisma = prisma;
+    this.postService = postService;
+    this.friendshipService = friendshipService;
+  }
   /**
    * Retrieves the last post based on the provided post ID.
    * @param postId - The ID of the post to retrieve the last post for.
    * @returns The last post if found, or null if no post ID is provided.
    * @throws Throws an error if the last post is not found.
    */
-  static async getLastPost(postId: Post["id"] | null): Promise<Post | null> {
+  async getLastPost(postId: Post["id"] | null): Promise<Post | null> {
     if (!postId) return null;
-    const lastPost = await PostService.getPost(postId);
+    const lastPost = await this.postService.getPost(postId);
     if (!lastPost) throw new Error("Last post not found.");
     return lastPost;
   }
@@ -28,8 +41,8 @@ export class PostRecommendationService {
    * @param userId - The ID of the user whose friends are to be retrieved.
    * @returns A list of IDs of the user's friends.
    */
-  static async getUserFriends(userId: User["id"]): Promise<User["id"][]> {
-    const friendships = await FriendshipService.getUserFriendships(userId);
+  async getUserFriends(userId: User["id"]): Promise<User["id"][]> {
+    const friendships = await this.friendshipService.getUserFriendships(userId);
 
     const friends = friendships
       .filter((fr) => fr.status === "ACCEPTED")
@@ -49,13 +62,13 @@ export class PostRecommendationService {
    * @param limit - The maximum number of posts to fetch.
    * @returns A list of posts made by non-friends, excluding the user's own posts.
    */
-  static async fetchNonFriendsPostsOnly(
+  async fetchNonFriendsPostsOnly(
     deadline: Date | undefined,
     friends: User["id"][],
     userId: User["id"],
     limit: number
   ): Promise<Post[]> {
-    const posts = await prisma.post.findMany({
+    const posts = await this.prisma.post.findMany({
       where: {
         createdAt: { lt: deadline },
         authorId: { notIn: [...friends, userId] }, // avoid showing own posts
@@ -78,7 +91,7 @@ export class PostRecommendationService {
    * @param limit - The maximum number of posts to fetch.
    * @returns A list of posts made by the user's friends.
    */
-  static async fetchFriendsPostsOnly(
+  async fetchFriendsPostsOnly(
     lastPost: Post | null,
     friends: User["id"][],
     limit: number
@@ -87,7 +100,7 @@ export class PostRecommendationService {
       ? { lt: lastPost.createdAt }
       : undefined;
 
-    const friendsPosts = await prisma.post.findMany({
+    const friendsPosts = await this.prisma.post.findMany({
       where: {
         createdAt: createdAtFilter,
         author: {
@@ -139,7 +152,7 @@ export class PostRecommendationService {
    * @param limit - The maximum number of recommended posts to fetch.
    * @returns A list of recommended posts for the user.
    */
-  static async getRecommendedPosts(
+  async getRecommendedPosts(
     userId: User["id"],
     lastPostId: Post["id"] | null,
     limit: number
@@ -167,11 +180,12 @@ export class PostRecommendationService {
 
     if (remainingPosts === 0) return friendsPosts.map(PostService.sanitizePost);
 
-    const othersPostsCreatedAtFilter = this.getOthersPostsCreatedAtFilter(
-      lastPost,
-      friendsPosts,
-      friends
-    );
+    const othersPostsCreatedAtFilter =
+      PostRecommendationService.getOthersPostsCreatedAtFilter(
+        lastPost,
+        friendsPosts,
+        friends
+      );
 
     const otherPosts = await this.fetchNonFriendsPostsOnly(
       othersPostsCreatedAtFilter?.lt,

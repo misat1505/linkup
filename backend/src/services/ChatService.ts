@@ -1,4 +1,3 @@
-import { prisma } from "../lib/Prisma";
 import { Chat, UserInChat } from "../types/Chat";
 import { Message } from "../types/Message";
 import { User } from "../types/User";
@@ -6,6 +5,7 @@ import { v7 as uuidv7 } from "uuid";
 import { userSelect } from "../utils/prisma/userSelect";
 import { messageWithoutResponseSelect } from "../utils/prisma/messageWithoutResponseSelect";
 import { Reaction } from "../types/Reaction";
+import { PrismaClientOrTransaction } from "../types/Prisma";
 
 function sanitizeChat(chat: any): Chat | null {
   if (!chat) return null;
@@ -22,13 +22,18 @@ function sanitizeChat(chat: any): Chat | null {
  * Service class responsible for managing chat-related operations in database using Prisma.
  */
 export class ChatService {
+  private prisma: PrismaClientOrTransaction;
+
+  constructor(prisma: PrismaClientOrTransaction) {
+    this.prisma = prisma;
+  }
   /**
    * Retrieves a chat by its ID.
    * @param id - The ID of the chat to retrieve.
    * @returns The chat object, or null if not found.
    */
-  static async getChatById(id: Chat["id"]): Promise<Chat | null> {
-    const result = await prisma.chat.findFirst({
+  async getChatById(id: Chat["id"]): Promise<Chat | null> {
+    const result = await this.prisma.chat.findFirst({
       where: { id },
       include: {
         users: {
@@ -52,7 +57,7 @@ export class ChatService {
    * @param file - The new photo URL of the chat.
    * @returns The updated chat object, or null if not found.
    */
-  static async updateGroupChat({
+  async updateGroupChat({
     chatId,
     name,
     file,
@@ -61,7 +66,7 @@ export class ChatService {
     name: Chat["name"];
     file: Chat["photoURL"];
   }): Promise<Chat | null> {
-    const result = await prisma.chat.update({
+    const result = await this.prisma.chat.update({
       data: { name, photoURL: file },
       where: { id: chatId },
       include: {
@@ -84,14 +89,14 @@ export class ChatService {
    * @param chatId - The ID of the chat.
    * @param userId - The ID of the user to remove.
    */
-  static async deleteFromChat({
+  async deleteFromChat({
     chatId,
     userId,
   }: {
     userId: User["id"];
     chatId: Chat["id"];
   }): Promise<void> {
-    await prisma.userChat.delete({
+    await this.prisma.userChat.delete({
       where: {
         userId_chatId: { chatId, userId },
       },
@@ -103,8 +108,8 @@ export class ChatService {
    * @param id - The ID of the chat.
    * @returns The chat type, or null if not found.
    */
-  static async getChatType(id: Chat["id"]): Promise<Chat["type"] | null> {
-    const result = await prisma.chat.findFirst({
+  async getChatType(id: Chat["id"]): Promise<Chat["type"] | null> {
+    const result = await this.prisma.chat.findFirst({
       where: { id },
       select: { type: true },
     });
@@ -118,14 +123,14 @@ export class ChatService {
    * @param userId - The ID of the user to add to the chat.
    * @returns The user object that was added to the chat.
    */
-  static async addUserToChat({
+  async addUserToChat({
     chatId,
     userId,
   }: {
     chatId: Chat["id"];
     userId: User["id"];
   }): Promise<UserInChat> {
-    const result = await prisma.userChat.create({
+    const result = await this.prisma.userChat.create({
       data: { chatId, userId },
       include: {
         user: { select: userSelect },
@@ -142,7 +147,7 @@ export class ChatService {
    * @param chatId - The ID of the chat.
    * @param alias - The new alias for the user in the chat.
    */
-  static async updateAlias({
+  async updateAlias({
     userId,
     chatId,
     alias,
@@ -151,7 +156,7 @@ export class ChatService {
     chatId: Chat["id"];
     alias: UserInChat["alias"];
   }): Promise<void> {
-    await prisma.userChat.update({
+    await this.prisma.userChat.update({
       where: {
         userId_chatId: {
           userId: userId,
@@ -169,12 +174,12 @@ export class ChatService {
    * @param data - The user ID, reaction ID, and message ID to create a reaction for.
    * @returns The created reaction object.
    */
-  static async createReactionToMessage(data: {
+  async createReactionToMessage(data: {
     userId: User["id"];
     reactionId: string;
     messageId: Message["id"];
   }): Promise<Reaction> {
-    const reactionRecord = await prisma.userReaction.create({
+    const reactionRecord = await this.prisma.userReaction.create({
       data,
       include: { user: { select: userSelect }, reaction: true },
     });
@@ -195,14 +200,14 @@ export class ChatService {
    * @param messageId - The ID of the message.
    * @returns True if the message exists in the chat, otherwise false.
    */
-  static async isMessageInChat({
+  async isMessageInChat({
     chatId,
     messageId,
   }: {
     chatId: Chat["id"];
     messageId: Message["id"];
   }): Promise<boolean> {
-    const result = await prisma.message.findFirst({
+    const result = await this.prisma.message.findFirst({
       where: { chatId, id: messageId },
     });
 
@@ -239,11 +244,11 @@ export class ChatService {
    * @param responseId - Optionally, the ID of the parent message to filter by.
    * @returns A list of messages in the chat.
    */
-  static async getPostChatMessages(
+  async getPostChatMessages(
     chatId: Chat["id"],
     responseId: Message["id"] | null
   ): Promise<Message[]> {
-    const result = await prisma.message.findMany({
+    const result = await this.prisma.message.findMany({
       where: {
         chatId,
         responseId,
@@ -267,16 +272,16 @@ export class ChatService {
       },
     });
 
-    return this.sanitizeMessages(result);
+    return ChatService.sanitizeMessages(result);
   }
 
-  static async getChatMessages(
+  async getChatMessages(
     chatId: Chat["id"],
     lastMessageId: Message["id"] | undefined = undefined,
     limit: number | undefined = undefined
   ): Promise<Message[]> {
     const lastMessage = lastMessageId
-      ? await prisma.message.findFirst({
+      ? await this.prisma.message.findFirst({
           where: { id: lastMessageId },
         })
       : null;
@@ -284,7 +289,7 @@ export class ChatService {
     if (lastMessage && lastMessage.chatId !== chatId)
       throw new Error("Message not in chat.");
 
-    const result = await prisma.message.findMany({
+    const result = await this.prisma.message.findMany({
       where: {
         chatId,
         createdAt: lastMessage ? { lt: lastMessage.createdAt } : undefined,
@@ -310,7 +315,7 @@ export class ChatService {
       take: limit,
     });
 
-    return this.sanitizeMessages(result);
+    return ChatService.sanitizeMessages(result);
   }
 
   /**
@@ -319,14 +324,14 @@ export class ChatService {
    * @param chatId - The ID of the chat to check.
    * @returns True if the user is part of the chat, otherwise false.
    */
-  static async isUserInChat({
+  async isUserInChat({
     userId,
     chatId,
   }: {
     userId: User["id"];
     chatId: Chat["id"];
   }): Promise<boolean> {
-    const chat = await prisma.chat.findUnique({
+    const chat = await this.prisma.chat.findUnique({
       where: { id: chatId },
       select: {
         type: true,
@@ -354,7 +359,7 @@ export class ChatService {
    * @param responseId - Optionally, the ID of the message being replied to.
    * @returns The created message object.
    */
-  static async createMessage({
+  async createMessage({
     content,
     authorId,
     chatId,
@@ -367,7 +372,7 @@ export class ChatService {
     files: string[];
     responseId: Message["id"] | null;
   }): Promise<Message> {
-    const result = await prisma.message.create({
+    const result = await this.prisma.message.create({
       data: {
         id: uuidv7(),
         content,
@@ -392,7 +397,7 @@ export class ChatService {
       },
     });
 
-    await prisma.chat.update({
+    await this.prisma.chat.update({
       data: { lastMessageId: result.id },
       where: { id: chatId },
     });
@@ -416,8 +421,8 @@ export class ChatService {
    * @param userId - The ID of the user to retrieve chats for.
    * @returns A list of chats the user is part of.
    */
-  static async getUserChats(userId: User["id"]): Promise<Chat[]> {
-    const result = await prisma.chat.findMany({
+  async getUserChats(userId: User["id"]): Promise<Chat[]> {
+    const result = await this.prisma.chat.findMany({
       where: {
         users: {
           some: {
@@ -446,11 +451,11 @@ export class ChatService {
    * @param id2 - The ID of the second user.
    * @returns The private chat object, or null if not found.
    */
-  static async getPrivateChatByUserIds(
+  async getPrivateChatByUserIds(
     id1: string,
     id2: string
   ): Promise<Chat | null> {
-    const result = await prisma.chat.findMany({
+    const result = await this.prisma.chat.findMany({
       where: {
         type: "PRIVATE",
         users: {
@@ -487,10 +492,10 @@ export class ChatService {
    * @param id2 The ID of the second user.
    * @returns The created private chat with user details and the last message, sanitized.
    */
-  static async createPrivateChat(id1: string, id2: string): Promise<Chat> {
+  async createPrivateChat(id1: string, id2: string): Promise<Chat> {
     const users = Array.from(new Set([id1, id2]));
 
-    const result = await prisma.chat.create({
+    const result = await this.prisma.chat.create({
       data: {
         type: "PRIVATE",
         users: {
@@ -523,14 +528,14 @@ export class ChatService {
    * @param photoURL The photo URL for the group chat.
    * @returns The created group chat with user details and the last message, sanitized.
    */
-  static async createGroupChat(
+  async createGroupChat(
     users: User["id"][],
     name: Chat["name"],
     photoURL: Chat["photoURL"]
   ): Promise<Chat> {
     users = Array.from(new Set(users));
 
-    const result = await prisma.chat.create({
+    const result = await this.prisma.chat.create({
       data: {
         type: "GROUP",
         name,

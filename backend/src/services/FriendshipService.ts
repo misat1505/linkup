@@ -1,5 +1,5 @@
-import { prisma } from "../lib/Prisma";
 import { Friendship } from "../types/Friendship";
+import { PrismaClientOrTransaction } from "../types/Prisma";
 import { User } from "../types/User";
 import { userSelect } from "../utils/prisma/userSelect";
 
@@ -14,13 +14,18 @@ function sanitizeFriendship(friendship: any): Friendship | null {
  * Service class responsible for managing friendship-related operations in the database using Prisma.
  */
 export class FriendshipService {
+  private prisma: PrismaClientOrTransaction;
+
+  constructor(prisma: PrismaClientOrTransaction) {
+    this.prisma = prisma;
+  }
   /**
    * Retrieves a user's friendships.
    * @param userId - The ID of the user whose friendships are to be retrieved.
    * @returns A list of friendships associated with the user.
    */
-  static async getUserFriendships(userId: User["id"]): Promise<Friendship[]> {
-    const friendships: Friendship[] = await prisma.friend.findMany({
+  async getUserFriendships(userId: User["id"]): Promise<Friendship[]> {
+    const friendships: Friendship[] = await this.prisma.friend.findMany({
       where: {
         OR: [{ requesterId: userId }, { acceptorId: userId }],
       },
@@ -39,11 +44,11 @@ export class FriendshipService {
    * @param acceptorId - The ID of the user receiving the friend request.
    * @returns The created friendship object, or `null` if the friendship already exists.
    */
-  static async createFriendship(
+  async createFriendship(
     requesterId: User["id"],
     acceptorId: User["id"]
   ): Promise<Friendship | null> {
-    const existingFriendship = await prisma.friend.findFirst({
+    const existingFriendship = await this.prisma.friend.findFirst({
       where: {
         OR: [
           { requesterId, acceptorId },
@@ -54,7 +59,7 @@ export class FriendshipService {
 
     if (existingFriendship) return null;
 
-    const newFriendship: Friendship = await prisma.friend.create({
+    const newFriendship: Friendship = await this.prisma.friend.create({
       data: {
         requesterId,
         acceptorId,
@@ -75,11 +80,11 @@ export class FriendshipService {
    * @param acceptorId - The ID of the user accepting the friend request.
    * @returns The updated friendship object, or `null` if no pending friendship exists.
    */
-  static async acceptFriendship(
+  async acceptFriendship(
     requesterId: User["id"],
     acceptorId: User["id"]
   ): Promise<Friendship | null> {
-    const friendship = await prisma.friend.findFirst({
+    const friendship = await this.prisma.friend.findFirst({
       where: {
         requesterId,
         acceptorId,
@@ -89,7 +94,7 @@ export class FriendshipService {
 
     if (!friendship) return null;
 
-    const updatedFriendship: Friendship = await prisma.friend.update({
+    const updatedFriendship: Friendship = await this.prisma.friend.update({
       where: {
         requesterId_acceptorId: {
           requesterId,
@@ -114,11 +119,11 @@ export class FriendshipService {
    * @param acceptorId - The ID of the user accepting or rejecting the friendship.
    * @returns `true` if the friendship was successfully deleted, otherwise `false`.
    */
-  static async deleteFriendship(
+  async deleteFriendship(
     requesterId: User["id"],
     acceptorId: User["id"]
   ): Promise<boolean> {
-    const deletedCount = await prisma.friend.deleteMany({
+    const deletedCount = await this.prisma.friend.deleteMany({
       where: {
         OR: [
           { requesterId, acceptorId },
