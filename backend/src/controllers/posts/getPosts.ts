@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { Post } from "../../types/Post";
-import { PostRecommendationService } from "../../services/PostRecommendationService";
 
 /**
  * Controller to retrieve a list of posts.
@@ -59,6 +58,8 @@ export const getPosts = async (
   try {
     const { userId } = req.body.token;
     const { lastPostId: queryLastPostId, limit: queryLimit } = req.query;
+    const postRecommendationService =
+      req.app.services.postRecommendationService;
 
     const limit = processLimit(queryLimit);
 
@@ -66,7 +67,7 @@ export const getPosts = async (
       res.status(400).json({ message: `Maximum limit is 10 - given ${limit}` });
     }
 
-    const posts = await PostRecommendationService.getRecommendedPosts(
+    const posts = await postRecommendationService.getRecommendedPosts(
       userId,
       processLastPostId(queryLastPostId),
       limit

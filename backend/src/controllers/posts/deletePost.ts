@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { PostService } from "../../services/PostService";
 import fileStorage from "../../lib/FileStorage";
 
 /**
@@ -55,8 +54,9 @@ export const deletePost = async (
     const {
       token: { userId },
     } = req.body;
+    const postService = req.app.services.postService;
 
-    const post = await PostService.getPost(id);
+    const post = await postService.getPost(id);
 
     if (!post)
       return res
@@ -69,7 +69,7 @@ export const deletePost = async (
         .json({ message: req.t("posts.controllers.delete.unauthorized") });
 
     await Promise.all([
-      PostService.deletePost(id),
+      postService.deletePost(id),
       fileStorage.deleteAllFilesInDirectory(`posts/${post.id}`),
       fileStorage.deleteAllFilesInDirectory(`chats/${post.chat.id}`),
     ]);

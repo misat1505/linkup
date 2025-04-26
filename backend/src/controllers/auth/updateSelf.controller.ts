@@ -71,22 +71,21 @@ export const updateSelfController = async (
       password,
       token: { userId },
     } = req.body;
+    const userService = req.app.services.userService;
     const file = await processAvatar(req.file);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = Hasher.hash(password + salt);
 
-    const fetchedUser = await UserService.getUserByLogin(login);
+    const fetchedUser = await userService.getUserByLogin(login);
 
     const isLoginTaken =
       fetchedUser && fetchedUser.login === login && fetchedUser.id !== userId;
 
     if (isLoginTaken) {
-      return res
-        .status(409)
-        .json({
-          message: req.t("auth.controllers.update.login-already-exists"),
-        });
+      return res.status(409).json({
+        message: req.t("auth.controllers.update.login-already-exists"),
+      });
     }
 
     const user: UserWithCredentials = {
@@ -100,7 +99,7 @@ export const updateSelfController = async (
       lastActive: new Date(),
     };
 
-    await UserService.updateUser(user);
+    await userService.updateUser(user);
 
     if (fetchedUser?.photoURL) {
       await fileStorage.deleteFile(`avatars/${fetchedUser.photoURL}`);

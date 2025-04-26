@@ -45,8 +45,9 @@ export const getSelfController = async (
 ) => {
   try {
     const userId = req.body.token.userId;
+    const userService = req.app.services.userService;
 
-    const user = await UserService.getUser(userId);
+    const user = await userService.getUser(userId);
 
     if (!user) {
       return res

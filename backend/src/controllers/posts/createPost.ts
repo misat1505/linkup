@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { PostService } from "../../services/PostService";
 import { v4 as uuidv4 } from "uuid";
 import { handleMarkdownUpdate } from "../../utils/updatePost";
 
@@ -56,12 +55,13 @@ export const createPost = async (
       content,
       token: { userId },
     } = req.body;
+    const postService = req.app.services.postService;
 
     const id = uuidv4();
 
     const updatedContent = await handleMarkdownUpdate(content, userId, id);
 
-    const post = await PostService.createPost({
+    const post = await postService.createPost({
       id,
       content: updatedContent,
       authorId: userId,

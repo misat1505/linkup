@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { PostService } from "../../services/PostService";
 import { Prisma } from "@prisma/client";
 
 /**
@@ -53,8 +52,9 @@ export const reportPost = async (
   try {
     const { id } = req.params;
     const { userId } = req.body.token;
+    const postService = req.app.services.postService;
 
-    await PostService.reportPost(userId, id);
+    await postService.reportPost(userId, id);
 
     res
       .status(200)

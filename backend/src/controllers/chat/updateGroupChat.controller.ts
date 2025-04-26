@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatService } from "../../services/ChatService";
 import { processAvatar } from "../../utils/processAvatar";
 import { v4 as uuidv4 } from "uuid";
 import fileStorage from "../../lib/FileStorage";
@@ -67,22 +66,19 @@ export const updateGroupChatController = async (
       token: { userId },
     } = req.body;
     const { chatId } = req.params;
+    const chatService = req.app.services.chatService;
 
-    const isAuthorized = await ChatService.isUserInChat({ chatId, userId });
+    const isAuthorized = await chatService.isUserInChat({ chatId, userId });
     if (!isAuthorized)
-      return res
-        .status(401)
-        .json({
-          message: req.t("chats.controllers.update-group-chat.unauthorized"),
-        });
+      return res.status(401).json({
+        message: req.t("chats.controllers.update-group-chat.unauthorized"),
+      });
 
-    const oldChat = await ChatService.getChatById(chatId);
+    const oldChat = await chatService.getChatById(chatId);
     if (!oldChat || oldChat.type !== "GROUP")
-      return res
-        .status(400)
-        .json({
-          message: req.t("chats.controllers.update-group-chat.bad-type"),
-        });
+      return res.status(400).json({
+        message: req.t("chats.controllers.update-group-chat.bad-type"),
+      });
 
     const newFilename = uuidv4();
     const file = await processAvatar(
@@ -95,7 +91,7 @@ export const updateGroupChatController = async (
       await fileStorage.deleteFile(`chats/${chatId}/${oldChat.photoURL}`);
     }
 
-    const chat = await ChatService.updateGroupChat({
+    const chat = await chatService.updateGroupChat({
       chatId,
       file,
       name: name || null,

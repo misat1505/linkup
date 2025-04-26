@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatService } from "../../services/ChatService";
 import { Message } from "../../types/Message";
 
 /**
@@ -72,8 +71,9 @@ export const getChatMessagesController = async (
     const { userId } = req.body.token;
     const { chatId } = req.params;
     const { responseId, lastMessageId, limit } = req.query;
+    const chatService = req.app.services.chatService;
 
-    const isUserAuthorized = await ChatService.isUserInChat({ chatId, userId });
+    const isUserAuthorized = await chatService.isUserInChat({ chatId, userId });
 
     if (!isUserAuthorized)
       return res.status(401).json({
@@ -83,12 +83,12 @@ export const getChatMessagesController = async (
     const serviceFunction =
       responseId !== undefined
         ? () =>
-            ChatService.getPostChatMessages(
+            chatService.getPostChatMessages(
               chatId,
               processResponseId(responseId)
             )
         : () =>
-            ChatService.getChatMessages(
+            chatService.getChatMessages(
               chatId,
               processLastMessageId(lastMessageId),
               processLimit(limit)

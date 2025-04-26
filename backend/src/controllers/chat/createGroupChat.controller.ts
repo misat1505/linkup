@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatService } from "../../services/ChatService";
 import { processAvatar } from "../../utils/processAvatar";
 import { v4 as uuidv4 } from "uuid";
 
@@ -64,18 +63,17 @@ export const createGroupChatController = async (
       name,
       token: { userId },
     } = req.body;
+    const chatService = req.app.services.chatService;
     if (!users.includes(userId))
-      return res
-        .status(401)
-        .json({
-          message: req.t(
-            "chats.controllers.create-group-chat.not-belonging-to-you"
-          ),
-        });
+      return res.status(401).json({
+        message: req.t(
+          "chats.controllers.create-group-chat.not-belonging-to-you"
+        ),
+      });
 
     const newFilename = req.file ? uuidv4() + ".webp" : null;
 
-    const chat = await ChatService.createGroupChat(
+    const chat = await chatService.createGroupChat(
       users,
       name || null,
       newFilename

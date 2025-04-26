@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatService } from "../../services/ChatService";
 
 /**
  * Controller to retrieve all chats for a user.
@@ -40,8 +39,9 @@ export const getSelfChatsController = async (
 ) => {
   try {
     const { userId } = req.body.token;
+    const chatService = req.app.services.chatService;
 
-    const chats = await ChatService.getUserChats(userId);
+    const chats = await chatService.getUserChats(userId);
 
     return res.status(200).json({ chats });
   } catch (e) {

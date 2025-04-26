@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { FileService } from "../../services/FileService";
 import fileStorage from "../../lib/FileStorage";
 
 type Filter = "avatar" | "chat-message" | "chat-photo" | "cache" | "post";
@@ -98,6 +97,7 @@ export const getFileController = async (
     const chatId = req.query.chat;
     const postId = req.query.post;
     const { userId } = req.body.token;
+    const fileService = req.app.services.fileService;
 
     if (!filterArray.includes(filter))
       return res.status(400).json({
@@ -124,19 +124,19 @@ export const getFileController = async (
 
     if (filter === "avatar") {
       const response = await sendFile(
-        () => FileService.isUserAvatar(filename),
+        () => fileService.isUserAvatar(filename),
         req.t("files.controllers.get-file.avatar-not-found")
       );
       return response;
     } else if (filter === "chat-photo") {
       const response = await sendFile(
-        () => FileService.isChatPhoto(filename, userId),
+        () => fileService.isChatPhoto(filename, userId),
         req.t("files.controllers.get-file.group-photo-not-found")
       );
       return response;
     } else if (filter === "chat-message") {
       const response = await sendFile(
-        () => FileService.isChatMessage(filename, userId),
+        () => fileService.isChatMessage(filename, userId),
         req.t("files.controllers.get-file.group-photo-not-found")
       );
       return response;

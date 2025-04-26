@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { FriendshipService } from "../../services/FriendshipService";
 
 /**
  * Controller to delete an existing friendship between two users.
@@ -83,13 +82,14 @@ export const deleteFriendship = async (
   try {
     const { userId } = req.body.token;
     const { requesterId, acceptorId } = req.body;
+    const friendshipService = req.app.services.friendshipService;
 
     if (![requesterId, acceptorId].includes(userId))
       return res
         .status(400)
         .json({ message: req.t("friends.controllers.delete.unauthorized") });
 
-    const isDeleted = await FriendshipService.deleteFriendship(
+    const isDeleted = await friendshipService.deleteFriendship(
       requesterId,
       acceptorId
     );

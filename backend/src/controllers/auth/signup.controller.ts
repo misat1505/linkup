@@ -73,19 +73,18 @@ export const signupController = async (
 ) => {
   try {
     const { firstName, lastName, login, password } = req.body;
+    const userService = req.app.services.userService;
     const file = await processAvatar(req.file);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = Hasher.hash(password + salt);
 
-    const isLoginTaken = await UserService.isLoginTaken(login);
+    const isLoginTaken = await userService.isLoginTaken(login);
 
     if (isLoginTaken) {
-      return res
-        .status(409)
-        .json({
-          message: req.t("auth.controllers.signup.login-already-exists"),
-        });
+      return res.status(409).json({
+        message: req.t("auth.controllers.signup.login-already-exists"),
+      });
     }
 
     const user: UserWithCredentials = {
@@ -99,7 +98,7 @@ export const signupController = async (
       lastActive: new Date(),
     };
 
-    await UserService.insertUser(user);
+    await userService.insertUser(user);
 
     const refreshToken = TokenProcessor.encode(
       { userId: user.id },

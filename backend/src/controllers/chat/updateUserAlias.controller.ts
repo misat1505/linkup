@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatService } from "../../services/ChatService";
 
 /**
  * Controller to update a user's alias in a group chat.
@@ -61,27 +60,24 @@ export const updateAliasController = async (
       alias,
     } = req.body;
     const { chatId, userId: userToUpdateId } = req.params;
+    const chatService = req.app.services.chatService;
 
-    const isUserUpdatedInChat = await ChatService.isUserInChat({
+    const isUserUpdatedInChat = await chatService.isUserInChat({
       userId: userToUpdateId,
       chatId,
     });
     if (!isUserUpdatedInChat)
-      return res
-        .status(401)
-        .json({
-          message: req.t("chats.controllers.update-alias.user-not-in-chat"),
-        });
+      return res.status(401).json({
+        message: req.t("chats.controllers.update-alias.user-not-in-chat"),
+      });
 
-    const isAuthorized = await ChatService.isUserInChat({ userId, chatId });
+    const isAuthorized = await chatService.isUserInChat({ userId, chatId });
     if (!isAuthorized)
-      return res
-        .status(401)
-        .json({
-          message: req.t("chats.controllers.update-alias.unauthorized"),
-        });
+      return res.status(401).json({
+        message: req.t("chats.controllers.update-alias.unauthorized"),
+      });
 
-    await ChatService.updateAlias({ userId: userToUpdateId, chatId, alias });
+    await chatService.updateAlias({ userId: userToUpdateId, chatId, alias });
 
     return res.status(200).json({ alias });
   } catch (e) {

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatService } from "../../services/ChatService";
 import { generateNewFilename } from "../../utils/generateNewFilename";
 import fileStorage from "../../lib/FileStorage";
 
@@ -69,12 +68,13 @@ export const createMessageController = async (
     const { userId } = req.body.token;
     const { chatId } = req.params;
     const files = req.files as Express.Multer.File[];
+    const chatService = req.app.services.chatService;
 
-    const checks = [ChatService.isUserInChat({ chatId, userId })];
+    const checks = [chatService.isUserInChat({ chatId, userId })];
 
     if (responseId) {
       checks.push(
-        ChatService.isMessageInChat({
+        chatService.isMessageInChat({
           chatId,
           messageId: responseId,
         })
@@ -84,13 +84,11 @@ export const createMessageController = async (
     const [isUserAuthorized, isResponseInChat] = await Promise.all(checks);
 
     if (!isUserAuthorized) {
-      return res
-        .status(401)
-        .json({
-          message: req.t(
-            "chats.controllers.create-message.user-not-belonging-to-chat"
-          ),
-        });
+      return res.status(401).json({
+        message: req.t(
+          "chats.controllers.create-message.user-not-belonging-to-chat"
+        ),
+      });
     }
 
     if (responseId && !isResponseInChat) {
@@ -110,7 +108,7 @@ export const createMessageController = async (
       })
     );
 
-    const message = await ChatService.createMessage({
+    const message = await chatService.createMessage({
       content,
       authorId: userId,
       chatId,
