@@ -13,8 +13,11 @@ import { prisma } from "./lib/Prisma";
 import expressStatusMonitor from "express-status-monitor";
 import i18next from "./i18n";
 import middleware from "i18next-http-middleware";
+import { initializeServices } from "./utils/initializeServices";
 
 const app = express();
+
+app.services = initializeServices(prisma);
 
 const isSentryActive = !!env.SENTRY_DSN;
 
@@ -37,7 +40,7 @@ if (env.NODE_ENV === "development") {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   app.get("/", async (req: Request, res: Response, next: NextFunction) => {
-    const users = await prisma.user.findMany();
+    const users = await req.app.services.userService.getUserByLogin("login1");
     res.json(users);
   });
 }
