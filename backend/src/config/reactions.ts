@@ -1,4 +1,4 @@
-import { prisma } from "../lib/Prisma";
+import { prisma as globalPrisma } from "../lib/Prisma";
 
 type Reaction = { id: string; name: string };
 
@@ -44,7 +44,7 @@ export const reactions: Reaction[] = [
  *
  * @source
  */
-export async function initReactions(): Promise<void> {
+export async function initReactions(prisma = globalPrisma): Promise<void> {
   await Promise.all(
     reactions.map(async (reaction) => {
       const existingReaction = await prisma.reaction.findUnique({
