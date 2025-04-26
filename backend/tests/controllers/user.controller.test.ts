@@ -1,49 +1,56 @@
 import { USER_WITHOUT_CREDENTIALS } from "../utils/constants";
 import { searchUserController } from "../../src/controllers/user/searchUser.controller";
 import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
+import { seedProvider } from "../utils/seedProvider";
 
 describe("User controllers", () => {
   describe("searchUser", () => {
     it("should return users", async () => {
-      const users = [USER_WITHOUT_CREDENTIALS];
-      mockUserService.searchUsers.mockResolvedValue(users);
+      await seedProvider(async (seed) => {
+        const users = seed.users;
+        mockUserService.searchUsers.mockResolvedValue(users);
 
-      const req = mockRequest({
-        query: { term: "abc" },
+        const req = mockRequest({
+          query: { term: "abc" },
+        });
+
+        const res = mockResponse();
+
+        await searchUserController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ users });
       });
-
-      const res = mockResponse();
-
-      await searchUserController(req, res, jest.fn());
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ users });
     });
 
     it("fails if term not provided", async () => {
-      const users = [USER_WITHOUT_CREDENTIALS];
-      mockUserService.searchUsers.mockResolvedValue(users);
+      await seedProvider(async (seed) => {
+        const users = seed.users;
+        mockUserService.searchUsers.mockResolvedValue(users);
 
-      const req = mockRequest({ query: {} });
-      const res = mockResponse();
+        const req = mockRequest({ query: {} });
+        const res = mockResponse();
 
-      await searchUserController(req, res, jest.fn());
+        await searchUserController(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.status).toHaveBeenCalledWith(400);
+      });
     });
 
     it("fails if term provided more than once", async () => {
-      const users = [USER_WITHOUT_CREDENTIALS];
-      mockUserService.searchUsers.mockResolvedValue(users);
+      await seedProvider(async (seed) => {
+        const users = seed.users;
+        mockUserService.searchUsers.mockResolvedValue(users);
 
-      const req = mockRequest({
-        query: { term: ["abc", "dbc"] },
+        const req = mockRequest({
+          query: { term: ["abc", "dbc"] },
+        });
+        const res = mockResponse();
+
+        await searchUserController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(400);
       });
-      const res = mockResponse();
-
-      await searchUserController(req, res, jest.fn());
-
-      expect(res.status).toHaveBeenCalledWith(400);
     });
   });
 });
