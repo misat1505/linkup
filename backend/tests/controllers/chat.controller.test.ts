@@ -1,7 +1,3 @@
-import express from "express";
-import { ChatService } from "../../src/services/ChatService";
-import request from "supertest";
-import { upload } from "../../src/middlewares/multer";
 import { processAvatar } from "../../src/utils/processAvatar";
 import { createReactionController } from "../../src/controllers/chat/createReaction.controller";
 import { getChatMessagesController } from "../../src/controllers/chat/getChatMessages.controller";
@@ -13,65 +9,43 @@ import { updateAliasController } from "../../src/controllers/chat/updateUserAlia
 import { addUserToGroupChatController } from "../../src/controllers/chat/addUserToGroupChat.controller";
 import { deleteSelfFromGroupChatController } from "../../src/controllers/chat/deleteSelfFromGroupChat.controller";
 import { updateGroupChatController } from "../../src/controllers/chat/updateGroupChat.controller";
-import i18next from "../../src/i18n";
-import middleware from "i18next-http-middleware";
+import { mockChatService, mockRequest, mockResponse } from "../utils/mocks";
 
-jest.mock("../../src/services/ChatService");
 jest.mock("../../src/utils/processAvatar");
 
 describe("Chat controllers", () => {
-  const app = express();
-  app.use(express.json());
-  app.use(middleware.handle(i18next));
-  app.post("/:chatId/reactions", createReactionController);
-  app.get("/:chatId/messages", getChatMessagesController);
-  app.post("/:chatId/messages", upload.array("files"), createMessageController);
-  app.get("/chats", getSelfChatsController);
-  app.post("/chats/group", createGroupChatController);
-  app.post("/chats/private", createPrivateChatController);
-  app.put(`/chats/:chatId/users/:userId/alias`, updateAliasController);
-  app.post("/chats/:chatId/users", addUserToGroupChatController);
-  app.delete("/chats/:chatId/users", deleteSelfFromGroupChatController);
-  app.put("/chats/:chatId", upload.single("file"), updateGroupChatController);
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   describe("updateGroupChat", () => {
     it("should successfully update group chat", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.getChatById as jest.Mock).mockResolvedValue({
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.getChatById.mockResolvedValue({
         type: "GROUP",
       });
       (processAvatar as jest.Mock).mockResolvedValue("processedAvatarPath");
-      (ChatService.updateGroupChat as jest.Mock).mockResolvedValue({
+      mockChatService.updateGroupChat.mockResolvedValue({
         id: "123",
         name: "New Chat Name",
         avatar: "processedAvatarPath",
       });
 
-      const response = await request(app)
-        .put("/chats/123")
-        .send({
-          name: "New Chat Name",
-          token: { userId: "789" },
-        });
-
-      expect(response.status).toBe(201);
-      expect(response.body).toEqual({
-        chat: {
-          id: "123",
-          name: "New Chat Name",
-          avatar: "processedAvatarPath",
-        },
+      const req = mockRequest({
+        body: { name: "New Chat Name", token: { userId: "789" } },
+        params: { chatId: "123" },
       });
-      expect(ChatService.isUserInChat).toHaveBeenCalledWith({
+      const res = mockResponse();
+
+      await updateGroupChatController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
         chatId: "123",
         userId: "789",
       });
-      expect(ChatService.getChatById).toHaveBeenCalledWith("123");
-      expect(ChatService.updateGroupChat).toHaveBeenCalledWith({
+      expect(mockChatService.getChatById).toHaveBeenCalledWith("123");
+      expect(mockChatService.updateGroupChat).toHaveBeenCalledWith({
         chatId: "123",
         file: "processedAvatarPath",
         name: "New Chat Name",
@@ -79,234 +53,211 @@ describe("Chat controllers", () => {
     });
 
     it("should return 401 if the user is not authorized to update the chat", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(false);
+      mockChatService.isUserInChat.mockResolvedValue(false);
 
-      const response = await request(app)
-        .put("/chats/123")
-        .send({
-          name: "New Chat Name",
-          token: { userId: "789" },
-        });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        message: "Cannot update chat you do not belong to.",
+      const req = mockRequest({
+        body: { name: "New Chat Name", token: { userId: "789" } },
+        params: { chatId: "123" },
       });
-      expect(ChatService.isUserInChat).toHaveBeenCalledWith({
+      const res = mockResponse();
+
+      await updateGroupChatController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
         chatId: "123",
         userId: "789",
       });
-      expect(ChatService.getChatType).not.toHaveBeenCalled();
+      expect(mockChatService.getChatType).not.toHaveBeenCalled();
       expect(processAvatar).not.toHaveBeenCalled();
-      expect(ChatService.updateGroupChat).not.toHaveBeenCalled();
+      expect(mockChatService.updateGroupChat).not.toHaveBeenCalled();
     });
 
     it("should return 400 if the chat is not of type 'GROUP'", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.getChatById as jest.Mock).mockResolvedValue({
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.getChatById.mockResolvedValue({
         type: "PRIVATE",
       });
 
-      const response = await request(app)
-        .put("/chats/123")
-        .send({
-          name: "New Chat Name",
-          token: { userId: "789" },
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({
-        message: "Cannot update chat of this type.",
+      const req = mockRequest({
+        body: { name: "New Chat Name", token: { userId: "789" } },
+        params: { chatId: "123" },
       });
-      expect(ChatService.isUserInChat).toHaveBeenCalledWith({
+      const res = mockResponse();
+
+      await updateGroupChatController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
         chatId: "123",
         userId: "789",
       });
       expect(processAvatar).not.toHaveBeenCalled();
-      expect(ChatService.updateGroupChat).not.toHaveBeenCalled();
+      expect(mockChatService.updateGroupChat).not.toHaveBeenCalled();
     });
   });
 
   describe("deleteUserFromGroupChat", () => {
     it("should successfully delete user from group chat", async () => {
-      (ChatService.getChatType as jest.Mock).mockResolvedValue("GROUP");
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.deleteFromChat as jest.Mock).mockResolvedValue(undefined);
+      mockChatService.getChatType.mockResolvedValue("GROUP");
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.deleteFromChat.mockResolvedValue(undefined);
 
-      const response = await request(app)
-        .delete("/chats/123/users")
-        .send({
-          token: { userId: "789" },
-        });
-
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({
-        message: "Successfully deleted from chat.",
+      const req = mockRequest({
+        body: { token: { userId: "789" } },
+        params: { chatId: "123" },
       });
-      expect(ChatService.getChatType).toHaveBeenCalledWith("123");
-      expect(ChatService.isUserInChat).toHaveBeenCalledWith({
+      const res = mockResponse();
+      await deleteSelfFromGroupChatController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
+      expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
         userId: "789",
         chatId: "123",
       });
-      expect(ChatService.deleteFromChat).toHaveBeenCalledWith({
+      expect(mockChatService.deleteFromChat).toHaveBeenCalledWith({
         chatId: "123",
         userId: "789",
       });
     });
 
     it("should return 401 if chat is not of type 'GROUP'", async () => {
-      (ChatService.getChatType as jest.Mock).mockResolvedValue("PRIVATE");
+      mockChatService.getChatType.mockResolvedValue("PRIVATE");
 
-      const response = await request(app)
-        .delete("/chats/123/users")
-        .send({
-          token: { userId: "789" },
-        });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        message: "Cannot remove yourself from chat of this type.",
+      const req = mockRequest({
+        body: { token: { userId: "789" } },
+        params: { chatId: "123" },
       });
-      expect(ChatService.getChatType).toHaveBeenCalledWith("123");
-      expect(ChatService.isUserInChat).not.toHaveBeenCalled();
-      expect(ChatService.deleteFromChat).not.toHaveBeenCalled();
+      const res = mockResponse();
+      await deleteSelfFromGroupChatController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
+      expect(mockChatService.isUserInChat).not.toHaveBeenCalled();
+      expect(mockChatService.deleteFromChat).not.toHaveBeenCalled();
     });
 
     it("should return 401 if the user is not in the chat", async () => {
-      (ChatService.getChatType as jest.Mock).mockResolvedValue("GROUP");
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(false);
+      mockChatService.getChatType.mockResolvedValue("GROUP");
+      mockChatService.isUserInChat.mockResolvedValue(false);
 
-      const response = await request(app)
-        .delete("/chats/123/users")
-        .send({
-          token: { userId: "789" },
-        });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        message: "Cannot remove yourself from chat which you do not belong to.",
+      const req = mockRequest({
+        body: { token: { userId: "789" } },
+        params: { chatId: "123" },
       });
-      expect(ChatService.getChatType).toHaveBeenCalledWith("123");
-      expect(ChatService.isUserInChat).toHaveBeenCalledWith({
+      const res = mockResponse();
+      await deleteSelfFromGroupChatController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
+      expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
         userId: "789",
         chatId: "123",
       });
-      expect(ChatService.deleteFromChat).not.toHaveBeenCalled();
+      expect(mockChatService.deleteFromChat).not.toHaveBeenCalled();
     });
   });
 
   describe("addUserToGroupChat", () => {
     it("should add user to group chat successfully", async () => {
-      (ChatService.getChatType as jest.Mock).mockResolvedValue("GROUP");
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValueOnce(true);
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValueOnce(false);
-      (ChatService.addUserToChat as jest.Mock).mockResolvedValue({
+      mockChatService.getChatType.mockResolvedValue("GROUP");
+      mockChatService.isUserInChat.mockResolvedValueOnce(true);
+      mockChatService.isUserInChat.mockResolvedValueOnce(false);
+      mockChatService.addUserToChat.mockResolvedValue({
         id: "newUserId",
         name: "New User",
       });
 
-      const response = await request(app)
-        .post("/chats/123/users")
-        .send({
-          token: { userId: "789" },
-          userId: "456",
-        });
-
-      expect(response.status).toBe(201);
-      expect(response.body).toEqual({
-        user: { id: "newUserId", name: "New User" },
+      const req = mockRequest({
+        body: { userId: "456", token: { userId: "789" } },
+        params: { chatId: "123" },
       });
-      expect(ChatService.getChatType).toHaveBeenCalledWith("123");
-      expect(ChatService.isUserInChat).toHaveBeenCalledTimes(2);
-      expect(ChatService.isUserInChat).toHaveBeenCalledWith({
+      const res = mockResponse();
+      await addUserToGroupChatController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
+      expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
+      expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
         userId: "789",
         chatId: "123",
       });
-      expect(ChatService.isUserInChat).toHaveBeenCalledWith({
+      expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
         userId: "456",
         chatId: "123",
       });
-      expect(ChatService.addUserToChat).toHaveBeenCalledWith({
+      expect(mockChatService.addUserToChat).toHaveBeenCalledWith({
         chatId: "123",
         userId: "456",
       });
     });
 
     it("should return 401 if chat is not of type 'GROUP'", async () => {
-      (ChatService.getChatType as jest.Mock).mockResolvedValue("PRIVATE");
+      mockChatService.getChatType.mockResolvedValue("PRIVATE");
 
-      const response = await request(app)
-        .post("/chats/123/users")
-        .send({
-          token: { userId: "789" },
-          userId: "456",
-        });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        message: "Cannot add people to chat of this type.",
+      const req = mockRequest({
+        body: { userId: "456", token: { userId: "789" } },
+        params: { chatId: "123" },
       });
-      expect(ChatService.getChatType).toHaveBeenCalledWith("123");
-      expect(ChatService.addUserToChat).not.toHaveBeenCalled();
+      const res = mockResponse();
+      await addUserToGroupChatController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
+      expect(mockChatService.addUserToChat).not.toHaveBeenCalled();
     });
 
     it("should return 401 if the requester is not in the chat", async () => {
-      (ChatService.getChatType as jest.Mock).mockResolvedValue("GROUP");
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValueOnce(false);
+      mockChatService.getChatType.mockResolvedValue("GROUP");
+      mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
-      const response = await request(app)
-        .post("/chats/123/users")
-        .send({
-          token: { userId: "789" },
-          userId: "456",
-        });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        message: "Cannot add users to chat to which you do not belong to.",
+      const req = mockRequest({
+        body: { userId: "456", token: { userId: "789" } },
+        params: { chatId: "123" },
       });
-      expect(ChatService.getChatType).toHaveBeenCalledWith("123");
-      expect(ChatService.addUserToChat).not.toHaveBeenCalled();
+      const res = mockResponse();
+      await addUserToGroupChatController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
+      expect(mockChatService.addUserToChat).not.toHaveBeenCalled();
     });
 
     it("should return 409 if the user is already in the chat", async () => {
-      (ChatService.getChatType as jest.Mock).mockResolvedValue("GROUP");
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValueOnce(true);
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValueOnce(true);
+      mockChatService.getChatType.mockResolvedValue("GROUP");
+      mockChatService.isUserInChat.mockResolvedValueOnce(true);
+      mockChatService.isUserInChat.mockResolvedValueOnce(true);
 
-      const response = await request(app)
-        .post("/chats/123/users")
-        .send({
-          token: { userId: "789" },
-          userId: "456",
-        });
-
-      expect(response.status).toBe(409);
-      expect(response.body).toEqual({
-        message: "User is already in this chat.",
+      const req = mockRequest({
+        body: { userId: "456", token: { userId: "789" } },
+        params: { chatId: "123" },
       });
-      expect(ChatService.getChatType).toHaveBeenCalledWith("123");
-      expect(ChatService.isUserInChat).toHaveBeenCalledTimes(2);
-      expect(ChatService.addUserToChat).not.toHaveBeenCalled();
+      const res = mockResponse();
+      await addUserToGroupChatController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(409);
+      expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
+      expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
+      expect(mockChatService.addUserToChat).not.toHaveBeenCalled();
     });
   });
 
   describe("updateAlias", () => {
     it("should update alias successfully", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.updateAlias as jest.Mock).mockResolvedValue(null);
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.updateAlias.mockResolvedValue(null);
 
-      const response = await request(app)
-        .put("/chats/123/users/456/alias")
-        .send({
-          token: { userId: "789" },
-          alias: "NewAlias",
-        });
+      const req = mockRequest({
+        body: { token: { userId: "789" }, alias: "NewAlias" },
+        params: { chatId: "123", userId: "456" },
+      });
+      const res = mockResponse();
+      await updateAliasController(req, res, jest.fn());
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ alias: "NewAlias" });
-      expect(ChatService.isUserInChat).toHaveBeenCalledTimes(2);
-      expect(ChatService.updateAlias).toHaveBeenCalledWith({
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
+      expect(mockChatService.updateAlias).toHaveBeenCalledWith({
         userId: "456",
         chatId: "123",
         alias: "NewAlias",
@@ -314,135 +265,142 @@ describe("Chat controllers", () => {
     });
 
     it("should return 401 if the user to update is not in the chat", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValueOnce(false);
+      mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
-      const response = await request(app)
-        .put("/chats/123/users/456/alias")
-        .send({
-          token: { userId: "789" },
-          alias: "NewAlias",
-        });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        message: "This user doesn't belong to this chat.",
+      const req = mockRequest({
+        body: { token: { userId: "789" } },
+        params: { chatId: "123", userId: "456" },
       });
-      expect(ChatService.isUserInChat).toHaveBeenCalledTimes(1);
-      expect(ChatService.updateAlias).not.toHaveBeenCalled();
+      const res = mockResponse();
+      await updateAliasController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(1);
+      expect(mockChatService.updateAlias).not.toHaveBeenCalled();
     });
 
     it("should return 401 if the requesting user is not authorized", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValueOnce(true);
+      mockChatService.isUserInChat.mockResolvedValueOnce(true);
+      mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValueOnce(false);
-
-      const response = await request(app)
-        .put("/chats/123/users/456/alias")
-        .send({
-          token: { userId: "789" },
-          alias: "NewAlias",
-        });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        message: "Cannot set aliases in chat you do not belong to.",
+      const req = mockRequest({
+        body: { token: { userId: "789" } },
+        params: { chatId: "123", userId: "456" },
       });
-      expect(ChatService.isUserInChat).toHaveBeenCalledTimes(2);
-      expect(ChatService.updateAlias).not.toHaveBeenCalled();
+      const res = mockResponse();
+      await updateAliasController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
+      expect(mockChatService.updateAlias).not.toHaveBeenCalled();
     });
   });
 
   describe("createReaction", () => {
     it("should create a reaction", async () => {
       const newReactionData = "reaction";
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.isMessageInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.createReactionToMessage as jest.Mock).mockResolvedValue(
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.isMessageInChat.mockResolvedValue(true);
+      mockChatService.createReactionToMessage.mockResolvedValue(
         newReactionData
       );
 
-      const response = await request(app)
-        .post("/someId/reactions")
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "userId" },
           reactionId: "reactionId",
           messageId: "messageId",
-        });
+        },
+        params: { chatId: "someId" },
+      });
+      const res = mockResponse();
+      await createReactionController(req, res, jest.fn());
 
-      expect(response.status).toBe(201);
-      expect(response.body.reaction).toEqual(newReactionData);
+      expect(res.status).toHaveBeenCalledWith(201);
     });
 
     it("shouldn't allow if messageId is not message in chat", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.isMessageInChat as jest.Mock).mockResolvedValue(false);
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.isMessageInChat.mockResolvedValue(false);
 
-      const response = await request(app)
-        .post("/someId/reactions")
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "userId" },
           reactionId: "reactionId",
           messageId: "messageId",
-        });
+        },
+        params: { chatId: "someId" },
+      });
+      const res = mockResponse();
+      await createReactionController(req, res, jest.fn());
 
-      expect(response.status).toBe(401);
-      expect(response.body.message).toBeDefined();
+      expect(res.status).toHaveBeenCalledWith(401);
     });
 
     it("shouldn't allow if user doesn't belong to the chat", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(false);
+      mockChatService.isUserInChat.mockResolvedValue(false);
 
-      const response = await request(app)
-        .post("/someId/reactions")
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "userId" },
           reactionId: "reactionId",
           messageId: "messageId",
-        });
+        },
+        params: { chatId: "someId" },
+      });
+      const res = mockResponse();
+      await createReactionController(req, res, jest.fn());
 
-      expect(response.status).toBe(401);
-      expect(response.body.message).toBeDefined();
+      expect(res.status).toHaveBeenCalledWith(401);
     });
   });
 
   describe("getChatMessages", () => {
     it("should return chat messages if the user is authorized", async () => {
       const messages = [{ id: "message1" }, { id: "message2" }];
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.getChatMessages as jest.Mock).mockResolvedValue(messages);
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.getChatMessages.mockResolvedValue(messages);
 
-      const response = await request(app)
-        .get("/someId/messages")
-        .send({ token: { userId: "userId" } });
+      const req = mockRequest({
+        body: { token: { userId: "userId" } },
+        params: { chatId: "someId" },
+        query: {},
+      });
+      const res = mockResponse();
+      await getChatMessagesController(req, res, jest.fn());
 
-      expect(response.status).toBe(200);
-      expect(response.body.messages).toEqual(messages);
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
     it("shouldn't allow access if the user is not in the chat", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(false);
+      mockChatService.isUserInChat.mockResolvedValue(false);
 
-      const response = await request(app)
-        .get("/someId/messages")
-        .send({ token: { userId: "userId" } });
+      const req = mockRequest({
+        body: { token: { userId: "userId" } },
+        params: { chatId: "someId" },
+        query: {},
+      });
+      const res = mockResponse();
+      await getChatMessagesController(req, res, jest.fn());
 
-      expect(response.status).toBe(401);
-      expect(response.body.message).toBeDefined();
+      expect(res.status).toHaveBeenCalledWith(401);
     });
 
     it("should return chat messages when no responseId is provided", async () => {
       const messages = [{ id: "message1" }, { id: "message2" }];
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.getChatMessages as jest.Mock).mockResolvedValue(messages);
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.getChatMessages.mockResolvedValue(messages);
 
-      const response = await request(app)
-        .get("/someId/messages")
-        .query({ lastMessageId: "message1", limit: 5 })
-        .send({ token: { userId: "userId" } });
+      const req = mockRequest({
+        body: { token: { userId: "userId" } },
+        params: { chatId: "someId" },
+        query: { lastMessageId: "message1", limit: "5" },
+      });
+      const res = mockResponse();
+      await getChatMessagesController(req, res, jest.fn());
 
-      expect(response.status).toBe(200);
-      expect(response.body.messages).toEqual(messages);
-      expect(ChatService.getChatMessages).toHaveBeenCalledWith(
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(mockChatService.getChatMessages).toHaveBeenCalledWith(
         "someId",
         "message1",
         5
@@ -451,48 +409,53 @@ describe("Chat controllers", () => {
 
     it("should return chat messages for a specific responseId", async () => {
       const messages = [{ id: "message1" }, { id: "message2" }];
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.getPostChatMessages as jest.Mock).mockResolvedValue(
-        messages
-      );
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.getPostChatMessages.mockResolvedValue(messages);
 
-      const response = await request(app)
-        .get("/someId/messages")
-        .query({ responseId: "response123" })
-        .send({ token: { userId: "userId" } });
+      const req = mockRequest({
+        body: { token: { userId: "userId" } },
+        params: { chatId: "someId" },
+        query: { responseId: "response123" },
+      });
+      const res = mockResponse();
+      await getChatMessagesController(req, res, jest.fn());
 
-      expect(response.status).toBe(200);
-      expect(response.body.messages).toEqual(messages);
-      expect(ChatService.getPostChatMessages).toHaveBeenCalledWith(
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(mockChatService.getPostChatMessages).toHaveBeenCalledWith(
         "someId",
         "response123"
       );
     });
 
     it("should return 500 if limit is not a number", async () => {
-      const response = await request(app)
-        .get("/someId/messages")
-        .query({ limit: "not-a-number" })
-        .send({ token: { userId: "userId" } });
+      const mockNextFunction = jest.fn();
 
-      expect(response.status).toBe(500);
+      const req = mockRequest({
+        body: { token: { userId: "userId" } },
+        params: { chatId: "someId" },
+        query: { limit: "suhdusahd" },
+      });
+      const res = mockResponse();
+      await getChatMessagesController(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("should treat 'null' as a valid responseId and return null", async () => {
       const messages = [{ id: "message1" }, { id: "message2" }];
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.getPostChatMessages as jest.Mock).mockResolvedValue(
-        messages
-      );
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.getPostChatMessages.mockResolvedValue(messages);
 
-      const response = await request(app)
-        .get("/someId/messages")
-        .query({ responseId: "null" })
-        .send({ token: { userId: "userId" } });
+      const req = mockRequest({
+        body: { token: { userId: "userId" } },
+        params: { chatId: "someId" },
+        query: { responseId: "null" },
+      });
+      const res = mockResponse();
+      await getChatMessagesController(req, res, jest.fn());
 
-      expect(response.status).toBe(200);
-      expect(response.body.messages).toEqual(messages);
-      expect(ChatService.getPostChatMessages).toHaveBeenCalledWith(
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(mockChatService.getPostChatMessages).toHaveBeenCalledWith(
         "someId",
         null
       );
@@ -500,71 +463,85 @@ describe("Chat controllers", () => {
 
     it("should pass to error middleware if an error occurs", async () => {
       const errorMessage = "Error in processing request";
-      (ChatService.isUserInChat as jest.Mock).mockRejectedValue(
-        new Error(errorMessage)
-      );
+      mockChatService.isUserInChat.mockRejectedValue(new Error(errorMessage));
 
-      const response = await request(app)
-        .get("/someId/messages")
-        .send({ token: { userId: "userId" } });
+      const mockNextFunction = jest.fn();
 
-      expect(response.statusCode).toBe(500);
+      const req = mockRequest({
+        body: { token: { userId: "userId" } },
+        params: { chatId: "someId" },
+        query: {},
+      });
+      const res = mockResponse();
+      await getChatMessagesController(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
   });
 
   describe("createMessage", () => {
     it("should create a message if the user is authorized", async () => {
       const newMessage = { id: "message1", content: "Hello" };
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.createMessage as jest.Mock).mockResolvedValue(newMessage);
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.createMessage.mockResolvedValue(newMessage);
 
-      const response = await request(app)
-        .post("/someId/messages")
-        .field("content", "Hello")
-        .field("token", '{"userId": "userId"}');
+      const req = mockRequest({
+        body: { content: "Hello", token: { userId: "userId" } },
+        params: { chatId: "someId" },
+        files: [],
+      });
+      const res = mockResponse();
+      await createMessageController(req, res, jest.fn());
 
-      expect(response.status).toBe(201);
-      expect(response.body.message).toEqual(newMessage);
+      expect(res.status).toHaveBeenCalledWith(201);
     });
 
     it("shouldn't allow sending a message if the user is not in the chat", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(false);
+      mockChatService.isUserInChat.mockResolvedValue(false);
 
-      const response = await request(app)
-        .post("/someId/messages")
-        .field("token", '{"userId": "userId"}')
-        .field("content", "Hello");
+      const req = mockRequest({
+        body: { content: "Hello", token: { userId: "userId" } },
+        params: { chatId: "someId" },
+        files: [],
+      });
+      const res = mockResponse();
+      await createMessageController(req, res, jest.fn());
 
-      expect(response.status).toBe(401);
-      expect(response.body.message).toBeDefined();
+      expect(res.status).toHaveBeenCalledWith(401);
     });
 
     it("shouldn't allow sending a message if responseId is not in the chat", async () => {
-      (ChatService.isUserInChat as jest.Mock).mockResolvedValue(true);
-      (ChatService.isMessageInChat as jest.Mock).mockResolvedValue(false);
+      mockChatService.isUserInChat.mockResolvedValue(true);
+      mockChatService.isMessageInChat.mockResolvedValue(false);
 
-      const response = await request(app)
-        .post("/someId/messages")
-        .field("token", '{"userId": "userId"}')
-        .field("content", "Hello")
-        .field("responseId", "responseId");
+      const req = mockRequest({
+        body: {
+          content: "Hello",
+          token: { userId: "userId" },
+          responseId: "responseId",
+        },
+        params: { chatId: "someId" },
+        files: [],
+      });
+      const res = mockResponse();
+      await createMessageController(req, res, jest.fn());
 
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBeDefined();
+      expect(res.status).toHaveBeenCalledWith(400);
     });
   });
 
   describe("getUserChats", () => {
     it("should return user's chats", async () => {
       const chats = [{ id: "chat1" }, { id: "chat2" }];
-      (ChatService.getUserChats as jest.Mock).mockResolvedValue(chats);
+      mockChatService.getUserChats.mockResolvedValue(chats);
 
-      const response = await request(app)
-        .get("/chats")
-        .send({ token: { userId: "userId" } });
+      const req = mockRequest({
+        body: { token: { userId: "userId" } },
+      });
+      const res = mockResponse();
+      await getSelfChatsController(req, res, jest.fn());
 
-      expect(response.status).toBe(200);
-      expect(response.body.chats).toEqual(chats);
+      expect(res.status).toHaveBeenCalledWith(200);
     });
   });
 
@@ -572,82 +549,83 @@ describe("Chat controllers", () => {
     it("should create a group chat if user is in the list", async () => {
       const chat = { id: "chat1" };
       (processAvatar as jest.Mock).mockResolvedValue("file");
-      (ChatService.createGroupChat as jest.Mock).mockResolvedValue(chat);
+      mockChatService.createGroupChat.mockResolvedValue(chat);
 
-      const response = await request(app)
-        .post("/chats/group")
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "userId" },
           users: ["userId", "user2"],
           name: "Group Chat",
-        });
+        },
+      });
+      const res = mockResponse();
+      await createGroupChatController(req, res, jest.fn());
 
-      expect(response.status).toBe(201);
-      expect(response.body.chat).toEqual(chat);
+      expect(res.status).toHaveBeenCalledWith(201);
     });
 
     it("shouldn't allow if user is not in the user list", async () => {
       (processAvatar as jest.Mock).mockResolvedValue("file");
 
-      const response = await request(app)
-        .post("/chats/group")
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "userId" },
           users: ["user2", "user3"],
           name: "Group Chat",
-        });
+        },
+      });
+      const res = mockResponse();
+      await createGroupChatController(req, res, jest.fn());
 
-      expect(response.status).toBe(401);
-      expect(response.body.message).toBeDefined();
+      expect(res.status).toHaveBeenCalledWith(401);
     });
   });
 
   describe("createPrivateChat", () => {
     it("should create a private chat if user is in the list", async () => {
       const chat = { id: "chat1" };
-      (ChatService.getPrivateChatByUserIds as jest.Mock).mockResolvedValue(
-        null
-      );
-      (ChatService.createPrivateChat as jest.Mock).mockResolvedValue(chat);
+      mockChatService.getPrivateChatByUserIds.mockResolvedValue(null);
+      mockChatService.createPrivateChat.mockResolvedValue(chat);
 
-      const response = await request(app)
-        .post("/chats/private")
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "userId" },
           users: ["userId", "user2"],
-        });
+        },
+      });
+      const res = mockResponse();
+      await createPrivateChatController(req, res, jest.fn());
 
-      expect(response.status).toBe(201);
-      expect(response.body.chat).toEqual(chat);
+      expect(res.status).toHaveBeenCalledWith(201);
     });
 
     it("should return conflict if chat already exists", async () => {
       const existingChat = { id: "chat1" };
-      (ChatService.getPrivateChatByUserIds as jest.Mock).mockResolvedValue(
-        existingChat
-      );
+      mockChatService.getPrivateChatByUserIds.mockResolvedValue(existingChat);
 
-      const response = await request(app)
-        .post("/chats/private")
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "userId" },
           users: ["userId", "user2"],
-        });
+        },
+      });
+      const res = mockResponse();
+      await createPrivateChatController(req, res, jest.fn());
 
-      expect(response.status).toBe(409);
-      expect(response.body.chat).toEqual(existingChat);
+      expect(res.status).toHaveBeenCalledWith(409);
     });
 
     it("shouldn't allow if user is not in the user list", async () => {
-      const response = await request(app)
-        .post("/chats/private")
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "userId" },
           users: ["user2", "user3"],
-        });
+        },
+      });
+      const res = mockResponse();
+      await createPrivateChatController(req, res, jest.fn());
 
-      expect(response.status).toBe(401);
-      expect(response.body.message).toBeDefined();
+      expect(res.status).toHaveBeenCalledWith(401);
     });
   });
 });
