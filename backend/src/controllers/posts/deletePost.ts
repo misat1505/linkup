@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import fileStorage from "../../lib/FileStorage";
 
 /**
  * Controller to delete a post.
@@ -54,7 +53,7 @@ export const deletePost = async (
     const {
       token: { userId },
     } = req.body;
-    const postService = req.app.services.postService;
+    const { postService, fileStorage } = req.app.services;
 
     const post = await postService.getPost(id);
 

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import fileStorage from "../../lib/FileStorage";
 
 /**
  * Controller to retrieve a list of files from the user's cache.
@@ -50,6 +49,7 @@ export const getCache = async (
 ) => {
   try {
     const { userId } = req.body.token;
+    const fileStorage = req.app.services.fileStorage;
 
     const files = await fileStorage.listFiles(`cache/${userId}`);
 

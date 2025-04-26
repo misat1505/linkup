@@ -1,3 +1,4 @@
+import { FileStorage } from "../lib/FileStorage";
 import { ChatService } from "../services/ChatService";
 import { FileService } from "../services/FileService";
 import { FriendshipService } from "../services/FriendshipService";
@@ -13,6 +14,7 @@ export type AppServices = {
   postRecommendationService: PostRecommendationService;
   postService: PostService;
   userService: UserService;
+  fileStorage: FileStorage;
 };
 
 export function initializeServices(
@@ -28,6 +30,7 @@ export function initializeServices(
     postService,
     friendshipService
   );
+  const fileStorage = new FileStorage();
 
   return {
     chatService,
@@ -36,5 +39,6 @@ export function initializeServices(
     postService,
     userService,
     postRecommendationService,
+    fileStorage,
   };
 }

@@ -73,8 +73,8 @@ export const signupController = async (
 ) => {
   try {
     const { firstName, lastName, login, password } = req.body;
-    const userService = req.app.services.userService;
-    const file = await processAvatar(req.file);
+    const { userService, fileStorage } = req.app.services;
+    const file = await processAvatar(fileStorage, req.file);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = Hasher.hash(password + salt);

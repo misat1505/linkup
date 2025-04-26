@@ -55,11 +55,16 @@ export const createPost = async (
       content,
       token: { userId },
     } = req.body;
-    const postService = req.app.services.postService;
+    const { postService, fileStorage } = req.app.services;
 
     const id = uuidv4();
 
-    const updatedContent = await handleMarkdownUpdate(content, userId, id);
+    const updatedContent = await handleMarkdownUpdate(
+      fileStorage,
+      content,
+      userId,
+      id
+    );
 
     const post = await postService.createPost({
       id,

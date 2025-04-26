@@ -226,10 +226,3 @@ export class FileStorage {
     await this.s3.send(deleteCommand);
   }
 }
-
-/**
- * FileStorage global object.
- */
-const fileStorage = new FileStorage();
-
-export default fileStorage;

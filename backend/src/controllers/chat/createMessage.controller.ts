@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { generateNewFilename } from "../../utils/generateNewFilename";
-import fileStorage from "../../lib/FileStorage";
 
 /**
  * Controller to create a new message in a chat.
@@ -68,7 +67,7 @@ export const createMessageController = async (
     const { userId } = req.body.token;
     const { chatId } = req.params;
     const files = req.files as Express.Multer.File[];
-    const chatService = req.app.services.chatService;
+    const { chatService, fileStorage } = req.app.services;
 
     const checks = [chatService.isUserInChat({ chatId, userId })];
 

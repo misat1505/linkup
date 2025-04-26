@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { processAvatar } from "../../utils/processAvatar";
 import { v4 as uuidv4 } from "uuid";
-import fileStorage from "../../lib/FileStorage";
 
 /**
  * Controller to update a group chat's name and avatar.
@@ -66,7 +65,7 @@ export const updateGroupChatController = async (
       token: { userId },
     } = req.body;
     const { chatId } = req.params;
-    const chatService = req.app.services.chatService;
+    const { chatService, fileStorage } = req.app.services;
 
     const isAuthorized = await chatService.isUserInChat({ chatId, userId });
     if (!isAuthorized)
@@ -82,6 +81,7 @@ export const updateGroupChatController = async (
 
     const newFilename = uuidv4();
     const file = await processAvatar(
+      fileStorage,
       req.file,
       `chats/${chatId}/`,
       newFilename + ".webp"

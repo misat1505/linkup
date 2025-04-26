@@ -63,7 +63,7 @@ export const createGroupChatController = async (
       name,
       token: { userId },
     } = req.body;
-    const chatService = req.app.services.chatService;
+    const { chatService, fileStorage } = req.app.services;
     if (!users.includes(userId))
       return res.status(401).json({
         message: req.t(
@@ -80,7 +80,12 @@ export const createGroupChatController = async (
     );
 
     if (newFilename)
-      await processAvatar(req.file, `chats/${chat.id}/`, newFilename);
+      await processAvatar(
+        fileStorage,
+        req.file,
+        `chats/${chat.id}/`,
+        newFilename
+      );
 
     return res.status(201).json({ chat });
   } catch (e) {

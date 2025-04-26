@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import fileStorage from "../../lib/FileStorage";
 
 type Filter = "avatar" | "chat-message" | "chat-photo" | "cache" | "post";
 
@@ -12,6 +11,7 @@ const sendFileBuilder =
 
     errorMessage = req.t("files.controllers.get-file.default-error-message")
   ) => {
+    const fileStorage = req.app.services.fileStorage;
     const result = await fn();
 
     if (!result) return res.status(401).json({ message: errorMessage });
@@ -97,7 +97,7 @@ export const getFileController = async (
     const chatId = req.query.chat;
     const postId = req.query.post;
     const { userId } = req.body.token;
-    const fileService = req.app.services.fileService;
+    const { fileService, fileStorage } = req.app.services;
 
     if (!filterArray.includes(filter))
       return res.status(400).json({

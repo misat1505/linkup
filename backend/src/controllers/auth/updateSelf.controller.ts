@@ -4,7 +4,6 @@ import { Hasher } from "../../lib/Hasher";
 import { UserService } from "../../services/UserService";
 import { UserWithCredentials } from "../../types/User";
 import bcrypt from "bcryptjs";
-import fileStorage from "../../lib/FileStorage";
 
 /**
  * Controller to update the user's details, including login, password, and avatar.
@@ -71,8 +70,8 @@ export const updateSelfController = async (
       password,
       token: { userId },
     } = req.body;
-    const userService = req.app.services.userService;
-    const file = await processAvatar(req.file);
+    const { userService, fileStorage } = req.app.services;
+    const file = await processAvatar(fileStorage, req.file);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = Hasher.hash(password + salt);

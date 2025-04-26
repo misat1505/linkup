@@ -67,7 +67,7 @@ export const updatePost = async (
       token: { userId },
       content,
     } = req.body;
-    const postService = req.app.services.postService;
+    const { postService, fileStorage } = req.app.services;
 
     const post = await postService.getPost(id);
 
@@ -81,7 +81,12 @@ export const updatePost = async (
         .status(401)
         .json({ message: req.t("posts.controllers.update.unauthorized") });
 
-    const updatedContent = await handleMarkdownUpdate(content, userId, id);
+    const updatedContent = await handleMarkdownUpdate(
+      fileStorage,
+      content,
+      userId,
+      id
+    );
 
     const newPost = await postService.updatePost({
       id,

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import fileStorage from "../../lib/FileStorage";
 
 /**
  * Controller to delete a file from the user's cache.
@@ -65,6 +64,7 @@ export const deleteFromCache = async (
   try {
     const { userId } = req.body.token;
     const { filename } = req.params;
+    const fileStorage = req.app.services.fileStorage;
 
     await fileStorage.deleteFile(`cache/${userId}/${filename}`);
 
