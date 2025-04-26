@@ -1,5 +1,22 @@
 import { Request, Response } from "express";
 
+export const mockFriendshipService = {
+  acceptFriendship: jest.fn(),
+  createFriendship: jest.fn(),
+  deleteFriendship: jest.fn(),
+  getUserFriendships: jest.fn(),
+};
+
+export const mockPostService = {
+  createPost: jest.fn(),
+  deletePost: jest.fn(),
+  getPost: jest.fn(),
+  getUserPosts: jest.fn(),
+  reportPost: jest.fn(),
+  updatePost: jest.fn(),
+  sanitizePost: jest.fn(),
+};
+
 export const mockFileStorage = {
   copyFile: jest.fn(),
   deleteAllFilesInDirectory: jest.fn(),
@@ -25,6 +42,8 @@ export function mockRequest(data: Partial<Request> = {}): Request {
       services: {
         userService: mockUserService,
         fileStorage: mockFileStorage,
+        postService: mockPostService,
+        friendshipService: mockFriendshipService,
       },
     },
     t: jest.fn(),
