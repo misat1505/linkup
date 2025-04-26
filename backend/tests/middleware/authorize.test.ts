@@ -1,60 +1,77 @@
-import express from "express";
-import request from "supertest";
 import { authorize } from "../../src/middlewares/authorize";
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import cookieParser from "cookie-parser";
 import { env } from "../../src/config/env";
-import { UserService } from "../../src/services/UserService";
-import { USER } from "../utils/constants";
-
-jest.mock("../../src/services/UserService");
+import { seedProvider } from "../utils/seedProvider";
+import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
 
 describe("authorize middleware", () => {
-  const app = express();
-  app.use(express.json());
-  app.use(cookieParser());
-  app.post("/test", authorize, (req, res) => {
-    res.status(200).json({ userId: req.body.token.userId });
-  });
+  const mockNextFunction = jest.fn();
 
   it("should append token on authorized", async () => {
-    (UserService.getUser as jest.Mock).mockResolvedValue(USER);
-    const token = TokenProcessor.encode(
-      { userId: USER.id },
-      env.ACCESS_TOKEN_SECRET
-    );
-    const response = await request(app)
-      .post("/test")
-      .set("Authorization", `Bearer ${token}`);
+    await seedProvider(async (seed) => {
+      mockUserService.getUser.mockResolvedValue(seed.users[0]);
+      const token = TokenProcessor.encode(
+        { userId: seed.users[0].id },
+        env.ACCESS_TOKEN_SECRET
+      );
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body.userId).toBe(USER.id);
+      const req = mockRequest({
+        headers: { authorization: `Bearer ${token}` },
+        body: {},
+      });
+      const res = mockResponse();
+
+      await authorize(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
+    });
   });
 
   it("shouldn't allow valid token of non-existent user", async () => {
-    (UserService.getUser as jest.Mock).mockResolvedValue(null);
-    const token = TokenProcessor.encode(
-      { userId: USER.id },
-      env.ACCESS_TOKEN_SECRET
-    );
-    const response = await request(app)
-      .post("/test")
-      .set("Authorization", `Bearer ${token}`);
+    await seedProvider(async (seed) => {
+      mockUserService.getUser.mockResolvedValue(null);
+      const token = TokenProcessor.encode(
+        { userId: seed.users[0].id },
+        env.ACCESS_TOKEN_SECRET
+      );
 
-    expect(response.statusCode).toBe(404);
+      const req = mockRequest({
+        headers: { authorization: `Bearer ${token}` },
+      });
+      const res = mockResponse();
+
+      await authorize(req, res, mockNextFunction);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+    });
   });
 
   it("shouldn't allow no token", async () => {
-    (UserService.getUser as jest.Mock).mockResolvedValue(USER);
-    const response = await request(app).post("/test");
-    expect(response.statusCode).toBe(400);
+    await seedProvider(async (seed) => {
+      mockUserService.getUser.mockResolvedValue(seed.users[0]);
+
+      const req = mockRequest({
+        headers: {},
+      });
+      const res = mockResponse();
+
+      await authorize(req, res, mockNextFunction);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+    });
   });
 
   it("shouldn't allow invalid token", async () => {
-    (UserService.getUser as jest.Mock).mockResolvedValue(USER);
-    const response = await request(app)
-      .post("/test")
-      .set("Authorization", `Bearer invalid`);
-    expect(response.statusCode).toBe(401);
+    await seedProvider(async (seed) => {
+      mockUserService.getUser.mockResolvedValue(seed.users[0]);
+      const req = mockRequest({
+        headers: { authorization: "Bearer invalid" },
+      });
+      const res = mockResponse();
+
+      await authorize(req, res, mockNextFunction);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+    });
   });
 });

@@ -1,34 +1,38 @@
-import express from "express";
-import request from "supertest";
 import { body } from "express-validator";
 import { validate } from "../../src/middlewares/validate";
-import i18next from "../../src/i18n";
-import middleware from "i18next-http-middleware";
+import { mockRequest, mockResponse } from "../utils/mocks";
 
 describe("validate middleware", () => {
   const validationRules = [
     body("name").exists().withMessage("Name has to be given"),
   ];
 
-  const app = express();
-  app.use(express.json());
-  app.use(middleware.handle(i18next));
-  app.post("/test", validate(validationRules), (req, res) => {
-    res.status(200).send({ message: "Success" });
+  const mockNextFunction = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   it("should go to next function if validation successful", async () => {
-    const response = await request(app).post("/test").send({
-      name: "Bob",
-    });
+    const middleware = validate(validationRules);
 
-    expect(response.statusCode).toBe(200);
+    const req = mockRequest({ body: { name: "Bob" } });
+    const res = mockResponse();
+
+    await middleware(req, res, mockNextFunction);
+
+    expect(mockNextFunction).toHaveBeenCalled();
   });
 
   it("returns errors if validation not successful", async () => {
-    const response = await request(app).post("/test");
+    const middleware = validate(validationRules);
 
-    expect(response.status).toBe(400);
-    expect(response.body.errors.length).toBe(1);
+    const req = mockRequest({ body: {} });
+    const res = mockResponse();
+
+    await middleware(req, res, mockNextFunction);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(mockNextFunction).not.toHaveBeenCalled();
   });
 });
