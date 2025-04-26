@@ -1,54 +1,49 @@
-import express from "express";
-import { UserService } from "../../src/services/UserService";
 import { USER_WITHOUT_CREDENTIALS } from "../utils/constants";
-import request from "supertest";
-import { User } from "../../src/types/User";
 import { searchUserController } from "../../src/controllers/user/searchUser.controller";
-import i18next from "../../src/i18n";
-import middleware from "i18next-http-middleware";
-
-jest.mock("../../src/services/UserService");
+import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
 
 describe("User controllers", () => {
-  const app = express();
-  app.use(express.json());
-  app.use(middleware.handle(i18next));
-  app.get("/search", searchUserController);
-
   describe("searchUser", () => {
     it("should return users", async () => {
-      (UserService.searchUsers as jest.Mock).mockResolvedValue([
-        USER_WITHOUT_CREDENTIALS,
-      ]);
+      const users = [USER_WITHOUT_CREDENTIALS];
+      mockUserService.searchUsers.mockResolvedValue(users);
 
-      const users: (Omit<User, "lastActive"> & { lastActive: string })[] = [
-        USER_WITHOUT_CREDENTIALS,
-      ].map(({ lastActive, ...rest }) => ({
-        lastActive: lastActive.toISOString(),
-        ...rest,
-      }));
+      const req = mockRequest({
+        query: { term: "abc" },
+      });
 
-      const response = await request(app).get("/search?term=abc");
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toEqual({ users });
+      const res = mockResponse();
+
+      await searchUserController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({ users });
     });
 
     it("fails if term not provided", async () => {
-      (UserService.searchUsers as jest.Mock).mockResolvedValue([
-        USER_WITHOUT_CREDENTIALS,
-      ]);
+      const users = [USER_WITHOUT_CREDENTIALS];
+      mockUserService.searchUsers.mockResolvedValue(users);
 
-      const response = await request(app).get("/search");
-      expect(response.statusCode).toBe(400);
+      const req = mockRequest({ query: {} });
+      const res = mockResponse();
+
+      await searchUserController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(400);
     });
 
     it("fails if term provided more than once", async () => {
-      (UserService.searchUsers as jest.Mock).mockResolvedValue([
-        USER_WITHOUT_CREDENTIALS,
-      ]);
+      const users = [USER_WITHOUT_CREDENTIALS];
+      mockUserService.searchUsers.mockResolvedValue(users);
 
-      const response = await request(app).get("/search?term=abc&term=dbc");
-      expect(response.statusCode).toBe(400);
+      const req = mockRequest({
+        query: { term: ["abc", "dbc"] },
+      });
+      const res = mockResponse();
+
+      await searchUserController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(400);
     });
   });
 });

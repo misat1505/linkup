@@ -1,10 +1,13 @@
-import { initReactions } from "../src/config/reactions";
-import { resetDB } from "./utils/setup";
+// import { initReactions } from "../src/config/reactions";
+// import { resetDB } from "./utils/setup";
 
 beforeAll(async () => {
-  await initReactions();
+  jest.clearAllMocks();
+  console.log("seed db");
+  // await initReactions();
 });
 
 beforeEach(async () => {
-  await resetDB();
+  console.log("transaction setup");
+  // await resetDB();
 });
