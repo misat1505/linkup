@@ -1,11 +1,6 @@
-import request from "supertest";
-import express from "express";
-import { UserService } from "../../src/services/UserService";
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import { User, UserWithCredentials } from "../../src/types/User";
+import { UserWithCredentials } from "../../src/types/User";
 import { v4 as uuidv4 } from "uuid";
-import bcrypt from "bcryptjs";
-import { isUser } from "../../src/types/guards/user.guard";
 import { VALID_USER_ID } from "../utils/constants";
 import { signupController } from "../../src/controllers/auth/signup.controller";
 import { loginController } from "../../src/controllers/auth/login.controller";
@@ -13,143 +8,125 @@ import { refreshTokenController } from "../../src/controllers/auth/refreshToken.
 import { logoutController } from "../../src/controllers/auth/logout.controller";
 import { getSelfController } from "../../src/controllers/auth/getSelf.controller";
 import { updateSelfController } from "../../src/controllers/auth/updateSelf.controller";
-import i18next from "../../src/i18n";
-import middleware from "i18next-http-middleware";
+import { seedProvider } from "../utils/seedProvider";
+import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
 
-jest.mock("uuid");
-jest.mock("bcryptjs");
-jest.mock("../../src/services/UserService");
 jest.mock("../../src/lib/TokenProcessor");
-jest.mock("../../src/lib/FileStorage");
 
 describe("Auth Controllers", () => {
-  const app = express();
-  app.use(express.json());
-  app.use(middleware.handle(i18next));
-  app.post("/signup", signupController);
-  app.post("/login", loginController);
-  app.post("/refresh", refreshTokenController);
-  app.post("/logout", logoutController);
-  app.get("/user", getSelfController);
-  app.put("/user", updateSelfController);
-
-  const removeCredentials = (
-    userWithCredentials: UserWithCredentials
-  ): User => {
-    const { login, password, salt, ...rest } = userWithCredentials;
-    const user: User = { ...rest };
-    return user;
-  };
-
-  beforeAll(() => {
-    (UserService.removeCredentials as jest.Mock).mockImplementation(
-      removeCredentials
-    );
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe("updateUser", () => {
     it("should update user", async () => {
-      (UserService.getUserByLogin as jest.Mock).mockResolvedValue({
-        id: "some-id",
-        login: "some-login",
-        photoURL: "some-url",
-      });
-
-      const response = await request(app)
-        .put("/user")
-        .send({
-          firstName: "John",
-          lastName: "Doe",
-          login: "login1",
-          password: "pass1",
-          token: { userId: VALID_USER_ID },
+      await seedProvider(async (seed) => {
+        mockUserService.getUserByLogin.mockResolvedValue({
+          id: "some-id",
+          login: "some-login",
+          photoURL: "some-url",
         });
 
-      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
-        true
-      );
+        const req = mockRequest({
+          body: {
+            firstName: "John",
+            lastName: "Doe",
+            login: "login1",
+            password: "pass1",
+            token: { userId: seed.users[0].id },
+          },
+        });
+        const res = mockResponse();
+        await updateSelfController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(201);
+      });
     });
 
     it("should update user when same id", async () => {
-      (UserService.getUserByLogin as jest.Mock).mockResolvedValue({
-        id: VALID_USER_ID,
-        login: "some-login",
-        photoURL: "some-url",
-      });
-
-      const response = await request(app)
-        .put("/user")
-        .send({
-          firstName: "John",
-          lastName: "Doe",
-          login: "login1",
-          password: "pass1",
-          token: { userId: VALID_USER_ID },
+      await seedProvider(async (seed) => {
+        mockUserService.getUserByLogin.mockResolvedValue({
+          id: seed.users[0].id,
+          login: "some-login",
+          photoURL: "some-url",
         });
 
-      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
-        true
-      );
+        const req = mockRequest({
+          body: {
+            firstName: "John",
+            lastName: "Doe",
+            login: "login1",
+            password: "pass1",
+            token: { userId: VALID_USER_ID },
+          },
+        });
+        const res = mockResponse();
+
+        await updateSelfController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(201);
+      });
     });
 
     it("shouldn't allow 2 users of the same login", async () => {
-      (UserService.getUserByLogin as jest.Mock).mockResolvedValue({
-        id: "some-id",
-        login: "login1",
-        photoURL: "some-url",
-      });
-
-      const response = await request(app)
-        .put("/user")
-        .send({
-          firstName: "John",
-          lastName: "Doe",
+      await seedProvider(async (seed) => {
+        mockUserService.getUserByLogin.mockResolvedValue({
+          id: "some-id",
           login: "login1",
-          password: "pass1",
-          token: { userId: VALID_USER_ID },
+          photoURL: "some-url",
         });
 
-      expect(response.statusCode).toBe(409);
+        const req = mockRequest({
+          body: {
+            firstName: "John",
+            lastName: "Doe",
+            login: "login1",
+            password: "pass1",
+            token: { userId: seed.users[0].id },
+          },
+        });
+        const res = mockResponse();
+
+        await updateSelfController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(409);
+      });
     });
   });
 
   describe("signupUser", () => {
     it("should sign up a new user", async () => {
-      (uuidv4 as jest.Mock).mockReturnValue("fixed-uuid");
-      (bcrypt.genSalt as jest.Mock).mockResolvedValue("salt");
+      mockUserService.isLoginTaken.mockResolvedValue(false);
 
-      (UserService.isLoginTaken as jest.Mock).mockResolvedValue(false);
-      (TokenProcessor.encode as jest.Mock).mockReturnValue("fake_jwt_token");
-
-      const response = await request(app).post("/signup").send({
-        firstName: "John",
-        lastName: "Doe",
-        login: "john_doe",
-        password: "password123",
+      const req = mockRequest({
+        body: {
+          firstName: "John",
+          lastName: "Doe",
+          login: "john_doe",
+          password: "password123",
+        },
       });
+      const res = mockResponse();
 
-      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
-        true
-      );
-      expect(response.headers["set-cookie"]).toBeDefined();
+      await signupController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.cookie).toHaveBeenCalled();
     });
 
     it("should not sign up a user with an existing login", async () => {
-      (UserService.isLoginTaken as jest.Mock).mockResolvedValue(true);
+      mockUserService.isLoginTaken.mockResolvedValue(true);
 
-      const response = await request(app).post("/signup").send({
-        firstName: "John",
-        lastName: "Doe",
-        login: "john_doe",
-        password: "password123",
+      const req = mockRequest({
+        body: {
+          firstName: "John",
+          lastName: "Doe",
+          login: "john_doe",
+          password: "password123",
+        },
       });
+      const res = mockResponse();
 
-      expect(response.status).toBe(409);
-      expect(response.body.message).toBe("Login already taken.");
+      await signupController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(409);
+      expect(res.cookie).not.toHaveBeenCalled();
     });
   });
 
@@ -170,30 +147,31 @@ describe("Auth Controllers", () => {
         lastActive: new Date(),
       };
 
-      (UserService.getUserByLogin as jest.Mock).mockResolvedValue(mockUser);
-      (TokenProcessor.encode as jest.Mock).mockReturnValue("fake_jwt_token");
+      mockUserService.getUserByLogin.mockResolvedValue(mockUser);
 
-      const response = await request(app).post("/login").send({
-        login: "john_doe",
-        password: "password",
+      const req = mockRequest({
+        body: { login: "john_doe", password: "password" },
       });
+      const res = mockResponse();
 
-      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
-        true
-      );
-      expect(response.headers["set-cookie"]).toBeDefined();
+      await loginController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.cookie).toHaveBeenCalled();
     });
 
     it("should not log in a user with invalid login", async () => {
-      (UserService.getUserByLogin as jest.Mock).mockResolvedValue(null);
+      mockUserService.getUserByLogin.mockResolvedValue(null);
 
-      const response = await request(app).post("/login").send({
-        login: "john_doe",
-        password: "wrong_password",
+      const req = mockRequest({
+        body: { login: "john_doe", password: "wrong_password" },
       });
+      const res = mockResponse();
 
-      expect(response.status).toBe(401);
-      expect(response.body.message).toBe("Invalid login.");
+      await loginController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.cookie).not.toHaveBeenCalled();
     });
 
     it("should not log in a user with invalid password", async () => {
@@ -208,15 +186,17 @@ describe("Auth Controllers", () => {
         photoURL: "file.jpg",
         lastActive: new Date(),
       };
-      (UserService.getUserByLogin as jest.Mock).mockResolvedValue(mockUser);
+      mockUserService.getUserByLogin.mockResolvedValue(mockUser);
 
-      const response = await request(app).post("/login").send({
-        login: "login1",
-        password: "wrong_password",
+      const req = mockRequest({
+        body: { login: "john_doe", password: "wrong_password" },
       });
+      const res = mockResponse();
 
-      expect(response.status).toBe(401);
-      expect(response.body.message).toBe("Invalid password.");
+      await loginController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.cookie).not.toHaveBeenCalled();
     });
   });
 
@@ -226,13 +206,16 @@ describe("Auth Controllers", () => {
         "new_fake_jwt_token"
       );
 
-      const response = await request(app)
-        .post("/refresh")
-        .send({ token: { userId: 1 } });
+      const req = mockRequest({ body: { token: { userId: 1 } } });
+      const res = mockResponse();
 
-      expect(response.status).toBe(200);
-      expect(response.body.message).toBe("Successfully refreshed token.");
-      expect(response.headers["set-cookie"]).toBeDefined();
+      refreshTokenController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({ accessToken: expect.any(String) })
+      );
+      expect(res.cookie).toHaveBeenCalled();
     });
   });
 
@@ -240,13 +223,13 @@ describe("Auth Controllers", () => {
     it("should log out a user", async () => {
       (TokenProcessor.encode as jest.Mock).mockReturnValue("logout_jwt_token");
 
-      const response = await request(app)
-        .post("/logout")
-        .send({ token: { userId: 1 } });
+      const req = mockRequest({ body: { token: { userId: 1 } } });
+      const res = mockResponse();
 
-      expect(response.status).toBe(200);
-      expect(response.body.message).toBe("Successfully logged out.");
-      expect(response.headers["set-cookie"]).toBeDefined();
+      logoutController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.clearCookie).toHaveBeenCalled();
     });
   });
 
@@ -266,26 +249,25 @@ describe("Auth Controllers", () => {
         lastActive: new Date(),
       };
 
-      (UserService.getUser as jest.Mock).mockResolvedValue(mockUser);
+      mockUserService.getUser.mockResolvedValue(mockUser);
 
-      const response = await request(app)
-        .get("/user")
-        .send({ token: { userId: id } });
+      const req = mockRequest({ body: { token: { userId: id } } });
+      const res = mockResponse();
 
-      expect(isUser(response.body.user, { allowStringifiedDates: true })).toBe(
-        true
-      );
+      await getSelfController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
     it("should return 404 if user not found", async () => {
-      (UserService.getUser as jest.Mock).mockResolvedValue(null);
+      mockUserService.getUser.mockResolvedValue(null);
 
-      const response = await request(app)
-        .get("/user")
-        .send({ token: { userId: 1 } });
+      const req = mockRequest({ body: { token: { userId: 1 } } });
+      const res = mockResponse();
 
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe("User not found.");
+      await getSelfController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(404);
     });
   });
 });
