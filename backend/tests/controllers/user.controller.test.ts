@@ -1,4 +1,3 @@
-import { USER_WITHOUT_CREDENTIALS } from "../utils/constants";
 import { searchUserController } from "../../src/controllers/user/searchUser.controller";
 import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
 import { seedProvider } from "../utils/seedProvider";

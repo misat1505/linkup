@@ -1,5 +1,14 @@
 import { Request, Response } from "express";
 
+export const mockFileStorage = {
+  copyFile: jest.fn(),
+  deleteAllFilesInDirectory: jest.fn(),
+  deleteFile: jest.fn(),
+  getSignedUrl: jest.fn(),
+  listFiles: jest.fn(),
+  uploadFile: jest.fn(),
+};
+
 export const mockUserService = {
   searchUsers: jest.fn(),
   updateUser: jest.fn(),
@@ -15,6 +24,7 @@ export function mockRequest(data: Partial<Request> = {}): Request {
     app: {
       services: {
         userService: mockUserService,
+        fileStorage: mockFileStorage,
       },
     },
     t: jest.fn(),
