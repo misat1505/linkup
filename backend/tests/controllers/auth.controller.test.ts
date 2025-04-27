@@ -1,7 +1,6 @@
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { UserWithCredentials } from "../../src/types/User";
 import { v4 as uuidv4 } from "uuid";
-import { VALID_USER_ID } from "../utils/constants";
 import { signupController } from "../../src/controllers/auth/signup.controller";
 import { loginController } from "../../src/controllers/auth/login.controller";
 import { refreshTokenController } from "../../src/controllers/auth/refreshToken.controller";
@@ -53,7 +52,7 @@ describe("Auth Controllers", () => {
             lastName: "Doe",
             login: "login1",
             password: "pass1",
-            token: { userId: VALID_USER_ID },
+            token: { userId: seed.users[0].id },
           },
         });
         const res = mockResponse();

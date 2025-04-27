@@ -1,12 +1,9 @@
-import { VALID_USER_ID } from "../utils/constants";
 import { getFileController } from "../../src/controllers/file/getFile.controller";
 import { getCache } from "../../src/controllers/file/getCache.controller";
 import {
   CACHE_CAPACITY,
   insertToCache,
 } from "../../src/controllers/file/insertToCache.controller";
-import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import { env } from "../../src/config/env";
 import { deleteFromCache } from "../../src/controllers/file/deleteFromCache.controller";
 import {
   mockFileService,
@@ -15,20 +12,14 @@ import {
   mockResponse,
 } from "../utils/mocks";
 
-mockFileService.isUserAvatar.mockResolvedValue(true);
-mockFileService.isChatMessage.mockResolvedValue(true);
-mockFileService.isChatPhoto.mockResolvedValue(true);
-
-const mockChatId = "some-chat-id";
-
-const mockPostId = "post-id";
-
-const token = TokenProcessor.encode(
-  { userId: VALID_USER_ID },
-  env.ACCESS_TOKEN_SECRET
-);
-
 describe("File Controllers", () => {
+  mockFileService.isUserAvatar.mockResolvedValue(true);
+  mockFileService.isChatMessage.mockResolvedValue(true);
+  mockFileService.isChatPhoto.mockResolvedValue(true);
+
+  const mockChatId = "some-chat-id";
+  const mockPostId = "post-id";
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -37,7 +28,7 @@ describe("File Controllers", () => {
     it("shouldn't allow requests without filter", async () => {
       const req = mockRequest({
         params: { filename: "testfile.txt" },
-        body: { token: { userId: VALID_USER_ID } },
+        body: { token: { userId: "userId" } },
         query: {},
       });
       const res = mockResponse();
@@ -53,7 +44,7 @@ describe("File Controllers", () => {
 
         const req = mockRequest({
           params: { filename: "testfile.txt" },
-          body: { token: { userId: VALID_USER_ID } },
+          body: { token: { userId: "userId" } },
           query: { filter: "avatar" },
         });
         const res = mockResponse();
@@ -68,7 +59,7 @@ describe("File Controllers", () => {
 
         const req = mockRequest({
           params: { filename: "testfile.txt" },
-          body: { token: { userId: VALID_USER_ID } },
+          body: { token: { userId: "userId" } },
           query: { filter: "avatar" },
         });
         const res = mockResponse();
@@ -88,7 +79,7 @@ describe("File Controllers", () => {
 
         const req = mockRequest({
           params: { filename: "testfile.txt" },
-          body: { token: { userId: VALID_USER_ID } },
+          body: { token: { userId: "userId" } },
           query: { filter: "chat-photo", chat: mockChatId },
         });
         const res = mockResponse();
@@ -106,7 +97,7 @@ describe("File Controllers", () => {
 
         const req = mockRequest({
           params: { filename: "testfile.txt" },
-          body: { token: { userId: VALID_USER_ID } },
+          body: { token: { userId: "userId" } },
           query: { filter: "chat-message", chat: mockChatId },
         });
         const res = mockResponse();
@@ -122,7 +113,7 @@ describe("File Controllers", () => {
       it("should return 400 if filter is chat message, but no chat given", async () => {
         const req = mockRequest({
           params: { filename: "testfile.txt" },
-          body: { token: { userId: VALID_USER_ID } },
+          body: { token: { userId: "userId" } },
           query: { filter: "chat-message" },
         });
         const res = mockResponse();
@@ -139,7 +130,7 @@ describe("File Controllers", () => {
 
         const req = mockRequest({
           params: { filename: "testfile.txt" },
-          body: { token: { userId: VALID_USER_ID } },
+          body: { token: { userId: "userId" } },
           query: { filter: "cache" },
         });
         const res = mockResponse();
@@ -157,7 +148,7 @@ describe("File Controllers", () => {
 
         const req = mockRequest({
           params: { filename: "testfile.txt" },
-          body: { token: { userId: VALID_USER_ID } },
+          body: { token: { userId: "userId" } },
           query: { filter: "cache" },
         });
         const res = mockResponse();
@@ -174,7 +165,7 @@ describe("File Controllers", () => {
 
         const req = mockRequest({
           params: { filename: "testfile.txt" },
-          body: { token: { userId: VALID_USER_ID } },
+          body: { token: { userId: "userId" } },
           query: { filter: "post", post: mockPostId },
         });
         const res = mockResponse();
@@ -192,7 +183,7 @@ describe("File Controllers", () => {
 
         const req = mockRequest({
           params: { filename: "testfile.txt" },
-          body: { token: { userId: VALID_USER_ID } },
+          body: { token: { userId: "userId" } },
           query: { filter: "post", post: mockPostId },
         });
         const res = mockResponse();
@@ -205,7 +196,7 @@ describe("File Controllers", () => {
       it("shouldn't return 400 if filter is post but no post id given", async () => {
         const req = mockRequest({
           params: { filename: "testfile.txt" },
-          body: { token: { userId: VALID_USER_ID } },
+          body: { token: { userId: "userId" } },
           query: { filter: "post" },
         });
         const res = mockResponse();
@@ -223,7 +214,7 @@ describe("File Controllers", () => {
 
       const req = mockRequest({
         params: { filename: "testfile.txt" },
-        body: { token: { userId: VALID_USER_ID } },
+        body: { token: { userId: "userId" } },
         query: { filter: "post" },
       });
       const res = mockResponse();
@@ -234,7 +225,7 @@ describe("File Controllers", () => {
 
       expect(mockFileStorage.listFiles).toHaveBeenCalledTimes(1);
       expect(mockFileStorage.listFiles).toHaveBeenCalledWith(
-        `cache/${VALID_USER_ID}`
+        `cache/${"userId"}`
       );
     });
   });
@@ -249,7 +240,7 @@ describe("File Controllers", () => {
           buffer: Buffer.from("fake-image-data"),
           originalname: "testfile.jpg",
         } as Express.Multer.File,
-        body: { token: { userId: VALID_USER_ID } },
+        body: { token: { userId: "userId" } },
       });
       const res = mockResponse();
 
@@ -269,7 +260,7 @@ describe("File Controllers", () => {
 
       const req = mockRequest({
         file: { buffer: Buffer.from("fake-image-data") } as Express.Multer.File,
-        body: { token: { userId: VALID_USER_ID } },
+        body: { token: { userId: "userId" } },
       });
       const res = mockResponse();
 
@@ -280,7 +271,7 @@ describe("File Controllers", () => {
 
     it("returns 400 if no file uploaded", async () => {
       const req = mockRequest({
-        body: { token: { userId: VALID_USER_ID } },
+        body: { token: { userId: "userId" } },
       });
       const res = mockResponse();
 
@@ -297,7 +288,7 @@ describe("File Controllers", () => {
 
       const req = mockRequest({
         file: { buffer: Buffer.from("fake-image-data") } as Express.Multer.File,
-        body: { token: { userId: VALID_USER_ID } },
+        body: { token: { userId: "userId" } },
       });
       const res = mockResponse();
 
@@ -311,7 +302,7 @@ describe("File Controllers", () => {
     it("deletes file from cache", async () => {
       const req = mockRequest({
         params: { filename: "url1" },
-        body: { token: { userId: VALID_USER_ID } },
+        body: { token: { userId: "userId" } },
       });
       const res = mockResponse();
 
@@ -321,7 +312,7 @@ describe("File Controllers", () => {
 
       expect(mockFileStorage.deleteFile).toHaveBeenCalledTimes(1);
       expect(mockFileStorage.deleteFile).toHaveBeenCalledWith(
-        `cache/${VALID_USER_ID}/url1`
+        `cache/${"userId"}/url1`
       );
     });
 
@@ -332,7 +323,7 @@ describe("File Controllers", () => {
 
       const req = mockRequest({
         params: { filename: "testfile.txt" },
-        body: { token: { userId: VALID_USER_ID } },
+        body: { token: { userId: "userId" } },
       });
       const res = mockResponse();
 
