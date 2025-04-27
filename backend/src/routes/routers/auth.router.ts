@@ -3,9 +3,7 @@ import { upload } from "../../middlewares/multer";
 import { validate } from "../../middlewares/validate";
 import { signupRules } from "../../validators/auth.validator";
 import { authorize } from "../../middlewares/authorize";
-import { logoutController } from "../../controllers/auth/logout.controller";
-import { getSelfController } from "../../controllers/auth/getSelf.controller";
-import { updateSelfController } from "../../controllers/auth/updateSelf.controller";
+import { AuthControllers } from "../../controllers";
 
 /**
  * Protected Authentication Routes Router.
@@ -15,14 +13,14 @@ import { updateSelfController } from "../../controllers/auth/updateSelf.controll
  */
 const authRouterProtected = Router();
 
-authRouterProtected.post("/logout", logoutController);
-authRouterProtected.get("/user", getSelfController);
+authRouterProtected.post("/logout", AuthControllers.logout);
+authRouterProtected.get("/user", AuthControllers.getSelf);
 authRouterProtected.put(
   "/user",
   upload.single("file"),
   validate(signupRules),
   authorize,
-  updateSelfController
+  AuthControllers.updateSelf
 );
 
 export default authRouterProtected;

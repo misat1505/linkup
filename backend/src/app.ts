@@ -4,8 +4,6 @@ import cookieParser from "cookie-parser";
 import express, { NextFunction, Request, Response } from "express";
 import { env } from "./config/env";
 import { corsMiddleware } from "./config/cors";
-import protectedRoutes from "./routes/protected.routes";
-import publicRoutes from "./routes/public.routes";
 import { initReactions } from "./config/reactions";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./lib/swagger";
@@ -13,6 +11,7 @@ import { prisma } from "./lib/Prisma";
 import i18next from "./i18n";
 import middleware from "i18next-http-middleware";
 import { initializeServices } from "./utils/initializeServices";
+import { Routers } from "./routes";
 
 const app = express();
 
@@ -46,8 +45,8 @@ if (env.NODE_ENV === "development") {
   });
 }
 
-app.use("/", publicRoutes);
-app.use("/", protectedRoutes);
+app.use("/", Routers.publicRoutes);
+app.use("/", Routers.protectedRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (env.NODE_ENV !== "test") console.error(err);
