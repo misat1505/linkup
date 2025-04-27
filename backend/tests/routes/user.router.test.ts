@@ -7,7 +7,7 @@ describe("user router", () => {
   describe("[GET] /search", () => {
     it("should return users", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const token = TestHelpers.createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createToken(seed.users[0].id);
 
         const response = await request(app)
           .get("/users/search?term=Kylian")

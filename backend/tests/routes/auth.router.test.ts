@@ -1,23 +1,19 @@
 import request from "supertest";
 import path from "path";
-import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import { VALID_USER_ID } from "../utils/constants";
 import { isUser } from "../../src/types/guards/user.guard";
 import { env } from "../../src/config/env";
 import { refreshTokenCookieName } from "../../src/config/jwt-cookie";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFileStorage } from "../utils/mocks";
+import { TestHelpers } from "../utils/helpers";
 
 describe("auth router", () => {
-  const token = TokenProcessor.encode(
-    { userId: VALID_USER_ID },
-    env.ACCESS_TOKEN_SECRET
-  );
-
   describe("[PUT] /user", () => {
     it("should update user", async () => {
-      await testWithTransaction(async ({ app }) => {
+      await testWithTransaction(async ({ app, seed }) => {
         app.services.fileStorage = mockFileStorage as any;
+        const token = TestHelpers.createToken(seed.users[0].id);
+
         const newUser = {
           login: "login2",
           password: "pass2",
@@ -129,9 +125,9 @@ describe("auth router", () => {
 
   describe("[POST] /refresh", () => {
     it("should refresh token", async () => {
-      await testWithTransaction(async ({ app }) => {
-        const token = TokenProcessor.encode(
-          { userId: VALID_USER_ID },
+      await testWithTransaction(async ({ app, seed }) => {
+        const token = TestHelpers.createToken(
+          seed.users[0].id,
           env.REFRESH_TOKEN_SECRET
         );
 
@@ -147,7 +143,9 @@ describe("auth router", () => {
 
   describe("[POST] /logout", () => {
     it("should logout user", async () => {
-      await testWithTransaction(async ({ app }) => {
+      await testWithTransaction(async ({ app, seed }) => {
+        const token = TestHelpers.createToken(seed.users[0].id);
+
         const res = await request(app)
           .post("/auth/logout")
           .set("Authorization", `Bearer ${token}`);
@@ -160,7 +158,9 @@ describe("auth router", () => {
 
   describe("[GET] /user", () => {
     it("should get user", async () => {
-      await testWithTransaction(async ({ app }) => {
+      await testWithTransaction(async ({ app, seed }) => {
+        const token = TestHelpers.createToken(seed.users[0].id);
+
         const res = await request(app)
           .get("/auth/user")
           .set("Authorization", `Bearer ${token}`);

@@ -1,9 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
-import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import { VALID_USER_ID } from "../utils/constants";
 import { isPost } from "../../src/types/guards/Post.guard";
-import { env } from "../../src/config/env";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFileStorage } from "../utils/mocks";
 import { TestHelpers } from "../utils/helpers";
@@ -11,25 +7,11 @@ import { TestHelpers } from "../utils/helpers";
 jest.mock("../../src/lib/FileStorage");
 
 describe("posts router", () => {
-  // const token = TokenProcessor.encode(
-  //   { userId: VALID_USER_ID },
-  //   env.ACCESS_TOKEN_SECRET
-  // );
-
-  // const otherUserToken = TokenProcessor.encode(
-  //   { userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61" },
-  //   env.ACCESS_TOKEN_SECRET
-  // );
-
-  // afterEach(() => {
-  //   jest.clearAllMocks();
-  // });
-
   describe("[POST] /posts", () => {
     it("should create a new post", async () => {
       await testWithTransaction(async ({ app, seed }) => {
         app.services.fileStorage = mockFileStorage as any;
-        const token = TestHelpers.createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createToken(seed.users[0].id);
         mockFileStorage.listFiles.mockResolvedValue([]);
 
         const res = await request(app)
@@ -51,7 +33,7 @@ describe("posts router", () => {
   describe("[GET] /posts", () => {
     it("should retrieve a list of posts", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const otherUserToken = TestHelpers.createTokens([seed.users[1].id])[0];
+        const otherUserToken = TestHelpers.createToken(seed.users[1].id);
 
         const res = await request(app)
           .get("/posts")
@@ -70,7 +52,7 @@ describe("posts router", () => {
   describe("[GET] /posts/mine", () => {
     it("should retrieve posts by the authenticated user", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const token = TestHelpers.createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createToken(seed.users[0].id);
 
         const res = await request(app)
           .get("/posts/mine")
@@ -88,7 +70,7 @@ describe("posts router", () => {
   describe("[GET] /posts/:id", () => {
     it("should retrieve a post by its ID", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const token = TestHelpers.createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createToken(seed.users[0].id);
         const postId = seed.posts[0].id;
 
         const res = await request(app)
@@ -108,7 +90,7 @@ describe("posts router", () => {
     it("should update an existing post", async () => {
       await testWithTransaction(async ({ app, seed }) => {
         app.services.fileStorage = mockFileStorage as any;
-        const token = TestHelpers.createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createToken(seed.users[0].id);
         mockFileStorage.listFiles.mockResolvedValue([]);
         const postId = seed.posts[0].id;
 
@@ -133,7 +115,7 @@ describe("posts router", () => {
   describe("[DELETE] /posts/:id", () => {
     it("should delete post correctly", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const token = TestHelpers.createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createToken(seed.users[0].id);
         const postId = seed.posts[0].id;
 
         const res = await request(app)
@@ -148,7 +130,7 @@ describe("posts router", () => {
   describe("[POST] /posts/:id/report", () => {
     it("should report post correctly", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const token = TestHelpers.createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createToken(seed.users[0].id);
         const postId = seed.posts[0].id;
 
         const res = await request(app)

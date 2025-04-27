@@ -7,7 +7,7 @@ describe("friendship router", () => {
   describe("[POST] /friendships", () => {
     it("should create a new friendship", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const token = TestHelpers.createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createToken(seed.users[0].id);
         const res = await request(app)
           .post("/friendships")
           .set("Authorization", `Bearer ${token}`)
@@ -99,7 +99,7 @@ describe("friendship router", () => {
 
     it("shouldn't accept own friendship requests", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const token = TestHelpers.createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createToken(seed.users[0].id);
 
         await request(app)
           .post("/friendships")

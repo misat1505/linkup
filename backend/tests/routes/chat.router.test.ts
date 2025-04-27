@@ -1,5 +1,3 @@
-import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import { VALID_USER_ID } from "../utils/constants";
 import request from "supertest";
 import path from "path";
 import { Message } from "../../src/types/Message";
@@ -8,14 +6,9 @@ import { isMessage } from "../../src/types/guards/message.guard";
 import { isReaction } from "../../src/types/guards/reaction.guard";
 import { Chat } from "../../src/types/Chat";
 import { isUserInChat } from "../../src/types/guards/user.guard";
-import { env } from "../../src/config/env";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFileStorage } from "../utils/mocks";
-
-const token = TokenProcessor.encode(
-  { userId: VALID_USER_ID },
-  env.ACCESS_TOKEN_SECRET
-);
+import { TestHelpers } from "../utils/helpers";
 
 jest.mock("../../src/lib/FileStorage");
 
@@ -27,6 +20,8 @@ describe("chat router", () => {
   describe("[GET] /chats", () => {
     it("should get user chats", async () => {
       await testWithTransaction(async ({ app, seed }) => {
+        const token = TestHelpers.createToken(seed.users[0].id);
+
         const res = await request(app)
           .get("/chats")
           .set("Authorization", `Bearer ${token}`);
@@ -44,6 +39,7 @@ describe("chat router", () => {
     it("should create user chats", async () => {
       await testWithTransaction(async ({ app, seed }) => {
         const userId = seed.users[0].id;
+        const token = TestHelpers.createToken(userId);
         const initialChatsCount = seed.chats.length;
 
         const res = await request(app)
@@ -76,6 +72,7 @@ describe("chat router", () => {
       await testWithTransaction(async ({ app, seed }) => {
         const initialChatsCount = seed.chats.length;
         const userId = seed.users[0].id;
+        const token = TestHelpers.createToken(userId);
 
         const res = await request(app)
           .post("/chats/group")
@@ -106,6 +103,7 @@ describe("chat router", () => {
   describe("[GET] chats/:chatId/messages", () => {
     it("should get chat messages", async () => {
       await testWithTransaction(async ({ app, seed }) => {
+        const token = TestHelpers.createToken(seed.users[0].id);
         const chatId = seed.chats[0].id;
         const messages = seed.messages.filter((m) => m.chatId === chatId);
 
@@ -130,6 +128,7 @@ describe("chat router", () => {
         app.services.fileStorage = mockFileStorage as any;
         const chatId = seed.chats[0].id;
         const messages = seed.messages.filter((m) => m.chatId === chatId);
+        const token = TestHelpers.createToken(seed.users[0].id);
 
         const res = await request(app)
           .post(`/chats/${chatId}/messages`)
@@ -164,6 +163,7 @@ describe("chat router", () => {
       await testWithTransaction(async ({ app, seed }) => {
         const chatId = seed.chats[1].id;
         const messages = seed.messages.filter((m) => m.chatId === chatId);
+        const token = TestHelpers.createToken(seed.users[0].id);
 
         const res = await request(app)
           .get(`/chats/${chatId}/messages`)
@@ -199,6 +199,7 @@ describe("chat router", () => {
         const chatId = seed.chats[1].id;
         const userId = seed.users[0].id;
         const alias = "new alias";
+        const token = TestHelpers.createToken(userId);
 
         const res1 = await request(app)
           .get("/chats")
@@ -235,6 +236,7 @@ describe("chat router", () => {
       await testWithTransaction(async ({ app, seed }) => {
         const chatId = seed.chats[1].id;
         const userId = seed.users[1].id;
+        const token = TestHelpers.createToken(seed.users[0].id);
 
         const res1 = await request(app)
           .get("/chats")
@@ -269,6 +271,7 @@ describe("chat router", () => {
     it("should delete self from group chat", async () => {
       await testWithTransaction(async ({ app, seed }) => {
         const chatId = seed.chats[1].id;
+        const token = TestHelpers.createToken(seed.users[0].id);
 
         const res1 = await request(app)
           .get("/chats")
@@ -298,6 +301,7 @@ describe("chat router", () => {
       await testWithTransaction(async ({ app, seed }) => {
         app.services.fileStorage = mockFileStorage as any;
         const chatId = seed.chats[1].id;
+        const token = TestHelpers.createToken(seed.users[0].id);
 
         const res1 = await request(app)
           .get("/chats")

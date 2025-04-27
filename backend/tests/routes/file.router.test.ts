@@ -1,46 +1,30 @@
 import path from "path";
 import request from "supertest";
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import { VALID_USER_ID } from "../utils/constants";
 import { User } from "../../src/types/User";
 import { Message } from "../../src/types/Message";
 import { env } from "../../src/config/env";
 import { Application } from "express";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFileStorage } from "../utils/mocks";
+import { TestHelpers } from "../utils/helpers";
 
 jest.mock("../../src/lib/FileStorage");
 
-const createTestUser = async (app: Application) => {
-  const login = "valid_login";
-  const password = "valid_password";
-
-  const res = await request(app)
-    .post("/auth/signup")
-    .field("firstName", "Melon")
-    .field("lastName", "Muzg")
-    .field("login", login)
-    .field("password", password)
-    .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
-
-  return res.body.user;
-};
-
 describe("file router", () => {
-  const token = TokenProcessor.encode(
-    { userId: VALID_USER_ID },
-    env.ACCESS_TOKEN_SECRET
-  );
-
   async function createNewUser(app: Application) {
-    const user = await createTestUser(app);
-    const token = TokenProcessor.encode(
-      {
-        userId: user.id,
-      },
-      env.ACCESS_TOKEN_SECRET
-    );
-    return { user, token } as { user: User; token: string };
+    const login = "valid_login";
+    const password = "valid_password";
+
+    const res = await request(app)
+      .post("/auth/signup")
+      .field("firstName", "Melon")
+      .field("lastName", "Muzg")
+      .field("login", login)
+      .field("password", password)
+      .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+
+    return res.body.user as User;
   }
 
   afterEach(() => {
@@ -49,30 +33,38 @@ describe("file router", () => {
 
   describe("[GET] /:filename", () => {
     it("should allow everyone to access avatar", async () => {
-      await testWithTransaction(async ({ app }) => {
-        const { user: newlyCreatedUser, token: newlyCreatedUserToken } =
-          await createNewUser(app);
+      await testWithTransaction(async ({ app, seed }) => {
+        const createdUser = await createNewUser(app);
+        const tokens = TestHelpers.createTokens([
+          seed.users[0].id,
+          createdUser.id,
+        ]);
 
         const res = await request(app)
-          .get(`/files/${newlyCreatedUser.photoURL}?filter=avatar`)
-          .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
+          .get(`/files/${createdUser.photoURL}?filter=avatar`)
+          .set("Authorization", `Bearer ${tokens[1]}`);
         expect(res.statusCode).toBe(200);
 
         const res2 = await request(app)
-          .get(`/files/${newlyCreatedUser.photoURL}?filter=avatar`)
-          .set("Authorization", `Bearer ${token}`);
+          .get(`/files/${createdUser.photoURL}?filter=avatar`)
+          .set("Authorization", `Bearer ${tokens[0]}`);
         expect(res2.statusCode).toBe(200);
       });
     });
 
     it("should allow only people in chat see chat photo", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const { token: newlyCreatedUserToken } = await createNewUser(app);
+        const createdUser = await createNewUser(app);
+        const tokens = TestHelpers.createTokens([
+          seed.users[0].id,
+          createdUser.id,
+        ]);
+
         const {
           body: { chat },
         } = await request(app)
           .post("/chats/group")
-          .set("Authorization", `Bearer ${token}`)
+          .set("Authorization", `Bearer ${tokens[0]}`)
           .field("users[0]", seed.users[0].id)
           .field("users[1]", seed.users[1].id)
           .field("name", "chat name")
@@ -80,7 +72,7 @@ describe("file router", () => {
 
         const res = await request(app)
           .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-          .set("Authorization", `Bearer ${token}`);
+          .set("Authorization", `Bearer ${tokens[0]}`);
         expect(res.statusCode).toBe(200);
 
         const user2Token = TokenProcessor.encode(
@@ -97,19 +89,24 @@ describe("file router", () => {
 
         const res3 = await request(app)
           .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-          .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
+          .set("Authorization", `Bearer ${tokens[1]}`);
         expect(res3.statusCode).toBe(401);
       });
     });
 
     it("should allow only people in chat see files in chat message", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const { token: newlyCreatedUserToken } = await createNewUser(app);
+        const createdUser = await createNewUser(app);
+        const tokens = TestHelpers.createTokens([
+          seed.users[0].id,
+          createdUser.id,
+        ]);
+
         const {
           body: { chat },
         } = await request(app)
           .post("/chats/group")
-          .set("Authorization", `Bearer ${token}`)
+          .set("Authorization", `Bearer ${tokens[0]}`)
           .field("users[0]", seed.users[0].id)
           .field("name", "")
           .field("users[1]", seed.users[1].id);
@@ -118,7 +115,7 @@ describe("file router", () => {
           body: { message },
         } = await request(app)
           .post(`/chats/${chat.id}/messages`)
-          .set("Authorization", `Bearer ${token}`)
+          .set("Authorization", `Bearer ${tokens[0]}`)
           .field("content", "message")
           .attach("files", Buffer.from("message file"), "file1.txt");
 
@@ -126,7 +123,7 @@ describe("file router", () => {
 
         const res = await request(app)
           .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-          .set("Authorization", `Bearer ${token}`);
+          .set("Authorization", `Bearer ${tokens[0]}`);
         expect(res.statusCode).toBe(200);
 
         const user2Token = TokenProcessor.encode(
@@ -143,13 +140,15 @@ describe("file router", () => {
 
         const res3 = await request(app)
           .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-          .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
+          .set("Authorization", `Bearer ${tokens[1]}`);
         expect(res3.statusCode).toBe(401);
       });
     });
 
     it("should allow getting file from cache only by user which uploaded the file", async () => {
-      await testWithTransaction(async ({ app }) => {
+      await testWithTransaction(async ({ app, seed }) => {
+        const token = TestHelpers.createToken(seed.users[0].id);
+
         const res1 = await request(app)
           .post("/files/cache")
           .set("Authorization", `Bearer ${token}`)
@@ -164,19 +163,23 @@ describe("file router", () => {
     });
 
     it("should allow everyone to access file from post", async () => {
-      await testWithTransaction(async ({ app }) => {
-        const { token: newlyCreatedUserToken } = await createNewUser(app);
+      await testWithTransaction(async ({ app, seed }) => {
+        const createdUser = await createNewUser(app);
+        const tokens = TestHelpers.createTokens([
+          seed.users[0].id,
+          createdUser.id,
+        ]);
         const postId = "post-id";
         const filename = "file.txt";
 
         const res2 = await request(app)
           .get(`/files/${filename}?filter=post&post=${postId}`)
-          .set("Authorization", `Bearer ${token}`);
+          .set("Authorization", `Bearer ${tokens[0]}`);
         expect(res2.statusCode).toBe(200);
 
         const res3 = await request(app)
           .get(`/files/${filename}?filter=post&post=${postId}`)
-          .set("Authorization", `Bearer ${newlyCreatedUserToken}`);
+          .set("Authorization", `Bearer ${tokens[1]}`);
         expect(res3.statusCode).toBe(200);
       });
     });
@@ -184,8 +187,10 @@ describe("file router", () => {
 
   describe("cache routes", () => {
     it("handles cache correctly", async () => {
-      await testWithTransaction(async ({ app }) => {
+      await testWithTransaction(async ({ app, seed }) => {
         app.services.fileStorage = mockFileStorage as any;
+        const token = TestHelpers.createToken(seed.users[0].id);
+
         const res1 = await request(app)
           .get("/files/cache")
           .set("Authorization", `Bearer ${token}`);
