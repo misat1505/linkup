@@ -19,10 +19,6 @@ case "$command" in
         npm i
         npm run e2e
         ;;
-    test)
-        echo "Running application for backend testing..."
-        docker compose -f ./docker/docker-compose.test.yml up --build
-        ;;
     dev)
         echo "Running application for backend development..."
         docker compose -f ./docker/docker-compose.yml up database socket minio --build
