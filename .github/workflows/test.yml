@@ -19,6 +19,9 @@ jobs:
         with:
           node-version: "21"
 
+      - name: Copy envs for tests
+        run: cp backend/env.example backend/.env.test
+
       - name: Run Tests
         run: |
           cd backend
