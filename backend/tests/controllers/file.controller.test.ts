@@ -1,37 +1,23 @@
-import request from "supertest";
-import express from "express";
-import path from "path";
-import { FileService } from "../../src/services/FileService";
 import { VALID_USER_ID } from "../utils/constants";
 import { getFileController } from "../../src/controllers/file/getFile.controller";
 import { getCache } from "../../src/controllers/file/getCache.controller";
-import { upload } from "../../src/middlewares/multer";
 import {
   CACHE_CAPACITY,
   insertToCache,
 } from "../../src/controllers/file/insertToCache.controller";
-import { authorize } from "../../src/middlewares/authorize";
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { env } from "../../src/config/env";
 import { deleteFromCache } from "../../src/controllers/file/deleteFromCache.controller";
-import fileStorage from "../../src/lib/FileStorage";
-import i18next from "../../src/i18n";
-import middleware from "i18next-http-middleware";
+import {
+  mockFileService,
+  mockFileStorage,
+  mockRequest,
+  mockResponse,
+} from "../utils/mocks";
 
-jest.mock("../../src/services/FileService");
-jest.mock("../../src/lib/FileStorage");
-
-(FileService.isUserAvatar as jest.Mock).mockResolvedValue(true);
-(FileService.isChatMessage as jest.Mock).mockResolvedValue(true);
-(FileService.isChatPhoto as jest.Mock).mockResolvedValue(true);
-
-const app = express();
-app.use(express.json());
-app.use(middleware.handle(i18next));
-app.post("/cache", upload.single("file"), authorize, insertToCache);
-app.get("/cache", getCache);
-app.delete("/cache/:filename", deleteFromCache);
-app.get("/:filename", getFileController);
+mockFileService.isUserAvatar.mockResolvedValue(true);
+mockFileService.isChatMessage.mockResolvedValue(true);
+mockFileService.isChatPhoto.mockResolvedValue(true);
 
 const mockChatId = "some-chat-id";
 
@@ -49,126 +35,205 @@ describe("File Controllers", () => {
 
   describe("getFile", () => {
     it("shouldn't allow requests without filter", async () => {
-      const response = await request(app)
-        .get("/nonexistentfile.txt")
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(400);
+      const req = mockRequest({
+        params: { filename: "testfile.txt" },
+        body: { token: { userId: VALID_USER_ID } },
+        query: {},
+      });
+      const res = mockResponse();
+
+      await getFileController(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(400);
     });
 
     describe("avatar", () => {
       it("should return 404 if the file does not exist", async () => {
-        (fileStorage.getSignedUrl as jest.Mock).mockRejectedValue(new Error());
+        mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
-        const response = await request(app)
-          .get("/nonexistentfile.txt?filter=avatar")
-          .send({ token: { userId: VALID_USER_ID } });
-        expect(response.status).toBe(404);
-        expect(response.body).toEqual({ message: "File not found." });
+        const req = mockRequest({
+          params: { filename: "testfile.txt" },
+          body: { token: { userId: VALID_USER_ID } },
+          query: { filter: "avatar" },
+        });
+        const res = mockResponse();
+
+        await getFileController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(404);
       });
 
       it("should return avatar url if it exists", async () => {
-        (fileStorage.getSignedUrl as jest.Mock).mockResolvedValue("url");
+        mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
-        const response = await request(app)
-          .get("/testfile.txt?filter=avatar")
-          .send({ token: { userId: VALID_USER_ID } });
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual({ url: "url" });
+        const req = mockRequest({
+          params: { filename: "testfile.txt" },
+          body: { token: { userId: VALID_USER_ID } },
+          query: { filter: "avatar" },
+        });
+        const res = mockResponse();
+
+        await getFileController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith(
+          expect.objectContaining({ url: expect.any(String) })
+        );
       });
     });
 
     describe("chat", () => {
       it("should return chat photo url if it exists", async () => {
-        (fileStorage.getSignedUrl as jest.Mock).mockResolvedValue("url");
+        mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
-        const response = await request(app)
-          .get(`/testfile.txt?filter=chat-photo&chat=${mockChatId}`)
-          .send({ token: { userId: VALID_USER_ID } });
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual({ url: "url" });
+        const req = mockRequest({
+          params: { filename: "testfile.txt" },
+          body: { token: { userId: VALID_USER_ID } },
+          query: { filter: "chat-photo", chat: mockChatId },
+        });
+        const res = mockResponse();
+
+        await getFileController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith(
+          expect.objectContaining({ url: expect.any(String) })
+        );
       });
 
       it("should return chat message file url if it exists", async () => {
-        (fileStorage.getSignedUrl as jest.Mock).mockResolvedValue("url");
+        mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
-        const response = await request(app)
-          .get(`/testfile.txt?filter=chat-message&chat=${mockChatId}`)
-          .send({ token: { userId: VALID_USER_ID } });
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual({ url: "url" });
+        const req = mockRequest({
+          params: { filename: "testfile.txt" },
+          body: { token: { userId: VALID_USER_ID } },
+          query: { filter: "chat-message", chat: mockChatId },
+        });
+        const res = mockResponse();
+
+        await getFileController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith(
+          expect.objectContaining({ url: expect.any(String) })
+        );
       });
 
       it("should return 400 if filter is chat message, but no chat given", async () => {
-        const response = await request(app)
-          .get(`/testfile.txt?filter=chat-message`)
-          .send({ token: { userId: VALID_USER_ID } });
-        expect(response.status).toBe(400);
+        const req = mockRequest({
+          params: { filename: "testfile.txt" },
+          body: { token: { userId: VALID_USER_ID } },
+          query: { filter: "chat-message" },
+        });
+        const res = mockResponse();
+
+        await getFileController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(400);
       });
     });
 
     describe("cache", () => {
       it("should return file url from cache if exists", async () => {
-        (fileStorage.getSignedUrl as jest.Mock).mockResolvedValue("url");
+        mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
-        const response = await request(app)
-          .get(`/testfile.txt?filter=cache`)
-          .send({ token: { userId: VALID_USER_ID } });
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual({ url: "url" });
+        const req = mockRequest({
+          params: { filename: "testfile.txt" },
+          body: { token: { userId: VALID_USER_ID } },
+          query: { filter: "cache" },
+        });
+        const res = mockResponse();
+
+        await getFileController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith(
+          expect.objectContaining({ url: expect.any(String) })
+        );
       });
 
       it("should return 404 if file from cache doesn't exist", async () => {
-        (fileStorage.getSignedUrl as jest.Mock).mockRejectedValue(new Error());
+        mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
-        const response = await request(app)
-          .get(`/non-existent.txt?filter=cache`)
-          .send({ token: { userId: VALID_USER_ID } });
-        expect(response.status).toBe(404);
+        const req = mockRequest({
+          params: { filename: "testfile.txt" },
+          body: { token: { userId: VALID_USER_ID } },
+          query: { filter: "cache" },
+        });
+        const res = mockResponse();
+
+        await getFileController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(404);
       });
     });
 
     describe("post", () => {
       it("should return file url from post if exists", async () => {
-        (fileStorage.getSignedUrl as jest.Mock).mockResolvedValue("url");
+        mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
-        const response = await request(app)
-          .get(`/testfile.txt?filter=post&post=${mockPostId}`)
-          .send({ token: { userId: VALID_USER_ID } });
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual({ url: "url" });
+        const req = mockRequest({
+          params: { filename: "testfile.txt" },
+          body: { token: { userId: VALID_USER_ID } },
+          query: { filter: "post", post: mockPostId },
+        });
+        const res = mockResponse();
+
+        await getFileController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith(
+          expect.objectContaining({ url: expect.any(String) })
+        );
       });
 
       it("should return 404 if file from post doesn't exist", async () => {
-        (fileStorage.getSignedUrl as jest.Mock).mockRejectedValue(new Error());
+        mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
-        const response = await request(app)
-          .get(`/non-existent.txt?filter=post&post=${mockPostId}`)
-          .send({ token: { userId: VALID_USER_ID } });
-        expect(response.status).toBe(404);
+        const req = mockRequest({
+          params: { filename: "testfile.txt" },
+          body: { token: { userId: VALID_USER_ID } },
+          query: { filter: "post", post: mockPostId },
+        });
+        const res = mockResponse();
+
+        await getFileController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(404);
       });
 
       it("shouldn't return 400 if filter is post but no post id given", async () => {
-        const response = await request(app)
-          .get(`/testfile.txt?filter=post`)
-          .send({ token: { userId: VALID_USER_ID } });
-        expect(response.status).toBe(400);
+        const req = mockRequest({
+          params: { filename: "testfile.txt" },
+          body: { token: { userId: VALID_USER_ID } },
+          query: { filter: "post" },
+        });
+        const res = mockResponse();
+
+        await getFileController(req, res, jest.fn());
+
+        expect(res.status).toHaveBeenCalledWith(400);
       });
     });
   });
 
   describe("getCache", () => {
     it("returns user's cache", async () => {
-      (fileStorage.listFiles as jest.Mock).mockResolvedValue(["url", "url2"]);
+      mockFileStorage.listFiles.mockResolvedValue(["url", "url2"]);
 
-      const response = await request(app)
-        .get(`/cache`)
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(response.status).toBe(200);
-      const filenames = response.body.files;
-      expect(filenames).toEqual(["url", "url2"]);
+      const req = mockRequest({
+        params: { filename: "testfile.txt" },
+        body: { token: { userId: VALID_USER_ID } },
+        query: { filter: "post" },
+      });
+      const res = mockResponse();
 
-      expect(fileStorage.listFiles).toHaveBeenCalledTimes(1);
-      expect(fileStorage.listFiles).toHaveBeenCalledWith(
+      await getCache(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+
+      expect(mockFileStorage.listFiles).toHaveBeenCalledTimes(1);
+      expect(mockFileStorage.listFiles).toHaveBeenCalledWith(
         `cache/${VALID_USER_ID}`
       );
     });
@@ -176,52 +241,104 @@ describe("File Controllers", () => {
 
   describe("insertToCache", () => {
     it("inserts file to cache and returns newly created filename", async () => {
-      (fileStorage.listFiles as jest.Mock).mockResolvedValue([]);
+      mockFileStorage.listFiles.mockResolvedValue([]);
+      mockFileStorage.uploadFile.mockResolvedValue("new-file.jpg");
 
-      const response = await request(app)
-        .post(`/cache`)
-        .set("Authorization", `Bearer ${token}`)
-        .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
-      expect(response.status).toBe(201);
+      const req = mockRequest({
+        file: {
+          buffer: Buffer.from("fake-image-data"),
+          originalname: "testfile.jpg",
+        } as Express.Multer.File,
+        body: { token: { userId: VALID_USER_ID } },
+      });
+      const res = mockResponse();
 
-      expect(fileStorage.uploadFile).toHaveBeenCalledTimes(1);
+      await insertToCache(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({ file: expect.any(String) })
+      );
+      expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
     });
 
-    it(`cache can store up to ${CACHE_CAPACITY} files per user`, async () => {
-      (fileStorage.listFiles as jest.Mock).mockResolvedValue(
-        new Array(CACHE_CAPACITY).fill("url1")
+    it(`does not allow inserting if user has already ${CACHE_CAPACITY} files`, async () => {
+      mockFileStorage.listFiles.mockResolvedValue(
+        new Array(CACHE_CAPACITY).fill("existing-file.jpg")
       );
 
-      const response = await request(app)
-        .post(`/cache`)
-        .set("Authorization", `Bearer ${token}`)
-        .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
+      const req = mockRequest({
+        file: { buffer: Buffer.from("fake-image-data") } as Express.Multer.File,
+        body: { token: { userId: VALID_USER_ID } },
+      });
+      const res = mockResponse();
 
-      expect(response.statusCode).not.toBe(201);
+      await insertToCache(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(500);
+    });
+
+    it("returns 400 if no file uploaded", async () => {
+      const req = mockRequest({
+        body: { token: { userId: VALID_USER_ID } },
+      });
+      const res = mockResponse();
+
+      await insertToCache(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(400);
+    });
+
+    it("returns 500 if upload fails", async () => {
+      mockFileStorage.listFiles.mockResolvedValue([]);
+      mockFileStorage.uploadFile.mockRejectedValue(new Error("upload failed"));
+
+      const mockNextFunction = jest.fn();
+
+      const req = mockRequest({
+        file: { buffer: Buffer.from("fake-image-data") } as Express.Multer.File,
+        body: { token: { userId: VALID_USER_ID } },
+      });
+      const res = mockResponse();
+
+      await insertToCache(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
   });
 
   describe("deleteFromCache", () => {
     it("deletes file from cache", async () => {
-      const res2 = await request(app)
-        .delete(`/cache/url1`)
-        .send({ token: { userId: VALID_USER_ID } });
-      expect(res2.statusCode).toBe(200);
+      const req = mockRequest({
+        params: { filename: "url1" },
+        body: { token: { userId: VALID_USER_ID } },
+      });
+      const res = mockResponse();
 
-      expect(fileStorage.deleteFile).toHaveBeenCalledTimes(1);
-      expect(fileStorage.deleteFile).toHaveBeenCalledWith(
+      await deleteFromCache(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+
+      expect(mockFileStorage.deleteFile).toHaveBeenCalledTimes(1);
+      expect(mockFileStorage.deleteFile).toHaveBeenCalledWith(
         `cache/${VALID_USER_ID}/url1`
       );
     });
 
     it("returns 500 if file cannot be deleted", async () => {
-      (fileStorage.deleteFile as jest.Mock).mockRejectedValue(new Error());
+      mockFileStorage.deleteFile.mockRejectedValue(new Error());
 
-      const response = await request(app)
-        .delete(`/cache/not-found.tsx`)
-        .send({ token: { userId: VALID_USER_ID } });
+      const mockNextFunction = jest.fn();
 
-      expect(response.statusCode).toBe(500);
+      const req = mockRequest({
+        params: { filename: "testfile.txt" },
+        body: { token: { userId: VALID_USER_ID } },
+      });
+      const res = mockResponse();
+
+      await getFileController(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
   });
 });

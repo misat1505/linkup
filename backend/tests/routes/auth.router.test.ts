@@ -5,21 +5,14 @@ import { VALID_USER_ID } from "../utils/constants";
 import { isUser } from "../../src/types/guards/user.guard";
 import { env } from "../../src/config/env";
 import { refreshTokenCookieName } from "../../src/config/jwt-cookie";
-// import fileStorage from "../../src/lib/FileStorage";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFileStorage } from "../utils/mocks";
-
-// jest.mock("../../src/lib/FileStorage");
 
 describe("auth router", () => {
   const token = TokenProcessor.encode(
     { userId: VALID_USER_ID },
     env.ACCESS_TOKEN_SECRET
   );
-
-  // afterEach(() => {
-  //   jest.clearAllMocks;
-  // });
 
   describe("[PUT] /user", () => {
     it("should update user", async () => {
