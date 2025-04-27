@@ -10,7 +10,6 @@ import { initReactions } from "./config/reactions";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./lib/swagger";
 import { prisma } from "./lib/Prisma";
-import expressStatusMonitor from "express-status-monitor";
 import i18next from "./i18n";
 import middleware from "i18next-http-middleware";
 import { initializeServices } from "./utils/initializeServices";
@@ -27,7 +26,9 @@ if (isSentryActive) {
     tracesSampleRate: 1.0,
   });
 
-  app.use(expressStatusMonitor());
+  import("express-status-monitor").then(({ default: expressStatusMonitor }) => {
+    app.use(expressStatusMonitor());
+  });
 }
 
 app.use(corsMiddleware);
