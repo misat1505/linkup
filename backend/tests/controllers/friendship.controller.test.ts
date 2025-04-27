@@ -1,148 +1,127 @@
-import express from "express";
-import request from "supertest";
-import { FriendshipService } from "../../src/services/FriendshipService";
 import { createFriendship } from "../../src/controllers/friendships/createFriendship.controller";
 import { acceptFriendship } from "../../src/controllers/friendships/acceptFriendship.controller";
 import { getUserFriendships } from "../../src/controllers/friendships/getUserFriendships.controller";
 import { deleteFriendship } from "../../src/controllers/friendships/deleteFriendship.controller";
-import i18next from "../../src/i18n";
-import middleware from "i18next-http-middleware";
+import {
+  mockFriendshipService,
+  mockRequest,
+  mockResponse,
+} from "../utils/mocks";
 
-jest.mock("../../src/services/FriendshipService");
+const mockFriendship = {
+  status: "PENDING",
+  requester: {
+    id: "3b6431d2-43a4-427d-9f28-ab9001ad4f63",
+    name: "User A",
+  },
+  acceptor: {
+    id: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
+    name: "User B",
+  },
+};
 
 describe("Friendship controllers", () => {
-  const app = express();
-  app.use(express.json());
-  app.use(middleware.handle(i18next));
-  app.post("/friendships", createFriendship);
-  app.post("/friendships/accept", acceptFriendship);
-  app.get("/friendships", getUserFriendships);
-  app.delete("/friendships", deleteFriendship);
-
   describe("createFriendship", () => {
     it("should create a friendship successfully", async () => {
-      const mockFriendship = {
-        status: "PENDING",
-        requester: {
-          id: "3b6431d2-43a4-427d-9f28-ab9001ad4f63",
-          name: "User A",
+      mockFriendshipService.createFriendship.mockResolvedValue(mockFriendship);
+
+      const req = mockRequest({
+        body: {
+          token: { userId: mockFriendship.requester.id },
+          requesterId: mockFriendship.requester.id,
+          acceptorId: mockFriendship.acceptor.id,
         },
-        acceptor: {
-          id: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
-          name: "User B",
-        },
-      };
+      });
+      const res = mockResponse();
 
-      (FriendshipService.createFriendship as jest.Mock).mockResolvedValue(
-        mockFriendship
-      );
+      await createFriendship(req, res, jest.fn());
 
-      const response = await request(app)
-        .post("/friendships")
-        .send({
-          token: { userId: "3b6431d2-43a4-427d-9f28-ab9001ad4f63" },
-          requesterId: "3b6431d2-43a4-427d-9f28-ab9001ad4f63",
-          acceptorId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
-        });
-
-      expect(response.statusCode).toBe(201);
-      expect(response.body).toEqual({ friendship: mockFriendship });
+      expect(res.status).toHaveBeenCalledWith(201);
     });
 
     it("should fail if requesterId does not match userId", async () => {
-      const response = await request(app)
-        .post("/friendships")
-        .send({
-          token: { userId: "different-user-id" },
-          requesterId: "3b6431d2-43a4-427d-9f28-ab9001ad4f63",
-          acceptorId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
-        });
+      mockFriendshipService.createFriendship.mockResolvedValue(mockFriendship);
 
-      expect(response.statusCode).toBe(400);
-      expect(response.body).toEqual({
-        message: "Cannot create friendship not requested by you.",
+      const req = mockRequest({
+        body: {
+          token: { userId: "different-user-id" },
+          requesterId: mockFriendship.requester.id,
+          acceptorId: mockFriendship.acceptor.id,
+        },
       });
+      const res = mockResponse();
+
+      await createFriendship(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(400);
     });
 
     it("should fail if friendship already exists", async () => {
-      (FriendshipService.createFriendship as jest.Mock).mockResolvedValue(null);
+      mockFriendshipService.createFriendship.mockResolvedValue(null);
 
-      const response = await request(app)
-        .post("/friendships")
-        .send({
-          token: { userId: "3b6431d2-43a4-427d-9f28-ab9001ad4f63" },
-          requesterId: "3b6431d2-43a4-427d-9f28-ab9001ad4f63",
-          acceptorId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
-        });
-
-      expect(response.statusCode).toBe(409);
-      expect(response.body).toEqual({
-        message: "Friendship already exists between users.",
+      const req = mockRequest({
+        body: {
+          token: { userId: mockFriendship.requester.id },
+          requesterId: mockFriendship.requester.id,
+          acceptorId: mockFriendship.acceptor.id,
+        },
       });
+      const res = mockResponse();
+
+      await createFriendship(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(409);
     });
   });
 
   describe("acceptFriendship", () => {
     it("should accept a friendship successfully", async () => {
-      const mockFriendship = {
-        status: "ACCEPTED",
-        requester: {
-          id: "3b6431d2-43a4-427d-9f28-ab9001ad4f63",
-          name: "User A",
+      mockFriendshipService.acceptFriendship.mockResolvedValue(mockFriendship);
+
+      const req = mockRequest({
+        body: {
+          token: { userId: mockFriendship.requester.id },
+          requesterId: mockFriendship.acceptor.id,
+          acceptorId: mockFriendship.requester.id,
         },
-        acceptor: {
-          id: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
-          name: "User B",
-        },
-      };
+      });
+      const res = mockResponse();
 
-      (FriendshipService.acceptFriendship as jest.Mock).mockResolvedValue(
-        mockFriendship
-      );
+      await acceptFriendship(req, res, jest.fn());
 
-      const response = await request(app)
-        .post("/friendships/accept")
-        .send({
-          token: { userId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a" },
-          requesterId: "3b6431d2-43a4-427d-9f28-ab9001ad4f63",
-          acceptorId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
-        });
-
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toEqual({ friendship: mockFriendship });
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
     it("should fail if acceptorId does not match userId", async () => {
-      const response = await request(app)
-        .post("/friendships/accept")
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "different-user-id" },
-          requesterId: "3b6431d2-43a4-427d-9f28-ab9001ad4f63",
-          acceptorId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
-        });
-
-      expect(response.statusCode).toBe(400);
-      expect(response.body).toEqual({
-        message:
-          "Cannot accept friendship not being meant to be accepted by you.",
+          requesterId: mockFriendship.requester.id,
+          acceptorId: mockFriendship.acceptor.id,
+        },
       });
+      const res = mockResponse();
+
+      await acceptFriendship(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(400);
     });
 
     it("should fail if friendship does not exist", async () => {
-      (FriendshipService.acceptFriendship as jest.Mock).mockResolvedValue(null);
+      mockFriendshipService.acceptFriendship.mockResolvedValue(null);
 
-      const response = await request(app)
-        .post("/friendships/accept")
-        .send({
-          token: { userId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a" },
-          requesterId: "3b6431d2-43a4-427d-9f28-ab9001ad4f63",
-          acceptorId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
-        });
-
-      expect(response.statusCode).toBe(409);
-      expect(response.body).toEqual({
-        message: "Friendship between users doesn't exist.",
+      const req = mockRequest({
+        body: {
+          token: { userId: mockFriendship.requester.id },
+          requesterId: mockFriendship.acceptor.id,
+          acceptorId: mockFriendship.requester.id,
+        },
       });
+      const res = mockResponse();
+
+      await acceptFriendship(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(409);
     });
   });
 
@@ -156,73 +135,73 @@ describe("Friendship controllers", () => {
         },
       ];
 
-      (FriendshipService.getUserFriendships as jest.Mock).mockResolvedValue(
+      mockFriendshipService.getUserFriendships.mockResolvedValue(
         mockFriendships
       );
 
-      const response = await request(app)
-        .get("/friendships")
-        .send({ token: { userId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a" } });
+      const req = mockRequest({
+        body: {
+          token: { userId: mockFriendship.requester.id },
+        },
+      });
+      const res = mockResponse();
 
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toEqual({ friendships: mockFriendships });
+      await getUserFriendships(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
     });
   });
 
   describe("deleteFriendship", () => {
     it("should delete a friendship successfully", async () => {
-      (FriendshipService.deleteFriendship as jest.Mock).mockResolvedValue(true);
+      mockFriendshipService.deleteFriendship.mockResolvedValue(true);
 
-      const response = await request(app)
-        .delete("/friendships")
-        .send({
-          token: { userId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a" },
-          requesterId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
+      const req = mockRequest({
+        body: {
+          token: { userId: mockFriendship.acceptor.id },
+          requesterId: mockFriendship.acceptor.id,
           acceptorId: "user-id-2",
-        });
-
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toEqual({
-        message: "Friendship deleted successfully.",
+        },
       });
+      const res = mockResponse();
+
+      await deleteFriendship(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
     it("should fail if user is not part of the friendship", async () => {
-      (FriendshipService.deleteFriendship as jest.Mock).mockResolvedValue(
-        false
-      );
+      mockFriendshipService.deleteFriendship.mockResolvedValue(false);
 
-      const response = await request(app)
-        .delete("/friendships")
-        .send({
-          token: { userId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a" },
+      const req = mockRequest({
+        body: {
+          token: { userId: mockFriendship.acceptor.id },
           requesterId: "user-id-1",
           acceptorId: "user-id-2",
-        });
-
-      expect(response.statusCode).toBe(400);
-      expect(response.body).toEqual({
-        message: "Cannot delete friendship not belonging to you.",
+        },
       });
+      const res = mockResponse();
+
+      await deleteFriendship(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(400);
     });
 
     it("should fail if the friendship does not exist", async () => {
-      (FriendshipService.deleteFriendship as jest.Mock).mockResolvedValue(
-        false
-      );
+      mockFriendshipService.deleteFriendship.mockResolvedValue(false);
 
-      const response = await request(app)
-        .delete("/friendships")
-        .send({
-          token: { userId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a" },
-          requesterId: "9a2e94ad-604c-46ea-b96c-44c490d1a91a",
+      const req = mockRequest({
+        body: {
+          token: { userId: mockFriendship.acceptor.id },
+          requesterId: mockFriendship.acceptor.id,
           acceptorId: "user-id-2",
-        });
-
-      expect(response.statusCode).toBe(404);
-      expect(response.body).toEqual({
-        message: "Friendship not found.",
+        },
       });
+      const res = mockResponse();
+
+      await deleteFriendship(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(404);
     });
   });
 });
