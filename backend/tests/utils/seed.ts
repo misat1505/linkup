@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 // import { z } from "zod";
-import { User } from "../../src/types/User";
+import { User, UserWithCredentials } from "../../src/types/User";
 import { Post } from "../../src/types/Post";
 import { userSelect } from "../../src/utils/prisma/userSelect";
 import { postChatSelect } from "../../src/utils/prisma/postChatSelect";
@@ -33,7 +33,7 @@ type MessageEntity = {
 };
 
 export type TestSeed = {
-  users: User[];
+  users: UserWithCredentials[];
   posts: Post[];
   chats: ChatEntity[];
   messages: MessageEntity[];

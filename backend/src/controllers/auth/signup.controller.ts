@@ -115,6 +115,7 @@ export const signupController = async (
       .status(201)
       .json({ user: UserService.removeCredentials(user), accessToken });
   } catch (e) {
+    console.log(e);
     next(new Error(req.t("auth.controllers.signup.failure")));
   }
 };
