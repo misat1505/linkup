@@ -1,135 +1,148 @@
-import app from "../../src/app";
 import { env } from "../../src/config/env";
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { isFriendship } from "../../src/types/guards/friendship.guard";
-import { USER } from "../utils/constants";
+import { User } from "../../src/types/User";
 import request from "supertest";
-
-const user1Token = TokenProcessor.encode(
-  { userId: USER.id },
-  env.ACCESS_TOKEN_SECRET
-);
-
-const user2Id = "935719fa-05c4-42c4-9b02-2be3fefb6e61";
-
-const user2Token = TokenProcessor.encode(
-  { userId: user2Id },
-  env.ACCESS_TOKEN_SECRET
-);
+import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("friendship router", () => {
+  function createTokens(ids: User["id"][]) {
+    return ids.map((id) =>
+      TokenProcessor.encode({ userId: id }, env.ACCESS_TOKEN_SECRET)
+    );
+  }
+
   describe("[POST] /friendships", () => {
     it("should create a new friendship", async () => {
-      const res = await request(app)
-        .post("/friendships")
-        .set("Authorization", `Bearer ${user1Token}`)
-        .send({
-          requesterId: USER.id,
-          acceptorId: user2Id,
-        });
+      await testWithTransaction(async ({ app, seed }) => {
+        const token = createTokens([seed.users[0].id])[0];
+        const res = await request(app)
+          .post("/friendships")
+          .set("Authorization", `Bearer ${token}`)
+          .send({
+            requesterId: seed.users[0].id,
+            acceptorId: seed.users[1].id,
+          });
 
-      expect(res.statusCode).toEqual(201);
-      expect(
-        isFriendship(res.body.friendship, { allowStringifiedDates: true })
-      ).toBe(true);
+        expect(res.statusCode).toEqual(201);
+        expect(
+          isFriendship(res.body.friendship, { allowStringifiedDates: true })
+        ).toBe(true);
+      });
     });
   });
 
   describe("[GET] /friendships", () => {
     it("should return friendships", async () => {
-      await request(app)
-        .post("/friendships")
-        .set("Authorization", `Bearer ${user1Token}`)
-        .send({
-          requesterId: USER.id,
-          acceptorId: user2Id,
+      await testWithTransaction(async ({ app, seed }) => {
+        const tokens = createTokens([seed.users[0].id, seed.users[1].id]);
+
+        await request(app)
+          .post("/friendships")
+          .set("Authorization", `Bearer ${tokens[0]}`)
+          .send({
+            requesterId: seed.users[0].id,
+            acceptorId: seed.users[1].id,
+          });
+
+        const res1 = await request(app)
+          .get("/friendships")
+          .set("Authorization", `Bearer ${tokens[0]}`);
+
+        expect(res1.body.friendships.length).toBe(1);
+        res1.body.friendships.forEach((friendship: any) => {
+          expect(
+            isFriendship(friendship, { allowStringifiedDates: true })
+          ).toBe(true);
         });
 
-      const res1 = await request(app)
-        .get("/friendships")
-        .set("Authorization", `Bearer ${user1Token}`);
+        const res2 = await request(app)
+          .get("/friendships")
+          .set("Authorization", `Bearer ${tokens[1]}`);
 
-      expect(res1.body.friendships.length).toBe(1);
-      res1.body.friendships.forEach((friendship: any) => {
-        expect(isFriendship(friendship, { allowStringifiedDates: true })).toBe(
-          true
-        );
-      });
-
-      const res2 = await request(app)
-        .get("/friendships")
-        .set("Authorization", `Bearer ${user2Token}`);
-
-      expect(res2.body.friendships.length).toBe(1);
-      res2.body.friendships.forEach((friendship: any) => {
-        expect(isFriendship(friendship, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        expect(res2.body.friendships.length).toBe(1);
+        res2.body.friendships.forEach((friendship: any) => {
+          expect(
+            isFriendship(friendship, { allowStringifiedDates: true })
+          ).toBe(true);
+        });
       });
     });
   });
 
   describe("[GET] /friendships", () => {
     it("should accept friendship", async () => {
-      await request(app)
-        .post("/friendships")
-        .set("Authorization", `Bearer ${user1Token}`)
-        .send({
-          requesterId: USER.id,
-          acceptorId: user2Id,
-        });
+      await testWithTransaction(async ({ app, seed }) => {
+        const tokens = createTokens([seed.users[0].id, seed.users[1].id]);
 
-      const res1 = await request(app)
-        .post("/friendships/accept")
-        .set("Authorization", `Bearer ${user2Token}`)
-        .send({
-          requesterId: USER.id,
-          acceptorId: user2Id,
-        });
+        await request(app)
+          .post("/friendships")
+          .set("Authorization", `Bearer ${tokens[0]}`)
+          .send({
+            requesterId: seed.users[0].id,
+            acceptorId: seed.users[1].id,
+          });
 
-      expect(
-        isFriendship(res1.body.friendship, {
-          allowStringifiedDates: true,
-        })
-      ).toBe(true);
+        const res1 = await request(app)
+          .post("/friendships/accept")
+          .set("Authorization", `Bearer ${tokens[1]}`)
+          .send({
+            requesterId: seed.users[0].id,
+            acceptorId: seed.users[1].id,
+          });
+
+        expect(
+          isFriendship(res1.body.friendship, {
+            allowStringifiedDates: true,
+          })
+        ).toBe(true);
+      });
     });
 
     it("shouldn't accept own friendship requests", async () => {
-      await request(app)
-        .post("/friendships")
-        .set("Authorization", `Bearer ${user1Token}`)
-        .send({
-          requesterId: USER.id,
-          acceptorId: user2Id,
-        });
+      await testWithTransaction(async ({ app, seed }) => {
+        const token = createTokens([seed.users[0].id])[0];
 
-      const res1 = await request(app)
-        .post("/friendships/accept")
-        .set("Authorization", `Bearer ${user1Token}`);
+        await request(app)
+          .post("/friendships")
+          .set("Authorization", `Bearer ${token}`)
+          .send({
+            requesterId: seed.users[0].id,
+            acceptorId: seed.users[1].id,
+          });
 
-      expect(res1.statusCode).toBe(400);
+        const res1 = await request(app)
+          .post("/friendships/accept")
+          .set("Authorization", `Bearer ${token}`);
+
+        expect(res1.statusCode).toBe(400);
+      });
     });
   });
 
   describe("[DELETE] /friendships", () => {
     it("should delete friendship", async () => {
-      await request(app)
-        .post("/friendships")
-        .set("Authorization", `Bearer ${user1Token}`)
-        .send({
-          requesterId: USER.id,
-          acceptorId: user2Id,
-        });
+      await testWithTransaction(async ({ app, seed }) => {
+        const tokens = createTokens([seed.users[0].id, seed.users[1].id]);
 
-      const res1 = await request(app)
-        .delete("/friendships")
-        .set("Authorization", `Bearer ${user2Token}`)
-        .send({
-          requesterId: USER.id,
-          acceptorId: user2Id,
-        });
+        await request(app)
+          .post("/friendships")
+          .set("Authorization", `Bearer ${tokens[0]}`)
+          .send({
+            requesterId: seed.users[0].id,
+            acceptorId: seed.users[1].id,
+          });
 
-      expect(res1.statusCode).toBe(200);
+        const res1 = await request(app)
+          .delete("/friendships")
+          .set("Authorization", `Bearer ${tokens[1]}`)
+          .send({
+            requesterId: seed.users[0].id,
+            acceptorId: seed.users[1].id,
+          });
+
+        expect(res1.statusCode).toBe(200);
+      });
     });
   });
 });
