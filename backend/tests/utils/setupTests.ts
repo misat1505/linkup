@@ -20,13 +20,15 @@ export async function startContainer() {
   container = await new PostgreSqlContainer().start();
 
   const dbUrl = container.getConnectionUri();
-  console.log(dbUrl);
+  console.log(1);
   process.env.DATABASE_URL = dbUrl;
+  console.log(2);
 
   execSync("npx prisma db push", {
     env: { DATABASE_URL: dbUrl },
     stdio: "inherit",
   });
+  console.log(3);
 
   _prisma = new PrismaClient({ datasources: { db: { url: dbUrl } } });
 

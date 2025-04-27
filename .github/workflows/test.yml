@@ -12,12 +12,19 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: "npm"
+          cache-dependency-path: "backend/package-lock.json"
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm ci # Use npm ci for CI environments for deterministic installs
 
       - name: Copy envs for tests
         run: cp backend/env.example backend/.env.test
@@ -25,5 +32,4 @@ jobs:
       - name: Run Tests
         run: |
           cd backend
-          npm install
           npm run test
