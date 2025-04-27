@@ -1,5 +1,13 @@
 import { Request, Response } from "express";
 
+export const mockPostRecommendationService = {
+  fetchFriendsPostsOnly: jest.fn(),
+  fetchNonFriendsPostsOnly: jest.fn(),
+  getLastPost: jest.fn(),
+  getRecommendedPosts: jest.fn(),
+  getUserFriends: jest.fn(),
+};
+
 export const mockFileService = {
   isChatMessage: jest.fn(),
   isChatPhoto: jest.fn(),
@@ -71,6 +79,7 @@ export function mockRequest(data: Partial<Request> = {}): Request {
         friendshipService: mockFriendshipService,
         chatService: mockChatService,
         fileService: mockFileService,
+        postRecommendationService: mockPostRecommendationService,
       },
     },
     t: jest.fn(),

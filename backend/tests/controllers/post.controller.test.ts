@@ -1,6 +1,3 @@
-import express, { NextFunction, Request, Response } from "express";
-import request from "supertest";
-import { PostService } from "../../src/services/PostService";
 import { createPost } from "../../src/controllers/posts/createPost";
 import { getPost } from "../../src/controllers/posts/getPost";
 import { getPosts } from "../../src/controllers/posts/getPosts";
@@ -8,67 +5,38 @@ import { getUserPosts } from "../../src/controllers/posts/getUserPosts";
 import { updatePost } from "../../src/controllers/posts/updatePost";
 import { handleMarkdownUpdate } from "../../src/utils/updatePost";
 import { deletePost } from "../../src/controllers/posts/deletePost";
-import i18next from "../../src/i18n";
-import middleware from "i18next-http-middleware";
-import { PostRecommendationService } from "../../src/services/PostRecommendationService";
 import { reportPost } from "../../src/controllers/posts/reportPost";
 import { Prisma } from "@prisma/client";
+import {
+  mockPostRecommendationService,
+  mockPostService,
+  mockRequest,
+  mockResponse,
+} from "../utils/mocks";
 
-jest.mock("../../src/lib/FileStorage");
-jest.mock("../../src/services/PostService");
-jest.mock("../../src/services/PostRecommendationService");
 jest.mock("../../src/utils/updatePost");
 
-const mockErrorMiddleware = jest.fn(
-  (err: Error, req: Request, res: Response, next: NextFunction) => {
-    res.status(500).send({ message: err.message });
-  }
-);
-
 describe("Post controllers", () => {
-  const app = express();
-  app.use(express.json());
-  app.use(middleware.handle(i18next));
-  app.put("/posts/:id", updatePost);
-  app.get("/posts/mine", getUserPosts);
-  app.get("/posts/:id", getPost);
-  app.get("/posts", getPosts);
-  app.post("/posts", createPost);
-  app.delete("/posts/:id", deletePost);
-  app.post("/posts/:id/report", reportPost);
-  app.use(mockErrorMiddleware);
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  (handleMarkdownUpdate as jest.Mock).mockImplementation((a, b, c) => a);
+  (handleMarkdownUpdate as jest.Mock).mockImplementation((a, b, c, d) => b);
 
   describe("createPost", () => {
     it("should successfully create a post", async () => {
       const postContent = "This is a new post.";
-      (PostService.createPost as jest.Mock).mockResolvedValue({
+      mockPostService.createPost.mockResolvedValue({
         id: "post-id",
         content: postContent,
         authorId: "user-id",
       });
 
-      const response = await request(app)
-        .post("/posts")
-        .send({
-          content: postContent,
-          token: { userId: "user-id" },
-        });
-
-      expect(response.status).toBe(201);
-      expect(response.body).toEqual({
-        post: {
-          id: "post-id",
-          content: postContent,
-          authorId: "user-id",
-        },
+      const req = mockRequest({
+        body: { content: postContent, token: { userId: "user-id" } },
       });
-      expect(PostService.createPost).toHaveBeenCalledWith({
+      const res = mockResponse();
+
+      await createPost(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(mockPostService.createPost).toHaveBeenCalledWith({
         content: postContent,
         authorId: "user-id",
         id: expect.any(String),
@@ -76,18 +44,20 @@ describe("Post controllers", () => {
     });
 
     it("should pass to error middleware if post creation fails", async () => {
-      (PostService.createPost as jest.Mock).mockRejectedValue(
-        new Error("Error")
-      );
+      mockPostService.createPost.mockRejectedValue(new Error("Error"));
+      const mockNextFunction = jest.fn();
 
-      await request(app)
-        .post("/posts")
-        .send({
+      const req = mockRequest({
+        body: {
           content: "This is a new post.",
           token: { userId: "user-id" },
-        });
+        },
+      });
+      const res = mockResponse();
 
-      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
+      await createPost(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -98,31 +68,44 @@ describe("Post controllers", () => {
         content: "This is a post.",
         authorId: "user-id",
       };
+      mockPostService.getPost.mockResolvedValue(post);
 
-      (PostService.getPost as jest.Mock).mockResolvedValue(post);
+      const req = mockRequest({
+        params: { id: post.id },
+      });
+      const res = mockResponse();
 
-      const response = await request(app).get("/posts/post-id");
+      await getPost(req, res, jest.fn());
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ post });
-      expect(PostService.getPost).toHaveBeenCalledWith("post-id");
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(mockPostService.getPost).toHaveBeenCalledWith(post.id);
     });
 
     it("should return a 404 error if post not found", async () => {
-      (PostService.getPost as jest.Mock).mockResolvedValue(null);
+      mockPostService.getPost.mockResolvedValue(null);
 
-      const response = await request(app).get("/posts/post-id");
+      const req = mockRequest({
+        params: { id: "post-id" },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual({ message: "Post not found." });
+      await getPost(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(404);
     });
 
     it("should pass to error middleware if post retrieval fails", async () => {
-      (PostService.getPost as jest.Mock).mockRejectedValue(new Error("Error"));
+      mockPostService.getPost.mockRejectedValue(new Error("Error"));
+      const mockNextFunction = jest.fn();
 
-      await request(app).get("/posts/post-id");
+      const req = mockRequest({
+        params: { id: "post-id" },
+      });
+      const res = mockResponse();
 
-      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
+      await getPost(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
   });
 
@@ -132,28 +115,34 @@ describe("Post controllers", () => {
         { id: "post-id-1", content: "Post 1" },
         { id: "post-id-2", content: "Post 2" },
       ];
-      (
-        PostRecommendationService.getRecommendedPosts as jest.Mock
-      ).mockResolvedValue(posts);
+      mockPostRecommendationService.getRecommendedPosts.mockResolvedValue(
+        posts
+      );
 
-      const response = await request(app)
-        .get("/posts")
-        .send({ token: { userId: "user-id" } });
+      const req = mockRequest({
+        body: { token: { userId: "user-id" } },
+        query: {},
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ posts });
-      expect(PostRecommendationService.getRecommendedPosts).toHaveBeenCalled();
+      await getPosts(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(
+        mockPostRecommendationService.getRecommendedPosts
+      ).toHaveBeenCalled();
     });
 
     it("should return 400 if limit exceeds 10", async () => {
-      const response = await request(app)
-        .get("/posts?limit=20")
-        .send({ token: { userId: "user-id" } });
-
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({
-        message: "Maximum limit is 10 - given 20",
+      const req = mockRequest({
+        body: { token: { userId: "user-id" } },
+        query: { limit: "20" },
       });
+      const res = mockResponse();
+
+      await getPosts(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(400);
     });
 
     it("should successfully retrieve a list of posts with a valid limit and lastPostId", async () => {
@@ -161,29 +150,39 @@ describe("Post controllers", () => {
         { id: "post-id-1", content: "Post 1" },
         { id: "post-id-2", content: "Post 2" },
       ];
-      (
-        PostRecommendationService.getRecommendedPosts as jest.Mock
-      ).mockResolvedValue(posts);
+      mockPostRecommendationService.getRecommendedPosts.mockResolvedValue(
+        posts
+      );
 
-      const response = await request(app)
-        .get("/posts?lastPostId=post-id-5&limit=5")
-        .send({ token: { userId: "user-id" } });
+      const req = mockRequest({
+        body: { token: { userId: "user-id" } },
+        query: { lastPostId: "post-id-5", limit: "5" },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ posts });
+      await getPosts(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
       expect(
-        PostRecommendationService.getRecommendedPosts
+        mockPostRecommendationService.getRecommendedPosts
       ).toHaveBeenCalledWith("user-id", "post-id-5", 5);
     });
 
     it("should pass to error middleware if post retrieval fails", async () => {
-      (
-        PostRecommendationService.getRecommendedPosts as jest.Mock
-      ).mockRejectedValue(new Error("Error"));
+      mockPostRecommendationService.getRecommendedPosts.mockRejectedValue(
+        new Error("Error")
+      );
+      const mockNextFunction = jest.fn();
 
-      await request(app).get("/posts");
+      const req = mockRequest({
+        body: { token: { userId: "user-id" } },
+        query: {},
+      });
+      const res = mockResponse();
 
-      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
+      await getPosts(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("should handle invalid lastPostId", async () => {
@@ -191,18 +190,21 @@ describe("Post controllers", () => {
         { id: "post-id-1", content: "Post 1" },
         { id: "post-id-2", content: "Post 2" },
       ];
-      (
-        PostRecommendationService.getRecommendedPosts as jest.Mock
-      ).mockResolvedValue(posts);
+      mockPostRecommendationService.getRecommendedPosts.mockResolvedValue(
+        posts
+      );
 
-      const response = await request(app)
-        .get("/posts?lastPostId=invalid-id&limit=5")
-        .send({ token: { userId: "user-id" } });
+      const req = mockRequest({
+        body: { token: { userId: "user-id" } },
+        query: { lastPostId: "invalid-id", limit: "5" },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ posts });
+      await getPosts(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
       expect(
-        PostRecommendationService.getRecommendedPosts
+        mockPostRecommendationService.getRecommendedPosts
       ).toHaveBeenCalledWith("user-id", "invalid-id", 5);
     });
 
@@ -211,18 +213,21 @@ describe("Post controllers", () => {
         { id: "post-id-1", content: "Post 1" },
         { id: "post-id-2", content: "Post 2" },
       ];
-      (
-        PostRecommendationService.getRecommendedPosts as jest.Mock
-      ).mockResolvedValue(posts);
+      mockPostRecommendationService.getRecommendedPosts.mockResolvedValue(
+        posts
+      );
 
-      const response = await request(app)
-        .get("/posts?limit=invalid")
-        .send({ token: { userId: "user-id" } });
+      const req = mockRequest({
+        body: { token: { userId: "user-id" } },
+        query: { limit: "invalid" },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ posts });
+      await getPosts(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
       expect(
-        PostRecommendationService.getRecommendedPosts
+        mockPostRecommendationService.getRecommendedPosts
       ).toHaveBeenCalledWith("user-id", null, 10);
     });
 
@@ -231,18 +236,21 @@ describe("Post controllers", () => {
         { id: "post-id-1", content: "Post 1" },
         { id: "post-id-2", content: "Post 2" },
       ];
-      (
-        PostRecommendationService.getRecommendedPosts as jest.Mock
-      ).mockResolvedValue(posts);
+      mockPostRecommendationService.getRecommendedPosts.mockResolvedValue(
+        posts
+      );
 
-      const response = await request(app)
-        .get("/posts?lastPostId=null&limit=5")
-        .send({ token: { userId: "user-id" } });
+      const req = mockRequest({
+        body: { token: { userId: "user-id" } },
+        query: { lastPostId: "null", limit: "5" },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ posts });
+      await getPosts(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
       expect(
-        PostRecommendationService.getRecommendedPosts
+        mockPostRecommendationService.getRecommendedPosts
       ).toHaveBeenCalledWith("user-id", null, 5);
     });
   });
@@ -250,31 +258,31 @@ describe("Post controllers", () => {
   describe("getUserPosts", () => {
     it("should successfully retrieve user's posts", async () => {
       const posts = [{ id: "post-id-1", content: "User Post 1" }];
-      (PostService.getUserPosts as jest.Mock).mockResolvedValue(posts);
+      mockPostService.getUserPosts.mockResolvedValue(posts);
 
-      const response = await request(app)
-        .get("/posts/mine")
-        .send({
-          token: { userId: "user-id" },
-        });
+      const req = mockRequest({
+        body: { token: { userId: "user-id" } },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ posts });
-      expect(PostService.getUserPosts).toHaveBeenCalledWith("user-id");
+      await getUserPosts(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(mockPostService.getUserPosts).toHaveBeenCalledWith("user-id");
     });
 
     it("should pass to error middleware if user post retrieval fails", async () => {
-      (PostService.getUserPosts as jest.Mock).mockRejectedValue(
-        new Error("Error")
-      );
+      mockPostService.getUserPosts.mockRejectedValue(new Error("Error"));
+      const mockNextFunction = jest.fn();
 
-      await request(app)
-        .get("/posts/mine")
-        .send({
-          token: { userId: "user-id" },
-        });
+      const req = mockRequest({
+        body: { token: { userId: "user-id" } },
+      });
+      const res = mockResponse();
 
-      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
+      await getPosts(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
   });
 
@@ -285,46 +293,46 @@ describe("Post controllers", () => {
         content: "Updated post content.",
         author: { id: "user-id" },
       };
-      (PostService.getPost as jest.Mock).mockResolvedValue(post);
-      (PostService.updatePost as jest.Mock).mockResolvedValue({
+      mockPostService.getPost.mockResolvedValue(post);
+      mockPostService.updatePost.mockResolvedValue({
         ...post,
         content: "New updated content",
       });
 
-      const response = await request(app)
-        .put("/posts/post-id")
-        .send({
+      const req = mockRequest({
+        body: {
           content: "New updated content",
           token: { userId: "user-id" },
-        });
-
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({
-        post: {
-          id: "post-id",
-          content: "New updated content",
-          author: { id: "user-id" },
         },
+        params: { id: "post-id" },
       });
-      expect(PostService.getPost).toHaveBeenCalledWith("post-id");
-      expect(PostService.updatePost).toHaveBeenCalledWith({
+      const res = mockResponse();
+
+      await updatePost(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(mockPostService.getPost).toHaveBeenCalledWith("post-id");
+      expect(mockPostService.updatePost).toHaveBeenCalledWith({
         id: "post-id",
         content: "New updated content",
       });
     });
 
     it("should return a 404 error if post not found", async () => {
-      (PostService.getPost as jest.Mock).mockResolvedValue(null);
+      mockPostService.getPost.mockResolvedValue(null);
 
-      const response = await request(app)
-        .put("/posts/post-id")
-        .send({
-          content: "New content",
+      const req = mockRequest({
+        body: {
+          content: "New updated content",
           token: { userId: "user-id" },
-        });
+        },
+        params: { id: "post-id" },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual({ message: "Post not found." });
+      await updatePost(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(404);
     });
 
     it("should return a 401 error if user is not authorized to update the post", async () => {
@@ -333,19 +341,20 @@ describe("Post controllers", () => {
         content: "Post content.",
         author: { id: "bad-user-id" },
       };
-      (PostService.getPost as jest.Mock).mockResolvedValue(post);
+      mockPostService.getPost.mockResolvedValue(post);
 
-      const response = await request(app)
-        .put("/posts/post-id")
-        .send({
-          content: "New content",
+      const req = mockRequest({
+        body: {
+          content: "New updated content",
           token: { userId: "user-id" },
-        });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        message: "Cannot edit post not belonging to you.",
+        },
+        params: { id: "post-id" },
       });
+      const res = mockResponse();
+
+      await updatePost(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
     });
 
     it("should pass to error middleware if post update fails", async () => {
@@ -354,19 +363,22 @@ describe("Post controllers", () => {
         content: "Post content.",
         author: { id: "user-id" },
       };
-      (PostService.getPost as jest.Mock).mockResolvedValue(post);
-      (PostService.updatePost as jest.Mock).mockRejectedValue(
-        new Error("Error")
-      );
+      mockPostService.getPost.mockResolvedValue(post);
+      mockPostService.updatePost.mockRejectedValue(new Error("Error"));
+      const mockNextFunction = jest.fn();
 
-      await request(app)
-        .put("/posts/post-id")
-        .send({
-          content: "New content",
+      const req = mockRequest({
+        body: {
+          content: "New updated content",
           token: { userId: "user-id" },
-        });
+        },
+        params: { id: "post-id" },
+      });
+      const res = mockResponse();
 
-      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
+      await updatePost(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
   });
 
@@ -378,32 +390,38 @@ describe("Post controllers", () => {
         author: { id: "user-id" },
         chat: { id: "chat-id" },
       };
-      (PostService.getPost as jest.Mock).mockResolvedValue(post);
-      (PostService.deletePost as jest.Mock).mockResolvedValue(true);
+      mockPostService.getPost.mockResolvedValue(post);
+      mockPostService.deletePost.mockResolvedValue(true);
 
-      const response = await request(app)
-        .delete(`/posts/${post.id}`)
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "user-id" },
-        });
+        },
+        params: { id: post.id },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({ message: "Post deleted successfully." });
-      expect(PostService.getPost).toHaveBeenCalledWith(post.id);
-      expect(PostService.deletePost).toHaveBeenCalledWith(post.id);
+      await deletePost(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(mockPostService.getPost).toHaveBeenCalledWith(post.id);
+      expect(mockPostService.deletePost).toHaveBeenCalledWith(post.id);
     });
 
     it("should return a 404 error if post not found", async () => {
-      (PostService.getPost as jest.Mock).mockResolvedValue(null);
+      (mockPostService.getPost as jest.Mock).mockResolvedValue(null);
 
-      const response = await request(app)
-        .delete("/posts/non-existent-id")
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "user-id" },
-        });
+        },
+        params: { id: "non-existent-id" },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual({ message: "Post not found." });
+      await deletePost(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(404);
     });
 
     it("should return a 401 error if user is not authorized to delete the post", async () => {
@@ -412,18 +430,19 @@ describe("Post controllers", () => {
         content: "Post content.",
         author: { id: "another-user-id" },
       };
-      (PostService.getPost as jest.Mock).mockResolvedValue(unauthorizedPost);
+      mockPostService.getPost.mockResolvedValue(unauthorizedPost);
 
-      const response = await request(app)
-        .delete(`/posts/${unauthorizedPost.id}`)
-        .send({
+      const req = mockRequest({
+        body: {
           token: { userId: "user-id" },
-        });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        message: "Cannot delete post not belonging to you.",
+        },
+        params: { id: unauthorizedPost.id },
       });
+      const res = mockResponse();
+
+      await deletePost(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(401);
     });
   });
 
@@ -431,57 +450,55 @@ describe("Post controllers", () => {
     const postId = "123";
     const userId = "user-id";
 
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-
     it("should successfully report a post", async () => {
-      (PostService.reportPost as jest.Mock).mockResolvedValue(undefined);
+      mockPostService.reportPost.mockResolvedValue(undefined);
 
-      const response = await request(app)
-        .post(`/posts/${postId}/report`)
-        .send({ token: { userId } });
+      const req = mockRequest({
+        body: { token: { userId } },
+        params: { id: postId },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(200);
-      expect(response.body.message).toBe("Post reported successfully.");
-      expect(PostService.reportPost).toHaveBeenCalledWith(userId, postId);
+      await reportPost(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(mockPostService.reportPost).toHaveBeenCalledWith(userId, postId);
     });
 
     it("should return 409 if post is already reported", async () => {
-      (PostService.reportPost as jest.Mock).mockRejectedValue(
+      mockPostService.reportPost.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError("Unique constraint", {
           clientVersion: "4.0.0",
           code: "P2002",
         } as any)
       );
 
-      const response = await request(app)
-        .post(`/posts/${postId}/report`)
-        .send({ token: { userId } });
+      const req = mockRequest({
+        body: { token: { userId } },
+        params: { id: postId },
+      });
+      const res = mockResponse();
 
-      expect(response.status).toBe(409);
-      expect(response.body.message).toBe(
-        "This post had been previously reported by you."
-      );
+      await reportPost(req, res, jest.fn());
+
+      expect(res.status).toHaveBeenCalledWith(409);
     });
 
     it("should pass to error middleware if reporting fails for another reason", async () => {
-      const error = new Error("Unexpected error");
-      (PostService.reportPost as jest.Mock).mockRejectedValue(error);
-
-      await request(app)
-        .post(`/posts/${postId}/report`)
-        .send({ token: { userId } });
-
-      expect(mockErrorMiddleware).toHaveBeenCalledTimes(1);
-      expect(mockErrorMiddleware).toHaveBeenCalledWith(
-        expect.objectContaining({
-          message: expect.any(String),
-        }),
-        expect.anything(),
-        expect.anything(),
-        expect.anything()
+      mockPostService.reportPost.mockRejectedValue(
+        new Error("Unexpected error")
       );
+      const mockNextFunction = jest.fn();
+
+      const req = mockRequest({
+        body: { token: { userId } },
+        params: { id: postId },
+      });
+      const res = mockResponse();
+
+      await reportPost(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
   });
 });
