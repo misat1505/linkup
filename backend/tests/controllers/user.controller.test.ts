@@ -1,4 +1,4 @@
-import { searchUserController } from "../../src/controllers/user/searchUser.controller";
+import { UserControllers } from "../../src/controllers";
 import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
 import { seedProvider } from "../utils/seedProvider";
 
@@ -15,7 +15,7 @@ describe("User controllers", () => {
 
         const res = mockResponse();
 
-        await searchUserController(req, res, jest.fn());
+        await UserControllers.searchUser(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({ users });
@@ -30,7 +30,7 @@ describe("User controllers", () => {
         const req = mockRequest({ query: {} });
         const res = mockResponse();
 
-        await searchUserController(req, res, jest.fn());
+        await UserControllers.searchUser(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(400);
       });
@@ -46,7 +46,7 @@ describe("User controllers", () => {
         });
         const res = mockResponse();
 
-        await searchUserController(req, res, jest.fn());
+        await UserControllers.searchUser(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(400);
       });

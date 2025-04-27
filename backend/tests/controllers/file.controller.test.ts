@@ -1,16 +1,11 @@
-import { getFileController } from "../../src/controllers/file/getFile.controller";
-import { getCache } from "../../src/controllers/file/getCache.controller";
-import {
-  CACHE_CAPACITY,
-  insertToCache,
-} from "../../src/controllers/file/insertToCache.controller";
-import { deleteFromCache } from "../../src/controllers/file/deleteFromCache.controller";
+import { CACHE_CAPACITY } from "../../src/controllers/file/insertToCache.controller";
 import {
   mockFileService,
   mockFileStorage,
   mockRequest,
   mockResponse,
 } from "../utils/mocks";
+import { FileControllers } from "../../src/controllers";
 
 describe("File Controllers", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
@@ -33,7 +28,7 @@ describe("File Controllers", () => {
       });
       const res = mockResponse();
 
-      await getFileController(req, res, jest.fn());
+      await FileControllers.getFile(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
@@ -49,7 +44,7 @@ describe("File Controllers", () => {
         });
         const res = mockResponse();
 
-        await getFileController(req, res, jest.fn());
+        await FileControllers.getFile(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(404);
       });
@@ -64,7 +59,7 @@ describe("File Controllers", () => {
         });
         const res = mockResponse();
 
-        await getFileController(req, res, jest.fn());
+        await FileControllers.getFile(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith(
@@ -84,7 +79,7 @@ describe("File Controllers", () => {
         });
         const res = mockResponse();
 
-        await getFileController(req, res, jest.fn());
+        await FileControllers.getFile(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith(
@@ -102,7 +97,7 @@ describe("File Controllers", () => {
         });
         const res = mockResponse();
 
-        await getFileController(req, res, jest.fn());
+        await FileControllers.getFile(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith(
@@ -118,7 +113,7 @@ describe("File Controllers", () => {
         });
         const res = mockResponse();
 
-        await getFileController(req, res, jest.fn());
+        await FileControllers.getFile(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(400);
       });
@@ -135,7 +130,7 @@ describe("File Controllers", () => {
         });
         const res = mockResponse();
 
-        await getFileController(req, res, jest.fn());
+        await FileControllers.getFile(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith(
@@ -153,7 +148,7 @@ describe("File Controllers", () => {
         });
         const res = mockResponse();
 
-        await getFileController(req, res, jest.fn());
+        await FileControllers.getFile(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(404);
       });
@@ -170,7 +165,7 @@ describe("File Controllers", () => {
         });
         const res = mockResponse();
 
-        await getFileController(req, res, jest.fn());
+        await FileControllers.getFile(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith(
@@ -188,7 +183,7 @@ describe("File Controllers", () => {
         });
         const res = mockResponse();
 
-        await getFileController(req, res, jest.fn());
+        await FileControllers.getFile(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(404);
       });
@@ -201,7 +196,7 @@ describe("File Controllers", () => {
         });
         const res = mockResponse();
 
-        await getFileController(req, res, jest.fn());
+        await FileControllers.getFile(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(400);
       });
@@ -219,7 +214,7 @@ describe("File Controllers", () => {
       });
       const res = mockResponse();
 
-      await getCache(req, res, jest.fn());
+      await FileControllers.getCache(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
 
@@ -244,7 +239,7 @@ describe("File Controllers", () => {
       });
       const res = mockResponse();
 
-      await insertToCache(req, res, jest.fn());
+      await FileControllers.insertToCache(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith(
@@ -264,7 +259,7 @@ describe("File Controllers", () => {
       });
       const res = mockResponse();
 
-      await insertToCache(req, res, jest.fn());
+      await FileControllers.insertToCache(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(500);
     });
@@ -275,7 +270,7 @@ describe("File Controllers", () => {
       });
       const res = mockResponse();
 
-      await insertToCache(req, res, jest.fn());
+      await FileControllers.insertToCache(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
@@ -292,7 +287,7 @@ describe("File Controllers", () => {
       });
       const res = mockResponse();
 
-      await insertToCache(req, res, mockNextFunction);
+      await FileControllers.insertToCache(req, res, mockNextFunction);
 
       expect(mockNextFunction).toHaveBeenCalled();
     });
@@ -306,7 +301,7 @@ describe("File Controllers", () => {
       });
       const res = mockResponse();
 
-      await deleteFromCache(req, res, jest.fn());
+      await FileControllers.deleteFromCache(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
 
@@ -327,7 +322,7 @@ describe("File Controllers", () => {
       });
       const res = mockResponse();
 
-      await getFileController(req, res, mockNextFunction);
+      await FileControllers.deleteFromCache(req, res, mockNextFunction);
 
       expect(mockNextFunction).toHaveBeenCalled();
     });

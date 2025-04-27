@@ -1,11 +1,4 @@
-import { createPost } from "../../src/controllers/posts/createPost";
-import { getPost } from "../../src/controllers/posts/getPost";
-import { getPosts } from "../../src/controllers/posts/getPosts";
-import { getUserPosts } from "../../src/controllers/posts/getUserPosts";
-import { updatePost } from "../../src/controllers/posts/updatePost";
 import { handleMarkdownUpdate } from "../../src/utils/updatePost";
-import { deletePost } from "../../src/controllers/posts/deletePost";
-import { reportPost } from "../../src/controllers/posts/reportPost";
 import { Prisma } from "@prisma/client";
 import {
   mockPostRecommendationService,
@@ -13,6 +6,7 @@ import {
   mockRequest,
   mockResponse,
 } from "../utils/mocks";
+import { PostControllers } from "../../src/controllers";
 
 jest.mock("../../src/utils/updatePost");
 
@@ -33,7 +27,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await createPost(req, res, jest.fn());
+      await PostControllers.createPost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(201);
       expect(mockPostService.createPost).toHaveBeenCalledWith({
@@ -55,7 +49,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await createPost(req, res, mockNextFunction);
+      await PostControllers.createPost(req, res, mockNextFunction);
 
       expect(mockNextFunction).toHaveBeenCalledTimes(1);
     });
@@ -75,7 +69,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPost(req, res, jest.fn());
+      await PostControllers.getPost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(mockPostService.getPost).toHaveBeenCalledWith(post.id);
@@ -89,7 +83,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPost(req, res, jest.fn());
+      await PostControllers.getPost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(404);
     });
@@ -103,7 +97,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPost(req, res, mockNextFunction);
+      await PostControllers.getPost(req, res, mockNextFunction);
 
       expect(mockNextFunction).toHaveBeenCalled();
     });
@@ -125,7 +119,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPosts(req, res, jest.fn());
+      await PostControllers.getPosts(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(
@@ -140,7 +134,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPosts(req, res, jest.fn());
+      await PostControllers.getPosts(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
@@ -160,7 +154,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPosts(req, res, jest.fn());
+      await PostControllers.getPosts(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(
@@ -180,7 +174,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPosts(req, res, mockNextFunction);
+      await PostControllers.getPosts(req, res, mockNextFunction);
 
       expect(mockNextFunction).toHaveBeenCalled();
     });
@@ -200,7 +194,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPosts(req, res, jest.fn());
+      await PostControllers.getPosts(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(
@@ -223,7 +217,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPosts(req, res, jest.fn());
+      await PostControllers.getPosts(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(
@@ -246,7 +240,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPosts(req, res, jest.fn());
+      await PostControllers.getPosts(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(
@@ -265,7 +259,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getUserPosts(req, res, jest.fn());
+      await PostControllers.getUserPosts(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(mockPostService.getUserPosts).toHaveBeenCalledWith("user-id");
@@ -280,7 +274,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await getPosts(req, res, mockNextFunction);
+      await PostControllers.getUserPosts(req, res, mockNextFunction);
 
       expect(mockNextFunction).toHaveBeenCalled();
     });
@@ -308,7 +302,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await updatePost(req, res, jest.fn());
+      await PostControllers.updatePost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(mockPostService.getPost).toHaveBeenCalledWith("post-id");
@@ -330,7 +324,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await updatePost(req, res, jest.fn());
+      await PostControllers.updatePost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(404);
     });
@@ -352,7 +346,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await updatePost(req, res, jest.fn());
+      await PostControllers.updatePost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
     });
@@ -376,7 +370,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await updatePost(req, res, mockNextFunction);
+      await PostControllers.updatePost(req, res, mockNextFunction);
 
       expect(mockNextFunction).toHaveBeenCalled();
     });
@@ -401,7 +395,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await deletePost(req, res, jest.fn());
+      await PostControllers.deletePost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(mockPostService.getPost).toHaveBeenCalledWith(post.id);
@@ -419,7 +413,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await deletePost(req, res, jest.fn());
+      await PostControllers.deletePost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(404);
     });
@@ -440,7 +434,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await deletePost(req, res, jest.fn());
+      await PostControllers.deletePost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
     });
@@ -459,7 +453,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await reportPost(req, res, jest.fn());
+      await PostControllers.reportPost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(mockPostService.reportPost).toHaveBeenCalledWith(userId, postId);
@@ -479,7 +473,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await reportPost(req, res, jest.fn());
+      await PostControllers.reportPost(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(409);
     });
@@ -496,7 +490,7 @@ describe("Post controllers", () => {
       });
       const res = mockResponse();
 
-      await reportPost(req, res, mockNextFunction);
+      await PostControllers.reportPost(req, res, mockNextFunction);
 
       expect(mockNextFunction).toHaveBeenCalled();
     });

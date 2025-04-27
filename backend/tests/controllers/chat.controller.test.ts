@@ -1,15 +1,6 @@
 import { processAvatar } from "../../src/utils/processAvatar";
-import { createReactionController } from "../../src/controllers/chat/createReaction.controller";
-import { getChatMessagesController } from "../../src/controllers/chat/getChatMessages.controller";
-import { createMessageController } from "../../src/controllers/chat/createMessage.controller";
-import { getSelfChatsController } from "../../src/controllers/chat/getSelfChats.controller";
-import { createGroupChatController } from "../../src/controllers/chat/createGroupChat.controller";
-import { createPrivateChatController } from "../../src/controllers/chat/createPrivateChat.controller";
-import { updateAliasController } from "../../src/controllers/chat/updateUserAlias.controller";
-import { addUserToGroupChatController } from "../../src/controllers/chat/addUserToGroupChat.controller";
-import { deleteSelfFromGroupChatController } from "../../src/controllers/chat/deleteSelfFromGroupChat.controller";
-import { updateGroupChatController } from "../../src/controllers/chat/updateGroupChat.controller";
 import { mockChatService, mockRequest, mockResponse } from "../utils/mocks";
+import { ChatControllers } from "../../src/controllers";
 
 jest.mock("../../src/utils/processAvatar");
 
@@ -37,7 +28,7 @@ describe("Chat controllers", () => {
       });
       const res = mockResponse();
 
-      await updateGroupChatController(req, res, jest.fn());
+      await ChatControllers.updateGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(201);
       expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
@@ -61,7 +52,7 @@ describe("Chat controllers", () => {
       });
       const res = mockResponse();
 
-      await updateGroupChatController(req, res, jest.fn());
+      await ChatControllers.updateGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
@@ -85,7 +76,7 @@ describe("Chat controllers", () => {
       });
       const res = mockResponse();
 
-      await updateGroupChatController(req, res, jest.fn());
+      await ChatControllers.updateGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(400);
       expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
@@ -108,7 +99,7 @@ describe("Chat controllers", () => {
         params: { chatId: "123" },
       });
       const res = mockResponse();
-      await deleteSelfFromGroupChatController(req, res, jest.fn());
+      await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
@@ -130,7 +121,7 @@ describe("Chat controllers", () => {
         params: { chatId: "123" },
       });
       const res = mockResponse();
-      await deleteSelfFromGroupChatController(req, res, jest.fn());
+      await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
@@ -147,7 +138,7 @@ describe("Chat controllers", () => {
         params: { chatId: "123" },
       });
       const res = mockResponse();
-      await deleteSelfFromGroupChatController(req, res, jest.fn());
+      await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
@@ -174,7 +165,7 @@ describe("Chat controllers", () => {
         params: { chatId: "123" },
       });
       const res = mockResponse();
-      await addUserToGroupChatController(req, res, jest.fn());
+      await ChatControllers.addUserToGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(201);
       expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
@@ -201,7 +192,7 @@ describe("Chat controllers", () => {
         params: { chatId: "123" },
       });
       const res = mockResponse();
-      await addUserToGroupChatController(req, res, jest.fn());
+      await ChatControllers.addUserToGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
@@ -217,7 +208,7 @@ describe("Chat controllers", () => {
         params: { chatId: "123" },
       });
       const res = mockResponse();
-      await addUserToGroupChatController(req, res, jest.fn());
+      await ChatControllers.addUserToGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
@@ -234,7 +225,7 @@ describe("Chat controllers", () => {
         params: { chatId: "123" },
       });
       const res = mockResponse();
-      await addUserToGroupChatController(req, res, jest.fn());
+      await ChatControllers.addUserToGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(409);
       expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
@@ -253,7 +244,7 @@ describe("Chat controllers", () => {
         params: { chatId: "123", userId: "456" },
       });
       const res = mockResponse();
-      await updateAliasController(req, res, jest.fn());
+      await ChatControllers.updateAlias(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
@@ -272,7 +263,7 @@ describe("Chat controllers", () => {
         params: { chatId: "123", userId: "456" },
       });
       const res = mockResponse();
-      await updateAliasController(req, res, jest.fn());
+      await ChatControllers.updateAlias(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(1);
@@ -288,7 +279,7 @@ describe("Chat controllers", () => {
         params: { chatId: "123", userId: "456" },
       });
       const res = mockResponse();
-      await updateAliasController(req, res, jest.fn());
+      await ChatControllers.updateAlias(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
@@ -314,7 +305,7 @@ describe("Chat controllers", () => {
         params: { chatId: "someId" },
       });
       const res = mockResponse();
-      await createReactionController(req, res, jest.fn());
+      await ChatControllers.createReaction(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(201);
     });
@@ -332,7 +323,7 @@ describe("Chat controllers", () => {
         params: { chatId: "someId" },
       });
       const res = mockResponse();
-      await createReactionController(req, res, jest.fn());
+      await ChatControllers.createReaction(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
     });
@@ -349,7 +340,7 @@ describe("Chat controllers", () => {
         params: { chatId: "someId" },
       });
       const res = mockResponse();
-      await createReactionController(req, res, jest.fn());
+      await ChatControllers.createReaction(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
     });
@@ -367,7 +358,7 @@ describe("Chat controllers", () => {
         query: {},
       });
       const res = mockResponse();
-      await getChatMessagesController(req, res, jest.fn());
+      await ChatControllers.getChatMessages(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
     });
@@ -381,7 +372,7 @@ describe("Chat controllers", () => {
         query: {},
       });
       const res = mockResponse();
-      await getChatMessagesController(req, res, jest.fn());
+      await ChatControllers.getChatMessages(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
     });
@@ -397,7 +388,7 @@ describe("Chat controllers", () => {
         query: { lastMessageId: "message1", limit: "5" },
       });
       const res = mockResponse();
-      await getChatMessagesController(req, res, jest.fn());
+      await ChatControllers.getChatMessages(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(mockChatService.getChatMessages).toHaveBeenCalledWith(
@@ -418,7 +409,7 @@ describe("Chat controllers", () => {
         query: { responseId: "response123" },
       });
       const res = mockResponse();
-      await getChatMessagesController(req, res, jest.fn());
+      await ChatControllers.getChatMessages(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(mockChatService.getPostChatMessages).toHaveBeenCalledWith(
@@ -436,7 +427,7 @@ describe("Chat controllers", () => {
         query: { limit: "suhdusahd" },
       });
       const res = mockResponse();
-      await getChatMessagesController(req, res, mockNextFunction);
+      await ChatControllers.getChatMessages(req, res, mockNextFunction);
 
       expect(mockNextFunction).toHaveBeenCalled();
     });
@@ -452,7 +443,7 @@ describe("Chat controllers", () => {
         query: { responseId: "null" },
       });
       const res = mockResponse();
-      await getChatMessagesController(req, res, jest.fn());
+      await ChatControllers.getChatMessages(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(mockChatService.getPostChatMessages).toHaveBeenCalledWith(
@@ -473,7 +464,7 @@ describe("Chat controllers", () => {
         query: {},
       });
       const res = mockResponse();
-      await getChatMessagesController(req, res, mockNextFunction);
+      await ChatControllers.getChatMessages(req, res, mockNextFunction);
 
       expect(mockNextFunction).toHaveBeenCalled();
     });
@@ -491,7 +482,7 @@ describe("Chat controllers", () => {
         files: [],
       });
       const res = mockResponse();
-      await createMessageController(req, res, jest.fn());
+      await ChatControllers.createMessage(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(201);
     });
@@ -505,7 +496,7 @@ describe("Chat controllers", () => {
         files: [],
       });
       const res = mockResponse();
-      await createMessageController(req, res, jest.fn());
+      await ChatControllers.createMessage(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
     });
@@ -524,13 +515,13 @@ describe("Chat controllers", () => {
         files: [],
       });
       const res = mockResponse();
-      await createMessageController(req, res, jest.fn());
+      await ChatControllers.createMessage(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
   });
 
-  describe("getUserChats", () => {
+  describe("getSelfChats", () => {
     it("should return user's chats", async () => {
       const chats = [{ id: "chat1" }, { id: "chat2" }];
       mockChatService.getUserChats.mockResolvedValue(chats);
@@ -539,7 +530,7 @@ describe("Chat controllers", () => {
         body: { token: { userId: "userId" } },
       });
       const res = mockResponse();
-      await getSelfChatsController(req, res, jest.fn());
+      await ChatControllers.getSelfChats(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
     });
@@ -559,7 +550,7 @@ describe("Chat controllers", () => {
         },
       });
       const res = mockResponse();
-      await createGroupChatController(req, res, jest.fn());
+      await ChatControllers.createGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(201);
     });
@@ -575,7 +566,7 @@ describe("Chat controllers", () => {
         },
       });
       const res = mockResponse();
-      await createGroupChatController(req, res, jest.fn());
+      await ChatControllers.createGroupChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
     });
@@ -594,7 +585,7 @@ describe("Chat controllers", () => {
         },
       });
       const res = mockResponse();
-      await createPrivateChatController(req, res, jest.fn());
+      await ChatControllers.createPrivateChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(201);
     });
@@ -610,7 +601,7 @@ describe("Chat controllers", () => {
         },
       });
       const res = mockResponse();
-      await createPrivateChatController(req, res, jest.fn());
+      await ChatControllers.createPrivateChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(409);
     });
@@ -623,7 +614,7 @@ describe("Chat controllers", () => {
         },
       });
       const res = mockResponse();
-      await createPrivateChatController(req, res, jest.fn());
+      await ChatControllers.createPrivateChat(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
     });

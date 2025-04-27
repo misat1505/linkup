@@ -1,12 +1,9 @@
-import { createFriendship } from "../../src/controllers/friendships/createFriendship.controller";
-import { acceptFriendship } from "../../src/controllers/friendships/acceptFriendship.controller";
-import { getUserFriendships } from "../../src/controllers/friendships/getUserFriendships.controller";
-import { deleteFriendship } from "../../src/controllers/friendships/deleteFriendship.controller";
 import {
   mockFriendshipService,
   mockRequest,
   mockResponse,
 } from "../utils/mocks";
+import { FriendshipControllers } from "../../src/controllers";
 
 const mockFriendship = {
   status: "PENDING",
@@ -34,7 +31,7 @@ describe("Friendship controllers", () => {
       });
       const res = mockResponse();
 
-      await createFriendship(req, res, jest.fn());
+      await FriendshipControllers.createFriendship(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(201);
     });
@@ -51,7 +48,7 @@ describe("Friendship controllers", () => {
       });
       const res = mockResponse();
 
-      await createFriendship(req, res, jest.fn());
+      await FriendshipControllers.createFriendship(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
@@ -68,7 +65,7 @@ describe("Friendship controllers", () => {
       });
       const res = mockResponse();
 
-      await createFriendship(req, res, jest.fn());
+      await FriendshipControllers.createFriendship(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(409);
     });
@@ -87,7 +84,7 @@ describe("Friendship controllers", () => {
       });
       const res = mockResponse();
 
-      await acceptFriendship(req, res, jest.fn());
+      await FriendshipControllers.acceptFriendship(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
     });
@@ -102,7 +99,7 @@ describe("Friendship controllers", () => {
       });
       const res = mockResponse();
 
-      await acceptFriendship(req, res, jest.fn());
+      await FriendshipControllers.acceptFriendship(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
@@ -119,7 +116,7 @@ describe("Friendship controllers", () => {
       });
       const res = mockResponse();
 
-      await acceptFriendship(req, res, jest.fn());
+      await FriendshipControllers.acceptFriendship(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(409);
     });
@@ -146,7 +143,7 @@ describe("Friendship controllers", () => {
       });
       const res = mockResponse();
 
-      await getUserFriendships(req, res, jest.fn());
+      await FriendshipControllers.getUserFriendships(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
     });
@@ -165,7 +162,7 @@ describe("Friendship controllers", () => {
       });
       const res = mockResponse();
 
-      await deleteFriendship(req, res, jest.fn());
+      await FriendshipControllers.deleteFriendship(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
     });
@@ -182,7 +179,7 @@ describe("Friendship controllers", () => {
       });
       const res = mockResponse();
 
-      await deleteFriendship(req, res, jest.fn());
+      await FriendshipControllers.deleteFriendship(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(400);
     });
@@ -199,7 +196,7 @@ describe("Friendship controllers", () => {
       });
       const res = mockResponse();
 
-      await deleteFriendship(req, res, jest.fn());
+      await FriendshipControllers.deleteFriendship(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(404);
     });

@@ -1,18 +1,13 @@
 import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { UserWithCredentials } from "../../src/types/User";
 import { v4 as uuidv4 } from "uuid";
-import { signupController } from "../../src/controllers/auth/signup.controller";
-import { loginController } from "../../src/controllers/auth/login.controller";
-import { refreshTokenController } from "../../src/controllers/auth/refreshToken.controller";
-import { logoutController } from "../../src/controllers/auth/logout.controller";
-import { getSelfController } from "../../src/controllers/auth/getSelf.controller";
-import { updateSelfController } from "../../src/controllers/auth/updateSelf.controller";
 import { seedProvider } from "../utils/seedProvider";
 import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
+import { AuthControllers } from "../../src/controllers";
 
 jest.mock("../../src/lib/TokenProcessor");
 
-describe("Auth Controllers", () => {
+describe("AuthControllers", () => {
   describe("updateUser", () => {
     it("should update user", async () => {
       await seedProvider(async (seed) => {
@@ -32,7 +27,7 @@ describe("Auth Controllers", () => {
           },
         });
         const res = mockResponse();
-        await updateSelfController(req, res, jest.fn());
+        await AuthControllers.updateSelf(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(201);
       });
@@ -57,7 +52,7 @@ describe("Auth Controllers", () => {
         });
         const res = mockResponse();
 
-        await updateSelfController(req, res, jest.fn());
+        await AuthControllers.updateSelf(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(201);
       });
@@ -82,7 +77,7 @@ describe("Auth Controllers", () => {
         });
         const res = mockResponse();
 
-        await updateSelfController(req, res, jest.fn());
+        await AuthControllers.updateSelf(req, res, jest.fn());
 
         expect(res.status).toHaveBeenCalledWith(409);
       });
@@ -103,7 +98,7 @@ describe("Auth Controllers", () => {
       });
       const res = mockResponse();
 
-      await signupController(req, res, jest.fn());
+      await AuthControllers.signup(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.cookie).toHaveBeenCalled();
@@ -122,7 +117,7 @@ describe("Auth Controllers", () => {
       });
       const res = mockResponse();
 
-      await signupController(req, res, jest.fn());
+      await AuthControllers.signup(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(409);
       expect(res.cookie).not.toHaveBeenCalled();
@@ -153,7 +148,7 @@ describe("Auth Controllers", () => {
       });
       const res = mockResponse();
 
-      await loginController(req, res, jest.fn());
+      await AuthControllers.login(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.cookie).toHaveBeenCalled();
@@ -167,7 +162,7 @@ describe("Auth Controllers", () => {
       });
       const res = mockResponse();
 
-      await loginController(req, res, jest.fn());
+      await AuthControllers.login(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(res.cookie).not.toHaveBeenCalled();
@@ -192,7 +187,7 @@ describe("Auth Controllers", () => {
       });
       const res = mockResponse();
 
-      await loginController(req, res, jest.fn());
+      await AuthControllers.login(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(res.cookie).not.toHaveBeenCalled();
@@ -208,7 +203,7 @@ describe("Auth Controllers", () => {
       const req = mockRequest({ body: { token: { userId: 1 } } });
       const res = mockResponse();
 
-      refreshTokenController(req, res, jest.fn());
+      AuthControllers.refreshToken(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(
@@ -225,7 +220,7 @@ describe("Auth Controllers", () => {
       const req = mockRequest({ body: { token: { userId: 1 } } });
       const res = mockResponse();
 
-      logoutController(req, res, jest.fn());
+      AuthControllers.logout(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.clearCookie).toHaveBeenCalled();
@@ -253,7 +248,7 @@ describe("Auth Controllers", () => {
       const req = mockRequest({ body: { token: { userId: id } } });
       const res = mockResponse();
 
-      await getSelfController(req, res, jest.fn());
+      await AuthControllers.getSelf(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(200);
     });
@@ -264,7 +259,7 @@ describe("Auth Controllers", () => {
       const req = mockRequest({ body: { token: { userId: 1 } } });
       const res = mockResponse();
 
-      await getSelfController(req, res, jest.fn());
+      await AuthControllers.getSelf(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(404);
     });
