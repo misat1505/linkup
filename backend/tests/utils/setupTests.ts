@@ -20,20 +20,12 @@ export async function startContainer() {
   container = await new PostgreSqlContainer().start();
 
   const dbUrl = container.getConnectionUri();
-  console.log(1);
   process.env.DATABASE_URL = dbUrl;
-  console.log(2);
 
-  try {
-    execSync("npx prisma db push", {
-      env: { ...process.env, DATABASE_URL: dbUrl },
-      stdio: "inherit",
-    });
-    console.log(3);
-  } catch (error) {
-    console.error("Error running npx prisma db push:", error);
-    throw error;
-  }
+  execSync("npx prisma db push", {
+    env: { ...process.env, DATABASE_URL: dbUrl },
+    stdio: "inherit",
+  });
 
   _prisma = new PrismaClient({ datasources: { db: { url: dbUrl } } });
 

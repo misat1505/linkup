@@ -16,25 +16,6 @@ jobs:
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "npm"
-          cache-dependency-path: "backend/package-lock.json"
-
-      - name: Verify Node.js installation
-        run: |
-          node --version
-          npm --version
-
-      - name: Install dependencies
-        run: |
-          cd backend
-          npm ci
-
-      - name: Verify Prisma installation
-        run: |
-          cd backend
-          npx prisma --version
 
       - name: Copy envs for tests
         run: cp backend/env.example backend/.env.test
