@@ -1,21 +1,13 @@
-import { env } from "../../src/config/env";
-import { TokenProcessor } from "../../src/lib/TokenProcessor";
 import { isFriendship } from "../../src/types/guards/friendship.guard";
-import { User } from "../../src/types/User";
 import request from "supertest";
 import { testWithTransaction } from "../utils/testWithTransaction";
+import { TestHelpers } from "../utils/helpers";
 
 describe("friendship router", () => {
-  function createTokens(ids: User["id"][]) {
-    return ids.map((id) =>
-      TokenProcessor.encode({ userId: id }, env.ACCESS_TOKEN_SECRET)
-    );
-  }
-
   describe("[POST] /friendships", () => {
     it("should create a new friendship", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const token = createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createTokens([seed.users[0].id])[0];
         const res = await request(app)
           .post("/friendships")
           .set("Authorization", `Bearer ${token}`)
@@ -35,7 +27,10 @@ describe("friendship router", () => {
   describe("[GET] /friendships", () => {
     it("should return friendships", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const tokens = createTokens([seed.users[0].id, seed.users[1].id]);
+        const tokens = TestHelpers.createTokens([
+          seed.users[0].id,
+          seed.users[1].id,
+        ]);
 
         await request(app)
           .post("/friendships")
@@ -73,7 +68,10 @@ describe("friendship router", () => {
   describe("[GET] /friendships", () => {
     it("should accept friendship", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const tokens = createTokens([seed.users[0].id, seed.users[1].id]);
+        const tokens = TestHelpers.createTokens([
+          seed.users[0].id,
+          seed.users[1].id,
+        ]);
 
         await request(app)
           .post("/friendships")
@@ -101,7 +99,7 @@ describe("friendship router", () => {
 
     it("shouldn't accept own friendship requests", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const token = createTokens([seed.users[0].id])[0];
+        const token = TestHelpers.createTokens([seed.users[0].id])[0];
 
         await request(app)
           .post("/friendships")
@@ -123,7 +121,10 @@ describe("friendship router", () => {
   describe("[DELETE] /friendships", () => {
     it("should delete friendship", async () => {
       await testWithTransaction(async ({ app, seed }) => {
-        const tokens = createTokens([seed.users[0].id, seed.users[1].id]);
+        const tokens = TestHelpers.createTokens([
+          seed.users[0].id,
+          seed.users[1].id,
+        ]);
 
         await request(app)
           .post("/friendships")
