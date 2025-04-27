@@ -19,6 +19,11 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm i
+
       - name: Copy envs for tests
         run: cp backend/env.example backend/.env.test
 
