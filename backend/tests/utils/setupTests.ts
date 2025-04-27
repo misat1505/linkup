@@ -24,11 +24,16 @@ export async function startContainer() {
   process.env.DATABASE_URL = dbUrl;
   console.log(2);
 
-  execSync("npx prisma db push", {
-    env: { DATABASE_URL: dbUrl },
-    stdio: "inherit",
-  });
-  console.log(3);
+  try {
+    execSync("npx prisma db push", {
+      env: { ...process.env, DATABASE_URL: dbUrl },
+      stdio: "inherit",
+    });
+    console.log(3);
+  } catch (error) {
+    console.error("Error running npx prisma db push:", error);
+    throw error;
+  }
 
   _prisma = new PrismaClient({ datasources: { db: { url: dbUrl } } });
 

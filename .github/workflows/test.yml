@@ -21,10 +21,20 @@ jobs:
           cache: "npm"
           cache-dependency-path: "backend/package-lock.json"
 
+      - name: Verify Node.js installation
+        run: |
+          node --version
+          npm --version
+
       - name: Install dependencies
         run: |
           cd backend
-          npm ci # Use npm ci for CI environments for deterministic installs
+          npm ci
+
+      - name: Verify Prisma installation
+        run: |
+          cd backend
+          npx prisma --version
 
       - name: Copy envs for tests
         run: cp backend/env.example backend/.env.test
