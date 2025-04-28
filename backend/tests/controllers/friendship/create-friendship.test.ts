@@ -1,4 +1,5 @@
 import { FriendshipControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFriendshipService,
   mockRequest,
@@ -11,8 +12,8 @@ describe("createFriendship", () => {
     mockFriendshipService.createFriendship.mockResolvedValue(mockFriendship);
 
     const req = mockRequest({
+      user: { id: mockFriendship.requester.id } as UserWithCredentials,
       body: {
-        token: { userId: mockFriendship.requester.id },
         requesterId: mockFriendship.requester.id,
         acceptorId: mockFriendship.acceptor.id,
       },
@@ -28,8 +29,8 @@ describe("createFriendship", () => {
     mockFriendshipService.createFriendship.mockResolvedValue(mockFriendship);
 
     const req = mockRequest({
+      user: { id: "differen-user-id" } as UserWithCredentials,
       body: {
-        token: { userId: "different-user-id" },
         requesterId: mockFriendship.requester.id,
         acceptorId: mockFriendship.acceptor.id,
       },
@@ -45,8 +46,8 @@ describe("createFriendship", () => {
     mockFriendshipService.createFriendship.mockResolvedValue(null);
 
     const req = mockRequest({
+      user: { id: mockFriendship.requester.id } as UserWithCredentials,
       body: {
-        token: { userId: mockFriendship.requester.id },
         requesterId: mockFriendship.requester.id,
         acceptorId: mockFriendship.acceptor.id,
       },

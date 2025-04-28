@@ -1,4 +1,5 @@
 import { PostControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { handleMarkdownUpdate } from "../../../src/utils/updatePost";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
@@ -20,9 +21,9 @@ describe("updatePost", () => {
     });
 
     const req = mockRequest({
+      user: { id: "user-id" } as UserWithCredentials,
       body: {
         content: "New updated content",
-        token: { userId: "user-id" },
       },
       params: { id: "post-id" },
     });
@@ -42,9 +43,9 @@ describe("updatePost", () => {
     mockPostService.getPost.mockResolvedValue(null);
 
     const req = mockRequest({
+      user: { id: "user-id" } as UserWithCredentials,
       body: {
         content: "New updated content",
-        token: { userId: "user-id" },
       },
       params: { id: "post-id" },
     });
@@ -64,9 +65,9 @@ describe("updatePost", () => {
     mockPostService.getPost.mockResolvedValue(post);
 
     const req = mockRequest({
+      user: { id: "user-id" } as UserWithCredentials,
       body: {
         content: "New updated content",
-        token: { userId: "user-id" },
       },
       params: { id: "post-id" },
     });
@@ -88,9 +89,9 @@ describe("updatePost", () => {
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
+      user: { id: "user-id" } as UserWithCredentials,
       body: {
         content: "New updated content",
-        token: { userId: "user-id" },
       },
       params: { id: "post-id" },
     });

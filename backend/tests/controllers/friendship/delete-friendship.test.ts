@@ -1,4 +1,5 @@
 import { FriendshipControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFriendshipService,
   mockRequest,
@@ -11,8 +12,8 @@ describe("deleteFriendship", () => {
     mockFriendshipService.deleteFriendship.mockResolvedValue(true);
 
     const req = mockRequest({
+      user: { id: mockFriendship.acceptor.id } as UserWithCredentials,
       body: {
-        token: { userId: mockFriendship.acceptor.id },
         requesterId: mockFriendship.acceptor.id,
         acceptorId: "user-id-2",
       },
@@ -28,8 +29,8 @@ describe("deleteFriendship", () => {
     mockFriendshipService.deleteFriendship.mockResolvedValue(false);
 
     const req = mockRequest({
+      user: { id: mockFriendship.acceptor.id } as UserWithCredentials,
       body: {
-        token: { userId: mockFriendship.acceptor.id },
         requesterId: "user-id-1",
         acceptorId: "user-id-2",
       },
@@ -45,8 +46,8 @@ describe("deleteFriendship", () => {
     mockFriendshipService.deleteFriendship.mockResolvedValue(false);
 
     const req = mockRequest({
+      user: { id: mockFriendship.acceptor.id } as UserWithCredentials,
       body: {
-        token: { userId: mockFriendship.acceptor.id },
         requesterId: mockFriendship.acceptor.id,
         acceptorId: "user-id-2",
       },

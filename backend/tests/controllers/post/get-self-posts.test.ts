@@ -1,4 +1,5 @@
 import { PostControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("getUserPosts", () => {
@@ -6,9 +7,7 @@ describe("getUserPosts", () => {
     const posts = [{ id: "post-id-1", content: "User Post 1" }];
     mockPostService.getUserPosts.mockResolvedValue(posts);
 
-    const req = mockRequest({
-      body: { token: { userId: "user-id" } },
-    });
+    const req = mockRequest({ user: { id: "user-id" } as UserWithCredentials });
     const res = mockResponse();
 
     await PostControllers.getUserPosts(req, res, jest.fn());
@@ -21,9 +20,7 @@ describe("getUserPosts", () => {
     mockPostService.getUserPosts.mockRejectedValue(new Error("Error"));
     const mockNextFunction = jest.fn();
 
-    const req = mockRequest({
-      body: { token: { userId: "user-id" } },
-    });
+    const req = mockRequest({ user: { id: "user-id" } as UserWithCredentials });
     const res = mockResponse();
 
     await PostControllers.getUserPosts(req, res, mockNextFunction);

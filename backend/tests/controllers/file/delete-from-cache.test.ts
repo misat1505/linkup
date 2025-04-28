@@ -1,4 +1,5 @@
 import { FileControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFileService,
   mockFileStorage,
@@ -17,8 +18,8 @@ describe("deleteFromCache", () => {
 
   it("deletes file from cache", async () => {
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       params: { filename: "url1" },
-      body: { token: { userId: "userId" } },
     });
     const res = mockResponse();
 
@@ -38,8 +39,8 @@ describe("deleteFromCache", () => {
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       params: { filename: "testfile.txt" },
-      body: { token: { userId: "userId" } },
     });
     const res = mockResponse();
 

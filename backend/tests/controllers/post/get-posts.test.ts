@@ -1,4 +1,5 @@
 import { PostControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockPostRecommendationService,
   mockRequest,
@@ -14,7 +15,7 @@ describe("getPosts", () => {
     mockPostRecommendationService.getRecommendedPosts.mockResolvedValue(posts);
 
     const req = mockRequest({
-      body: { token: { userId: "user-id" } },
+      user: { id: "user-id" } as UserWithCredentials,
       query: {},
     });
     const res = mockResponse();
@@ -29,7 +30,7 @@ describe("getPosts", () => {
 
   it("should return 400 if limit exceeds 10", async () => {
     const req = mockRequest({
-      body: { token: { userId: "user-id" } },
+      user: { id: "user-id" } as UserWithCredentials,
       query: { limit: "20" },
     });
     const res = mockResponse();
@@ -47,7 +48,7 @@ describe("getPosts", () => {
     mockPostRecommendationService.getRecommendedPosts.mockResolvedValue(posts);
 
     const req = mockRequest({
-      body: { token: { userId: "user-id" } },
+      user: { id: "user-id" } as UserWithCredentials,
       query: { lastPostId: "post-id-5", limit: "5" },
     });
     const res = mockResponse();
@@ -67,7 +68,7 @@ describe("getPosts", () => {
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
-      body: { token: { userId: "user-id" } },
+      user: { id: "user-id" } as UserWithCredentials,
       query: {},
     });
     const res = mockResponse();
@@ -85,7 +86,7 @@ describe("getPosts", () => {
     mockPostRecommendationService.getRecommendedPosts.mockResolvedValue(posts);
 
     const req = mockRequest({
-      body: { token: { userId: "user-id" } },
+      user: { id: "user-id" } as UserWithCredentials,
       query: { lastPostId: "invalid-id", limit: "5" },
     });
     const res = mockResponse();
@@ -106,7 +107,7 @@ describe("getPosts", () => {
     mockPostRecommendationService.getRecommendedPosts.mockResolvedValue(posts);
 
     const req = mockRequest({
-      body: { token: { userId: "user-id" } },
+      user: { id: "user-id" } as UserWithCredentials,
       query: { limit: "invalid" },
     });
     const res = mockResponse();
@@ -127,7 +128,7 @@ describe("getPosts", () => {
     mockPostRecommendationService.getRecommendedPosts.mockResolvedValue(posts);
 
     const req = mockRequest({
-      body: { token: { userId: "user-id" } },
+      user: { id: "user-id" } as UserWithCredentials,
       query: { lastPostId: "null", limit: "5" },
     });
     const res = mockResponse();

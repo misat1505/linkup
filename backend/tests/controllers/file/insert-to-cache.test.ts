@@ -1,5 +1,6 @@
 import { FileControllers } from "../../../src/controllers";
 import { CACHE_CAPACITY } from "../../../src/controllers/file/insertToCache.controller";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFileService,
   mockFileStorage,
@@ -25,7 +26,7 @@ describe("insertToCache", () => {
         buffer: Buffer.from("fake-image-data"),
         originalname: "testfile.jpg",
       } as Express.Multer.File,
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
     });
     const res = mockResponse();
 
@@ -45,7 +46,7 @@ describe("insertToCache", () => {
 
     const req = mockRequest({
       file: { buffer: Buffer.from("fake-image-data") } as Express.Multer.File,
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
     });
     const res = mockResponse();
 
@@ -56,7 +57,7 @@ describe("insertToCache", () => {
 
   it("returns 400 if no file uploaded", async () => {
     const req = mockRequest({
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
     });
     const res = mockResponse();
 
@@ -73,7 +74,7 @@ describe("insertToCache", () => {
 
     const req = mockRequest({
       file: { buffer: Buffer.from("fake-image-data") } as Express.Multer.File,
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
     });
     const res = mockResponse();
 

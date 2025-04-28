@@ -1,4 +1,5 @@
 import { FileControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFileService,
   mockFileStorage,
@@ -19,8 +20,8 @@ describe("getCache", () => {
     mockFileStorage.listFiles.mockResolvedValue(["url", "url2"]);
 
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       params: { filename: "testfile.txt" },
-      body: { token: { userId: "userId" } },
       query: { filter: "post" },
     });
     const res = mockResponse();

@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { PostControllers } from "../../../src/controllers";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
+import { UserWithCredentials } from "../../../src/types/User";
 
 describe("reportPost", () => {
   const postId = "123";
@@ -10,7 +11,7 @@ describe("reportPost", () => {
     mockPostService.reportPost.mockResolvedValue(undefined);
 
     const req = mockRequest({
-      body: { token: { userId } },
+      user: { id: userId } as UserWithCredentials,
       params: { id: postId },
     });
     const res = mockResponse();
@@ -30,7 +31,7 @@ describe("reportPost", () => {
     );
 
     const req = mockRequest({
-      body: { token: { userId } },
+      user: { id: userId } as UserWithCredentials,
       params: { id: postId },
     });
     const res = mockResponse();
@@ -45,7 +46,7 @@ describe("reportPost", () => {
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
-      body: { token: { userId } },
+      user: { id: userId } as UserWithCredentials,
       params: { id: postId },
     });
     const res = mockResponse();

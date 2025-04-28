@@ -1,4 +1,5 @@
 import { PostControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { handleMarkdownUpdate } from "../../../src/utils/updatePost";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
@@ -16,7 +17,8 @@ describe("createPost", () => {
     });
 
     const req = mockRequest({
-      body: { content: postContent, token: { userId: "user-id" } },
+      user: { id: "user-id" } as UserWithCredentials,
+      body: { content: postContent },
     });
     const res = mockResponse();
 
@@ -35,9 +37,9 @@ describe("createPost", () => {
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
+      user: { id: "user-id" } as UserWithCredentials,
       body: {
         content: "This is a new post.",
-        token: { userId: "user-id" },
       },
     });
     const res = mockResponse();

@@ -1,4 +1,5 @@
 import { PostControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("deletePost", () => {
@@ -13,9 +14,7 @@ describe("deletePost", () => {
     mockPostService.deletePost.mockResolvedValue(true);
 
     const req = mockRequest({
-      body: {
-        token: { userId: "user-id" },
-      },
+      user: { id: "user-id" } as UserWithCredentials,
       params: { id: post.id },
     });
     const res = mockResponse();
@@ -31,9 +30,7 @@ describe("deletePost", () => {
     (mockPostService.getPost as jest.Mock).mockResolvedValue(null);
 
     const req = mockRequest({
-      body: {
-        token: { userId: "user-id" },
-      },
+      user: { id: "user-id" } as UserWithCredentials,
       params: { id: "non-existent-id" },
     });
     const res = mockResponse();
@@ -52,9 +49,7 @@ describe("deletePost", () => {
     mockPostService.getPost.mockResolvedValue(unauthorizedPost);
 
     const req = mockRequest({
-      body: {
-        token: { userId: "user-id" },
-      },
+      user: { id: "user-id" } as UserWithCredentials,
       params: { id: unauthorizedPost.id },
     });
     const res = mockResponse();

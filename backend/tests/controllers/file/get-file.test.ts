@@ -1,4 +1,5 @@
 import { FileControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFileService,
   mockFileStorage,
@@ -20,8 +21,8 @@ describe("getFile", () => {
 
   it("shouldn't allow requests without filter", async () => {
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       params: { filename: "testfile.txt" },
-      body: { token: { userId: "userId" } },
       query: {},
     });
     const res = mockResponse();
@@ -36,8 +37,8 @@ describe("getFile", () => {
       mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
       const req = mockRequest({
+        user: { id: "userId" } as UserWithCredentials,
         params: { filename: "testfile.txt" },
-        body: { token: { userId: "userId" } },
         query: { filter: "avatar" },
       });
       const res = mockResponse();
@@ -51,8 +52,8 @@ describe("getFile", () => {
       mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
       const req = mockRequest({
+        user: { id: "userId" } as UserWithCredentials,
         params: { filename: "testfile.txt" },
-        body: { token: { userId: "userId" } },
         query: { filter: "avatar" },
       });
       const res = mockResponse();
@@ -71,8 +72,8 @@ describe("getFile", () => {
       mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
       const req = mockRequest({
+        user: { id: "userId" } as UserWithCredentials,
         params: { filename: "testfile.txt" },
-        body: { token: { userId: "userId" } },
         query: { filter: "chat-photo", chat: mockChatId },
       });
       const res = mockResponse();
@@ -89,8 +90,8 @@ describe("getFile", () => {
       mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
       const req = mockRequest({
+        user: { id: "userId" } as UserWithCredentials,
         params: { filename: "testfile.txt" },
-        body: { token: { userId: "userId" } },
         query: { filter: "chat-message", chat: mockChatId },
       });
       const res = mockResponse();
@@ -105,8 +106,8 @@ describe("getFile", () => {
 
     it("should return 400 if filter is chat message, but no chat given", async () => {
       const req = mockRequest({
+        user: { id: "userId" } as UserWithCredentials,
         params: { filename: "testfile.txt" },
-        body: { token: { userId: "userId" } },
         query: { filter: "chat-message" },
       });
       const res = mockResponse();
@@ -122,8 +123,8 @@ describe("getFile", () => {
       mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
       const req = mockRequest({
+        user: { id: "userId" } as UserWithCredentials,
         params: { filename: "testfile.txt" },
-        body: { token: { userId: "userId" } },
         query: { filter: "cache" },
       });
       const res = mockResponse();
@@ -140,8 +141,8 @@ describe("getFile", () => {
       mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
       const req = mockRequest({
+        user: { id: "userId" } as UserWithCredentials,
         params: { filename: "testfile.txt" },
-        body: { token: { userId: "userId" } },
         query: { filter: "cache" },
       });
       const res = mockResponse();
@@ -157,8 +158,8 @@ describe("getFile", () => {
       mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
       const req = mockRequest({
+        user: { id: "userId" } as UserWithCredentials,
         params: { filename: "testfile.txt" },
-        body: { token: { userId: "userId" } },
         query: { filter: "post", post: mockPostId },
       });
       const res = mockResponse();
@@ -175,8 +176,8 @@ describe("getFile", () => {
       mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
       const req = mockRequest({
+        user: { id: "userId" } as UserWithCredentials,
         params: { filename: "testfile.txt" },
-        body: { token: { userId: "userId" } },
         query: { filter: "post", post: mockPostId },
       });
       const res = mockResponse();
@@ -188,8 +189,8 @@ describe("getFile", () => {
 
     it("shouldn't return 400 if filter is post but no post id given", async () => {
       const req = mockRequest({
+        user: { id: "userId" } as UserWithCredentials,
         params: { filename: "testfile.txt" },
-        body: { token: { userId: "userId" } },
         query: { filter: "post" },
       });
       const res = mockResponse();
