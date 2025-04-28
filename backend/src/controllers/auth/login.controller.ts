@@ -9,6 +9,7 @@ import {
 } from "../../config/jwt-cookie";
 import { env } from "../../config/env";
 import { User } from "../../types/User";
+import { LoginDTO } from "../../validators/auth/login.validators";
 
 /**
  * Controller to log in an existing user and generate authentication tokens.
@@ -65,7 +66,7 @@ export const loginController = async (
   next: NextFunction
 ) => {
   try {
-    const { login, password } = req.body;
+    const { login, password } = req.validated!.body! as LoginDTO;
     const userService = req.app.services.userService;
 
     const user = await userService.getUserByLogin(login);

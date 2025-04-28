@@ -1,4 +1,5 @@
 import { AppServices } from "../utils/initializeServices";
+import { RequestValidatedValues } from "./RequestValidation";
 import { UserWithCredentials } from "./User";
 
 declare global {
@@ -9,6 +10,7 @@ declare global {
 
     interface Request {
       user?: UserWithCredentials;
+      validated?: RequestValidatedValues;
     }
   }
 }

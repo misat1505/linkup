@@ -1,5 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { ValidationChain, validationResult } from "express-validator";
+import {
+  RequestValidatedValues,
+  RequestValidation,
+} from "../types/RequestValidation";
+import { ZodError } from "zod";
 
 /**
  * Middleware to validate the request based on provided validation rules.
@@ -34,5 +39,26 @@ export const validate = (validations: ValidationChain[]) => {
     }));
 
     res.status(400).json({ errors: i18nErrors });
+  };
+};
+
+export const zodValidate = (validations: RequestValidation) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const validated = {} as RequestValidatedValues;
+    const errors: ZodError<any>[] = [];
+
+    Object.entries(validations).forEach(([key, schema]) => {
+      const typedKey = key as keyof RequestValidatedValues;
+      const result = schema.safeParse(req[typedKey]);
+      if (!result.success) errors.push(result.error);
+      else validated[typedKey] = result.data;
+    });
+
+    if (errors.length === 0) {
+      req.validated = validated;
+      return next();
+    }
+
+    res.status(400).json({ errors });
   };
 };

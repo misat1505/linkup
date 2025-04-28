@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { upload } from "../../middlewares/multer";
-import { validate } from "../../middlewares/validate";
+import { validate, zodValidate } from "../../middlewares/validate";
 import { loginRules, signupRules } from "../../validators/auth.validator";
 import { authorizeWithRefreshToken } from "../../middlewares/authorize";
 import { AuthControllers } from "../../controllers";
+import { LoginDTO } from "../../validators/auth/login.validators";
 
 /**
  * Public Authentication Routes Router.
@@ -18,7 +19,11 @@ authRouter.post(
   validate(signupRules),
   AuthControllers.signup
 );
-authRouter.post("/login", validate(loginRules), AuthControllers.login);
+authRouter.post(
+  "/login",
+  zodValidate({ body: LoginDTO }),
+  AuthControllers.login
+);
 authRouter.post(
   "/refresh",
   authorizeWithRefreshToken,
