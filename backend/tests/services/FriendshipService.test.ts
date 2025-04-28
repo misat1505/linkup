@@ -1,5 +1,5 @@
 import { FriendshipService } from "../../src/services/FriendshipService";
-import { isFriendship } from "../../src/types/guards/friendship.guard";
+import { Friendship } from "../../src/types/Friendship";
 import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("FriendshipService", () => {
@@ -31,7 +31,7 @@ describe("FriendshipService", () => {
         expect(result[0].requester.id).toBe(seed.users[0].id);
         expect(result[0].acceptor.id).toBe(seed.users[1].id);
         expect(result[0].status).toBe("PENDING");
-        expect(isFriendship(result[0])).toBe(true);
+        Friendship.strict().parse(result[0]);
       });
     });
   });
@@ -49,7 +49,7 @@ describe("FriendshipService", () => {
         expect(result!.requester.id).toBe(seed.users[0].id);
         expect(result!.acceptor.id).toBe(seed.users[1].id);
         expect(result!.status).toBe("PENDING");
-        expect(isFriendship(result)).toBe(true);
+        Friendship.strict().parse(result);
       });
     });
 
@@ -86,7 +86,7 @@ describe("FriendshipService", () => {
         expect(result!.requester.id).toBe(seed.users[0].id);
         expect(result!.acceptor.id).toBe(seed.users[1].id);
         expect(result!.status).toBe("ACCEPTED");
-        expect(isFriendship(result)).toBe(true);
+        Friendship.strict().parse(result);
       });
     });
 

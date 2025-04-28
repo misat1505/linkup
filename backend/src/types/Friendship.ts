@@ -2,8 +2,8 @@ import { z } from "zod";
 import { User } from "./User";
 
 export const Friendship = z.object({
-  requester: User,
-  acceptor: User,
+  requester: User.strict(),
+  acceptor: User.strict(),
   status: z.enum(["PENDING", "ACCEPTED"]),
 });
 
