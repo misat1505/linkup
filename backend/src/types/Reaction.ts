@@ -1,9 +1,11 @@
-import { Message } from "./Message";
+import { z } from "zod";
 import { User } from "./User";
 
-export type Reaction = {
-  id: string;
-  name: string;
-  messageId: Message["id"];
-  user: User;
-};
+export const Reaction = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  messageId: z.string().uuid(),
+  user: User,
+});
+
+export type Reaction = z.infer<typeof Reaction>;
