@@ -54,7 +54,7 @@ export class UserService {
       select: userSelect,
     });
 
-    return users;
+    return users.map((u) => User.parse(u));
   }
 
   /**
@@ -90,7 +90,10 @@ export class UserService {
     const user: UserWithCredentials | null = await this.prisma.user.findFirst({
       where: { login },
     });
-    return user;
+
+    if (!user) return null;
+
+    return UserWithCredentials.parse(user);
   }
 
   /**
@@ -104,7 +107,10 @@ export class UserService {
     const user: UserWithCredentials | null = await this.prisma.user.findFirst({
       where: { id },
     });
-    return user;
+
+    if (!user) return null;
+
+    return UserWithCredentials.parse(user);
   }
 
   /**

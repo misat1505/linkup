@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { UserService } from "../../services/UserService";
 import { Hasher } from "../../lib/Hasher";
 import { TokenProcessor } from "../../lib/TokenProcessor";
 import {
@@ -9,6 +8,7 @@ import {
   refreshTokenSignOptions,
 } from "../../config/jwt-cookie";
 import { env } from "../../config/env";
+import { User } from "../../types/User";
 
 /**
  * Controller to log in an existing user and generate authentication tokens.
@@ -94,9 +94,7 @@ export const loginController = async (
       accessTokenSignOptions
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res
-      .status(200)
-      .json({ user: UserService.removeCredentials(user), accessToken });
+    return res.status(200).json({ user: User.parse(user), accessToken });
   } catch (e) {
     next(new Error(req.t("auth.controllers.login.failure")));
   }

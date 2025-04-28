@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { processAvatar } from "../../utils/processAvatar";
 import { Hasher } from "../../lib/Hasher";
-import { UserService } from "../../services/UserService";
-import { UserWithCredentials } from "../../types/User";
+import { User, UserWithCredentials } from "../../types/User";
 import { TokenProcessor } from "../../lib/TokenProcessor";
 import {
   accessTokenSignOptions,
@@ -111,9 +110,7 @@ export const signupController = async (
       accessTokenSignOptions
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res
-      .status(201)
-      .json({ user: UserService.removeCredentials(user), accessToken });
+    return res.status(201).json({ user: User.parse(user), accessToken });
   } catch (e) {
     console.log(e);
     next(new Error(req.t("auth.controllers.signup.failure")));

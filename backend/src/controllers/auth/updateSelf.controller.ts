@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { processAvatar } from "../../utils/processAvatar";
 import { Hasher } from "../../lib/Hasher";
-import { UserService } from "../../services/UserService";
-import { UserWithCredentials } from "../../types/User";
+import { User, UserWithCredentials } from "../../types/User";
 import bcrypt from "bcryptjs";
 
 /**
@@ -99,7 +98,7 @@ export const updateSelfController = async (
       await fileStorage.deleteFile(`avatars/${fetchedUser.photoURL}`);
     }
 
-    return res.status(201).json({ user: UserService.removeCredentials(user) });
+    return res.status(201).json({ user: User.parse(user) });
   } catch (e) {
     next(new Error(req.t("auth.controllers.update.failure")));
   }
