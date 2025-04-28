@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("deleteUserFromGroupChat", () => {
@@ -12,7 +13,7 @@ describe("deleteUserFromGroupChat", () => {
     mockChatService.deleteFromChat.mockResolvedValue(undefined);
 
     const req = mockRequest({
-      body: { token: { userId: "789" } },
+      user: { id: "789" } as UserWithCredentials,
       params: { chatId: "123" },
     });
     const res = mockResponse();
@@ -34,7 +35,7 @@ describe("deleteUserFromGroupChat", () => {
     mockChatService.getChatType.mockResolvedValue("PRIVATE");
 
     const req = mockRequest({
-      body: { token: { userId: "789" } },
+      user: { id: "789" } as UserWithCredentials,
       params: { chatId: "123" },
     });
     const res = mockResponse();
@@ -51,7 +52,7 @@ describe("deleteUserFromGroupChat", () => {
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({
-      body: { token: { userId: "789" } },
+      user: { id: "789" } as UserWithCredentials,
       params: { chatId: "123" },
     });
     const res = mockResponse();

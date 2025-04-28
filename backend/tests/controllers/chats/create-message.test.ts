@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("createMessage", () => {
@@ -8,7 +9,8 @@ describe("createMessage", () => {
     mockChatService.createMessage.mockResolvedValue(newMessage);
 
     const req = mockRequest({
-      body: { content: "Hello", token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
+      body: { content: "Hello" },
       params: { chatId: "someId" },
       files: [],
     });
@@ -22,7 +24,8 @@ describe("createMessage", () => {
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({
-      body: { content: "Hello", token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
+      body: { content: "Hello" },
       params: { chatId: "someId" },
       files: [],
     });
@@ -37,9 +40,9 @@ describe("createMessage", () => {
     mockChatService.isMessageInChat.mockResolvedValue(false);
 
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       body: {
         content: "Hello",
-        token: { userId: "userId" },
         responseId: "responseId",
       },
       params: { chatId: "someId" },

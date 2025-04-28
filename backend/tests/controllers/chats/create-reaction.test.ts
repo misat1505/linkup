@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("createReaction", () => {
@@ -9,8 +10,8 @@ describe("createReaction", () => {
     mockChatService.createReactionToMessage.mockResolvedValue(newReactionData);
 
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       body: {
-        token: { userId: "userId" },
         reactionId: "reactionId",
         messageId: "messageId",
       },
@@ -27,8 +28,8 @@ describe("createReaction", () => {
     mockChatService.isMessageInChat.mockResolvedValue(false);
 
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       body: {
-        token: { userId: "userId" },
         reactionId: "reactionId",
         messageId: "messageId",
       },
@@ -44,8 +45,8 @@ describe("createReaction", () => {
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       body: {
-        token: { userId: "userId" },
         reactionId: "reactionId",
         messageId: "messageId",
       },

@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("updateAlias", () => {
@@ -11,7 +12,8 @@ describe("updateAlias", () => {
     mockChatService.updateAlias.mockResolvedValue(null);
 
     const req = mockRequest({
-      body: { token: { userId: "789" }, alias: "NewAlias" },
+      user: { id: "userId" } as UserWithCredentials,
+      body: { alias: "NewAlias" },
       params: { chatId: "123", userId: "456" },
     });
     const res = mockResponse();
@@ -30,7 +32,8 @@ describe("updateAlias", () => {
     mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
     const req = mockRequest({
-      body: { token: { userId: "789" } },
+      user: { id: "userId" } as UserWithCredentials,
+      body: {},
       params: { chatId: "123", userId: "456" },
     });
     const res = mockResponse();
@@ -46,7 +49,8 @@ describe("updateAlias", () => {
     mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
     const req = mockRequest({
-      body: { token: { userId: "789" } },
+      user: { id: "userId" } as UserWithCredentials,
+      body: {},
       params: { chatId: "123", userId: "456" },
     });
     const res = mockResponse();

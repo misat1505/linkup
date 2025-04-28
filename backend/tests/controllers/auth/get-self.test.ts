@@ -2,41 +2,34 @@ import { v4 as uuidv4 } from "uuid";
 import { UserWithCredentials } from "../../../src/types/User";
 import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 import { AuthControllers } from "../../../src/controllers";
+import { seedProvider } from "../../utils/seedProvider";
 
 describe("getUser", () => {
   it("should get a user by id", async () => {
-    const id = uuidv4();
-    const salt = "salt";
+    await seedProvider(async (seed) => {
+      const user = seed.users[0];
+      mockUserService.getUser.mockResolvedValue(seed);
 
-    const mockUser: UserWithCredentials = {
-      id,
-      firstName: "John",
-      lastName: "Doe",
-      login: "john_doe",
-      password: "hashed_password",
-      salt,
-      photoURL: "file.jpg",
-      lastActive: new Date(),
-    };
+      const req = mockRequest({ user });
+      const res = mockResponse();
 
-    mockUserService.getUser.mockResolvedValue(mockUser);
+      await AuthControllers.getSelf(req, res, jest.fn());
 
-    const req = mockRequest({ body: { token: { userId: id } } });
-    const res = mockResponse();
-
-    await AuthControllers.getSelf(req, res, jest.fn());
-
-    expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(200);
+    });
   });
 
   it("should return 404 if user not found", async () => {
-    mockUserService.getUser.mockResolvedValue(null);
+    await seedProvider(async (seed) => {
+      const user = seed.users[0];
+      mockUserService.getUser.mockResolvedValue(null);
 
-    const req = mockRequest({ body: { token: { userId: 1 } } });
-    const res = mockResponse();
+      const req = mockRequest({ user });
+      const res = mockResponse();
 
-    await AuthControllers.getSelf(req, res, jest.fn());
+      await AuthControllers.getSelf(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.status).toHaveBeenCalledWith(404);
+    });
   });
 });

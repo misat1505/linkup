@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("getChatMessages", () => {
@@ -8,7 +9,7 @@ describe("getChatMessages", () => {
     mockChatService.getChatMessages.mockResolvedValue(messages);
 
     const req = mockRequest({
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
       params: { chatId: "someId" },
       query: {},
     });
@@ -22,7 +23,7 @@ describe("getChatMessages", () => {
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
       params: { chatId: "someId" },
       query: {},
     });
@@ -38,7 +39,7 @@ describe("getChatMessages", () => {
     mockChatService.getChatMessages.mockResolvedValue(messages);
 
     const req = mockRequest({
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
       params: { chatId: "someId" },
       query: { lastMessageId: "message1", limit: "5" },
     });
@@ -59,7 +60,7 @@ describe("getChatMessages", () => {
     mockChatService.getPostChatMessages.mockResolvedValue(messages);
 
     const req = mockRequest({
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
       params: { chatId: "someId" },
       query: { responseId: "response123" },
     });
@@ -77,7 +78,7 @@ describe("getChatMessages", () => {
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
       params: { chatId: "someId" },
       query: { limit: "suhdusahd" },
     });
@@ -93,7 +94,7 @@ describe("getChatMessages", () => {
     mockChatService.getPostChatMessages.mockResolvedValue(messages);
 
     const req = mockRequest({
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
       params: { chatId: "someId" },
       query: { responseId: "null" },
     });
@@ -114,7 +115,7 @@ describe("getChatMessages", () => {
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
       params: { chatId: "someId" },
       query: {},
     });

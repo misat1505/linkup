@@ -17,8 +17,8 @@ describe("updateUser", () => {
           lastName: "Doe",
           login: "login1",
           password: "pass1",
-          token: { userId: seed.users[0].id },
         },
+        user: seed.users[0],
       });
       const res = mockResponse();
       await AuthControllers.updateSelf(req, res, jest.fn());
@@ -41,8 +41,8 @@ describe("updateUser", () => {
           lastName: "Doe",
           login: "login1",
           password: "pass1",
-          token: { userId: seed.users[0].id },
         },
+        user: seed.users[0],
       });
       const res = mockResponse();
 
@@ -66,8 +66,8 @@ describe("updateUser", () => {
           lastName: "Doe",
           login: "login1",
           password: "pass1",
-          token: { userId: seed.users[0].id },
         },
+        user: seed.users[0],
       });
       const res = mockResponse();
 

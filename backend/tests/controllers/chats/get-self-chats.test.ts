@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("getSelfChats", () => {
@@ -7,7 +8,7 @@ describe("getSelfChats", () => {
     mockChatService.getUserChats.mockResolvedValue(chats);
 
     const req = mockRequest({
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
     });
     const res = mockResponse();
     await ChatControllers.getSelfChats(req, res, jest.fn());

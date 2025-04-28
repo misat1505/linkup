@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("createPrivateChat", () => {
@@ -8,8 +9,8 @@ describe("createPrivateChat", () => {
     mockChatService.createPrivateChat.mockResolvedValue(chat);
 
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       body: {
-        token: { userId: "userId" },
         users: ["userId", "user2"],
       },
     });
@@ -24,8 +25,8 @@ describe("createPrivateChat", () => {
     mockChatService.getPrivateChatByUserIds.mockResolvedValue(existingChat);
 
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       body: {
-        token: { userId: "userId" },
         users: ["userId", "user2"],
       },
     });
@@ -37,8 +38,8 @@ describe("createPrivateChat", () => {
 
   it("shouldn't allow if user is not in the user list", async () => {
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       body: {
-        token: { userId: "userId" },
         users: ["user2", "user3"],
       },
     });

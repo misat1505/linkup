@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { processAvatar } from "../../../src/utils/processAvatar";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
@@ -11,8 +12,8 @@ describe("createGroupChat", () => {
     mockChatService.createGroupChat.mockResolvedValue(chat);
 
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       body: {
-        token: { userId: "userId" },
         users: ["userId", "user2"],
         name: "Group Chat",
       },
@@ -27,8 +28,8 @@ describe("createGroupChat", () => {
     (processAvatar as jest.Mock).mockResolvedValue("file");
 
     const req = mockRequest({
+      user: { id: "userId" } as UserWithCredentials,
       body: {
-        token: { userId: "userId" },
         users: ["user2", "user3"],
         name: "Group Chat",
       },

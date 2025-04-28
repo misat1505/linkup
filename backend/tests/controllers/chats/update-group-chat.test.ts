@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { processAvatar } from "../../../src/utils/processAvatar";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
@@ -22,7 +23,8 @@ describe("updateGroupChat", () => {
     });
 
     const req = mockRequest({
-      body: { name: "New Chat Name", token: { userId: "789" } },
+      user: { id: "789" } as UserWithCredentials,
+      body: { name: "New Chat Name" },
       params: { chatId: "123" },
     });
     const res = mockResponse();
@@ -46,7 +48,8 @@ describe("updateGroupChat", () => {
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({
-      body: { name: "New Chat Name", token: { userId: "789" } },
+      user: { id: "789" } as UserWithCredentials,
+      body: { name: "New Chat Name" },
       params: { chatId: "123" },
     });
     const res = mockResponse();
@@ -70,7 +73,8 @@ describe("updateGroupChat", () => {
     });
 
     const req = mockRequest({
-      body: { name: "New Chat Name", token: { userId: "789" } },
+      user: { id: "789" } as UserWithCredentials,
+      body: { name: "New Chat Name" },
       params: { chatId: "123" },
     });
     const res = mockResponse();
