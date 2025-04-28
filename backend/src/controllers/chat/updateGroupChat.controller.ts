@@ -60,10 +60,8 @@ export const updateGroupChatController = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      name,
-      token: { userId },
-    } = req.body;
+    const userId = req.user!.id;
+    const { name } = req.body;
     const { chatId } = req.params;
     const { chatService, fileStorage } = req.app.services;
 

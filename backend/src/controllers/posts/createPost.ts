@@ -51,10 +51,8 @@ export const createPost = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      content,
-      token: { userId },
-    } = req.body;
+    const userId = req.user!.id;
+    const { content } = req.body;
     const { postService, fileStorage } = req.app.services;
 
     const id = uuidv4();

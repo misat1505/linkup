@@ -63,10 +63,8 @@ export const updatePost = async (
 ) => {
   try {
     const { id } = req.params;
-    const {
-      token: { userId },
-      content,
-    } = req.body;
+    const userId = req.user!.id;
+    const { content } = req.body;
     const { postService, fileStorage } = req.app.services;
 
     const post = await postService.getPost(id);

@@ -80,7 +80,7 @@ export const deleteFriendship = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const { requesterId, acceptorId } = req.body;
     const friendshipService = req.app.services.friendshipService;
 

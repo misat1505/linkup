@@ -55,10 +55,8 @@ export const updateAliasController = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      token: { userId },
-      alias,
-    } = req.body;
+    const userId = req.user!.id;
+    const { alias } = req.body;
     const { chatId, userId: userToUpdateId } = req.params;
     const chatService = req.app.services.chatService;
 

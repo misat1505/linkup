@@ -39,9 +39,7 @@ export const getUserPosts = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      token: { userId },
-    } = req.body;
+    const userId = req.user!.id;
     const postService = req.app.services.postService;
 
     const posts = await postService.getUserPosts(userId);

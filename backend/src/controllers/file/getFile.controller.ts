@@ -96,7 +96,7 @@ export const getFileController = async (
     const filter = req.query.filter as Filter;
     const chatId = req.query.chat;
     const postId = req.query.post;
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const { fileService, fileStorage } = req.app.services;
 
     if (!filterArray.includes(filter))

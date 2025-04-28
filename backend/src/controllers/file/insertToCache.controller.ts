@@ -61,7 +61,7 @@ export const insertToCache = async (
 ) => {
   try {
     const file = req.file;
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const fileStorage = req.app.services.fileStorage;
 
     if (!file)

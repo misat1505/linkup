@@ -55,10 +55,8 @@ export const createPrivateChatController = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      users,
-      token: { userId },
-    } = req.body;
+    const userId = req.user!.id;
+    const { users } = req.body;
     const chatService = req.app.services.chatService;
 
     if (!users.includes(userId))

@@ -58,11 +58,8 @@ export const createGroupChatController = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      users,
-      name,
-      token: { userId },
-    } = req.body;
+    const userId = req.user!.id;
+    const { users, name } = req.body;
     const { chatService, fileStorage } = req.app.services;
     if (!users.includes(userId))
       return res.status(401).json({

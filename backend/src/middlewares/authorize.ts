@@ -7,7 +7,7 @@ import { refreshTokenCookieName } from "../config/jwt-cookie";
  * Middleware to authorize and verify JWT token from Authorization header.
  *
  * This middleware checks for a valid JWT token in the `Authorization` header.
- * If a valid token is found, it decodes the token and appends the decoded payload to `req.body.token`.
+ * If a valid token is found, it decodes the token and appends the decoded payload to `req.user`.
  * If no token is found or if the token is invalid, it responds with an error.
  * After processing, it passes control to the next middleware in the stack.
  *
@@ -53,7 +53,7 @@ export const authorize = async (
       .json({ message: "Invalid request - user not found." });
   }
 
-  req.body.token = tokenPayload;
+  req.user = user;
   next();
 };
 
@@ -74,11 +74,12 @@ export const authorize = async (
  *
  * @source
  */
-export const authorizeWithRefreshToken = (
+export const authorizeWithRefreshToken = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const userService = req.app.services.userService;
   const token = req.cookies[refreshTokenCookieName];
 
   if (!token) {
@@ -90,6 +91,14 @@ export const authorizeWithRefreshToken = (
     return res.status(401).json({ message: "Invalid token" });
   }
 
-  req.body.token = tokenPayload;
+  const user = await userService.getUser(tokenPayload.userId);
+
+  if (!user) {
+    return res
+      .status(404)
+      .json({ message: "Invalid request - user not found." });
+  }
+
+  req.user = user;
   next();
 };

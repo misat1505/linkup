@@ -39,9 +39,7 @@ export const deleteSelfFromGroupChatController = async (
 ) => {
   try {
     const { chatId } = req.params;
-    const {
-      token: { userId },
-    } = req.body;
+    const userId = req.user!.id;
     const chatService = req.app.services.chatService;
 
     const chatType = await chatService.getChatType(chatId);

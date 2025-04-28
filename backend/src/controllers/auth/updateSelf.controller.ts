@@ -63,13 +63,8 @@ export const updateSelfController = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      firstName,
-      lastName,
-      login,
-      password,
-      token: { userId },
-    } = req.body;
+    const { firstName, lastName, login, password } = req.body;
+    const userId = req.user!.id;
     const { userService, fileStorage } = req.app.services;
     const file = await processAvatar(fileStorage, req.file);
 

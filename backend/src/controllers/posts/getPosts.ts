@@ -56,7 +56,7 @@ export const getPosts = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const { lastPostId: queryLastPostId, limit: queryLimit } = req.query;
     const postRecommendationService =
       req.app.services.postRecommendationService;

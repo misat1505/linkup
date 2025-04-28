@@ -64,7 +64,7 @@ export const createMessageController = async (
 ) => {
   try {
     const { content, responseId } = req.body;
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const { chatId } = req.params;
     const files = req.files as Express.Multer.File[];
     const { chatService, fileStorage } = req.app.services;

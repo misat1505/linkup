@@ -59,11 +59,8 @@ export const createReactionController = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      token: { userId },
-      reactionId,
-      messageId,
-    } = req.body;
+    const userId = req.user!.id;
+    const { reactionId, messageId } = req.body;
     const chatService = req.app.services.chatService;
     const { chatId } = req.params;
 

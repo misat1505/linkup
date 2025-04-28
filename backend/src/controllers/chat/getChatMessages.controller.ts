@@ -68,7 +68,7 @@ export const getChatMessagesController = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const { chatId } = req.params;
     const { responseId, lastMessageId, limit } = req.query;
     const chatService = req.app.services.chatService;

@@ -62,10 +62,8 @@ export const addUserToGroupChatController = async (
   try {
     const chatService = req.app.services.chatService;
     const { chatId } = req.params;
-    const {
-      token: { userId: myId },
-      userId,
-    } = req.body;
+    const myId = req.user!.id;
+    const { userId } = req.body;
 
     const [chatType, iAmInChat, isOtherInChat] = await Promise.all([
       chatService.getChatType(chatId),

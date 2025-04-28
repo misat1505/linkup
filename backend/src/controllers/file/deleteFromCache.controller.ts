@@ -62,7 +62,7 @@ export const deleteFromCache = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const { filename } = req.params;
     const fileStorage = req.app.services.fileStorage;
 

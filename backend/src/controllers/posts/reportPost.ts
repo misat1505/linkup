@@ -51,7 +51,7 @@ export const reportPost = async (
 ) => {
   try {
     const { id } = req.params;
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const postService = req.app.services.postService;
 
     await postService.reportPost(userId, id);
