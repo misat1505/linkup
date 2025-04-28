@@ -2,7 +2,7 @@ import { z } from "zod";
 import { User } from "./User";
 import { Message } from "./Message";
 
-const UserInChat = User.extend({
+export const UserInChat = User.extend({
   alias: z.string().nullable(),
 });
 

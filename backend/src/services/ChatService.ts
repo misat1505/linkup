@@ -7,16 +7,16 @@ import { messageWithoutResponseSelect } from "../utils/prisma/messageWithoutResp
 import { Reaction } from "../types/Reaction";
 import { PrismaClientOrTransaction } from "../types/Prisma";
 
-function sanitizeChat(chat: any): Chat | null {
-  if (!chat) return null;
+// function sanitizeChat(chat: any): Chat | null {
+//   if (!chat) return null;
 
-  const { lastMessageId, ...sanitizedChat } = chat;
-  sanitizedChat.users = sanitizedChat.users.map(({ alias, user }: any) => ({
-    alias,
-    ...user,
-  }));
-  return sanitizedChat as Chat;
-}
+//   const { lastMessageId, ...sanitizedChat } = chat;
+//   sanitizedChat.users = sanitizedChat.users.map(({ alias, user }: any) => ({
+//     alias,
+//     ...user,
+//   }));
+//   return sanitizedChat as Chat;
+// }
 
 /**
  * Service class responsible for managing chat-related operations in database using Prisma.
@@ -47,7 +47,9 @@ export class ChatService {
       },
     });
 
-    return sanitizeChat(result);
+    if (!result) return null;
+
+    return Chat.parse(result);
   }
 
   /**
@@ -81,7 +83,7 @@ export class ChatService {
       },
     });
 
-    return sanitizeChat(result);
+    return Chat.parse(result);
   }
 
   /**
@@ -137,8 +139,8 @@ export class ChatService {
       },
     });
 
-    const user: UserInChat = { ...result.user, alias: null };
-    return user;
+    const user = { ...result.user, alias: null };
+    return UserInChat.parse(user);
   }
 
   /**
@@ -191,7 +193,7 @@ export class ChatService {
       user: reactionRecord.user,
     };
 
-    return reaction;
+    return Reaction.parse(reaction);
   }
 
   /**
@@ -212,30 +214,6 @@ export class ChatService {
     });
 
     return !!result;
-  }
-
-  private static sanitizeMessages(data: any): Message[] {
-    return data.map((message: any) => ({
-      id: message.id,
-      content: message.content,
-      author: message.author,
-      createdAt: message.createdAt,
-      response: message.response,
-      chatId: message.chatId,
-      files: message.files,
-      reactions: message.reactions.map((userReaction: any) => ({
-        id: userReaction.reaction.id,
-        name: userReaction.reaction.name,
-        messageId: userReaction.messageId,
-        user: {
-          id: userReaction.user.id,
-          firstName: userReaction.user.firstName,
-          lastName: userReaction.user.lastName,
-          photoURL: userReaction.user.photoURL,
-          lastActive: userReaction.user.lastActive,
-        },
-      })),
-    }));
   }
 
   /**
@@ -272,7 +250,7 @@ export class ChatService {
       },
     });
 
-    return ChatService.sanitizeMessages(result);
+    return result.map((m) => Message.parse(m));
   }
 
   async getChatMessages(
@@ -315,7 +293,7 @@ export class ChatService {
       take: limit,
     });
 
-    return ChatService.sanitizeMessages(result);
+    return result.map((m) => Message.parse(m));
   }
 
   /**
@@ -413,7 +391,7 @@ export class ChatService {
       reactions: [],
     };
 
-    return message;
+    return Message.parse(message);
   }
 
   /**
@@ -442,7 +420,7 @@ export class ChatService {
       },
     });
 
-    return result.map((chat) => sanitizeChat(chat)!);
+    return result.map((c) => Chat.parse(c));
   }
 
   /**
@@ -483,7 +461,9 @@ export class ChatService {
         ? result.find((chat) => chat.users?.length !== 1)
         : result.find((chat) => chat.users?.length === 1);
 
-    return sanitizeChat(chat);
+    if (!chat) return null;
+
+    return Chat.parse(chat);
   }
 
   /**
@@ -518,7 +498,7 @@ export class ChatService {
       },
     });
 
-    return sanitizeChat(result)!;
+    return Chat.parse(result);
   }
 
   /**
@@ -560,6 +540,6 @@ export class ChatService {
       },
     });
 
-    return sanitizeChat(result)!;
+    return Chat.parse(result);
   }
 }

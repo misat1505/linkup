@@ -1,7 +1,8 @@
 import { Prisma } from "@prisma/client";
 import { PostService } from "../../src/services/PostService";
-import { isPost } from "../../src/types/guards/Post.guard";
 import { testWithTransaction } from "../utils/testWithTransaction";
+import { v4 as uuidv4 } from "uuid";
+import { Post } from "../../src/types/Post";
 
 describe("PostService", () => {
   describe("createPost", () => {
@@ -10,11 +11,11 @@ describe("PostService", () => {
         const postService = new PostService(tx);
         const content = "This is a new post";
         const authorId = seed.users[0].id;
-        const id = "123";
+        const id = uuidv4();
 
         const result = await postService.createPost({ id, content, authorId });
 
-        expect(isPost(result)).toBe(true);
+        Post.strict().parse(result);
         expect(result.content).toBe(content);
         expect(result.author.id).toBe(authorId);
       });
@@ -31,7 +32,7 @@ describe("PostService", () => {
 
         expect(Array.isArray(result)).toBe(true);
         result.forEach((post) => {
-          expect(isPost(post)).toBe(true);
+          Post.strict().parse(post);
           expect(post.author.id).toBe(userId);
         });
       });
@@ -45,7 +46,7 @@ describe("PostService", () => {
         const postId = seed.posts[0].id;
         const result = await postService.getPost(postId);
 
-        expect(isPost(result)).toBe(true);
+        Post.strict().parse(result);
         expect(result!.id).toBe(postId);
       });
     });
@@ -72,7 +73,7 @@ describe("PostService", () => {
           content: newContent,
         });
 
-        expect(isPost(result)).toBe(true);
+        Post.strict().parse(result);
         expect(result!.content).toBe(newContent);
       });
     });

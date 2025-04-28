@@ -90,7 +90,7 @@ export async function seedDatabase(prisma: PrismaClient): Promise<TestSeed> {
       },
     },
   });
-  const posts = dirtyPosts.map(PostService.sanitizePost);
+  const posts = dirtyPosts.map((p) => Post.parse(p));
 
   const chat1 = await prisma.chat.create({
     data: {
@@ -152,7 +152,7 @@ export async function seedDatabase(prisma: PrismaClient): Promise<TestSeed> {
 
   const seed: TestSeed = {
     users,
-    posts,
+    posts: posts as any,
     chats: [chat1, chat2],
     messages: [message1, message2],
     reactions,

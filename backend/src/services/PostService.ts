@@ -21,16 +21,6 @@ export class PostService {
   constructor(prisma: PrismaClientOrTransaction) {
     this.prisma = prisma;
   }
-  /**
-   * Sanitizes post
-   * @param post - data to be sanitized
-   */
-  static sanitizePost(post: any): Post {
-    return sanitizePost({
-      ...post,
-      chat: transformPostChatSelect(post.chat),
-    });
-  }
 
   /**
    * Deletes a post by its ID.
@@ -72,7 +62,7 @@ export class PostService {
       },
     });
 
-    return PostService.sanitizePost(post);
+    return Post.parse(post);
   }
 
   /**
@@ -93,7 +83,7 @@ export class PostService {
 
     if (!post) return null;
 
-    return PostService.sanitizePost(post);
+    return Post.parse(post);
   }
 
   /**
@@ -112,7 +102,7 @@ export class PostService {
       },
     });
 
-    return posts.map(PostService.sanitizePost);
+    return posts.map((p) => Post.parse(p));
   }
 
   /**
@@ -150,7 +140,7 @@ export class PostService {
       },
     });
 
-    return PostService.sanitizePost(result);
+    return Post.parse(result);
   }
 
   /**
