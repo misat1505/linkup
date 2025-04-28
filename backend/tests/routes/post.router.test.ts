@@ -1,8 +1,8 @@
 import request from "supertest";
-import { isPost } from "../../src/types/guards/Post.guard";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFileStorage } from "../utils/mocks";
 import { TestHelpers } from "../utils/helpers";
+import { Post } from "../../src/types/Post";
 
 jest.mock("../../src/lib/FileStorage");
 
@@ -22,9 +22,7 @@ describe("posts router", () => {
           });
 
         expect(res.statusCode).toEqual(201);
-        expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        Post.strict().parse(res.body.post);
         expect(res.body.post.content).toBe("This is a new post.");
       });
     });
@@ -42,9 +40,7 @@ describe("posts router", () => {
         expect(res.statusCode).toEqual(200);
         expect(Array.isArray(res.body.posts)).toBe(true);
         expect(res.body.posts.length).toBe(1);
-        expect(isPost(res.body.posts[0], { allowStringifiedDates: true })).toBe(
-          true
-        );
+        Post.strict().parse(res.body.posts[0]);
       });
     });
   });
@@ -60,9 +56,7 @@ describe("posts router", () => {
 
         expect(res.statusCode).toEqual(200);
         expect(Array.isArray(res.body.posts)).toBe(true);
-        expect(isPost(res.body.posts[0], { allowStringifiedDates: true })).toBe(
-          true
-        );
+        Post.strict().parse(res.body.posts[0]);
       });
     });
   });
@@ -78,9 +72,7 @@ describe("posts router", () => {
           .set("Authorization", `Bearer ${token}`);
 
         expect(res.statusCode).toEqual(200);
-        expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        Post.strict().parse(res.body.post);
         expect(res.body.post.id).toBe(postId);
       });
     });
@@ -102,9 +94,7 @@ describe("posts router", () => {
           });
 
         expect(res.statusCode).toEqual(200);
-        expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        Post.strict().parse(res.body.post);
         expect(res.body.post.content).toBe(
           "This is the updated content of the post."
         );

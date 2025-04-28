@@ -1,5 +1,4 @@
 import { PostRecommendationService } from "../../src/services/PostRecommendationService";
-import { PostService } from "../../src/services/PostService";
 import { Post } from "../../src/types/Post";
 import { User } from "../../src/types/User";
 import { testWithTransaction } from "../utils/testWithTransaction";
