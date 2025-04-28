@@ -1,11 +1,7 @@
-import { UserWithCredentials } from "../../src/types/User";
+import { User, UserWithCredentials } from "../../src/types/User";
 import { UserService } from "../../src/services/UserService";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
-import {
-  isUser,
-  isUserWithCredentials,
-} from "../../src/types/guards/user.guard";
 import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("UserService", () => {
@@ -16,7 +12,7 @@ describe("UserService", () => {
         const result = await userService.searchUsers("Kyli");
         expect(result.length).toBe(1);
         result.forEach((user) => {
-          expect(isUser(user)).toBe(true);
+          User.strict().parse(user);
         });
       });
     });
@@ -68,7 +64,7 @@ describe("UserService", () => {
         const userService = new UserService(tx);
         const user = await userService.getUserByLogin("login2");
         expect(user).not.toBe(null);
-        expect(isUserWithCredentials(user)).toBe(true);
+        UserWithCredentials.strict().parse(user);
       });
     });
 
@@ -87,7 +83,7 @@ describe("UserService", () => {
         const userService = new UserService(tx);
         const user = await userService.getUser(seed.users[0].id);
         expect(user).not.toBe(null);
-        expect(isUserWithCredentials(user)).toBe(true);
+        UserWithCredentials.strict().parse(user);
       });
     });
 
