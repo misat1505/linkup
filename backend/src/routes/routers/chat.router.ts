@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { validate } from "../../middlewares/validate";
+import { validate, zodValidate } from "../../middlewares/validate";
 import {
   addUserToGroupChatRules,
   createGroupChatRules,
@@ -12,6 +12,10 @@ import {
 import { upload } from "../../middlewares/multer";
 import { authorize } from "../../middlewares/authorize";
 import { ChatControllers } from "../../controllers";
+import {
+  ChatId,
+  GetMessagesQuery,
+} from "../../validators/chats/messages.validators";
 
 /**
  * Chat Routes Router.
@@ -46,7 +50,11 @@ chatRouter.post(
   ChatControllers.createMessage
 );
 
-chatRouter.get("/:chatId/messages", ChatControllers.getChatMessages);
+chatRouter.get(
+  "/:chatId/messages",
+  zodValidate({ params: ChatId, query: GetMessagesQuery }),
+  ChatControllers.getChatMessages
+);
 
 chatRouter.post(
   "/:chatId/reactions",
