@@ -7,16 +7,23 @@ import { messageWithoutResponseSelect } from "../utils/prisma/messageWithoutResp
 import { Reaction } from "../types/Reaction";
 import { PrismaClientOrTransaction } from "../types/Prisma";
 
-// function sanitizeChat(chat: any): Chat | null {
-//   if (!chat) return null;
+function sanitizeChat(chat: any): Chat | null {
+  if (!chat) return null;
 
-//   const { lastMessageId, ...sanitizedChat } = chat;
-//   sanitizedChat.users = sanitizedChat.users.map(({ alias, user }: any) => ({
-//     alias,
-//     ...user,
-//   }));
-//   return sanitizedChat as Chat;
-// }
+  chat.users = chat.users.map(({ alias, user }: any) => ({
+    alias,
+    ...user,
+  }));
+  return chat as Chat;
+}
+
+function sanitizeMessage(message: any): Message {
+  message.reactions = message.reactions.map(({ reaction, ...rest }: any) => ({
+    ...rest,
+    ...reaction,
+  }));
+  return message;
+}
 
 /**
  * Service class responsible for managing chat-related operations in database using Prisma.
@@ -49,7 +56,7 @@ export class ChatService {
 
     if (!result) return null;
 
-    return Chat.parse(result);
+    return Chat.parse(sanitizeChat(result));
   }
 
   /**
@@ -83,7 +90,7 @@ export class ChatService {
       },
     });
 
-    return Chat.parse(result);
+    return Chat.parse(sanitizeChat(result));
   }
 
   /**
@@ -293,7 +300,7 @@ export class ChatService {
       take: limit,
     });
 
-    return result.map((m) => Message.parse(m));
+    return result.map((m) => Message.parse(sanitizeMessage(m)));
   }
 
   /**
@@ -420,7 +427,7 @@ export class ChatService {
       },
     });
 
-    return result.map((c) => Chat.parse(c));
+    return result.map((c) => Chat.parse(sanitizeChat(c)));
   }
 
   /**
@@ -463,7 +470,7 @@ export class ChatService {
 
     if (!chat) return null;
 
-    return Chat.parse(chat);
+    return Chat.parse(sanitizeChat(chat));
   }
 
   /**
@@ -498,7 +505,7 @@ export class ChatService {
       },
     });
 
-    return Chat.parse(result);
+    return Chat.parse(sanitizeChat(result));
   }
 
   /**
@@ -540,6 +547,6 @@ export class ChatService {
       },
     });
 
-    return Chat.parse(result);
+    return Chat.parse(sanitizeChat(result));
   }
 }

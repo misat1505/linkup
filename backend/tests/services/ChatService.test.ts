@@ -1,10 +1,8 @@
 import { Reaction } from "../../src/types/Reaction";
 import { ChatService } from "../../src/services/ChatService";
-import { isReaction } from "../../src/types/guards/reaction.guard";
-import { isMessage } from "../../src/types/guards/message.guard";
-import { isChat } from "../../src/types/guards/chat.guard";
-import { isUserInChat } from "../../src/types/guards/user.guard";
 import { testWithTransaction } from "../utils/testWithTransaction";
+import { Chat, UserInChat } from "../../src/types/Chat";
+import { Message } from "../../src/types/Message";
 
 describe("ChatService", () => {
   describe("updateGroupChat", () => {
@@ -21,7 +19,7 @@ describe("ChatService", () => {
           file,
         });
 
-        expect(isChat(result)).toBe(true);
+        Chat.strict().parse(result);
         expect(result?.photoURL).toBe(file);
         expect(result?.name).toBe(name);
       });
@@ -40,7 +38,7 @@ describe("ChatService", () => {
           file,
         });
 
-        expect(isChat(result)).toBe(true);
+        Chat.strict().parse(result);
         expect(result?.photoURL).toBeNull();
         expect(result?.name).toBeNull();
       });
@@ -88,12 +86,12 @@ describe("ChatService", () => {
           userId,
         });
 
-        expect(isUserInChat(result)).toBe(true);
+        UserInChat.strict().parse(result);
 
         const chats = await chatService.getUserChats(seed.users[0].id);
         const chat = chats.find((c) => c.id === chatId)!;
         const user = chat.users?.find((u) => u.id === userId);
-        expect(isUserInChat(user)).toBe(true);
+        UserInChat.strict().parse(user);
       });
     });
   });
@@ -116,7 +114,7 @@ describe("ChatService", () => {
         const chat = chats.find((c) => c.id === chatId)!;
         const user = chat.users?.find((u) => u.id === userId);
         expect(user?.alias).toBe(alias);
-        expect(isUserInChat(user)).toBe(true);
+        UserInChat.strict().parse(user);
       });
     });
   });
@@ -131,7 +129,7 @@ describe("ChatService", () => {
           reactionId: seed.reactions[0].id,
         });
 
-        expect(isReaction(reaction)).toBe(true);
+        Reaction.strict().parse(reaction);
         expect(reaction).toEqual({
           id: seed.reactions[0].id,
           name: "happy",
@@ -176,7 +174,7 @@ describe("ChatService", () => {
 
         expect(result.length).toBe(1);
         result.forEach((message) => {
-          expect(isMessage(message)).toBe(true);
+          Message.strict().parse(message);
         });
 
         const message = result[0];
@@ -236,7 +234,7 @@ describe("ChatService", () => {
           responseId: seed.messages[1].id,
         });
 
-        expect(isMessage(message)).toBe(true);
+        Message.strict().parse(message);
       });
     });
   });
@@ -249,7 +247,7 @@ describe("ChatService", () => {
 
         expect(chats.length).toBe(2);
         chats.forEach((chat) => {
-          expect(isChat(chat)).toBe(true);
+          Chat.strict().parse(chat);
         });
       });
     });
@@ -264,7 +262,7 @@ describe("ChatService", () => {
           seed.users[0].id
         );
 
-        expect(isChat(result)).toBe(true);
+        Chat.strict().parse(result);
       });
     });
 
@@ -290,7 +288,7 @@ describe("ChatService", () => {
           seed.users[0].id
         );
 
-        expect(isChat(result)).toBe(true);
+        Chat.strict().parse(result);
         expect(result.type).toBe("PRIVATE");
       });
     });
@@ -306,7 +304,7 @@ describe("ChatService", () => {
           "photo.webp"
         );
 
-        expect(isChat(result)).toBe(true);
+        Chat.strict().parse(result);
         expect(result.name).toBe("name");
         expect(result.photoURL).toBe("photo.webp");
         expect(result.type).toBe("GROUP");
