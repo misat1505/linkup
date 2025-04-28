@@ -1,4 +1,3 @@
-import express from "express";
 import {
   createPrivateChatRules,
   createGroupChatRules,
@@ -8,325 +7,362 @@ import {
   addUserToGroupChatRules,
   updateGroupChatRules,
 } from "../../src/validators/chat.validators";
-import { ValidationChain } from "express-validator";
 import { validate } from "../../src/middlewares/validate";
 import request from "supertest";
-import i18next from "../../src/i18n";
-import middleware from "i18next-http-middleware";
-
-const createTestServer = (validations: ValidationChain[]) => {
-  const app = express();
-  app.use(express.json());
-  app.use(middleware.handle(i18next));
-  app.post("/test", validate(validations), (req, res) => {
-    res.status(200).send("Validation passed");
-  });
-  return app;
-};
+import { mockRequest, mockResponse } from "../utils/mocks";
 
 describe("Chat validators", () => {
   describe("Create Private Chat validation rules", () => {
     it("passes with correct data", async () => {
-      const app = createTestServer(createPrivateChatRules);
-      const res = await request(app)
-        .post("/test")
-        .send({
+      const req = mockRequest({
+        body: {
           users: [
             "d290f1ee-6c54-4b01-90e6-d701748f0851",
             "d290f1ee-6c54-4b01-90e6-d701748f0852",
           ],
-        });
+        },
+      });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toBe("Validation passed");
+      const middleware = validate(createPrivateChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("fails with incorrect number of users", async () => {
-      const app = createTestServer(createPrivateChatRules);
-      const res = await request(app)
-        .post("/test")
-        .send({
+      const req = mockRequest({
+        body: {
           users: ["d290f1ee-6c54-4b01-90e6-d701748f0851"],
-        });
+        },
+      });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "Users should be an array with exactly 2 UUIDs",
-          }),
-        ])
-      );
+      const middleware = validate(createPrivateChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
 
     it("fails with invalid UUID", async () => {
-      const app = createTestServer(createPrivateChatRules);
-      const res = await request(app)
-        .post("/test")
-        .send({
-          users: ["invalid-uuid", "d290f1ee-6c54-4b01-90e6-d701748f0852"],
-        });
+      const req = mockRequest({
+        body: {
+          users: ["invalid-uuid", "d290f1ee-6c54-4b01-90e6-d701748f0851"],
+        },
+      });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "Each user should be a valid UUID",
-          }),
-        ])
-      );
+      const middleware = validate(createPrivateChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
   });
 
   describe("Create Group Chat validation rules", () => {
     it("passes with correct data", async () => {
-      const app = createTestServer(createGroupChatRules);
-      const res = await request(app)
-        .post("/test")
-        .send({
+      const req = mockRequest({
+        body: {
           users: ["d290f1ee-6c54-4b01-90e6-d701748f0851"],
           name: "Group Chat",
-        });
+        },
+      });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toBe("Validation passed");
+      const middleware = validate(createGroupChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("fails with no users", async () => {
-      const app = createTestServer(createGroupChatRules);
-      const res = await request(app).post("/test").send({
-        name: "Group Chat",
+      const req = mockRequest({
+        body: {
+          name: "Group Chat",
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "Users should be an array with at least 1 UUID",
-          }),
-        ])
-      );
+      const middleware = validate(createGroupChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
 
     it("fails with invalid name length", async () => {
-      const app = createTestServer(createGroupChatRules);
-      const res = await request(app)
-        .post("/test")
-        .send({
+      const req = mockRequest({
+        body: {
           users: ["d290f1ee-6c54-4b01-90e6-d701748f0851"],
           name: "a".repeat(101),
-        });
+        },
+      });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "Name should be a string with a maximum length of 100 characters",
-          }),
-        ])
-      );
+      const middleware = validate(createGroupChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
   });
 
   describe("Create Message validation rules", () => {
     it("passes with correct data", async () => {
-      const app = createTestServer(createMessageRules);
-      const res = await request(app).post("/test").send({
-        content: "This is a valid message",
+      const req = mockRequest({
+        body: {
+          content: "This is a valid message",
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toBe("Validation passed");
+      const middleware = validate(createMessageRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("fails with content too long", async () => {
-      const app = createTestServer(createMessageRules);
-      const res = await request(app)
-        .post("/test")
-        .send({
+      const req = mockRequest({
+        body: {
           content: "a".repeat(5001),
-        });
+        },
+      });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "Content should be a string with a maximum length of 5000 characters",
-          }),
-        ])
-      );
+      const middleware = validate(createMessageRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
 
     it("fails with invalid responseId", async () => {
-      const app = createTestServer(createMessageRules);
-      const res = await request(app).post("/test").send({
-        content: "This is a valid message",
-        responseId: "invalid-uuid",
+      const req = mockRequest({
+        body: {
+          content: "This is a valid message",
+          responseId: "invalid-uuid",
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "Response ID should be a valid UUID",
-          }),
-        ])
-      );
+      const middleware = validate(createMessageRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
   });
 
   describe("Create Reaction validation rules", () => {
     it("passes with correct data", async () => {
-      const app = createTestServer(createReactionRules);
-      const res = await request(app).post("/test").send({
-        messageId: "d290f1ee-6c54-4b01-90e6-d701748f0851",
-        reactionId: "d290f1ee-6c54-4b01-90e6-d701748f0852",
+      const req = mockRequest({
+        body: {
+          messageId: "d290f1ee-6c54-4b01-90e6-d701748f0851",
+          reactionId: "d290f1ee-6c54-4b01-90e6-d701748f0852",
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toBe("Validation passed");
+      const middleware = validate(createReactionRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("fails with invalid messageId", async () => {
-      const app = createTestServer(createReactionRules);
-      const res = await request(app).post("/test").send({
-        messageId: "invalid-uuid",
-        reactionId: "d290f1ee-6c54-4b01-90e6-d701748f0852",
+      const req = mockRequest({
+        body: {
+          messageId: "invalid-uuid",
+          reactionId: "d290f1ee-6c54-4b01-90e6-d701748f0852",
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "messageId should be a valid UUID",
-          }),
-        ])
-      );
+      const middleware = validate(createReactionRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
 
     it("fails with invalid reactionId", async () => {
-      const app = createTestServer(createReactionRules);
-      const res = await request(app).post("/test").send({
-        messageId: "d290f1ee-6c54-4b01-90e6-d701748f0851",
-        reactionId: "invalid-uuid",
+      const req = mockRequest({
+        body: {
+          messageId: "d290f1ee-6c54-4b01-90e6-d701748f0851",
+          reactionId: "invalid-uuid",
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "reactionId should be a valid UUID",
-          }),
-        ])
-      );
+      const middleware = validate(createReactionRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
   });
 
   describe("Update Alias validation rules", () => {
     it("passes with correct data", async () => {
-      const app = createTestServer(updateAliasRules);
-      const res = await request(app).post("/test").send({
-        alias: "New Alias",
+      const req = mockRequest({
+        body: {
+          alias: "New Alias",
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toBe("Validation passed");
+      const middleware = validate(updateAliasRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("passes with null alias", async () => {
-      const app = createTestServer(updateAliasRules);
-      const res = await request(app).post("/test").send({
-        alias: null,
+      const req = mockRequest({
+        body: {
+          alias: null,
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toBe("Validation passed");
+      const middleware = validate(updateAliasRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("fails with alias too long", async () => {
-      const app = createTestServer(updateAliasRules);
-      const res = await request(app)
-        .post("/test")
-        .send({
+      const req = mockRequest({
+        body: {
           alias: "a".repeat(101),
-        });
+        },
+      });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "alias should be null or a string of maximum length of 100 characters",
-          }),
-        ])
-      );
+      const middleware = validate(updateAliasRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
   });
 
   describe("Add User to Group Chat validation rules", () => {
     it("passes with correct data", async () => {
-      const app = createTestServer(addUserToGroupChatRules);
-      const res = await request(app).post("/test").send({
-        userId: "d290f1ee-6c54-4b01-90e6-d701748f0851",
+      const req = mockRequest({
+        body: {
+          userId: "d290f1ee-6c54-4b01-90e6-d701748f0851",
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toBe("Validation passed");
+      const middleware = validate(addUserToGroupChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("fails with invalid userId", async () => {
-      const app = createTestServer(addUserToGroupChatRules);
-      const res = await request(app).post("/test").send({
-        userId: "invalid-uuid",
+      const req = mockRequest({
+        body: {
+          userId: "invalid-uuid",
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "userId should be a valid UUID",
-          }),
-        ])
-      );
+      const middleware = validate(addUserToGroupChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
   });
 
   describe("Update Group Chat validation rules", () => {
     it("passes with correct data", async () => {
-      const app = createTestServer(updateGroupChatRules);
-      const res = await request(app).post("/test").send({
-        name: "Updated Group Chat Name",
+      const req = mockRequest({
+        body: {
+          name: "Updated Group Chat Name",
+        },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toBe("Validation passed");
+      const middleware = validate(updateGroupChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("passes with null name", async () => {
-      const app = createTestServer(updateGroupChatRules);
-      const res = await request(app).post("/test").send({
-        name: null,
+      const req = mockRequest({
+        body: { name: null },
       });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toBe("Validation passed");
+      const middleware = validate(updateGroupChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).toHaveBeenCalled();
     });
 
     it("fails with name too long", async () => {
-      const app = createTestServer(updateGroupChatRules);
-      const res = await request(app)
-        .post("/test")
-        .send({
+      const req = mockRequest({
+        body: {
           name: "a".repeat(101),
-        });
+        },
+      });
+      const res = mockResponse();
+      const mockNextFunction = jest.fn();
 
-      expect(res.statusCode).toBe(400);
-      expect(res.body.errors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            msg: "Name should be a string with a maximum length of 100 characters",
-          }),
-        ])
-      );
+      const middleware = validate(updateGroupChatRules);
+      await middleware(req, res, mockNextFunction);
+
+      expect(mockNextFunction).not.toHaveBeenCalled();
+
+      const jsonCallArgs = (res.json as jest.Mock).mock.calls[0][0];
+      expect(jsonCallArgs.errors).toHaveLength(1);
     });
   });
 });

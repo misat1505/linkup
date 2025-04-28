@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { searchUserController } from "../../controllers/user/searchUser.controller";
+import { UserControllers } from "../../controllers";
 
 /**
  * User Routes Router.
@@ -8,6 +8,6 @@ import { searchUserController } from "../../controllers/user/searchUser.controll
  */
 const userRouter = Router();
 
-userRouter.get("/search", searchUserController);
+userRouter.get("/search", UserControllers.searchUser);
 
 export default userRouter;

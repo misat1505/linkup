@@ -1,13 +1,13 @@
-import fileStorage from "../../src/lib/FileStorage";
 import { handleMarkdownUpdate } from "../../src/utils/updatePost";
+import { mockFileStorage } from "./mocks";
 
-jest.mock("../../src/lib/FileStorage", () => ({
-  copyFile: jest.fn(),
-  deleteFile: jest.fn(),
-  listFiles: jest
-    .fn()
-    .mockResolvedValue(["posts/123/file1.png", "posts/123/file2.png"]),
-}));
+// jest.mock("../../src/lib/FileStorage", () => ({
+//   copyFile: jest.fn(),
+//   deleteFile: jest.fn(),
+//   listFiles: jest
+//     .fn()
+//     .mockResolvedValue(["posts/123/file1.png", "posts/123/file2.png"]),
+// }));
 
 describe("handleMarkdownUpdate", () => {
   const mockUserId = "user-1";
@@ -19,27 +19,34 @@ describe("handleMarkdownUpdate", () => {
       ![another image](https://example.com/cache/user-1/file3.png?filter=cache)
       <img src="https://example.com/cache/user-1/file4.png?filter=cache" />
     `;
+    mockFileStorage.listFiles.mockResolvedValue([
+      "posts/123/file1.png",
+      "posts/123/file2.png",
+    ]);
 
     const updatedContent = await handleMarkdownUpdate(
+      mockFileStorage as any,
       mockMarkdown,
       mockUserId,
       mockPostId
     );
 
-    expect(fileStorage.copyFile).toHaveBeenCalledWith(
+    expect(mockFileStorage.copyFile).toHaveBeenCalledWith(
       "cache/user-1/file1.png",
       "posts/123/file1.png"
     );
-    expect(fileStorage.copyFile).toHaveBeenCalledWith(
+    expect(mockFileStorage.copyFile).toHaveBeenCalledWith(
       "cache/user-1/file3.png",
       "posts/123/file3.png"
     );
-    expect(fileStorage.copyFile).toHaveBeenCalledWith(
+    expect(mockFileStorage.copyFile).toHaveBeenCalledWith(
       "cache/user-1/file4.png",
       "posts/123/file4.png"
     );
 
-    expect(fileStorage.deleteFile).toHaveBeenCalledWith("posts/123/file2.png");
+    expect(mockFileStorage.deleteFile).toHaveBeenCalledWith(
+      "posts/123/file2.png"
+    );
     expect(updatedContent).toContain("filter=post&post=123");
   });
 });

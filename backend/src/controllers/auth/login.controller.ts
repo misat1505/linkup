@@ -66,8 +66,9 @@ export const loginController = async (
 ) => {
   try {
     const { login, password } = req.body;
+    const userService = req.app.services.userService;
 
-    const user = await UserService.getUserByLogin(login);
+    const user = await userService.getUserByLogin(login);
 
     if (!user) {
       return res

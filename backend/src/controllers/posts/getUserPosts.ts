@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { PostService } from "../../services/PostService";
 
 /**
  * Controller to retrieve posts by the authenticated user.
@@ -43,8 +42,9 @@ export const getUserPosts = async (
     const {
       token: { userId },
     } = req.body;
+    const postService = req.app.services.postService;
 
-    const posts = await PostService.getUserPosts(userId);
+    const posts = await postService.getUserPosts(userId);
 
     return res.status(200).json({ posts });
   } catch (e) {

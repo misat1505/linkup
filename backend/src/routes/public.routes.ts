@@ -1,8 +1,8 @@
 import { Router } from "express";
-import authRouter from "./routers/auth.public.router";
 import { reactions } from "../config/reactions";
 import { env } from "../config/env";
 import { resetDB } from "../../tests/utils/setup";
+import { Routers } from "./routers";
 
 /**
  * Public Routes Router.
@@ -13,7 +13,7 @@ import { resetDB } from "../../tests/utils/setup";
  */
 const publicRoutes = Router();
 
-publicRoutes.use("/auth", authRouter);
+publicRoutes.use("/auth", Routers.auth.public);
 publicRoutes.get("/chats/reactions", (req, res) => {
   return res.status(200).json({ reactions });
 });

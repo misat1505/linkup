@@ -12,32 +12,22 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: "21"
+          node-version: "22"
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm i
 
       - name: Copy envs for tests
-        run: cp backend/cicd.env backend/.env.test
-
-      - name: Make script executable
-        run: chmod +x ./docker-compose.sh
-
-      - name: Start database
-        run: ./docker-compose.sh test &
-
-      - name: Wait for database to initialize
-        run: |
-          echo "Waiting for database to initialize..."
-          until docker exec $(docker ps -qf "name=database") pg_isready -h localhost -p 5432; do
-            sleep 1
-          done
-          echo "Database is ready."
+        run: cp backend/env.example backend/.env.test
 
       - name: Run Tests
         run: |
           cd backend
-          npm install
           npm run test

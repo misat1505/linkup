@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { FriendshipService } from "../../services/FriendshipService";
 
 /**
  * Controller to retrieve a list of user friendships.
@@ -59,8 +58,9 @@ export const getUserFriendships = async (
 ) => {
   try {
     const { userId } = req.body.token;
+    const friendshipService = req.app.services.friendshipService;
 
-    const friendships = await FriendshipService.getUserFriendships(userId);
+    const friendships = await friendshipService.getUserFriendships(userId);
 
     return res.status(200).json({ friendships });
   } catch (e) {

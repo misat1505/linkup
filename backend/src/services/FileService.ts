@@ -1,17 +1,22 @@
-import { prisma } from "../lib/Prisma";
+import { PrismaClientOrTransaction } from "../types/Prisma";
 import { User } from "../types/User";
 
 /**
  * Service class responsible for managing file-related operations in the database using Prisma.
  */
 export class FileService {
+  private prisma: PrismaClientOrTransaction;
+
+  constructor(prisma: PrismaClientOrTransaction) {
+    this.prisma = prisma;
+  }
   /**
    * Checks if a photo URL is associated with a user's avatar.
    * @param photoURL - The URL of the photo to check.
    * @returns `true` if the photo URL matches a user's avatar, otherwise `false`.
    */
-  static async isUserAvatar(photoURL: string): Promise<boolean> {
-    const result = await prisma.user.findFirst({
+  async isUserAvatar(photoURL: string): Promise<boolean> {
+    const result = await this.prisma.user.findFirst({
       where: { photoURL },
     });
 
@@ -24,11 +29,8 @@ export class FileService {
    * @param userId - The ID of the user to check the association for.
    * @returns `true` if the photo URL is associated with a chat's photo, otherwise `false`.
    */
-  static async isChatPhoto(
-    photoURL: string,
-    userId: User["id"]
-  ): Promise<boolean> {
-    const result = await prisma.chat.findFirst({
+  async isChatPhoto(photoURL: string, userId: User["id"]): Promise<boolean> {
+    const result = await this.prisma.chat.findFirst({
       where: {
         photoURL,
         type: { in: ["GROUP", "PRIVATE"] },
@@ -47,11 +49,8 @@ export class FileService {
    * @param userId - The ID of the user to check the association for.
    * @returns `true` if the photo URL is associated with a chat message, otherwise `false`.
    */
-  static async isChatMessage(
-    photoURL: string,
-    userId: User["id"]
-  ): Promise<boolean> {
-    const postChat = await prisma.chat.findFirst({
+  async isChatMessage(photoURL: string, userId: User["id"]): Promise<boolean> {
+    const postChat = await this.prisma.chat.findFirst({
       where: {
         type: "POST",
         messages: {
@@ -68,7 +67,7 @@ export class FileService {
 
     if (postChat) return true;
 
-    const result = await prisma.chat.findFirst({
+    const result = await this.prisma.chat.findFirst({
       where: {
         type: { in: ["GROUP", "PRIVATE"] },
         users: {

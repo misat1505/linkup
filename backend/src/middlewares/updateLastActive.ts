@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { UserService } from "../services/UserService";
 
 /**
  * Middleware to update the last active timestamp for the user.
@@ -20,8 +19,9 @@ export const updateLastActive = async (
   next: NextFunction
 ) => {
   const { userId } = req.body.token;
+  const userService = req.app.services.userService;
 
-  await UserService.updateLastActive(userId);
+  await userService.updateLastActive(userId);
 
   next();
 };

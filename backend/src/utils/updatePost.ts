@@ -1,6 +1,6 @@
 import { User } from "../types/User";
 import { Post } from "../types/Post";
-import fileStorage from "../lib/FileStorage";
+import { FileStorage } from "../lib/FileStorage";
 
 /**
  * Handles updating a post's content with new file references.
@@ -15,14 +15,15 @@ import fileStorage from "../lib/FileStorage";
  * @source
  */
 export async function handleMarkdownUpdate(
+  fileStorage: FileStorage,
   content: string,
   userId: User["id"],
   postId: Post["id"]
 ): Promise<string> {
   const urls = extractUrlsFromMarkdown(content);
   const filesInfo = extractFileInfo(urls);
-  await migrateFiles(filesInfo, userId, postId);
-  await removeUnusedFiles(filesInfo, postId);
+  await migrateFiles(fileStorage, filesInfo, userId, postId);
+  await removeUnusedFiles(fileStorage, filesInfo, postId);
   return updateUrlsInContent(content, filesInfo, postId);
 }
 
@@ -60,6 +61,7 @@ function extractFileInfo(urls: string[]): FileInfo[] {
 }
 
 async function migrateFiles(
+  fileStorage: FileStorage,
   files: FileInfo[],
   userId: User["id"],
   postId: Post["id"]
@@ -91,7 +93,11 @@ function updateUrlsInContent(
   }, content);
 }
 
-async function removeUnusedFiles(files: FileInfo[], postId: Post["id"]) {
+async function removeUnusedFiles(
+  fileStorage: FileStorage,
+  files: FileInfo[],
+  postId: Post["id"]
+) {
   const paths = await fileStorage.listFiles(`posts/${postId}`);
 
   paths.forEach((path) => {

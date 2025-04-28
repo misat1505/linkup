@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { FriendshipService } from "../../services/FriendshipService";
 
 /**
  * Controller to accept an existing friendship request.
@@ -93,13 +92,14 @@ export const acceptFriendship = async (
   try {
     const { userId } = req.body.token;
     const { requesterId, acceptorId } = req.body;
+    const friendshipService = req.app.services.friendshipService;
 
     if (userId !== acceptorId)
       return res.status(400).json({
         message: req.t("friends.controllers.accept.unauthorized"),
       });
 
-    const friendship = await FriendshipService.acceptFriendship(
+    const friendship = await friendshipService.acceptFriendship(
       requesterId,
       acceptorId
     );

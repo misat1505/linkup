@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { PostService } from "../../services/PostService";
 import { handleMarkdownUpdate } from "../../utils/updatePost";
 
 /**
@@ -68,8 +67,9 @@ export const updatePost = async (
       token: { userId },
       content,
     } = req.body;
+    const { postService, fileStorage } = req.app.services;
 
-    const post = await PostService.getPost(id);
+    const post = await postService.getPost(id);
 
     if (!post)
       return res
@@ -81,9 +81,14 @@ export const updatePost = async (
         .status(401)
         .json({ message: req.t("posts.controllers.update.unauthorized") });
 
-    const updatedContent = await handleMarkdownUpdate(content, userId, id);
+    const updatedContent = await handleMarkdownUpdate(
+      fileStorage,
+      content,
+      userId,
+      id
+    );
 
-    const newPost = await PostService.updatePost({
+    const newPost = await postService.updatePost({
       id,
       content: updatedContent,
     });

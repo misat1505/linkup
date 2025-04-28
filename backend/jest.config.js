@@ -3,5 +3,7 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   maxConcurrency: 1,
-  setupFilesAfterEnv: ["./tests/jest.setup.ts"],
+  globalSetup: "<rootDir>/tests/utils/jest.global-setup.ts",
+  globalTeardown: "<rootDir>/tests/utils/jest.global-teardown.ts",
+  setupFilesAfterEnv: ["<rootDir>/tests/jest.setup.ts"],
 };

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatService } from "../../services/ChatService";
 
 /**
  * Controller to add a user to a group chat.
@@ -61,6 +60,7 @@ export const addUserToGroupChatController = async (
   next: NextFunction
 ) => {
   try {
+    const chatService = req.app.services.chatService;
     const { chatId } = req.params;
     const {
       token: { userId: myId },
@@ -68,19 +68,17 @@ export const addUserToGroupChatController = async (
     } = req.body;
 
     const [chatType, iAmInChat, isOtherInChat] = await Promise.all([
-      ChatService.getChatType(chatId),
-      ChatService.isUserInChat({ userId: myId, chatId }),
-      ChatService.isUserInChat({ userId, chatId }),
+      chatService.getChatType(chatId),
+      chatService.isUserInChat({ userId: myId, chatId }),
+      chatService.isUserInChat({ userId, chatId }),
     ]);
 
     if (chatType !== "GROUP")
-      return res
-        .status(401)
-        .json({
-          message: req.t(
-            "chats.controllers.add-user-to-group-chat.bad-chat-type"
-          ),
-        });
+      return res.status(401).json({
+        message: req.t(
+          "chats.controllers.add-user-to-group-chat.bad-chat-type"
+        ),
+      });
 
     if (!iAmInChat)
       return res.status(401).json({
@@ -90,15 +88,13 @@ export const addUserToGroupChatController = async (
       });
 
     if (isOtherInChat)
-      return res
-        .status(409)
-        .json({
-          message: req.t(
-            "chats.controllers.add-user-to-group-chat.user-already-in-chat"
-          ),
-        });
+      return res.status(409).json({
+        message: req.t(
+          "chats.controllers.add-user-to-group-chat.user-already-in-chat"
+        ),
+      });
 
-    const user = await ChatService.addUserToChat({ chatId, userId });
+    const user = await chatService.addUserToChat({ chatId, userId });
     return res.status(201).json({ user });
   } catch (e) {
     next(new Error(req.t("chats.controllers.add-user-to-group-chat.failure")));

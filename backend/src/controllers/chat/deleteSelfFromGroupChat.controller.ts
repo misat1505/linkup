@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatService } from "../../services/ChatService";
 
 /**
  * Controller to remove a user from a group chat.
@@ -43,18 +42,15 @@ export const deleteSelfFromGroupChatController = async (
     const {
       token: { userId },
     } = req.body;
+    const chatService = req.app.services.chatService;
 
-    const chatType = await ChatService.getChatType(chatId);
+    const chatType = await chatService.getChatType(chatId);
     if (chatType !== "GROUP")
-      return res
-        .status(401)
-        .json({
-          message: req.t(
-            "chats.controllers.delete-self-from-chat.bad-chat-type"
-          ),
-        });
+      return res.status(401).json({
+        message: req.t("chats.controllers.delete-self-from-chat.bad-chat-type"),
+      });
 
-    const iAmInChat = await ChatService.isUserInChat({ userId, chatId });
+    const iAmInChat = await chatService.isUserInChat({ userId, chatId });
     if (!iAmInChat)
       return res.status(401).json({
         message: req.t(
@@ -62,12 +58,10 @@ export const deleteSelfFromGroupChatController = async (
         ),
       });
 
-    await ChatService.deleteFromChat({ chatId, userId });
-    return res
-      .status(200)
-      .json({
-        message: req.t("chats.controllers.delete-self-from-chat.success"),
-      });
+    await chatService.deleteFromChat({ chatId, userId });
+    return res.status(200).json({
+      message: req.t("chats.controllers.delete-self-from-chat.success"),
+    });
   } catch (e) {
     next(new Error(req.t("chats.controllers.delete-self-from-chat.failure")));
   }

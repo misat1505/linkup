@@ -1,11 +1,5 @@
 import { Router } from "express";
-import { updatePost } from "../../controllers/posts/updatePost";
-import { getUserPosts } from "../../controllers/posts/getUserPosts";
-import { getPost } from "../../controllers/posts/getPost";
-import { getPosts } from "../../controllers/posts/getPosts";
-import { createPost } from "../../controllers/posts/createPost";
-import { deletePost } from "../../controllers/posts/deletePost";
-import { reportPost } from "../../controllers/posts/reportPost";
+import { PostControllers } from "../../controllers";
 
 /**
  * Post Routes Router.
@@ -15,12 +9,12 @@ import { reportPost } from "../../controllers/posts/reportPost";
  */
 const postRouter = Router();
 
-postRouter.put("/:id", updatePost);
-postRouter.get("/mine", getUserPosts);
-postRouter.get("/:id", getPost);
-postRouter.delete("/:id", deletePost);
-postRouter.get("/", getPosts);
-postRouter.post("/:id/report", reportPost);
-postRouter.post("/", createPost);
+postRouter.put("/:id", PostControllers.updatePost);
+postRouter.get("/mine", PostControllers.getUserPosts);
+postRouter.get("/:id", PostControllers.getPost);
+postRouter.delete("/:id", PostControllers.deletePost);
+postRouter.get("/", PostControllers.getPosts);
+postRouter.post("/:id/report", PostControllers.reportPost);
+postRouter.post("/", PostControllers.createPost);
 
 export default postRouter;

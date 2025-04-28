@@ -4,7 +4,6 @@ import { Hasher } from "../../lib/Hasher";
 import { UserService } from "../../services/UserService";
 import { UserWithCredentials } from "../../types/User";
 import bcrypt from "bcryptjs";
-import fileStorage from "../../lib/FileStorage";
 
 /**
  * Controller to update the user's details, including login, password, and avatar.
@@ -71,22 +70,21 @@ export const updateSelfController = async (
       password,
       token: { userId },
     } = req.body;
-    const file = await processAvatar(req.file);
+    const { userService, fileStorage } = req.app.services;
+    const file = await processAvatar(fileStorage, req.file);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = Hasher.hash(password + salt);
 
-    const fetchedUser = await UserService.getUserByLogin(login);
+    const fetchedUser = await userService.getUserByLogin(login);
 
     const isLoginTaken =
       fetchedUser && fetchedUser.login === login && fetchedUser.id !== userId;
 
     if (isLoginTaken) {
-      return res
-        .status(409)
-        .json({
-          message: req.t("auth.controllers.update.login-already-exists"),
-        });
+      return res.status(409).json({
+        message: req.t("auth.controllers.update.login-already-exists"),
+      });
     }
 
     const user: UserWithCredentials = {
@@ -100,7 +98,7 @@ export const updateSelfController = async (
       lastActive: new Date(),
     };
 
-    await UserService.updateUser(user);
+    await userService.updateUser(user);
 
     if (fetchedUser?.photoURL) {
       await fileStorage.deleteFile(`avatars/${fetchedUser.photoURL}`);

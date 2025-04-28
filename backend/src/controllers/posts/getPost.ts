@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { PostService } from "../../services/PostService";
 
 /**
  * Controller to retrieve a post by its ID.
@@ -48,8 +47,9 @@ export const getPost = async (
 ) => {
   try {
     const { id } = req.params;
+    const postService = req.app.services.postService;
 
-    const post = await PostService.getPost(id);
+    const post = await postService.getPost(id);
 
     if (!post)
       return res

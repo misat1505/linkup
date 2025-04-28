@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { UserService } from "../../services/UserService";
 
 /**
  * Controller to search users by a search term.
@@ -56,13 +55,14 @@ export const searchUserController = async (
 ) => {
   try {
     const { term } = req.query;
+    const userService = req.app.services.userService;
 
     if (!term || typeof term !== "string")
       return res
         .status(400)
         .json({ message: req.t("users.controllers.search.term-required") });
 
-    const users = await UserService.searchUsers(term);
+    const users = await userService.searchUsers(term);
     return res.status(200).json({ users });
   } catch (e) {
     next(new Error(req.t("users.controllers.search.failure")));

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatService } from "../../services/ChatService";
 
 /**
  * Controller to create a new private chat between two users.
@@ -60,21 +59,20 @@ export const createPrivateChatController = async (
       users,
       token: { userId },
     } = req.body;
+    const chatService = req.app.services.chatService;
 
     if (!users.includes(userId))
-      return res
-        .status(401)
-        .json({
-          message: req.t(
-            "chats.controllers.create-private-chat.not-belonging-to-you"
-          ),
-        });
+      return res.status(401).json({
+        message: req.t(
+          "chats.controllers.create-private-chat.not-belonging-to-you"
+        ),
+      });
 
-    const chat = await ChatService.getPrivateChatByUserIds(users[0], users[1]);
+    const chat = await chatService.getPrivateChatByUserIds(users[0], users[1]);
 
     if (chat) return res.status(409).json({ chat });
 
-    const createdChat = await ChatService.createPrivateChat(users[0], users[1]);
+    const createdChat = await chatService.createPrivateChat(users[0], users[1]);
 
     return res.status(201).json({ chat: createdChat });
   } catch (e) {

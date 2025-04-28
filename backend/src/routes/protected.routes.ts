@@ -1,12 +1,7 @@
 import { Router } from "express";
 import { authorize } from "../middlewares/authorize";
-import authRouterProtected from "./routers/auth.router";
 import { updateLastActive } from "../middlewares/updateLastActive";
-import userRouter from "./routers/user.router";
-import chatRouter from "./routers/chat.router";
-import fileRouter from "./routers/file.router";
-import postRouter from "./routers/post.router";
-import friendshipRouter from "./routers/friendship.router";
+import { Routers } from "./routers";
 
 /**
  * Protected Routes Router.
@@ -16,16 +11,21 @@ import friendshipRouter from "./routers/friendship.router";
  */
 const protectedRoutes = Router();
 
-protectedRoutes.use("/auth", authorize, updateLastActive, authRouterProtected);
-protectedRoutes.use("/files", authorize, updateLastActive, fileRouter);
-protectedRoutes.use("/users", authorize, updateLastActive, userRouter);
-protectedRoutes.use("/chats", authorize, updateLastActive, chatRouter);
-protectedRoutes.use("/posts", authorize, updateLastActive, postRouter);
+protectedRoutes.use(
+  "/auth",
+  authorize,
+  updateLastActive,
+  Routers.auth.protected
+);
+protectedRoutes.use("/files", authorize, updateLastActive, Routers.file);
+protectedRoutes.use("/users", authorize, updateLastActive, Routers.user);
+protectedRoutes.use("/chats", authorize, updateLastActive, Routers.chat);
+protectedRoutes.use("/posts", authorize, updateLastActive, Routers.post);
 protectedRoutes.use(
   "/friendships",
   authorize,
   updateLastActive,
-  friendshipRouter
+  Routers.friendship
 );
 
 export default protectedRoutes;

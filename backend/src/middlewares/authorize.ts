@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { TokenProcessor } from "../lib/TokenProcessor";
 import { env } from "../config/env";
 import { refreshTokenCookieName } from "../config/jwt-cookie";
-import { UserService } from "../services/UserService";
 
 /**
  * Middleware to authorize and verify JWT token from Authorization header.
@@ -27,6 +26,7 @@ export const authorize = async (
   next: NextFunction
 ) => {
   const authorization = req.headers.authorization;
+  const userService = req.app.services.userService;
 
   if (!authorization) {
     return res.status(400).json({ message: "Invalid request - no token" });
@@ -45,7 +45,7 @@ export const authorize = async (
     return res.status(401).json({ message: "Invalid token" });
   }
 
-  const user = await UserService.getUser(tokenPayload.userId);
+  const user = await userService.getUser(tokenPayload.userId);
 
   if (!user) {
     return res

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import fileStorage from "../../lib/FileStorage";
 import { generateNewFilename } from "../../utils/generateNewFilename";
 
 export const CACHE_CAPACITY = 10;
@@ -63,6 +62,7 @@ export const insertToCache = async (
   try {
     const file = req.file;
     const { userId } = req.body.token;
+    const fileStorage = req.app.services.fileStorage;
 
     if (!file)
       return res

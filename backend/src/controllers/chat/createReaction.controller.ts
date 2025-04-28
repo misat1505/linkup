@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatService } from "../../services/ChatService";
 
 /**
  * Controller to create a reaction to a message in a chat.
@@ -65,16 +64,17 @@ export const createReactionController = async (
       reactionId,
       messageId,
     } = req.body;
+    const chatService = req.app.services.chatService;
     const { chatId } = req.params;
 
-    const isUserAuthorized = await ChatService.isUserInChat({ chatId, userId });
+    const isUserAuthorized = await chatService.isUserInChat({ chatId, userId });
 
     if (!isUserAuthorized)
       return res.status(401).json({
         message: req.t("chats.controllers.create-reaction.bad-chat"),
       });
 
-    const isMessageInChat = await ChatService.isMessageInChat({
+    const isMessageInChat = await chatService.isMessageInChat({
       chatId,
       messageId,
     });
@@ -84,7 +84,7 @@ export const createReactionController = async (
         message: req.t("chats.controllers.create-reaction.bad-message"),
       });
 
-    const reaction = await ChatService.createReactionToMessage({
+    const reaction = await chatService.createReactionToMessage({
       userId,
       reactionId,
       messageId,

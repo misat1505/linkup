@@ -1,19 +1,24 @@
 import { User, UserWithCredentials } from "../types/User";
-import { prisma } from "../lib/Prisma";
 import { userSelect } from "../utils/prisma/userSelect";
+import { PrismaClientOrTransaction } from "../types/Prisma";
 
 /**
  * Service class responsible for managing user-related operations in the database using Prisma.
  */
 export class UserService {
+  private prisma: PrismaClientOrTransaction;
+
+  constructor(prisma: PrismaClientOrTransaction) {
+    this.prisma = prisma;
+  }
   /**
    * Updates the user data in the database.
    * @param user - The user object containing updated data.
    */
-  static async updateUser(user: UserWithCredentials): Promise<void> {
+  async updateUser(user: UserWithCredentials): Promise<void> {
     const { id, ...rest } = user;
 
-    await prisma.user.update({
+    await this.prisma.user.update({
       data: { ...rest },
       where: { id },
     });
@@ -24,10 +29,10 @@ export class UserService {
    * @param term - The search term to use for matching users.
    * @returns A list of users matching the search criteria.
    */
-  static async searchUsers(term: string): Promise<User[]> {
+  async searchUsers(term: string): Promise<User[]> {
     const searchTerms = term.trim().toLowerCase().split(/\s+/);
 
-    const users: User[] = await prisma.user.findMany({
+    const users: User[] = await this.prisma.user.findMany({
       where: {
         OR: searchTerms.map((term) => ({
           OR: [
@@ -57,10 +62,8 @@ export class UserService {
    * @param login - The login to check.
    * @returns `true` if the login is taken, otherwise `false`.
    */
-  static async isLoginTaken(
-    login: UserWithCredentials["login"]
-  ): Promise<boolean> {
-    const user: UserWithCredentials | null = await prisma.user.findFirst({
+  async isLoginTaken(login: UserWithCredentials["login"]): Promise<boolean> {
+    const user: UserWithCredentials | null = await this.prisma.user.findFirst({
       where: { login },
     });
     return !!user;
@@ -70,8 +73,8 @@ export class UserService {
    * Inserts a new user into the database.
    * @param user - The user object to insert.
    */
-  static async insertUser(user: UserWithCredentials): Promise<void> {
-    await prisma.user.create({
+  async insertUser(user: UserWithCredentials): Promise<void> {
+    await this.prisma.user.create({
       data: { ...user },
     });
   }
@@ -81,10 +84,10 @@ export class UserService {
    * @param login - The login of the user to retrieve.
    * @returns The user object, or `null` if the user is not found.
    */
-  static async getUserByLogin(
+  async getUserByLogin(
     login: UserWithCredentials["login"]
   ): Promise<UserWithCredentials | null> {
-    const user: UserWithCredentials | null = await prisma.user.findFirst({
+    const user: UserWithCredentials | null = await this.prisma.user.findFirst({
       where: { login },
     });
     return user;
@@ -95,10 +98,10 @@ export class UserService {
    * @param id - The ID of the user to retrieve.
    * @returns The user object, or `null` if the user is not found.
    */
-  static async getUser(
+  async getUser(
     id: UserWithCredentials["id"]
   ): Promise<UserWithCredentials | null> {
-    const user: UserWithCredentials | null = await prisma.user.findFirst({
+    const user: UserWithCredentials | null = await this.prisma.user.findFirst({
       where: { id },
     });
     return user;
@@ -108,8 +111,8 @@ export class UserService {
    * Updates the last active timestamp for a user.
    * @param id - The ID of the user to update.
    */
-  static async updateLastActive(id: User["id"]): Promise<void> {
-    await prisma.user.update({
+  async updateLastActive(id: User["id"]): Promise<void> {
+    await this.prisma.user.update({
       data: { lastActive: new Date() },
       where: { id },
     });

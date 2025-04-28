@@ -1,6 +1,6 @@
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
-import fileStorage from "../lib/FileStorage";
+import { FileStorage } from "../lib/FileStorage";
 
 /**
  * Processes an avatar image: resizes, converts to WebP, and uploads it.
@@ -13,6 +13,7 @@ import fileStorage from "../lib/FileStorage";
  * @source
  */
 export const processAvatar = async (
+  fileStorage: FileStorage,
   file: Express.Multer.File | undefined,
   path: string = "avatars/",
   name?: string

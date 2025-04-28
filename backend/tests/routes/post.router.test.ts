@@ -1,126 +1,144 @@
 import request from "supertest";
-import app from "../../src/app";
-import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import { VALID_USER_ID } from "../utils/constants";
 import { isPost } from "../../src/types/guards/Post.guard";
-import { env } from "../../src/config/env";
-import fileStorage from "../../src/lib/FileStorage";
+import { testWithTransaction } from "../utils/testWithTransaction";
+import { mockFileStorage } from "../utils/mocks";
+import { TestHelpers } from "../utils/helpers";
 
 jest.mock("../../src/lib/FileStorage");
 
 describe("posts router", () => {
-  const token = TokenProcessor.encode(
-    { userId: VALID_USER_ID },
-    env.ACCESS_TOKEN_SECRET
-  );
-
-  const otherUserToken = TokenProcessor.encode(
-    { userId: "935719fa-05c4-42c4-9b02-2be3fefb6e61" },
-    env.ACCESS_TOKEN_SECRET
-  );
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe("[POST] /posts", () => {
     it("should create a new post", async () => {
-      (fileStorage.listFiles as jest.Mock).mockResolvedValue([]);
+      await testWithTransaction(async ({ app, seed }) => {
+        app.services.fileStorage = mockFileStorage as any;
+        const token = TestHelpers.createToken(seed.users[0].id);
+        mockFileStorage.listFiles.mockResolvedValue([]);
 
-      const res = await request(app)
-        .post("/posts")
-        .set("Authorization", `Bearer ${token}`)
-        .send({
-          content: "This is a new post.",
-        });
+        const res = await request(app)
+          .post("/posts")
+          .set("Authorization", `Bearer ${token}`)
+          .send({
+            content: "This is a new post.",
+          });
 
-      expect(res.statusCode).toEqual(201);
-      expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(true);
-      expect(res.body.post.content).toBe("This is a new post.");
+        expect(res.statusCode).toEqual(201);
+        expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(
+          true
+        );
+        expect(res.body.post.content).toBe("This is a new post.");
+      });
     });
   });
 
   describe("[GET] /posts", () => {
     it("should retrieve a list of posts", async () => {
-      const res = await request(app)
-        .get("/posts")
-        .set("Authorization", `Bearer ${otherUserToken}`);
+      await testWithTransaction(async ({ app, seed }) => {
+        const otherUserToken = TestHelpers.createToken(seed.users[1].id);
 
-      expect(res.statusCode).toEqual(200);
-      expect(Array.isArray(res.body.posts)).toBe(true);
-      expect(res.body.posts.length).toBe(1);
-      expect(isPost(res.body.posts[0], { allowStringifiedDates: true })).toBe(
-        true
-      );
+        const res = await request(app)
+          .get("/posts")
+          .set("Authorization", `Bearer ${otherUserToken}`);
+
+        expect(res.statusCode).toEqual(200);
+        expect(Array.isArray(res.body.posts)).toBe(true);
+        expect(res.body.posts.length).toBe(1);
+        expect(isPost(res.body.posts[0], { allowStringifiedDates: true })).toBe(
+          true
+        );
+      });
     });
   });
 
   describe("[GET] /posts/mine", () => {
     it("should retrieve posts by the authenticated user", async () => {
-      const res = await request(app)
-        .get("/posts/mine")
-        .set("Authorization", `Bearer ${token}`);
+      await testWithTransaction(async ({ app, seed }) => {
+        const token = TestHelpers.createToken(seed.users[0].id);
 
-      expect(res.statusCode).toEqual(200);
-      expect(Array.isArray(res.body.posts)).toBe(true);
-      expect(isPost(res.body.posts[0], { allowStringifiedDates: true })).toBe(
-        true
-      );
+        const res = await request(app)
+          .get("/posts/mine")
+          .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toEqual(200);
+        expect(Array.isArray(res.body.posts)).toBe(true);
+        expect(isPost(res.body.posts[0], { allowStringifiedDates: true })).toBe(
+          true
+        );
+      });
     });
   });
 
   describe("[GET] /posts/:id", () => {
     it("should retrieve a post by its ID", async () => {
-      const postId = "25776a73-a5c6-40cf-b77f-76288a34cfa7";
-      const res = await request(app)
-        .get(`/posts/${postId}`)
-        .set("Authorization", `Bearer ${token}`);
+      await testWithTransaction(async ({ app, seed }) => {
+        const token = TestHelpers.createToken(seed.users[0].id);
+        const postId = seed.posts[0].id;
 
-      expect(res.statusCode).toEqual(200);
-      expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(true);
-      expect(res.body.post.id).toBe(postId);
+        const res = await request(app)
+          .get(`/posts/${postId}`)
+          .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toEqual(200);
+        expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(
+          true
+        );
+        expect(res.body.post.id).toBe(postId);
+      });
     });
   });
 
   describe("[PUT] /posts/:id", () => {
     it("should update an existing post", async () => {
-      (fileStorage.listFiles as jest.Mock).mockResolvedValue([]);
+      await testWithTransaction(async ({ app, seed }) => {
+        app.services.fileStorage = mockFileStorage as any;
+        const token = TestHelpers.createToken(seed.users[0].id);
+        mockFileStorage.listFiles.mockResolvedValue([]);
+        const postId = seed.posts[0].id;
 
-      const postId = "25776a73-a5c6-40cf-b77f-76288a34cfa7";
-      const res = await request(app)
-        .put(`/posts/${postId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .send({
-          content: "This is the updated content of the post.",
-        });
+        const res = await request(app)
+          .put(`/posts/${postId}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({
+            content: "This is the updated content of the post.",
+          });
 
-      expect(res.statusCode).toEqual(200);
-      expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(true);
-      expect(res.body.post.content).toBe(
-        "This is the updated content of the post."
-      );
+        expect(res.statusCode).toEqual(200);
+        expect(isPost(res.body.post, { allowStringifiedDates: true })).toBe(
+          true
+        );
+        expect(res.body.post.content).toBe(
+          "This is the updated content of the post."
+        );
+      });
     });
   });
 
   describe("[DELETE] /posts/:id", () => {
     it("should delete post correctly", async () => {
-      const postId = "25776a73-a5c6-40cf-b77f-76288a34cfa7";
-      const res = await request(app)
-        .delete(`/posts/${postId}`)
-        .set("Authorization", `Bearer ${token}`);
+      await testWithTransaction(async ({ app, seed }) => {
+        const token = TestHelpers.createToken(seed.users[0].id);
+        const postId = seed.posts[0].id;
 
-      expect(res.statusCode).toEqual(200);
+        const res = await request(app)
+          .delete(`/posts/${postId}`)
+          .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toEqual(200);
+      });
     });
   });
 
   describe("[POST] /posts/:id/report", () => {
     it("should report post correctly", async () => {
-      const postId = "25776a73-a5c6-40cf-b77f-76288a34cfa7";
-      const res = await request(app)
-        .post(`/posts/${postId}/report`)
-        .set("Authorization", `Bearer ${token}`);
+      await testWithTransaction(async ({ app, seed }) => {
+        const token = TestHelpers.createToken(seed.users[0].id);
+        const postId = seed.posts[0].id;
 
-      expect(res.statusCode).toEqual(200);
+        const res = await request(app)
+          .post(`/posts/${postId}/report`)
+          .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toEqual(200);
+      });
     });
   });
 });

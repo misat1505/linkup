@@ -1,4 +1,3 @@
-import { prisma } from "../lib/Prisma";
 import { Post } from "../types/Post";
 import { User } from "../types/User";
 import { userSelect } from "../utils/prisma/userSelect";
@@ -6,6 +5,7 @@ import {
   postChatSelect,
   transformPostChatSelect,
 } from "../utils/prisma/postChatSelect";
+import { PrismaClientOrTransaction } from "../types/Prisma";
 
 function sanitizePost(post: any): Post {
   const { authorId, chatId, ...sanitizedPost } = post;
@@ -16,6 +16,11 @@ function sanitizePost(post: any): Post {
  * Service class responsible for managing post-related operations in the database using Prisma.
  */
 export class PostService {
+  private prisma: PrismaClientOrTransaction;
+
+  constructor(prisma: PrismaClientOrTransaction) {
+    this.prisma = prisma;
+  }
   /**
    * Sanitizes post
    * @param post - data to be sanitized
@@ -31,8 +36,8 @@ export class PostService {
    * Deletes a post by its ID.
    * @param id - The ID of the post to be deleted.
    */
-  static async deletePost(id: Post["id"]) {
-    await prisma.post.delete({
+  async deletePost(id: Post["id"]) {
+    await this.prisma.post.delete({
       where: { id },
     });
   }
@@ -43,20 +48,20 @@ export class PostService {
    * @param content - The new content of the post.
    * @returns The updated post object, or `null` if no post was found.
    */
-  static async updatePost({
+  async updatePost({
     id,
     content,
   }: {
     id: Post["id"];
     content: Post["content"];
   }): Promise<Post | null> {
-    const existingPost = await prisma.post.findUnique({
+    const existingPost = await this.prisma.post.findUnique({
       where: { id },
     });
 
     if (!existingPost) return null;
 
-    const post = await prisma.post.update({
+    const post = await this.prisma.post.update({
       data: { content },
       where: { id },
       include: {
@@ -67,7 +72,7 @@ export class PostService {
       },
     });
 
-    return this.sanitizePost(post);
+    return PostService.sanitizePost(post);
   }
 
   /**
@@ -75,8 +80,8 @@ export class PostService {
    * @param id - The ID of the post to retrieve.
    * @returns The post object, or `null` if not found.
    */
-  static async getPost(id: Post["id"]): Promise<Post | null> {
-    const post = await prisma.post.findFirst({
+  async getPost(id: Post["id"]): Promise<Post | null> {
+    const post = await this.prisma.post.findFirst({
       where: { id },
       include: {
         author: { select: userSelect },
@@ -88,7 +93,7 @@ export class PostService {
 
     if (!post) return null;
 
-    return this.sanitizePost(post);
+    return PostService.sanitizePost(post);
   }
 
   /**
@@ -96,8 +101,8 @@ export class PostService {
    * @param id - The ID of the user whose posts are to be retrieved.
    * @returns A list of posts created by the user.
    */
-  static async getUserPosts(id: User["id"]): Promise<Post[]> {
-    const posts = await prisma.post.findMany({
+  async getUserPosts(id: User["id"]): Promise<Post[]> {
+    const posts = await this.prisma.post.findMany({
       where: { authorId: id },
       include: {
         author: { select: userSelect },
@@ -107,7 +112,7 @@ export class PostService {
       },
     });
 
-    return posts.map(this.sanitizePost);
+    return posts.map(PostService.sanitizePost);
   }
 
   /**
@@ -117,7 +122,7 @@ export class PostService {
    * @param authorId - The ID of the user who is creating the post.
    * @returns The created post object.
    */
-  static async createPost({
+  async createPost({
     id,
     content,
     authorId,
@@ -126,11 +131,11 @@ export class PostService {
     content: Post["content"];
     authorId: User["id"];
   }): Promise<Post> {
-    const chat = await prisma.chat.create({
+    const chat = await this.prisma.chat.create({
       data: { type: "POST" },
     });
 
-    const result = await prisma.post.create({
+    const result = await this.prisma.post.create({
       data: {
         id,
         content,
@@ -145,7 +150,7 @@ export class PostService {
       },
     });
 
-    return this.sanitizePost(result);
+    return PostService.sanitizePost(result);
   }
 
   /**
@@ -153,8 +158,8 @@ export class PostService {
    * @param userId - The ID of the user that reports the post.
    * @param postId - The ID of the post being reported.
    */
-  static async reportPost(userId: User["id"], postId: Post["id"]) {
-    await prisma.postReport.create({
+  async reportPost(userId: User["id"], postId: Post["id"]) {
+    await this.prisma.postReport.create({
       data: { userId, postId },
     });
   }
