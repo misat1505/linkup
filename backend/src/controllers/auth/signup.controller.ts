@@ -12,6 +12,7 @@ import {
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import { env } from "../../config/env";
+import { SignupDTO } from "../../validators/auth/signup.validators";
 
 /**
  * Controller to sign up a new user, hash the user's password, and return access and refresh tokens.
@@ -71,7 +72,8 @@ export const signupController = async (
   next: NextFunction
 ) => {
   try {
-    const { firstName, lastName, login, password } = req.body;
+    const { firstName, lastName, login, password } = req.validated!
+      .body! as SignupDTO;
     const { userService, fileStorage } = req.app.services;
     const file = await processAvatar(fileStorage, req.file);
 

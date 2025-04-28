@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { PostControllers } from "../../controllers";
+import { zodValidate } from "../../middlewares/validate";
+import { PostId } from "../../validators/params.validators";
 
 /**
  * Post Routes Router.
@@ -11,7 +13,11 @@ const postRouter = Router();
 
 postRouter.put("/:id", PostControllers.updatePost);
 postRouter.get("/mine", PostControllers.getUserPosts);
-postRouter.get("/:id", PostControllers.getPost);
+postRouter.get(
+  "/:id",
+  zodValidate({ params: PostId }),
+  PostControllers.getPost
+);
 postRouter.delete("/:id", PostControllers.deletePost);
 postRouter.get("/", PostControllers.getPosts);
 postRouter.post("/:id/report", PostControllers.reportPost);
