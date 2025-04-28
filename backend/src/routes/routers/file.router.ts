@@ -2,6 +2,11 @@ import { Router } from "express";
 import { upload } from "../../middlewares/multer";
 import { authorize } from "../../middlewares/authorize";
 import { FileControllers } from "../../controllers";
+import { zodValidate } from "../../middlewares/validate";
+import {
+  Filename,
+  FileQuery,
+} from "../../validators/files/getFiles.validators";
 
 /**
  * File Routes Router.
@@ -20,6 +25,10 @@ fileRouter.post(
   authorize,
   FileControllers.insertToCache
 );
-fileRouter.get("/:filename", FileControllers.getFile);
+fileRouter.get(
+  "/:filename",
+  zodValidate({ params: Filename, query: FileQuery }),
+  FileControllers.getFile
+);
 
 export default fileRouter;
