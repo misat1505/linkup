@@ -1,6 +1,5 @@
 import request from "supertest";
 import path from "path";
-import { isUser } from "../../src/types/guards/user.guard";
 import { env } from "../../src/config/env";
 import { refreshTokenCookieName } from "../../src/config/jwt-cookie";
 import { testWithTransaction } from "../utils/testWithTransaction";
@@ -31,9 +30,7 @@ describe("auth router", () => {
           .set("Authorization", `Bearer ${token}`);
 
         expect(res.statusCode).toEqual(201);
-        expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        User.strict().parse(res.body.user);
 
         expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
 
@@ -42,7 +39,7 @@ describe("auth router", () => {
           .set("Authorization", `Bearer ${token}`);
 
         const getUser = res2.body.user;
-        expect(isUser(getUser, { allowStringifiedDates: true })).toBe(true);
+        User.strict().parse(getUser);
         expect(getUser.firstName).toBe(newUser.firstName);
         expect(getUser.lastName).toBe(newUser.lastName);
       });
@@ -57,9 +54,7 @@ describe("auth router", () => {
           password: "pass2",
         });
         expect(res.statusCode).toEqual(200);
-        expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        User.strict().parse(res.body.user);
         expect(res.headers["set-cookie"]).toBeDefined();
       });
     });
@@ -82,9 +77,7 @@ describe("auth router", () => {
           password,
         });
         expect(res.statusCode).toEqual(201);
-        expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        User.strict().parse(res.body.user);
         expect(res.headers["set-cookie"]).toBeDefined();
 
         const res2 = await request(app).post("/auth/login").send({
@@ -93,9 +86,7 @@ describe("auth router", () => {
         });
 
         expect(res2.statusCode).toBe(200);
-        expect(isUser(res2.body.user, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        User.strict().parse(res2.body.user);
         expect(res2.headers["set-cookie"]).toBeDefined();
       });
     });
@@ -115,10 +106,7 @@ describe("auth router", () => {
           .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
 
         expect(res.statusCode).toEqual(201);
-        expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(
-          true
-        );
-
+        User.strict().parse(res.body.user);
         expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
       });
     });
