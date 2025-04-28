@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { PostControllers } from "../../controllers";
 import { zodValidate } from "../../middlewares/validate";
-import { PostId } from "../../validators/params.validators";
+import { PostId } from "../../validators/shared.validators";
 
 /**
  * Post Routes Router.

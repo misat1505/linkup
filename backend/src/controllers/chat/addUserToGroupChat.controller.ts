@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from "express";
+import { ChatId } from "../../validators/chats/messages.validators";
+import { UserId } from "../../validators/shared.validators";
 
 /**
  * Controller to add a user to a group chat.
@@ -61,9 +63,9 @@ export const addUserToGroupChatController = async (
 ) => {
   try {
     const chatService = req.app.services.chatService;
-    const { chatId } = req.params;
+    const { chatId } = req.validated!.params! as ChatId;
     const myId = req.user!.id;
-    const { userId } = req.body;
+    const { userId } = req.validated!.body! as UserId;
 
     const [chatType, iAmInChat, isOtherInChat] = await Promise.all([
       chatService.getChatType(chatId),

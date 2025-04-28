@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { PostId } from "../../validators/params.validators";
+import { PostId } from "../../validators/shared.validators";
 
 /**
  * Controller to retrieve a post by its ID.

@@ -16,6 +16,7 @@ import {
   ChatId,
   GetMessagesQuery,
 } from "../../validators/chats/messages.validators";
+import { UserId } from "../../validators/shared.validators";
 
 /**
  * Chat Routes Router.
@@ -70,7 +71,7 @@ chatRouter.put(
 
 chatRouter.post(
   "/:chatId/users",
-  validate(addUserToGroupChatRules),
+  zodValidate({ body: UserId, params: ChatId }),
   ChatControllers.addUserToGroupChat
 );
 
