@@ -1,7 +1,7 @@
-import { isFriendship } from "../../src/types/guards/friendship.guard";
 import request from "supertest";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { TestHelpers } from "../utils/helpers";
+import { Friendship } from "../../src/types/Friendship";
 
 describe("friendship router", () => {
   describe("[POST] /friendships", () => {
@@ -17,9 +17,7 @@ describe("friendship router", () => {
           });
 
         expect(res.statusCode).toEqual(201);
-        expect(
-          isFriendship(res.body.friendship, { allowStringifiedDates: true })
-        ).toBe(true);
+        Friendship.strict().parse(res.body.friendship);
       });
     });
   });
@@ -46,9 +44,7 @@ describe("friendship router", () => {
 
         expect(res1.body.friendships.length).toBe(1);
         res1.body.friendships.forEach((friendship: any) => {
-          expect(
-            isFriendship(friendship, { allowStringifiedDates: true })
-          ).toBe(true);
+          Friendship.strict().parse(friendship);
         });
 
         const res2 = await request(app)
@@ -57,9 +53,7 @@ describe("friendship router", () => {
 
         expect(res2.body.friendships.length).toBe(1);
         res2.body.friendships.forEach((friendship: any) => {
-          expect(
-            isFriendship(friendship, { allowStringifiedDates: true })
-          ).toBe(true);
+          Friendship.strict().parse(friendship);
         });
       });
     });
@@ -89,11 +83,7 @@ describe("friendship router", () => {
             acceptorId: seed.users[1].id,
           });
 
-        expect(
-          isFriendship(res1.body.friendship, {
-            allowStringifiedDates: true,
-          })
-        ).toBe(true);
+        Friendship.strict().parse(res1.body.friendship);
       });
     });
 

@@ -1,14 +1,6 @@
 import { handleMarkdownUpdate } from "../../src/utils/updatePost";
 import { mockFileStorage } from "./mocks";
 
-// jest.mock("../../src/lib/FileStorage", () => ({
-//   copyFile: jest.fn(),
-//   deleteFile: jest.fn(),
-//   listFiles: jest
-//     .fn()
-//     .mockResolvedValue(["posts/123/file1.png", "posts/123/file2.png"]),
-// }));
-
 describe("handleMarkdownUpdate", () => {
   const mockUserId = "user-1";
   const mockPostId = "123";

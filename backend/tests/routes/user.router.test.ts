@@ -1,7 +1,7 @@
-import { isUser } from "../../src/types/guards/user.guard";
 import request from "supertest";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { TestHelpers } from "../utils/helpers";
+import { User } from "../../src/types/User";
 
 describe("user router", () => {
   describe("[GET] /search", () => {
@@ -16,7 +16,7 @@ describe("user router", () => {
         expect(response.statusCode).toBe(200);
         expect(response.body.users.length).toBe(1);
         response.body.users.forEach((user: any) => {
-          expect(isUser(user, { allowStringifiedDates: true })).toBe(true);
+          User.strict().parse(user);
         });
       });
     });

@@ -1,14 +1,11 @@
 import request from "supertest";
 import path from "path";
 import { Message } from "../../src/types/Message";
-import { isChat } from "../../src/types/guards/chat.guard";
-import { isMessage } from "../../src/types/guards/message.guard";
-import { isReaction } from "../../src/types/guards/reaction.guard";
-import { Chat } from "../../src/types/Chat";
-import { isUserInChat } from "../../src/types/guards/user.guard";
+import { Chat, UserInChat } from "../../src/types/Chat";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFileStorage } from "../utils/mocks";
 import { TestHelpers } from "../utils/helpers";
+import { Reaction } from "../../src/types/Reaction";
 
 jest.mock("../../src/lib/FileStorage");
 
@@ -29,7 +26,7 @@ describe("chat router", () => {
         expect(res.statusCode).toBe(200);
         expect(res.body.chats.length).toBe(seed.chats.length);
         res.body.chats.forEach((chat: unknown) => {
-          expect(isChat(chat, { allowStringifiedDates: true })).toBe(true);
+          Chat.strict().parse(chat);
         });
       });
     });
@@ -50,9 +47,7 @@ describe("chat router", () => {
           });
 
         expect(res.statusCode).toBe(201);
-        expect(isChat(res.body.chat, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        Chat.strict().parse(res.body.chat);
 
         const res2 = await request(app)
           .get("/chats")
@@ -61,7 +56,7 @@ describe("chat router", () => {
         expect(res2.statusCode).toBe(200);
         expect(res2.body.chats.length).toBe(initialChatsCount + 1);
         res2.body.chats.forEach((chat: unknown) => {
-          expect(isChat(chat, { allowStringifiedDates: true })).toBe(true);
+          Chat.strict().parse(chat);
         });
       });
     });
@@ -83,9 +78,7 @@ describe("chat router", () => {
           .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
 
         expect(res.statusCode).toBe(201);
-        expect(isChat(res.body.chat, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        Chat.strict().parse(res.body.chat);
 
         const res2 = await request(app)
           .get("/chats")
@@ -94,7 +87,7 @@ describe("chat router", () => {
         expect(res2.statusCode).toBe(200);
         expect(res2.body.chats.length).toBe(initialChatsCount + 1);
         res2.body.chats.forEach((chat: unknown) => {
-          expect(isChat(chat, { allowStringifiedDates: true })).toBe(true);
+          Chat.strict().parse(chat);
         });
       });
     });
@@ -114,9 +107,7 @@ describe("chat router", () => {
         expect(res.statusCode).toBe(200);
         expect(res.body.messages.length).toBe(messages.length);
         res.body.messages.forEach((message: unknown) => {
-          expect(isMessage(message, { allowStringifiedDates: true })).toBe(
-            true
-          );
+          Message.strict().parse(message);
         });
       });
     });
@@ -139,9 +130,7 @@ describe("chat router", () => {
           .set("Authorization", `Bearer ${token}`);
 
         expect(res.statusCode).toBe(201);
-        expect(
-          isMessage(res.body.message, { allowStringifiedDates: true })
-        ).toBe(true);
+        Message.strict().parse(res.body.message);
 
         const res2 = await request(app)
           .get(`/chats/${chatId}/messages`)
@@ -150,9 +139,7 @@ describe("chat router", () => {
         expect(res2.statusCode).toBe(200);
         expect(res2.body.messages.length).toBe(messages.length + 1);
         res2.body.messages.forEach((message: unknown) => {
-          expect(isMessage(message, { allowStringifiedDates: true })).toBe(
-            true
-          );
+          Message.strict().parse(message);
         });
       });
     });
@@ -179,9 +166,7 @@ describe("chat router", () => {
             messageId: messages[0].id,
           });
         expect(res2.statusCode).toBe(201);
-        expect(
-          isReaction(res2.body.reaction, { allowStringifiedDates: true })
-        ).toBe(true);
+        Reaction.strict().parse(res2.body.reaction);
 
         const res3 = await request(app)
           .get(`/chats/${chatId}/messages`)
@@ -251,9 +236,7 @@ describe("chat router", () => {
           .post(`/chats/${chatId}/users`)
           .set("Authorization", `Bearer ${token}`)
           .send({ userId });
-        expect(
-          isUserInChat(res2.body.user, { allowStringifiedDates: true })
-        ).toBe(true);
+        UserInChat.strict().parse(res2.body.user);
 
         const res3 = await request(app)
           .get("/chats")
@@ -262,7 +245,7 @@ describe("chat router", () => {
           (c: Chat) => c.id === chatId
         )! as Chat;
         const user3 = chat3.users?.find((u) => u.id === userId);
-        expect(isUserInChat(user3, { allowStringifiedDates: true })).toBe(true);
+        UserInChat.strict().parse(user3);
       });
     });
   });
@@ -279,7 +262,8 @@ describe("chat router", () => {
         const chat1 = res1.body.chats.find(
           (c: Chat) => c.id === chatId
         )! as Chat;
-        expect(isChat(chat1, { allowStringifiedDates: true })).toBe(true);
+
+        Chat.strict().parse(chat1);
 
         await request(app)
           .delete(`/chats/${chatId}/users`)
@@ -309,7 +293,7 @@ describe("chat router", () => {
         const chat1 = res1.body.chats.find(
           (c: Chat) => c.id === chatId
         )! as Chat;
-        expect(isChat(chat1, { allowStringifiedDates: true })).toBe(true);
+        Chat.strict().parse(chat1);
         expect(chat1.name).toBe("Group Chat");
         expect(chat1.photoURL).toBe("chat-photo.webp");
 
@@ -320,9 +304,7 @@ describe("chat router", () => {
           .attach("file", path.join(__dirname, "..", "utils", "image.jpg"));
 
         expect(res2.statusCode).toBe(201);
-        expect(isChat(res2.body.chat, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        Chat.strict().parse(res2.body.chat);
 
         const res3 = await request(app)
           .get("/chats")
@@ -330,7 +312,7 @@ describe("chat router", () => {
 
         expect(res3.statusCode).toBe(200);
         res3.body.chats.forEach((chat: unknown) => {
-          expect(isChat(chat, { allowStringifiedDates: true })).toBe(true);
+          Chat.strict().parse(chat);
         });
         const chat3 = res3.body.chats.find(
           (c: Chat) => c.id === chatId
