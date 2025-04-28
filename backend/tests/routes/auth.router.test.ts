@@ -6,6 +6,7 @@ import { refreshTokenCookieName } from "../../src/config/jwt-cookie";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFileStorage } from "../utils/mocks";
 import { TestHelpers } from "../utils/helpers";
+import { User } from "../../src/types/User";
 
 describe("auth router", () => {
   describe("[PUT] /user", () => {
@@ -166,9 +167,7 @@ describe("auth router", () => {
           .set("Authorization", `Bearer ${token}`);
 
         expect(res.statusCode).toBe(200);
-        expect(isUser(res.body.user, { allowStringifiedDates: true })).toBe(
-          true
-        );
+        User.strict().parse(res.body.user);
       });
     });
   });
