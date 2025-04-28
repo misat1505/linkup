@@ -1,5 +1,5 @@
 import { handleMarkdownUpdate } from "../../src/utils/updatePost";
-import { mockFileStorage } from "./mocks";
+import { mockFileStorage } from "../utils/mocks";
 
 describe("handleMarkdownUpdate", () => {
   const mockUserId = "user-1";

@@ -6,4 +6,5 @@ module.exports = {
   globalSetup: "<rootDir>/tests/utils/jest.global-setup.ts",
   globalTeardown: "<rootDir>/tests/utils/jest.global-teardown.ts",
   setupFilesAfterEnv: ["<rootDir>/tests/jest.setup.ts"],
+  coveragePathIgnorePatterns: ["/node_modules/", "/tests/utils/"],
 };
