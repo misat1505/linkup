@@ -56,4 +56,33 @@ describe("[POST] /auth/signup", () => {
       expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
     });
   });
+
+  it("should fail if login already taken", async () => {
+    await testWithTransaction(async ({ app, seed }) => {
+      const login = seed.users[0].login;
+      const password = "valid_password";
+
+      const res = await request(app).post("/auth/signup").send({
+        firstName: "Melon",
+        lastName: "Muzg",
+        login,
+        password,
+      });
+      expect(res.statusCode).toEqual(409);
+    });
+  });
+
+  it("should fail with bad data", async () => {
+    await testWithTransaction(async ({ app }) => {
+      const login = "valid_login";
+      const password = "valid_password";
+
+      const res = await request(app).post("/auth/signup").send({
+        firstName: "Melon",
+        login,
+        password,
+      });
+      expect(res.statusCode).toEqual(400);
+    });
+  });
 });

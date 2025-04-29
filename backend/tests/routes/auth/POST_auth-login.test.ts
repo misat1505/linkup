@@ -4,14 +4,45 @@ import request from "supertest";
 
 describe("[POST] /auth/login", () => {
   it("should login", async () => {
-    await testWithTransaction(async ({ app }) => {
+    await testWithTransaction(async ({ app, seed }) => {
+      const user = seed.users[0];
       const res = await request(app).post("/auth/login").send({
-        login: "login2",
+        login: user.login,
         password: "pass2",
       });
       expect(res.statusCode).toEqual(200);
       User.strict().parse(res.body.user);
       expect(res.headers["set-cookie"]).toBeDefined();
+    });
+  });
+
+  it("should fail if bad password", async () => {
+    await testWithTransaction(async ({ app, seed }) => {
+      const user = seed.users[0];
+      const res = await request(app).post("/auth/login").send({
+        login: user.login,
+        password: "bad-password",
+      });
+      expect(res.statusCode).toEqual(401);
+    });
+  });
+
+  it("should fail if no user of given login", async () => {
+    await testWithTransaction(async ({ app }) => {
+      const res = await request(app).post("/auth/login").send({
+        login: "bad-login",
+        password: "pass2",
+      });
+      expect(res.statusCode).toEqual(401);
+    });
+  });
+
+  it("should fail with bad data", async () => {
+    await testWithTransaction(async ({ app }) => {
+      const res = await request(app).post("/auth/login").send({
+        login: "login",
+      });
+      expect(res.statusCode).toEqual(400);
     });
   });
 });

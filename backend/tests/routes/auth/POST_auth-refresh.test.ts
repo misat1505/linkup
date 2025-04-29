@@ -20,4 +20,27 @@ describe("[POST] /auth/refresh", () => {
       expect(res.headers["set-cookie"]).toBeDefined();
     });
   });
+
+  it("should fail if no refresh token in cookie", async () => {
+    await testWithTransaction(async ({ app }) => {
+      const res = await request(app).post("/auth/refresh");
+
+      expect(res.statusCode).toBe(400);
+    });
+  });
+
+  it("should fail if user doesn't exist", async () => {
+    await testWithTransaction(async ({ app }) => {
+      const token = TestHelpers.createToken(
+        "invalid-user-id",
+        env.REFRESH_TOKEN_SECRET
+      );
+
+      const res = await request(app)
+        .post("/auth/refresh")
+        .set("Cookie", `${refreshTokenCookieName}=${token}`);
+
+      expect(res.statusCode).toBe(404);
+    });
+  });
 });
