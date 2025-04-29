@@ -11,11 +11,13 @@ describe("createReaction", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {
-        reactionId: "reactionId",
-        messageId: "messageId",
+      validated: {
+        body: {
+          reactionId: "reactionId",
+          messageId: "messageId",
+        },
+        params: { chatId: "someId" },
       },
-      params: { chatId: "someId" },
     });
     const res = mockResponse();
     await ChatControllers.createReaction(req, res, jest.fn());
@@ -29,11 +31,13 @@ describe("createReaction", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {
-        reactionId: "reactionId",
-        messageId: "messageId",
+      validated: {
+        body: {
+          reactionId: "reactionId",
+          messageId: "messageId",
+        },
+        params: { chatId: "someId" },
       },
-      params: { chatId: "someId" },
     });
     const res = mockResponse();
     await ChatControllers.createReaction(req, res, jest.fn());
@@ -46,11 +50,13 @@ describe("createReaction", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {
-        reactionId: "reactionId",
-        messageId: "messageId",
+      validated: {
+        body: {
+          reactionId: "reactionId",
+          messageId: "messageId",
+        },
+        params: { chatId: "someId" },
       },
-      params: { chatId: "someId" },
     });
     const res = mockResponse();
     await ChatControllers.createReaction(req, res, jest.fn());

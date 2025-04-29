@@ -24,8 +24,7 @@ describe("updateGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "789" } as UserWithCredentials,
-      body: { name: "New Chat Name" },
-      params: { chatId: "123" },
+      validated: { body: { name: "New Chat Name" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
 
@@ -49,8 +48,7 @@ describe("updateGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "789" } as UserWithCredentials,
-      body: { name: "New Chat Name" },
-      params: { chatId: "123" },
+      validated: { body: { name: "New Chat Name" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
 
@@ -74,8 +72,7 @@ describe("updateGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "789" } as UserWithCredentials,
-      body: { name: "New Chat Name" },
-      params: { chatId: "123" },
+      validated: { body: { name: "New Chat Name" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
 

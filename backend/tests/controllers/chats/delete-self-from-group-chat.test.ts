@@ -14,7 +14,7 @@ describe("deleteUserFromGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "789" } as UserWithCredentials,
-      params: { chatId: "123" },
+      validated: { params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
@@ -36,7 +36,7 @@ describe("deleteUserFromGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "789" } as UserWithCredentials,
-      params: { chatId: "123" },
+      validated: { params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
@@ -53,7 +53,7 @@ describe("deleteUserFromGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "789" } as UserWithCredentials,
-      params: { chatId: "123" },
+      validated: { params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());

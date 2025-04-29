@@ -10,8 +10,10 @@ describe("createPrivateChat", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {
-        users: ["userId", "user2"],
+      validated: {
+        body: {
+          users: ["userId", "user2"],
+        },
       },
     });
     const res = mockResponse();
@@ -26,8 +28,10 @@ describe("createPrivateChat", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {
-        users: ["userId", "user2"],
+      validated: {
+        body: {
+          users: ["userId", "user2"],
+        },
       },
     });
     const res = mockResponse();
@@ -39,8 +43,10 @@ describe("createPrivateChat", () => {
   it("shouldn't allow if user is not in the user list", async () => {
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {
-        users: ["user2", "user3"],
+      validated: {
+        body: {
+          users: ["user2", "user3"],
+        },
       },
     });
     const res = mockResponse();

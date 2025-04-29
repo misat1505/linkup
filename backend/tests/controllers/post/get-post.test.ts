@@ -11,7 +11,7 @@ describe("getPost", () => {
     mockPostService.getPost.mockResolvedValue(post);
 
     const req = mockRequest({
-      params: { id: post.id },
+      validated: { params: { id: post.id } },
     });
     const res = mockResponse();
 
@@ -25,7 +25,7 @@ describe("getPost", () => {
     mockPostService.getPost.mockResolvedValue(null);
 
     const req = mockRequest({
-      params: { id: "post-id" },
+      validated: { params: { id: "post-id" } },
     });
     const res = mockResponse();
 
@@ -39,7 +39,7 @@ describe("getPost", () => {
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
-      params: { id: "post-id" },
+      validated: { params: { id: "post-id" } },
     });
     const res = mockResponse();
 

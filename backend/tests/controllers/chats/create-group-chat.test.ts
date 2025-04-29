@@ -13,9 +13,11 @@ describe("createGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {
-        users: ["userId", "user2"],
-        name: "Group Chat",
+      validated: {
+        body: {
+          users: ["userId", "user2"],
+          name: "Group Chat",
+        },
       },
     });
     const res = mockResponse();
@@ -29,9 +31,11 @@ describe("createGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {
-        users: ["user2", "user3"],
-        name: "Group Chat",
+      validated: {
+        body: {
+          users: ["user2", "user3"],
+          name: "Group Chat",
+        },
       },
     });
     const res = mockResponse();

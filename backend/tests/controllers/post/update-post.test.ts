@@ -22,10 +22,12 @@ describe("updatePost", () => {
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
-      body: {
-        content: "New updated content",
+      validated: {
+        body: {
+          content: "New updated content",
+        },
+        params: { id: "post-id" },
       },
-      params: { id: "post-id" },
     });
     const res = mockResponse();
 
@@ -44,10 +46,12 @@ describe("updatePost", () => {
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
-      body: {
-        content: "New updated content",
+      validated: {
+        body: {
+          content: "New updated content",
+        },
+        params: { id: "post-id" },
       },
-      params: { id: "post-id" },
     });
     const res = mockResponse();
 
@@ -66,10 +70,12 @@ describe("updatePost", () => {
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
-      body: {
-        content: "New updated content",
+      validated: {
+        body: {
+          content: "New updated content",
+        },
+        params: { id: "post-id" },
       },
-      params: { id: "post-id" },
     });
     const res = mockResponse();
 
@@ -90,10 +96,12 @@ describe("updatePost", () => {
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
-      body: {
-        content: "New updated content",
+      validated: {
+        body: {
+          content: "New updated content",
+        },
+        params: { id: "post-id" },
       },
-      params: { id: "post-id" },
     });
     const res = mockResponse();
 

@@ -10,8 +10,7 @@ describe("createMessage", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: { content: "Hello" },
-      params: { chatId: "someId" },
+      validated: { body: { content: "Hello" }, params: { chatId: "someId" } },
       files: [],
     });
     const res = mockResponse();
@@ -25,8 +24,7 @@ describe("createMessage", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: { content: "Hello" },
-      params: { chatId: "someId" },
+      validated: { body: { content: "Hello" }, params: { chatId: "someId" } },
       files: [],
     });
     const res = mockResponse();
@@ -41,11 +39,13 @@ describe("createMessage", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {
-        content: "Hello",
-        responseId: "responseId",
+      validated: {
+        body: {
+          content: "Hello",
+          responseId: "responseId",
+        },
+        params: { chatId: "someId" },
       },
-      params: { chatId: "someId" },
       files: [],
     });
     const res = mockResponse();

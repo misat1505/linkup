@@ -12,11 +12,13 @@ describe("updateUser", () => {
       });
 
       const req = mockRequest({
-        body: {
-          firstName: "John",
-          lastName: "Doe",
-          login: "login1",
-          password: "pass1",
+        validated: {
+          body: {
+            firstName: "John",
+            lastName: "Doe",
+            login: "login1",
+            password: "pass1",
+          },
         },
         user: seed.users[0],
       });
@@ -36,11 +38,13 @@ describe("updateUser", () => {
       });
 
       const req = mockRequest({
-        body: {
-          firstName: "John",
-          lastName: "Doe",
-          login: "login1",
-          password: "pass1",
+        validated: {
+          body: {
+            firstName: "John",
+            lastName: "Doe",
+            login: "login1",
+            password: "pass1",
+          },
         },
         user: seed.users[0],
       });
@@ -61,11 +65,13 @@ describe("updateUser", () => {
       });
 
       const req = mockRequest({
-        body: {
-          firstName: "John",
-          lastName: "Doe",
-          login: "login1",
-          password: "pass1",
+        validated: {
+          body: {
+            firstName: "John",
+            lastName: "Doe",
+            login: "login1",
+            password: "pass1",
+          },
         },
         user: seed.users[0],
       });

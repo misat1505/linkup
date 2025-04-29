@@ -19,7 +19,7 @@ describe("deleteFromCache", () => {
   it("deletes file from cache", async () => {
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      params: { filename: "url1" },
+      validated: { params: { filename: "url1" } },
     });
     const res = mockResponse();
 
@@ -40,7 +40,7 @@ describe("deleteFromCache", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      params: { filename: "testfile.txt" },
+      validated: { params: { filename: "testfile.txt" } },
     });
     const res = mockResponse();
 

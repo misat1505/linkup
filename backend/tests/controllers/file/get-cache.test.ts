@@ -21,8 +21,10 @@ describe("getCache", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      params: { filename: "testfile.txt" },
-      query: { filter: "post" },
+      validated: {
+        params: { filename: "testfile.txt" },
+        query: { filter: "post" },
+      },
     });
     const res = mockResponse();
 

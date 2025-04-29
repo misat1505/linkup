@@ -12,7 +12,7 @@ describe("reportPost", () => {
 
     const req = mockRequest({
       user: { id: userId } as UserWithCredentials,
-      params: { id: postId },
+      validated: { params: { id: postId } },
     });
     const res = mockResponse();
 
@@ -32,7 +32,7 @@ describe("reportPost", () => {
 
     const req = mockRequest({
       user: { id: userId } as UserWithCredentials,
-      params: { id: postId },
+      validated: { params: { id: postId } },
     });
     const res = mockResponse();
 
@@ -47,7 +47,7 @@ describe("reportPost", () => {
 
     const req = mockRequest({
       user: { id: userId } as UserWithCredentials,
-      params: { id: postId },
+      validated: { params: { id: postId } },
     });
     const res = mockResponse();
 

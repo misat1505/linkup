@@ -15,7 +15,7 @@ describe("deletePost", () => {
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
-      params: { id: post.id },
+      validated: { params: { id: post.id } },
     });
     const res = mockResponse();
 
@@ -31,7 +31,7 @@ describe("deletePost", () => {
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
-      params: { id: "non-existent-id" },
+      validated: { params: { id: "non-existent-id" } },
     });
     const res = mockResponse();
 
@@ -50,7 +50,7 @@ describe("deletePost", () => {
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
-      params: { id: unauthorizedPost.id },
+      validated: { params: { id: unauthorizedPost.id } },
     });
     const res = mockResponse();
 

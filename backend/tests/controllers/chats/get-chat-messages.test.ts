@@ -10,8 +10,7 @@ describe("getChatMessages", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      params: { chatId: "someId" },
-      query: {},
+      validated: { params: { chatId: "someId" }, query: {} },
     });
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, jest.fn());
@@ -24,8 +23,7 @@ describe("getChatMessages", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      params: { chatId: "someId" },
-      query: {},
+      validated: { params: { chatId: "someId" }, query: {} },
     });
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, jest.fn());
@@ -40,8 +38,10 @@ describe("getChatMessages", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      params: { chatId: "someId" },
-      query: { lastMessageId: "message1", limit: "5" },
+      validated: {
+        params: { chatId: "someId" },
+        query: { lastMessageId: "message1", limit: 5 },
+      },
     });
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, jest.fn());
@@ -61,8 +61,10 @@ describe("getChatMessages", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      params: { chatId: "someId" },
-      query: { responseId: "response123" },
+      validated: {
+        params: { chatId: "someId" },
+        query: { responseId: "response123" },
+      },
     });
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, jest.fn());
@@ -74,20 +76,6 @@ describe("getChatMessages", () => {
     );
   });
 
-  it("should return 500 if limit is not a number", async () => {
-    const mockNextFunction = jest.fn();
-
-    const req = mockRequest({
-      user: { id: "userId" } as UserWithCredentials,
-      params: { chatId: "someId" },
-      query: { limit: "suhdusahd" },
-    });
-    const res = mockResponse();
-    await ChatControllers.getChatMessages(req, res, mockNextFunction);
-
-    expect(mockNextFunction).toHaveBeenCalled();
-  });
-
   it("should treat 'null' as a valid responseId and return null", async () => {
     const messages = [{ id: "message1" }, { id: "message2" }];
     mockChatService.isUserInChat.mockResolvedValue(true);
@@ -95,8 +83,10 @@ describe("getChatMessages", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      params: { chatId: "someId" },
-      query: { responseId: "null" },
+      validated: {
+        params: { chatId: "someId" },
+        query: { responseId: null },
+      },
     });
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, jest.fn());
@@ -116,8 +106,7 @@ describe("getChatMessages", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      params: { chatId: "someId" },
-      query: {},
+      validated: { params: { chatId: "someId" }, query: {} },
     });
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, mockNextFunction);

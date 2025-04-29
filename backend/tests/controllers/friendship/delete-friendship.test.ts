@@ -13,9 +13,11 @@ describe("deleteFriendship", () => {
 
     const req = mockRequest({
       user: { id: mockFriendship.acceptor.id } as UserWithCredentials,
-      body: {
-        requesterId: mockFriendship.acceptor.id,
-        acceptorId: "user-id-2",
+      validated: {
+        body: {
+          requesterId: mockFriendship.acceptor.id,
+          acceptorId: "user-id-2",
+        },
       },
     });
     const res = mockResponse();
@@ -30,9 +32,11 @@ describe("deleteFriendship", () => {
 
     const req = mockRequest({
       user: { id: mockFriendship.acceptor.id } as UserWithCredentials,
-      body: {
-        requesterId: "user-id-1",
-        acceptorId: "user-id-2",
+      validated: {
+        body: {
+          requesterId: "user-id-1",
+          acceptorId: "user-id-2",
+        },
       },
     });
     const res = mockResponse();
@@ -47,9 +51,11 @@ describe("deleteFriendship", () => {
 
     const req = mockRequest({
       user: { id: mockFriendship.acceptor.id } as UserWithCredentials,
-      body: {
-        requesterId: mockFriendship.acceptor.id,
-        acceptorId: "user-id-2",
+      validated: {
+        body: {
+          requesterId: mockFriendship.acceptor.id,
+          acceptorId: "user-id-2",
+        },
       },
     });
     const res = mockResponse();

@@ -19,27 +19,16 @@ describe("getFile", () => {
     jest.clearAllMocks();
   });
 
-  it("shouldn't allow requests without filter", async () => {
-    const req = mockRequest({
-      user: { id: "userId" } as UserWithCredentials,
-      params: { filename: "testfile.txt" },
-      query: {},
-    });
-    const res = mockResponse();
-
-    await FileControllers.getFile(req, res, jest.fn());
-
-    expect(res.status).toHaveBeenCalledWith(400);
-  });
-
   describe("avatar", () => {
     it("should return 404 if the file does not exist", async () => {
       mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
       const req = mockRequest({
         user: { id: "userId" } as UserWithCredentials,
-        params: { filename: "testfile.txt" },
-        query: { filter: "avatar" },
+        validated: {
+          params: { filename: "testfile.txt" },
+          query: { filter: "avatar" },
+        },
       });
       const res = mockResponse();
 
@@ -53,8 +42,10 @@ describe("getFile", () => {
 
       const req = mockRequest({
         user: { id: "userId" } as UserWithCredentials,
-        params: { filename: "testfile.txt" },
-        query: { filter: "avatar" },
+        validated: {
+          params: { filename: "testfile.txt" },
+          query: { filter: "avatar" },
+        },
       });
       const res = mockResponse();
 
@@ -73,8 +64,10 @@ describe("getFile", () => {
 
       const req = mockRequest({
         user: { id: "userId" } as UserWithCredentials,
-        params: { filename: "testfile.txt" },
-        query: { filter: "chat-photo", chat: mockChatId },
+        validated: {
+          params: { filename: "testfile.txt" },
+          query: { filter: "chat-photo", chat: mockChatId },
+        },
       });
       const res = mockResponse();
 
@@ -91,8 +84,10 @@ describe("getFile", () => {
 
       const req = mockRequest({
         user: { id: "userId" } as UserWithCredentials,
-        params: { filename: "testfile.txt" },
-        query: { filter: "chat-message", chat: mockChatId },
+        validated: {
+          params: { filename: "testfile.txt" },
+          query: { filter: "chat-message", chat: mockChatId },
+        },
       });
       const res = mockResponse();
 
@@ -103,19 +98,6 @@ describe("getFile", () => {
         expect.objectContaining({ url: expect.any(String) })
       );
     });
-
-    it("should return 400 if filter is chat message, but no chat given", async () => {
-      const req = mockRequest({
-        user: { id: "userId" } as UserWithCredentials,
-        params: { filename: "testfile.txt" },
-        query: { filter: "chat-message" },
-      });
-      const res = mockResponse();
-
-      await FileControllers.getFile(req, res, jest.fn());
-
-      expect(res.status).toHaveBeenCalledWith(400);
-    });
   });
 
   describe("cache", () => {
@@ -124,8 +106,10 @@ describe("getFile", () => {
 
       const req = mockRequest({
         user: { id: "userId" } as UserWithCredentials,
-        params: { filename: "testfile.txt" },
-        query: { filter: "cache" },
+        validated: {
+          params: { filename: "testfile.txt" },
+          query: { filter: "cache" },
+        },
       });
       const res = mockResponse();
 
@@ -142,8 +126,10 @@ describe("getFile", () => {
 
       const req = mockRequest({
         user: { id: "userId" } as UserWithCredentials,
-        params: { filename: "testfile.txt" },
-        query: { filter: "cache" },
+        validated: {
+          params: { filename: "testfile.txt" },
+          query: { filter: "cache" },
+        },
       });
       const res = mockResponse();
 
@@ -159,8 +145,10 @@ describe("getFile", () => {
 
       const req = mockRequest({
         user: { id: "userId" } as UserWithCredentials,
-        params: { filename: "testfile.txt" },
-        query: { filter: "post", post: mockPostId },
+        validated: {
+          params: { filename: "testfile.txt" },
+          query: { filter: "post", post: mockPostId },
+        },
       });
       const res = mockResponse();
 
@@ -177,27 +165,16 @@ describe("getFile", () => {
 
       const req = mockRequest({
         user: { id: "userId" } as UserWithCredentials,
-        params: { filename: "testfile.txt" },
-        query: { filter: "post", post: mockPostId },
+        validated: {
+          params: { filename: "testfile.txt" },
+          query: { filter: "post", post: mockPostId },
+        },
       });
       const res = mockResponse();
 
       await FileControllers.getFile(req, res, jest.fn());
 
       expect(res.status).toHaveBeenCalledWith(404);
-    });
-
-    it("shouldn't return 400 if filter is post but no post id given", async () => {
-      const req = mockRequest({
-        user: { id: "userId" } as UserWithCredentials,
-        params: { filename: "testfile.txt" },
-        query: { filter: "post" },
-      });
-      const res = mockResponse();
-
-      await FileControllers.getFile(req, res, jest.fn());
-
-      expect(res.status).toHaveBeenCalledWith(400);
     });
   });
 });

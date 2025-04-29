@@ -18,8 +18,7 @@ describe("addUserToGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "789" } as UserWithCredentials,
-      body: { userId: "456" },
-      params: { chatId: "123" },
+      validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());
@@ -46,8 +45,7 @@ describe("addUserToGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "789" } as UserWithCredentials,
-      body: { userId: "456" },
-      params: { chatId: "123" },
+      validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());
@@ -63,8 +61,7 @@ describe("addUserToGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "789" } as UserWithCredentials,
-      body: { userId: "456" },
-      params: { chatId: "123" },
+      validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());
@@ -81,8 +78,7 @@ describe("addUserToGroupChat", () => {
 
     const req = mockRequest({
       user: { id: "789" } as UserWithCredentials,
-      body: { userId: "456" },
-      params: { chatId: "123" },
+      validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());

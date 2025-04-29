@@ -13,9 +13,11 @@ describe("acceptFriendship", () => {
 
     const req = mockRequest({
       user: { id: mockFriendship.requester.id } as UserWithCredentials,
-      body: {
-        requesterId: mockFriendship.acceptor.id,
-        acceptorId: mockFriendship.requester.id,
+      validated: {
+        body: {
+          requesterId: mockFriendship.acceptor.id,
+          acceptorId: mockFriendship.requester.id,
+        },
       },
     });
     const res = mockResponse();
@@ -28,9 +30,11 @@ describe("acceptFriendship", () => {
   it("should fail if acceptorId does not match userId", async () => {
     const req = mockRequest({
       user: { id: "different-user-id" } as UserWithCredentials,
-      body: {
-        requesterId: mockFriendship.requester.id,
-        acceptorId: mockFriendship.acceptor.id,
+      validated: {
+        body: {
+          requesterId: mockFriendship.requester.id,
+          acceptorId: mockFriendship.acceptor.id,
+        },
       },
     });
     const res = mockResponse();
@@ -45,9 +49,11 @@ describe("acceptFriendship", () => {
 
     const req = mockRequest({
       user: { id: mockFriendship.requester.id } as UserWithCredentials,
-      body: {
-        requesterId: mockFriendship.acceptor.id,
-        acceptorId: mockFriendship.requester.id,
+      validated: {
+        body: {
+          requesterId: mockFriendship.acceptor.id,
+          acceptorId: mockFriendship.requester.id,
+        },
       },
     });
     const res = mockResponse();

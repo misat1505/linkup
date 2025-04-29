@@ -13,8 +13,10 @@ describe("updateAlias", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: { alias: "NewAlias" },
-      params: { chatId: "123", userId: "456" },
+      validated: {
+        body: { alias: "NewAlias" },
+        params: { chatId: "123", userId: "456" },
+      },
     });
     const res = mockResponse();
     await ChatControllers.updateAlias(req, res, jest.fn());
@@ -33,8 +35,7 @@ describe("updateAlias", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {},
-      params: { chatId: "123", userId: "456" },
+      validated: { body: {}, params: { chatId: "123", userId: "456" } },
     });
     const res = mockResponse();
     await ChatControllers.updateAlias(req, res, jest.fn());
@@ -50,8 +51,7 @@ describe("updateAlias", () => {
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
-      body: {},
-      params: { chatId: "123", userId: "456" },
+      validated: { body: {}, params: { chatId: "123", userId: "456" } },
     });
     const res = mockResponse();
     await ChatControllers.updateAlias(req, res, jest.fn());

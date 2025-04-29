@@ -18,7 +18,7 @@ describe("createPost", () => {
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
-      body: { content: postContent },
+      validated: { body: { content: postContent } },
     });
     const res = mockResponse();
 
@@ -38,8 +38,10 @@ describe("createPost", () => {
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
-      body: {
-        content: "This is a new post.",
+      validated: {
+        body: {
+          content: "This is a new post.",
+        },
       },
     });
     const res = mockResponse();

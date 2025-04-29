@@ -6,11 +6,13 @@ describe("signupUser", () => {
     mockUserService.isLoginTaken.mockResolvedValue(false);
 
     const req = mockRequest({
-      body: {
-        firstName: "John",
-        lastName: "Doe",
-        login: "john_doe",
-        password: "password123",
+      validated: {
+        body: {
+          firstName: "John",
+          lastName: "Doe",
+          login: "john_doe",
+          password: "password123",
+        },
       },
     });
     const res = mockResponse();
@@ -25,11 +27,13 @@ describe("signupUser", () => {
     mockUserService.isLoginTaken.mockResolvedValue(true);
 
     const req = mockRequest({
-      body: {
-        firstName: "John",
-        lastName: "Doe",
-        login: "john_doe",
-        password: "password123",
+      validated: {
+        body: {
+          firstName: "John",
+          lastName: "Doe",
+          login: "john_doe",
+          password: "password123",
+        },
       },
     });
     const res = mockResponse();

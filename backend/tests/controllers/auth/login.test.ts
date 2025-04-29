@@ -23,7 +23,7 @@ describe("loginUser", () => {
     mockUserService.getUserByLogin.mockResolvedValue(mockUser);
 
     const req = mockRequest({
-      body: { login: "john_doe", password: "password" },
+      validated: { body: { login: "john_doe", password: "password" } },
     });
     const res = mockResponse();
 
@@ -37,7 +37,7 @@ describe("loginUser", () => {
     mockUserService.getUserByLogin.mockResolvedValue(null);
 
     const req = mockRequest({
-      body: { login: "john_doe", password: "wrong_password" },
+      validated: { body: { login: "john_doe", password: "wrong_password" } },
     });
     const res = mockResponse();
 
@@ -62,7 +62,7 @@ describe("loginUser", () => {
     mockUserService.getUserByLogin.mockResolvedValue(mockUser);
 
     const req = mockRequest({
-      body: { login: "john_doe", password: "wrong_password" },
+      validated: { body: { login: "john_doe", password: "wrong_password" } },
     });
     const res = mockResponse();
 
