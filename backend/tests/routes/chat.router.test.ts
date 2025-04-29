@@ -101,7 +101,7 @@ describe("chat router", () => {
         const messages = seed.messages.filter((m) => m.chatId === chatId);
 
         const res = await request(app)
-          .get(`/chats/${chatId}/messages`)
+          .get(`/chats/${chatId}/messages?lastMessageId=null&limit=20`)
           .set("Authorization", `Bearer ${token}`);
 
         expect(res.statusCode).toBe(200);
@@ -133,7 +133,7 @@ describe("chat router", () => {
         Message.strict().parse(res.body.message);
 
         const res2 = await request(app)
-          .get(`/chats/${chatId}/messages`)
+          .get(`/chats/${chatId}/messages?lastMessageId=null&limit=20`)
           .set("Authorization", `Bearer ${token}`);
 
         expect(res2.statusCode).toBe(200);
@@ -153,7 +153,7 @@ describe("chat router", () => {
         const token = TestHelpers.createToken(seed.users[0].id);
 
         const res = await request(app)
-          .get(`/chats/${chatId}/messages`)
+          .get(`/chats/${chatId}/messages?lastMessageId=null&limit=20`)
           .set("Authorization", `Bearer ${token}`);
         const initialReactions = (res.body.messages[0] as Message).reactions
           .length;
@@ -169,7 +169,7 @@ describe("chat router", () => {
         Reaction.strict().parse(res2.body.reaction);
 
         const res3 = await request(app)
-          .get(`/chats/${chatId}/messages`)
+          .get(`/chats/${chatId}/messages?lastMessageId=null&limit=20`)
           .set("Authorization", `Bearer ${token}`);
         expect((res3.body.messages[0] as Message).reactions.length).toBe(
           initialReactions + 1

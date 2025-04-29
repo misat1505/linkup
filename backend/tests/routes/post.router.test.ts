@@ -34,7 +34,7 @@ describe("posts router", () => {
         const otherUserToken = TestHelpers.createToken(seed.users[1].id);
 
         const res = await request(app)
-          .get("/posts")
+          .get("/posts?lastPostId=null&limit=5")
           .set("Authorization", `Bearer ${otherUserToken}`);
 
         expect(res.statusCode).toEqual(200);

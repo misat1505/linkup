@@ -8,6 +8,7 @@ import { Application } from "express";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFileStorage } from "../utils/mocks";
 import { TestHelpers } from "../utils/helpers";
+import { v4 as uuidv4 } from "uuid";
 
 jest.mock("../../src/lib/FileStorage");
 
@@ -169,7 +170,7 @@ describe("file router", () => {
           seed.users[0].id,
           createdUser.id,
         ]);
-        const postId = "post-id";
+        const postId = uuidv4();
         const filename = "file.txt";
 
         const res2 = await request(app)
