@@ -23,12 +23,7 @@ fileRouter.delete(
   validate({ params: Filename }),
   FileControllers.deleteFromCache
 );
-fileRouter.post(
-  "/cache",
-  upload.single("file"),
-  authorize,
-  FileControllers.insertToCache
-);
+fileRouter.post("/cache", upload.single("file"), FileControllers.insertToCache);
 fileRouter.get(
   "/:filename",
   validate({ params: Filename, query: FileQuery }),

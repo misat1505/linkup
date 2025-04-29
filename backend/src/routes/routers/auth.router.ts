@@ -19,7 +19,6 @@ authRouterProtected.put(
   "/user",
   upload.single("file"),
   validate({ body: SignupDTO }),
-  authorize,
   AuthControllers.updateSelf
 );
 

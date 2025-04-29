@@ -36,7 +36,6 @@ chatRouter.post(
   "/group",
   upload.single("file"),
   validate({ body: CreateGroupChatDTO }),
-  authorize,
   ChatControllers.createGroupChat
 );
 
@@ -46,7 +45,6 @@ chatRouter.post(
   "/:chatId/messages",
   upload.array("files"),
   validate({ body: CreateMessageDTO, params: ChatId }),
-  authorize, // multer is overriding req.body
   ChatControllers.createMessage
 );
 
@@ -84,7 +82,6 @@ chatRouter.put(
   "/:chatId",
   upload.single("file"),
   validate({ body: UpdateGroupChatDTO, params: ChatId }),
-  authorize,
   ChatControllers.updateGroupChat
 );
 
