@@ -4,6 +4,7 @@ import { TestSeed } from "./seed";
 import { PrismaClientOrTransaction } from "../../src/types/Prisma";
 import app from "../../src/app";
 import { initializeServices } from "../../src/utils/initializeServices";
+import { mockFileStorage } from "./mocks";
 
 type TransactionProvidedValues = {
   tx: PrismaClientOrTransaction;
@@ -24,6 +25,7 @@ export const testWithTransaction = async (
     const { prisma, seed } = initializeTestCase();
     return await prisma.$transaction(async (tx) => {
       app.services = initializeServices(tx);
+      app.services.fileStorage = mockFileStorage as any;
       await testFn({ tx, app, seed });
       throw new RollbackError();
     });
