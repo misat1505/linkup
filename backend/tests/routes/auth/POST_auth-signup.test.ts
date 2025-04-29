@@ -6,7 +6,7 @@ import path from "path";
 
 jest.mock("../../../src/lib/FileStorage");
 
-describe("[POST] /signup", () => {
+describe("[POST] /auth/signup", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

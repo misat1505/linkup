@@ -4,7 +4,7 @@ import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
-describe("[POST] /refresh", () => {
+describe("[POST] /auth/refresh", () => {
   it("should refresh token", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(

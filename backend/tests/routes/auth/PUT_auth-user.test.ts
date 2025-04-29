@@ -7,7 +7,7 @@ import { User } from "../../../src/types/User";
 
 jest.mock("../../../src/lib/FileStorage");
 
-describe("[PUT] /user", () => {
+describe("[PUT] /auth/user", () => {
   it("should update user", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       app.services.fileStorage = mockFileStorage as any;

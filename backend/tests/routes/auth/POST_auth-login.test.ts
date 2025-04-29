@@ -2,7 +2,7 @@ import { User } from "../../../src/types/User";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
-describe("[POST] /login", () => {
+describe("[POST] /auth/login", () => {
   it("should login", async () => {
     await testWithTransaction(async ({ app }) => {
       const res = await request(app).post("/auth/login").send({
