@@ -257,7 +257,7 @@ export class ChatService {
       },
     });
 
-    return result.map((m) => Message.parse(m));
+    return result.map((m) => Message.parse(sanitizeMessage(m)));
   }
 
   async getChatMessages(

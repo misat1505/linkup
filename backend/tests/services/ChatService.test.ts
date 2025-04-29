@@ -72,6 +72,16 @@ describe("ChatService", () => {
         expect(result).toBe("GROUP");
       });
     });
+
+    it("should return null if chat doesn't exists", async () => {
+      await testWithTransaction(async ({ tx }) => {
+        const chatService = new ChatService(tx);
+        const chatId = "non-existent";
+
+        const result = await chatService.getChatType(chatId);
+        expect(result).toBeNull();
+      });
+    });
   });
 
   describe("addUserToChat", () => {
@@ -308,6 +318,48 @@ describe("ChatService", () => {
         expect(result.name).toBe("name");
         expect(result.photoURL).toBe("photo.webp");
         expect(result.type).toBe("GROUP");
+      });
+    });
+  });
+
+  describe("getChatById", () => {
+    it("should get chat of given id", async () => {
+      await testWithTransaction(async ({ tx, seed }) => {
+        const chatService = new ChatService(tx);
+        const result = await chatService.getChatById(seed.chats[0].id);
+        Chat.strict().parse(result);
+      });
+    });
+
+    it("should return null if of given id doesn't exist", async () => {
+      await testWithTransaction(async ({ tx }) => {
+        const chatService = new ChatService(tx);
+        const result = await chatService.getChatById("non-existent");
+        expect(result).toBeNull();
+      });
+    });
+  });
+
+  describe("getPostChatMessages", () => {
+    it("should get chat of given id", async () => {
+      await testWithTransaction(async ({ tx, seed }) => {
+        const chatService = new ChatService(tx);
+        await chatService.createMessage({
+          content: "message",
+          authorId: seed.users[0].id,
+          chatId: seed.posts[0].chat.id,
+          files: [],
+          responseId: null,
+        });
+
+        const result = await chatService.getPostChatMessages(
+          seed.chats[0].id,
+          null
+        );
+        expect(result.length).toBe(1);
+        result.forEach((message) => {
+          Message.strict().parse(message);
+        });
       });
     });
   });

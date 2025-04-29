@@ -123,15 +123,4 @@ export class UserService {
       where: { id },
     });
   }
-
-  /**
-   * Removes sensitive credential data from a user object.
-   * @param userWithCredentials - The user object with credentials.
-   * @returns The user object without login, password, or salt.
-   */
-  static removeCredentials(userWithCredentials: UserWithCredentials): User {
-    const { login, password, salt, ...rest } = userWithCredentials;
-    const user: User = { ...rest };
-    return user;
-  }
 }

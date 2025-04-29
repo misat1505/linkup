@@ -1,16 +1,8 @@
 import { Post } from "../types/Post";
 import { User } from "../types/User";
 import { userSelect } from "../utils/prisma/userSelect";
-import {
-  postChatSelect,
-  transformPostChatSelect,
-} from "../utils/prisma/postChatSelect";
+import { postChatSelect } from "../utils/prisma/postChatSelect";
 import { PrismaClientOrTransaction } from "../types/Prisma";
-
-function sanitizePost(post: any): Post {
-  const { authorId, chatId, ...sanitizedPost } = post;
-  return { ...sanitizedPost } as Post;
-}
 
 /**
  * Service class responsible for managing post-related operations in the database using Prisma.
