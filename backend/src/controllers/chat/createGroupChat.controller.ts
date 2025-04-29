@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { processAvatar } from "../../utils/processAvatar";
 import { v4 as uuidv4 } from "uuid";
+import { CreateGroupChatDTO } from "../../validators/chats/chats.validatotors";
 
 /**
  * Controller to create a new group chat.
@@ -59,8 +60,9 @@ export const createGroupChatController = async (
 ) => {
   try {
     const userId = req.user!.id;
-    const { users, name } = req.body;
+    const { users, name } = req.validated!.body! as CreateGroupChatDTO;
     const { chatService, fileStorage } = req.app.services;
+
     if (!users.includes(userId))
       return res.status(401).json({
         message: req.t(

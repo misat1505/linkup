@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { ChatId } from "../../validators/chats/messages.validators";
 
 /**
  * Controller to remove a user from a group chat.
@@ -38,7 +39,7 @@ export const deleteSelfFromGroupChatController = async (
   next: NextFunction
 ) => {
   try {
-    const { chatId } = req.params;
+    const { chatId } = req.validated!.params! as ChatId;
     const userId = req.user!.id;
     const chatService = req.app.services.chatService;
 

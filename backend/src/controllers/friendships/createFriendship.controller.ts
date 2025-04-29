@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { CreateFriendshipDTO } from "../../validators/friendships/friendships.validators";
 
 /**
  * Controller to create a new friendship request between two users.
@@ -91,7 +92,8 @@ export const createFriendship = async (
 ) => {
   try {
     const userId = req.user!.id;
-    const { requesterId, acceptorId } = req.body;
+    const { requesterId, acceptorId } = req.validated!
+      .body! as CreateFriendshipDTO;
     const friendshipService = req.app.services.friendshipService;
 
     if (userId !== requesterId)

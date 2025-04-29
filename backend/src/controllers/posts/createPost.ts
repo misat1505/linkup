@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { handleMarkdownUpdate } from "../../utils/updatePost";
+import { CreatePostDTO } from "../../validators/posts/posts.validators";
 
 /**
  * Controller to create a new post.
@@ -52,7 +53,7 @@ export const createPost = async (
 ) => {
   try {
     const userId = req.user!.id;
-    const { content } = req.body;
+    const { content } = req.validated!.body! as CreatePostDTO;
     const { postService, fileStorage } = req.app.services;
 
     const id = uuidv4();

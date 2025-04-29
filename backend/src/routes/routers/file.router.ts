@@ -18,7 +18,11 @@ import {
 const fileRouter = Router();
 
 fileRouter.get("/cache", FileControllers.getCache);
-fileRouter.delete("/cache/:filename", FileControllers.deleteFromCache);
+fileRouter.delete(
+  "/cache/:filename",
+  zodValidate({ params: Filename }),
+  FileControllers.deleteFromCache
+);
 fileRouter.post(
   "/cache",
   upload.single("file"),

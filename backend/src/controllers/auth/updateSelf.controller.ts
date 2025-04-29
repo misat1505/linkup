@@ -3,6 +3,7 @@ import { processAvatar } from "../../utils/processAvatar";
 import { Hasher } from "../../lib/Hasher";
 import { User, UserWithCredentials } from "../../types/User";
 import bcrypt from "bcryptjs";
+import { SignupDTO } from "../../validators/auth/signup.validators";
 
 /**
  * Controller to update the user's details, including login, password, and avatar.
@@ -62,7 +63,8 @@ export const updateSelfController = async (
   next: NextFunction
 ) => {
   try {
-    const { firstName, lastName, login, password } = req.body;
+    const { firstName, lastName, login, password } = req.validated!
+      .body! as SignupDTO;
     const userId = req.user!.id;
     const { userService, fileStorage } = req.app.services;
     const file = await processAvatar(fileStorage, req.file);

@@ -1,4 +1,8 @@
 import { NextFunction, Request, Response } from "express";
+import { UpdateAliasDTO } from "../../validators/chats/chats.validatotors";
+import { ChatId } from "../../validators/chats/messages.validators";
+import { UserId } from "../../validators/shared.validators";
+import { z } from "zod";
 
 /**
  * Controller to update a user's alias in a group chat.
@@ -56,8 +60,8 @@ export const updateAliasController = async (
 ) => {
   try {
     const userId = req.user!.id;
-    const { alias } = req.body;
-    const { chatId, userId: userToUpdateId } = req.params;
+    const { alias } = req.validated!.body! as UpdateAliasDTO;
+    const { chatId, userId: userToUpdateId } = req.validated!.params! as Params;
     const chatService = req.app.services.chatService;
 
     const isUserUpdatedInChat = await chatService.isUserInChat({
@@ -75,10 +79,17 @@ export const updateAliasController = async (
         message: req.t("chats.controllers.update-alias.unauthorized"),
       });
 
-    await chatService.updateAlias({ userId: userToUpdateId, chatId, alias });
+    await chatService.updateAlias({
+      userId: userToUpdateId,
+      chatId,
+      alias,
+    });
 
     return res.status(200).json({ alias });
   } catch (e) {
     next(new Error(req.t("chats.controllers.update-alias.failure")));
   }
 };
+
+const Params = ChatId.merge(UserId);
+type Params = z.infer<typeof Params>;

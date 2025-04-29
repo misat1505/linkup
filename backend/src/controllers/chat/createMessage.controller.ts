@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { generateNewFilename } from "../../utils/generateNewFilename";
+import {
+  ChatId,
+  CreateMessageDTO,
+} from "../../validators/chats/messages.validators";
 
 /**
  * Controller to create a new message in a chat.
@@ -63,9 +67,9 @@ export const createMessageController = async (
   next: NextFunction
 ) => {
   try {
-    const { content, responseId } = req.body;
+    const { content, responseId } = req.validated!.body! as CreateMessageDTO;
     const userId = req.user!.id;
-    const { chatId } = req.params;
+    const { chatId } = req.validated!.params! as ChatId;
     const files = req.files as Express.Multer.File[];
     const { chatService, fileStorage } = req.app.services;
 
@@ -112,7 +116,7 @@ export const createMessageController = async (
       authorId: userId,
       chatId,
       files: filenames,
-      responseId,
+      responseId: responseId ?? null,
     });
 
     return res.status(201).json({ message });

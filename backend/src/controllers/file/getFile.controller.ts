@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { FileQuery } from "../../validators/files/getFiles.validators";
+import {
+  Filename,
+  FileQuery,
+} from "../../validators/files/getFiles.validators";
 
 const sendFileBuilder =
   (filename: string, req: Request, res: Response) =>
@@ -88,7 +91,7 @@ export const getFileController = async (
   next: NextFunction
 ) => {
   try {
-    const { filename } = req.params;
+    const { filename } = req.validated!.params! as Filename;
     const query = req.validated!.query! as FileQuery;
     const userId = req.user!.id;
     const { fileService, fileStorage } = req.app.services;

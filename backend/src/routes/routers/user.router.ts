@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { UserControllers } from "../../controllers";
+import { zodValidate } from "../../middlewares/validate";
+import { SearchUserQuery } from "../../validators/users/users.validators";
 
 /**
  * User Routes Router.
@@ -8,6 +10,10 @@ import { UserControllers } from "../../controllers";
  */
 const userRouter = Router();
 
-userRouter.get("/search", UserControllers.searchUser);
+userRouter.get(
+  "/search",
+  zodValidate({ query: SearchUserQuery }),
+  UserControllers.searchUser
+);
 
 export default userRouter;

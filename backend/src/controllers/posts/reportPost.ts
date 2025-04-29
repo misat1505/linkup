@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Prisma } from "@prisma/client";
+import { PostId } from "../../validators/shared.validators";
 
 /**
  * Controller to report a post by an authenticated user.
@@ -50,7 +51,7 @@ export const reportPost = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
+    const { id } = req.validated!.params! as PostId;
     const userId = req.user!.id;
     const postService = req.app.services.postService;
 

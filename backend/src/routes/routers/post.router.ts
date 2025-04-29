@@ -2,6 +2,11 @@ import { Router } from "express";
 import { PostControllers } from "../../controllers";
 import { zodValidate } from "../../middlewares/validate";
 import { PostId } from "../../validators/shared.validators";
+import {
+  CreatePostDTO,
+  GetPostsQuery,
+  UpdatePostDTO,
+} from "../../validators/posts/posts.validators";
 
 /**
  * Post Routes Router.
@@ -11,16 +16,36 @@ import { PostId } from "../../validators/shared.validators";
  */
 const postRouter = Router();
 
-postRouter.put("/:id", PostControllers.updatePost);
+postRouter.put(
+  "/:id",
+  zodValidate({ params: PostId, body: UpdatePostDTO }),
+  PostControllers.updatePost
+);
 postRouter.get("/mine", PostControllers.getUserPosts);
 postRouter.get(
   "/:id",
   zodValidate({ params: PostId }),
   PostControllers.getPost
 );
-postRouter.delete("/:id", PostControllers.deletePost);
-postRouter.get("/", PostControllers.getPosts);
-postRouter.post("/:id/report", PostControllers.reportPost);
-postRouter.post("/", PostControllers.createPost);
+postRouter.delete(
+  "/:id",
+  zodValidate({ params: PostId }),
+  PostControllers.deletePost
+);
+postRouter.get(
+  "/",
+  zodValidate({ query: GetPostsQuery }),
+  PostControllers.getPosts
+);
+postRouter.post(
+  "/:id/report",
+  zodValidate({ params: PostId }),
+  PostControllers.reportPost
+);
+postRouter.post(
+  "/",
+  zodValidate({ body: CreatePostDTO }),
+  PostControllers.createPost
+);
 
 export default postRouter;

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { CreatePrivateChatDTO } from "../../validators/chats/chats.validatotors";
 
 /**
  * Controller to create a new private chat between two users.
@@ -56,7 +57,7 @@ export const createPrivateChatController = async (
 ) => {
   try {
     const userId = req.user!.id;
-    const { users } = req.body;
+    const { users } = req.validated!.body! as CreatePrivateChatDTO;
     const chatService = req.app.services.chatService;
 
     if (!users.includes(userId))
