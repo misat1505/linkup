@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserControllers } from "../../controllers";
-import { zodValidate } from "../../middlewares/validate";
+import { validate } from "../../middlewares/validate";
 import { SearchUserQuery } from "../../validators/users/users.validators";
 
 /**
@@ -12,7 +12,7 @@ const userRouter = Router();
 
 userRouter.get(
   "/search",
-  zodValidate({ query: SearchUserQuery }),
+  validate({ query: SearchUserQuery }),
   UserControllers.searchUser
 );
 

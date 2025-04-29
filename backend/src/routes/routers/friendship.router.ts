@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { FriendshipControllers } from "../../controllers";
-import { zodValidate } from "../../middlewares/validate";
+import { validate } from "../../middlewares/validate";
 import {
   AcceptFriendshipDTO,
   CreateFriendshipDTO,
@@ -18,17 +18,17 @@ const friendshipRouter = Router();
 friendshipRouter.get("/", FriendshipControllers.getUserFriendships);
 friendshipRouter.post(
   "/accept",
-  zodValidate({ body: AcceptFriendshipDTO }),
+  validate({ body: AcceptFriendshipDTO }),
   FriendshipControllers.acceptFriendship
 );
 friendshipRouter.post(
   "/",
-  zodValidate({ body: CreateFriendshipDTO }),
+  validate({ body: CreateFriendshipDTO }),
   FriendshipControllers.createFriendship
 );
 friendshipRouter.delete(
   "/",
-  zodValidate({ body: DeleteFriendshipDTO }),
+  validate({ body: DeleteFriendshipDTO }),
   FriendshipControllers.deleteFriendship
 );
 

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { upload } from "../../middlewares/multer";
 import { authorize } from "../../middlewares/authorize";
 import { FileControllers } from "../../controllers";
-import { zodValidate } from "../../middlewares/validate";
+import { validate } from "../../middlewares/validate";
 import {
   Filename,
   FileQuery,
@@ -20,7 +20,7 @@ const fileRouter = Router();
 fileRouter.get("/cache", FileControllers.getCache);
 fileRouter.delete(
   "/cache/:filename",
-  zodValidate({ params: Filename }),
+  validate({ params: Filename }),
   FileControllers.deleteFromCache
 );
 fileRouter.post(
@@ -31,7 +31,7 @@ fileRouter.post(
 );
 fileRouter.get(
   "/:filename",
-  zodValidate({ params: Filename, query: FileQuery }),
+  validate({ params: Filename, query: FileQuery }),
   FileControllers.getFile
 );
 

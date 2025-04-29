@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { zodValidate } from "../../middlewares/validate";
+import { validate } from "../../middlewares/validate";
 import { upload } from "../../middlewares/multer";
 import { authorize } from "../../middlewares/authorize";
 import { ChatControllers } from "../../controllers";
@@ -28,14 +28,14 @@ const chatRouter = Router();
 
 chatRouter.post(
   "/private",
-  zodValidate({ body: CreatePrivateChatDTO }),
+  validate({ body: CreatePrivateChatDTO }),
   ChatControllers.createPrivateChat
 );
 
 chatRouter.post(
   "/group",
   upload.single("file"),
-  zodValidate({ body: CreateGroupChatDTO }),
+  validate({ body: CreateGroupChatDTO }),
   authorize,
   ChatControllers.createGroupChat
 );
@@ -45,45 +45,45 @@ chatRouter.get("/", ChatControllers.getSelfChats);
 chatRouter.post(
   "/:chatId/messages",
   upload.array("files"),
-  zodValidate({ body: CreateMessageDTO, params: ChatId }),
+  validate({ body: CreateMessageDTO, params: ChatId }),
   authorize, // multer is overriding req.body
   ChatControllers.createMessage
 );
 
 chatRouter.get(
   "/:chatId/messages",
-  zodValidate({ params: ChatId, query: GetMessagesQuery }),
+  validate({ params: ChatId, query: GetMessagesQuery }),
   ChatControllers.getChatMessages
 );
 
 chatRouter.post(
   "/:chatId/reactions",
-  zodValidate({ body: CreateReactionDTO, params: ChatId }),
+  validate({ body: CreateReactionDTO, params: ChatId }),
   ChatControllers.createReaction
 );
 
 chatRouter.put(
   "/:chatId/users/:userId/alias",
-  zodValidate({ body: UpdateAliasDTO, params: ChatId.merge(UserId) }),
+  validate({ body: UpdateAliasDTO, params: ChatId.merge(UserId) }),
   ChatControllers.updateAlias
 );
 
 chatRouter.post(
   "/:chatId/users",
-  zodValidate({ body: UserId, params: ChatId }),
+  validate({ body: UserId, params: ChatId }),
   ChatControllers.addUserToGroupChat
 );
 
 chatRouter.delete(
   "/:chatId/users",
-  zodValidate({ params: ChatId }),
+  validate({ params: ChatId }),
   ChatControllers.deleteSelfFromGroupChat
 );
 
 chatRouter.put(
   "/:chatId",
   upload.single("file"),
-  zodValidate({ body: UpdateGroupChatDTO, params: ChatId }),
+  validate({ body: UpdateGroupChatDTO, params: ChatId }),
   authorize,
   ChatControllers.updateGroupChat
 );

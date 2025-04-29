@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { upload } from "../../middlewares/multer";
-import { zodValidate } from "../../middlewares/validate";
 import { authorizeWithRefreshToken } from "../../middlewares/authorize";
 import { AuthControllers } from "../../controllers";
 import { LoginDTO } from "../../validators/auth/login.validators";
 import { SignupDTO } from "../../validators/auth/signup.validators";
+import { validate } from "../../middlewares/validate";
 
 /**
  * Public Authentication Routes Router.
@@ -16,14 +16,10 @@ const authRouter = Router();
 authRouter.post(
   "/signup",
   upload.single("file"),
-  zodValidate({ body: SignupDTO }),
+  validate({ body: SignupDTO }),
   AuthControllers.signup
 );
-authRouter.post(
-  "/login",
-  zodValidate({ body: LoginDTO }),
-  AuthControllers.login
-);
+authRouter.post("/login", validate({ body: LoginDTO }), AuthControllers.login);
 authRouter.post(
   "/refresh",
   authorizeWithRefreshToken,

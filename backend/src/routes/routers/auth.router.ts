@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../../middlewares/multer";
-import { zodValidate } from "../../middlewares/validate";
+import { validate } from "../../middlewares/validate";
 import { authorize } from "../../middlewares/authorize";
 import { AuthControllers } from "../../controllers";
 import { SignupDTO } from "../../validators/auth/signup.validators";
@@ -18,7 +18,7 @@ authRouterProtected.get("/user", AuthControllers.getSelf);
 authRouterProtected.put(
   "/user",
   upload.single("file"),
-  zodValidate({ body: SignupDTO }),
+  validate({ body: SignupDTO }),
   authorize,
   AuthControllers.updateSelf
 );
