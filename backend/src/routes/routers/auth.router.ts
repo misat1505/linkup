@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { upload } from "../../middlewares/multer";
 import { validate } from "../../middlewares/validate";
-import { authorize } from "../../middlewares/authorize";
 import { AuthControllers } from "../../controllers";
 import { SignupDTO } from "../../validators/auth/signup.validators";
 

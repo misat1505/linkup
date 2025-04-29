@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { upload } from "../../middlewares/multer";
-import { authorize } from "../../middlewares/authorize";
 import { FileControllers } from "../../controllers";
 import { validate } from "../../middlewares/validate";
 import {

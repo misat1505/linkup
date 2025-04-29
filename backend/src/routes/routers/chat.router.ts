@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { validate } from "../../middlewares/validate";
 import { upload } from "../../middlewares/multer";
-import { authorize } from "../../middlewares/authorize";
 import { ChatControllers } from "../../controllers";
 import {
   ChatId,
