@@ -10,9 +10,9 @@ describe("[GET] /auth/user", () => {
 
       const res = await request(app)
         .get("/auth/user")
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
 
-      expect(res.statusCode).toBe(200);
       User.strict().parse(res.body.user);
     });
   });

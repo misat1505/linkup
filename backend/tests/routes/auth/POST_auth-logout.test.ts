@@ -9,9 +9,9 @@ describe("[POST] /auth/logout", () => {
 
       const res = await request(app)
         .post("/auth/logout")
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
 
-      expect(res.statusCode).toBe(200);
       expect(res.headers["set-cookie"]).toBeDefined();
     });
   });

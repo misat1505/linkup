@@ -14,18 +14,16 @@ describe("[POST] /auth/refresh", () => {
 
       const res = await request(app)
         .post("/auth/refresh")
-        .set("Cookie", `${refreshTokenCookieName}=${token}`);
+        .set("Cookie", `${refreshTokenCookieName}=${token}`)
+        .expect(200);
 
-      expect(res.statusCode).toBe(200);
       expect(res.headers["set-cookie"]).toBeDefined();
     });
   });
 
   it("should fail if no refresh token in cookie", async () => {
     await testWithTransaction(async ({ app }) => {
-      const res = await request(app).post("/auth/refresh");
-
-      expect(res.statusCode).toBe(400);
+      await request(app).post("/auth/refresh").expect(400);
     });
   });
 
@@ -36,11 +34,10 @@ describe("[POST] /auth/refresh", () => {
         env.REFRESH_TOKEN_SECRET
       );
 
-      const res = await request(app)
+      await request(app)
         .post("/auth/refresh")
-        .set("Cookie", `${refreshTokenCookieName}=${token}`);
-
-      expect(res.statusCode).toBe(404);
+        .set("Cookie", `${refreshTokenCookieName}=${token}`)
+        .expect(404);
     });
   });
 });

@@ -49,9 +49,9 @@ describe("[POST] /auth/signup", () => {
         .field("lastName", "Muzg")
         .field("login", login)
         .field("password", password)
-        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"));
+        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"))
+        .expect(201);
 
-      expect(res.statusCode).toEqual(201);
       User.strict().parse(res.body.user);
       expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
     });
@@ -59,30 +59,28 @@ describe("[POST] /auth/signup", () => {
 
   it("should fail if login already taken", async () => {
     await testWithTransaction(async ({ app, seed }) => {
-      const login = seed.users[0].login;
-      const password = "valid_password";
-
-      const res = await request(app).post("/auth/signup").send({
-        firstName: "Melon",
-        lastName: "Muzg",
-        login,
-        password,
-      });
-      expect(res.statusCode).toEqual(409);
+      const res = await request(app)
+        .post("/auth/signup")
+        .send({
+          firstName: "Melon",
+          lastName: "Muzg",
+          login: seed.users[0].login,
+          password: "valid_password",
+        })
+        .expect(409);
     });
   });
 
   it("should fail with bad data", async () => {
     await testWithTransaction(async ({ app }) => {
-      const login = "valid_login";
-      const password = "valid_password";
-
-      const res = await request(app).post("/auth/signup").send({
-        firstName: "Melon",
-        login,
-        password,
-      });
-      expect(res.statusCode).toEqual(400);
+      await request(app)
+        .post("/auth/signup")
+        .send({
+          firstName: "Melon",
+          login: "valid_login",
+          password: "valid_password",
+        })
+        .expect(400);
     });
   });
 });
