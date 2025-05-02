@@ -5,12 +5,9 @@ import request from "supertest";
 import path from "path";
 import { User } from "../../../src/types/User";
 
-jest.mock("../../../src/lib/FileStorage");
-
 describe("[PUT] /auth/user", () => {
   it("updates user profile", async () => {
     await testWithTransaction(async ({ app, seed }) => {
-      app.services.fileStorage = mockFileStorage as any;
       const token = TestHelpers.createToken(seed.users[0].id);
 
       const newUser = {

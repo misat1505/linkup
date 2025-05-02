@@ -4,12 +4,9 @@ import { mockFileStorage } from "../../utils/mocks";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
-jest.mock("../../../src/lib/FileStorage");
-
 describe("[PUT] /posts/:id", () => {
   it("updates existing post", async () => {
     await testWithTransaction(async ({ app, seed }) => {
-      app.services.fileStorage = mockFileStorage as any;
       const token = TestHelpers.createToken(seed.users[0].id);
       mockFileStorage.listFiles.mockResolvedValue([]);
       const postId = seed.posts[0].id;
@@ -31,7 +28,6 @@ describe("[PUT] /posts/:id", () => {
 
   it("blocks post update by non-owner", async () => {
     await testWithTransaction(async ({ app, seed }) => {
-      app.services.fileStorage = mockFileStorage as any;
       const token = TestHelpers.createToken(seed.users[1].id);
       mockFileStorage.listFiles.mockResolvedValue([]);
       const postId = seed.posts[0].id;

@@ -1,20 +1,12 @@
 import { Chat } from "../../../src/types/Chat";
 import { TestHelpers } from "../../utils/helpers";
-import { mockFileStorage } from "../../utils/mocks";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import path from "path";
 import request from "supertest";
 
-jest.mock("../../../src/lib/FileStorage");
-
 describe("[PUT] /chats/:chatId", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it("updates group chat details", async () => {
     await testWithTransaction(async ({ app, seed }) => {
-      app.services.fileStorage = mockFileStorage as any;
       const chatId = seed.chats[1].id;
       const token = TestHelpers.createToken(seed.users[0].id);
 

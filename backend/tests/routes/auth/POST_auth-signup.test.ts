@@ -4,13 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 import path from "path";
 
-jest.mock("../../../src/lib/FileStorage");
-
 describe("[POST] /auth/signup", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it("signs up new user", async () => {
     await testWithTransaction(async ({ app }) => {
       const login = "valid_login";
@@ -39,7 +33,6 @@ describe("[POST] /auth/signup", () => {
 
   it("signs up new user with image", async () => {
     await testWithTransaction(async ({ app }) => {
-      app.services.fileStorage = mockFileStorage as any;
       const login = "valid_login";
       const password = "valid_password";
 
