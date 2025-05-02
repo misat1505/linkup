@@ -28,4 +28,21 @@ describe("[PUT] /posts/:id", () => {
       );
     });
   });
+
+  it("shouldn't allow to update a post not belonging to the user", async () => {
+    await testWithTransaction(async ({ app, seed }) => {
+      app.services.fileStorage = mockFileStorage as any;
+      const token = TestHelpers.createToken(seed.users[1].id);
+      mockFileStorage.listFiles.mockResolvedValue([]);
+      const postId = seed.posts[0].id;
+
+      await request(app)
+        .put(`/posts/${postId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          content: "This is the updated content of the post.",
+        })
+        .expect(401);
+    });
+  });
 });

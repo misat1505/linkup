@@ -18,9 +18,9 @@ describe("[POST] /posts", () => {
         .set("Authorization", `Bearer ${token}`)
         .send({
           content: "This is a new post.",
-        });
+        })
+        .expect(201);
 
-      expect(res.statusCode).toEqual(201);
       Post.strict().parse(res.body.post);
       expect(res.body.post.content).toBe("This is a new post.");
     });

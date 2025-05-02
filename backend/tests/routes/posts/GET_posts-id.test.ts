@@ -11,9 +11,9 @@ describe("[GET] /posts/:id", () => {
 
       const res = await request(app)
         .get(`/posts/${postId}`)
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
 
-      expect(res.statusCode).toEqual(200);
       Post.strict().parse(res.body.post);
       expect(res.body.post.id).toBe(postId);
     });

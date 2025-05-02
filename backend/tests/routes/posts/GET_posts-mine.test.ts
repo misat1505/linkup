@@ -10,10 +10,10 @@ describe("[GET] /posts/mine", () => {
 
       const res = await request(app)
         .get("/posts/mine")
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
 
-      expect(res.statusCode).toEqual(200);
-      expect(Array.isArray(res.body.posts)).toBe(true);
+      expect(Array.isArray(res.body.posts)).toBeTruthy();
       Post.strict().parse(res.body.posts[0]);
     });
   });

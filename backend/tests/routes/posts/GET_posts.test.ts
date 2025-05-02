@@ -10,12 +10,23 @@ describe("[GET] /posts", () => {
 
       const res = await request(app)
         .get("/posts?lastPostId=null&limit=5")
-        .set("Authorization", `Bearer ${otherUserToken}`);
+        .set("Authorization", `Bearer ${otherUserToken}`)
+        .expect(200);
 
-      expect(res.statusCode).toEqual(200);
-      expect(Array.isArray(res.body.posts)).toBe(true);
+      expect(Array.isArray(res.body.posts)).toBeTruthy();
       expect(res.body.posts.length).toBe(1);
       Post.strict().parse(res.body.posts[0]);
+    });
+  });
+
+  it("should require lastPostId and limit in query params", async () => {
+    await testWithTransaction(async ({ app, seed }) => {
+      const otherUserToken = TestHelpers.createToken(seed.users[1].id);
+
+      await request(app)
+        .get("/posts")
+        .set("Authorization", `Bearer ${otherUserToken}`)
+        .expect(400);
     });
   });
 });

@@ -19,4 +19,15 @@ describe("[GET] /search", () => {
       });
     });
   });
+
+  it("should require term query param", async () => {
+    await testWithTransaction(async ({ app, seed }) => {
+      const token = TestHelpers.createToken(seed.users[0].id);
+
+      await request(app)
+        .get("/users/search")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(400);
+    });
+  });
 });
