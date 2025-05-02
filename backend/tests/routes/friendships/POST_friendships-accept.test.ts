@@ -43,11 +43,10 @@ describe("[GET] /friendships/accept", () => {
           acceptorId: seed.users[1].id,
         });
 
-      const res1 = await request(app)
+      await request(app)
         .post("/friendships/accept")
-        .set("Authorization", `Bearer ${token}`);
-
-      expect(res1.statusCode).toBe(400);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(400);
     });
   });
 });

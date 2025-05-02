@@ -1,18 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-// import { z } from "zod";
-import { User, UserWithCredentials } from "../../src/types/User";
+import { UserWithCredentials } from "../../src/types/User";
 import { Post } from "../../src/types/Post";
 import { userSelect } from "../../src/utils/prisma/userSelect";
 import { postChatSelect } from "../../src/utils/prisma/postChatSelect";
-import { PostService } from "../../src/services/PostService";
 import { initReactions, reactions } from "../../src/config/reactions";
-
-// export const TestSeed = z.object({
-//   users: z.array(User),
-//   posts: z.array(Post),
-// });
-
-// export type TestSeed = z.infer<typeof TestSeed>;
 
 type ChatEntity = {
   id: string;
@@ -64,6 +55,17 @@ export async function seedDatabase(prisma: PrismaClient): Promise<TestSeed> {
         salt: "random_salt_for_jane",
         lastActive: new Date(),
         photoURL: "some_photo_url_for_jane.webp",
+      },
+      {
+        id: "c40b3259-f642-4180-ba2f-4ead056012a8",
+        firstName: "Bob",
+        lastName: "Johnson",
+        login: "login3",
+        password:
+          "37b4a40ef177c39863a3fa75de835f4ab276c18f00ba4e909e54b039215143d0", // "pass2"
+        salt: "random_salt_for_bob",
+        lastActive: new Date(),
+        photoURL: "some_photo_url_for_bob.webp",
       },
     ],
   });
