@@ -35,4 +35,19 @@ describe("[PUT] /chats/:chatId/users/:userId/alias", () => {
       expect(user3?.alias).toBe(alias);
     });
   });
+
+  it("shouldn't allow to update alias by a user who doesn't belong to the chat", async () => {
+    await testWithTransaction(async ({ app, seed }) => {
+      const chatId = seed.chats[1].id;
+      const userId = seed.users[1].id;
+      const alias = "new alias";
+      const token = TestHelpers.createToken(userId);
+
+      await request(app)
+        .put(`/chats/${chatId}/users/${seed.users[0].id}/alias`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({ alias })
+        .expect(401);
+    });
+  });
 });

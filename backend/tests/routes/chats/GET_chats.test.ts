@@ -10,9 +10,9 @@ describe("[GET] /chats", () => {
 
       const res = await request(app)
         .get("/chats")
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
 
-      expect(res.statusCode).toBe(200);
       expect(res.body.chats.length).toBe(seed.chats.length);
       res.body.chats.forEach((chat: unknown) => {
         Chat.strict().parse(chat);

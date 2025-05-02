@@ -20,20 +20,47 @@ describe("[POST] chats/:chatId/messages", () => {
         .field("responseId", messages[0].id)
         .attach("files", Buffer.from("message file"), "file1.txt")
         .attach("files", Buffer.from("message file2"), "file2.txt")
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(201);
 
-      expect(res.statusCode).toBe(201);
       Message.strict().parse(res.body.message);
 
       const res2 = await request(app)
         .get(`/chats/${chatId}/messages?lastMessageId=null&limit=20`)
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
 
-      expect(res2.statusCode).toBe(200);
       expect(res2.body.messages.length).toBe(messages.length + 1);
       res2.body.messages.forEach((message: unknown) => {
         Message.strict().parse(message);
       });
+    });
+  });
+
+  it("shouldn't allow to send a message for a user that doesn't belong to the chat", async () => {
+    await testWithTransaction(async ({ app, seed }) => {
+      const chatId = seed.chats[1].id;
+      const token = TestHelpers.createToken(seed.users[1].id);
+
+      await request(app)
+        .post(`/chats/${chatId}/messages`)
+        .send({ content: "message" })
+        .set("Authorization", `Bearer ${token}`)
+        .expect(401);
+    });
+  });
+
+  it("shouldn't allow to respond to the message not belonging to the chat", async () => {
+    await testWithTransaction(async ({ app, seed }) => {
+      const message = seed.messages[0];
+      const chatId = seed.chats[1].id;
+      const token = TestHelpers.createToken(seed.users[0].id);
+
+      await request(app)
+        .post(`/chats/${chatId}/messages`)
+        .send({ content: "message", responseId: message.id })
+        .set("Authorization", `Bearer ${token}`)
+        .expect(400);
     });
   });
 });

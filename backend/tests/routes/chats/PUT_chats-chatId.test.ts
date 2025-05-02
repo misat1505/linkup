@@ -30,22 +30,36 @@ describe("[PUT] /chats/:chatId", () => {
         .put(`/chats/${chatId}`)
         .set("Authorization", `Bearer ${token}`)
         .field("name", "chat name")
-        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"));
+        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"))
+        .expect(201);
 
-      expect(res2.statusCode).toBe(201);
       Chat.strict().parse(res2.body.chat);
 
       const res3 = await request(app)
         .get("/chats")
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
 
-      expect(res3.statusCode).toBe(200);
       res3.body.chats.forEach((chat: unknown) => {
         Chat.strict().parse(chat);
       });
       const chat3 = res3.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
       expect(chat3.name).toBe("chat name");
       expect(chat3.photoURL).not.toBe("chat-photo.webp");
+    });
+  });
+
+  it("shouldn't allow to update chat by a user who doesn't belong to it", async () => {
+    await testWithTransaction(async ({ app, seed }) => {
+      const chatId = seed.chats[1].id;
+      const userId = seed.users[1].id;
+      const token = TestHelpers.createToken(userId);
+
+      await request(app)
+        .put(`/chats/${chatId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({ name: "chat name" })
+        .expect(401);
     });
   });
 });
