@@ -39,15 +39,15 @@ describe("[GET] /files/:filename", () => {
         createdUser.id,
       ]);
 
-      const res = await request(app)
+      await request(app)
         .get(`/files/${createdUser.photoURL}?filter=avatar`)
-        .set("Authorization", `Bearer ${tokens[1]}`);
-      expect(res.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${tokens[1]}`)
+        .expect(200);
 
-      const res2 = await request(app)
+      await request(app)
         .get(`/files/${createdUser.photoURL}?filter=avatar`)
-        .set("Authorization", `Bearer ${tokens[0]}`);
-      expect(res2.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${tokens[0]}`)
+        .expect(200);
     });
   });
 
@@ -69,10 +69,10 @@ describe("[GET] /files/:filename", () => {
         .field("name", "chat name")
         .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"));
 
-      const res = await request(app)
+      await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-        .set("Authorization", `Bearer ${tokens[0]}`);
-      expect(res.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${tokens[0]}`)
+        .expect(200);
 
       const user2Token = TokenProcessor.encode(
         {
@@ -81,15 +81,15 @@ describe("[GET] /files/:filename", () => {
         env.ACCESS_TOKEN_SECRET
       );
 
-      const res2 = await request(app)
+      await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-        .set("Authorization", `Bearer ${user2Token}`);
-      expect(res2.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${user2Token}`)
+        .expect(200);
 
-      const res3 = await request(app)
+      await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
-        .set("Authorization", `Bearer ${tokens[1]}`);
-      expect(res3.statusCode).toBe(401);
+        .set("Authorization", `Bearer ${tokens[1]}`)
+        .expect(401);
     });
   });
 
@@ -120,10 +120,10 @@ describe("[GET] /files/:filename", () => {
 
       const filename = (message as Message).files[0].url;
 
-      const res = await request(app)
+      await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-        .set("Authorization", `Bearer ${tokens[0]}`);
-      expect(res.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${tokens[0]}`)
+        .expect(200);
 
       const user2Token = TokenProcessor.encode(
         {
@@ -132,15 +132,15 @@ describe("[GET] /files/:filename", () => {
         env.ACCESS_TOKEN_SECRET
       );
 
-      const res2 = await request(app)
+      await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-        .set("Authorization", `Bearer ${user2Token}`);
-      expect(res2.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${user2Token}`)
+        .expect(200);
 
-      const res3 = await request(app)
+      await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
-        .set("Authorization", `Bearer ${tokens[1]}`);
-      expect(res3.statusCode).toBe(401);
+        .set("Authorization", `Bearer ${tokens[1]}`)
+        .expect(401);
     });
   });
 
@@ -154,10 +154,10 @@ describe("[GET] /files/:filename", () => {
         .attach("file", Buffer.from("message file"), "file1.txt");
       const newFileName = res1.body.file;
 
-      const res2 = await request(app)
+      await request(app)
         .get(`/files/${newFileName}?filter=cache`)
-        .set("Authorization", `Bearer ${token}`);
-      expect(res2.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
     });
   });
 
@@ -171,15 +171,15 @@ describe("[GET] /files/:filename", () => {
       const postId = uuidv4();
       const filename = "file.txt";
 
-      const res2 = await request(app)
+      await request(app)
         .get(`/files/${filename}?filter=post&post=${postId}`)
-        .set("Authorization", `Bearer ${tokens[0]}`);
-      expect(res2.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${tokens[0]}`)
+        .expect(200);
 
-      const res3 = await request(app)
+      await request(app)
         .get(`/files/${filename}?filter=post&post=${postId}`)
-        .set("Authorization", `Bearer ${tokens[1]}`);
-      expect(res3.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${tokens[1]}`)
+        .expect(200);
     });
   });
 });

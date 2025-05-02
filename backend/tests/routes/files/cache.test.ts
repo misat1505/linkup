@@ -15,7 +15,7 @@ describe("cache routes", () => {
       app.services.fileStorage = mockFileStorage as any;
       const token = TestHelpers.createToken(seed.users[0].id);
 
-      const res1 = await request(app)
+      await request(app)
         .get("/files/cache")
         .set("Authorization", `Bearer ${token}`);
 
@@ -25,15 +25,15 @@ describe("cache routes", () => {
         .attach("file", Buffer.from("message file"), "file1.txt");
       const filename1 = res2.body.file;
 
-      const res3 = await request(app)
+      await request(app)
         .get(`/files/${filename1}?filter=cache`)
-        .set("Authorization", `Bearer ${token}`);
-      expect(res3.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
 
-      const res4 = await request(app)
+      await request(app)
         .delete(`/files/cache/${filename1}`)
-        .set("Authorization", `Bearer ${token}`);
-      expect(res4.statusCode).toBe(200);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
     });
   });
 });
