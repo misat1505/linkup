@@ -7,7 +7,7 @@ import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
 describe("authorize middleware", () => {
   const mockNextFunction = jest.fn();
 
-  it("should append token on authorized", async () => {
+  it("appends token for authorized user", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUser.mockResolvedValue(seed.users[0]);
       const token = TokenProcessor.encode(
@@ -27,7 +27,7 @@ describe("authorize middleware", () => {
     });
   });
 
-  it("shouldn't allow valid token of non-existent user", async () => {
+  it("blocks valid token for non-existent user", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUser.mockResolvedValue(null);
       const token = TokenProcessor.encode(
@@ -46,7 +46,7 @@ describe("authorize middleware", () => {
     });
   });
 
-  it("shouldn't allow no token", async () => {
+  it("blocks missing token", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUser.mockResolvedValue(seed.users[0]);
 
@@ -61,7 +61,7 @@ describe("authorize middleware", () => {
     });
   });
 
-  it("shouldn't allow invalid token", async () => {
+  it("blocks invalid token", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUser.mockResolvedValue(seed.users[0]);
       const req = mockRequest({

@@ -11,7 +11,7 @@ describe("[POST] /auth/signup", () => {
     jest.clearAllMocks();
   });
 
-  it("should sign up", async () => {
+  it("signs up new user", async () => {
     await testWithTransaction(async ({ app }) => {
       const login = "valid_login";
       const password = "valid_password";
@@ -37,7 +37,7 @@ describe("[POST] /auth/signup", () => {
     });
   });
 
-  it("should sign up with image", async () => {
+  it("signs up new user with image", async () => {
     await testWithTransaction(async ({ app }) => {
       app.services.fileStorage = mockFileStorage as any;
       const login = "valid_login";
@@ -57,9 +57,9 @@ describe("[POST] /auth/signup", () => {
     });
   });
 
-  it("should fail if login already taken", async () => {
+  it("fails if login is taken", async () => {
     await testWithTransaction(async ({ app, seed }) => {
-      const res = await request(app)
+      await request(app)
         .post("/auth/signup")
         .send({
           firstName: "Melon",
@@ -71,7 +71,7 @@ describe("[POST] /auth/signup", () => {
     });
   });
 
-  it("should fail with bad data", async () => {
+  it("fails with invalid data", async () => {
     await testWithTransaction(async ({ app }) => {
       await request(app)
         .post("/auth/signup")

@@ -6,7 +6,7 @@ import { seedProvider } from "../../utils/seedProvider";
 jest.mock("../../../src/lib/TokenProcessor");
 
 describe("refreshToken", () => {
-  it("should refresh a token", async () => {
+  it("refreshes authentication token", async () => {
     await seedProvider(async (seed) => {
       const user = seed.users[0];
       (TokenProcessor.encode as jest.Mock).mockReturnValue(

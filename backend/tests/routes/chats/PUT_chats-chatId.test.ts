@@ -12,7 +12,7 @@ describe("[PUT] /chats/:chatId", () => {
     jest.clearAllMocks();
   });
 
-  it("should update group chat", async () => {
+  it("updates group chat details", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       app.services.fileStorage = mockFileStorage as any;
       const chatId = seed.chats[1].id;
@@ -49,7 +49,7 @@ describe("[PUT] /chats/:chatId", () => {
     });
   });
 
-  it("shouldn't allow to update chat by a user who doesn't belong to it", async () => {
+  it("blocks chat update by non-member", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const chatId = seed.chats[1].id;
       const userId = seed.users[1].id;

@@ -3,7 +3,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[DELETE] /friendships", () => {
-  it("should delete friendship", async () => {
+  it("deletes existing friendship", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const tokens = TestHelpers.createTokens([
         seed.users[0].id,
@@ -29,7 +29,7 @@ describe("[DELETE] /friendships", () => {
     });
   });
 
-  it("shouldn't allow to delete friendship not belonging to me", async () => {
+  it("blocks deletion of non-owned friendship", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const tokens = TestHelpers.createTokens([
         seed.users[0].id,

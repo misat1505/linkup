@@ -6,7 +6,7 @@ import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 jest.mock("../../../src/utils/processAvatar");
 
 describe("createGroupChat", () => {
-  it("should create a group chat if user is in the list", async () => {
+  it("creates group chat with user included", async () => {
     const chat = { id: "chat1" };
     (processAvatar as jest.Mock).mockResolvedValue("file");
     mockChatService.createGroupChat.mockResolvedValue(chat);
@@ -26,7 +26,7 @@ describe("createGroupChat", () => {
     expect(res.status).toHaveBeenCalledWith(201);
   });
 
-  it("shouldn't allow if user is not in the user list", async () => {
+  it("blocks group chat creation without user", async () => {
     (processAvatar as jest.Mock).mockResolvedValue("file");
 
     const req = mockRequest({

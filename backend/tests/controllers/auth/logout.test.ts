@@ -6,7 +6,7 @@ import { seedProvider } from "../../utils/seedProvider";
 jest.mock("../../../src/lib/TokenProcessor");
 
 describe("logout", () => {
-  it("should log out a user", async () => {
+  it("logs out user", async () => {
     await seedProvider(async (seed) => {
       const user = seed.users[0];
       (TokenProcessor.encode as jest.Mock).mockReturnValue("logout_jwt_token");

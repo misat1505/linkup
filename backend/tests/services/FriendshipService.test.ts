@@ -4,7 +4,7 @@ import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("FriendshipService", () => {
   describe("getUserFriendships", () => {
-    it("should return an empty list when no friendships exist", async () => {
+    it("returns empty list for no friendships", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.getUserFriendships(
@@ -15,7 +15,7 @@ describe("FriendshipService", () => {
       });
     });
 
-    it("should return friendships for a user", async () => {
+    it("retrieves user friendships", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
@@ -37,7 +37,7 @@ describe("FriendshipService", () => {
   });
 
   describe("createFriendship", () => {
-    it("should create a new friendship", async () => {
+    it("creates new friendship", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.createFriendship(
@@ -53,7 +53,7 @@ describe("FriendshipService", () => {
       });
     });
 
-    it("should return null if the friendship already exists", async () => {
+    it("returns null for existing friendship", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
@@ -70,7 +70,7 @@ describe("FriendshipService", () => {
   });
 
   describe("acceptFriendship", () => {
-    it("should accept a pending friendship", async () => {
+    it("accepts pending friendship request", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
@@ -90,7 +90,7 @@ describe("FriendshipService", () => {
       });
     });
 
-    it("should return null if there is no pending friendship", async () => {
+    it("returns null for non-existent pending friendship", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.acceptFriendship(
@@ -103,7 +103,7 @@ describe("FriendshipService", () => {
   });
 
   describe("deleteFriendship", () => {
-    it("should delete an existing friendship", async () => {
+    it("deletes existing friendship", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
@@ -124,7 +124,7 @@ describe("FriendshipService", () => {
       });
     });
 
-    it("should return false if the friendship does not exist", async () => {
+    it("returns false for non-existent friendship deletion", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.deleteFriendship(

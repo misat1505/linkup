@@ -6,7 +6,7 @@ import { Post } from "../../src/types/Post";
 
 describe("PostService", () => {
   describe("createPost", () => {
-    it("should create a post", async () => {
+    it("creates new post", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const content = "This is a new post";
@@ -23,7 +23,7 @@ describe("PostService", () => {
   });
 
   describe("getUserPosts", () => {
-    it("should return posts for a specific user", async () => {
+    it("retrieves posts for specific user", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const userId = seed.users[0].id;
@@ -40,7 +40,7 @@ describe("PostService", () => {
   });
 
   describe("getPost", () => {
-    it("should return a post by ID", async () => {
+    it("retrieves post by ID", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const postId = seed.posts[0].id;
@@ -51,7 +51,7 @@ describe("PostService", () => {
       });
     });
 
-    it("should return null for a non-existent post", async () => {
+    it("returns null for non-existent post ID", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postService = new PostService(tx);
         const result = await postService.getPost("non-existent-id");
@@ -62,7 +62,7 @@ describe("PostService", () => {
   });
 
   describe("updatePost", () => {
-    it("should update an existing post", async () => {
+    it("updates existing post", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const postId = seed.posts[0].id;
@@ -78,7 +78,7 @@ describe("PostService", () => {
       });
     });
 
-    it("should return null for a non-existent post update", async () => {
+    it("returns null for non-existent post update", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postService = new PostService(tx);
         const result = await postService.updatePost({
@@ -91,8 +91,8 @@ describe("PostService", () => {
     });
   });
 
-  describe("updatePost", () => {
-    it("should delete an existing post", async () => {
+  describe("deletePost", () => {
+    it("deletes existing post", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const postId = seed.posts[0].id;
@@ -105,7 +105,7 @@ describe("PostService", () => {
   });
 
   describe("reportPost", () => {
-    it("should report post", async () => {
+    it("reports post successfully", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         await postService.reportPost(seed.users[0].id, seed.posts[0].id);
@@ -113,7 +113,7 @@ describe("PostService", () => {
       });
     });
 
-    it("should throw error if user already reported this post", async () => {
+    it("throws error for duplicate post report", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const userId = seed.users[0].id;

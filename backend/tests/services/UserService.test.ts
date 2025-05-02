@@ -6,7 +6,7 @@ import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("UserService", () => {
   describe("searchUsers", () => {
-    it("should return users fitting given term", async () => {
+    it("retrieves users matching search term", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const result = await userService.searchUsers("Kyli");
@@ -19,7 +19,7 @@ describe("UserService", () => {
   });
 
   describe("isLoginTaken", () => {
-    it("should return true if taken", async () => {
+    it("confirms login is taken", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const userService = new UserService(tx);
         const result = await userService.isLoginTaken(seed.users[0].login);
@@ -27,7 +27,7 @@ describe("UserService", () => {
       });
     });
 
-    it("should return false if not taken", async () => {
+    it("denies login is taken", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const result = await userService.isLoginTaken("not_taken");
@@ -37,7 +37,7 @@ describe("UserService", () => {
   });
 
   describe("insertUser", () => {
-    it("should insert user", async () => {
+    it("inserts new user", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const login = "not_taken";
@@ -58,7 +58,7 @@ describe("UserService", () => {
   });
 
   describe("getUserByLogin", () => {
-    it("should return user if existent", async () => {
+    it("retrieves existing user by login", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUserByLogin("login2");
@@ -67,7 +67,7 @@ describe("UserService", () => {
       });
     });
 
-    it("should return null if not existent", async () => {
+    it("returns null for non-existent user by login", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUserByLogin("not_existent");
@@ -77,7 +77,7 @@ describe("UserService", () => {
   });
 
   describe("getUser", () => {
-    it("should return user if existent", async () => {
+    it("retrieves existing user by ID", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const userService = new UserService(tx);
         const user = await userService.getUser(seed.users[0].id);
@@ -86,7 +86,7 @@ describe("UserService", () => {
       });
     });
 
-    it("should return null if not existent", async () => {
+    it("returns null for non-existent user by ID", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUser("invalid");

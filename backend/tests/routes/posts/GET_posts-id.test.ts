@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /posts/:id", () => {
-  it("should retrieve a post by its ID", async () => {
+  it("retrieves post by ID", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
       const postId = seed.posts[0].id;

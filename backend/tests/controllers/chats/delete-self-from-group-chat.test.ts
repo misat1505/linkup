@@ -7,7 +7,7 @@ describe("deleteUserFromGroupChat", () => {
     jest.clearAllMocks();
   });
 
-  it("should successfully delete user from group chat", async () => {
+  it("removes user from group chat successfully", async () => {
     mockChatService.getChatType.mockResolvedValue("GROUP");
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.deleteFromChat.mockResolvedValue(undefined);
@@ -31,7 +31,7 @@ describe("deleteUserFromGroupChat", () => {
     });
   });
 
-  it("should return 401 if chat is not of type 'GROUP'", async () => {
+  it("returns 401 for non-group chat", async () => {
     mockChatService.getChatType.mockResolvedValue("PRIVATE");
 
     const req = mockRequest({
@@ -47,7 +47,7 @@ describe("deleteUserFromGroupChat", () => {
     expect(mockChatService.deleteFromChat).not.toHaveBeenCalled();
   });
 
-  it("should return 401 if the user is not in the chat", async () => {
+  it("returns 401 for non-chat member", async () => {
     mockChatService.getChatType.mockResolvedValue("GROUP");
     mockChatService.isUserInChat.mockResolvedValue(false);
 

@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] chats/:chatId/messages", () => {
-  it("should get chat messages", async () => {
+  it("retrieves chat messages", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
       const chatId = seed.chats[0].id;
@@ -22,7 +22,7 @@ describe("[GET] chats/:chatId/messages", () => {
     });
   });
 
-  it("shouldn't allow no query params", async () => {
+  it("requires query parameters", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
       const chatId = seed.chats[0].id;
@@ -34,7 +34,7 @@ describe("[GET] chats/:chatId/messages", () => {
     });
   });
 
-  it("shouldn't require limit if lastMessageId provided", async () => {
+  it("requires limit query parameter with lastMessageId", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
       const chatId = seed.chats[0].id;
@@ -46,7 +46,7 @@ describe("[GET] chats/:chatId/messages", () => {
     });
   });
 
-  it("shouldn't allow to get messages from chat in which user is not part of", async () => {
+  it("blocks message retrieval by non-chat member", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[1].id);
       const chatId = seed.chats[1].id;
@@ -58,7 +58,7 @@ describe("[GET] chats/:chatId/messages", () => {
     });
   });
 
-  it("should allow responseId", async () => {
+  it("supports responseId in message retrieval", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
       const chatId = seed.chats[0].id;

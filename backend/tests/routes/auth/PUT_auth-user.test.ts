@@ -8,7 +8,7 @@ import { User } from "../../../src/types/User";
 jest.mock("../../../src/lib/FileStorage");
 
 describe("[PUT] /auth/user", () => {
-  it("should update user", async () => {
+  it("updates user profile", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       app.services.fileStorage = mockFileStorage as any;
       const token = TestHelpers.createToken(seed.users[0].id);
@@ -44,7 +44,7 @@ describe("[PUT] /auth/user", () => {
     });
   });
 
-  it("should allow to change login", async () => {
+  it("changes user login", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
 
@@ -61,7 +61,7 @@ describe("[PUT] /auth/user", () => {
     });
   });
 
-  it("should fail if login already taken", async () => {
+  it("fails if new login is taken", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
 
@@ -78,7 +78,7 @@ describe("[PUT] /auth/user", () => {
     });
   });
 
-  it("should fail with bad data", async () => {
+  it("fails with invalid data", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
 

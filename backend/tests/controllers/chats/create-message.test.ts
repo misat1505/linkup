@@ -3,7 +3,7 @@ import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("createMessage", () => {
-  it("should create a message if the user is authorized", async () => {
+  it("creates message for authorized user", async () => {
     const newMessage = { id: "message1", content: "Hello" };
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.createMessage.mockResolvedValue(newMessage);
@@ -19,7 +19,7 @@ describe("createMessage", () => {
     expect(res.status).toHaveBeenCalledWith(201);
   });
 
-  it("shouldn't allow sending a message if the user is not in the chat", async () => {
+  it("blocks message creation by non-chat member", async () => {
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({
@@ -33,7 +33,7 @@ describe("createMessage", () => {
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
-  it("shouldn't allow sending a message if responseId is not in the chat", async () => {
+  it("blocks message with responseId outside chat", async () => {
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.isMessageInChat.mockResolvedValue(false);
 

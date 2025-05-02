@@ -5,7 +5,7 @@ import request from "supertest";
 import { v4 as uuidv4 } from "uuid";
 
 describe("[POST] /chats/:chatId/users", () => {
-  it("should add user to group chat", async () => {
+  it("adds user to group chat", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const chatId = seed.chats[1].id;
       const userId = seed.users[1].id;
@@ -33,7 +33,7 @@ describe("[POST] /chats/:chatId/users", () => {
     });
   });
 
-  it("shouldn't allow to add to private chat", async () => {
+  it("blocks adding user to private chat", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const userId = seed.users[0].id;
       const token = TestHelpers.createToken(seed.users[0].id);
@@ -56,7 +56,7 @@ describe("[POST] /chats/:chatId/users", () => {
     });
   });
 
-  it("shouldn't allow to add to chat by a user who doesn't belong to it", async () => {
+  it("blocks adding user by non-chat member", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const chatId = seed.chats[1].id;
       const token = TestHelpers.createToken(seed.users[1].id);
@@ -69,7 +69,7 @@ describe("[POST] /chats/:chatId/users", () => {
     });
   });
 
-  it("shouldn't allow to add self to the chat", async () => {
+  it("blocks adding self to chat", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const userId = seed.users[1].id;
       const chatId = seed.chats[1].id;

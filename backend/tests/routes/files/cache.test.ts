@@ -10,7 +10,7 @@ describe("cache routes", () => {
     jest.clearAllMocks();
   });
 
-  it("handles cache correctly", async () => {
+  it("manages file cache operations", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       app.services.fileStorage = mockFileStorage as any;
       const token = TestHelpers.createToken(seed.users[0].id);

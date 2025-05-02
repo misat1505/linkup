@@ -52,7 +52,7 @@ describe("PostRecommendationService", () => {
   }
 
   describe("getLastPost", () => {
-    it("should return null when postId is null", async () => {
+    it("returns null for null postId", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const result = await postRecommendationService.getLastPost(null);
@@ -61,7 +61,7 @@ describe("PostRecommendationService", () => {
       });
     });
 
-    it("should return post when found", async () => {
+    it("retrieves post by ID", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockPost = {
@@ -77,7 +77,7 @@ describe("PostRecommendationService", () => {
       });
     });
 
-    it("should throw error when post not found", async () => {
+    it("throws error for non-existent post", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         mockPostService.getPost.mockResolvedValue(null);
@@ -90,7 +90,7 @@ describe("PostRecommendationService", () => {
   });
 
   describe("getUserFriends", () => {
-    it("should return friend IDs", async () => {
+    it("retrieves friend IDs", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockFriendships = [
@@ -107,7 +107,7 @@ describe("PostRecommendationService", () => {
       });
     });
 
-    it("should return empty array when no accepted friendships", async () => {
+    it("returns empty array for no accepted friendships", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         mockFriendshipService.getUserFriendships.mockResolvedValue([]);
@@ -118,7 +118,7 @@ describe("PostRecommendationService", () => {
   });
 
   describe("fetchFriendsPostsOnly", () => {
-    it("should fetch friends posts with lastPost filter", async () => {
+    it("fetches friends' posts with lastPost filter", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockPost = {
@@ -129,7 +129,6 @@ describe("PostRecommendationService", () => {
         const fetchSpy = jest
           .spyOn(postRecommendationService, "fetchFriendsPostsOnly")
           .mockResolvedValue([mockPost]);
-        // (PostService.sanitizePost as jest.Mock).mockReturnValue(mockPost);
 
         const result = await postRecommendationService.fetchFriendsPostsOnly(
           mockPost,
@@ -144,7 +143,7 @@ describe("PostRecommendationService", () => {
   });
 
   describe("fetchNonFriendsPostsOnly", () => {
-    it("should fetch non-friends posts with deadline", async () => {
+    it("fetches non-friends' posts with deadline", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockPost = {
@@ -155,7 +154,6 @@ describe("PostRecommendationService", () => {
         const fetchSpy = jest
           .spyOn(postRecommendationService, "fetchNonFriendsPostsOnly")
           .mockResolvedValue([mockPost]);
-        // (PostService.sanitizePost as jest.Mock).mockReturnValue(mockPost);
 
         const deadline = new Date();
         const result = await postRecommendationService.fetchNonFriendsPostsOnly(
@@ -177,7 +175,7 @@ describe("PostRecommendationService", () => {
   });
 
   describe("getOthersPostsCreatedAtFilter", () => {
-    it("should return undefined when no lastPost", () => {
+    it("returns undefined without lastPost", () => {
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         null,
         [],
@@ -186,7 +184,7 @@ describe("PostRecommendationService", () => {
       expect(result).toBeUndefined();
     });
 
-    it("should return undefined when friendsPosts exist", () => {
+    it("returns undefined when friends' posts exist", () => {
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         { id: "post1", author: STRANGER, createdAt: new Date() } as Post,
         [{ id: "post2", author: FRIEND1, createdAt: new Date() } as Post],
@@ -195,7 +193,7 @@ describe("PostRecommendationService", () => {
       expect(result).toBeUndefined();
     });
 
-    it("should return undefined when lastPost is from friend", () => {
+    it("returns undefined for friend’s lastPost", () => {
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         { id: "post1", author: FRIEND1, createdAt: new Date() } as Post,
         [],
@@ -204,7 +202,7 @@ describe("PostRecommendationService", () => {
       expect(result).toBeUndefined();
     });
 
-    it("should return date filter when lastPost is from non-friend", () => {
+    it("returns date filter for non-friend’s lastPost", () => {
       const date = new Date();
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         { id: "post1", author: STRANGER, createdAt: date } as Post,
@@ -216,7 +214,7 @@ describe("PostRecommendationService", () => {
   });
 
   describe("getRecommendedPosts", () => {
-    it("should return only non-friends posts when lastPost is from non-friend", async () => {
+    it("returns only non-friends' posts for non-friend lastPost", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const lastPost = {
@@ -262,7 +260,7 @@ describe("PostRecommendationService", () => {
       });
     });
 
-    it("should return only friends posts when limit is reached", async () => {
+    it("returns only friends' posts when limit reached", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const getLastPostSpy = jest
@@ -290,9 +288,6 @@ describe("PostRecommendationService", () => {
         const fetchNonFriendsSpy = jest
           .spyOn(postRecommendationService, "fetchNonFriendsPostsOnly")
           .mockResolvedValue([]);
-        // (PostService.sanitizePost as jest.Mock).mockImplementation(
-        //   (post) => post
-        // );
 
         const result = await postRecommendationService.getRecommendedPosts(
           USER.id,
@@ -315,7 +310,7 @@ describe("PostRecommendationService", () => {
       });
     });
 
-    it("should return mix of friends and non-friends posts", async () => {
+    it("returns mixed friends and non-friends' posts", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const getLastPostSpy = jest

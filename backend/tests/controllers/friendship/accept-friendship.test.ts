@@ -8,7 +8,7 @@ import {
 import { mockFriendship } from "./setup";
 
 describe("acceptFriendship", () => {
-  it("should accept a friendship successfully", async () => {
+  it("accepts friendship successfully", async () => {
     mockFriendshipService.acceptFriendship.mockResolvedValue(mockFriendship);
 
     const req = mockRequest({
@@ -27,7 +27,7 @@ describe("acceptFriendship", () => {
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  it("should fail if acceptorId does not match userId", async () => {
+  it("fails for mismatched acceptorId", async () => {
     const req = mockRequest({
       user: { id: "different-user-id" } as UserWithCredentials,
       validated: {
@@ -44,7 +44,7 @@ describe("acceptFriendship", () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
-  it("should fail if friendship does not exist", async () => {
+  it("fails for non-existent friendship", async () => {
     mockFriendshipService.acceptFriendship.mockResolvedValue(null);
 
     const req = mockRequest({

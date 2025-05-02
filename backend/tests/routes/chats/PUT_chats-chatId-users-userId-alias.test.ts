@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[PUT] /chats/:chatId/users/:userId/alias", () => {
-  it("should update alias in chat", async () => {
+  it("updates user alias in chat", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const chatId = seed.chats[1].id;
       const userId = seed.users[0].id;
@@ -36,7 +36,7 @@ describe("[PUT] /chats/:chatId/users/:userId/alias", () => {
     });
   });
 
-  it("shouldn't allow to update alias by a user who doesn't belong to the chat", async () => {
+  it("blocks alias update by non-chat member", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const chatId = seed.chats[1].id;
       const userId = seed.users[1].id;

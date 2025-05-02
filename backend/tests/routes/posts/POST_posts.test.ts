@@ -7,7 +7,7 @@ import request from "supertest";
 jest.mock("../../../src/lib/FileStorage");
 
 describe("[POST] /posts", () => {
-  it("should create a new post", async () => {
+  it("creates new post", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       app.services.fileStorage = mockFileStorage as any;
       const token = TestHelpers.createToken(seed.users[0].id);

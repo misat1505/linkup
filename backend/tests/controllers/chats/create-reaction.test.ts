@@ -3,7 +3,7 @@ import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("createReaction", () => {
-  it("should create a reaction", async () => {
+  it("creates message reaction", async () => {
     const newReactionData = "reaction";
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.isMessageInChat.mockResolvedValue(true);
@@ -25,7 +25,7 @@ describe("createReaction", () => {
     expect(res.status).toHaveBeenCalledWith(201);
   });
 
-  it("shouldn't allow if messageId is not message in chat", async () => {
+  it("blocks reaction for message outside chat", async () => {
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.isMessageInChat.mockResolvedValue(false);
 
@@ -45,7 +45,7 @@ describe("createReaction", () => {
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
-  it("shouldn't allow if user doesn't belong to the chat", async () => {
+  it("blocks reaction by non-chat member", async () => {
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({

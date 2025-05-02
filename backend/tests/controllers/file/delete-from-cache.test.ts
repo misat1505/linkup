@@ -16,7 +16,7 @@ describe("deleteFromCache", () => {
     jest.clearAllMocks();
   });
 
-  it("deletes file from cache", async () => {
+  it("deletes file from cache successfully", async () => {
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
       validated: { params: { filename: "url1" } },
@@ -33,7 +33,7 @@ describe("deleteFromCache", () => {
     );
   });
 
-  it("returns 500 if file cannot be deleted", async () => {
+  it("returns 500 for failed cache deletion", async () => {
     mockFileStorage.deleteFile.mockRejectedValue(new Error());
 
     const mockNextFunction = jest.fn();

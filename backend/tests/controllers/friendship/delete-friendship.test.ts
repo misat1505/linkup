@@ -8,7 +8,7 @@ import {
 import { mockFriendship } from "./setup";
 
 describe("deleteFriendship", () => {
-  it("should delete a friendship successfully", async () => {
+  it("deletes friendship successfully", async () => {
     mockFriendshipService.deleteFriendship.mockResolvedValue(true);
 
     const req = mockRequest({
@@ -27,7 +27,7 @@ describe("deleteFriendship", () => {
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  it("should fail if user is not part of the friendship", async () => {
+  it("fails for non-participant user", async () => {
     mockFriendshipService.deleteFriendship.mockResolvedValue(false);
 
     const req = mockRequest({
@@ -46,7 +46,7 @@ describe("deleteFriendship", () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
-  it("should fail if the friendship does not exist", async () => {
+  it("fails for non-existent friendship", async () => {
     mockFriendshipService.deleteFriendship.mockResolvedValue(false);
 
     const req = mockRequest({

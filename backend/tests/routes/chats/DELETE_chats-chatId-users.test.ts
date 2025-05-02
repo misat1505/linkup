@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[DELETE] /chats/:chatId/users", () => {
-  it("should delete self from group chat", async () => {
+  it("removes self from group chat", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const chatId = seed.chats[1].id;
       const token = TestHelpers.createToken(seed.users[0].id);
@@ -29,7 +29,7 @@ describe("[DELETE] /chats/:chatId/users", () => {
     });
   });
 
-  it("shouldn't be able to leave chat which user is not part of", async () => {
+  it("blocks leaving chat by non-member", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const chatId = seed.chats[1].id;
       const token = TestHelpers.createToken(seed.users[1].id);
@@ -41,7 +41,7 @@ describe("[DELETE] /chats/:chatId/users", () => {
     });
   });
 
-  it("shouldn't be able to leave private chat", async () => {
+  it("blocks leaving private chat", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const chatId = seed.chats[0].id;
       const token = TestHelpers.createToken(seed.users[0].id);

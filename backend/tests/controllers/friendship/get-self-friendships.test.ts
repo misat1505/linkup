@@ -8,7 +8,7 @@ import {
 import { mockFriendship } from "./setup";
 
 describe("getUserFriendships", () => {
-  it("should fetch all friendships for the user", async () => {
+  it("retrieves all user friendships", async () => {
     const mockFriendships = [
       {
         status: "ACCEPTED",

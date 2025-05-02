@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /auth/user", () => {
-  it("should get user", async () => {
+  it("retrieves authenticated user", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
 

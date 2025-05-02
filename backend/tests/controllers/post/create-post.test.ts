@@ -8,7 +8,7 @@ jest.mock("../../../src/utils/updatePost");
 describe("createPost", () => {
   (handleMarkdownUpdate as jest.Mock).mockImplementation((a, b, c, d) => b);
 
-  it("should successfully create a post", async () => {
+  it("creates post successfully", async () => {
     const postContent = "This is a new post.";
     mockPostService.createPost.mockResolvedValue({
       id: "post-id",
@@ -32,7 +32,7 @@ describe("createPost", () => {
     });
   });
 
-  it("should pass to error middleware if post creation fails", async () => {
+  it("passes errors to error middleware", async () => {
     mockPostService.createPost.mockRejectedValue(new Error("Error"));
     const mockNextFunction = jest.fn();
 

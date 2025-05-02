@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /search", () => {
-  it("should return users", async () => {
+  it("returns users matching search term", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
 
@@ -20,7 +20,7 @@ describe("[GET] /search", () => {
     });
   });
 
-  it("should require term query param", async () => {
+  it("requires term query parameter", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
 

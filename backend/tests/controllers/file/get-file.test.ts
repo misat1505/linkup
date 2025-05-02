@@ -20,7 +20,7 @@ describe("getFile", () => {
   });
 
   describe("avatar", () => {
-    it("should return 404 if the file does not exist", async () => {
+    it("returns 404 for non-existent file", async () => {
       mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
       const req = mockRequest({
@@ -37,7 +37,7 @@ describe("getFile", () => {
       expect(res.status).toHaveBeenCalledWith(404);
     });
 
-    it("should return avatar url if it exists", async () => {
+    it("returns avatar URL for existing file", async () => {
       mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
       const req = mockRequest({
@@ -59,7 +59,7 @@ describe("getFile", () => {
   });
 
   describe("chat", () => {
-    it("should return chat photo url if it exists", async () => {
+    it("returns chat photo URL for existing file", async () => {
       mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
       const req = mockRequest({
@@ -79,7 +79,7 @@ describe("getFile", () => {
       );
     });
 
-    it("should return chat message file url if it exists", async () => {
+    it("returns chat message file URL for existing file", async () => {
       mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
       const req = mockRequest({
@@ -101,7 +101,7 @@ describe("getFile", () => {
   });
 
   describe("cache", () => {
-    it("should return file url from cache if exists", async () => {
+    it("returns cache file URL for existing file", async () => {
       mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
       const req = mockRequest({
@@ -121,7 +121,7 @@ describe("getFile", () => {
       );
     });
 
-    it("should return 404 if file from cache doesn't exist", async () => {
+    it("returns 404 for non-existent cache file", async () => {
       mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
       const req = mockRequest({
@@ -140,7 +140,7 @@ describe("getFile", () => {
   });
 
   describe("post", () => {
-    it("should return file url from post if exists", async () => {
+    it("returns post file URL for existing file", async () => {
       mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
       const req = mockRequest({
@@ -160,7 +160,7 @@ describe("getFile", () => {
       );
     });
 
-    it("should return 404 if file from post doesn't exist", async () => {
+    it("returns 404 for non-existent post file", async () => {
       mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
       const req = mockRequest({

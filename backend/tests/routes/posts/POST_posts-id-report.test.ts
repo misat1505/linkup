@@ -3,7 +3,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[POST] /posts/:id/report", () => {
-  it("should report post correctly", async () => {
+  it("reports post successfully", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
       const postId = seed.posts[0].id;
@@ -15,7 +15,7 @@ describe("[POST] /posts/:id/report", () => {
     });
   });
 
-  it("shouldn't allow to double report a post", async () => {
+  it("blocks duplicate post report", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
       const postId = seed.posts[0].id;

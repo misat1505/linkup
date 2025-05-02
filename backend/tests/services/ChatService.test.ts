@@ -6,7 +6,7 @@ import { Message } from "../../src/types/Message";
 
 describe("ChatService", () => {
   describe("updateGroupChat", () => {
-    it("should update group chat", async () => {
+    it("updates group chat details", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const chatId = seed.chats[1].id;
@@ -25,7 +25,7 @@ describe("ChatService", () => {
       });
     });
 
-    it("should handle null values", async () => {
+    it("handles null input values gracefully", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const chatId = seed.chats[1].id;
@@ -46,7 +46,7 @@ describe("ChatService", () => {
   });
 
   describe("deleteFromChat", () => {
-    it("should delete user from chat", async () => {
+    it("removes user from chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const chatId = seed.chats[1].id;
@@ -62,7 +62,7 @@ describe("ChatService", () => {
   });
 
   describe("getChatType", () => {
-    it("should get chat type", async () => {
+    it("retrieves chat type", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const chatId = seed.chats[1].id;
@@ -73,7 +73,7 @@ describe("ChatService", () => {
       });
     });
 
-    it("should return null if chat doesn't exists", async () => {
+    it("returns null for non-existent chat", async () => {
       await testWithTransaction(async ({ tx }) => {
         const chatService = new ChatService(tx);
         const chatId = "non-existent";
@@ -85,7 +85,7 @@ describe("ChatService", () => {
   });
 
   describe("addUserToChat", () => {
-    it("should add user to chat", async () => {
+    it("adds user to chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const chatId = seed.chats[1].id;
@@ -107,7 +107,7 @@ describe("ChatService", () => {
   });
 
   describe("updateAlias", () => {
-    it("should update alias", async () => {
+    it("updates user alias in chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const chatId = seed.chats[1].id;
@@ -130,7 +130,7 @@ describe("ChatService", () => {
   });
 
   describe("createReactionToMessage", () => {
-    it("should create a reaction", async () => {
+    it("creates message reaction", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const reaction: Reaction = await chatService.createReactionToMessage({
@@ -151,7 +151,7 @@ describe("ChatService", () => {
   });
 
   describe("isMessageInChat", () => {
-    it("should return true if message is in chat", async () => {
+    it("confirms message belongs to chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.isMessageInChat({
@@ -163,7 +163,7 @@ describe("ChatService", () => {
       });
     });
 
-    it("should return false if message is not in chat", async () => {
+    it("denies message belongs to chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.isMessageInChat({
@@ -177,7 +177,7 @@ describe("ChatService", () => {
   });
 
   describe("getChatMessages", () => {
-    it("should return messages from the given chat", async () => {
+    it("retrieves messages for specified chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.getChatMessages(seed.chats[0].id);
@@ -195,7 +195,7 @@ describe("ChatService", () => {
   });
 
   describe("isUserInChat", () => {
-    it("should return true if user is in chat", async () => {
+    it("confirms user is in chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.isUserInChat({
@@ -207,7 +207,7 @@ describe("ChatService", () => {
       });
     });
 
-    it("should return false if user is not in chat", async () => {
+    it("denies user is in chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.isUserInChat({
@@ -219,7 +219,7 @@ describe("ChatService", () => {
       });
     });
 
-    it("should return true if chat doesnt exist", async () => {
+    it("returns true for non-existent chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.isUserInChat({
@@ -233,7 +233,7 @@ describe("ChatService", () => {
   });
 
   describe("createMessage", () => {
-    it("should create a message", async () => {
+    it("creates new message in chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const message = await chatService.createMessage({
@@ -250,7 +250,7 @@ describe("ChatService", () => {
   });
 
   describe("getUserChats", () => {
-    it("should return user chats", async () => {
+    it("retrieves all chats for user", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const chats = await chatService.getUserChats(seed.users[0].id);
@@ -264,7 +264,7 @@ describe("ChatService", () => {
   });
 
   describe("getPrivateChatByUserIds", () => {
-    it("should get chat if exists", async () => {
+    it("retrieves existing private chat by user IDs", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.getPrivateChatByUserIds(
@@ -276,7 +276,7 @@ describe("ChatService", () => {
       });
     });
 
-    it("should return null if chat doesnt exist", async () => {
+    it("returns null for non-existent private chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.getPrivateChatByUserIds(
@@ -290,7 +290,7 @@ describe("ChatService", () => {
   });
 
   describe("createPrivateChat", () => {
-    it("should create private chat", async () => {
+    it("creates new private chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.createPrivateChat(
@@ -305,7 +305,7 @@ describe("ChatService", () => {
   });
 
   describe("createGroupChat", () => {
-    it("should create group chat", async () => {
+    it("creates new group chat", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.createGroupChat(
@@ -323,7 +323,7 @@ describe("ChatService", () => {
   });
 
   describe("getChatById", () => {
-    it("should get chat of given id", async () => {
+    it("retrieves chat by ID", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.getChatById(seed.chats[0].id);
@@ -331,7 +331,7 @@ describe("ChatService", () => {
       });
     });
 
-    it("should return null if of given id doesn't exist", async () => {
+    it("returns null for non-existent chat ID", async () => {
       await testWithTransaction(async ({ tx }) => {
         const chatService = new ChatService(tx);
         const result = await chatService.getChatById("non-existent");
@@ -341,7 +341,7 @@ describe("ChatService", () => {
   });
 
   describe("getPostChatMessages", () => {
-    it("should get chat of given id", async () => {
+    it("retrieves post-related chat messages by ID", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const chatService = new ChatService(tx);
         await chatService.createMessage({

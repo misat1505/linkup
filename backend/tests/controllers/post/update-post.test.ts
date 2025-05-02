@@ -8,7 +8,7 @@ jest.mock("../../../src/utils/updatePost");
 describe("updatePost", () => {
   (handleMarkdownUpdate as jest.Mock).mockImplementation((a, b, c, d) => b);
 
-  it("should successfully update a post", async () => {
+  it("updates post successfully", async () => {
     const post = {
       id: "post-id",
       content: "Updated post content.",
@@ -41,7 +41,7 @@ describe("updatePost", () => {
     });
   });
 
-  it("should return a 404 error if post not found", async () => {
+  it("returns 404 for non-existent post", async () => {
     mockPostService.getPost.mockResolvedValue(null);
 
     const req = mockRequest({
@@ -60,7 +60,7 @@ describe("updatePost", () => {
     expect(res.status).toHaveBeenCalledWith(404);
   });
 
-  it("should return a 401 error if user is not authorized to update the post", async () => {
+  it("returns 401 for unauthorized user", async () => {
     const post = {
       id: "post-id",
       content: "Post content.",
@@ -84,7 +84,7 @@ describe("updatePost", () => {
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
-  it("should pass to error middleware if post update fails", async () => {
+  it("passes errors to error middleware", async () => {
     const post = {
       id: "post-id",
       content: "Post content.",

@@ -2,7 +2,7 @@ import { AuthControllers } from "../../../src/controllers";
 import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 
 describe("signupUser", () => {
-  it("should sign up a new user", async () => {
+  it("signs up new user successfully", async () => {
     mockUserService.isLoginTaken.mockResolvedValue(false);
 
     const req = mockRequest({
@@ -23,7 +23,7 @@ describe("signupUser", () => {
     expect(res.cookie).toHaveBeenCalled();
   });
 
-  it("should not sign up a user with an existing login", async () => {
+  it("fails for existing login", async () => {
     mockUserService.isLoginTaken.mockResolvedValue(true);
 
     const req = mockRequest({

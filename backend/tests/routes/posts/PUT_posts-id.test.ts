@@ -7,7 +7,7 @@ import request from "supertest";
 jest.mock("../../../src/lib/FileStorage");
 
 describe("[PUT] /posts/:id", () => {
-  it("should update an existing post", async () => {
+  it("updates existing post", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       app.services.fileStorage = mockFileStorage as any;
       const token = TestHelpers.createToken(seed.users[0].id);
@@ -29,7 +29,7 @@ describe("[PUT] /posts/:id", () => {
     });
   });
 
-  it("shouldn't allow to update a post not belonging to the user", async () => {
+  it("blocks post update by non-owner", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       app.services.fileStorage = mockFileStorage as any;
       const token = TestHelpers.createToken(seed.users[1].id);

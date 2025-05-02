@@ -5,12 +5,12 @@ import { v4 as uuidv4 } from "uuid";
 describe("TokenProcessor", () => {
   const payload: JwtPayload = { userId: uuidv4() };
 
-  it("encodes correctly", () => {
+  it("encodes token correctly", () => {
     const encoded = TokenProcessor.encode(payload, env.ACCESS_TOKEN_SECRET);
     expect(typeof encoded).toBe("string");
   });
 
-  describe("decodes correctly", () => {
+  describe("decodes token correctly", () => {
     it("without options", () => {
       const encoded = TokenProcessor.encode(payload, env.ACCESS_TOKEN_SECRET);
       const decoded = TokenProcessor.decode(encoded, env.ACCESS_TOKEN_SECRET);

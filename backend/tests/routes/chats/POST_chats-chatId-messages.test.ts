@@ -7,7 +7,7 @@ import request from "supertest";
 jest.mock("../../../src/lib/FileStorage");
 
 describe("[POST] chats/:chatId/messages", () => {
-  it("should create new message", async () => {
+  it("creates new chat message", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       app.services.fileStorage = mockFileStorage as any;
       const chatId = seed.chats[0].id;
@@ -37,7 +37,7 @@ describe("[POST] chats/:chatId/messages", () => {
     });
   });
 
-  it("shouldn't allow to send a message for a user that doesn't belong to the chat", async () => {
+  it("blocks message creation by non-chat member", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const chatId = seed.chats[1].id;
       const token = TestHelpers.createToken(seed.users[1].id);
@@ -50,7 +50,7 @@ describe("[POST] chats/:chatId/messages", () => {
     });
   });
 
-  it("shouldn't allow to respond to the message not belonging to the chat", async () => {
+  it("blocks response to message outside chat", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const message = seed.messages[0];
       const chatId = seed.chats[1].id;

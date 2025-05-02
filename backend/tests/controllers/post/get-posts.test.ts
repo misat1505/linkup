@@ -11,7 +11,7 @@ describe("getPosts", () => {
     jest.clearAllMocks();
   });
 
-  it("should successfully retrieve a list of posts", async () => {
+  it("retrieves list of posts successfully", async () => {
     const posts = [
       { id: "post-id-1", content: "Post 1" },
       { id: "post-id-2", content: "Post 2" },
@@ -32,7 +32,7 @@ describe("getPosts", () => {
     ).toHaveBeenCalled();
   });
 
-  it("should successfully retrieve a list of posts with a valid limit and lastPostId", async () => {
+  it("retrieves posts with valid limit and lastPostId", async () => {
     const posts = [
       { id: "post-id-1", content: "Post 1" },
       { id: "post-id-2", content: "Post 2" },
@@ -53,7 +53,7 @@ describe("getPosts", () => {
     ).toHaveBeenCalledWith("user-id", "post-id-5", 5);
   });
 
-  it("should pass to error middleware if post retrieval fails", async () => {
+  it("passes errors to error middleware", async () => {
     mockPostRecommendationService.getRecommendedPosts.mockRejectedValue(
       new Error("Error")
     );
@@ -70,7 +70,7 @@ describe("getPosts", () => {
     expect(mockNextFunction).toHaveBeenCalled();
   });
 
-  it("should return null for lastPostId if 'null' is passed as query", async () => {
+  it("handles null lastPostId query", async () => {
     const posts = [
       { id: "post-id-1", content: "Post 1" },
       { id: "post-id-2", content: "Post 2" },

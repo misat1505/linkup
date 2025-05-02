@@ -7,7 +7,7 @@ describe("reportPost", () => {
   const postId = "123";
   const userId = "user-id";
 
-  it("should successfully report a post", async () => {
+  it("reports post successfully", async () => {
     mockPostService.reportPost.mockResolvedValue(undefined);
 
     const req = mockRequest({
@@ -22,7 +22,7 @@ describe("reportPost", () => {
     expect(mockPostService.reportPost).toHaveBeenCalledWith(userId, postId);
   });
 
-  it("should return 409 if post is already reported", async () => {
+  it("returns 409 for already reported post", async () => {
     mockPostService.reportPost.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Unique constraint", {
         clientVersion: "4.0.0",
@@ -41,7 +41,7 @@ describe("reportPost", () => {
     expect(res.status).toHaveBeenCalledWith(409);
   });
 
-  it("should pass to error middleware if reporting fails for another reason", async () => {
+  it("passes errors to error middleware", async () => {
     mockPostService.reportPost.mockRejectedValue(new Error("Unexpected error"));
     const mockNextFunction = jest.fn();
 

@@ -1,11 +1,9 @@
-import { v4 as uuidv4 } from "uuid";
-import { UserWithCredentials } from "../../../src/types/User";
 import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 import { AuthControllers } from "../../../src/controllers";
 import { seedProvider } from "../../utils/seedProvider";
 
 describe("getUser", () => {
-  it("should get a user by id", async () => {
+  it("retrieves authenticated user by ID", async () => {
     await seedProvider(async (seed) => {
       const user = seed.users[0];
       mockUserService.getUser.mockResolvedValue(seed);
@@ -19,7 +17,7 @@ describe("getUser", () => {
     });
   });
 
-  it("should return 404 if user not found", async () => {
+  it("returns 404 for non-existent user", async () => {
     await seedProvider(async (seed) => {
       const user = seed.users[0];
       mockUserService.getUser.mockResolvedValue(null);

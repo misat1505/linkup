@@ -5,7 +5,7 @@ import request from "supertest";
 import { v4 as uuidv4 } from "uuid";
 
 describe("[POST] /chats/private", () => {
-  it("should create user chats", async () => {
+  it("creates new private chat", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const userId = seed.users[0].id;
       const token = TestHelpers.createToken(userId);
@@ -33,7 +33,7 @@ describe("[POST] /chats/private", () => {
     });
   });
 
-  it("shouldn't create a new private chat between users that already have it", async () => {
+  it("blocks private chat creation if already exists", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const userId = seed.users[0].id;
       const token = TestHelpers.createToken(userId);
@@ -56,7 +56,7 @@ describe("[POST] /chats/private", () => {
     });
   });
 
-  it("shouldn't allow to create a private chat to which creator doesn't belong to", async () => {
+  it("blocks private chat creation by non-member", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const mockUserId = uuidv4();
       const userId = seed.users[0].id;

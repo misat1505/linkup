@@ -3,7 +3,7 @@ import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 import { seedProvider } from "../../utils/seedProvider";
 
 describe("searchUser", () => {
-  it("should return users", async () => {
+  it("retrieves users matching search criteria", async () => {
     await seedProvider(async (seed) => {
       const users = seed.users;
       mockUserService.searchUsers.mockResolvedValue(users);

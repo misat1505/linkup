@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[POST] /friendships", () => {
-  it("should create a new friendship", async () => {
+  it("creates new friendship request", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
       const res = await request(app)
@@ -20,7 +20,7 @@ describe("[POST] /friendships", () => {
     });
   });
 
-  it("shouldn't allow to create a friendship not belonging to user", async () => {
+  it("blocks friendship creation by non-requester", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[2].id);
       await request(app)
@@ -34,7 +34,7 @@ describe("[POST] /friendships", () => {
     });
   });
 
-  it("shouldn't allow to create a friendship with self as acceptor", async () => {
+  it("blocks friendship creation with self", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[1].id);
       await request(app)

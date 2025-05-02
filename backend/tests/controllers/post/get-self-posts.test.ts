@@ -3,7 +3,7 @@ import { UserWithCredentials } from "../../../src/types/User";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("getUserPosts", () => {
-  it("should successfully retrieve user's posts", async () => {
+  it("retrieves user’s posts successfully", async () => {
     const posts = [{ id: "post-id-1", content: "User Post 1" }];
     mockPostService.getUserPosts.mockResolvedValue(posts);
 
@@ -16,7 +16,7 @@ describe("getUserPosts", () => {
     expect(mockPostService.getUserPosts).toHaveBeenCalledWith("user-id");
   });
 
-  it("should pass to error middleware if user post retrieval fails", async () => {
+  it("passes errors to error middleware", async () => {
     mockPostService.getUserPosts.mockRejectedValue(new Error("Error"));
     const mockNextFunction = jest.fn();
 

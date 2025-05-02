@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /posts/mine", () => {
-  it("should retrieve posts by the authenticated user", async () => {
+  it("retrieves authenticated user’s posts", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
 

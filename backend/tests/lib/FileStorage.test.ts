@@ -33,7 +33,7 @@ describe("FileStorage", () => {
     });
   });
 
-  test("should upload a file", async () => {
+  test("uploads file successfully", async () => {
     mockSend.mockResolvedValueOnce({});
 
     const result = await fileStorage.uploadFile(
@@ -46,7 +46,7 @@ describe("FileStorage", () => {
     expect(result).toBe("path/test.txt");
   });
 
-  test("should get a signed URL", async () => {
+  test("generates signed URL", async () => {
     (getSignedUrl as jest.Mock).mockResolvedValueOnce("https://signed-url");
 
     const url = await fileStorage.getSignedUrl("path/test.txt");
@@ -59,7 +59,7 @@ describe("FileStorage", () => {
     expect(url).toBe("https://signed-url");
   });
 
-  test("should list files", async () => {
+  test("lists stored files", async () => {
     mockSend.mockResolvedValueOnce({
       Contents: [{ Key: "file1.txt" }, { Key: "file2.txt" }],
     });
@@ -70,7 +70,7 @@ describe("FileStorage", () => {
     expect(files).toEqual(["file1.txt", "file2.txt"]);
   });
 
-  test("should return empty array if no files found", async () => {
+  test("returns empty array for no files", async () => {
     mockSend.mockResolvedValueOnce({ Contents: undefined });
 
     const files = await fileStorage.listFiles("empty-folder/");
@@ -78,7 +78,7 @@ describe("FileStorage", () => {
     expect(files).toEqual([]);
   });
 
-  test("should delete a file", async () => {
+  test("deletes file successfully", async () => {
     mockSend.mockResolvedValueOnce({});
 
     await fileStorage.deleteFile("file.txt");
@@ -86,7 +86,7 @@ describe("FileStorage", () => {
     expect(mockSend).toHaveBeenCalledWith(expect.any(DeleteObjectCommand));
   });
 
-  test("should copy a file", async () => {
+  test("copies file successfully", async () => {
     mockSend.mockResolvedValueOnce({});
 
     await fileStorage.copyFile("source.txt", "destination.txt");
@@ -94,7 +94,7 @@ describe("FileStorage", () => {
     expect(mockSend).toHaveBeenCalledWith(expect.any(CopyObjectCommand));
   });
 
-  test("should delete all files in a directory", async () => {
+  test("deletes all files in directory", async () => {
     mockSend
       .mockResolvedValueOnce({
         Contents: [{ Key: "file1.txt" }, { Key: "file2.txt" }],
@@ -107,7 +107,7 @@ describe("FileStorage", () => {
     expect(mockSend).toHaveBeenCalledWith(expect.any(DeleteObjectsCommand));
   });
 
-  test("should handle empty directory deletion", async () => {
+  test("handles empty directory deletion gracefully", async () => {
     mockSend.mockResolvedValueOnce({ Contents: undefined });
 
     await fileStorage.deleteAllFilesInDirectory("empty-folder/");

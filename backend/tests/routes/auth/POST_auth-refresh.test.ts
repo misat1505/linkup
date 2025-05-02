@@ -5,7 +5,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[POST] /auth/refresh", () => {
-  it("should refresh token", async () => {
+  it("refreshes authentication token", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(
         seed.users[0].id,
@@ -21,13 +21,13 @@ describe("[POST] /auth/refresh", () => {
     });
   });
 
-  it("should fail if no refresh token in cookie", async () => {
+  it("fails without refresh token in cookie", async () => {
     await testWithTransaction(async ({ app }) => {
       await request(app).post("/auth/refresh").expect(400);
     });
   });
 
-  it("should fail if user doesn't exist", async () => {
+  it("fails for non-existent user", async () => {
     await testWithTransaction(async ({ app }) => {
       const token = TestHelpers.createToken(
         "invalid-user-id",

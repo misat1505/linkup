@@ -31,7 +31,7 @@ describe("[GET] /files/:filename", () => {
     jest.clearAllMocks();
   });
 
-  it("should allow everyone to access avatar", async () => {
+  it("allows public access to user avatar", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const createdUser = await createNewUser(app);
       const tokens = TestHelpers.createTokens([
@@ -51,7 +51,7 @@ describe("[GET] /files/:filename", () => {
     });
   });
 
-  it("should allow only people in chat see chat photo", async () => {
+  it("restricts chat photo access to chat members", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const createdUser = await createNewUser(app);
       const tokens = TestHelpers.createTokens([
@@ -93,7 +93,7 @@ describe("[GET] /files/:filename", () => {
     });
   });
 
-  it("should allow only people in chat see files in chat message", async () => {
+  it("restricts chat message file access to chat members", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const createdUser = await createNewUser(app);
       const tokens = TestHelpers.createTokens([
@@ -144,7 +144,7 @@ describe("[GET] /files/:filename", () => {
     });
   });
 
-  it("should allow getting file from cache only by user which uploaded the file", async () => {
+  it("restricts cache file access to uploader", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
 
@@ -161,7 +161,7 @@ describe("[GET] /files/:filename", () => {
     });
   });
 
-  it("should allow everyone to access file from post", async () => {
+  it("allows public access to post file", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const createdUser = await createNewUser(app);
       const tokens = TestHelpers.createTokens([

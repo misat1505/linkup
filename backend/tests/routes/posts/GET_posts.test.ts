@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /posts", () => {
-  it("should retrieve a list of posts", async () => {
+  it("retrieves list of posts", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const otherUserToken = TestHelpers.createToken(seed.users[1].id);
 
@@ -19,7 +19,7 @@ describe("[GET] /posts", () => {
     });
   });
 
-  it("should require lastPostId and limit in query params", async () => {
+  it("requires lastPostId and limit query parameters", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const otherUserToken = TestHelpers.createToken(seed.users[1].id);
 

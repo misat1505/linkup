@@ -8,7 +8,7 @@ import {
 import { mockFriendship } from "./setup";
 
 describe("createFriendship", () => {
-  it("should create a friendship successfully", async () => {
+  it("creates friendship successfully", async () => {
     mockFriendshipService.createFriendship.mockResolvedValue(mockFriendship);
 
     const req = mockRequest({
@@ -27,7 +27,7 @@ describe("createFriendship", () => {
     expect(res.status).toHaveBeenCalledWith(201);
   });
 
-  it("should fail if requesterId does not match userId", async () => {
+  it("fails for mismatched requesterId", async () => {
     mockFriendshipService.createFriendship.mockResolvedValue(mockFriendship);
 
     const req = mockRequest({
@@ -46,7 +46,7 @@ describe("createFriendship", () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
-  it("should fail if friendship already exists", async () => {
+  it("fails for existing friendship", async () => {
     mockFriendshipService.createFriendship.mockResolvedValue(null);
 
     const req = mockRequest({

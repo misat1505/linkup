@@ -16,7 +16,7 @@ describe("getCache", () => {
     jest.clearAllMocks();
   });
 
-  it("returns user's cache", async () => {
+  it("retrieves user’s cache files", async () => {
     mockFileStorage.listFiles.mockResolvedValue(["url", "url2"]);
 
     const req = mockRequest({

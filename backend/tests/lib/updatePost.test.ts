@@ -5,7 +5,7 @@ describe("handleMarkdownUpdate", () => {
   const mockUserId = "user-1";
   const mockPostId = "123";
 
-  it("should process markdown, move files, and clean up unused ones", async () => {
+  it("processes markdown and manages post files", async () => {
     const mockMarkdown = `
       ![image](https://example.com/cache/user-1/file1.png?filter=cache)
       ![another image](https://example.com/cache/user-1/file3.png?filter=cache)

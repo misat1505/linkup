@@ -17,7 +17,7 @@ describe("insertToCache", () => {
     jest.clearAllMocks();
   });
 
-  it("inserts file to cache and returns newly created filename", async () => {
+  it("inserts file to cache with new filename", async () => {
     mockFileStorage.listFiles.mockResolvedValue([]);
     mockFileStorage.uploadFile.mockResolvedValue("new-file.jpg");
 
@@ -39,7 +39,7 @@ describe("insertToCache", () => {
     expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
   });
 
-  it(`does not allow inserting if user has already ${CACHE_CAPACITY} files`, async () => {
+  it(`blocks cache insertion at ${CACHE_CAPACITY}-file limit`, async () => {
     mockFileStorage.listFiles.mockResolvedValue(
       new Array(CACHE_CAPACITY).fill("existing-file.jpg")
     );
@@ -55,7 +55,7 @@ describe("insertToCache", () => {
     expect(res.status).toHaveBeenCalledWith(500);
   });
 
-  it("returns 400 if no file uploaded", async () => {
+  it("returns 400 for missing file upload", async () => {
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,
     });
@@ -66,7 +66,7 @@ describe("insertToCache", () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
-  it("returns 500 if upload fails", async () => {
+  it("returns 500 for failed cache insertion", async () => {
     mockFileStorage.listFiles.mockResolvedValue([]);
     mockFileStorage.uploadFile.mockRejectedValue(new Error("upload failed"));
 

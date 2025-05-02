@@ -5,7 +5,7 @@ import path from "path";
 import request from "supertest";
 
 describe("[POST] /chats/group", () => {
-  it("should create group chat", async () => {
+  it("creates new group chat", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const initialChatsCount = seed.chats.length;
       const userId = seed.users[0].id;
@@ -34,7 +34,7 @@ describe("[POST] /chats/group", () => {
     });
   });
 
-  it("shouldn't allow to create group chat without self", async () => {
+  it("blocks group chat creation without creator", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const userId = seed.users[0].id;
       const token = TestHelpers.createToken(userId);

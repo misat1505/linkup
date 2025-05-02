@@ -16,7 +16,7 @@ describe("validate middleware", () => {
     jest.clearAllMocks();
   });
 
-  it("should go to next function if validation successful", async () => {
+  it("proceeds to next function on successful validation", async () => {
     const middleware = validate({ body: UserDTO });
 
     const req = mockRequest({ body: { name: "Bob" } });
@@ -27,7 +27,7 @@ describe("validate middleware", () => {
     expect(mockNextFunction).toHaveBeenCalled();
   });
 
-  it("returns errors if validation not successful", async () => {
+  it("returns errors on failed validation", async () => {
     const middleware = validate({ body: UserDTO });
 
     const req = mockRequest({ body: {} });

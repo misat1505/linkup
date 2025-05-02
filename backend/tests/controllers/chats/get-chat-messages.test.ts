@@ -3,7 +3,7 @@ import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("getChatMessages", () => {
-  it("should return chat messages if the user is authorized", async () => {
+  it("retrieves chat messages for authorized user", async () => {
     const messages = [{ id: "message1" }, { id: "message2" }];
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.getChatMessages.mockResolvedValue(messages);
@@ -18,7 +18,7 @@ describe("getChatMessages", () => {
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  it("shouldn't allow access if the user is not in the chat", async () => {
+  it("blocks message access by non-chat member", async () => {
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({
@@ -31,7 +31,7 @@ describe("getChatMessages", () => {
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
-  it("should return chat messages when no responseId is provided", async () => {
+  it("retrieves chat messages without responseId", async () => {
     const messages = [{ id: "message1" }, { id: "message2" }];
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.getChatMessages.mockResolvedValue(messages);
@@ -54,7 +54,7 @@ describe("getChatMessages", () => {
     );
   });
 
-  it("should return chat messages for a specific responseId", async () => {
+  it("retrieves chat messages for specific responseId", async () => {
     const messages = [{ id: "message1" }, { id: "message2" }];
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.getPostChatMessages.mockResolvedValue(messages);
@@ -76,7 +76,7 @@ describe("getChatMessages", () => {
     );
   });
 
-  it("should treat 'null' as a valid responseId and return null", async () => {
+  it("handles null responseId and returns null", async () => {
     const messages = [{ id: "message1" }, { id: "message2" }];
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.getPostChatMessages.mockResolvedValue(messages);
@@ -98,7 +98,7 @@ describe("getChatMessages", () => {
     );
   });
 
-  it("should pass to error middleware if an error occurs", async () => {
+  it("passes errors to error middleware", async () => {
     const errorMessage = "Error in processing request";
     mockChatService.isUserInChat.mockRejectedValue(new Error(errorMessage));
 

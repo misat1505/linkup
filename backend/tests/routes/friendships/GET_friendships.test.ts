@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /friendships", () => {
-  it("should return friendships", async () => {
+  it("retrieves user friendships", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const tokens = TestHelpers.createTokens([
         seed.users[0].id,

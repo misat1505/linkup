@@ -3,7 +3,7 @@ import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 import { seedProvider } from "../../utils/seedProvider";
 
 describe("updateUser", () => {
-  it("should update user", async () => {
+  it("updates authenticated user profile", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUserByLogin.mockResolvedValue({
         id: "some-id",
@@ -29,7 +29,7 @@ describe("updateUser", () => {
     });
   });
 
-  it("should update user when same id", async () => {
+  it("updates user with same ID", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUserByLogin.mockResolvedValue({
         id: seed.users[0].id,
@@ -56,7 +56,7 @@ describe("updateUser", () => {
     });
   });
 
-  it("shouldn't allow 2 users of the same login", async () => {
+  it("blocks duplicate login for different users", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUserByLogin.mockResolvedValue({
         id: "some-id",

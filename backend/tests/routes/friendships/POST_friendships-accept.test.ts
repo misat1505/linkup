@@ -4,7 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /friendships/accept", () => {
-  it("should accept friendship", async () => {
+  it("accepts pending friendship request", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const tokens = TestHelpers.createTokens([
         seed.users[0].id,
@@ -31,7 +31,7 @@ describe("[GET] /friendships/accept", () => {
     });
   });
 
-  it("shouldn't accept own friendship requests", async () => {
+  it("blocks accepting own friendship request", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
 

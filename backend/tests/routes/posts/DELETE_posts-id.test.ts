@@ -3,7 +3,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 
 describe("[DELETE] /posts/:id", () => {
-  it("should delete post correctly", async () => {
+  it("deletes post successfully", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[0].id);
       const postId = seed.posts[0].id;
@@ -15,7 +15,7 @@ describe("[DELETE] /posts/:id", () => {
     });
   });
 
-  it("shouldn't allow to delete a post not belonging to user", async () => {
+  it("blocks post deletion by non-owner", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const token = TestHelpers.createToken(seed.users[1].id);
       const postId = seed.posts[0].id;
