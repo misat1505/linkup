@@ -159,7 +159,7 @@ describe("ChatService", () => {
           messageId: seed.messages[1].id,
         });
 
-        expect(result).toBe(true);
+        expect(result).toBeTruthy();
       });
     });
 
@@ -171,7 +171,7 @@ describe("ChatService", () => {
           messageId: seed.messages[0].id,
         });
 
-        expect(result).toBe(false);
+        expect(result).toBeFalsy();
       });
     });
   });
@@ -203,7 +203,7 @@ describe("ChatService", () => {
           userId: seed.users[0].id,
         });
 
-        expect(result).toBe(true);
+        expect(result).toBeTruthy();
       });
     });
 
@@ -215,7 +215,7 @@ describe("ChatService", () => {
           userId: seed.users[1].id,
         });
 
-        expect(result).toBe(false);
+        expect(result).toBeFalsy();
       });
     });
 
@@ -227,7 +227,7 @@ describe("ChatService", () => {
           userId: seed.users[0].id,
         });
 
-        expect(result).toBe(false);
+        expect(result).toBeFalsy();
       });
     });
   });
@@ -284,7 +284,7 @@ describe("ChatService", () => {
           seed.users[1].id
         );
 
-        expect(result).toBe(null);
+        expect(result).toBeNull();
       });
     });
   });

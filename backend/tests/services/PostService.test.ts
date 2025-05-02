@@ -30,7 +30,7 @@ describe("PostService", () => {
 
         const result = await postService.getUserPosts(userId);
 
-        expect(Array.isArray(result)).toBe(true);
+        expect(Array.isArray(result)).toBeTruthy();
         result.forEach((post) => {
           Post.strict().parse(post);
           expect(post.author.id).toBe(userId);
@@ -99,7 +99,7 @@ describe("PostService", () => {
 
         await postService.deletePost(postId);
 
-        expect(true).toBe(true);
+        expect(true).toBeTruthy();
       });
     });
   });
@@ -109,7 +109,7 @@ describe("PostService", () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         await postService.reportPost(seed.users[0].id, seed.posts[0].id);
-        expect(true).toBe(true);
+        expect(true).toBeTruthy();
       });
     });
 
@@ -120,11 +120,10 @@ describe("PostService", () => {
         const postId = seed.posts[0].id;
 
         await postService.reportPost(userId, postId);
-        expect(true).toBe(true);
+        expect(true).toBeTruthy();
 
         try {
           await postService.reportPost(userId, postId);
-          expect(true).toBe(true);
         } catch (e) {
           expect(e).toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
         }

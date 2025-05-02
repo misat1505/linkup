@@ -19,9 +19,9 @@ describe("[PUT] /posts/:id", () => {
         .set("Authorization", `Bearer ${token}`)
         .send({
           content: "This is the updated content of the post.",
-        });
+        })
+        .expect(200);
 
-      expect(res.statusCode).toEqual(200);
       Post.strict().parse(res.body.post);
       expect(res.body.post.content).toBe(
         "This is the updated content of the post."

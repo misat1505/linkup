@@ -10,9 +10,9 @@ describe("[GET] /search", () => {
 
       const response = await request(app)
         .get("/users/search?term=Kylian")
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
 
-      expect(response.statusCode).toBe(200);
       expect(response.body.users.length).toBe(1);
       response.body.users.forEach((user: any) => {
         User.strict().parse(user);

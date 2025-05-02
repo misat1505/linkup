@@ -10,7 +10,7 @@ describe("FriendshipService", () => {
         const result = await friendshipService.getUserFriendships(
           seed.users[0].id
         );
-        expect(Array.isArray(result)).toBe(true);
+        expect(Array.isArray(result)).toBeTruthy();
         expect(result.length).toBe(0);
       });
     });
@@ -26,7 +26,7 @@ describe("FriendshipService", () => {
         const result = await friendshipService.getUserFriendships(
           seed.users[0].id
         );
-        expect(Array.isArray(result)).toBe(true);
+        expect(Array.isArray(result)).toBeTruthy();
         expect(result.length).toBe(1);
         expect(result[0].requester.id).toBe(seed.users[0].id);
         expect(result[0].acceptor.id).toBe(seed.users[1].id);
@@ -115,7 +115,7 @@ describe("FriendshipService", () => {
           seed.users[1].id
         );
 
-        expect(result).toBe(true);
+        expect(result).toBeTruthy();
 
         const friendships = await friendshipService.getUserFriendships(
           seed.users[0].id
@@ -131,7 +131,7 @@ describe("FriendshipService", () => {
           seed.users[0].id,
           seed.users[1].id
         );
-        expect(result).toBe(false);
+        expect(result).toBeFalsy();
       });
     });
   });

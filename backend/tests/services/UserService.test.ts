@@ -20,10 +20,10 @@ describe("UserService", () => {
 
   describe("isLoginTaken", () => {
     it("should return true if taken", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await testWithTransaction(async ({ tx, seed }) => {
         const userService = new UserService(tx);
-        const result = await userService.isLoginTaken("login2");
-        expect(result).toBe(true);
+        const result = await userService.isLoginTaken(seed.users[0].login);
+        expect(result).toBeTruthy();
       });
     });
 
@@ -31,7 +31,7 @@ describe("UserService", () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const result = await userService.isLoginTaken("not_taken");
-        expect(result).toBe(false);
+        expect(result).toBeFalsy();
       });
     });
   });
@@ -53,7 +53,6 @@ describe("UserService", () => {
         };
 
         await userService.insertUser(user);
-        expect(true).toBe(true); // check if no error
       });
     });
   });
@@ -63,7 +62,7 @@ describe("UserService", () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUserByLogin("login2");
-        expect(user).not.toBe(null);
+        expect(user).not.toBeNull();
         UserWithCredentials.strict().parse(user);
       });
     });
@@ -72,7 +71,7 @@ describe("UserService", () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUserByLogin("not_existent");
-        expect(user).toBe(null);
+        expect(user).toBeNull();
       });
     });
   });
@@ -82,7 +81,7 @@ describe("UserService", () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const userService = new UserService(tx);
         const user = await userService.getUser(seed.users[0].id);
-        expect(user).not.toBe(null);
+        expect(user).not.toBeNull();
         UserWithCredentials.strict().parse(user);
       });
     });
@@ -91,7 +90,7 @@ describe("UserService", () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUser("invalid");
-        expect(user).toBe(null);
+        expect(user).toBeNull();
       });
     });
   });

@@ -7,7 +7,7 @@ describe("FileSevice", () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const fileService = new FileService(tx);
         const result = await fileService.isUserAvatar(seed.users[0].photoURL!);
-        expect(result).toBe(true);
+        expect(result).toBeTruthy();
       });
     });
 
@@ -15,7 +15,7 @@ describe("FileSevice", () => {
       await testWithTransaction(async ({ tx }) => {
         const fileService = new FileService(tx);
         const result = await fileService.isUserAvatar("767.webp");
-        expect(result).toBe(false);
+        expect(result).toBeFalsy();
       });
     });
   });
@@ -28,7 +28,7 @@ describe("FileSevice", () => {
           "chat-photo.webp",
           seed.users[0].id
         );
-        expect(result).toBe(true);
+        expect(result).toBeTruthy();
       });
     });
 
@@ -39,7 +39,7 @@ describe("FileSevice", () => {
           "chat-photo-invalid.webp",
           seed.users[0].id
         );
-        expect(result).toBe(false);
+        expect(result).toBeFalsy();
       });
     });
   });
@@ -52,7 +52,7 @@ describe("FileSevice", () => {
           "chat-message.webp",
           seed.users[0].id
         );
-        expect(result).toBe(true);
+        expect(result).toBeTruthy();
       });
     });
 
@@ -63,7 +63,7 @@ describe("FileSevice", () => {
           "chat-message-invalid.webp",
           seed.users[0].id
         );
-        expect(result).toBe(false);
+        expect(result).toBeFalsy();
       });
     });
   });
