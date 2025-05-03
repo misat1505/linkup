@@ -1,4 +1,5 @@
 import { Chat } from "../../../src/types/Chat";
+import { TEST_FILENAME_PATH } from "../../utils/constants";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import path from "path";
@@ -22,7 +23,7 @@ describe("[PUT] /chats/:chatId", () => {
         .put(`/chats/${chatId}`)
         .set("Authorization", `Bearer ${token}`)
         .field("name", "chat name")
-        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"))
+        .attach("file", TEST_FILENAME_PATH)
         .expect(201);
 
       Chat.strict().parse(res2.body.chat);

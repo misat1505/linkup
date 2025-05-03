@@ -8,6 +8,7 @@ import { TokenProcessor } from "../../../src/lib/TokenProcessor";
 import { env } from "../../../src/config/env";
 import { Message } from "../../../src/types/Message";
 import { v4 as uuidv4 } from "uuid";
+import { TEST_FILENAME_PATH } from "../../utils/constants";
 
 jest.mock("../../../src/lib/FileStorage");
 
@@ -21,7 +22,7 @@ async function createNewUser(app: Application) {
     .field("lastName", "Muzg")
     .field("login", login)
     .field("password", password)
-    .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"));
+    .attach("file", TEST_FILENAME_PATH);
 
   return res.body.user as User;
 }
@@ -67,7 +68,7 @@ describe("[GET] /files/:filename", () => {
         .field("users[0]", seed.users[0].id)
         .field("users[1]", seed.users[1].id)
         .field("name", "chat name")
-        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"));
+        .attach("file", TEST_FILENAME_PATH);
 
       await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)

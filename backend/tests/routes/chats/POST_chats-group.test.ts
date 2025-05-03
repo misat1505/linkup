@@ -1,4 +1,5 @@
 import { Chat } from "../../../src/types/Chat";
+import { TEST_FILENAME_PATH } from "../../utils/constants";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import path from "path";
@@ -17,7 +18,7 @@ describe("[POST] /chats/group", () => {
         .field("users[0]", userId)
         .field("users[1]", userId)
         .field("name", "chat name")
-        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"))
+        .attach("file", TEST_FILENAME_PATH)
         .expect(201);
 
       Chat.strict().parse(res.body.chat);

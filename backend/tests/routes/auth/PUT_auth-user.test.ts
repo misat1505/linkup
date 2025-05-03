@@ -4,6 +4,7 @@ import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 import path from "path";
 import { User } from "../../../src/types/User";
+import { TEST_FILENAME_PATH } from "../../utils/constants";
 
 describe("[PUT] /auth/user", () => {
   it("updates user profile", async () => {
@@ -22,7 +23,7 @@ describe("[PUT] /auth/user", () => {
         .field("password", newUser.password)
         .field("firstName", newUser.firstName)
         .field("lastName", newUser.lastName)
-        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"))
+        .attach("file", TEST_FILENAME_PATH)
         .set("Authorization", `Bearer ${token}`)
         .expect(201);
 
