@@ -2,7 +2,7 @@ import { PostControllers } from "../../../src/controllers";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("getPost", () => {
-  it("should successfully retrieve a post by ID", async () => {
+  it("retrieves post by ID successfully", async () => {
     const post = {
       id: "post-id",
       content: "This is a post.",
@@ -11,7 +11,7 @@ describe("getPost", () => {
     mockPostService.getPost.mockResolvedValue(post);
 
     const req = mockRequest({
-      params: { id: post.id },
+      validated: { params: { id: post.id } },
     });
     const res = mockResponse();
 
@@ -21,11 +21,11 @@ describe("getPost", () => {
     expect(mockPostService.getPost).toHaveBeenCalledWith(post.id);
   });
 
-  it("should return a 404 error if post not found", async () => {
+  it("returns 404 for non-existent post", async () => {
     mockPostService.getPost.mockResolvedValue(null);
 
     const req = mockRequest({
-      params: { id: "post-id" },
+      validated: { params: { id: "post-id" } },
     });
     const res = mockResponse();
 
@@ -34,12 +34,12 @@ describe("getPost", () => {
     expect(res.status).toHaveBeenCalledWith(404);
   });
 
-  it("should pass to error middleware if post retrieval fails", async () => {
+  it("passes errors to error middleware", async () => {
     mockPostService.getPost.mockRejectedValue(new Error("Error"));
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
-      params: { id: "post-id" },
+      validated: { params: { id: "post-id" } },
     });
     const res = mockResponse();
 

@@ -1,4 +1,5 @@
 import { FileControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFileService,
   mockFileStorage,
@@ -15,10 +16,10 @@ describe("deleteFromCache", () => {
     jest.clearAllMocks();
   });
 
-  it("deletes file from cache", async () => {
+  it("deletes file from cache successfully", async () => {
     const req = mockRequest({
-      params: { filename: "url1" },
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
+      validated: { params: { filename: "url1" } },
     });
     const res = mockResponse();
 
@@ -32,14 +33,14 @@ describe("deleteFromCache", () => {
     );
   });
 
-  it("returns 500 if file cannot be deleted", async () => {
+  it("returns 500 for failed cache deletion", async () => {
     mockFileStorage.deleteFile.mockRejectedValue(new Error());
 
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
-      params: { filename: "testfile.txt" },
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
+      validated: { params: { filename: "testfile.txt" } },
     });
     const res = mockResponse();
 

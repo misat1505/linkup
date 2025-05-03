@@ -4,7 +4,7 @@ import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 import { AuthControllers } from "../../../src/controllers";
 
 describe("loginUser", () => {
-  it("should log in a user with valid credentials", async () => {
+  it("logs in user with valid credentials", async () => {
     const id = uuidv4();
     const salt = "salt";
 
@@ -23,7 +23,7 @@ describe("loginUser", () => {
     mockUserService.getUserByLogin.mockResolvedValue(mockUser);
 
     const req = mockRequest({
-      body: { login: "john_doe", password: "password" },
+      validated: { body: { login: "john_doe", password: "password" } },
     });
     const res = mockResponse();
 
@@ -33,11 +33,11 @@ describe("loginUser", () => {
     expect(res.cookie).toHaveBeenCalled();
   });
 
-  it("should not log in a user with invalid login", async () => {
+  it("fails for invalid login", async () => {
     mockUserService.getUserByLogin.mockResolvedValue(null);
 
     const req = mockRequest({
-      body: { login: "john_doe", password: "wrong_password" },
+      validated: { body: { login: "john_doe", password: "wrong_password" } },
     });
     const res = mockResponse();
 
@@ -47,7 +47,7 @@ describe("loginUser", () => {
     expect(res.cookie).not.toHaveBeenCalled();
   });
 
-  it("should not log in a user with invalid password", async () => {
+  it("fails for invalid password", async () => {
     const mockUser: UserWithCredentials = {
       id: uuidv4(),
       firstName: "John",
@@ -62,7 +62,7 @@ describe("loginUser", () => {
     mockUserService.getUserByLogin.mockResolvedValue(mockUser);
 
     const req = mockRequest({
-      body: { login: "john_doe", password: "wrong_password" },
+      validated: { body: { login: "john_doe", password: "wrong_password" } },
     });
     const res = mockResponse();
 

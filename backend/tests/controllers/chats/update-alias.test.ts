@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("updateAlias", () => {
@@ -6,13 +7,16 @@ describe("updateAlias", () => {
     jest.clearAllMocks();
   });
 
-  it("should update alias successfully", async () => {
+  it("updates alias successfully", async () => {
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.updateAlias.mockResolvedValue(null);
 
     const req = mockRequest({
-      body: { token: { userId: "789" }, alias: "NewAlias" },
-      params: { chatId: "123", userId: "456" },
+      user: { id: "userId" } as UserWithCredentials,
+      validated: {
+        body: { alias: "NewAlias" },
+        params: { chatId: "123", userId: "456" },
+      },
     });
     const res = mockResponse();
     await ChatControllers.updateAlias(req, res, jest.fn());
@@ -26,12 +30,12 @@ describe("updateAlias", () => {
     });
   });
 
-  it("should return 401 if the user to update is not in the chat", async () => {
+  it("returns 401 for non-chat member update", async () => {
     mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
     const req = mockRequest({
-      body: { token: { userId: "789" } },
-      params: { chatId: "123", userId: "456" },
+      user: { id: "userId" } as UserWithCredentials,
+      validated: { body: {}, params: { chatId: "123", userId: "456" } },
     });
     const res = mockResponse();
     await ChatControllers.updateAlias(req, res, jest.fn());
@@ -41,13 +45,13 @@ describe("updateAlias", () => {
     expect(mockChatService.updateAlias).not.toHaveBeenCalled();
   });
 
-  it("should return 401 if the requesting user is not authorized", async () => {
+  it("returns 401 for unauthorized requester", async () => {
     mockChatService.isUserInChat.mockResolvedValueOnce(true);
     mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
     const req = mockRequest({
-      body: { token: { userId: "789" } },
-      params: { chatId: "123", userId: "456" },
+      user: { id: "userId" } as UserWithCredentials,
+      validated: { body: {}, params: { chatId: "123", userId: "456" } },
     });
     const res = mockResponse();
     await ChatControllers.updateAlias(req, res, jest.fn());

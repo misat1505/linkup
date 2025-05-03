@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("deleteUserFromGroupChat", () => {
@@ -6,14 +7,14 @@ describe("deleteUserFromGroupChat", () => {
     jest.clearAllMocks();
   });
 
-  it("should successfully delete user from group chat", async () => {
+  it("removes user from group chat successfully", async () => {
     mockChatService.getChatType.mockResolvedValue("GROUP");
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.deleteFromChat.mockResolvedValue(undefined);
 
     const req = mockRequest({
-      body: { token: { userId: "789" } },
-      params: { chatId: "123" },
+      user: { id: "789" } as UserWithCredentials,
+      validated: { params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
@@ -30,12 +31,12 @@ describe("deleteUserFromGroupChat", () => {
     });
   });
 
-  it("should return 401 if chat is not of type 'GROUP'", async () => {
+  it("returns 401 for non-group chat", async () => {
     mockChatService.getChatType.mockResolvedValue("PRIVATE");
 
     const req = mockRequest({
-      body: { token: { userId: "789" } },
-      params: { chatId: "123" },
+      user: { id: "789" } as UserWithCredentials,
+      validated: { params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
@@ -46,13 +47,13 @@ describe("deleteUserFromGroupChat", () => {
     expect(mockChatService.deleteFromChat).not.toHaveBeenCalled();
   });
 
-  it("should return 401 if the user is not in the chat", async () => {
+  it("returns 401 for non-chat member", async () => {
     mockChatService.getChatType.mockResolvedValue("GROUP");
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({
-      body: { token: { userId: "789" } },
-      params: { chatId: "123" },
+      user: { id: "789" } as UserWithCredentials,
+      validated: { params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());

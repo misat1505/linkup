@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { PostId } from "../../validators/shared.validators";
 
 /**
  * Controller to delete a post.
@@ -49,10 +50,8 @@ export const deletePost = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    const {
-      token: { userId },
-    } = req.body;
+    const { id } = req.validated!.params! as PostId;
+    const userId = req.user!.id;
     const { postService, fileStorage } = req.app.services;
 
     const post = await postService.getPost(id);

@@ -1,23 +1,23 @@
-# Link Up - Bachelor's Thesis Project
+# LinkUp - Bachelor's Thesis Project
 
 ### Project Overview:
 
-Link Up is an under-development social media platform designed to facilitate easy communication and content sharing among users. Developed as part of a Bachelor's degree project, the platform provides essential features for chatting with individuals, creating group conversations, and sharing various types of files. The focus is on delivering a simple, user-friendly experience that meets the needs of modern social interactions.
+LinkUp is a social media platform developed as part of a Bachelor's thesis project. It enables seamless communication and content sharing among users. The platform offers real-time chats, group conversations, file sharing, and Markdown-based posts — all wrapped in a clean, responsive user interface. The focus is on delivering a reliable, user-friendly experience that supports modern social interaction needs.
 
 ## Key features
 
 ### Chats
 
-Link Up supports real-time chats, enabling users to send and receive messages instantly, react to messages, and share files seamlessly within conversations. Users can also assign aliases to personalize their chat experience. In group chats, users have the flexibility to add new members and modify chat settings, such as changing the group name, group photo, ensuring a customized and manageable communication environment.
+LinkUp supports real-time chats, enabling users to send and receive messages instantly, react to messages, and share files seamlessly within conversations. Users can also assign aliases to personalize their chat experience. In group chats, users have the flexibility to add new members and modify chat settings, such as changing the group name, group photo, ensuring a customized and manageable communication environment.
 
 ![](/docs/chat-dark.png)
 
-Link Up manages chat settings and creating new chats with intuitive dialogs.
+LinkUp manages chat settings and creating new chats with intuitive dialogs.
 ![](/docs/chat-dialog.png)
 
 ### Posts
 
-In Link Up, users can create and share posts using Markdown, allowing for rich text formatting, code snippets, and more. This flexibility enables users to craft detailed posts with headings, lists, links, and other elements commonly used in modern content creation. Whether sharing thoughts, updates, or technical content, the Markdown-based system provides an intuitive way to compose posts while maintaining full control over the appearance and structure.
+In LinkUp, users can create and share posts using Markdown, allowing for rich text formatting, code snippets, and more. This flexibility enables users to craft detailed posts with headings, lists, links, and other elements commonly used in modern content creation. Whether sharing thoughts, updates, or technical content, the Markdown-based system provides an intuitive way to compose posts while maintaining full control over the appearance and structure.
 
 ![](/docs/post.png)
 
@@ -25,13 +25,13 @@ In Link Up, users can create and share posts using Markdown, allowing for rich t
 
 ### Themes
 
-Link Up features a convenient toggle button that allows users to switch effortlessly between light and dark mode. This option provides a customizable viewing experience, letting users choose the display that best suits their preferences or ambient lighting conditions.
+LinkUp features a convenient toggle button that allows users to switch effortlessly between light and dark mode. This option provides a customizable viewing experience, letting users choose the display that best suits their preferences or ambient lighting conditions.
 
 ![](/docs/chat-light.png)
 
 ### Responsive Web Design
 
-Link Up employs responsive web design to ensure a seamless user experience across all devices. The platform automatically adjusts its layout and functionality to fit various screen sizes, from desktop monitors to smartphones and tablets. This adaptability provides consistent performance and ease of use, regardless of the device being used.
+LinkUp employs responsive web design to ensure a seamless user experience across all devices. The platform automatically adjusts its layout and functionality to fit various screen sizes, from desktop monitors to smartphones and tablets. This adaptability provides consistent performance and ease of use, regardless of the device being used.
 
 ![](/docs/chat-phone.png)
 
@@ -39,18 +39,19 @@ Link Up employs responsive web design to ensure a seamless user experience acros
 
 - **Frontend:** Developed with **React** for a dynamic and responsive user interface.
 - **Backend:** Utilizes **Express** as the web server framework for efficient request handling and routing.
-- **Database:** **MySQL** is used for reliable data storage.
+- **Database:** **PostgreSQL** is used for reliable data storage.
+- **File Storage:** **S3** is used for reliable file storage.
 - **ORM:** **Prisma** facilitates seamless interaction between Express and MySQL.
 
 ## Getting Started
 
-To set up and run Link Up on your local machine, follow these steps:
+To set up and run LinkUp on your local machine, follow these steps:
 
 1. **Install Prerequisites**  
    Ensure the following are installed on your system:
 
    - [Docker](https://www.docker.com/) and Docker Compose
-   - [Node.js](https://nodejs.org/) (if running locally without Docker)
+   - [Node.js](https://nodejs.org/)
 
 2. **Clone the Repository**  
    Clone the project repository to your local machine:
@@ -60,8 +61,8 @@ To set up and run Link Up on your local machine, follow these steps:
    cd linkup
    ```
 
-3. **Run with Docker**  
-   Use the provided `docker-compose.sh` script to manage and run the application. This script supports various modes: production, testing, backend development, and frontend development.
+3. **Run the App**  
+   Use the provided `docker-compose.sh` script to manage and run the application. This script supports various modes: production, development and end-to-end testing.
 
    - **Run Production Environment:**  
      Starts the application with all services required for production:
@@ -70,14 +71,16 @@ To set up and run Link Up on your local machine, follow these steps:
      ./docker-compose.sh prod
      ```
 
-   - **Run Tests:**  
-     Initializes the test database in docker:
+     In another terminal start backend:
 
      ```bash
-     ./docker-compose.sh test
+     cd backend
+     npm install
+     npm run dev
      ```
 
-     And execute following commands:
+   - **Run Tests:**  
+     Execute following commands:
 
      ```
      cd backend
@@ -90,6 +93,14 @@ To set up and run Link Up on your local machine, follow these steps:
 
      ```bash
      ./docker-compose.sh dev
+     ```
+
+     In another terminal start backend:
+
+     ```bash
+     cd backend
+     npm install
+     npm run dev
      ```
 
      And execute following commands:
@@ -107,6 +118,14 @@ To set up and run Link Up on your local machine, follow these steps:
      ./docker-compose.sh e2e
      ```
 
+     In another terminal start backend in e2e mode:
+
+     ```bash
+     cd backend
+     npm install
+     npm run e2e
+     ```
+
      And execute following commands:
 
      ```
@@ -117,7 +136,7 @@ To set up and run Link Up on your local machine, follow these steps:
 
    - **Run Development Environment:**
 
-     Start database for development:
+     Start database, socket and S3 for development:
 
      ```
      ./docker-compose.sh dev

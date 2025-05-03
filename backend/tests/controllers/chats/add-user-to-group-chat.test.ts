@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("addUserToGroupChat", () => {
@@ -6,7 +7,7 @@ describe("addUserToGroupChat", () => {
     jest.clearAllMocks();
   });
 
-  it("should add user to group chat successfully", async () => {
+  it("adds user to group chat successfully", async () => {
     mockChatService.getChatType.mockResolvedValue("GROUP");
     mockChatService.isUserInChat.mockResolvedValueOnce(true);
     mockChatService.isUserInChat.mockResolvedValueOnce(false);
@@ -16,8 +17,8 @@ describe("addUserToGroupChat", () => {
     });
 
     const req = mockRequest({
-      body: { userId: "456", token: { userId: "789" } },
-      params: { chatId: "123" },
+      user: { id: "789" } as UserWithCredentials,
+      validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());
@@ -39,12 +40,12 @@ describe("addUserToGroupChat", () => {
     });
   });
 
-  it("should return 401 if chat is not of type 'GROUP'", async () => {
+  it("returns 401 for non-group chat", async () => {
     mockChatService.getChatType.mockResolvedValue("PRIVATE");
 
     const req = mockRequest({
-      body: { userId: "456", token: { userId: "789" } },
-      params: { chatId: "123" },
+      user: { id: "789" } as UserWithCredentials,
+      validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());
@@ -54,13 +55,13 @@ describe("addUserToGroupChat", () => {
     expect(mockChatService.addUserToChat).not.toHaveBeenCalled();
   });
 
-  it("should return 401 if the requester is not in the chat", async () => {
+  it("returns 401 for non-member requester", async () => {
     mockChatService.getChatType.mockResolvedValue("GROUP");
     mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
     const req = mockRequest({
-      body: { userId: "456", token: { userId: "789" } },
-      params: { chatId: "123" },
+      user: { id: "789" } as UserWithCredentials,
+      validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());
@@ -70,14 +71,14 @@ describe("addUserToGroupChat", () => {
     expect(mockChatService.addUserToChat).not.toHaveBeenCalled();
   });
 
-  it("should return 409 if the user is already in the chat", async () => {
+  it("returns 409 for already added user", async () => {
     mockChatService.getChatType.mockResolvedValue("GROUP");
     mockChatService.isUserInChat.mockResolvedValueOnce(true);
     mockChatService.isUserInChat.mockResolvedValueOnce(true);
 
     const req = mockRequest({
-      body: { userId: "456", token: { userId: "789" } },
-      params: { chatId: "123" },
+      user: { id: "789" } as UserWithCredentials,
+      validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());

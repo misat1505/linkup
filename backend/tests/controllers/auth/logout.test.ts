@@ -1,19 +1,23 @@
 import { AuthControllers } from "../../../src/controllers";
 import { TokenProcessor } from "../../../src/lib/TokenProcessor";
 import { mockRequest, mockResponse } from "../../utils/mocks";
+import { seedProvider } from "../../utils/seedProvider";
 
 jest.mock("../../../src/lib/TokenProcessor");
 
 describe("logout", () => {
-  it("should log out a user", async () => {
-    (TokenProcessor.encode as jest.Mock).mockReturnValue("logout_jwt_token");
+  it("logs out user", async () => {
+    await seedProvider(async (seed) => {
+      const user = seed.users[0];
+      (TokenProcessor.encode as jest.Mock).mockReturnValue("logout_jwt_token");
 
-    const req = mockRequest({ body: { token: { userId: 1 } } });
-    const res = mockResponse();
+      const req = mockRequest({ user });
+      const res = mockResponse();
 
-    AuthControllers.logout(req, res, jest.fn());
+      AuthControllers.logout(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.clearCookie).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.clearCookie).toHaveBeenCalled();
+    });
   });
 });

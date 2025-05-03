@@ -2,7 +2,7 @@ import request from "supertest";
 import { testWithTransaction } from "./utils/testWithTransaction";
 
 describe("i18n", () => {
-  it("should return message in language put in Accept-Language header", async () => {
+  it("returns message in requested Accept-Language", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const data = [
         {
@@ -47,7 +47,7 @@ describe("i18n", () => {
     });
   });
 
-  it("defaults to english if no Accept-Language header", async () => {
+  it("defaults to English without Accept-Language header", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const response = await request(app).post("/auth/signup").send({
         firstName: "Melon",
@@ -60,7 +60,7 @@ describe("i18n", () => {
     });
   });
 
-  it("defaults to english if locale passed in Accept-Language doesn't exists", async () => {
+  it("defaults to English for unsupported locale", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const response = await request(app)
         .post("/auth/signup")

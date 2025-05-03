@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { UserService } from "../../services/UserService";
+import { User } from "../../types/User";
 
 /**
  * Controller to fetch the details of the currently authenticated user.
@@ -44,7 +45,7 @@ export const getSelfController = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.body.token.userId;
+    const userId = req.user!.id;
     const userService = req.app.services.userService;
 
     const user = await userService.getUser(userId);
@@ -55,7 +56,7 @@ export const getSelfController = async (
         .json({ message: req.t("auth.controllers.get-self.user-not-found") });
     }
 
-    return res.status(200).json({ user: UserService.removeCredentials(user) });
+    return res.status(200).json({ user: User.parse(user) });
   } catch (e) {
     next(new Error(req.t("auth.controllers.get-self.failure")));
   }

@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { handleMarkdownUpdate } from "../../utils/updatePost";
+import { UpdatePostDTO } from "../../validators/posts/posts.validators";
+import { PostId } from "../../validators/shared.validators";
 
 /**
  * Controller to update an existing post by its ID.
@@ -62,11 +64,9 @@ export const updatePost = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    const {
-      token: { userId },
-      content,
-    } = req.body;
+    const { id } = req.validated!.params! as PostId;
+    const userId = req.user!.id;
+    const { content } = req.validated!.body! as UpdatePostDTO;
     const { postService, fileStorage } = req.app.services;
 
     const post = await postService.getPost(id);

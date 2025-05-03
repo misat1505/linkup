@@ -1,16 +1,19 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("createPrivateChat", () => {
-  it("should create a private chat if user is in the list", async () => {
+  it("creates private chat with user included", async () => {
     const chat = { id: "chat1" };
     mockChatService.getPrivateChatByUserIds.mockResolvedValue(null);
     mockChatService.createPrivateChat.mockResolvedValue(chat);
 
     const req = mockRequest({
-      body: {
-        token: { userId: "userId" },
-        users: ["userId", "user2"],
+      user: { id: "userId" } as UserWithCredentials,
+      validated: {
+        body: {
+          users: ["userId", "user2"],
+        },
       },
     });
     const res = mockResponse();
@@ -19,14 +22,16 @@ describe("createPrivateChat", () => {
     expect(res.status).toHaveBeenCalledWith(201);
   });
 
-  it("should return conflict if chat already exists", async () => {
+  it("returns conflict for existing private chat", async () => {
     const existingChat = { id: "chat1" };
     mockChatService.getPrivateChatByUserIds.mockResolvedValue(existingChat);
 
     const req = mockRequest({
-      body: {
-        token: { userId: "userId" },
-        users: ["userId", "user2"],
+      user: { id: "userId" } as UserWithCredentials,
+      validated: {
+        body: {
+          users: ["userId", "user2"],
+        },
       },
     });
     const res = mockResponse();
@@ -35,11 +40,13 @@ describe("createPrivateChat", () => {
     expect(res.status).toHaveBeenCalledWith(409);
   });
 
-  it("shouldn't allow if user is not in the user list", async () => {
+  it("blocks private chat creation without user", async () => {
     const req = mockRequest({
-      body: {
-        token: { userId: "userId" },
-        users: ["user2", "user3"],
+      user: { id: "userId" } as UserWithCredentials,
+      validated: {
+        body: {
+          users: ["user2", "user3"],
+        },
       },
     });
     const res = mockResponse();

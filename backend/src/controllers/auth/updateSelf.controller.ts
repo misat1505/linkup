@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { processAvatar } from "../../utils/processAvatar";
 import { Hasher } from "../../lib/Hasher";
-import { UserService } from "../../services/UserService";
-import { UserWithCredentials } from "../../types/User";
+import { User, UserWithCredentials } from "../../types/User";
 import bcrypt from "bcryptjs";
+import { SignupDTO } from "../../validators/auth/signup.validators";
 
 /**
  * Controller to update the user's details, including login, password, and avatar.
@@ -63,13 +63,9 @@ export const updateSelfController = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      firstName,
-      lastName,
-      login,
-      password,
-      token: { userId },
-    } = req.body;
+    const { firstName, lastName, login, password } = req.validated!
+      .body! as SignupDTO;
+    const userId = req.user!.id;
     const { userService, fileStorage } = req.app.services;
     const file = await processAvatar(fileStorage, req.file);
 
@@ -104,7 +100,7 @@ export const updateSelfController = async (
       await fileStorage.deleteFile(`avatars/${fetchedUser.photoURL}`);
     }
 
-    return res.status(201).json({ user: UserService.removeCredentials(user) });
+    return res.status(201).json({ user: User.parse(user) });
   } catch (e) {
     next(new Error(req.t("auth.controllers.update.failure")));
   }

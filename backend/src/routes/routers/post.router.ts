@@ -1,5 +1,12 @@
 import { Router } from "express";
 import { PostControllers } from "../../controllers";
+import { validate } from "../../middlewares/validate";
+import { PostId } from "../../validators/shared.validators";
+import {
+  CreatePostDTO,
+  GetPostsQuery,
+  UpdatePostDTO,
+} from "../../validators/posts/posts.validators";
 
 /**
  * Post Routes Router.
@@ -9,12 +16,32 @@ import { PostControllers } from "../../controllers";
  */
 const postRouter = Router();
 
-postRouter.put("/:id", PostControllers.updatePost);
+postRouter.put(
+  "/:id",
+  validate({ params: PostId, body: UpdatePostDTO }),
+  PostControllers.updatePost
+);
 postRouter.get("/mine", PostControllers.getUserPosts);
-postRouter.get("/:id", PostControllers.getPost);
-postRouter.delete("/:id", PostControllers.deletePost);
-postRouter.get("/", PostControllers.getPosts);
-postRouter.post("/:id/report", PostControllers.reportPost);
-postRouter.post("/", PostControllers.createPost);
+postRouter.get("/:id", validate({ params: PostId }), PostControllers.getPost);
+postRouter.delete(
+  "/:id",
+  validate({ params: PostId }),
+  PostControllers.deletePost
+);
+postRouter.get(
+  "/",
+  validate({ query: GetPostsQuery }),
+  PostControllers.getPosts
+);
+postRouter.post(
+  "/:id/report",
+  validate({ params: PostId }),
+  PostControllers.reportPost
+);
+postRouter.post(
+  "/",
+  validate({ body: CreatePostDTO }),
+  PostControllers.createPost
+);
 
 export default postRouter;

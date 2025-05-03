@@ -1,4 +1,5 @@
 import { FriendshipControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFriendshipService,
   mockRequest,
@@ -7,7 +8,7 @@ import {
 import { mockFriendship } from "./setup";
 
 describe("getUserFriendships", () => {
-  it("should fetch all friendships for the user", async () => {
+  it("retrieves all user friendships", async () => {
     const mockFriendships = [
       {
         status: "ACCEPTED",
@@ -19,9 +20,7 @@ describe("getUserFriendships", () => {
     mockFriendshipService.getUserFriendships.mockResolvedValue(mockFriendships);
 
     const req = mockRequest({
-      body: {
-        token: { userId: mockFriendship.requester.id },
-      },
+      user: { id: mockFriendship.requester.id } as UserWithCredentials,
     });
     const res = mockResponse();
 

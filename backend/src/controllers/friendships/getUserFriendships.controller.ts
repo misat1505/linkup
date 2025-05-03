@@ -57,7 +57,7 @@ export const getUserFriendships = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const friendshipService = req.app.services.friendshipService;
 
     const friendships = await friendshipService.getUserFriendships(userId);

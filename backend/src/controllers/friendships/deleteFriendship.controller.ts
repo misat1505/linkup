@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { DeleteFriendshipDTO } from "../../validators/friendships/friendships.validators";
 
 /**
  * Controller to delete an existing friendship between two users.
@@ -80,8 +81,9 @@ export const deleteFriendship = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
-    const { requesterId, acceptorId } = req.body;
+    const userId = req.user!.id;
+    const { requesterId, acceptorId } = req.validated!
+      .body! as DeleteFriendshipDTO;
     const friendshipService = req.app.services.friendshipService;
 
     if (![requesterId, acceptorId].includes(userId))

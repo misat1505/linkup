@@ -1,4 +1,5 @@
 import { FriendshipControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFriendshipService,
   mockRequest,
@@ -7,14 +8,16 @@ import {
 import { mockFriendship } from "./setup";
 
 describe("acceptFriendship", () => {
-  it("should accept a friendship successfully", async () => {
+  it("accepts friendship successfully", async () => {
     mockFriendshipService.acceptFriendship.mockResolvedValue(mockFriendship);
 
     const req = mockRequest({
-      body: {
-        token: { userId: mockFriendship.requester.id },
-        requesterId: mockFriendship.acceptor.id,
-        acceptorId: mockFriendship.requester.id,
+      user: { id: mockFriendship.requester.id } as UserWithCredentials,
+      validated: {
+        body: {
+          requesterId: mockFriendship.acceptor.id,
+          acceptorId: mockFriendship.requester.id,
+        },
       },
     });
     const res = mockResponse();
@@ -24,12 +27,14 @@ describe("acceptFriendship", () => {
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  it("should fail if acceptorId does not match userId", async () => {
+  it("fails for mismatched acceptorId", async () => {
     const req = mockRequest({
-      body: {
-        token: { userId: "different-user-id" },
-        requesterId: mockFriendship.requester.id,
-        acceptorId: mockFriendship.acceptor.id,
+      user: { id: "different-user-id" } as UserWithCredentials,
+      validated: {
+        body: {
+          requesterId: mockFriendship.requester.id,
+          acceptorId: mockFriendship.acceptor.id,
+        },
       },
     });
     const res = mockResponse();
@@ -39,14 +44,16 @@ describe("acceptFriendship", () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
-  it("should fail if friendship does not exist", async () => {
+  it("fails for non-existent friendship", async () => {
     mockFriendshipService.acceptFriendship.mockResolvedValue(null);
 
     const req = mockRequest({
-      body: {
-        token: { userId: mockFriendship.requester.id },
-        requesterId: mockFriendship.acceptor.id,
-        acceptorId: mockFriendship.requester.id,
+      user: { id: mockFriendship.requester.id } as UserWithCredentials,
+      validated: {
+        body: {
+          requesterId: mockFriendship.acceptor.id,
+          acceptorId: mockFriendship.requester.id,
+        },
       },
     });
     const res = mockResponse();

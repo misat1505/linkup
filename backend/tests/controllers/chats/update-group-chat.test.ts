@@ -1,4 +1,5 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { processAvatar } from "../../../src/utils/processAvatar";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
@@ -9,7 +10,7 @@ describe("updateGroupChat", () => {
     jest.clearAllMocks();
   });
 
-  it("should successfully update group chat", async () => {
+  it("updates group chat successfully", async () => {
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.getChatById.mockResolvedValue({
       type: "GROUP",
@@ -22,8 +23,8 @@ describe("updateGroupChat", () => {
     });
 
     const req = mockRequest({
-      body: { name: "New Chat Name", token: { userId: "789" } },
-      params: { chatId: "123" },
+      user: { id: "789" } as UserWithCredentials,
+      validated: { body: { name: "New Chat Name" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
 
@@ -42,12 +43,12 @@ describe("updateGroupChat", () => {
     });
   });
 
-  it("should return 401 if the user is not authorized to update the chat", async () => {
+  it("returns 401 for unauthorized user", async () => {
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({
-      body: { name: "New Chat Name", token: { userId: "789" } },
-      params: { chatId: "123" },
+      user: { id: "789" } as UserWithCredentials,
+      validated: { body: { name: "New Chat Name" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
 
@@ -63,15 +64,15 @@ describe("updateGroupChat", () => {
     expect(mockChatService.updateGroupChat).not.toHaveBeenCalled();
   });
 
-  it("should return 400 if the chat is not of type 'GROUP'", async () => {
+  it("returns 400 for non-group chat", async () => {
     mockChatService.isUserInChat.mockResolvedValue(true);
     mockChatService.getChatById.mockResolvedValue({
       type: "PRIVATE",
     });
 
     const req = mockRequest({
-      body: { name: "New Chat Name", token: { userId: "789" } },
-      params: { chatId: "123" },
+      user: { id: "789" } as UserWithCredentials,
+      validated: { body: { name: "New Chat Name" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
 

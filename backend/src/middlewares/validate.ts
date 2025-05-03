@@ -1,38 +1,55 @@
 import { NextFunction, Request, Response } from "express";
-import { ValidationChain, validationResult } from "express-validator";
+import {
+  RequestValidatedValues,
+  RequestValidation,
+} from "../types/RequestValidation";
+import { ZodError } from "zod";
 
 /**
- * Middleware to validate the request based on provided validation rules.
+ * Middleware to validate Express request properties using Zod schemas.
  *
- * This middleware accepts an array of validation chains from `express-validator` and runs them on the incoming request.
- * If validation fails, it terminates the request and returns the validation errors as a response.
- * If validation passes, it proceeds to the next middleware or route handler.
+ * This middleware accepts a `RequestValidation` object containing Zod schemas
+ * for request sections such as `body`, `query`, or `params`. It validates
+ * these sections of the incoming request. If all validations succeed, the
+ * parsed and typed data is assigned to `req.validated` and passed to the next
+ * middleware. If any validation fails, it responds with a 400 status and a
+ * list of `ZodError`s.
  *
- * @param {ValidationChain[]} validations - An array of validation chains from `express-validator` to be applied to the request.
+ * @param {RequestValidation} validations - An object mapping request sections
+ * (e.g., `body`, `query`, `params`) to their corresponding Zod schemas.
  *
  * @example
- * const validations = [
- *   body("email").isEmail().withMessage("Invalid email format"),
- *   body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters")
- * ];
- * app.post('/login', validate(validations), loginHandler);
+ * const validations = {
+ *   body: z.object({
+ *     email: z.string().email(),
+ *     password: z.string().min(6)
+ *   }),
+ *   query: z.object({
+ *     redirect: z.string().url().optional()
+ *   })
+ * };
  *
- * @source
+ * app.post('/login', zodValidate(validations), loginHandler);
+ *
+ * @returns Express middleware that validates request and populates `req.validated` if valid.
  */
-export const validate = (validations: ValidationChain[]) => {
+export const validate = (validations: RequestValidation) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    await Promise.all(validations.map((validation) => validation.run(req)));
+    const validated = {} as RequestValidatedValues;
+    const errors: ZodError<any>[] = [];
 
-    const errors = validationResult(req);
-    if (errors.isEmpty()) {
+    Object.entries(validations).forEach(([key, schema]) => {
+      const typedKey = key as keyof RequestValidatedValues;
+      const result = schema.safeParse(req[typedKey]);
+      if (!result.success) errors.push(result.error);
+      else validated[typedKey] = result.data;
+    });
+
+    if (errors.length === 0) {
+      req.validated = validated;
       return next();
     }
 
-    const i18nErrors = errors.array().map((err) => ({
-      ...err,
-      msg: req.t(err.msg),
-    }));
-
-    res.status(400).json({ errors: i18nErrors });
+    res.status(400).json({ errors });
   };
 };

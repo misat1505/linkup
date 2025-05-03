@@ -1,4 +1,5 @@
 import { FileControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFileService,
   mockFileStorage,
@@ -15,13 +16,15 @@ describe("getCache", () => {
     jest.clearAllMocks();
   });
 
-  it("returns user's cache", async () => {
+  it("retrieves user’s cache files", async () => {
     mockFileStorage.listFiles.mockResolvedValue(["url", "url2"]);
 
     const req = mockRequest({
-      params: { filename: "testfile.txt" },
-      body: { token: { userId: "userId" } },
-      query: { filter: "post" },
+      user: { id: "userId" } as UserWithCredentials,
+      validated: {
+        params: { filename: "testfile.txt" },
+        query: { filter: "post" },
+      },
     });
     const res = mockResponse();
 

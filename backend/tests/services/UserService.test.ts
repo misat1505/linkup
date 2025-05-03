@@ -1,47 +1,43 @@
-import { UserWithCredentials } from "../../src/types/User";
+import { User, UserWithCredentials } from "../../src/types/User";
 import { UserService } from "../../src/services/UserService";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
-import {
-  isUser,
-  isUserWithCredentials,
-} from "../../src/types/guards/user.guard";
 import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("UserService", () => {
   describe("searchUsers", () => {
-    it("should return users fitting given term", async () => {
+    it("retrieves users matching search term", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const result = await userService.searchUsers("Kyli");
         expect(result.length).toBe(1);
         result.forEach((user) => {
-          expect(isUser(user)).toBe(true);
+          User.strict().parse(user);
         });
       });
     });
   });
 
   describe("isLoginTaken", () => {
-    it("should return true if taken", async () => {
-      await testWithTransaction(async ({ tx }) => {
+    it("confirms login is taken", async () => {
+      await testWithTransaction(async ({ tx, seed }) => {
         const userService = new UserService(tx);
-        const result = await userService.isLoginTaken("login2");
-        expect(result).toBe(true);
+        const result = await userService.isLoginTaken(seed.users[0].login);
+        expect(result).toBeTruthy();
       });
     });
 
-    it("should return false if not taken", async () => {
+    it("denies login is taken", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const result = await userService.isLoginTaken("not_taken");
-        expect(result).toBe(false);
+        expect(result).toBeFalsy();
       });
     });
   });
 
   describe("insertUser", () => {
-    it("should insert user", async () => {
+    it("inserts new user", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const login = "not_taken";
@@ -57,45 +53,44 @@ describe("UserService", () => {
         };
 
         await userService.insertUser(user);
-        expect(true).toBe(true); // check if no error
       });
     });
   });
 
   describe("getUserByLogin", () => {
-    it("should return user if existent", async () => {
+    it("retrieves existing user by login", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUserByLogin("login2");
-        expect(user).not.toBe(null);
-        expect(isUserWithCredentials(user)).toBe(true);
+        expect(user).not.toBeNull();
+        UserWithCredentials.strict().parse(user);
       });
     });
 
-    it("should return null if not existent", async () => {
+    it("returns null for non-existent user by login", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUserByLogin("not_existent");
-        expect(user).toBe(null);
+        expect(user).toBeNull();
       });
     });
   });
 
   describe("getUser", () => {
-    it("should return user if existent", async () => {
+    it("retrieves existing user by ID", async () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const userService = new UserService(tx);
         const user = await userService.getUser(seed.users[0].id);
-        expect(user).not.toBe(null);
-        expect(isUserWithCredentials(user)).toBe(true);
+        expect(user).not.toBeNull();
+        UserWithCredentials.strict().parse(user);
       });
     });
 
-    it("should return null if not existent", async () => {
+    it("returns null for non-existent user by ID", async () => {
       await testWithTransaction(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUser("invalid");
-        expect(user).toBe(null);
+        expect(user).toBeNull();
       });
     });
   });

@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { upload } from "../../middlewares/multer";
-import { authorize } from "../../middlewares/authorize";
 import { FileControllers } from "../../controllers";
+import { validate } from "../../middlewares/validate";
+import {
+  Filename,
+  FileQuery,
+} from "../../validators/files/getFiles.validators";
 
 /**
  * File Routes Router.
@@ -13,13 +17,16 @@ import { FileControllers } from "../../controllers";
 const fileRouter = Router();
 
 fileRouter.get("/cache", FileControllers.getCache);
-fileRouter.delete("/cache/:filename", FileControllers.deleteFromCache);
-fileRouter.post(
-  "/cache",
-  upload.single("file"),
-  authorize,
-  FileControllers.insertToCache
+fileRouter.delete(
+  "/cache/:filename",
+  validate({ params: Filename }),
+  FileControllers.deleteFromCache
 );
-fileRouter.get("/:filename", FileControllers.getFile);
+fileRouter.post("/cache", upload.single("file"), FileControllers.insertToCache);
+fileRouter.get(
+  "/:filename",
+  validate({ params: Filename, query: FileQuery }),
+  FileControllers.getFile
+);
 
 export default fileRouter;

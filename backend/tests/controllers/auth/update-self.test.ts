@@ -3,7 +3,7 @@ import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 import { seedProvider } from "../../utils/seedProvider";
 
 describe("updateUser", () => {
-  it("should update user", async () => {
+  it("updates authenticated user profile", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUserByLogin.mockResolvedValue({
         id: "some-id",
@@ -12,13 +12,15 @@ describe("updateUser", () => {
       });
 
       const req = mockRequest({
-        body: {
-          firstName: "John",
-          lastName: "Doe",
-          login: "login1",
-          password: "pass1",
-          token: { userId: seed.users[0].id },
+        validated: {
+          body: {
+            firstName: "John",
+            lastName: "Doe",
+            login: "login1",
+            password: "pass1",
+          },
         },
+        user: seed.users[0],
       });
       const res = mockResponse();
       await AuthControllers.updateSelf(req, res, jest.fn());
@@ -27,7 +29,7 @@ describe("updateUser", () => {
     });
   });
 
-  it("should update user when same id", async () => {
+  it("updates user with same ID", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUserByLogin.mockResolvedValue({
         id: seed.users[0].id,
@@ -36,13 +38,15 @@ describe("updateUser", () => {
       });
 
       const req = mockRequest({
-        body: {
-          firstName: "John",
-          lastName: "Doe",
-          login: "login1",
-          password: "pass1",
-          token: { userId: seed.users[0].id },
+        validated: {
+          body: {
+            firstName: "John",
+            lastName: "Doe",
+            login: "login1",
+            password: "pass1",
+          },
         },
+        user: seed.users[0],
       });
       const res = mockResponse();
 
@@ -52,7 +56,7 @@ describe("updateUser", () => {
     });
   });
 
-  it("shouldn't allow 2 users of the same login", async () => {
+  it("blocks duplicate login for different users", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUserByLogin.mockResolvedValue({
         id: "some-id",
@@ -61,13 +65,15 @@ describe("updateUser", () => {
       });
 
       const req = mockRequest({
-        body: {
-          firstName: "John",
-          lastName: "Doe",
-          login: "login1",
-          password: "pass1",
-          token: { userId: seed.users[0].id },
+        validated: {
+          body: {
+            firstName: "John",
+            lastName: "Doe",
+            login: "login1",
+            password: "pass1",
+          },
         },
+        user: seed.users[0],
       });
       const res = mockResponse();
 

@@ -1,18 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-
-type Filter = "avatar" | "chat-message" | "chat-photo" | "cache" | "post";
-
-const filterArray = ["avatar", "chat-message", "chat-photo", "cache", "post"];
+import {
+  Filename,
+  FileQuery,
+} from "../../validators/files/getFiles.validators";
 
 const sendFileBuilder =
   (filename: string, req: Request, res: Response) =>
   async (
-    fn: () => Promise<boolean>,
-
+    validator: () => Promise<boolean>,
     errorMessage = req.t("files.controllers.get-file.default-error-message")
   ) => {
     const fileStorage = req.app.services.fileStorage;
-    const result = await fn();
+    const result = await validator();
 
     if (!result) return res.status(401).json({ message: errorMessage });
 
@@ -92,78 +91,63 @@ export const getFileController = async (
   next: NextFunction
 ) => {
   try {
-    const { filename } = req.params;
-    const filter = req.query.filter as Filter;
-    const chatId = req.query.chat;
-    const postId = req.query.post;
-    const { userId } = req.body.token;
+    const { filename } = req.validated!.params! as Filename;
+    const query = req.validated!.query! as FileQuery;
+    const userId = req.user!.id;
     const { fileService, fileStorage } = req.app.services;
 
-    if (!filterArray.includes(filter))
-      return res.status(400).json({
-        message:
-          req.t("files.controllers.get-file.wrong-filter") +
-          filterArray.join(", "),
-      });
+    const sendFile = (path: string) => sendFileBuilder(path, req, res);
 
-    if (
-      ["chat-message", "chat-photo"].includes(filter) &&
-      typeof chatId !== "string"
-    )
-      return res
-        .status(400)
-        .json({ message: req.t("files.controllers.get-file.bad-chat") });
-
-    if (filter === "post" && typeof postId !== "string")
-      return res
-        .status(400)
-        .json({ message: req.t("files.controllers.get-file.bad-post") });
-
-    const prefix = chatId ? `chats/${chatId}` : "avatars";
-    const sendFile = sendFileBuilder(`${prefix}/${filename}`, req, res);
-
-    if (filter === "avatar") {
-      const response = await sendFile(
-        () => fileService.isUserAvatar(filename),
-        req.t("files.controllers.get-file.avatar-not-found")
-      );
-      return response;
-    } else if (filter === "chat-photo") {
-      const response = await sendFile(
-        () => fileService.isChatPhoto(filename, userId),
-        req.t("files.controllers.get-file.group-photo-not-found")
-      );
-      return response;
-    } else if (filter === "chat-message") {
-      const response = await sendFile(
-        () => fileService.isChatMessage(filename, userId),
-        req.t("files.controllers.get-file.group-photo-not-found")
-      );
-      return response;
-    } else if (filter === "cache") {
-      try {
-        const url = await fileStorage.getSignedUrl(
-          `cache/${userId}/${filename}`
+    switch (query.filter) {
+      case "avatar": {
+        const path = `avatars/${filename}`;
+        return sendFile(path)(
+          () => fileService.isUserAvatar(filename),
+          req.t("files.controllers.get-file.avatar-not-found")
         );
-        return res.status(200).json({ url });
-      } catch (e) {
-        return res
-          .status(404)
-          .json({ message: req.t("files.controllers.get-file.not-found") });
       }
-    } else if (filter === "post") {
-      try {
-        const url = await fileStorage.getSignedUrl(
-          `posts/${postId}/${filename}`
+
+      case "chat-photo": {
+        const path = `chats/${query.chat}/${filename}`;
+        return sendFile(path)(
+          () => fileService.isChatPhoto(filename, userId),
+          req.t("files.controllers.get-file.group-photo-not-found")
         );
-        return res.status(200).json({ url });
-      } catch (e) {
-        return res
-          .status(404)
-          .json({ message: req.t("files.controllers.get-file.not-found") });
+      }
+
+      case "chat-message": {
+        const path = `chats/${query.chat}/${filename}`;
+        return sendFile(path)(
+          () => fileService.isChatMessage(filename, userId),
+          req.t("files.controllers.get-file.group-photo-not-found")
+        );
+      }
+
+      case "cache": {
+        const path = `cache/${userId}/${filename}`;
+        try {
+          const url = await fileStorage.getSignedUrl(path);
+          return res.status(200).json({ url });
+        } catch {
+          return res
+            .status(404)
+            .json({ message: req.t("files.controllers.get-file.not-found") });
+        }
+      }
+
+      case "post": {
+        const path = `posts/${query.post}/${filename}`;
+        try {
+          const url = await fileStorage.getSignedUrl(path);
+          return res.status(200).json({ url });
+        } catch {
+          return res
+            .status(404)
+            .json({ message: req.t("files.controllers.get-file.not-found") });
+        }
       }
     }
-  } catch (e) {
+  } catch (error) {
     next(new Error(req.t("files.controllers.get-file.failure")));
   }
 };

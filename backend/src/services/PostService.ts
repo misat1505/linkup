@@ -1,16 +1,8 @@
 import { Post } from "../types/Post";
 import { User } from "../types/User";
 import { userSelect } from "../utils/prisma/userSelect";
-import {
-  postChatSelect,
-  transformPostChatSelect,
-} from "../utils/prisma/postChatSelect";
+import { postChatSelect } from "../utils/prisma/postChatSelect";
 import { PrismaClientOrTransaction } from "../types/Prisma";
-
-function sanitizePost(post: any): Post {
-  const { authorId, chatId, ...sanitizedPost } = post;
-  return { ...sanitizedPost } as Post;
-}
 
 /**
  * Service class responsible for managing post-related operations in the database using Prisma.
@@ -20,16 +12,6 @@ export class PostService {
 
   constructor(prisma: PrismaClientOrTransaction) {
     this.prisma = prisma;
-  }
-  /**
-   * Sanitizes post
-   * @param post - data to be sanitized
-   */
-  static sanitizePost(post: any): Post {
-    return sanitizePost({
-      ...post,
-      chat: transformPostChatSelect(post.chat),
-    });
   }
 
   /**
@@ -72,7 +54,7 @@ export class PostService {
       },
     });
 
-    return PostService.sanitizePost(post);
+    return Post.parse(post);
   }
 
   /**
@@ -93,7 +75,7 @@ export class PostService {
 
     if (!post) return null;
 
-    return PostService.sanitizePost(post);
+    return Post.parse(post);
   }
 
   /**
@@ -112,7 +94,7 @@ export class PostService {
       },
     });
 
-    return posts.map(PostService.sanitizePost);
+    return posts.map((p) => Post.parse(p));
   }
 
   /**
@@ -150,7 +132,7 @@ export class PostService {
       },
     });
 
-    return PostService.sanitizePost(result);
+    return Post.parse(result);
   }
 
   /**

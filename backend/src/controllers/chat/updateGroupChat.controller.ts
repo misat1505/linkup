@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { processAvatar } from "../../utils/processAvatar";
 import { v4 as uuidv4 } from "uuid";
+import { UpdateGroupChatDTO } from "../../validators/chats/chats.validatotors";
+import { ChatId } from "../../validators/chats/messages.validators";
 
 /**
  * Controller to update a group chat's name and avatar.
@@ -60,11 +62,9 @@ export const updateGroupChatController = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      name,
-      token: { userId },
-    } = req.body;
-    const { chatId } = req.params;
+    const userId = req.user!.id;
+    const { name } = req.validated!.body! as UpdateGroupChatDTO;
+    const { chatId } = req.validated!.params! as ChatId;
     const { chatService, fileStorage } = req.app.services;
 
     const isAuthorized = await chatService.isUserInChat({ chatId, userId });

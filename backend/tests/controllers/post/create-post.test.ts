@@ -1,4 +1,5 @@
 import { PostControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { handleMarkdownUpdate } from "../../../src/utils/updatePost";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
@@ -7,7 +8,7 @@ jest.mock("../../../src/utils/updatePost");
 describe("createPost", () => {
   (handleMarkdownUpdate as jest.Mock).mockImplementation((a, b, c, d) => b);
 
-  it("should successfully create a post", async () => {
+  it("creates post successfully", async () => {
     const postContent = "This is a new post.";
     mockPostService.createPost.mockResolvedValue({
       id: "post-id",
@@ -16,7 +17,8 @@ describe("createPost", () => {
     });
 
     const req = mockRequest({
-      body: { content: postContent, token: { userId: "user-id" } },
+      user: { id: "user-id" } as UserWithCredentials,
+      validated: { body: { content: postContent } },
     });
     const res = mockResponse();
 
@@ -30,14 +32,16 @@ describe("createPost", () => {
     });
   });
 
-  it("should pass to error middleware if post creation fails", async () => {
+  it("passes errors to error middleware", async () => {
     mockPostService.createPost.mockRejectedValue(new Error("Error"));
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
-      body: {
-        content: "This is a new post.",
-        token: { userId: "user-id" },
+      user: { id: "user-id" } as UserWithCredentials,
+      validated: {
+        body: {
+          content: "This is a new post.",
+        },
       },
     });
     const res = mockResponse();

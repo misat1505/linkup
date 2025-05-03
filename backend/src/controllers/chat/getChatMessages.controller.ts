@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { Message } from "../../types/Message";
+import {
+  ChatId,
+  GetMessagesQuery,
+} from "../../validators/chats/messages.validators";
 
 /**
  * Controller to retrieve messages from a chat.
@@ -68,9 +72,9 @@ export const getChatMessagesController = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
-    const { chatId } = req.params;
-    const { responseId, lastMessageId, limit } = req.query;
+    const userId = req.user!.id;
+    const { chatId } = req.validated!.params! as ChatId;
+    const query = req.validated!.query! as GetMessagesQuery;
     const chatService = req.app.services.chatService;
 
     const isUserAuthorized = await chatService.isUserInChat({ chatId, userId });
@@ -80,50 +84,23 @@ export const getChatMessagesController = async (
         message: req.t("chats.controllers.get-messages.unauthorized"),
       });
 
-    const serviceFunction =
-      responseId !== undefined
-        ? () =>
-            chatService.getPostChatMessages(
-              chatId,
-              processResponseId(responseId)
-            )
-        : () =>
-            chatService.getChatMessages(
-              chatId,
-              processLastMessageId(lastMessageId),
-              processLimit(limit)
-            );
+    let messages: Message[];
 
-    const messages = await serviceFunction();
+    if ("responseId" in query) {
+      messages = await chatService.getPostChatMessages(
+        chatId,
+        query.responseId
+      );
+    } else {
+      messages = await chatService.getChatMessages(
+        chatId,
+        query.lastMessageId ?? undefined,
+        query.limit
+      );
+    }
 
     return res.status(200).json({ messages });
   } catch (e) {
     next(new Error(req.t("chats.controllers.get-messages.failure")));
   }
-};
-
-const processResponseId = (responseId: any): string | null => {
-  if (responseId === "null") {
-    return null;
-  }
-  if (typeof responseId === "string") {
-    return responseId;
-  }
-  throw new Error("ResponseId has to be a string");
-};
-
-const processLastMessageId = (
-  lastMessageId: any
-): Message["id"] | undefined => {
-  if (!lastMessageId) return undefined;
-  if (typeof lastMessageId !== "string")
-    throw new Error("lastMessageId has to be a string");
-  return lastMessageId;
-};
-
-const processLimit = (limit: any): number | undefined => {
-  if (!limit) return 10;
-  const parsed = parseInt(limit);
-  if (isNaN(parsed)) throw new Error("Limit has to be a number");
-  return parsed;
 };

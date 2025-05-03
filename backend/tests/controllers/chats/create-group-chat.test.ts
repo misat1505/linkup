@@ -1,20 +1,23 @@
 import { ChatControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { processAvatar } from "../../../src/utils/processAvatar";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 jest.mock("../../../src/utils/processAvatar");
 
 describe("createGroupChat", () => {
-  it("should create a group chat if user is in the list", async () => {
+  it("creates group chat with user included", async () => {
     const chat = { id: "chat1" };
     (processAvatar as jest.Mock).mockResolvedValue("file");
     mockChatService.createGroupChat.mockResolvedValue(chat);
 
     const req = mockRequest({
-      body: {
-        token: { userId: "userId" },
-        users: ["userId", "user2"],
-        name: "Group Chat",
+      user: { id: "userId" } as UserWithCredentials,
+      validated: {
+        body: {
+          users: ["userId", "user2"],
+          name: "Group Chat",
+        },
       },
     });
     const res = mockResponse();
@@ -23,14 +26,16 @@ describe("createGroupChat", () => {
     expect(res.status).toHaveBeenCalledWith(201);
   });
 
-  it("shouldn't allow if user is not in the user list", async () => {
+  it("blocks group chat creation without user", async () => {
     (processAvatar as jest.Mock).mockResolvedValue("file");
 
     const req = mockRequest({
-      body: {
-        token: { userId: "userId" },
-        users: ["user2", "user3"],
-        name: "Group Chat",
+      user: { id: "userId" } as UserWithCredentials,
+      validated: {
+        body: {
+          users: ["user2", "user3"],
+          name: "Group Chat",
+        },
       },
     });
     const res = mockResponse();

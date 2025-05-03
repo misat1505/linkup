@@ -1,4 +1,5 @@
 import { PostControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "../../../src/types/User";
 import { handleMarkdownUpdate } from "../../../src/utils/updatePost";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
@@ -7,7 +8,7 @@ jest.mock("../../../src/utils/updatePost");
 describe("updatePost", () => {
   (handleMarkdownUpdate as jest.Mock).mockImplementation((a, b, c, d) => b);
 
-  it("should successfully update a post", async () => {
+  it("updates post successfully", async () => {
     const post = {
       id: "post-id",
       content: "Updated post content.",
@@ -20,11 +21,13 @@ describe("updatePost", () => {
     });
 
     const req = mockRequest({
-      body: {
-        content: "New updated content",
-        token: { userId: "user-id" },
+      user: { id: "user-id" } as UserWithCredentials,
+      validated: {
+        body: {
+          content: "New updated content",
+        },
+        params: { id: "post-id" },
       },
-      params: { id: "post-id" },
     });
     const res = mockResponse();
 
@@ -38,15 +41,17 @@ describe("updatePost", () => {
     });
   });
 
-  it("should return a 404 error if post not found", async () => {
+  it("returns 404 for non-existent post", async () => {
     mockPostService.getPost.mockResolvedValue(null);
 
     const req = mockRequest({
-      body: {
-        content: "New updated content",
-        token: { userId: "user-id" },
+      user: { id: "user-id" } as UserWithCredentials,
+      validated: {
+        body: {
+          content: "New updated content",
+        },
+        params: { id: "post-id" },
       },
-      params: { id: "post-id" },
     });
     const res = mockResponse();
 
@@ -55,7 +60,7 @@ describe("updatePost", () => {
     expect(res.status).toHaveBeenCalledWith(404);
   });
 
-  it("should return a 401 error if user is not authorized to update the post", async () => {
+  it("returns 401 for unauthorized user", async () => {
     const post = {
       id: "post-id",
       content: "Post content.",
@@ -64,11 +69,13 @@ describe("updatePost", () => {
     mockPostService.getPost.mockResolvedValue(post);
 
     const req = mockRequest({
-      body: {
-        content: "New updated content",
-        token: { userId: "user-id" },
+      user: { id: "user-id" } as UserWithCredentials,
+      validated: {
+        body: {
+          content: "New updated content",
+        },
+        params: { id: "post-id" },
       },
-      params: { id: "post-id" },
     });
     const res = mockResponse();
 
@@ -77,7 +84,7 @@ describe("updatePost", () => {
     expect(res.status).toHaveBeenCalledWith(401);
   });
 
-  it("should pass to error middleware if post update fails", async () => {
+  it("passes errors to error middleware", async () => {
     const post = {
       id: "post-id",
       content: "Post content.",
@@ -88,11 +95,13 @@ describe("updatePost", () => {
     const mockNextFunction = jest.fn();
 
     const req = mockRequest({
-      body: {
-        content: "New updated content",
-        token: { userId: "user-id" },
+      user: { id: "user-id" } as UserWithCredentials,
+      validated: {
+        body: {
+          content: "New updated content",
+        },
+        params: { id: "post-id" },
       },
-      params: { id: "post-id" },
     });
     const res = mockResponse();
 

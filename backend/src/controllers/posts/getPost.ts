@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { PostId } from "../../validators/shared.validators";
 
 /**
  * Controller to retrieve a post by its ID.
@@ -46,7 +47,7 @@ export const getPost = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
+    const { id } = req.validated!.params! as PostId;
     const postService = req.app.services.postService;
 
     const post = await postService.getPost(id);

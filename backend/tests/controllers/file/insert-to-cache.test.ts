@@ -1,5 +1,6 @@
 import { FileControllers } from "../../../src/controllers";
 import { CACHE_CAPACITY } from "../../../src/controllers/file/insertToCache.controller";
+import { UserWithCredentials } from "../../../src/types/User";
 import {
   mockFileService,
   mockFileStorage,
@@ -16,7 +17,7 @@ describe("insertToCache", () => {
     jest.clearAllMocks();
   });
 
-  it("inserts file to cache and returns newly created filename", async () => {
+  it("inserts file to cache with new filename", async () => {
     mockFileStorage.listFiles.mockResolvedValue([]);
     mockFileStorage.uploadFile.mockResolvedValue("new-file.jpg");
 
@@ -25,7 +26,7 @@ describe("insertToCache", () => {
         buffer: Buffer.from("fake-image-data"),
         originalname: "testfile.jpg",
       } as Express.Multer.File,
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
     });
     const res = mockResponse();
 
@@ -38,14 +39,14 @@ describe("insertToCache", () => {
     expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
   });
 
-  it(`does not allow inserting if user has already ${CACHE_CAPACITY} files`, async () => {
+  it(`blocks cache insertion at ${CACHE_CAPACITY}-file limit`, async () => {
     mockFileStorage.listFiles.mockResolvedValue(
       new Array(CACHE_CAPACITY).fill("existing-file.jpg")
     );
 
     const req = mockRequest({
       file: { buffer: Buffer.from("fake-image-data") } as Express.Multer.File,
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
     });
     const res = mockResponse();
 
@@ -54,9 +55,9 @@ describe("insertToCache", () => {
     expect(res.status).toHaveBeenCalledWith(500);
   });
 
-  it("returns 400 if no file uploaded", async () => {
+  it("returns 400 for missing file upload", async () => {
     const req = mockRequest({
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
     });
     const res = mockResponse();
 
@@ -65,7 +66,7 @@ describe("insertToCache", () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
-  it("returns 500 if upload fails", async () => {
+  it("returns 500 for failed cache insertion", async () => {
     mockFileStorage.listFiles.mockResolvedValue([]);
     mockFileStorage.uploadFile.mockRejectedValue(new Error("upload failed"));
 
@@ -73,7 +74,7 @@ describe("insertToCache", () => {
 
     const req = mockRequest({
       file: { buffer: Buffer.from("fake-image-data") } as Express.Multer.File,
-      body: { token: { userId: "userId" } },
+      user: { id: "userId" } as UserWithCredentials,
     });
     const res = mockResponse();
 

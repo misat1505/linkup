@@ -1,7 +1,7 @@
 import { Hasher } from "../../src/lib/Hasher";
 
 describe("Hasher", () => {
-  it("hashes given string correctly", () => {
+  it("hashes string correctly", () => {
     const plain = "hello world";
     const encrypted = Hasher.hash(plain);
     const hashed =

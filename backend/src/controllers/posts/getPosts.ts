@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Post } from "../../types/Post";
+import { GetPostsQuery } from "../../validators/posts/posts.validators";
 
 /**
  * Controller to retrieve a list of posts.
@@ -56,20 +57,14 @@ export const getPosts = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
-    const { lastPostId: queryLastPostId, limit: queryLimit } = req.query;
+    const userId = req.user!.id;
+    const { lastPostId, limit } = req.validated!.query! as GetPostsQuery;
     const postRecommendationService =
       req.app.services.postRecommendationService;
 
-    const limit = processLimit(queryLimit);
-
-    if (limit > 10) {
-      res.status(400).json({ message: `Maximum limit is 10 - given ${limit}` });
-    }
-
     const posts = await postRecommendationService.getRecommendedPosts(
       userId,
-      processLastPostId(queryLastPostId),
+      lastPostId,
       limit
     );
 
@@ -77,18 +72,4 @@ export const getPosts = async (
   } catch (e) {
     next(new Error(req.t("posts.controllers.get-all.failure")));
   }
-};
-
-const processLimit = (queryLimit: unknown): number => {
-  const defaultLimit = 10;
-  if (!queryLimit || typeof queryLimit !== "string") return defaultLimit;
-  const parsed = parseInt(queryLimit);
-  if (isNaN(parsed)) return 10;
-  return parsed;
-};
-
-const processLastPostId = (queryLastPostId: unknown): Post["id"] | null => {
-  if (!queryLastPostId || typeof queryLastPostId !== "string") return null;
-  if (queryLastPostId === "null") return null;
-  return queryLastPostId;
 };

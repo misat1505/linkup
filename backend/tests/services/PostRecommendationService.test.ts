@@ -1,15 +1,15 @@
 import { PostRecommendationService } from "../../src/services/PostRecommendationService";
-import { PostService } from "../../src/services/PostService";
 import { Post } from "../../src/types/Post";
 import { User } from "../../src/types/User";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFriendshipService, mockPostService } from "../utils/mocks";
 import { PrismaClientOrTransaction } from "../../src/types/Prisma";
+import { v4 as uuidv4 } from "uuid";
 
 jest.mock("../../src/services/PostService");
 
 const USER: User = {
-  id: "user1",
+  id: uuidv4(),
   firstName: "Test",
   lastName: "User",
   photoURL: null,
@@ -17,7 +17,7 @@ const USER: User = {
 };
 
 const FRIEND1: User = {
-  id: "friend1",
+  id: uuidv4(),
   firstName: "Friend",
   lastName: "One",
   photoURL: null,
@@ -25,7 +25,7 @@ const FRIEND1: User = {
 };
 
 const FRIEND2: User = {
-  id: "friend2",
+  id: uuidv4(),
   firstName: "Friend",
   lastName: "Two",
   photoURL: null,
@@ -33,7 +33,7 @@ const FRIEND2: User = {
 };
 
 const STRANGER: User = {
-  id: "stranger1",
+  id: uuidv4(),
   firstName: "Strange",
   lastName: "Person",
   photoURL: null,
@@ -52,7 +52,7 @@ describe("PostRecommendationService", () => {
   }
 
   describe("getLastPost", () => {
-    it("should return null when postId is null", async () => {
+    it("returns null for null postId", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const result = await postRecommendationService.getLastPost(null);
@@ -61,7 +61,7 @@ describe("PostRecommendationService", () => {
       });
     });
 
-    it("should return post when found", async () => {
+    it("retrieves post by ID", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockPost = {
@@ -77,7 +77,7 @@ describe("PostRecommendationService", () => {
       });
     });
 
-    it("should throw error when post not found", async () => {
+    it("throws error for non-existent post", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         mockPostService.getPost.mockResolvedValue(null);
@@ -90,7 +90,7 @@ describe("PostRecommendationService", () => {
   });
 
   describe("getUserFriends", () => {
-    it("should return friend IDs", async () => {
+    it("retrieves friend IDs", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockFriendships = [
@@ -107,7 +107,7 @@ describe("PostRecommendationService", () => {
       });
     });
 
-    it("should return empty array when no accepted friendships", async () => {
+    it("returns empty array for no accepted friendships", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         mockFriendshipService.getUserFriendships.mockResolvedValue([]);
@@ -118,7 +118,7 @@ describe("PostRecommendationService", () => {
   });
 
   describe("fetchFriendsPostsOnly", () => {
-    it("should fetch friends posts with lastPost filter", async () => {
+    it("fetches friends' posts with lastPost filter", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockPost = {
@@ -129,7 +129,6 @@ describe("PostRecommendationService", () => {
         const fetchSpy = jest
           .spyOn(postRecommendationService, "fetchFriendsPostsOnly")
           .mockResolvedValue([mockPost]);
-        (PostService.sanitizePost as jest.Mock).mockReturnValue(mockPost);
 
         const result = await postRecommendationService.fetchFriendsPostsOnly(
           mockPost,
@@ -144,7 +143,7 @@ describe("PostRecommendationService", () => {
   });
 
   describe("fetchNonFriendsPostsOnly", () => {
-    it("should fetch non-friends posts with deadline", async () => {
+    it("fetches non-friends' posts with deadline", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockPost = {
@@ -155,7 +154,6 @@ describe("PostRecommendationService", () => {
         const fetchSpy = jest
           .spyOn(postRecommendationService, "fetchNonFriendsPostsOnly")
           .mockResolvedValue([mockPost]);
-        (PostService.sanitizePost as jest.Mock).mockReturnValue(mockPost);
 
         const deadline = new Date();
         const result = await postRecommendationService.fetchNonFriendsPostsOnly(
@@ -177,7 +175,7 @@ describe("PostRecommendationService", () => {
   });
 
   describe("getOthersPostsCreatedAtFilter", () => {
-    it("should return undefined when no lastPost", () => {
+    it("returns undefined without lastPost", () => {
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         null,
         [],
@@ -186,7 +184,7 @@ describe("PostRecommendationService", () => {
       expect(result).toBeUndefined();
     });
 
-    it("should return undefined when friendsPosts exist", () => {
+    it("returns undefined when friends' posts exist", () => {
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         { id: "post1", author: STRANGER, createdAt: new Date() } as Post,
         [{ id: "post2", author: FRIEND1, createdAt: new Date() } as Post],
@@ -195,7 +193,7 @@ describe("PostRecommendationService", () => {
       expect(result).toBeUndefined();
     });
 
-    it("should return undefined when lastPost is from friend", () => {
+    it("returns undefined for friend’s lastPost", () => {
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         { id: "post1", author: FRIEND1, createdAt: new Date() } as Post,
         [],
@@ -204,7 +202,7 @@ describe("PostRecommendationService", () => {
       expect(result).toBeUndefined();
     });
 
-    it("should return date filter when lastPost is from non-friend", () => {
+    it("returns date filter for non-friend’s lastPost", () => {
       const date = new Date();
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         { id: "post1", author: STRANGER, createdAt: date } as Post,
@@ -216,7 +214,7 @@ describe("PostRecommendationService", () => {
   });
 
   describe("getRecommendedPosts", () => {
-    it("should return only non-friends posts when lastPost is from non-friend", async () => {
+    it("returns only non-friends' posts for non-friend lastPost", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const lastPost = {
@@ -262,7 +260,7 @@ describe("PostRecommendationService", () => {
       });
     });
 
-    it("should return only friends posts when limit is reached", async () => {
+    it("returns only friends' posts when limit reached", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const getLastPostSpy = jest
@@ -271,12 +269,18 @@ describe("PostRecommendationService", () => {
         const getUserFriendsSpy = jest
           .spyOn(postRecommendationService, "getUserFriends")
           .mockResolvedValue([FRIEND1.id]);
-        const mockPosts = [
+        const mockPosts: Post[] = [
           {
-            id: "post1",
+            id: uuidv4(),
+            content: "post",
             author: FRIEND1,
             createdAt: new Date(),
-          } as Post,
+            chat: {
+              id: uuidv4(),
+              createdAt: new Date(),
+              type: "POST",
+            },
+          },
         ];
         const fetchFriendsSpy = jest
           .spyOn(postRecommendationService, "fetchFriendsPostsOnly")
@@ -284,9 +288,6 @@ describe("PostRecommendationService", () => {
         const fetchNonFriendsSpy = jest
           .spyOn(postRecommendationService, "fetchNonFriendsPostsOnly")
           .mockResolvedValue([]);
-        (PostService.sanitizePost as jest.Mock).mockImplementation(
-          (post) => post
-        );
 
         const result = await postRecommendationService.getRecommendedPosts(
           USER.id,
@@ -309,7 +310,7 @@ describe("PostRecommendationService", () => {
       });
     });
 
-    it("should return mix of friends and non-friends posts", async () => {
+    it("returns mixed friends and non-friends' posts", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const getLastPostSpy = jest
@@ -318,16 +319,28 @@ describe("PostRecommendationService", () => {
         const getUserFriendsSpy = jest
           .spyOn(postRecommendationService, "getUserFriends")
           .mockResolvedValue([FRIEND1.id]);
-        const friendPost = {
-          id: "post1",
+        const friendPost: Post = {
+          id: uuidv4(),
+          content: "content",
           author: { ...FRIEND1 },
           createdAt: new Date(),
-        } as Post;
-        const strangerPost = {
-          id: "post2",
+          chat: {
+            id: uuidv4(),
+            createdAt: new Date(),
+            type: "POST",
+          },
+        };
+        const strangerPost: Post = {
+          id: uuidv4(),
           author: STRANGER,
+          content: "content2",
           createdAt: new Date(),
-        } as Post;
+          chat: {
+            id: uuidv4(),
+            createdAt: new Date(),
+            type: "POST",
+          },
+        };
         const fetchFriendsSpy = jest
           .spyOn(postRecommendationService, "fetchFriendsPostsOnly")
           .mockResolvedValue([friendPost]);
@@ -341,8 +354,8 @@ describe("PostRecommendationService", () => {
           2
         );
         expect(result).toHaveLength(2);
-        expect(result).toContain(friendPost);
-        expect(result).toContain(strangerPost);
+        expect(result).toContainEqual(friendPost);
+        expect(result).toContainEqual(strangerPost);
         expect(getLastPostSpy).toHaveBeenCalledWith(null);
         expect(getUserFriendsSpy).toHaveBeenCalledWith(USER.id);
         expect(fetchFriendsSpy).toHaveBeenCalledWith(null, [FRIEND1.id], 2);

@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { processAvatar } from "../../utils/processAvatar";
 import { Hasher } from "../../lib/Hasher";
-import { UserService } from "../../services/UserService";
-import { UserWithCredentials } from "../../types/User";
+import { User, UserWithCredentials } from "../../types/User";
 import { TokenProcessor } from "../../lib/TokenProcessor";
 import {
   accessTokenSignOptions,
@@ -13,6 +12,7 @@ import {
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import { env } from "../../config/env";
+import { SignupDTO } from "../../validators/auth/signup.validators";
 
 /**
  * Controller to sign up a new user, hash the user's password, and return access and refresh tokens.
@@ -72,7 +72,8 @@ export const signupController = async (
   next: NextFunction
 ) => {
   try {
-    const { firstName, lastName, login, password } = req.body;
+    const { firstName, lastName, login, password } = req.validated!
+      .body! as SignupDTO;
     const { userService, fileStorage } = req.app.services;
     const file = await processAvatar(fileStorage, req.file);
 
@@ -111,9 +112,7 @@ export const signupController = async (
       accessTokenSignOptions
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res
-      .status(201)
-      .json({ user: UserService.removeCredentials(user), accessToken });
+    return res.status(201).json({ user: User.parse(user), accessToken });
   } catch (e) {
     console.log(e);
     next(new Error(req.t("auth.controllers.signup.failure")));

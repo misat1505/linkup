@@ -81,7 +81,7 @@ export class PostRecommendationService {
       take: limit,
     });
 
-    return posts.map(PostService.sanitizePost);
+    return posts.map((p) => Post.parse(p));
   }
 
   /**
@@ -117,7 +117,7 @@ export class PostRecommendationService {
       take: limit,
     });
 
-    return friendsPosts.map(PostService.sanitizePost);
+    return friendsPosts.map((p) => Post.parse(p));
   }
 
   /**
@@ -178,7 +178,7 @@ export class PostRecommendationService {
 
     const remainingPosts = limit - friendsPosts.length;
 
-    if (remainingPosts === 0) return friendsPosts.map(PostService.sanitizePost);
+    if (remainingPosts === 0) return friendsPosts.map((p) => Post.parse(p));
 
     const othersPostsCreatedAtFilter =
       PostRecommendationService.getOthersPostsCreatedAtFilter(
@@ -194,6 +194,6 @@ export class PostRecommendationService {
       remainingPosts
     );
 
-    return [...friendsPosts, ...otherPosts].map(PostService.sanitizePost);
+    return [...friendsPosts, ...otherPosts].map((p) => Post.parse(p));
   }
 }

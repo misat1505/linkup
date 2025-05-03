@@ -48,7 +48,7 @@ export const getCache = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const fileStorage = req.app.services.fileStorage;
 
     const files = await fileStorage.listFiles(`cache/${userId}`);

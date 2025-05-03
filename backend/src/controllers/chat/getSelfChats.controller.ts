@@ -38,7 +38,7 @@ export const getSelfChatsController = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
+    const userId = req.user!.id;
     const chatService = req.app.services.chatService;
 
     const chats = await chatService.getUserChats(userId);

@@ -1,22 +1,28 @@
 import { AuthControllers } from "../../../src/controllers";
 import { TokenProcessor } from "../../../src/lib/TokenProcessor";
 import { mockRequest, mockResponse } from "../../utils/mocks";
+import { seedProvider } from "../../utils/seedProvider";
 
 jest.mock("../../../src/lib/TokenProcessor");
 
 describe("refreshToken", () => {
-  it("should refresh a token", async () => {
-    (TokenProcessor.encode as jest.Mock).mockReturnValue("new_fake_jwt_token");
+  it("refreshes authentication token", async () => {
+    await seedProvider(async (seed) => {
+      const user = seed.users[0];
+      (TokenProcessor.encode as jest.Mock).mockReturnValue(
+        "new_fake_jwt_token"
+      );
 
-    const req = mockRequest({ body: { token: { userId: 1 } } });
-    const res = mockResponse();
+      const req = mockRequest({ user });
+      const res = mockResponse();
 
-    AuthControllers.refreshToken(req, res, jest.fn());
+      AuthControllers.refreshToken(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({ accessToken: expect.any(String) })
-    );
-    expect(res.cookie).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({ accessToken: expect.any(String) })
+      );
+      expect(res.cookie).toHaveBeenCalled();
+    });
   });
 });

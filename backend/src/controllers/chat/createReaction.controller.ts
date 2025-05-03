@@ -1,4 +1,8 @@
 import { NextFunction, Request, Response } from "express";
+import {
+  ChatId,
+  CreateReactionDTO,
+} from "../../validators/chats/messages.validators";
 
 /**
  * Controller to create a reaction to a message in a chat.
@@ -59,13 +63,10 @@ export const createReactionController = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      token: { userId },
-      reactionId,
-      messageId,
-    } = req.body;
+    const userId = req.user!.id;
+    const { reactionId, messageId } = req.validated!.body! as CreateReactionDTO;
     const chatService = req.app.services.chatService;
-    const { chatId } = req.params;
+    const { chatId } = req.validated!.params! as ChatId;
 
     const isUserAuthorized = await chatService.isUserInChat({ chatId, userId });
 

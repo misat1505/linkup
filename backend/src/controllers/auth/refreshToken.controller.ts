@@ -40,7 +40,7 @@ export const refreshTokenController = (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.body.token;
+    const { id: userId } = req.user!;
 
     const refreshToken = TokenProcessor.encode(
       { userId },
@@ -53,12 +53,10 @@ export const refreshTokenController = (
       accessTokenSignOptions
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res
-      .status(200)
-      .json({
-        message: req.t("auth.controllers.refresh.success"),
-        accessToken,
-      });
+    return res.status(200).json({
+      message: req.t("auth.controllers.refresh.success"),
+      accessToken,
+    });
   } catch (e) {
     next(new Error(req.t("auth.controllers.refresh.failure")));
   }

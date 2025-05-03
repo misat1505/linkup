@@ -3,13 +3,6 @@ import { PrismaClientOrTransaction } from "../types/Prisma";
 import { User } from "../types/User";
 import { userSelect } from "../utils/prisma/userSelect";
 
-function sanitizeFriendship(friendship: any): Friendship | null {
-  if (!friendship) return null;
-
-  const { acceptorId, requesterId, ...sanitizedFriendship } = friendship;
-  return sanitizedFriendship as Friendship;
-}
-
 /**
  * Service class responsible for managing friendship-related operations in the database using Prisma.
  */
@@ -35,7 +28,7 @@ export class FriendshipService {
       },
     });
 
-    return friendships.map((f) => sanitizeFriendship(f)!);
+    return friendships.map((f) => Friendship.parse(f)!);
   }
 
   /**
@@ -71,7 +64,7 @@ export class FriendshipService {
       },
     });
 
-    return sanitizeFriendship(newFriendship);
+    return Friendship.parse(newFriendship);
   }
 
   /**
@@ -110,7 +103,7 @@ export class FriendshipService {
       },
     });
 
-    return sanitizeFriendship(updatedFriendship);
+    return Friendship.parse(updatedFriendship);
   }
 
   /**

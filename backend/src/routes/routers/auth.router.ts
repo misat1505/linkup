@@ -1,9 +1,8 @@
 import { Router } from "express";
 import { upload } from "../../middlewares/multer";
 import { validate } from "../../middlewares/validate";
-import { signupRules } from "../../validators/auth.validator";
-import { authorize } from "../../middlewares/authorize";
 import { AuthControllers } from "../../controllers";
+import { SignupDTO } from "../../validators/auth/signup.validators";
 
 /**
  * Protected Authentication Routes Router.
@@ -18,8 +17,7 @@ authRouterProtected.get("/user", AuthControllers.getSelf);
 authRouterProtected.put(
   "/user",
   upload.single("file"),
-  validate(signupRules),
-  authorize,
+  validate({ body: SignupDTO }),
   AuthControllers.updateSelf
 );
 

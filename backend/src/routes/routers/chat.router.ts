@@ -1,17 +1,20 @@
 import { Router } from "express";
 import { validate } from "../../middlewares/validate";
-import {
-  addUserToGroupChatRules,
-  createGroupChatRules,
-  createMessageRules,
-  createPrivateChatRules,
-  createReactionRules,
-  updateAliasRules,
-  updateGroupChatRules,
-} from "../../validators/chat.validators";
 import { upload } from "../../middlewares/multer";
-import { authorize } from "../../middlewares/authorize";
 import { ChatControllers } from "../../controllers";
+import {
+  ChatId,
+  CreateMessageDTO,
+  CreateReactionDTO,
+  GetMessagesQuery,
+} from "../../validators/chats/messages.validators";
+import { UserId } from "../../validators/shared.validators";
+import {
+  CreateGroupChatDTO,
+  CreatePrivateChatDTO,
+  UpdateAliasDTO,
+  UpdateGroupChatDTO,
+} from "../../validators/chats/chats.validatotors";
 
 /**
  * Chat Routes Router.
@@ -24,15 +27,14 @@ const chatRouter = Router();
 
 chatRouter.post(
   "/private",
-  validate(createPrivateChatRules),
+  validate({ body: CreatePrivateChatDTO }),
   ChatControllers.createPrivateChat
 );
 
 chatRouter.post(
   "/group",
   upload.single("file"),
-  validate(createGroupChatRules),
-  authorize,
+  validate({ body: CreateGroupChatDTO }),
   ChatControllers.createGroupChat
 );
 
@@ -41,38 +43,44 @@ chatRouter.get("/", ChatControllers.getSelfChats);
 chatRouter.post(
   "/:chatId/messages",
   upload.array("files"),
-  validate(createMessageRules),
-  authorize, // multer is overriding req.body
+  validate({ body: CreateMessageDTO, params: ChatId }),
   ChatControllers.createMessage
 );
 
-chatRouter.get("/:chatId/messages", ChatControllers.getChatMessages);
+chatRouter.get(
+  "/:chatId/messages",
+  validate({ params: ChatId, query: GetMessagesQuery }),
+  ChatControllers.getChatMessages
+);
 
 chatRouter.post(
   "/:chatId/reactions",
-  validate(createReactionRules),
+  validate({ body: CreateReactionDTO, params: ChatId }),
   ChatControllers.createReaction
 );
 
 chatRouter.put(
   "/:chatId/users/:userId/alias",
-  validate(updateAliasRules),
+  validate({ body: UpdateAliasDTO, params: ChatId.merge(UserId) }),
   ChatControllers.updateAlias
 );
 
 chatRouter.post(
   "/:chatId/users",
-  validate(addUserToGroupChatRules),
+  validate({ body: UserId, params: ChatId }),
   ChatControllers.addUserToGroupChat
 );
 
-chatRouter.delete("/:chatId/users", ChatControllers.deleteSelfFromGroupChat);
+chatRouter.delete(
+  "/:chatId/users",
+  validate({ params: ChatId }),
+  ChatControllers.deleteSelfFromGroupChat
+);
 
 chatRouter.put(
   "/:chatId",
   upload.single("file"),
-  validate(updateGroupChatRules),
-  authorize,
+  validate({ body: UpdateGroupChatDTO, params: ChatId }),
   ChatControllers.updateGroupChat
 );
 
