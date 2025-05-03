@@ -30,13 +30,6 @@ export default function Settings() {
       ),
   });
 
-  let fileList = data ? new DataTransfer().files : undefined;
-  if (data) {
-    const dataTransfer = new DataTransfer();
-    dataTransfer.items.add(data);
-    fileList = dataTransfer.files;
-  }
-
   if (isLoading)
     return (
       <div className="relative h-[calc(100vh-5rem)] w-full">
@@ -47,7 +40,7 @@ export default function Settings() {
   const defaultValues: DefaultValues<SignupFormEntries> = {
     firstName: me!.firstName,
     lastName: me!.lastName,
-    file: fileList,
+    file: data || null,
   };
 
   const onSubmit: SubmitHandler<SignupFormType> = async (

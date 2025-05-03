@@ -12,7 +12,7 @@ export class AuthService {
     formData.append("firstName", data.firstName);
     formData.append("lastName", data.lastName);
     if (data.file) {
-      formData.append("file", data.file?.[0]);
+      formData.append("file", data.file);
     }
 
     const {
@@ -58,7 +58,7 @@ export class AuthService {
     formData.append("firstName", data.firstName);
     formData.append("lastName", data.lastName);
     if (data.file) {
-      formData.append("file", data.file?.[0]);
+      formData.append("file", data.file);
     }
 
     const {

@@ -3,7 +3,12 @@ import SignupImageDisplay from "./SignupImageDisplay";
 import { Input } from "../ui/input";
 
 export default function SignupImageFormField() {
-  const { errors, register } = useSignupFormContext();
+  const { errors, setValue } = useSignupFormContext();
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setValue("file", file, { shouldValidate: true, shouldDirty: true });
+  };
 
   return (
     <div className="flex w-full flex-col justify-center">
@@ -12,7 +17,7 @@ export default function SignupImageFormField() {
         type="file"
         accept=".jpg, .webp, .png"
         className="mt-2 hover:cursor-pointer"
-        {...register("file")}
+        onChange={handleFileChange}
       />
       {errors.file && (
         <p className="text-sm font-semibold text-red-500">
