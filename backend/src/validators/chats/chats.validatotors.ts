@@ -1,12 +1,9 @@
 import { z } from "zod";
 
-export const CreateGroupChatDTO = z
-  .object({
-    users: z.array(z.string().uuid()).min(1),
-
-    name: z.string().max(100).optional().nullable(),
-  })
-  .strict();
+export const CreateGroupChatDTO = z.object({
+  users: z.array(z.string().uuid()).min(1),
+  name: z.string().max(100).optional().nullable(),
+});
 export type CreateGroupChatDTO = z.infer<typeof CreateGroupChatDTO>;
 
 export const CreatePrivateChatDTO = z

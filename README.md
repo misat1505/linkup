@@ -61,7 +61,7 @@ To set up and run LinkUp on your local machine, follow these steps:
    cd linkup
    ```
 
-3. **Run with Docker**  
+3. **Run the App**  
    Use the provided `docker-compose.sh` script to manage and run the application. This script supports various modes: production, development and end-to-end testing.
 
    - **Run Production Environment:**  
@@ -69,6 +69,14 @@ To set up and run LinkUp on your local machine, follow these steps:
 
      ```bash
      ./docker-compose.sh prod
+     ```
+
+     In another terminal start backend:
+
+     ```bash
+     cd backend
+     npm install
+     npm run dev
      ```
 
    - **Run Tests:**  
@@ -87,6 +95,14 @@ To set up and run LinkUp on your local machine, follow these steps:
      ./docker-compose.sh dev
      ```
 
+     In another terminal start backend:
+
+     ```bash
+     cd backend
+     npm install
+     npm run dev
+     ```
+
      And execute following commands:
 
      ```
@@ -100,6 +116,14 @@ To set up and run LinkUp on your local machine, follow these steps:
 
      ```bash
      ./docker-compose.sh e2e
+     ```
+
+     In another terminal start backend in e2e mode:
+
+     ```bash
+     cd backend
+     npm install
+     npm run e2e
      ```
 
      And execute following commands:

@@ -6,6 +6,6 @@ export const SignupDTO = UserWithCredentials.pick({
   lastName: true,
   login: true,
   password: true,
-}).strict();
+});
 
 export type SignupDTO = z.infer<typeof SignupDTO>;

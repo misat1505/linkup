@@ -35,12 +35,10 @@ export const ChatId = z
   .strict();
 export type ChatId = z.infer<typeof ChatId>;
 
-export const CreateMessageDTO = z
-  .object({
-    content: z.string().max(5000),
-    responseId: z.string().uuid().optional(),
-  })
-  .strict();
+export const CreateMessageDTO = z.object({
+  content: z.string().max(5000),
+  responseId: z.string().uuid().optional(),
+});
 export type CreateMessageDTO = z.infer<typeof CreateMessageDTO>;
 
 export const CreateReactionDTO = z
