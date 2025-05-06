@@ -32,6 +32,8 @@ import { ZodError } from "zod";
  * app.post('/login', zodValidate(validations), loginHandler);
  *
  * @returns Express middleware that validates request and populates `req.validated` if valid.
+ *
+ * @source
  */
 export const validate = (validations: RequestValidation) => {
   return async (req: Request, res: Response, next: NextFunction) => {

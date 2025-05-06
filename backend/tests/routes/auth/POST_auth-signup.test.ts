@@ -3,6 +3,7 @@ import { mockFileStorage } from "../../utils/mocks";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 import path from "path";
+import { TEST_FILENAME_PATH } from "../../utils/constants";
 
 describe("[POST] /auth/signup", () => {
   it("signs up new user", async () => {
@@ -42,7 +43,7 @@ describe("[POST] /auth/signup", () => {
         .field("lastName", "Muzg")
         .field("login", login)
         .field("password", password)
-        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"))
+        .attach("file", TEST_FILENAME_PATH)
         .expect(201);
 
       User.strict().parse(res.body.user);
