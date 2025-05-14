@@ -3,6 +3,7 @@ import { processAvatar } from "../../utils/processAvatar";
 import { v4 as uuidv4 } from "uuid";
 import { UpdateGroupChatDTO } from "../../validators/chats/chats.validatotors";
 import { ChatId } from "../../validators/chats/messages.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to update a group chat's name and avatar.
@@ -40,7 +41,7 @@ import { ChatId } from "../../validators/chats/messages.validators";
  *             required:
  *               - name
  *     responses:
- *       201:
+ *       200:
  *         description: Chat updated successfully
  *         content:
  *           application/json:
@@ -49,7 +50,7 @@ import { ChatId } from "../../validators/chats/messages.validators";
  *               properties:
  *                 chat:
  *                   $ref: '#/components/schemas/Chat'
- *       401:
+ *       403:
  *         description: User not authorized to update this chat
  *       400:
  *         description: Cannot update chat of this type
@@ -69,13 +70,13 @@ export const updateGroupChatController = async (
 
     const isAuthorized = await chatService.isUserInChat({ chatId, userId });
     if (!isAuthorized)
-      return res.status(401).json({
+      return res.status(StatusCodes.FORBIDDEN).json({
         message: req.t("chats.controllers.update-group-chat.unauthorized"),
       });
 
     const oldChat = await chatService.getChatById(chatId);
     if (!oldChat || oldChat.type !== "GROUP")
-      return res.status(400).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t("chats.controllers.update-group-chat.bad-type"),
       });
 
@@ -97,7 +98,7 @@ export const updateGroupChatController = async (
       name: name || null,
     });
 
-    return res.status(201).json({ chat });
+    return res.status(StatusCodes.OK).json({ chat });
   } catch (e) {
     next(new Error(req.t("chats.controllers.update-group-chat.failure")));
   }

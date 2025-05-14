@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { PostId } from "../../validators/shared.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to retrieve a post by its ID.
@@ -54,10 +55,10 @@ export const getPost = async (
 
     if (!post)
       return res
-        .status(404)
+        .status(StatusCodes.NOT_FOUND)
         .json({ message: req.t("posts.controllers.get-single.not-found") });
 
-    return res.status(200).json({ post });
+    return res.status(StatusCodes.OK).json({ post });
   } catch (e) {
     next(new Error(req.t("posts.controllers.get-single.failure")));
   }

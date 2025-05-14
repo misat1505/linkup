@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Filename } from "../../validators/files/getFiles.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to delete a file from the user's cache.
@@ -70,7 +71,7 @@ export const deleteFromCache = async (
     await fileStorage.deleteFile(`cache/${userId}/${filename}`);
 
     return res
-      .status(200)
+      .status(StatusCodes.OK)
       .json({ message: req.t("files.controllers.delete-from-cache.success") });
   } catch (e) {
     next(new Error(req.t("files.controllers.delete-from-cache.failure")));

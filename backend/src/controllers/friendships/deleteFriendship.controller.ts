@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { DeleteFriendshipDTO } from "../../validators/friendships/friendships.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to delete an existing friendship between two users.
@@ -88,7 +89,7 @@ export const deleteFriendship = async (
 
     if (![requesterId, acceptorId].includes(userId))
       return res
-        .status(400)
+        .status(StatusCodes.BAD_REQUEST)
         .json({ message: req.t("friends.controllers.delete.unauthorized") });
 
     const isDeleted = await friendshipService.deleteFriendship(
@@ -98,11 +99,11 @@ export const deleteFriendship = async (
 
     if (!isDeleted)
       return res
-        .status(404)
+        .status(StatusCodes.NOT_FOUND)
         .json({ message: req.t("friends.controllers.delete.not-found") });
 
     return res
-      .status(200)
+      .status(StatusCodes.OK)
       .json({ message: req.t("friends.controllers.delete.success") });
   } catch (e) {
     next(new Error(req.t("friends.controllers.delete.failure")));

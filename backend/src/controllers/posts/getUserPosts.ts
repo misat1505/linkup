@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to retrieve posts by the authenticated user.
@@ -44,7 +45,7 @@ export const getUserPosts = async (
 
     const posts = await postService.getUserPosts(userId);
 
-    return res.status(200).json({ posts });
+    return res.status(StatusCodes.OK).json({ posts });
   } catch (e) {
     next(new Error(req.t("posts.controllers.get-users.failure")));
   }

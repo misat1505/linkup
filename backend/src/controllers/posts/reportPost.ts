@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Prisma } from "@prisma/client";
 import { PostId } from "../../validators/shared.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to report a post by an authenticated user.
@@ -58,7 +59,7 @@ export const reportPost = async (
     await postService.reportPost(userId, id);
 
     res
-      .status(200)
+      .status(StatusCodes.OK)
       .json({ message: req.t("posts.controllers.report.success") });
   } catch (e) {
     const violatedUniqueConstraint =
@@ -66,7 +67,7 @@ export const reportPost = async (
 
     if (violatedUniqueConstraint) {
       res
-        .status(409)
+        .status(StatusCodes.CONFLICT)
         .json({ message: req.t("posts.controllers.report.already-reported") });
       return;
     }

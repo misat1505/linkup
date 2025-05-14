@@ -4,6 +4,7 @@ import {
   RequestValidation,
 } from "../types/RequestValidation";
 import { ZodError } from "zod";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Middleware to validate Express request properties using Zod schemas.
@@ -52,6 +53,6 @@ export const validate = (validations: RequestValidation) => {
       return next();
     }
 
-    res.status(400).json({ errors });
+    res.status(StatusCodes.BAD_REQUEST).json({ errors });
   };
 };

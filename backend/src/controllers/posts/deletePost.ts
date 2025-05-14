@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { PostId } from "../../validators/shared.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to delete a post.
@@ -37,7 +38,7 @@ import { PostId } from "../../validators/shared.validators";
  *                 message:
  *                   type: string
  *                   example: "Post deleted successfully."
- *       401:
+ *       403:
  *         description: Unauthorized access. The user is not allowed to delete this post.
  *       404:
  *         description: Post not found.
@@ -58,12 +59,12 @@ export const deletePost = async (
 
     if (!post)
       return res
-        .status(404)
+        .status(StatusCodes.NOT_FOUND)
         .json({ message: req.t("posts.controllers.delete.not-found") });
 
     if (post.author.id !== userId)
       return res
-        .status(401)
+        .status(StatusCodes.FORBIDDEN)
         .json({ message: req.t("posts.controllers.delete.unauthorized") });
 
     await Promise.all([
@@ -73,7 +74,7 @@ export const deletePost = async (
     ]);
 
     return res
-      .status(200)
+      .status(StatusCodes.OK)
       .json({ message: req.t("posts.controllers.delete.success") });
   } catch (e) {
     next(new Error(req.t("posts.controllers.delete.failure")));

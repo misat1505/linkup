@@ -7,6 +7,7 @@ import {
   refreshTokenSignOptions,
 } from "../../config/jwt-cookie";
 import { env } from "../../config/env";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to refresh the access token and refresh token using the provided refresh token.
@@ -53,7 +54,7 @@ export const refreshTokenController = (
       accessTokenSignOptions
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res.status(200).json({
+    return res.status(StatusCodes.OK).json({
       message: req.t("auth.controllers.refresh.success"),
       accessToken,
     });

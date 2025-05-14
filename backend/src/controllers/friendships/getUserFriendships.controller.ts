@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to retrieve a list of user friendships.
@@ -62,7 +63,7 @@ export const getUserFriendships = async (
 
     const friendships = await friendshipService.getUserFriendships(userId);
 
-    return res.status(200).json({ friendships });
+    return res.status(StatusCodes.OK).json({ friendships });
   } catch (e) {
     next(new Error(req.t("friends.controllers.get.failure")));
   }

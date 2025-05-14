@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { CreatePrivateChatDTO } from "../../validators/chats/chats.validatotors";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to create a new private chat between two users.
@@ -45,7 +46,7 @@ import { CreatePrivateChatDTO } from "../../validators/chats/chats.validatotors"
  *                   $ref: '#/components/schemas/Chat'
  *       409:
  *         description: Chat already exists
- *       401:
+ *       403:
  *         description: User not authorized to create private chat
  *       500:
  *         description: Server error when creating private chat
@@ -61,7 +62,7 @@ export const createPrivateChatController = async (
     const chatService = req.app.services.chatService;
 
     if (!users.includes(userId))
-      return res.status(401).json({
+      return res.status(StatusCodes.FORBIDDEN).json({
         message: req.t(
           "chats.controllers.create-private-chat.not-belonging-to-you"
         ),
@@ -69,11 +70,11 @@ export const createPrivateChatController = async (
 
     const chat = await chatService.getPrivateChatByUserIds(users[0], users[1]);
 
-    if (chat) return res.status(409).json({ chat });
+    if (chat) return res.status(StatusCodes.CONFLICT).json({ chat });
 
     const createdChat = await chatService.createPrivateChat(users[0], users[1]);
 
-    return res.status(201).json({ chat: createdChat });
+    return res.status(StatusCodes.CREATED).json({ chat: createdChat });
   } catch (e) {
     next(new Error(req.t("chats.controllers.create-private-chat.failure")));
   }

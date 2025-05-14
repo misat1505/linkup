@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ChatId } from "../../validators/chats/messages.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to remove a user from a group chat.
@@ -28,7 +29,9 @@ import { ChatId } from "../../validators/chats/messages.validators";
  *     responses:
  *       200:
  *         description: Successfully deleted from chat
- *       401:
+ *       400:
+ *         description: Cannot remove yourself from chat of this type.
+ *       403:
  *         description: User not authorized to remove from this chat
  *       500:
  *         description: Server error when removing user from chat
@@ -45,20 +48,20 @@ export const deleteSelfFromGroupChatController = async (
 
     const chatType = await chatService.getChatType(chatId);
     if (chatType !== "GROUP")
-      return res.status(401).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t("chats.controllers.delete-self-from-chat.bad-chat-type"),
       });
 
     const iAmInChat = await chatService.isUserInChat({ userId, chatId });
     if (!iAmInChat)
-      return res.status(401).json({
+      return res.status(StatusCodes.FORBIDDEN).json({
         message: req.t(
           "chats.controllers.delete-self-from-chat.not-belonging-to-you"
         ),
       });
 
     await chatService.deleteFromChat({ chatId, userId });
-    return res.status(200).json({
+    return res.status(StatusCodes.OK).json({
       message: req.t("chats.controllers.delete-self-from-chat.success"),
     });
   } catch (e) {

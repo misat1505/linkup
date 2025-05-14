@@ -3,6 +3,7 @@ import {
   Filename,
   FileQuery,
 } from "../../validators/files/getFiles.validators";
+import { StatusCodes } from "http-status-codes";
 
 const sendFileBuilder =
   (filename: string, req: Request, res: Response) =>
@@ -13,14 +14,15 @@ const sendFileBuilder =
     const fileStorage = req.app.services.fileStorage;
     const result = await validator();
 
-    if (!result) return res.status(401).json({ message: errorMessage });
+    if (!result)
+      return res.status(StatusCodes.FORBIDDEN).json({ message: errorMessage });
 
     try {
       const url = await fileStorage.getSignedUrl(filename);
-      return res.status(200).json({ url });
+      return res.status(StatusCodes.OK).json({ url });
     } catch (e) {
       return res
-        .status(404)
+        .status(StatusCodes.NOT_FOUND)
         .json({ message: req.t("files.controllers.get-file.not-found") });
     }
   };
@@ -78,7 +80,7 @@ const sendFileBuilder =
  *               format: binary
  *       400:
  *         description: Invalid request parameters
- *       401:
+ *       403:
  *         description: Unauthorized access or query failed
  *       404:
  *         description: File not found
@@ -127,10 +129,10 @@ export const getFileController = async (
         const path = `cache/${userId}/${filename}`;
         try {
           const url = await fileStorage.getSignedUrl(path);
-          return res.status(200).json({ url });
+          return res.status(StatusCodes.OK).json({ url });
         } catch {
           return res
-            .status(404)
+            .status(StatusCodes.NOT_FOUND)
             .json({ message: req.t("files.controllers.get-file.not-found") });
         }
       }
@@ -139,10 +141,10 @@ export const getFileController = async (
         const path = `posts/${query.post}/${filename}`;
         try {
           const url = await fileStorage.getSignedUrl(path);
-          return res.status(200).json({ url });
+          return res.status(StatusCodes.OK).json({ url });
         } catch {
           return res
-            .status(404)
+            .status(StatusCodes.NOT_FOUND)
             .json({ message: req.t("files.controllers.get-file.not-found") });
         }
       }

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to retrieve all chats for a user.
@@ -43,7 +44,7 @@ export const getSelfChatsController = async (
 
     const chats = await chatService.getUserChats(userId);
 
-    return res.status(200).json({ chats });
+    return res.status(StatusCodes.OK).json({ chats });
   } catch (e) {
     next(new Error(req.t("chats.controllers.get-self-chats.failure")));
   }

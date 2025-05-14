@@ -4,6 +4,7 @@ import {
   ChatId,
   GetMessagesQuery,
 } from "../../validators/chats/messages.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to retrieve messages from a chat.
@@ -61,7 +62,7 @@ import {
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Message'
- *       401:
+ *       403:
  *         description: User not authorized to read messages from this chat
  *       500:
  *         description: Server error when fetching messages
@@ -80,7 +81,7 @@ export const getChatMessagesController = async (
     const isUserAuthorized = await chatService.isUserInChat({ chatId, userId });
 
     if (!isUserAuthorized)
-      return res.status(401).json({
+      return res.status(StatusCodes.FORBIDDEN).json({
         message: req.t("chats.controllers.get-messages.unauthorized"),
       });
 
@@ -99,7 +100,7 @@ export const getChatMessagesController = async (
       );
     }
 
-    return res.status(200).json({ messages });
+    return res.status(StatusCodes.OK).json({ messages });
   } catch (e) {
     next(new Error(req.t("chats.controllers.get-messages.failure")));
   }
