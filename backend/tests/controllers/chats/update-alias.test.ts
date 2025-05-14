@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
@@ -21,7 +22,7 @@ describe("updateAlias", () => {
     const res = mockResponse();
     await ChatControllers.updateAlias(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
     expect(mockChatService.updateAlias).toHaveBeenCalledWith({
       userId: "456",
@@ -30,7 +31,7 @@ describe("updateAlias", () => {
     });
   });
 
-  it("returns 401 for non-chat member update", async () => {
+  it("returns 400 for non-chat member update", async () => {
     mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
     const req = mockRequest({
@@ -40,12 +41,12 @@ describe("updateAlias", () => {
     const res = mockResponse();
     await ChatControllers.updateAlias(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
     expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(1);
     expect(mockChatService.updateAlias).not.toHaveBeenCalled();
   });
 
-  it("returns 401 for unauthorized requester", async () => {
+  it("returns 403 for unauthorized requester", async () => {
     mockChatService.isUserInChat.mockResolvedValueOnce(true);
     mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
@@ -56,7 +57,7 @@ describe("updateAlias", () => {
     const res = mockResponse();
     await ChatControllers.updateAlias(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
     expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
     expect(mockChatService.updateAlias).not.toHaveBeenCalled();
   });

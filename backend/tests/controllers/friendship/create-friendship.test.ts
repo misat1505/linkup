@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { FriendshipControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import {
@@ -24,7 +25,7 @@ describe("createFriendship", () => {
 
     await FriendshipControllers.createFriendship(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
   });
 
   it("fails for mismatched requesterId", async () => {
@@ -43,7 +44,7 @@ describe("createFriendship", () => {
 
     await FriendshipControllers.createFriendship(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
   });
 
   it("fails for existing friendship", async () => {
@@ -62,6 +63,6 @@ describe("createFriendship", () => {
 
     await FriendshipControllers.createFriendship(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(409);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
   });
 });

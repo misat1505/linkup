@@ -16,7 +16,7 @@ const publicRoutes = Router();
 
 publicRoutes.use("/auth", Routers.auth.public);
 publicRoutes.get("/chats/reactions", (req, res) => {
-  return res.status(200).json({ reactions });
+  return res.status(StatusCodes.OK).json({ reactions });
 });
 
 if (env.NODE_ENV === "e2e") {

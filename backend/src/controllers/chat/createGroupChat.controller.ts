@@ -49,7 +49,7 @@ import { StatusCodes } from "http-status-codes";
  *               properties:
  *                 chat:
  *                   $ref: '#/components/schemas/Chat'
- *       403:
+ *       400:
  *         description: User not authorized to create group chat
  *       500:
  *         description: Server error when creating group chat
@@ -65,7 +65,7 @@ export const createGroupChatController = async (
     const { chatService, fileStorage } = req.app.services;
 
     if (!users.includes(userId))
-      return res.status(StatusCodes.FORBIDDEN).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t(
           "chats.controllers.create-group-chat.not-belonging-to-you"
         ),

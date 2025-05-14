@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { FileControllers } from "../../../src/controllers";
 import { CACHE_CAPACITY } from "../../../src/controllers/file/insertToCache.controller";
 import { UserWithCredentials } from "../../../src/types/User";
@@ -32,7 +33,7 @@ describe("insertToCache", () => {
 
     await FileControllers.insertToCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({ file: expect.any(String) })
     );
@@ -52,7 +53,7 @@ describe("insertToCache", () => {
 
     await FileControllers.insertToCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
   });
 
   it("returns 400 for missing file upload", async () => {
@@ -63,7 +64,7 @@ describe("insertToCache", () => {
 
     await FileControllers.insertToCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
   });
 
   it("returns 500 for failed cache insertion", async () => {

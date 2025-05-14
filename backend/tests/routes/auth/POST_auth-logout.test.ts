@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
@@ -10,7 +11,7 @@ describe("[POST] /auth/logout", () => {
       const res = await request(app)
         .post("/auth/logout")
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       expect(res.headers["set-cookie"]).toBeDefined();
     });

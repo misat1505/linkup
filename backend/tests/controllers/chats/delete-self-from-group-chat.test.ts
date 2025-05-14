@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
@@ -19,7 +20,7 @@ describe("deleteUserFromGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       userId: "789",
@@ -41,13 +42,13 @@ describe("deleteUserFromGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).not.toHaveBeenCalled();
     expect(mockChatService.deleteFromChat).not.toHaveBeenCalled();
   });
 
-  it("returns 401 for non-chat member", async () => {
+  it("returns 400 for non-chat member", async () => {
     mockChatService.getChatType.mockResolvedValue("GROUP");
     mockChatService.isUserInChat.mockResolvedValue(false);
 
@@ -58,7 +59,7 @@ describe("deleteUserFromGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       userId: "789",

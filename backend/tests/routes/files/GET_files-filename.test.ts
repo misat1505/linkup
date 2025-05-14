@@ -1,5 +1,4 @@
 import { Application } from "express";
-import path from "path";
 import { User } from "../../../src/types/User";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import { TestHelpers } from "../../utils/helpers";
@@ -9,6 +8,7 @@ import { env } from "../../../src/config/env";
 import { Message } from "../../../src/types/Message";
 import { v4 as uuidv4 } from "uuid";
 import { TEST_FILENAME_PATH } from "../../utils/constants";
+import { StatusCodes } from "http-status-codes";
 
 jest.mock("../../../src/lib/FileStorage");
 
@@ -43,12 +43,12 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${createdUser.photoURL}?filter=avatar`)
         .set("Authorization", `Bearer ${tokens[1]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       await request(app)
         .get(`/files/${createdUser.photoURL}?filter=avatar`)
         .set("Authorization", `Bearer ${tokens[0]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 
@@ -73,7 +73,7 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
         .set("Authorization", `Bearer ${tokens[0]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       const user2Token = TokenProcessor.encode(
         {
@@ -85,12 +85,12 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
         .set("Authorization", `Bearer ${user2Token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
         .set("Authorization", `Bearer ${tokens[1]}`)
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 
@@ -124,7 +124,7 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
         .set("Authorization", `Bearer ${tokens[0]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       const user2Token = TokenProcessor.encode(
         {
@@ -136,12 +136,12 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
         .set("Authorization", `Bearer ${user2Token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
         .set("Authorization", `Bearer ${tokens[1]}`)
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 
@@ -158,7 +158,7 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${newFileName}?filter=cache`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 
@@ -175,12 +175,12 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${filename}?filter=post&post=${postId}`)
         .set("Authorization", `Bearer ${tokens[0]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       await request(app)
         .get(`/files/${filename}?filter=post&post=${postId}`)
         .set("Authorization", `Bearer ${tokens[1]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 });

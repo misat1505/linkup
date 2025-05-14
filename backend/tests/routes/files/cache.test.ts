@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
@@ -20,12 +21,12 @@ describe("cache routes", () => {
       await request(app)
         .get(`/files/${filename1}?filter=cache`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       await request(app)
         .delete(`/files/cache/${filename1}`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 });

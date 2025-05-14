@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
@@ -13,6 +14,6 @@ describe("getSelfChats", () => {
     const res = mockResponse();
     await ChatControllers.getSelfChats(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
   });
 });

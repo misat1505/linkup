@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { FileControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import {
@@ -25,7 +26,7 @@ describe("deleteFromCache", () => {
 
     await FileControllers.deleteFromCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
 
     expect(mockFileStorage.deleteFile).toHaveBeenCalledTimes(1);
     expect(mockFileStorage.deleteFile).toHaveBeenCalledWith(

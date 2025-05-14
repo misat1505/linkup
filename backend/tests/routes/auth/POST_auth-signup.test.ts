@@ -2,8 +2,8 @@ import { User } from "../../../src/types/User";
 import { mockFileStorage } from "../../utils/mocks";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
-import path from "path";
 import { TEST_FILENAME_PATH } from "../../utils/constants";
+import { StatusCodes } from "http-status-codes";
 
 describe("[POST] /auth/signup", () => {
   it("signs up new user", async () => {
@@ -11,22 +11,26 @@ describe("[POST] /auth/signup", () => {
       const login = "valid_login";
       const password = "valid_password";
 
-      const res = await request(app).post("/auth/signup").send({
-        firstName: "Melon",
-        lastName: "Muzg",
-        login,
-        password,
-      });
-      expect(res.statusCode).toEqual(201);
+      const res = await request(app)
+        .post("/auth/signup")
+        .send({
+          firstName: "Melon",
+          lastName: "Muzg",
+          login,
+          password,
+        })
+        .expect(StatusCodes.CREATED);
       User.strict().parse(res.body.user);
       expect(res.headers["set-cookie"]).toBeDefined();
 
-      const res2 = await request(app).post("/auth/login").send({
-        login,
-        password,
-      });
+      const res2 = await request(app)
+        .post("/auth/login")
+        .send({
+          login,
+          password,
+        })
+        .expect(StatusCodes.OK);
 
-      expect(res2.statusCode).toBe(200);
       User.strict().parse(res2.body.user);
       expect(res2.headers["set-cookie"]).toBeDefined();
     });
@@ -44,7 +48,7 @@ describe("[POST] /auth/signup", () => {
         .field("login", login)
         .field("password", password)
         .attach("file", TEST_FILENAME_PATH)
-        .expect(201);
+        .expect(StatusCodes.CREATED);
 
       User.strict().parse(res.body.user);
       expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
@@ -61,7 +65,7 @@ describe("[POST] /auth/signup", () => {
           login: seed.users[0].login,
           password: "valid_password",
         })
-        .expect(409);
+        .expect(StatusCodes.CONFLICT);
     });
   });
 
@@ -74,7 +78,7 @@ describe("[POST] /auth/signup", () => {
           login: "valid_login",
           password: "valid_password",
         })
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

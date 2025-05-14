@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { Post } from "../../../src/types/Post";
 import { TestHelpers } from "../../utils/helpers";
 import { mockFileStorage } from "../../utils/mocks";
@@ -16,7 +17,7 @@ describe("[POST] /posts", () => {
         .send({
           content: "This is a new post.",
         })
-        .expect(201);
+        .expect(StatusCodes.CREATED);
 
       Post.strict().parse(res.body.post);
       expect(res.body.post.content).toBe("This is a new post.");

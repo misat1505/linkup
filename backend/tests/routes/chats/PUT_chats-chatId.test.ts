@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { Chat } from "../../../src/types/Chat";
 import { TEST_FILENAME_PATH } from "../../utils/constants";
 import { TestHelpers } from "../../utils/helpers";
@@ -24,14 +25,14 @@ describe("[PUT] /chats/:chatId", () => {
         .set("Authorization", `Bearer ${token}`)
         .field("name", "chat name")
         .attach("file", TEST_FILENAME_PATH)
-        .expect(201);
+        .expect(StatusCodes.OK);
 
       Chat.strict().parse(res2.body.chat);
 
       const res3 = await request(app)
         .get("/chats")
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       res3.body.chats.forEach((chat: unknown) => {
         Chat.strict().parse(chat);
@@ -52,7 +53,7 @@ describe("[PUT] /chats/:chatId", () => {
         .put(`/chats/${chatId}`)
         .set("Authorization", `Bearer ${token}`)
         .send({ name: "chat name" })
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 });

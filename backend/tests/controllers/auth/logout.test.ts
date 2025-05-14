@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { AuthControllers } from "../../../src/controllers";
 import { TokenProcessor } from "../../../src/lib/TokenProcessor";
 import { mockRequest, mockResponse } from "../../utils/mocks";
@@ -16,7 +17,7 @@ describe("logout", () => {
 
       AuthControllers.logout(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.clearCookie).toHaveBeenCalled();
     });
   });

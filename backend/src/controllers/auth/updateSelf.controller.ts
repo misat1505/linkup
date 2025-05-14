@@ -79,7 +79,7 @@ export const updateSelfController = async (
       fetchedUser && fetchedUser.login === login && fetchedUser.id !== userId;
 
     if (isLoginTaken) {
-      return res.status(409).json({
+      return res.status(StatusCodes.CONFLICT).json({
         message: req.t("auth.controllers.update.login-already-exists"),
       });
     }

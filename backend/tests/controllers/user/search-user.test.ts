@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { UserControllers } from "../../../src/controllers";
 import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 import { seedProvider } from "../../utils/seedProvider";
@@ -16,7 +17,7 @@ describe("searchUser", () => {
 
       await UserControllers.searchUser(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith({ users });
     });
   });

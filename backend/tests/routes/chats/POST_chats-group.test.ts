@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { Chat } from "../../../src/types/Chat";
 import { TEST_FILENAME_PATH } from "../../utils/constants";
 import { TestHelpers } from "../../utils/helpers";
@@ -19,14 +20,14 @@ describe("[POST] /chats/group", () => {
         .field("users[1]", userId)
         .field("name", "chat name")
         .attach("file", TEST_FILENAME_PATH)
-        .expect(201);
+        .expect(StatusCodes.CREATED);
 
       Chat.strict().parse(res.body.chat);
 
       const res2 = await request(app)
         .get("/chats")
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       expect(res2.body.chats.length).toBe(initialChatsCount + 1);
       res2.body.chats.forEach((chat: unknown) => {
@@ -45,7 +46,7 @@ describe("[POST] /chats/group", () => {
         .set("Authorization", `Bearer ${token}`)
         .field("users[0]", seed.users[1].id)
         .field("name", "chat name")
-        .expect(401);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

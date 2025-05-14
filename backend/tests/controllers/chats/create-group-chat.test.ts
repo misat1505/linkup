@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import { processAvatar } from "../../../src/utils/processAvatar";
@@ -23,7 +24,7 @@ describe("createGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.createGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
   });
 
   it("blocks group chat creation without user", async () => {
@@ -41,6 +42,6 @@ describe("createGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.createGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
   });
 });

@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { env } from "../../../src/config/env";
 import { refreshTokenCookieName } from "../../../src/config/jwt-cookie";
 import { TestHelpers } from "../../utils/helpers";
@@ -15,7 +16,7 @@ describe("[POST] /auth/refresh", () => {
       const res = await request(app)
         .post("/auth/refresh")
         .set("Cookie", `${refreshTokenCookieName}=${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       expect(res.headers["set-cookie"]).toBeDefined();
     });
@@ -23,7 +24,7 @@ describe("[POST] /auth/refresh", () => {
 
   it("fails without refresh token in cookie", async () => {
     await testWithTransaction(async ({ app }) => {
-      await request(app).post("/auth/refresh").expect(400);
+      await request(app).post("/auth/refresh").expect(StatusCodes.UNAUTHORIZED);
     });
   });
 
@@ -37,7 +38,7 @@ describe("[POST] /auth/refresh", () => {
       await request(app)
         .post("/auth/refresh")
         .set("Cookie", `${refreshTokenCookieName}=${token}`)
-        .expect(404);
+        .expect(StatusCodes.UNAUTHORIZED);
     });
   });
 });

@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { Message } from "../../../src/types/Message";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
@@ -17,14 +18,14 @@ describe("[POST] chats/:chatId/messages", () => {
         .attach("files", Buffer.from("message file"), "file1.txt")
         .attach("files", Buffer.from("message file2"), "file2.txt")
         .set("Authorization", `Bearer ${token}`)
-        .expect(201);
+        .expect(StatusCodes.CREATED);
 
       Message.strict().parse(res.body.message);
 
       const res2 = await request(app)
         .get(`/chats/${chatId}/messages?lastMessageId=null&limit=20`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       expect(res2.body.messages.length).toBe(messages.length + 1);
       res2.body.messages.forEach((message: unknown) => {
@@ -42,7 +43,7 @@ describe("[POST] chats/:chatId/messages", () => {
         .post(`/chats/${chatId}/messages`)
         .send({ content: "message" })
         .set("Authorization", `Bearer ${token}`)
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 
@@ -56,7 +57,7 @@ describe("[POST] chats/:chatId/messages", () => {
         .post(`/chats/${chatId}/messages`)
         .send({ content: "message", responseId: message.id })
         .set("Authorization", `Bearer ${token}`)
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

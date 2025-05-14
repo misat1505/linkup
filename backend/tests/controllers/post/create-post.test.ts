@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { PostControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import { handleMarkdownUpdate } from "../../../src/utils/updatePost";
@@ -24,7 +25,7 @@ describe("createPost", () => {
 
     await PostControllers.createPost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
     expect(mockPostService.createPost).toHaveBeenCalledWith({
       content: postContent,
       authorId: "user-id",

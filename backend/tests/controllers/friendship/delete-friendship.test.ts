@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { FriendshipControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import {
@@ -24,7 +25,7 @@ describe("deleteFriendship", () => {
 
     await FriendshipControllers.deleteFriendship(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
   });
 
   it("fails for non-participant user", async () => {
@@ -43,7 +44,7 @@ describe("deleteFriendship", () => {
 
     await FriendshipControllers.deleteFriendship(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
   });
 
   it("fails for non-existent friendship", async () => {
@@ -62,6 +63,6 @@ describe("deleteFriendship", () => {
 
     await FriendshipControllers.deleteFriendship(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
   });
 });

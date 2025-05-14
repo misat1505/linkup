@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { Chat, UserInChat } from "../../../src/types/Chat";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
@@ -44,7 +45,7 @@ describe("[POST] /chats/:chatId/users", () => {
         .send({
           users: [userId, userId],
         })
-        .expect(201);
+        .expect(StatusCodes.CREATED);
 
       const chatId = response.body.chat.id;
 
@@ -52,7 +53,7 @@ describe("[POST] /chats/:chatId/users", () => {
         .post(`/chats/${chatId}/users`)
         .set("Authorization", `Bearer ${token}`)
         .send({ userId: seed.users[1].id })
-        .expect(401);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 
@@ -65,7 +66,7 @@ describe("[POST] /chats/:chatId/users", () => {
         .post(`/chats/${chatId}/users`)
         .set("Authorization", `Bearer ${token}`)
         .send({ userId: uuidv4() })
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 
@@ -79,7 +80,7 @@ describe("[POST] /chats/:chatId/users", () => {
         .post(`/chats/${chatId}/users`)
         .set("Authorization", `Bearer ${token}`)
         .send({ userId })
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 });

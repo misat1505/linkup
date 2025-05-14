@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { User } from "../../../src/types/User";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
@@ -11,7 +12,7 @@ describe("[GET] /search", () => {
       const response = await request(app)
         .get("/users/search?term=Kylian")
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       expect(response.body.users.length).toBe(1);
       response.body.users.forEach((user: any) => {
@@ -27,7 +28,7 @@ describe("[GET] /search", () => {
       await request(app)
         .get("/users/search")
         .set("Authorization", `Bearer ${token}`)
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

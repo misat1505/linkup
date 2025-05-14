@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { AuthControllers } from "../../../src/controllers";
 import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 
@@ -19,7 +20,7 @@ describe("signupUser", () => {
 
     await AuthControllers.signup(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
     expect(res.cookie).toHaveBeenCalled();
   });
 
@@ -40,7 +41,7 @@ describe("signupUser", () => {
 
     await AuthControllers.signup(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(409);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
     expect(res.cookie).not.toHaveBeenCalled();
   });
 });

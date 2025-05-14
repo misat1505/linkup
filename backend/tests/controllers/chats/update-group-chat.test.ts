@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import { processAvatar } from "../../../src/utils/processAvatar";
@@ -30,7 +31,7 @@ describe("updateGroupChat", () => {
 
     await ChatControllers.updateGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       chatId: "123",
       userId: "789",
@@ -43,7 +44,7 @@ describe("updateGroupChat", () => {
     });
   });
 
-  it("returns 401 for unauthorized user", async () => {
+  it("returns 403 for unauthorized user", async () => {
     mockChatService.isUserInChat.mockResolvedValue(false);
 
     const req = mockRequest({
@@ -54,7 +55,7 @@ describe("updateGroupChat", () => {
 
     await ChatControllers.updateGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       chatId: "123",
       userId: "789",
@@ -78,7 +79,7 @@ describe("updateGroupChat", () => {
 
     await ChatControllers.updateGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       chatId: "123",
       userId: "789",

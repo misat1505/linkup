@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { Post } from "../../../src/types/Post";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
@@ -11,7 +12,7 @@ describe("[GET] /posts/mine", () => {
       const res = await request(app)
         .get("/posts/mine")
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       expect(Array.isArray(res.body.posts)).toBeTruthy();
       Post.strict().parse(res.body.posts[0]);

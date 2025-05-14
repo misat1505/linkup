@@ -46,8 +46,8 @@ import { StatusCodes } from "http-status-codes";
  *                   $ref: '#/components/schemas/Chat'
  *       409:
  *         description: Chat already exists
- *       403:
- *         description: User not authorized to create private chat
+ *       400:
+ *         description: User not in chat
  *       500:
  *         description: Server error when creating private chat
  */
@@ -62,7 +62,7 @@ export const createPrivateChatController = async (
     const chatService = req.app.services.chatService;
 
     if (!users.includes(userId))
-      return res.status(StatusCodes.FORBIDDEN).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t(
           "chats.controllers.create-private-chat.not-belonging-to-you"
         ),

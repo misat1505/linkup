@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { User } from "../../../src/types/User";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
@@ -11,7 +12,7 @@ describe("[GET] /auth/user", () => {
       const res = await request(app)
         .get("/auth/user")
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       User.strict().parse(res.body.user);
     });

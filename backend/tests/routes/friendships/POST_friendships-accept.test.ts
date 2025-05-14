@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { Friendship } from "../../../src/types/Friendship";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
@@ -46,7 +47,7 @@ describe("[GET] /friendships/accept", () => {
       await request(app)
         .post("/friendships/accept")
         .set("Authorization", `Bearer ${token}`)
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

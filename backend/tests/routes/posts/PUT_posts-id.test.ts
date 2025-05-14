@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { Post } from "../../../src/types/Post";
 import { TestHelpers } from "../../utils/helpers";
 import { mockFileStorage } from "../../utils/mocks";
@@ -17,7 +18,7 @@ describe("[PUT] /posts/:id", () => {
         .send({
           content: "This is the updated content of the post.",
         })
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       Post.strict().parse(res.body.post);
       expect(res.body.post.content).toBe(
@@ -38,7 +39,7 @@ describe("[PUT] /posts/:id", () => {
         .send({
           content: "This is the updated content of the post.",
         })
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 });

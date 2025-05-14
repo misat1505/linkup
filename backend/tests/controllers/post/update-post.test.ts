@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { PostControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import { handleMarkdownUpdate } from "../../../src/utils/updatePost";
@@ -33,7 +34,7 @@ describe("updatePost", () => {
 
     await PostControllers.updatePost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(mockPostService.getPost).toHaveBeenCalledWith("post-id");
     expect(mockPostService.updatePost).toHaveBeenCalledWith({
       id: "post-id",
@@ -57,10 +58,10 @@ describe("updatePost", () => {
 
     await PostControllers.updatePost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
   });
 
-  it("returns 401 for unauthorized user", async () => {
+  it("returns 403 for unauthorized user", async () => {
     const post = {
       id: "post-id",
       content: "Post content.",
@@ -81,7 +82,7 @@ describe("updatePost", () => {
 
     await PostControllers.updatePost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
   });
 
   it("passes errors to error middleware", async () => {

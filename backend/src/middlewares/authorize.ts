@@ -88,19 +88,23 @@ export const authorizeWithRefreshToken = async (
   const token = req.cookies[refreshTokenCookieName];
 
   if (!token) {
-    return res.status(400).json({ message: "Invalid request - no token" });
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: "Invalid request - no token" });
   }
 
   const tokenPayload = TokenProcessor.decode(token, env.REFRESH_TOKEN_SECRET);
   if (!tokenPayload) {
-    return res.status(401).json({ message: "Invalid token" });
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: "Invalid token" });
   }
 
   const user = await userService.getUser(tokenPayload.userId);
 
   if (!user) {
     return res
-      .status(404)
+      .status(StatusCodes.UNAUTHORIZED)
       .json({ message: "Invalid request - user not found." });
   }
 

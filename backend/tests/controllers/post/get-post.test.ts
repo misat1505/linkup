@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { PostControllers } from "../../../src/controllers";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
@@ -17,7 +18,7 @@ describe("getPost", () => {
 
     await PostControllers.getPost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(mockPostService.getPost).toHaveBeenCalledWith(post.id);
   });
 
@@ -31,7 +32,7 @@ describe("getPost", () => {
 
     await PostControllers.getPost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
   });
 
   it("passes errors to error middleware", async () => {

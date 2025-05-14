@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { FileControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import {
@@ -30,7 +31,7 @@ describe("getCache", () => {
 
     await FileControllers.getCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
 
     expect(mockFileStorage.listFiles).toHaveBeenCalledTimes(1);
     expect(mockFileStorage.listFiles).toHaveBeenCalledWith(`cache/${"userId"}`);

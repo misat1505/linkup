@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
@@ -22,7 +23,7 @@ describe("createReaction", () => {
     const res = mockResponse();
     await ChatControllers.createReaction(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
   });
 
   it("blocks reaction for message outside chat", async () => {
@@ -42,7 +43,7 @@ describe("createReaction", () => {
     const res = mockResponse();
     await ChatControllers.createReaction(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
   });
 
   it("blocks reaction by non-chat member", async () => {
@@ -61,6 +62,6 @@ describe("createReaction", () => {
     const res = mockResponse();
     await ChatControllers.createReaction(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
   });
 });

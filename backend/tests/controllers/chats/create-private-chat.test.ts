@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "../../../src/controllers";
 import { UserWithCredentials } from "../../../src/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
@@ -19,7 +20,7 @@ describe("createPrivateChat", () => {
     const res = mockResponse();
     await ChatControllers.createPrivateChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
   });
 
   it("returns conflict for existing private chat", async () => {
@@ -37,7 +38,7 @@ describe("createPrivateChat", () => {
     const res = mockResponse();
     await ChatControllers.createPrivateChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(409);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
   });
 
   it("blocks private chat creation without user", async () => {
@@ -52,6 +53,6 @@ describe("createPrivateChat", () => {
     const res = mockResponse();
     await ChatControllers.createPrivateChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
   });
 });

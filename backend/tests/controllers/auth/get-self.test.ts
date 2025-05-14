@@ -1,6 +1,7 @@
 import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 import { AuthControllers } from "../../../src/controllers";
 import { seedProvider } from "../../utils/seedProvider";
+import { StatusCodes } from "http-status-codes";
 
 describe("getUser", () => {
   it("retrieves authenticated user by ID", async () => {
@@ -13,7 +14,7 @@ describe("getUser", () => {
 
       await AuthControllers.getSelf(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     });
   });
 
@@ -27,7 +28,7 @@ describe("getUser", () => {
 
       await AuthControllers.getSelf(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     });
   });
 });
