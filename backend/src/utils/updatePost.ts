@@ -1,6 +1,6 @@
-import { User } from "../types/User";
-import { Post } from "../types/Post";
-import { FileStorage } from "../lib/FileStorage";
+import { User } from "@/types/User";
+import { Post } from "@/types/Post";
+import { FileStorage } from "@/lib/FileStorage";
 
 /**
  * Handles updating a post's content with new file references.

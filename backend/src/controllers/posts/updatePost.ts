@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { handleMarkdownUpdate } from "../../utils/updatePost";
-import { UpdatePostDTO } from "../../validators/posts/posts.validators";
-import { PostId } from "../../validators/shared.validators";
+import { handleMarkdownUpdate } from "@/utils/updatePost";
+import { UpdatePostDTO } from "@/validators/posts/posts.validators";
+import { PostId } from "@/validators/shared.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

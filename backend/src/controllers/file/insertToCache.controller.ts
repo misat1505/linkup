@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { generateNewFilename } from "../../utils/generateNewFilename";
+import { generateNewFilename } from "@/utils/generateNewFilename";
 import { StatusCodes } from "http-status-codes";
 
 export const CACHE_CAPACITY = 10;

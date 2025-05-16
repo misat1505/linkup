@@ -1,6 +1,6 @@
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
-import { FileStorage } from "../lib/FileStorage";
+import { FileStorage } from "@/lib/FileStorage";
 
 /**
  * Processes an avatar image: resizes, converts to WebP, and uploads it.

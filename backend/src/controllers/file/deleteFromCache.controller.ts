@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Filename } from "../../validators/files/getFiles.validators";
+import { Filename } from "@/validators/files/getFiles.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

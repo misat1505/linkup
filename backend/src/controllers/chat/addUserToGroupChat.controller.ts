@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatId } from "../../validators/chats/messages.validators";
-import { UserId } from "../../validators/shared.validators";
+import { ChatId } from "@/validators/chats/messages.validators";
+import { UserId } from "@/validators/shared.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { TokenProcessor } from "../../lib/TokenProcessor";
+import { TokenProcessor } from "@/lib/TokenProcessor";
 import {
   accessTokenSignOptions,
   refreshTokenCookieName,
   refreshTokenCookieOptions,
   refreshTokenSignOptions,
-} from "../../config/jwt-cookie";
-import { env } from "../../config/env";
+} from "@/config/jwt-cookie";
+import { env } from "@/config/env";
 import { StatusCodes } from "http-status-codes";
 
 /**

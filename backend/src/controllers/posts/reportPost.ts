@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Prisma } from "@prisma/client";
-import { PostId } from "../../validators/shared.validators";
+import { PostId } from "@/validators/shared.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { reactions } from "../config/reactions";
-import { env } from "../config/env";
+import { reactions } from "@/config/reactions";
+import { env } from "@/config/env";
 import { resetDB } from "../../tests/utils/setup";
 import { Routers } from "./routers";
 import { StatusCodes } from "http-status-codes";

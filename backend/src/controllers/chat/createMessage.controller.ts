@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { generateNewFilename } from "../../utils/generateNewFilename";
+import { generateNewFilename } from "@/utils/generateNewFilename";
 import {
   ChatId,
   CreateMessageDTO,
-} from "../../validators/chats/messages.validators";
+} from "@/validators/chats/messages.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

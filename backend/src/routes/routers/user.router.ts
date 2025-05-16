@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { UserControllers } from "../../controllers";
-import { validate } from "../../middlewares/validate";
-import { SearchUserQuery } from "../../validators/users/users.validators";
+import { UserControllers } from "@/controllers";
+import { validate } from "@/middlewares/validate";
+import { SearchUserQuery } from "@/validators/users/users.validators";
 
 /**
  * User Routes Router.

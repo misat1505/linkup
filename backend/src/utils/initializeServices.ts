@@ -1,11 +1,11 @@
-import { FileStorage } from "../lib/FileStorage";
-import { ChatService } from "../services/ChatService";
-import { FileService } from "../services/FileService";
-import { FriendshipService } from "../services/FriendshipService";
-import { PostRecommendationService } from "../services/PostRecommendationService";
-import { PostService } from "../services/PostService";
-import { UserService } from "../services/UserService";
-import { PrismaClientOrTransaction } from "../types/Prisma";
+import { FileStorage } from "@/lib/FileStorage";
+import { ChatService } from "@/services/ChatService";
+import { FileService } from "@/services/FileService";
+import { FriendshipService } from "@/services/FriendshipService";
+import { PostRecommendationService } from "@/services/PostRecommendationService";
+import { PostService } from "@/services/PostService";
+import { UserService } from "@/services/UserService";
+import { PrismaClientOrTransaction } from "@/types/Prisma";
 
 export type AppServices = {
   chatService: ChatService;

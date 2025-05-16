@@ -1,5 +1,5 @@
+import { refreshTokenCookieName } from "@/config/jwt-cookie";
 import { NextFunction, Request, Response } from "express";
-import { refreshTokenCookieName } from "../../config/jwt-cookie";
 import { StatusCodes } from "http-status-codes";
 
 /**

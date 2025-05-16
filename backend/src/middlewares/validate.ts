@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import {
   RequestValidatedValues,
   RequestValidation,
-} from "../types/RequestValidation";
+} from "@/types/RequestValidation";
 import { ZodError } from "zod";
 import { StatusCodes } from "http-status-codes";
 

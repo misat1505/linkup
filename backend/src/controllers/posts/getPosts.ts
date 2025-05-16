@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Post } from "../../types/Post";
-import { GetPostsQuery } from "../../validators/posts/posts.validators";
+import { GetPostsQuery } from "@/validators/posts/posts.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

@@ -1,15 +1,15 @@
-import { NextFunction, Request, Response } from "express";
-import { Hasher } from "../../lib/Hasher";
-import { TokenProcessor } from "../../lib/TokenProcessor";
+import { env } from "@/config/env";
 import {
   accessTokenSignOptions,
   refreshTokenCookieName,
   refreshTokenCookieOptions,
   refreshTokenSignOptions,
-} from "../../config/jwt-cookie";
-import { env } from "../../config/env";
-import { User } from "../../types/User";
-import { LoginDTO } from "../../validators/auth/login.validators";
+} from "@/config/jwt-cookie";
+import { Hasher } from "@/lib/Hasher";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { User } from "@/types/User";
+import { LoginDTO } from "@/validators/auth/login.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**

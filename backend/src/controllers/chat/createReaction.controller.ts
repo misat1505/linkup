@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import {
   ChatId,
   CreateReactionDTO,
-} from "../../validators/chats/messages.validators";
+} from "@/validators/chats/messages.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

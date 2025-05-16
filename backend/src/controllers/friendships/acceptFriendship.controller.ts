@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AcceptFriendshipDTO } from "../../validators/friendships/friendships.validators";
+import { AcceptFriendshipDTO } from "@/validators/friendships/friendships.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

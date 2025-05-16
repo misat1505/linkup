@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { PostId } from "../../validators/shared.validators";
+import { PostId } from "@/validators/shared.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

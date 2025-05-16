@@ -1,18 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { processAvatar } from "../../utils/processAvatar";
-import { Hasher } from "../../lib/Hasher";
-import { User, UserWithCredentials } from "../../types/User";
-import { TokenProcessor } from "../../lib/TokenProcessor";
+import { processAvatar } from "@/utils/processAvatar";
+import { Hasher } from "@/lib/Hasher";
+import { User, UserWithCredentials } from "@/types/User";
+import { TokenProcessor } from "@/lib/TokenProcessor";
 import {
   accessTokenSignOptions,
   refreshTokenCookieName,
   refreshTokenCookieOptions,
   refreshTokenSignOptions,
-} from "../../config/jwt-cookie";
+} from "@/config/jwt-cookie";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
-import { env } from "../../config/env";
-import { SignupDTO } from "../../validators/auth/signup.validators";
+import { env } from "@/config/env";
+import { SignupDTO } from "@/validators/auth/signup.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

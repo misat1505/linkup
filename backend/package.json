@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx prisma db push && cross-env NODE_ENV=production ts-node src/app.ts",
+    "start": "npx prisma db push && cross-env NODE_ENV=production ts-node -r tsconfig-paths/register src/app.ts",
     "dev": "npx prisma db push && cross-env NODE_ENV=development nodemon src/app.ts",
     "e2e": "npx prisma db push && cross-env NODE_ENV=e2e nodemon src/app.ts",
     "test": "npx jest --runInBand --forceExit",

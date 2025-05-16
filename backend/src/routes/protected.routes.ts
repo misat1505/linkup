@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { authorize } from "../middlewares/authorize";
-import { updateLastActive } from "../middlewares/updateLastActive";
+import { authorize } from "@/middlewares/authorize";
+import { updateLastActive } from "@/middlewares/updateLastActive";
 import { Routers } from "./routers";
 
 /**

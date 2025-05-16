@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  Filename,
-  FileQuery,
-} from "../../validators/files/getFiles.validators";
+import { Filename, FileQuery } from "@/validators/files/getFiles.validators";
 import { StatusCodes } from "http-status-codes";
 
 const sendFileBuilder =

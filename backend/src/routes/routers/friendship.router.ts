@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { FriendshipControllers } from "../../controllers";
-import { validate } from "../../middlewares/validate";
+import { FriendshipControllers } from "@/controllers";
+import { validate } from "@/middlewares/validate";
 import {
   AcceptFriendshipDTO,
   CreateFriendshipDTO,
   DeleteFriendshipDTO,
-} from "../../validators/friendships/friendships.validators";
+} from "@/validators/friendships/friendships.validators";
 
 /**
  * Friendship Routes Router.

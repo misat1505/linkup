@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { CreatePrivateChatDTO } from "../../validators/chats/chats.validatotors";
+import { CreatePrivateChatDTO } from "@/validators/chats/chats.validatotors";
 import { StatusCodes } from "http-status-codes";
 
 /**

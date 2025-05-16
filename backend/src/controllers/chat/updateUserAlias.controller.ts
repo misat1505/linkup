@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { UpdateAliasDTO } from "../../validators/chats/chats.validatotors";
-import { ChatId } from "../../validators/chats/messages.validators";
-import { UserId } from "../../validators/shared.validators";
+import { UpdateAliasDTO } from "@/validators/chats/chats.validatotors";
+import { ChatId } from "@/validators/chats/messages.validators";
+import { UserId } from "@/validators/shared.validators";
 import { z } from "zod";
 import { StatusCodes } from "http-status-codes";
 

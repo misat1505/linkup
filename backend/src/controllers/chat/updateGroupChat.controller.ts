@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { processAvatar } from "../../utils/processAvatar";
+import { processAvatar } from "@/utils/processAvatar";
 import { v4 as uuidv4 } from "uuid";
-import { UpdateGroupChatDTO } from "../../validators/chats/chats.validatotors";
-import { ChatId } from "../../validators/chats/messages.validators";
+import { UpdateGroupChatDTO } from "@/validators/chats/chats.validatotors";
+import { ChatId } from "@/validators/chats/messages.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

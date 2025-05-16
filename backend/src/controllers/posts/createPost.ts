@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { handleMarkdownUpdate } from "../../utils/updatePost";
-import { CreatePostDTO } from "../../validators/posts/posts.validators";
+import { handleMarkdownUpdate } from "@/utils/updatePost";
+import { CreatePostDTO } from "@/validators/posts/posts.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**

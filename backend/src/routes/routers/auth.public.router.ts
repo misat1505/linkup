@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { upload } from "../../middlewares/multer";
-import { authorizeWithRefreshToken } from "../../middlewares/authorize";
-import { AuthControllers } from "../../controllers";
-import { LoginDTO } from "../../validators/auth/login.validators";
-import { SignupDTO } from "../../validators/auth/signup.validators";
-import { validate } from "../../middlewares/validate";
+import { upload } from "@/middlewares/multer";
+import { authorizeWithRefreshToken } from "@/middlewares/authorize";
+import { AuthControllers } from "@/controllers";
+import { LoginDTO } from "@/validators/auth/login.validators";
+import { SignupDTO } from "@/validators/auth/signup.validators";
+import { validate } from "@/middlewares/validate";
 
 /**
  * Public Authentication Routes Router.
