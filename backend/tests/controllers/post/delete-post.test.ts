@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { PostControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
+import { PostControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("deletePost", () => {

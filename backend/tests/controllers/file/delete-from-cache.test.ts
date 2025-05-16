@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { FileControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
+import { FileControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
 import {
   mockFileService,
   mockFileStorage,

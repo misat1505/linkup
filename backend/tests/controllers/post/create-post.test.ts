@@ -1,10 +1,10 @@
 import { StatusCodes } from "http-status-codes";
-import { PostControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
-import { handleMarkdownUpdate } from "../../../src/utils/updatePost";
+import { PostControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
+import { handleMarkdownUpdate } from "@/utils/updatePost";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
-jest.mock("../../../src/utils/updatePost");
+jest.mock("@/utils/updatePost");
 
 describe("createPost", () => {
   (handleMarkdownUpdate as jest.Mock).mockImplementation((a, b, c, d) => b);

@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { Post } from "../../../src/types/Post";
+import { Post } from "@/types/Post";
 import { TestHelpers } from "../../utils/helpers";
 import { mockFileStorage } from "../../utils/mocks";
 import { testWithTransaction } from "../../utils/testWithTransaction";

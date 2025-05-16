@@ -1,10 +1,10 @@
 import { StatusCodes } from "http-status-codes";
-import { AuthControllers } from "../../../src/controllers";
-import { TokenProcessor } from "../../../src/lib/TokenProcessor";
-import { mockRequest, mockResponse } from "../../utils/mocks";
-import { seedProvider } from "../../utils/seedProvider";
+import { AuthControllers } from "@/controllers";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { mockRequest, mockResponse } from "@tests/utils/mocks";
+import { seedProvider } from "@tests/utils/seedProvider";
 
-jest.mock("../../../src/lib/TokenProcessor");
+jest.mock("@/lib/TokenProcessor");
 
 describe("refreshToken", () => {
   it("refreshes authentication token", async () => {

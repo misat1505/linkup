@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { PostControllers } from "../../../src/controllers";
+import { PostControllers } from "@/controllers";
 import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("getPost", () => {

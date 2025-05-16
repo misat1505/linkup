@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { Message } from "../../../src/types/Message";
-import { Reaction } from "../../../src/types/Reaction";
+import { Message } from "@/types/Message";
+import { Reaction } from "@/types/Reaction";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";

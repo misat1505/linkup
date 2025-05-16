@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
-import { FileControllers } from "../../../src/controllers";
-import { CACHE_CAPACITY } from "../../../src/controllers/file/insertToCache.controller";
-import { UserWithCredentials } from "../../../src/types/User";
+import { FileControllers } from "@/controllers";
+import { CACHE_CAPACITY } from "@/controllers/file/insertToCache.controller";
+import { UserWithCredentials } from "@/types/User";
 import {
   mockFileService,
   mockFileStorage,

@@ -1,9 +1,8 @@
 import { StatusCodes } from "http-status-codes";
-import { Chat } from "../../../src/types/Chat";
+import { Chat } from "@/types/Chat";
 import { TEST_FILENAME_PATH } from "../../utils/constants";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
-import path from "path";
 import request from "supertest";
 
 describe("[POST] /chats/group", () => {

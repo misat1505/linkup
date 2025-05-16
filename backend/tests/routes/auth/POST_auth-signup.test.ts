@@ -1,4 +1,4 @@
-import { User } from "../../../src/types/User";
+import { User } from "@/types/User";
 import { mockFileStorage } from "../../utils/mocks";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";

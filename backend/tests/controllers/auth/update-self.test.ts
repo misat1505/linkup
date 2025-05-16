@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
-import { AuthControllers } from "../../../src/controllers";
-import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
-import { seedProvider } from "../../utils/seedProvider";
+import { AuthControllers } from "@/controllers";
+import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
+import { seedProvider } from "@tests/utils/seedProvider";
 
 describe("updateUser", () => {
   it("updates authenticated user profile", async () => {

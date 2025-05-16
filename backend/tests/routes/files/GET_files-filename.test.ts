@@ -1,16 +1,16 @@
 import { Application } from "express";
-import { User } from "../../../src/types/User";
+import { User } from "@/types/User";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import { TestHelpers } from "../../utils/helpers";
 import request from "supertest";
-import { TokenProcessor } from "../../../src/lib/TokenProcessor";
-import { env } from "../../../src/config/env";
-import { Message } from "../../../src/types/Message";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { env } from "@/config/env";
+import { Message } from "@/types/Message";
 import { v4 as uuidv4 } from "uuid";
 import { TEST_FILENAME_PATH } from "../../utils/constants";
 import { StatusCodes } from "http-status-codes";
 
-jest.mock("../../../src/lib/FileStorage");
+jest.mock("@/lib/FileStorage");
 
 async function createNewUser(app: Application) {
   const login = "valid_login";

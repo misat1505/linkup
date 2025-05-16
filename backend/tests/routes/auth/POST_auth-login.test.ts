@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { User } from "../../../src/types/User";
+import { User } from "@/types/User";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
 

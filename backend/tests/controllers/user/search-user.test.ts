@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { UserControllers } from "../../../src/controllers";
+import { UserControllers } from "@/controllers";
 import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
 import { seedProvider } from "../../utils/seedProvider";
 

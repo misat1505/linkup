@@ -2,7 +2,7 @@ import { TestHelpers } from "../../utils/helpers";
 import { mockFileStorage } from "../../utils/mocks";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";
-import { User } from "../../../src/types/User";
+import { User } from "@/types/User";
 import { TEST_FILENAME_PATH } from "../../utils/constants";
 import { StatusCodes } from "http-status-codes";
 

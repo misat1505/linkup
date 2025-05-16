@@ -1,4 +1,4 @@
-import { Friendship } from "../../../src/types/Friendship";
+import { Friendship } from "@/types/Friendship";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";

@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { env } from "../../../src/config/env";
-import { refreshTokenCookieName } from "../../../src/config/jwt-cookie";
+import { env } from "@/config/env";
+import { refreshTokenCookieName } from "@/config/jwt-cookie";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";

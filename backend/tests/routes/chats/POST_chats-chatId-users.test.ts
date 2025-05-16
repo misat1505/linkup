@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { Chat, UserInChat } from "../../../src/types/Chat";
+import { Chat, UserInChat } from "@/types/Chat";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";

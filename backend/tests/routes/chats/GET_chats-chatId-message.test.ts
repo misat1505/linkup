@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { Message } from "../../../src/types/Message";
+import { Message } from "@/types/Message";
 import { TestHelpers } from "../../utils/helpers";
 import { testWithTransaction } from "../../utils/testWithTransaction";
 import request from "supertest";

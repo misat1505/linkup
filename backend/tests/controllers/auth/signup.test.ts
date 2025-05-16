@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { AuthControllers } from "../../../src/controllers";
-import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
+import { AuthControllers } from "@/controllers";
+import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 
 describe("signupUser", () => {
   it("signs up new user successfully", async () => {

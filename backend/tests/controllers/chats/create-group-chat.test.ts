@@ -1,10 +1,10 @@
 import { StatusCodes } from "http-status-codes";
-import { ChatControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
-import { processAvatar } from "../../../src/utils/processAvatar";
+import { ChatControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
+import { processAvatar } from "@/utils/processAvatar";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
-jest.mock("../../../src/utils/processAvatar");
+jest.mock("@/utils/processAvatar");
 
 describe("createGroupChat", () => {
   it("creates group chat with user included", async () => {

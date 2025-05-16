@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { ChatControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
+import { ChatControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
 import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
 
 describe("updateAlias", () => {

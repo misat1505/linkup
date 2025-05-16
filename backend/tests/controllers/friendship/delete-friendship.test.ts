@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { FriendshipControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
+import { FriendshipControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
 import {
   mockFriendshipService,
   mockRequest,

@@ -1,6 +1,6 @@
-import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
-import { AuthControllers } from "../../../src/controllers";
-import { seedProvider } from "../../utils/seedProvider";
+import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
+import { AuthControllers } from "@/controllers";
+import { seedProvider } from "@tests/utils/seedProvider";
 import { StatusCodes } from "http-status-codes";
 
 describe("getUser", () => {

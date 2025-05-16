@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
-import { UserWithCredentials } from "../../../src/types/User";
-import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
-import { AuthControllers } from "../../../src/controllers";
+import { UserWithCredentials } from "@/types/User";
+import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
+import { AuthControllers } from "@/controllers";
 import { StatusCodes } from "http-status-codes";
 
 describe("loginUser", () => {
