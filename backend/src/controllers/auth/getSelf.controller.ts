@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { UserService } from "../../services/UserService";
-import { User } from "../../types/User";
+import { User } from "@/types/User";
 import { StatusCodes } from "http-status-codes";
 
 /**
