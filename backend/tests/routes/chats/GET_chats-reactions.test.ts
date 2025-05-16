@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /chats/reactions", () => {

@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/User";
-import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
+import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 
 describe("getSelfChats", () => {
   it("retrieves user’s chats", async () => {

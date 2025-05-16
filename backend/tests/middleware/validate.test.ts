@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { validate } from "../../src/middlewares/validate";
+import { validate } from "@/middlewares/validate";
 import { mockRequest, mockResponse } from "../utils/mocks";
 import { z } from "zod";
 

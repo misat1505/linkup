@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { UserControllers } from "@/controllers";
-import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
-import { seedProvider } from "../../utils/seedProvider";
+import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
+import { seedProvider } from "@tests/utils/seedProvider";
 
 describe("searchUser", () => {
   it("retrieves users matching search criteria", async () => {

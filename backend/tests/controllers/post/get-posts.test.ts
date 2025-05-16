@@ -5,7 +5,7 @@ import {
   mockPostRecommendationService,
   mockRequest,
   mockResponse,
-} from "../../utils/mocks";
+} from "@tests/utils/mocks";
 
 describe("getPosts", () => {
   beforeEach(() => {

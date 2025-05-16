@@ -5,7 +5,7 @@ import {
   mockFriendshipService,
   mockRequest,
   mockResponse,
-} from "../../utils/mocks";
+} from "@tests/utils/mocks";
 import { mockFriendship } from "./setup";
 
 describe("acceptFriendship", () => {

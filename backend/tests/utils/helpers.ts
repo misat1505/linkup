@@ -1,6 +1,6 @@
-import { env } from "../../src/config/env";
-import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import { User } from "../../src/types/User";
+import { env } from "@/config/env";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { User } from "@/types/User";
 
 export namespace TestHelpers {
   export const createToken = (

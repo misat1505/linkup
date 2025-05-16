@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { PostControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/User";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
-import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
+import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 
 jest.mock("@/utils/updatePost");
 

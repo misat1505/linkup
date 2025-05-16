@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { PostService } from "../../src/services/PostService";
+import { PostService } from "@/services/PostService";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { v4 as uuidv4 } from "uuid";
-import { Post } from "../../src/types/Post";
+import { Post } from "@/types/Post";
 
 describe("PostService", () => {
   describe("createPost", () => {

@@ -6,7 +6,7 @@ import {
   mockFileStorage,
   mockRequest,
   mockResponse,
-} from "../../utils/mocks";
+} from "@tests/utils/mocks";
 
 describe("deleteFromCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);

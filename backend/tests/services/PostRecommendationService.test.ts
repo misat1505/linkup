@@ -1,12 +1,12 @@
-import { PostRecommendationService } from "../../src/services/PostRecommendationService";
-import { Post } from "../../src/types/Post";
-import { User } from "../../src/types/User";
+import { PostRecommendationService } from "@/services/PostRecommendationService";
+import { Post } from "@/types/Post";
+import { User } from "@/types/User";
 import { testWithTransaction } from "../utils/testWithTransaction";
 import { mockFriendshipService, mockPostService } from "../utils/mocks";
-import { PrismaClientOrTransaction } from "../../src/types/Prisma";
+import { PrismaClientOrTransaction } from "@/types/Prisma";
 import { v4 as uuidv4 } from "uuid";
 
-jest.mock("../../src/services/PostService");
+jest.mock("@/services/PostService");
 
 const USER: User = {
   id: uuidv4(),

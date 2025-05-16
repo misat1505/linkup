@@ -1,9 +1,9 @@
-import { TestHelpers } from "../../utils/helpers";
-import { mockFileStorage } from "../../utils/mocks";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { TestHelpers } from "@tests/utils/helpers";
+import { mockFileStorage } from "@tests/utils/mocks";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 import { User } from "@/types/User";
-import { TEST_FILENAME_PATH } from "../../utils/constants";
+import { TEST_FILENAME_PATH } from "@tests/utils/constants";
 import { StatusCodes } from "http-status-codes";
 
 describe("[PUT] /auth/user", () => {

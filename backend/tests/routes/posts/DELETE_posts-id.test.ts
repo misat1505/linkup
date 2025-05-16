@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[DELETE] /posts/:id", () => {

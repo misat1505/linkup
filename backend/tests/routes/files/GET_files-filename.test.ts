@@ -1,13 +1,13 @@
 import { Application } from "express";
 import { User } from "@/types/User";
-import { testWithTransaction } from "../../utils/testWithTransaction";
-import { TestHelpers } from "../../utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
+import { TestHelpers } from "@tests/utils/helpers";
 import request from "supertest";
 import { TokenProcessor } from "@/lib/TokenProcessor";
 import { env } from "@/config/env";
 import { Message } from "@/types/Message";
 import { v4 as uuidv4 } from "uuid";
-import { TEST_FILENAME_PATH } from "../../utils/constants";
+import { TEST_FILENAME_PATH } from "@tests/utils/constants";
 import { StatusCodes } from "http-status-codes";
 
 jest.mock("@/lib/FileStorage");

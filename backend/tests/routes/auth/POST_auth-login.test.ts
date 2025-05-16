@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { User } from "@/types/User";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[POST] /auth/login", () => {

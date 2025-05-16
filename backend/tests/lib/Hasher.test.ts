@@ -1,4 +1,4 @@
-import { Hasher } from "../../src/lib/Hasher";
+import { Hasher } from "@/lib/Hasher";
 
 describe("Hasher", () => {
   it("hashes string correctly", () => {

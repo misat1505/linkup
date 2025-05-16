@@ -1,6 +1,6 @@
-import { authorize } from "../../src/middlewares/authorize";
-import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import { env } from "../../src/config/env";
+import { authorize } from "@/middlewares/authorize";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { env } from "@/config/env";
 import { seedProvider } from "../utils/seedProvider";
 import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
 import { StatusCodes } from "http-status-codes";

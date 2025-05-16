@@ -6,7 +6,7 @@ import {
   mockFileStorage,
   mockRequest,
   mockResponse,
-} from "../../utils/mocks";
+} from "@tests/utils/mocks";
 
 describe("getFile", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);

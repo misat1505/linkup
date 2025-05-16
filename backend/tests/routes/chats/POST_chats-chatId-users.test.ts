@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { Chat, UserInChat } from "@/types/Chat";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 import { v4 as uuidv4 } from "uuid";
 

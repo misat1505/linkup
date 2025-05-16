@@ -7,7 +7,7 @@ import {
   mockFileStorage,
   mockRequest,
   mockResponse,
-} from "../../utils/mocks";
+} from "@tests/utils/mocks";
 
 describe("insertToCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);

@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/User";
 import { processAvatar } from "@/utils/processAvatar";
-import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
+import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 
 jest.mock("@/utils/processAvatar");
 

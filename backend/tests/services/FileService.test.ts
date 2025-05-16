@@ -1,4 +1,4 @@
-import { FileService } from "../../src/services/FileService";
+import { FileService } from "@/services/FileService";
 import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("FileSevice", () => {

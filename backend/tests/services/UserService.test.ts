@@ -1,5 +1,5 @@
-import { User, UserWithCredentials } from "../../src/types/User";
-import { UserService } from "../../src/services/UserService";
+import { User, UserWithCredentials } from "@/types/User";
+import { UserService } from "@/services/UserService";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import { testWithTransaction } from "../utils/testWithTransaction";

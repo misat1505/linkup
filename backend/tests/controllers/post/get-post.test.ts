@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { PostControllers } from "@/controllers";
-import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
+import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 
 describe("getPost", () => {
   it("retrieves post by ID successfully", async () => {

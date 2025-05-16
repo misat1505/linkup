@@ -1,9 +1,9 @@
 import { Application } from "express";
 import { initializeTestCase } from "./setupTests";
 import { TestSeed } from "./seed";
-import { PrismaClientOrTransaction } from "../../src/types/Prisma";
-import app from "../../src/app";
-import { initializeServices } from "../../src/utils/initializeServices";
+import { PrismaClientOrTransaction } from "@/types/Prisma";
+import app from "@/app";
+import { initializeServices } from "@/utils/initializeServices";
 import { mockFileStorage } from "./mocks";
 
 type TransactionProvidedValues = {

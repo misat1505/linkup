@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { PostControllers } from "@/controllers";
-import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
+import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { UserWithCredentials } from "@/types/User";
 import { StatusCodes } from "http-status-codes";
 

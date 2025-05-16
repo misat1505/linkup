@@ -1,5 +1,5 @@
-import { FriendshipService } from "../../src/services/FriendshipService";
-import { Friendship } from "../../src/types/Friendship";
+import { FriendshipService } from "@/services/FriendshipService";
+import { Friendship } from "@/types/Friendship";
 import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("FriendshipService", () => {

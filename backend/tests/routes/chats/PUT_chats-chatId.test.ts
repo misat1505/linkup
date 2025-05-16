@@ -1,8 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import { Chat } from "@/types/Chat";
-import { TEST_FILENAME_PATH } from "../../utils/constants";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { TEST_FILENAME_PATH } from "@tests/utils/constants";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[PUT] /chats/:chatId", () => {

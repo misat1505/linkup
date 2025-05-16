@@ -1,4 +1,4 @@
-import { User, UserWithCredentials } from "../../src/types/User";
+import { User, UserWithCredentials } from "@/types/User";
 import path from "path";
 
 export const USER: UserWithCredentials = {
