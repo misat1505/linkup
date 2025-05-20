@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { PostControllers } from "../../controllers";
-import { validate } from "../../middlewares/validate";
-import { PostId } from "../../validators/shared.validators";
+import { PostControllers } from "@/controllers";
+import { validate } from "@/middlewares/validate";
+import { PostId } from "@/validators/shared.validators";
 import {
   CreatePostDTO,
   GetPostsQuery,
   UpdatePostDTO,
-} from "../../validators/posts/posts.validators";
+} from "@/validators/posts/posts.validators";
 
 /**
  * Post Routes Router.

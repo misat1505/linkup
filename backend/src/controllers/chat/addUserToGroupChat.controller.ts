@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { ChatId } from "../../validators/chats/messages.validators";
-import { UserId } from "../../validators/shared.validators";
+import { ChatId } from "@/validators/chats/messages.validators";
+import { UserId } from "@/validators/shared.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to add a user to a group chat.
@@ -49,7 +50,9 @@ import { UserId } from "../../validators/shared.validators";
  *               properties:
  *                 user:
  *                   $ref: '#/components/schemas/User'
- *       401:
+ *       400:
+ *         description: Cannot add people to chat of this type.
+ *       403:
  *         description: User not authorized to add to this chat
  *       409:
  *         description: User is already in this chat
@@ -74,28 +77,28 @@ export const addUserToGroupChatController = async (
     ]);
 
     if (chatType !== "GROUP")
-      return res.status(401).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t(
           "chats.controllers.add-user-to-group-chat.bad-chat-type"
         ),
       });
 
     if (!iAmInChat)
-      return res.status(401).json({
+      return res.status(StatusCodes.FORBIDDEN).json({
         message: req.t(
           "chats.controllers.add-user-to-group-chat.i-am-not-in-chat"
         ),
       });
 
     if (isOtherInChat)
-      return res.status(409).json({
+      return res.status(StatusCodes.CONFLICT).json({
         message: req.t(
           "chats.controllers.add-user-to-group-chat.user-already-in-chat"
         ),
       });
 
     const user = await chatService.addUserToChat({ chatId, userId });
-    return res.status(201).json({ user });
+    return res.status(StatusCodes.CREATED).json({ user });
   } catch (e) {
     next(new Error(req.t("chats.controllers.add-user-to-group-chat.failure")));
   }

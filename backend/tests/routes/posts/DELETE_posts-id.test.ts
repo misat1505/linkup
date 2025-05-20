@@ -1,5 +1,6 @@
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[DELETE] /posts/:id", () => {
@@ -11,7 +12,7 @@ describe("[DELETE] /posts/:id", () => {
       await request(app)
         .delete(`/posts/${postId}`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 
@@ -23,7 +24,7 @@ describe("[DELETE] /posts/:id", () => {
       await request(app)
         .delete(`/posts/${postId}`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 });

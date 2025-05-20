@@ -1,6 +1,6 @@
-import { Friendship } from "../../../src/types/Friendship";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { Friendship } from "@/types/Friendship";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /friendships", () => {

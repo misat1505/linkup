@@ -1,5 +1,5 @@
-import { PrismaClientOrTransaction } from "../types/Prisma";
-import { User } from "../types/User";
+import { PrismaClientOrTransaction } from "@/types/Prisma";
+import { User } from "@/types/User";
 
 /**
  * Service class responsible for managing file-related operations in the database using Prisma.

@@ -1,7 +1,7 @@
-import { Friendship } from "../types/Friendship";
-import { PrismaClientOrTransaction } from "../types/Prisma";
-import { User } from "../types/User";
-import { userSelect } from "../utils/prisma/userSelect";
+import { Friendship } from "@/types/Friendship";
+import { PrismaClientOrTransaction } from "@/types/Prisma";
+import { User } from "@/types/User";
+import { userSelect } from "@/utils/prisma/userSelect";
 
 /**
  * Service class responsible for managing friendship-related operations in the database using Prisma.

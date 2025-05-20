@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { processAvatar } from "../../utils/processAvatar";
-import { Hasher } from "../../lib/Hasher";
-import { User, UserWithCredentials } from "../../types/User";
+import { processAvatar } from "@/utils/processAvatar";
+import { Hasher } from "@/lib/Hasher";
+import { User, UserWithCredentials } from "@/types/User";
 import bcrypt from "bcryptjs";
-import { SignupDTO } from "../../validators/auth/signup.validators";
+import { SignupDTO } from "@/validators/auth/signup.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to update the user's details, including login, password, and avatar.
@@ -43,7 +44,7 @@ import { SignupDTO } from "../../validators/auth/signup.validators";
  *                 type: string
  *                 format: binary
  *     responses:
- *       201:
+ *       200:
  *         description: User updated successfully
  *         content:
  *           application/json:
@@ -78,7 +79,7 @@ export const updateSelfController = async (
       fetchedUser && fetchedUser.login === login && fetchedUser.id !== userId;
 
     if (isLoginTaken) {
-      return res.status(409).json({
+      return res.status(StatusCodes.CONFLICT).json({
         message: req.t("auth.controllers.update.login-already-exists"),
       });
     }
@@ -100,7 +101,7 @@ export const updateSelfController = async (
       await fileStorage.deleteFile(`avatars/${fetchedUser.photoURL}`);
     }
 
-    return res.status(201).json({ user: User.parse(user) });
+    return res.status(StatusCodes.OK).json({ user: User.parse(user) });
   } catch (e) {
     next(new Error(req.t("auth.controllers.update.failure")));
   }

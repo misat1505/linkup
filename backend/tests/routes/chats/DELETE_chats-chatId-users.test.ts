@@ -1,6 +1,7 @@
-import { Chat } from "../../../src/types/Chat";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { Chat } from "@/types/Chat";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[DELETE] /chats/:chatId/users", () => {
@@ -19,7 +20,7 @@ describe("[DELETE] /chats/:chatId/users", () => {
       await request(app)
         .delete(`/chats/${chatId}/users`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       const res3 = await request(app)
         .get("/chats")
@@ -37,7 +38,7 @@ describe("[DELETE] /chats/:chatId/users", () => {
       await request(app)
         .delete(`/chats/${chatId}/users`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(401);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 
@@ -49,7 +50,7 @@ describe("[DELETE] /chats/:chatId/users", () => {
       await request(app)
         .delete(`/chats/${chatId}/users`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(401);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

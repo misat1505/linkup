@@ -1,6 +1,7 @@
-import { Chat } from "../../../src/types/Chat";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { Chat } from "@/types/Chat";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 import { v4 as uuidv4 } from "uuid";
 
@@ -17,14 +18,14 @@ describe("[POST] /chats/private", () => {
         .send({
           users: [userId, userId],
         })
-        .expect(201);
+        .expect(StatusCodes.CREATED);
 
       Chat.strict().parse(res.body.chat);
 
       const res2 = await request(app)
         .get("/chats")
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       expect(res2.body.chats.length).toBe(initialChatsCount + 1);
       res2.body.chats.forEach((chat: unknown) => {
@@ -44,7 +45,7 @@ describe("[POST] /chats/private", () => {
         .send({
           users: [userId, seed.users[1].id],
         })
-        .expect(409);
+        .expect(StatusCodes.CONFLICT);
 
       await request(app)
         .post("/chats/private")
@@ -52,7 +53,7 @@ describe("[POST] /chats/private", () => {
         .send({
           users: [seed.users[1].id, userId],
         })
-        .expect(409);
+        .expect(StatusCodes.CONFLICT);
     });
   });
 
@@ -68,7 +69,7 @@ describe("[POST] /chats/private", () => {
         .send({
           users: [mockUserId, seed.users[1].id],
         })
-        .expect(401);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

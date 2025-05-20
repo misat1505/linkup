@@ -1,8 +1,8 @@
-import { Post } from "../types/Post";
-import { User } from "../types/User";
-import { userSelect } from "../utils/prisma/userSelect";
-import { postChatSelect } from "../utils/prisma/postChatSelect";
-import { PrismaClientOrTransaction } from "../types/Prisma";
+import { Post } from "@/types/Post";
+import { User } from "@/types/User";
+import { userSelect } from "@/utils/prisma/userSelect";
+import { postChatSelect } from "@/utils/prisma/postChatSelect";
+import { PrismaClientOrTransaction } from "@/types/Prisma";
 
 /**
  * Service class responsible for managing post-related operations in the database using Prisma.

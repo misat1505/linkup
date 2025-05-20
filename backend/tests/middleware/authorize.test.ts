@@ -1,8 +1,9 @@
-import { authorize } from "../../src/middlewares/authorize";
-import { TokenProcessor } from "../../src/lib/TokenProcessor";
-import { env } from "../../src/config/env";
+import { authorize } from "@/middlewares/authorize";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { env } from "@/config/env";
 import { seedProvider } from "../utils/seedProvider";
 import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
+import { StatusCodes } from "http-status-codes";
 
 describe("authorize middleware", () => {
   const mockNextFunction = jest.fn();
@@ -42,7 +43,7 @@ describe("authorize middleware", () => {
 
       await authorize(req, res, mockNextFunction);
 
-      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED);
     });
   });
 
@@ -57,7 +58,7 @@ describe("authorize middleware", () => {
 
       await authorize(req, res, mockNextFunction);
 
-      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED);
     });
   });
 
@@ -71,7 +72,7 @@ describe("authorize middleware", () => {
 
       await authorize(req, res, mockNextFunction);
 
-      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED);
     });
   });
 });

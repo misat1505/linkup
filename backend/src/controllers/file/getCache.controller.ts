@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to retrieve a list of files from the user's cache.
@@ -58,7 +59,7 @@ export const getCache = async (
       return splitted[splitted.length - 1];
     });
 
-    return res.status(200).json({ files: filenames });
+    return res.status(StatusCodes.OK).json({ files: filenames });
   } catch (e) {
     next(new Error(req.t("files.controllers.get-cache.failure")));
   }

@@ -1,5 +1,5 @@
-import { env } from "../../src/config/env";
-import { TokenProcessor, JwtPayload } from "../../src/lib/TokenProcessor";
+import { env } from "@/config/env";
+import { TokenProcessor, JwtPayload } from "@/lib/TokenProcessor";
 import { v4 as uuidv4 } from "uuid";
 
 describe("TokenProcessor", () => {

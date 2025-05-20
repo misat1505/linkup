@@ -1,6 +1,7 @@
-import { Friendship } from "../../../src/types/Friendship";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { Friendship } from "@/types/Friendship";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /friendships/accept", () => {
@@ -46,7 +47,7 @@ describe("[GET] /friendships/accept", () => {
       await request(app)
         .post("/friendships/accept")
         .set("Authorization", `Bearer ${token}`)
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { upload } from "../../middlewares/multer";
-import { validate } from "../../middlewares/validate";
-import { AuthControllers } from "../../controllers";
-import { SignupDTO } from "../../validators/auth/signup.validators";
+import { upload } from "@/middlewares/multer";
+import { validate } from "@/middlewares/validate";
+import { AuthControllers } from "@/controllers";
+import { SignupDTO } from "@/validators/auth/signup.validators";
 
 /**
  * Protected Authentication Routes Router.

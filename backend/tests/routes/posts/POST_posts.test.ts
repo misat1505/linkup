@@ -1,7 +1,8 @@
-import { Post } from "../../../src/types/Post";
-import { TestHelpers } from "../../utils/helpers";
-import { mockFileStorage } from "../../utils/mocks";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { Post } from "@/types/Post";
+import { TestHelpers } from "@tests/utils/helpers";
+import { mockFileStorage } from "@tests/utils/mocks";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[POST] /posts", () => {
@@ -16,7 +17,7 @@ describe("[POST] /posts", () => {
         .send({
           content: "This is a new post.",
         })
-        .expect(201);
+        .expect(StatusCodes.CREATED);
 
       Post.strict().parse(res.body.post);
       expect(res.body.post.content).toBe("This is a new post.");

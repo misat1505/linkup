@@ -1,9 +1,10 @@
-import { PostControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
-import { handleMarkdownUpdate } from "../../../src/utils/updatePost";
-import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { PostControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
+import { handleMarkdownUpdate } from "@/utils/updatePost";
+import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 
-jest.mock("../../../src/utils/updatePost");
+jest.mock("@/utils/updatePost");
 
 describe("createPost", () => {
   (handleMarkdownUpdate as jest.Mock).mockImplementation((a, b, c, d) => b);
@@ -24,7 +25,7 @@ describe("createPost", () => {
 
     await PostControllers.createPost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
     expect(mockPostService.createPost).toHaveBeenCalledWith({
       content: postContent,
       authorId: "user-id",

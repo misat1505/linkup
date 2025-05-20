@@ -1,6 +1,6 @@
-import { User, UserWithCredentials } from "../types/User";
-import { userSelect } from "../utils/prisma/userSelect";
-import { PrismaClientOrTransaction } from "../types/Prisma";
+import { User, UserWithCredentials } from "@/types/User";
+import { userSelect } from "@/utils/prisma/userSelect";
+import { PrismaClientOrTransaction } from "@/types/Prisma";
 
 /**
  * Service class responsible for managing user-related operations in the database using Prisma.

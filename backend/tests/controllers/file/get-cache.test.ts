@@ -1,11 +1,12 @@
-import { FileControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
+import { StatusCodes } from "http-status-codes";
+import { FileControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
 import {
   mockFileService,
   mockFileStorage,
   mockRequest,
   mockResponse,
-} from "../../utils/mocks";
+} from "@tests/utils/mocks";
 
 describe("getCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
@@ -30,7 +31,7 @@ describe("getCache", () => {
 
     await FileControllers.getCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
 
     expect(mockFileStorage.listFiles).toHaveBeenCalledTimes(1);
     expect(mockFileStorage.listFiles).toHaveBeenCalledWith(`cache/${"userId"}`);

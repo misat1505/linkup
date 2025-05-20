@@ -1,5 +1,5 @@
 import { Friendship } from "@/types/Friendship";
-import { AxiosError } from "axios";
+import { AxiosError, HttpStatusCode } from "axios";
 import { FRIENDS_API } from "./utils";
 import { User } from "@/types/User";
 
@@ -26,7 +26,7 @@ export class FriendService {
       return response.data.friendship;
     } catch (e) {
       if (e instanceof AxiosError) {
-        if (e.response?.status === 409) {
+        if (e.response?.status === HttpStatusCode.Conflict) {
           return null;
         }
       }

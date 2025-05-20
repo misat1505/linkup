@@ -7,6 +7,7 @@ import {
   FieldErrors,
   UseFormProps,
   UseFormRegister,
+  UseFormSetValue,
   useForm,
 } from "react-hook-form";
 
@@ -16,7 +17,7 @@ export type SignupFormEntries = {
   login: string;
   password: string;
   confirmPassword: string;
-  file?: FileList | undefined;
+  file: File | null;
 };
 
 export type useSubmitFormValue = {
@@ -29,6 +30,7 @@ export type useSubmitFormValue = {
   ) => Promise<void>;
   removeFile: () => void;
   data: SignupFormEntries;
+  setValue: UseFormSetValue<SignupFormEntries>;
 };
 
 export type useSignupFormProps = UseFormProps<SignupFormType> & {
@@ -54,10 +56,10 @@ export default function useSignupForm({
   const submitForm = handleSubmit(onSubmit);
 
   const data = watch();
-  const file = data.file?.[0] || null;
+  const file = data.file;
 
   const removeFile = () => {
-    setValue("file", undefined);
+    setValue("file", null);
   };
 
   return {
@@ -68,5 +70,6 @@ export default function useSignupForm({
     submitForm,
     removeFile,
     data,
+    setValue,
   };
 }

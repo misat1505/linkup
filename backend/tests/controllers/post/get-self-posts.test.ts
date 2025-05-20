@@ -1,6 +1,7 @@
-import { PostControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
-import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { PostControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
+import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 
 describe("getUserPosts", () => {
   it("retrieves user’s posts successfully", async () => {
@@ -12,7 +13,7 @@ describe("getUserPosts", () => {
 
     await PostControllers.getUserPosts(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(mockPostService.getUserPosts).toHaveBeenCalledWith("user-id");
   });
 

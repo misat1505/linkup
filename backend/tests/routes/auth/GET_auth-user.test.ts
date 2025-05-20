@@ -1,6 +1,7 @@
-import { User } from "../../../src/types/User";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { User } from "@/types/User";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /auth/user", () => {
@@ -11,7 +12,7 @@ describe("[GET] /auth/user", () => {
       const res = await request(app)
         .get("/auth/user")
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       User.strict().parse(res.body.user);
     });

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { CreateFriendshipDTO } from "../../validators/friendships/friendships.validators";
+import { CreateFriendshipDTO } from "@/validators/friendships/friendships.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to create a new friendship request between two users.
@@ -34,7 +35,7 @@ import { CreateFriendshipDTO } from "../../validators/friendships/friendships.va
  *                 description: ID of the user accepting the friendship request
  *                 example: "9a2e94ad-604c-46ea-b96c-44c490d1a91a"
  *     responses:
- *       200:
+ *       201:
  *         description: Friendship created successfully
  *         content:
  *           application/json:
@@ -98,7 +99,7 @@ export const createFriendship = async (
 
     if (userId !== requesterId)
       return res
-        .status(400)
+        .status(StatusCodes.BAD_REQUEST)
         .json({ message: req.t("friends.controllers.create.unauthorized") });
 
     const friendship = await friendshipService.createFriendship(
@@ -108,10 +109,10 @@ export const createFriendship = async (
 
     if (!friendship)
       return res
-        .status(409)
+        .status(StatusCodes.CONFLICT)
         .json({ message: req.t("friends.controllers.create.already-exists") });
 
-    return res.status(201).json({ friendship });
+    return res.status(StatusCodes.CREATED).json({ friendship });
   } catch (e) {
     next(new Error(req.t("friends.controllers.create.failure")));
   }

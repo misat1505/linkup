@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { handleMarkdownUpdate } from "../../utils/updatePost";
-import { UpdatePostDTO } from "../../validators/posts/posts.validators";
-import { PostId } from "../../validators/shared.validators";
+import { handleMarkdownUpdate } from "@/utils/updatePost";
+import { UpdatePostDTO } from "@/validators/posts/posts.validators";
+import { PostId } from "@/validators/shared.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to update an existing post by its ID.
@@ -51,7 +52,7 @@ import { PostId } from "../../validators/shared.validators";
  *               properties:
  *                 post:
  *                   $ref: '#/components/schemas/Post'
- *       401:
+ *       403:
  *         description: Unauthorized, user cannot edit this post
  *       404:
  *         description: Post not found
@@ -73,12 +74,12 @@ export const updatePost = async (
 
     if (!post)
       return res
-        .status(404)
+        .status(StatusCodes.NOT_FOUND)
         .json({ message: req.t("posts.controllers.update.not-found") });
 
     if (post.author.id !== userId)
       return res
-        .status(401)
+        .status(StatusCodes.FORBIDDEN)
         .json({ message: req.t("posts.controllers.update.unauthorized") });
 
     const updatedContent = await handleMarkdownUpdate(
@@ -93,7 +94,7 @@ export const updatePost = async (
       content: updatedContent,
     });
 
-    return res.status(200).json({ post: newPost });
+    return res.status(StatusCodes.OK).json({ post: newPost });
   } catch (e) {
     next(new Error(req.t("posts.controllers.update.failure")));
   }

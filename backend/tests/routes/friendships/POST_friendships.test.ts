@@ -1,6 +1,7 @@
-import { Friendship } from "../../../src/types/Friendship";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { Friendship } from "@/types/Friendship";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[POST] /friendships", () => {
@@ -14,7 +15,7 @@ describe("[POST] /friendships", () => {
           requesterId: seed.users[0].id,
           acceptorId: seed.users[1].id,
         })
-        .expect(201);
+        .expect(StatusCodes.CREATED);
 
       Friendship.strict().parse(res.body.friendship);
     });
@@ -30,7 +31,7 @@ describe("[POST] /friendships", () => {
           requesterId: seed.users[0].id,
           acceptorId: seed.users[1].id,
         })
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 
@@ -44,7 +45,7 @@ describe("[POST] /friendships", () => {
           requesterId: seed.users[0].id,
           acceptorId: seed.users[1].id,
         })
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

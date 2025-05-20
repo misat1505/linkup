@@ -1,5 +1,3 @@
-import { Chat } from "../../types/Chat";
-
 /**
  * Prisma select object for querying basic information about a chat.
  * This select object includes the chat's ID, creation date, and type.

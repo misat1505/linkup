@@ -1,5 +1,6 @@
-import { User } from "../../../src/types/User";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { User } from "@/types/User";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[POST] /auth/login", () => {
@@ -12,7 +13,7 @@ describe("[POST] /auth/login", () => {
           login: user.login,
           password: "pass2",
         })
-        .expect(200);
+        .expect(StatusCodes.OK);
       User.strict().parse(res.body.user);
       expect(res.headers["set-cookie"]).toBeDefined();
     });
@@ -27,7 +28,7 @@ describe("[POST] /auth/login", () => {
           login: user.login,
           password: "bad-password",
         })
-        .expect(401);
+        .expect(StatusCodes.UNAUTHORIZED);
     });
   });
 
@@ -39,7 +40,7 @@ describe("[POST] /auth/login", () => {
           login: "bad-login",
           password: "pass2",
         })
-        .expect(401);
+        .expect(StatusCodes.UNAUTHORIZED);
     });
   });
 
@@ -50,7 +51,7 @@ describe("[POST] /auth/login", () => {
         .send({
           login: "login",
         })
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

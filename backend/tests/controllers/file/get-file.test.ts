@@ -1,11 +1,12 @@
-import { FileControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
+import { StatusCodes } from "http-status-codes";
+import { FileControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
 import {
   mockFileService,
   mockFileStorage,
   mockRequest,
   mockResponse,
-} from "../../utils/mocks";
+} from "@tests/utils/mocks";
 
 describe("getFile", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
@@ -34,7 +35,7 @@ describe("getFile", () => {
 
       await FileControllers.getFile(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     });
 
     it("returns avatar URL for existing file", async () => {
@@ -51,7 +52,7 @@ describe("getFile", () => {
 
       await FileControllers.getFile(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({ url: expect.any(String) })
       );
@@ -73,7 +74,7 @@ describe("getFile", () => {
 
       await FileControllers.getFile(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({ url: expect.any(String) })
       );
@@ -93,7 +94,7 @@ describe("getFile", () => {
 
       await FileControllers.getFile(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({ url: expect.any(String) })
       );
@@ -115,7 +116,7 @@ describe("getFile", () => {
 
       await FileControllers.getFile(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({ url: expect.any(String) })
       );
@@ -135,7 +136,7 @@ describe("getFile", () => {
 
       await FileControllers.getFile(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     });
   });
 
@@ -154,7 +155,7 @@ describe("getFile", () => {
 
       await FileControllers.getFile(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({ url: expect.any(String) })
       );
@@ -174,7 +175,7 @@ describe("getFile", () => {
 
       await FileControllers.getFile(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
     });
   });
 });

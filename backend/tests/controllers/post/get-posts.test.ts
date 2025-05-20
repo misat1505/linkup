@@ -1,10 +1,11 @@
-import { PostControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
+import { StatusCodes } from "http-status-codes";
+import { PostControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
 import {
   mockPostRecommendationService,
   mockRequest,
   mockResponse,
-} from "../../utils/mocks";
+} from "@tests/utils/mocks";
 
 describe("getPosts", () => {
   beforeEach(() => {
@@ -26,7 +27,7 @@ describe("getPosts", () => {
 
     await PostControllers.getPosts(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(
       mockPostRecommendationService.getRecommendedPosts
     ).toHaveBeenCalled();
@@ -47,7 +48,7 @@ describe("getPosts", () => {
 
     await PostControllers.getPosts(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(
       mockPostRecommendationService.getRecommendedPosts
     ).toHaveBeenCalledWith("user-id", "post-id-5", 5);
@@ -85,7 +86,7 @@ describe("getPosts", () => {
 
     await PostControllers.getPosts(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(
       mockPostRecommendationService.getRecommendedPosts
     ).toHaveBeenCalledWith("user-id", null, 5);

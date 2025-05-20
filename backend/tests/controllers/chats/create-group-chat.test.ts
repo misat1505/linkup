@@ -1,9 +1,10 @@
-import { ChatControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
-import { processAvatar } from "../../../src/utils/processAvatar";
-import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { ChatControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
+import { processAvatar } from "@/utils/processAvatar";
+import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 
-jest.mock("../../../src/utils/processAvatar");
+jest.mock("@/utils/processAvatar");
 
 describe("createGroupChat", () => {
   it("creates group chat with user included", async () => {
@@ -23,7 +24,7 @@ describe("createGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.createGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
   });
 
   it("blocks group chat creation without user", async () => {
@@ -41,6 +42,6 @@ describe("createGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.createGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
   });
 });

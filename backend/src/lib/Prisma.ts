@@ -1,5 +1,5 @@
+import { env } from "@/config/env";
 import { PrismaClient } from "@prisma/client";
-import { env } from "../config/env";
 
 /**
  * An instance of the PrismaClient to interact with the database.

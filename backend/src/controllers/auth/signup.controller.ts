@@ -1,18 +1,19 @@
 import { NextFunction, Request, Response } from "express";
-import { processAvatar } from "../../utils/processAvatar";
-import { Hasher } from "../../lib/Hasher";
-import { User, UserWithCredentials } from "../../types/User";
-import { TokenProcessor } from "../../lib/TokenProcessor";
+import { processAvatar } from "@/utils/processAvatar";
+import { Hasher } from "@/lib/Hasher";
+import { User, UserWithCredentials } from "@/types/User";
+import { TokenProcessor } from "@/lib/TokenProcessor";
 import {
   accessTokenSignOptions,
   refreshTokenCookieName,
   refreshTokenCookieOptions,
   refreshTokenSignOptions,
-} from "../../config/jwt-cookie";
+} from "@/config/jwt-cookie";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
-import { env } from "../../config/env";
-import { SignupDTO } from "../../validators/auth/signup.validators";
+import { env } from "@/config/env";
+import { SignupDTO } from "@/validators/auth/signup.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to sign up a new user, hash the user's password, and return access and refresh tokens.
@@ -83,7 +84,7 @@ export const signupController = async (
     const isLoginTaken = await userService.isLoginTaken(login);
 
     if (isLoginTaken) {
-      return res.status(409).json({
+      return res.status(StatusCodes.CONFLICT).json({
         message: req.t("auth.controllers.signup.login-already-exists"),
       });
     }
@@ -112,7 +113,9 @@ export const signupController = async (
       accessTokenSignOptions
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res.status(201).json({ user: User.parse(user), accessToken });
+    return res
+      .status(StatusCodes.CREATED)
+      .json({ user: User.parse(user), accessToken });
   } catch (e) {
     console.log(e);
     next(new Error(req.t("auth.controllers.signup.failure")));

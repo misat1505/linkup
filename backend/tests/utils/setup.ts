@@ -1,4 +1,4 @@
-import { prisma } from "../../src/lib/Prisma";
+import { prisma } from "@/lib/Prisma";
 import { USER } from "./constants";
 
 const tables = [

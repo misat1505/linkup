@@ -1,11 +1,8 @@
 import { Router } from "express";
-import { upload } from "../../middlewares/multer";
-import { FileControllers } from "../../controllers";
-import { validate } from "../../middlewares/validate";
-import {
-  Filename,
-  FileQuery,
-} from "../../validators/files/getFiles.validators";
+import { upload } from "@/middlewares/multer";
+import { FileControllers } from "@/controllers";
+import { validate } from "@/middlewares/validate";
+import { Filename, FileQuery } from "@/validators/files/getFiles.validators";
 
 /**
  * File Routes Router.

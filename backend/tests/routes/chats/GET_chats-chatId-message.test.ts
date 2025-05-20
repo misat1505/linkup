@@ -1,6 +1,7 @@
-import { Message } from "../../../src/types/Message";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { Message } from "@/types/Message";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] chats/:chatId/messages", () => {
@@ -13,7 +14,7 @@ describe("[GET] chats/:chatId/messages", () => {
       const res = await request(app)
         .get(`/chats/${chatId}/messages?lastMessageId=null&limit=20`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       expect(res.body.messages.length).toBe(messages.length);
       res.body.messages.forEach((message: unknown) => {
@@ -30,7 +31,7 @@ describe("[GET] chats/:chatId/messages", () => {
       await request(app)
         .get(`/chats/${chatId}/messages`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 
@@ -42,7 +43,7 @@ describe("[GET] chats/:chatId/messages", () => {
       await request(app)
         .get(`/chats/${chatId}/messages?lastMessageId=null`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 
@@ -54,7 +55,7 @@ describe("[GET] chats/:chatId/messages", () => {
       await request(app)
         .get(`/chats/${chatId}/messages?lastMessageId=null&limit=20`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 
@@ -66,7 +67,7 @@ describe("[GET] chats/:chatId/messages", () => {
       await request(app)
         .get(`/chats/${chatId}/messages?responseId=null`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 });

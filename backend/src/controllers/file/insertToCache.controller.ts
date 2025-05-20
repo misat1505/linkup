@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { generateNewFilename } from "../../utils/generateNewFilename";
+import { generateNewFilename } from "@/utils/generateNewFilename";
+import { StatusCodes } from "http-status-codes";
 
 export const CACHE_CAPACITY = 10;
 
@@ -32,7 +33,7 @@ export const CACHE_CAPACITY = 10;
  *                 format: binary
  *                 description: The file to be inserted into the cache.
  *     responses:
- *       200:
+ *       201:
  *         description: File uploaded successfully
  *         content:
  *           application/json:
@@ -43,7 +44,7 @@ export const CACHE_CAPACITY = 10;
  *                   type: string
  *                   description: The new UUID filename of the uploaded file.
  *                   example: "a1b2c3d4-5678-9101-1234-56789abcdef0.jpg"
- *       500:
+ *       400:
  *         description: Cache limit reached or server error
  *         content:
  *           application/json:
@@ -66,13 +67,13 @@ export const insertToCache = async (
 
     if (!file)
       return res
-        .status(400)
+        .status(StatusCodes.BAD_REQUEST)
         .json({ message: req.t("files.controllers.insert-to-cache.no-file") });
 
     const cachePaths = await fileStorage.listFiles(`cache/${userId}`);
 
     if (cachePaths.length >= CACHE_CAPACITY) {
-      return res.status(500).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t("files.controllers.insert-to-cache.limit-reached", {
           count: CACHE_CAPACITY,
         }),
@@ -87,7 +88,7 @@ export const insertToCache = async (
       `cache/${userId}/${filename}`
     );
 
-    return res.status(201).json({ file: filename });
+    return res.status(StatusCodes.CREATED).json({ file: filename });
   } catch (e) {
     next(new Error(req.t("files.controllers.insert-to-cache.failure")));
   }

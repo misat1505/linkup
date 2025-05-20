@@ -1,6 +1,7 @@
-import { ChatControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
-import { mockChatService, mockRequest, mockResponse } from "../../utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { ChatControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
+import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 
 describe("createMessage", () => {
   it("creates message for authorized user", async () => {
@@ -16,7 +17,7 @@ describe("createMessage", () => {
     const res = mockResponse();
     await ChatControllers.createMessage(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
   });
 
   it("blocks message creation by non-chat member", async () => {
@@ -30,7 +31,7 @@ describe("createMessage", () => {
     const res = mockResponse();
     await ChatControllers.createMessage(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
   });
 
   it("blocks message with responseId outside chat", async () => {
@@ -51,6 +52,6 @@ describe("createMessage", () => {
     const res = mockResponse();
     await ChatControllers.createMessage(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
   });
 });

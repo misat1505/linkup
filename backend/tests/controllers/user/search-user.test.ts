@@ -1,6 +1,7 @@
-import { UserControllers } from "../../../src/controllers";
-import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
-import { seedProvider } from "../../utils/seedProvider";
+import { StatusCodes } from "http-status-codes";
+import { UserControllers } from "@/controllers";
+import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
+import { seedProvider } from "@tests/utils/seedProvider";
 
 describe("searchUser", () => {
   it("retrieves users matching search criteria", async () => {
@@ -16,7 +17,7 @@ describe("searchUser", () => {
 
       await UserControllers.searchUser(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith({ users });
     });
   });

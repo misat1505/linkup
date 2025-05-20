@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { generateNewFilename } from "../../utils/generateNewFilename";
+import { generateNewFilename } from "@/utils/generateNewFilename";
 import {
   ChatId,
   CreateMessageDTO,
-} from "../../validators/chats/messages.validators";
+} from "@/validators/chats/messages.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to create a new message in a chat.
@@ -54,7 +55,7 @@ import {
  *               properties:
  *                 message:
  *                   $ref: '#/components/schemas/Message'
- *       401:
+ *       403:
  *         description: User not authorized to send a message
  *       400:
  *         description: Response message does not exist in this chat
@@ -87,7 +88,7 @@ export const createMessageController = async (
     const [isUserAuthorized, isResponseInChat] = await Promise.all(checks);
 
     if (!isUserAuthorized) {
-      return res.status(401).json({
+      return res.status(StatusCodes.FORBIDDEN).json({
         message: req.t(
           "chats.controllers.create-message.user-not-belonging-to-chat"
         ),
@@ -95,7 +96,7 @@ export const createMessageController = async (
     }
 
     if (responseId && !isResponseInChat) {
-      return res.status(400).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t(
           "chats.controllers.create-message.response-not-existent"
         ),
@@ -119,7 +120,7 @@ export const createMessageController = async (
       responseId: responseId ?? null,
     });
 
-    return res.status(201).json({ message });
+    return res.status(StatusCodes.CREATED).json({ message });
   } catch (e) {
     next(new Error(req.t("chats.controllers.create-message.failure")));
   }

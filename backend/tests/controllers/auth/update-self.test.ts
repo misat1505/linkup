@@ -1,6 +1,7 @@
-import { AuthControllers } from "../../../src/controllers";
-import { mockRequest, mockResponse, mockUserService } from "../../utils/mocks";
-import { seedProvider } from "../../utils/seedProvider";
+import { StatusCodes } from "http-status-codes";
+import { AuthControllers } from "@/controllers";
+import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
+import { seedProvider } from "@tests/utils/seedProvider";
 
 describe("updateUser", () => {
   it("updates authenticated user profile", async () => {
@@ -25,7 +26,7 @@ describe("updateUser", () => {
       const res = mockResponse();
       await AuthControllers.updateSelf(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     });
   });
 
@@ -52,7 +53,7 @@ describe("updateUser", () => {
 
       await AuthControllers.updateSelf(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     });
   });
 
@@ -79,7 +80,7 @@ describe("updateUser", () => {
 
       await AuthControllers.updateSelf(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(409);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
     });
   });
 });

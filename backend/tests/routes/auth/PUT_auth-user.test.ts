@@ -1,9 +1,10 @@
-import { TestHelpers } from "../../utils/helpers";
-import { mockFileStorage } from "../../utils/mocks";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { TestHelpers } from "@tests/utils/helpers";
+import { mockFileStorage } from "@tests/utils/mocks";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
-import path from "path";
-import { User } from "../../../src/types/User";
+import { User } from "@/types/User";
+import { TEST_FILENAME_PATH } from "@tests/utils/constants";
+import { StatusCodes } from "http-status-codes";
 
 describe("[PUT] /auth/user", () => {
   it("updates user profile", async () => {
@@ -22,9 +23,9 @@ describe("[PUT] /auth/user", () => {
         .field("password", newUser.password)
         .field("firstName", newUser.firstName)
         .field("lastName", newUser.lastName)
-        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"))
+        .attach("file", TEST_FILENAME_PATH)
         .set("Authorization", `Bearer ${token}`)
-        .expect(201);
+        .expect(StatusCodes.OK);
 
       User.strict().parse(res.body.user);
 
@@ -54,7 +55,7 @@ describe("[PUT] /auth/user", () => {
           lastName: "new last name",
         })
         .set("Authorization", `Bearer ${token}`)
-        .expect(201);
+        .expect(StatusCodes.OK);
     });
   });
 
@@ -71,7 +72,7 @@ describe("[PUT] /auth/user", () => {
           lastName: "new last name",
         })
         .set("Authorization", `Bearer ${token}`)
-        .expect(409);
+        .expect(StatusCodes.CONFLICT);
     });
   });
 
@@ -87,7 +88,7 @@ describe("[PUT] /auth/user", () => {
           password: "valid_password",
         })
         .set("Authorization", `Bearer ${token}`)
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

@@ -1,6 +1,7 @@
-import { Post } from "../../../src/types/Post";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { Post } from "@/types/Post";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /posts/:id", () => {
@@ -12,7 +13,7 @@ describe("[GET] /posts/:id", () => {
       const res = await request(app)
         .get(`/posts/${postId}`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       Post.strict().parse(res.body.post);
       expect(res.body.post.id).toBe(postId);

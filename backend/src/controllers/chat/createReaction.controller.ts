@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import {
   ChatId,
   CreateReactionDTO,
-} from "../../validators/chats/messages.validators";
+} from "@/validators/chats/messages.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to create a reaction to a message in a chat.
@@ -52,7 +53,7 @@ import {
  *               properties:
  *                 reaction:
  *                   $ref: '#/components/schemas/Reaction'
- *       401:
+ *       403:
  *         description: User not authorized to create reaction
  *       500:
  *         description: Server error when creating reaction
@@ -71,7 +72,7 @@ export const createReactionController = async (
     const isUserAuthorized = await chatService.isUserInChat({ chatId, userId });
 
     if (!isUserAuthorized)
-      return res.status(401).json({
+      return res.status(StatusCodes.FORBIDDEN).json({
         message: req.t("chats.controllers.create-reaction.bad-chat"),
       });
 
@@ -81,7 +82,7 @@ export const createReactionController = async (
     });
 
     if (!isMessageInChat)
-      return res.status(401).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t("chats.controllers.create-reaction.bad-message"),
       });
 
@@ -91,7 +92,7 @@ export const createReactionController = async (
       messageId,
     });
 
-    return res.status(201).json({ reaction });
+    return res.status(StatusCodes.CREATED).json({ reaction });
   } catch (e) {
     next(new Error(req.t("chats.controllers.create-reaction.failure")));
   }

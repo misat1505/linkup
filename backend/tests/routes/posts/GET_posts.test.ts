@@ -1,6 +1,7 @@
-import { Post } from "../../../src/types/Post";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { Post } from "@/types/Post";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[GET] /posts", () => {
@@ -11,7 +12,7 @@ describe("[GET] /posts", () => {
       const res = await request(app)
         .get("/posts?lastPostId=null&limit=5")
         .set("Authorization", `Bearer ${otherUserToken}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       expect(Array.isArray(res.body.posts)).toBeTruthy();
       expect(res.body.posts.length).toBe(1);
@@ -26,7 +27,7 @@ describe("[GET] /posts", () => {
       await request(app)
         .get("/posts")
         .set("Authorization", `Bearer ${otherUserToken}`)
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

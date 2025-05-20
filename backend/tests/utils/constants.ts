@@ -1,4 +1,5 @@
-import { User, UserWithCredentials } from "../../src/types/User";
+import { User, UserWithCredentials } from "@/types/User";
+import path from "path";
 
 export const USER: UserWithCredentials = {
   id: "3daf7676-ec0f-4548-85a7-67b4382166d4",
@@ -21,3 +22,5 @@ export const USER_WITHOUT_CREDENTIALS: User = {
   lastName,
   photoURL,
 };
+
+export const TEST_FILENAME_PATH = path.join(__dirname, "./image.jpg");

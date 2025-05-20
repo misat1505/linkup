@@ -1,4 +1,4 @@
-import { handleMarkdownUpdate } from "../../src/utils/updatePost";
+import { handleMarkdownUpdate } from "@/utils/updatePost";
 import { mockFileStorage } from "../utils/mocks";
 
 describe("handleMarkdownUpdate", () => {

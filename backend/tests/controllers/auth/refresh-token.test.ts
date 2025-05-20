@@ -1,9 +1,10 @@
-import { AuthControllers } from "../../../src/controllers";
-import { TokenProcessor } from "../../../src/lib/TokenProcessor";
-import { mockRequest, mockResponse } from "../../utils/mocks";
-import { seedProvider } from "../../utils/seedProvider";
+import { StatusCodes } from "http-status-codes";
+import { AuthControllers } from "@/controllers";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { mockRequest, mockResponse } from "@tests/utils/mocks";
+import { seedProvider } from "@tests/utils/seedProvider";
 
-jest.mock("../../../src/lib/TokenProcessor");
+jest.mock("@/lib/TokenProcessor");
 
 describe("refreshToken", () => {
   it("refreshes authentication token", async () => {
@@ -18,7 +19,7 @@ describe("refreshToken", () => {
 
       AuthControllers.refreshToken(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({ accessToken: expect.any(String) })
       );

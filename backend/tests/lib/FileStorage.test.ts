@@ -8,7 +8,7 @@ import {
   DeleteObjectsCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { FileStorage } from "../../src/lib/FileStorage";
+import { FileStorage } from "@/lib/FileStorage";
 
 jest.mock("@aws-sdk/client-s3");
 jest.mock("@aws-sdk/s3-request-presigner", () => ({

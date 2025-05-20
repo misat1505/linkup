@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { Post } from "../../types/Post";
-import { GetPostsQuery } from "../../validators/posts/posts.validators";
+import { GetPostsQuery } from "@/validators/posts/posts.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to retrieve a list of posts.
@@ -68,7 +68,7 @@ export const getPosts = async (
       limit
     );
 
-    return res.status(200).json({ posts });
+    return res.status(StatusCodes.OK).json({ posts });
   } catch (e) {
     next(new Error(req.t("posts.controllers.get-all.failure")));
   }

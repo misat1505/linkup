@@ -1,5 +1,6 @@
+import { refreshTokenCookieName } from "@/config/jwt-cookie";
 import { NextFunction, Request, Response } from "express";
-import { refreshTokenCookieName } from "../../config/jwt-cookie";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to log out a user by clearing the refresh token cookie.
@@ -36,7 +37,9 @@ export const logoutController = (
 ) => {
   try {
     res.clearCookie(refreshTokenCookieName);
-    res.status(200).json({ message: req.t("auth.controllers.logout.success") });
+    res
+      .status(StatusCodes.OK)
+      .json({ message: req.t("auth.controllers.logout.success") });
   } catch (e) {
     next(new Error(req.t("auth.controllers.logout.failure")));
   }

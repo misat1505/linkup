@@ -1,5 +1,6 @@
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[POST] /posts/:id/report", () => {
@@ -11,7 +12,7 @@ describe("[POST] /posts/:id/report", () => {
       await request(app)
         .post(`/posts/${postId}/report`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 
@@ -23,12 +24,12 @@ describe("[POST] /posts/:id/report", () => {
       await request(app)
         .post(`/posts/${postId}/report`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       await request(app)
         .post(`/posts/${postId}/report`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(409);
+        .expect(StatusCodes.CONFLICT);
     });
   });
 });

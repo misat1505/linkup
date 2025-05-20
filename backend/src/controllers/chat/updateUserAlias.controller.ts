@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { UpdateAliasDTO } from "../../validators/chats/chats.validatotors";
-import { ChatId } from "../../validators/chats/messages.validators";
-import { UserId } from "../../validators/shared.validators";
+import { UpdateAliasDTO } from "@/validators/chats/chats.validatotors";
+import { ChatId } from "@/validators/chats/messages.validators";
+import { UserId } from "@/validators/shared.validators";
 import { z } from "zod";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to update a user's alias in a group chat.
@@ -48,7 +49,9 @@ import { z } from "zod";
  *     responses:
  *       200:
  *         description: Alias updated successfully
- *       401:
+ *       400:
+ *         description: This user doesn't belong to this chat.
+ *       403:
  *         description: User not authorized to update alias
  *       500:
  *         description: Server error when updating alias
@@ -69,13 +72,13 @@ export const updateAliasController = async (
       chatId,
     });
     if (!isUserUpdatedInChat)
-      return res.status(401).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t("chats.controllers.update-alias.user-not-in-chat"),
       });
 
     const isAuthorized = await chatService.isUserInChat({ userId, chatId });
     if (!isAuthorized)
-      return res.status(401).json({
+      return res.status(StatusCodes.FORBIDDEN).json({
         message: req.t("chats.controllers.update-alias.unauthorized"),
       });
 
@@ -85,7 +88,7 @@ export const updateAliasController = async (
       alias,
     });
 
-    return res.status(200).json({ alias });
+    return res.status(StatusCodes.OK).json({ alias });
   } catch (e) {
     next(new Error(req.t("chats.controllers.update-alias.failure")));
   }

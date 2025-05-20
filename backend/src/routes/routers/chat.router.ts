@@ -1,20 +1,20 @@
 import { Router } from "express";
-import { validate } from "../../middlewares/validate";
-import { upload } from "../../middlewares/multer";
-import { ChatControllers } from "../../controllers";
+import { validate } from "@/middlewares/validate";
+import { upload } from "@/middlewares/multer";
+import { ChatControllers } from "@/controllers";
 import {
   ChatId,
   CreateMessageDTO,
   CreateReactionDTO,
   GetMessagesQuery,
-} from "../../validators/chats/messages.validators";
-import { UserId } from "../../validators/shared.validators";
+} from "@/validators/chats/messages.validators";
+import { UserId } from "@/validators/shared.validators";
 import {
   CreateGroupChatDTO,
   CreatePrivateChatDTO,
   UpdateAliasDTO,
   UpdateGroupChatDTO,
-} from "../../validators/chats/chats.validatotors";
+} from "@/validators/chats/chats.validatotors";
 
 /**
  * Chat Routes Router.

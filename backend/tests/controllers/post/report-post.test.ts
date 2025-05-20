@@ -1,7 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { PostControllers } from "../../../src/controllers";
-import { mockPostService, mockRequest, mockResponse } from "../../utils/mocks";
-import { UserWithCredentials } from "../../../src/types/User";
+import { PostControllers } from "@/controllers";
+import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
+import { UserWithCredentials } from "@/types/User";
+import { StatusCodes } from "http-status-codes";
 
 describe("reportPost", () => {
   const postId = "123";
@@ -18,7 +19,7 @@ describe("reportPost", () => {
 
     await PostControllers.reportPost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(mockPostService.reportPost).toHaveBeenCalledWith(userId, postId);
   });
 
@@ -38,7 +39,7 @@ describe("reportPost", () => {
 
     await PostControllers.reportPost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(409);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
   });
 
   it("passes errors to error middleware", async () => {

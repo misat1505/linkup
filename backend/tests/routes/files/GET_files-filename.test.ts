@@ -1,15 +1,16 @@
 import { Application } from "express";
-import path from "path";
-import { User } from "../../../src/types/User";
-import { testWithTransaction } from "../../utils/testWithTransaction";
-import { TestHelpers } from "../../utils/helpers";
+import { User } from "@/types/User";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
+import { TestHelpers } from "@tests/utils/helpers";
 import request from "supertest";
-import { TokenProcessor } from "../../../src/lib/TokenProcessor";
-import { env } from "../../../src/config/env";
-import { Message } from "../../../src/types/Message";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { env } from "@/config/env";
+import { Message } from "@/types/Message";
 import { v4 as uuidv4 } from "uuid";
+import { TEST_FILENAME_PATH } from "@tests/utils/constants";
+import { StatusCodes } from "http-status-codes";
 
-jest.mock("../../../src/lib/FileStorage");
+jest.mock("@/lib/FileStorage");
 
 async function createNewUser(app: Application) {
   const login = "valid_login";
@@ -21,7 +22,7 @@ async function createNewUser(app: Application) {
     .field("lastName", "Muzg")
     .field("login", login)
     .field("password", password)
-    .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"));
+    .attach("file", TEST_FILENAME_PATH);
 
   return res.body.user as User;
 }
@@ -42,12 +43,12 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${createdUser.photoURL}?filter=avatar`)
         .set("Authorization", `Bearer ${tokens[1]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       await request(app)
         .get(`/files/${createdUser.photoURL}?filter=avatar`)
         .set("Authorization", `Bearer ${tokens[0]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 
@@ -67,12 +68,12 @@ describe("[GET] /files/:filename", () => {
         .field("users[0]", seed.users[0].id)
         .field("users[1]", seed.users[1].id)
         .field("name", "chat name")
-        .attach("file", path.join(__dirname, "..", "..", "utils", "image.jpg"));
+        .attach("file", TEST_FILENAME_PATH);
 
       await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
         .set("Authorization", `Bearer ${tokens[0]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       const user2Token = TokenProcessor.encode(
         {
@@ -84,12 +85,12 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
         .set("Authorization", `Bearer ${user2Token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       await request(app)
         .get(`/files/${chat.photoURL}?filter=chat-photo&chat=${chat.id}`)
         .set("Authorization", `Bearer ${tokens[1]}`)
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 
@@ -123,7 +124,7 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
         .set("Authorization", `Bearer ${tokens[0]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       const user2Token = TokenProcessor.encode(
         {
@@ -135,12 +136,12 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
         .set("Authorization", `Bearer ${user2Token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       await request(app)
         .get(`/files/${filename}?filter=chat-message&chat=${chat.id}`)
         .set("Authorization", `Bearer ${tokens[1]}`)
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 
@@ -157,7 +158,7 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${newFileName}?filter=cache`)
         .set("Authorization", `Bearer ${token}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 
@@ -174,12 +175,12 @@ describe("[GET] /files/:filename", () => {
       await request(app)
         .get(`/files/${filename}?filter=post&post=${postId}`)
         .set("Authorization", `Bearer ${tokens[0]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
 
       await request(app)
         .get(`/files/${filename}?filter=post&post=${postId}`)
         .set("Authorization", `Bearer ${tokens[1]}`)
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 });

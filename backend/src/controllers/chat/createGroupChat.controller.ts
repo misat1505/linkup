@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { processAvatar } from "../../utils/processAvatar";
+import { processAvatar } from "@/utils/processAvatar";
 import { v4 as uuidv4 } from "uuid";
-import { CreateGroupChatDTO } from "../../validators/chats/chats.validatotors";
+import { CreateGroupChatDTO } from "@/validators/chats/chats.validatotors";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to create a new group chat.
@@ -48,7 +49,7 @@ import { CreateGroupChatDTO } from "../../validators/chats/chats.validatotors";
  *               properties:
  *                 chat:
  *                   $ref: '#/components/schemas/Chat'
- *       401:
+ *       400:
  *         description: User not authorized to create group chat
  *       500:
  *         description: Server error when creating group chat
@@ -64,7 +65,7 @@ export const createGroupChatController = async (
     const { chatService, fileStorage } = req.app.services;
 
     if (!users.includes(userId))
-      return res.status(401).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t(
           "chats.controllers.create-group-chat.not-belonging-to-you"
         ),
@@ -86,7 +87,7 @@ export const createGroupChatController = async (
         newFilename
       );
 
-    return res.status(201).json({ chat });
+    return res.status(StatusCodes.CREATED).json({ chat });
   } catch (e) {
     next(new Error(req.t("chats.controllers.create-group-chat.failure")));
   }

@@ -1,15 +1,16 @@
-import { NextFunction, Request, Response } from "express";
-import { Hasher } from "../../lib/Hasher";
-import { TokenProcessor } from "../../lib/TokenProcessor";
+import { env } from "@/config/env";
 import {
   accessTokenSignOptions,
   refreshTokenCookieName,
   refreshTokenCookieOptions,
   refreshTokenSignOptions,
-} from "../../config/jwt-cookie";
-import { env } from "../../config/env";
-import { User } from "../../types/User";
-import { LoginDTO } from "../../validators/auth/login.validators";
+} from "@/config/jwt-cookie";
+import { Hasher } from "@/lib/Hasher";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { User } from "@/types/User";
+import { LoginDTO } from "@/validators/auth/login.validators";
+import { NextFunction, Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to log in an existing user and generate authentication tokens.
@@ -73,14 +74,14 @@ export const loginController = async (
 
     if (!user) {
       return res
-        .status(401)
+        .status(StatusCodes.UNAUTHORIZED)
         .json({ message: req.t("auth.controllers.login.invalid-login") });
     }
 
     const hashedPassword = Hasher.hash(password + user.salt);
     if (hashedPassword !== user.password) {
       return res
-        .status(401)
+        .status(StatusCodes.UNAUTHORIZED)
         .json({ message: req.t("auth.controllers.login.invalid-password") });
     }
 
@@ -95,7 +96,9 @@ export const loginController = async (
       accessTokenSignOptions
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res.status(200).json({ user: User.parse(user), accessToken });
+    return res
+      .status(StatusCodes.OK)
+      .json({ user: User.parse(user), accessToken });
   } catch (e) {
     next(new Error(req.t("auth.controllers.login.failure")));
   }

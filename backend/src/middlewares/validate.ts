@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import {
   RequestValidatedValues,
   RequestValidation,
-} from "../types/RequestValidation";
+} from "@/types/RequestValidation";
 import { ZodError } from "zod";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Middleware to validate Express request properties using Zod schemas.
@@ -32,6 +33,8 @@ import { ZodError } from "zod";
  * app.post('/login', zodValidate(validations), loginHandler);
  *
  * @returns Express middleware that validates request and populates `req.validated` if valid.
+ *
+ * @source
  */
 export const validate = (validations: RequestValidation) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -50,6 +53,6 @@ export const validate = (validations: RequestValidation) => {
       return next();
     }
 
-    res.status(400).json({ errors });
+    res.status(StatusCodes.BAD_REQUEST).json({ errors });
   };
 };

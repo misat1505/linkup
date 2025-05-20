@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { SearchUserQuery } from "../../validators/users/users.validators";
+import { SearchUserQuery } from "@/validators/users/users.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to search users by a search term.
@@ -60,7 +61,7 @@ export const searchUserController = async (
 
     const users = await userService.searchUsers(term);
 
-    return res.status(200).json({ users });
+    return res.status(StatusCodes.OK).json({ users });
   } catch (e) {
     next(new Error(req.t("users.controllers.search.failure")));
   }

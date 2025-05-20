@@ -34,7 +34,7 @@ export const useSignupFormSchema = () => {
         .max(50, t("signup.form.errors.login.max")),
       password: z.string().min(5, t("signup.form.errors.password.min")),
       confirmPassword: z.string().min(5, t("signup.form.errors.password.min")),
-      file: z.optional(z.instanceof(FileList)),
+      file: z.instanceof(File).nullable(),
     })
     .refine((ctx) => ctx.password === ctx.confirmPassword, {
       message: t("signup.form.errors.password.mismatch"),

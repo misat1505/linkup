@@ -1,5 +1,6 @@
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[DELETE] /friendships", () => {
@@ -25,7 +26,7 @@ describe("[DELETE] /friendships", () => {
           requesterId: seed.users[0].id,
           acceptorId: seed.users[1].id,
         })
-        .expect(200);
+        .expect(StatusCodes.OK);
     });
   });
 
@@ -51,7 +52,7 @@ describe("[DELETE] /friendships", () => {
           requesterId: seed.users[0].id,
           acceptorId: seed.users[1].id,
         })
-        .expect(400);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

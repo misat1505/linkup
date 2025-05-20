@@ -1,10 +1,11 @@
-import { FriendshipControllers } from "../../../src/controllers";
-import { UserWithCredentials } from "../../../src/types/User";
+import { StatusCodes } from "http-status-codes";
+import { FriendshipControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/User";
 import {
   mockFriendshipService,
   mockRequest,
   mockResponse,
-} from "../../utils/mocks";
+} from "@tests/utils/mocks";
 import { mockFriendship } from "./setup";
 
 describe("getUserFriendships", () => {
@@ -26,6 +27,6 @@ describe("getUserFriendships", () => {
 
     await FriendshipControllers.getUserFriendships(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
   });
 });

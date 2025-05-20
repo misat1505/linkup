@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { handleMarkdownUpdate } from "../../utils/updatePost";
-import { CreatePostDTO } from "../../validators/posts/posts.validators";
+import { handleMarkdownUpdate } from "@/utils/updatePost";
+import { CreatePostDTO } from "@/validators/posts/posts.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to create a new post.
@@ -71,7 +72,7 @@ export const createPost = async (
       authorId: userId,
     });
 
-    return res.status(201).json({ post });
+    return res.status(StatusCodes.CREATED).json({ post });
   } catch (e) {
     next(new Error(req.t("posts.controllers.create.failure")));
   }

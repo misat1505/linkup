@@ -1,6 +1,7 @@
-import { Chat } from "../../../src/types/Chat";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { Chat } from "@/types/Chat";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[PUT] /chats/:chatId/users/:userId/alias", () => {
@@ -47,7 +48,7 @@ describe("[PUT] /chats/:chatId/users/:userId/alias", () => {
         .put(`/chats/${chatId}/users/${seed.users[0].id}/alias`)
         .set("Authorization", `Bearer ${token}`)
         .send({ alias })
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 });

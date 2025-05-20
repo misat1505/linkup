@@ -1,7 +1,8 @@
-import { Message } from "../../../src/types/Message";
-import { Reaction } from "../../../src/types/Reaction";
-import { TestHelpers } from "../../utils/helpers";
-import { testWithTransaction } from "../../utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
+import { Message } from "@/types/Message";
+import { Reaction } from "@/types/Reaction";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
 
 describe("[POST] /chats/:chatId/reactions", () => {
@@ -24,7 +25,7 @@ describe("[POST] /chats/:chatId/reactions", () => {
           reactionId: seed.reactions[1].id,
           messageId: messages[0].id,
         })
-        .expect(201);
+        .expect(StatusCodes.CREATED);
       Reaction.strict().parse(res2.body.reaction);
 
       const res3 = await request(app)
@@ -49,7 +50,7 @@ describe("[POST] /chats/:chatId/reactions", () => {
           reactionId: seed.reactions[1].id,
           messageId: message.id,
         })
-        .expect(401);
+        .expect(StatusCodes.FORBIDDEN);
     });
   });
 
@@ -66,7 +67,7 @@ describe("[POST] /chats/:chatId/reactions", () => {
           reactionId: seed.reactions[1].id,
           messageId: message.id,
         })
-        .expect(401);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

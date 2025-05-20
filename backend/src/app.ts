@@ -12,6 +12,7 @@ import i18next from "./i18n";
 import middleware from "i18next-http-middleware";
 import { initializeServices } from "./utils/initializeServices";
 import { Routers } from "./routes";
+import { StatusCodes } from "http-status-codes";
 
 const app = express();
 
@@ -51,7 +52,9 @@ app.use("/", Routers.protectedRoutes);
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (env.NODE_ENV !== "test") console.error(err);
   if (isSentryActive) Sentry.captureException(err);
-  return res.status(500).json({ message: err.message });
+  return res
+    .status(StatusCodes.INTERNAL_SERVER_ERROR)
+    .json({ message: err.message });
 });
 
 if (env.NODE_ENV !== "test") {

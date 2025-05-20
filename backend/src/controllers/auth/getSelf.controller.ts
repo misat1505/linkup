@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { UserService } from "../../services/UserService";
-import { User } from "../../types/User";
+import { User } from "@/types/User";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to fetch the details of the currently authenticated user.
@@ -52,11 +52,11 @@ export const getSelfController = async (
 
     if (!user) {
       return res
-        .status(404)
+        .status(StatusCodes.NOT_FOUND)
         .json({ message: req.t("auth.controllers.get-self.user-not-found") });
     }
 
-    return res.status(200).json({ user: User.parse(user) });
+    return res.status(StatusCodes.OK).json({ user: User.parse(user) });
   } catch (e) {
     next(new Error(req.t("auth.controllers.get-self.failure")));
   }

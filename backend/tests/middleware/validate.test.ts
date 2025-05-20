@@ -1,4 +1,5 @@
-import { validate } from "../../src/middlewares/validate";
+import { StatusCodes } from "http-status-codes";
+import { validate } from "@/middlewares/validate";
 import { mockRequest, mockResponse } from "../utils/mocks";
 import { z } from "zod";
 
@@ -35,7 +36,7 @@ describe("validate middleware", () => {
 
     await middleware(req, res, mockNextFunction);
 
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
     expect(mockNextFunction).not.toHaveBeenCalled();
   });
 });

@@ -1,8 +1,8 @@
-import { Reaction } from "../../src/types/Reaction";
-import { ChatService } from "../../src/services/ChatService";
+import { Reaction } from "@/types/Reaction";
+import { ChatService } from "@/services/ChatService";
 import { testWithTransaction } from "../utils/testWithTransaction";
-import { Chat, UserInChat } from "../../src/types/Chat";
-import { Message } from "../../src/types/Message";
+import { Chat, UserInChat } from "@/types/Chat";
+import { Message } from "@/types/Message";
 
 describe("ChatService", () => {
   describe("updateGroupChat", () => {

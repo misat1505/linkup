@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { AcceptFriendshipDTO } from "../../validators/friendships/friendships.validators";
+import { AcceptFriendshipDTO } from "@/validators/friendships/friendships.validators";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Controller to accept an existing friendship request.
@@ -97,7 +98,7 @@ export const acceptFriendship = async (
     const friendshipService = req.app.services.friendshipService;
 
     if (userId !== acceptorId)
-      return res.status(400).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t("friends.controllers.accept.unauthorized"),
       });
 
@@ -108,10 +109,10 @@ export const acceptFriendship = async (
 
     if (!friendship)
       return res
-        .status(409)
+        .status(StatusCodes.CONFLICT)
         .json({ message: req.t("friends.controllers.accept.not-found") });
 
-    return res.status(200).json({ friendship });
+    return res.status(StatusCodes.OK).json({ friendship });
   } catch (e) {
     next(new Error(req.t("friends.controllers.accept.failure")));
   }

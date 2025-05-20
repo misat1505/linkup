@@ -1,5 +1,5 @@
 import { Chat, UserInChat } from "@/types/Chat";
-import { AxiosError } from "axios";
+import { AxiosError, HttpStatusCode } from "axios";
 import { CHAT_API } from "./utils";
 import { User } from "@/types/User";
 import { Message } from "@/types/Message";
@@ -75,7 +75,7 @@ export class ChatService {
       return response.data.chat;
     } catch (e) {
       if (e instanceof AxiosError) {
-        if (e.response?.status === 409) {
+        if (e.response?.status === HttpStatusCode.Conflict) {
           return e.response.data.chat;
         }
       }
