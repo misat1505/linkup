@@ -88,25 +88,21 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
     queryClient.setQueryData(queryKeys.messages(chat!.id), (oldData: any) => {
       if (!oldData) return oldData;
 
-      const newPages = oldData.pages.map((page: any) => [...page]);
+      const newPages = oldData.pages.map((page: Message[]) =>
+        page.map((m) => {
+          if (m.id !== reaction.messageId) return m;
 
-      let messageFound = false;
-      for (const page of newPages) {
-        const message = page.find((m: Message) => m.id === reaction.messageId);
-        if (message) {
-          if (
-            !message.reactions.some(
-              (r: Reaction) => r.user.id === reaction.user.id
-            )
-          ) {
-            message.reactions.push(reaction);
-          }
-          messageFound = true;
-          break;
-        }
-      }
+          const alreadyReacted = m.reactions.some(
+            (r) => r.user.id === reaction.user.id
+          );
+          if (alreadyReacted) return m;
 
-      if (!messageFound) return oldData;
+          return {
+            ...m,
+            reactions: [...m.reactions, reaction],
+          };
+        })
+      );
 
       return {
         pages: newPages,
