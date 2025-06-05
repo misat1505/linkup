@@ -56,7 +56,9 @@ export class FileStorage {
     bucketName?: string;
     forcePathStyle?: boolean;
   }) {
-    const isS3Local = env.S3_ENDPOINT.includes("localhost");
+    const isS3Local =
+      env.S3_ENDPOINT.includes("localhost") ||
+      env.S3_ENDPOINT.includes("minio");
 
     const {
       region = env.AWS_REGION,
@@ -128,7 +130,7 @@ export class FileStorage {
   async getSignedUrl(path: string, expiresIn = 60): Promise<string> {
     if (env.DO_NOT_SIGN_OBJECTS) {
       const objectPath = `${env.S3_ENDPOINT}/${env.S3_BUCKET_NAME}/${path}`;
-      return objectPath.replace("host.docker.internal", "localhost");
+      return objectPath.replace("minio", "localhost");
     }
 
     const command = new GetObjectCommand({

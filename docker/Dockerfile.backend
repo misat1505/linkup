@@ -16,7 +16,7 @@ ENV AWS_ACCESS_KEY_ID=admin
 ENV AWS_SECRET_ACCESS_KEY=password
 ENV AWS_REGION=us-east-1
 ENV S3_BUCKET_NAME=linkup-bucket
-ENV S3_ENDPOINT=http://host.docker.internal:9000
+ENV S3_ENDPOINT=http://minio:9000
 ENV DO_NOT_SIGN_OBJECTS=true
 
 EXPOSE 5500
