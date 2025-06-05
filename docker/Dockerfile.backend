@@ -1,23 +1,37 @@
-FROM node:22
+FROM node:22 AS builder
 
-WORKDIR /backend
+WORKDIR /app
+
 COPY package*.json ./
+
 RUN npm install
 
 COPY . .
 
-ENV PORT=5500
-ENV ACCESS_TOKEN_SECRET=hf87uyefuyewf87t3287fr328yf2g7632frg3287f6g732vf83287fyt32fg723gf
-ENV REFRESH_TOKEN_SECRET=cen7bffcn87y584c95n4350mc28n0c973257mn3c507n50207mnvc
-ENV FRONTEND_URL=http://localhost:3000
-ENV DATABASE_URL=postgresql://postgres:postgres@database/linkup
+RUN npm run build
 
-ENV AWS_ACCESS_KEY_ID=admin
-ENV AWS_SECRET_ACCESS_KEY=password
-ENV AWS_REGION=us-east-1
-ENV S3_BUCKET_NAME=linkup-bucket
-ENV S3_ENDPOINT=http://minio:9000
-ENV DO_NOT_SIGN_OBJECTS=true
+FROM node:22 AS runner
+
+WORKDIR /backend
+
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/prisma ./prisma
+
+RUN npm install --omit=dev
+
+ENV PORT=5500 \
+    ACCESS_TOKEN_SECRET=hf87uyefuyewf87t3287fr328yf2g7632frg3287f6g732vf83287fyt32fg723gf \
+    REFRESH_TOKEN_SECRET=cen7bffcn87y584c95n4350mc28n0c973257mn3c507n50207mnvc \
+    FRONTEND_URL=http://localhost:3000 \
+    DATABASE_URL=postgresql://postgres:postgres@database/linkup \
+    AWS_ACCESS_KEY_ID=admin \
+    AWS_SECRET_ACCESS_KEY=password \
+    AWS_REGION=us-east-1 \
+    S3_BUCKET_NAME=linkup-bucket \
+    S3_ENDPOINT=http://minio:9000 \
+    DO_NOT_SIGN_OBJECTS=true \
+    NODE_ENV=production
 
 EXPOSE 5500
 

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx prisma db push && cross-env NODE_ENV=production node ./build/app.js",
+    "start": "npx prisma db push && node ./build/app.js",
     "build": "tsup",
     "dev": "npx prisma db push && cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/app.ts",
     "e2e": "npx prisma db push && cross-env NODE_ENV=e2e ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/app.ts",
