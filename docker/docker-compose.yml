@@ -17,7 +17,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   database:
-    image: postgres:15
+    image: postgres:15-alpine
     restart: always
     environment:
       POSTGRES_DB: linkup
