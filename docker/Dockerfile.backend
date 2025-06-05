@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:22
 
 WORKDIR /backend
 COPY package*.json ./
@@ -17,9 +17,8 @@ ENV AWS_SECRET_ACCESS_KEY=password
 ENV AWS_REGION=us-east-1
 ENV S3_BUCKET_NAME=linkup-bucket
 ENV S3_ENDPOINT=http://host.docker.internal:9000
-
-RUN npx prisma generate
+ENV DO_NOT_SIGN_OBJECTS=true
 
 EXPOSE 5500
 
-CMD ["sh", "-c", "npx prisma db push && npm start"]
+CMD ["npm", "run", "start"]

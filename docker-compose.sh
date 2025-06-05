@@ -7,10 +7,10 @@ command=$1
 case "$command" in
     prod)
         echo "Running application in production mode..."
-        docker compose -f ./docker/docker-compose.yml up --build -d
-        cd backend
-        npm i
-        npm run start
+        docker compose -f ./docker/docker-compose.yml up --build
+        # cd backend
+        # npm i
+        # npm run start
         ;;
     e2e)
         echo "Running application for e2e testing..."

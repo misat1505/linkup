@@ -126,8 +126,10 @@ export class FileStorage {
    * const url = await fileStorage.getSignedUrl("uploads/photo.jpg", 3600);
    */
   async getSignedUrl(path: string, expiresIn = 60): Promise<string> {
-    if (env.DO_NOT_SIGN_OBJECTS)
-      return `${env.S3_ENDPOINT}/${env.S3_BUCKET_NAME}/${path}`;
+    if (env.DO_NOT_SIGN_OBJECTS) {
+      const objectPath = `${env.S3_ENDPOINT}/${env.S3_BUCKET_NAME}/${path}`;
+      return objectPath.replace("host.docker.internal", "localhost");
+    }
 
     const command = new GetObjectCommand({
       Bucket: this.bucketName,

@@ -33,15 +33,15 @@ services:
       timeout: 5s
       retries: 5
 
-  # backend:
-  #   build:
-  #     context: ../backend
-  #     dockerfile: ../docker/Dockerfile.backend
-  #   depends_on:
-  #     database:
-  #       condition: service_healthy
-  #   ports:
-  #     - "5500:5500"
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "5500:5500"
 
   socket:
     build:
