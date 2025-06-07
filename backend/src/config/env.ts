@@ -1,16 +1,7 @@
 import dotenv from "dotenv";
 import { z } from "zod";
 
-const getEnvPath = (): string => {
-  const env = process.env.NODE_ENV!;
-  if (["test", "e2e"].includes(env)) return ".env.test";
-  return ".env";
-};
-
-dotenv.config({
-  override: true,
-  path: getEnvPath(),
-});
+dotenv.config();
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["production", "development", "test", "e2e"], {
@@ -47,6 +38,10 @@ const envSchema = z.object({
     .string()
     .url({ message: "'SENTRY_DSN' must be a valid URL." })
     .optional(),
+  DO_NOT_SIGN_OBJECTS: z
+    .string()
+    .optional()
+    .transform((val) => val === "true"),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
