@@ -11,10 +11,7 @@ case "$command" in
         ;;
     e2e)
         echo "Running application for e2e testing..."
-        docker compose -f ./docker/docker-compose.e2e.yml up --build -d
-        cd backend
-        npm i
-        npm run e2e
+        docker compose -f ./docker/docker-compose.e2e.yml up --build
         ;;
     dev)
         echo "Running application for backend development..."

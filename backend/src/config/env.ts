@@ -1,7 +1,17 @@
 import dotenv from "dotenv";
 import { z } from "zod";
 
-dotenv.config();
+const getEnvPath = (): string => {
+  const env = process.env.NODE_ENV!;
+  if (["test", "e2e"].includes(env)) return ".env.test";
+  return ".env";
+};
+
+dotenv.config({
+  override: true,
+  path: getEnvPath(),
+});
+
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["production", "development", "test", "e2e"], {
