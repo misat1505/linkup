@@ -1,8 +1,27 @@
 # LinkUp - Bachelor's Thesis Project
 
-### Project Overview:
+### 📝 Project Overview:
 
 LinkUp is a social media platform developed as part of a Bachelor's thesis project. It enables seamless communication and content sharing among users. The platform offers real-time chats, group conversations, file sharing, and Markdown-based posts — all wrapped in a clean, responsive user interface. The focus is on delivering a reliable, user-friendly experience that supports modern social interaction needs.
+
+## 🧰 Tech Stack
+
+- **Frontend:**  
+  ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)  
+  Built with **React** for a dynamic and responsive user interface.
+
+- **Backend:**  
+  ![Express](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)  
+  Uses **Express** for efficient request handling and routing.
+
+- **Database:**  
+  ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)  
+  Reliable data storage powered by **PostgreSQL**.
+
+- **File Storage:**  
+  ![Amazon S3](https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=amazonaws&logoColor=white)  
+  Stores and manages files with **Amazon S3**.
+
 
 ## Key features
 
@@ -35,125 +54,61 @@ LinkUp employs responsive web design to ensure a seamless user experience across
 
 ![](/docs/chat-phone.png)
 
-## Technologies used
-
-- **Frontend:** Developed with **React** for a dynamic and responsive user interface.
-- **Backend:** Utilizes **Express** as the web server framework for efficient request handling and routing.
-- **Database:** **PostgreSQL** is used for reliable data storage.
-- **File Storage:** **S3** is used for reliable file storage.
-- **ORM:** **Prisma** facilitates seamless interaction between Express and MySQL.
-
 ## Getting Started
 
-To set up and run LinkUp on your local machine, follow these steps:
+Follow these steps to set up and run **LinkUp** on your local machine:
 
-1. **Install Prerequisites**  
-   Ensure the following are installed on your system:
+### 1. Install Prerequisites
 
-   - [Docker](https://www.docker.com/) and Docker Compose
-   - [Node.js](https://nodejs.org/)
+Make sure you have the following installed:
 
-2. **Clone the Repository**  
-   Clone the project repository to your local machine:
+* [Docker](https://www.docker.com/) and Docker Compose
+* [Node.js](https://nodejs.org/)
 
-   ```bash
-   git clone https://github.com/misat1505/linkup.git
-   cd linkup
-   ```
+---
 
-3. **Run the App**  
-   Use the provided `docker-compose.sh` script to manage and run the application. This script supports various modes: production, development and end-to-end testing.
+### 2. Clone the Repository
 
-   - **Run Production Environment:**  
-     Starts the application with all services required for production:
+Clone the project repository and navigate into the folder:
 
-     ```bash
-     ./docker-compose.sh prod
-     ```
+```bash
+git clone https://github.com/misat1505/linkup.git
+cd linkup
+```
 
-     In another terminal start backend:
+---
 
-     ```bash
-     cd backend
-     npm install
-     npm run dev
-     ```
+### 3. Run the Application
 
-   - **Run Tests:**  
-     Execute following commands:
+Use the `docker-compose.sh` script to manage and run the app. It supports multiple modes: production, development, and end-to-end testing.
 
-     ```
-     cd backend
-     npm install
-     npm run test
-     ```
+* **Production Mode**
+  Builds and runs optimized Docker images for deployment:
 
-   - **Run Load Tests for Backend:**  
-     Start the app:
+  ```bash
+  ./docker-compose.sh prod
+  ```
 
-     ```bash
-     ./docker-compose.sh dev
-     ```
+* **Development Mode**
+  Starts database, socket, and S3 services like production, plus runs backend and frontend in development mode with hot-module replacement enabled:
 
-     In another terminal start backend:
+  ```bash
+  ./docker-compose.sh dev
+  ```
 
-     ```bash
-     cd backend
-     npm install
-     npm run dev
-     ```
+* **End-to-End (e2e) Testing Mode**
+  Start the app in e2e mode:
 
-     And execute following commands:
+  ```bash
+  ./docker-compose.sh e2e
+  ```
 
-     ```
-     cd backend
-     npm install
-     npm run test:load:report
-     ```
+  Then, in a separate terminal, run:
 
-   - **Run e2e Tests:**  
-     Start the app in e2e mode:
+  ```bash
+  cd frontend
+  npm install
+  npm run cypress:open
+  ```
 
-     ```bash
-     ./docker-compose.sh e2e
-     ```
 
-     In another terminal start backend in e2e mode:
-
-     ```bash
-     cd backend
-     npm install
-     npm run e2e
-     ```
-
-     And execute following commands:
-
-     ```
-     cd frontend
-     npm install
-     npm run cypress:open
-     ```
-
-   - **Run Development Environment:**
-
-     Start database, socket and S3 for development:
-
-     ```
-     ./docker-compose.sh dev
-     ```
-
-     Then to run backend execute the following commands:
-
-     ```
-     cd backend
-     npm install
-     npm run dev
-     ```
-
-     Then to run frontend execute the following commands:
-
-     ```
-     cd frontend
-     npm install
-     npm run dev
-     ```
