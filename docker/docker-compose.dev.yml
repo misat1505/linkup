@@ -36,10 +36,16 @@ services:
   backend:
     build:
       context: ../backend
-      dockerfile: ../docker/Dockerfile.backend
+      dockerfile: ../docker/Dockerfile.backend.dev
     depends_on:
       database:
         condition: service_healthy
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm run dev
+    volumes:
+      - ../backend:/app
+      - /app/node_modules
     ports:
       - "5500:5500"
 
@@ -53,9 +59,15 @@ services:
   frontend:
     build:
       context: ../frontend
-      dockerfile: ../docker/Dockerfile.frontend
+      dockerfile: ../docker/Dockerfile.frontend.dev
     ports:
-      - "3000:80"
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm run dev -- --host
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
 
 volumes:
   database-data:

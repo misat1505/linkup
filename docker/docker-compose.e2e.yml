@@ -32,15 +32,15 @@ services:
       timeout: 5s
       retries: 5
 
-  # e2e-backend:
-  #   build:
-  #     context: ../backend
-  #     dockerfile: ../docker/Dockerfile.backend.e2e
-  #   depends_on:
-  #     database:
-  #       condition: service_healthy
-  #   ports:
-  #     - "5500:5500"
+  e2e-backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend.e2e
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "5500:5500"
 
   frontend:
     build:
