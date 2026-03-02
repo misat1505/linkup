@@ -9,9 +9,14 @@ import {
   ReactNode,
 } from "react";
 
+type TranslateFn = <T extends keyof Translation>(
+  key: T,
+  vars?: Record<string, string>,
+) => any;
+
 type LanguageContextProps = {
   locale: string;
-  t: Translation;
+  t: TranslateFn;
   changeLanguage: (lng: string) => void;
   isLoading: boolean;
 };
@@ -31,18 +36,27 @@ type Props = {
   children: ReactNode;
 };
 
+const getNested = (obj: any, path: string) => {
+  return path.split(".").reduce((acc, part) => acc?.[part], obj);
+};
+
+const interpolate = (template: string, vars?: Record<string, string>) => {
+  if (!vars) return template;
+  return template.replace(/{{(.*?)}}/g, (_, key) => vars[key.trim()] || "");
+};
+
 export const LanguageProvider = ({ children }: Props) => {
   const [locale, setLocale] = useState("en");
-  const [t, setT] = useState<Translation | null>(null);
+  const [translations, setTranslations] = useState<Translation | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadTranslations = async (lng: string) => {
     try {
       const data = await import(`../i18n/locales/${lng}.json`);
-      setT(data.default.translation);
+      setTranslations(data.default.translation);
     } catch {
       const data = await import("../i18n/locales/en.json");
-      setT(data.default.translation);
+      setTranslations(data.default.translation);
     }
   };
 
@@ -58,7 +72,13 @@ export const LanguageProvider = ({ children }: Props) => {
     loadTranslations(storedLang).then(() => setIsLoading(false));
   }, []);
 
-  if (isLoading || !t) return null;
+  if (isLoading || !translations) return null;
+
+  const t = (path: string, vars?: Record<string, string>) => {
+    const value = getNested(translations, path);
+    if (typeof value === "string") return interpolate(value, vars);
+    return value;
+  };
 
   return (
     <LanguageContext.Provider value={{ locale, t, changeLanguage, isLoading }}>

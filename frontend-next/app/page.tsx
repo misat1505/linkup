@@ -6,5 +6,5 @@ import { useLanguageContext } from "@/providers/LanguageProvider";
 export default function Home() {
   const { t } = useLanguageContext();
 
-  return <Button>{t.login.slogan}</Button>;
+  return <Button>{t("tabs.chats", { name: "bbb" })}</Button>;
 }
