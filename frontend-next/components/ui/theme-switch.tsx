@@ -1,13 +1,13 @@
 import * as React from "react";
 import * as SwitchPrimitives from "@radix-ui/react-switch";
-import { useThemeContext } from "@/contexts/ThemeProvider";
+// import { useThemeContext } from "@/contexts/ThemeProvider";
 import { cn } from "@/lib/utils";
 
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root> & React.PropsWithChildren,
   React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
 >(({ className, children, ...props }, ref) => {
-  const { theme } = useThemeContext();
+  // const { theme } = useThemeContext();
 
   return (
     <SwitchPrimitives.Root
@@ -16,7 +16,7 @@ const Switch = React.forwardRef<
         theme === "dark"
           ? "data-[state=checked]:bg-black data-[state=unchecked]:bg-black"
           : "data-[state=checked]:bg-switch-white data-[state=unchecked]:bg-white",
-        className
+        className,
       )}
       {...props}
       ref={ref}
@@ -26,7 +26,7 @@ const Switch = React.forwardRef<
           "pointer-events-none block h-5 w-5 rounded-full shadow-lg ring-0 transition-all",
           theme === "dark"
             ? "data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 data-[state=checked]:bg-white data-[state=unchecked]:bg-white"
-            : "data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 data-[state=checked]:bg-black data-[state=unchecked]:bg-black"
+            : "data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 data-[state=checked]:bg-black data-[state=unchecked]:bg-black",
         )}
       >
         {children}
