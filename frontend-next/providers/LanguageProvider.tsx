@@ -9,10 +9,19 @@ import {
   ReactNode,
 } from "react";
 
-type TranslateFn = <T extends keyof Translation>(
-  key: T,
+type DotPrefix<T extends string> = T extends "" ? "" : `.${T}`;
+type DotPaths<T> = T extends object
+  ? {
+      [K in keyof T & string]: `${K}${DotPrefix<DotPaths<T[K]>>}`;
+    }[keyof T & string]
+  : "";
+
+type TranslationPath = DotPaths<Translation>;
+
+type TranslateFn = (
+  key: TranslationPath,
   vars?: Record<string, string>,
-) => any;
+) => string;
 
 type LanguageContextProps = {
   locale: string;
