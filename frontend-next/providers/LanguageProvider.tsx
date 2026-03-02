@@ -12,6 +12,7 @@ import {
 type DotPrefix<T extends string> = T extends "" ? "" : `.${T}`;
 type DotPaths<T> = T extends object
   ? {
+      // @ts-expect-error dot string won't be infinite
       [K in keyof T & string]: `${K}${DotPrefix<DotPaths<T[K]>>}`;
     }[keyof T & string]
   : "";
