@@ -1,10 +1,10 @@
-"use client";
-
+import { I18nText } from "@/components/shared/I18nText";
 import { Button } from "@/components/ui/button";
-import { useLanguageContext } from "@/providers/LanguageProvider";
 
 export default function Home() {
-  const { t } = useLanguageContext();
-
-  return <Button>{t("tabs.chats", { name: "bbb" })}</Button>;
+  return (
+    <Button>
+      <I18nText translationKey="tabs.chats" values={{ name: "bbb" }} />
+    </Button>
+  );
 }

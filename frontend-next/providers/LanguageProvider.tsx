@@ -16,7 +16,7 @@ type DotPaths<T> = T extends object
     }[keyof T & string]
   : "";
 
-type TranslationPath = DotPaths<Translation>;
+export type TranslationPath = DotPaths<Translation>;
 
 type TranslateFn = (
   key: TranslationPath,
