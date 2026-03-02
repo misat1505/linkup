@@ -1,5 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { useLanguageContext } from "@/providers/LanguageProvider";
 
 export default function Home() {
-  return <Button>Click me</Button>;
+  const { t } = useLanguageContext();
+
+  return <Button>{t.login.slogan}</Button>;
 }
