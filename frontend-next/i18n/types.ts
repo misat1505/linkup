@@ -69,8 +69,8 @@ type LoginTranslations = {
 
 type SignupTranslations = {
   header: {
-    1: string;
-    2: string;
+    "1": string;
+    "2": string;
   };
   slogan: string;
   form: {
