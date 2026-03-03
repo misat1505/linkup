@@ -8,9 +8,9 @@ import SignupForm from "@/features/auth/components/SignupForm";
 import AlreadyHaveAccount from "@/features/auth/components/AlreadyHaveAccount";
 import SignupFormProvider from "@/features/auth/providers/SignupFormProvider";
 import { useRouter } from "next/navigation";
-import { AuthService } from "@/features/auth/services/Auth.service";
 import { SignupFormType } from "@/features/auth/schemas/auth.validators";
 import { SignupFormEntries } from "@/features/auth/hooks/useSignupForm";
+import { signupUser } from "@/features/auth/actions/signupUser";
 
 export default function Signup() {
   const { t } = useLanguageContext();
@@ -21,7 +21,15 @@ export default function Signup() {
     data: SignupFormEntries,
   ) => {
     try {
-      const user = await AuthService.signup(data);
+      const formData = new FormData();
+      formData.append("login", data.login);
+      formData.append("password", data.password);
+      formData.append("firstName", data.firstName);
+      formData.append("lastName", data.lastName);
+      if (data.file) {
+        formData.append("file", data.file);
+      }
+      const user = await signupUser(formData);
       console.log(user);
       // setUser(user);
       router.push("/");
