@@ -34,10 +34,10 @@ export default function Signup() {
       // setUser(user);
       router.push("/");
     } catch (e: unknown) {
-      if (e instanceof AxiosError) {
+      if (e instanceof Error) {
         toast({
           title: t("signup.form.errors.toast.title"),
-          description: e.response?.data.message,
+          description: e.message,
           variant: "destructive",
         });
       }

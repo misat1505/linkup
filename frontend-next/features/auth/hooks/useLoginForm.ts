@@ -48,10 +48,10 @@ export default function useLoginForm(): useLoginFormValue {
       // setUser(user);
       router.push("/");
     } catch (e: unknown) {
-      if (e instanceof AxiosError) {
+      if (e instanceof Error) {
         toast({
           title: t("login.error.toast.title"),
-          description: e.response?.data.message,
+          description: e.message,
           variant: "destructive",
         });
       }

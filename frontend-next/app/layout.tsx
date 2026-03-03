@@ -4,6 +4,7 @@ import "./globals.css";
 import BgGradient from "@/components/shared/BgGradient";
 import { LanguageProvider } from "@/providers/LanguageProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
           <LanguageProvider>
             <BgGradient />
             <div className="relative z-10">{children}</div>
+            <Toaster />
           </LanguageProvider>
         </ThemeProvider>
       </body>
