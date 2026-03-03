@@ -5,6 +5,10 @@ import BgGradient from "@/components/shared/BgGradient";
 import { LanguageProvider } from "@/providers/LanguageProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/toaster";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/queryClient";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Providers from "@/components/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,18 +35,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <LanguageProvider>
-            <BgGradient />
-            <div className="relative z-10">{children}</div>
-            <Toaster />
-          </LanguageProvider>
-        </ThemeProvider>
+        <Providers>
+          <BgGradient />
+          <div className="relative z-10">{children}</div>
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
