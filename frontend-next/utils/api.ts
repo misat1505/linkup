@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { API_URL } from "./constants";
+import { addFilePrefix } from "./addFilePrefix";
 
 function createAPIInstance(config: AxiosRequestConfig): AxiosInstance {
   const instance = axios.create(config);
@@ -18,15 +19,15 @@ function createAPIInstance(config: AxiosRequestConfig): AxiosInstance {
     },
   );
 
-  // instance.interceptors.response.use(
-  //   (response) => {
-  //     response.data = addFilePrefix(response.data);
-  //     return response;
-  //   },
-  //   (error) => {
-  //     return Promise.reject(error);
-  //   }
-  // );
+  instance.interceptors.response.use(
+    (response) => {
+      response.data = addFilePrefix(response.data);
+      return response;
+    },
+    (error) => {
+      return Promise.reject(error);
+    },
+  );
 
   return instance;
 }

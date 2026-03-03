@@ -9,6 +9,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/queryClient";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Providers from "@/components/Providers";
+import Navbar from "@/components/shared/navbar/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
       >
         <Providers>
           <BgGradient />
+          <Navbar />
           <div className="relative z-10">{children}</div>
           <Toaster />
         </Providers>
