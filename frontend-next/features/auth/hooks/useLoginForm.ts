@@ -12,6 +12,7 @@ import {
 } from "react-hook-form";
 import { LoginFormType, useLoginFormSchema } from "../schemas/auth.validators";
 import { AuthService } from "../services/Auth.service";
+import { loginUser } from "../actions/loginUser";
 
 type LoginFormEntries = {
   login: string;
@@ -43,7 +44,7 @@ export default function useLoginForm(): useLoginFormValue {
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     try {
-      const user = await AuthService.login(data);
+      const user = await loginUser(data);
       // setUser(user);
       router.push("/");
     } catch (e: unknown) {

@@ -10,7 +10,7 @@ function createAPIInstance(config: AxiosRequestConfig): AxiosInstance {
       // if (token) {
       //   config.headers["Authorization"] = `Bearer ${token}`;
       // }
-      config.headers["Accept-Language"] = localStorage.getItem("lang") || "en";
+      // config.headers["Accept-Language"] = localStorage.getItem("lang") || "en";
       return config;
     },
     (error) => {

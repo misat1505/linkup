@@ -1,11 +1,10 @@
 import { MouseEvent, useMemo } from "react";
 import { FaUser } from "react-icons/fa";
-import { useLanguageContext } from "@/providers/LanguageProvider";
 import { useSignupFormContext } from "../providers/SignupFormProvider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { I18nText } from "@/components/shared/I18nText";
 
 export default function SignupImageDisplay() {
-  const { t } = useLanguageContext();
   const { file: fileData, removeFile, data } = useSignupFormContext();
 
   const file = useMemo(
@@ -30,7 +29,7 @@ export default function SignupImageDisplay() {
             onClick={handleRemoveFile}
             className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100"
           >
-            {t("signup.form.remove-image")}
+            <I18nText translationKey="signup.form.remove-image" />
           </button>
         )}
       </div>
