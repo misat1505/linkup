@@ -1,5 +1,6 @@
 "use client";
 import { getQueryClient } from "@/lib/queryClient";
+import AppProvider from "@/providers/AppProvider";
 import { LanguageProvider } from "@/providers/LanguageProvider";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -17,7 +18,9 @@ export default function Providers({ children }: PropsWithChildren) {
         enableSystem
         disableTransitionOnChange
       >
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          <AppProvider>{children}</AppProvider>
+        </LanguageProvider>
       </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

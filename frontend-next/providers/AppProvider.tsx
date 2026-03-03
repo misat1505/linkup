@@ -1,0 +1,45 @@
+"use client";
+
+import { getMe } from "@/features/auth/actions/getMe";
+import { User } from "@/features/auth/schemas/user";
+import { queryKeys } from "@/lib/queryKeys";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { createContext, PropsWithChildren, useContext } from "react";
+
+type AppContextProps = PropsWithChildren;
+
+type AppContextValue = {
+  user: User | null | undefined;
+  invalidateCurrentUser: () => void;
+  isLoading: boolean;
+};
+
+const AppContext = createContext<AppContextValue>({} as AppContextValue);
+
+export const useAppContext = () => useContext(AppContext);
+
+export const AppProvider = ({ children }: AppContextProps) => {
+  const queryClient = useQueryClient();
+  const { data: user, isLoading } = useQuery({
+    queryKey: queryKeys.me(),
+    queryFn: getMe,
+  });
+
+  function invalidateCurrentUser() {
+    queryClient.invalidateQueries({ queryKey: queryKeys.me() });
+  }
+
+  return (
+    <AppContext.Provider
+      value={{
+        user,
+        invalidateCurrentUser,
+        isLoading,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
+
+export default AppProvider;
