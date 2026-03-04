@@ -33,6 +33,8 @@ import { I18nText } from "../I18nText";
 import { useAppContext } from "@/providers/AppProvider";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { logoutUser } from "@/features/auth/actions/logout";
+import { sleep } from "@/utils/sleep";
 
 export default function NavbarSheet() {
   const { user } = useAppContext();
@@ -194,9 +196,11 @@ function LogoutDialog() {
   const { invalidateCurrentUser } = useAppContext();
 
   const handleLogout = async () => {
-    // await AuthService.logout();
+    logoutUser();
     invalidateCurrentUser();
     queryClient.clear();
+
+    await sleep(10);
     router.push("/login");
   };
 

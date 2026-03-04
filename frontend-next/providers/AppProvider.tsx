@@ -1,6 +1,7 @@
 "use client";
 
 import { getMe } from "@/features/auth/actions/getMe";
+import { useRefreshToken } from "@/features/auth/hooks/useRefreshToken";
 import { User } from "@/features/auth/schemas/user";
 import { queryKeys } from "@/lib/queryKeys";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -28,6 +29,8 @@ export const AppProvider = ({ children }: AppContextProps) => {
   function invalidateCurrentUser() {
     queryClient.invalidateQueries({ queryKey: queryKeys.me() });
   }
+
+  useRefreshToken(user);
 
   return (
     <AppContext.Provider
