@@ -36,3 +36,7 @@ export const AUTH_API = createAPIInstance({
   baseURL: `${API_URL}/auth`,
   withCredentials: true,
 });
+
+export const USER_API = createAPIInstance({
+  baseURL: `${API_URL}/users`,
+});

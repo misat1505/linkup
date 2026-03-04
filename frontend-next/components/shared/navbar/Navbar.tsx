@@ -28,7 +28,7 @@ export default function Navbar() {
               </span>
             </Tooltip>
           </div>
-          {/*{isLoggedIn && <NavbarSearch />}*/}
+          <NavbarSearch />
         </div>
 
         <div className="flex items-center gap-x-4">
