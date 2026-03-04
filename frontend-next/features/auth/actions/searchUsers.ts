@@ -1,17 +1,20 @@
 "use server";
 import { USER_API } from "@/utils/api";
 import { User } from "../schemas/user";
-import { getAccessTokenFromCookie } from "../utils/getAccessTokenFromCookie";
 import z from "zod";
+import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
 
 export async function searchUsers(term: string): Promise<User[]> {
-  const accessToken = await getAccessTokenFromCookie();
+  const api = await serverSideRequestFactory({
+    base: USER_API,
+    include: {
+      accessToken: true,
+    },
+  });
 
   const {
     data: { users },
-  } = await USER_API.get(`/search?term=${term}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+  } = await api.get(`/search?term=${term}`);
 
   return z.array(User).parse(users);
 }
