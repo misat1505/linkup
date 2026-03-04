@@ -2,12 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import BgGradient from "@/components/shared/BgGradient";
-import { LanguageProvider } from "@/providers/LanguageProvider";
-import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/toaster";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { getQueryClient } from "@/lib/queryClient";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/shared/navbar/Navbar";
 

@@ -11,8 +11,9 @@ import {
   useForm,
 } from "react-hook-form";
 import { LoginFormType, useLoginFormSchema } from "../schemas/auth.validators";
-import { AuthService } from "../services/Auth.service";
 import { loginUser } from "../actions/loginUser";
+import { useAppContext } from "@/providers/AppProvider";
+import { sleep } from "@/utils/sleep";
 
 type LoginFormEntries = {
   login: string;
@@ -32,7 +33,7 @@ export default function useLoginForm(): useLoginFormValue {
   const { t } = useLanguageContext();
   const router = useRouter();
   const { toast } = useToast();
-  // const { setUser } = useAppContext();
+  const { invalidateCurrentUser } = useAppContext();
   const loginFormSchema = useLoginFormSchema();
   const {
     register,
@@ -44,8 +45,12 @@ export default function useLoginForm(): useLoginFormValue {
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     try {
-      const user = await loginUser(data);
-      // setUser(user);
+      await loginUser(data);
+
+      invalidateCurrentUser();
+
+      // give time for cookies to be stored
+      await sleep(10);
       router.push("/");
     } catch (e: unknown) {
       if (e instanceof Error) {

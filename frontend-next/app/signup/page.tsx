@@ -11,12 +11,14 @@ import { useRouter } from "next/navigation";
 import { SignupFormType } from "@/features/auth/schemas/auth.validators";
 import { SignupFormEntries } from "@/features/auth/hooks/useSignupForm";
 import { signupUser } from "@/features/auth/actions/signupUser";
+import { useAppContext } from "@/providers/AppProvider";
+import { sleep } from "@/utils/sleep";
 
 export default function Signup() {
   const { t } = useLanguageContext();
   // useChangeTabTitle(t("tabs.signup"));
   const router = useRouter();
-  // const { setUser } = useAppContext();
+  const { invalidateCurrentUser } = useAppContext();
   const onSubmit: SubmitHandler<SignupFormType> = async (
     data: SignupFormEntries,
   ) => {
@@ -29,9 +31,12 @@ export default function Signup() {
       if (data.file) {
         formData.append("file", data.file);
       }
-      const user = await signupUser(formData);
-      console.log(user);
-      // setUser(user);
+      await signupUser(formData);
+
+      invalidateCurrentUser();
+
+      // give time for cookies to be stored
+      await sleep(10);
       router.push("/");
     } catch (e: unknown) {
       if (e instanceof Error) {
