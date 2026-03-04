@@ -1,6 +1,5 @@
 import Tooltip from "../Tooltip";
 import NavbarSearch from "./NavbarSearch";
-import ThemeToggle from "./ThemeToggle";
 import NavbarSheet from "./NavbarSheet";
 import { I18nText } from "../I18nText";
 import Link from "next/link";

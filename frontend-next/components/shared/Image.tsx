@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { ImgProps } from "react-image";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useFetchProtectedURL } from "@/hooks/useFetchProtectedURL";
@@ -19,7 +18,7 @@ function DefaultError({
     <p
       className={cn(
         "flex h-full w-full items-center justify-center",
-        className
+        className,
       )}
     >
       {content}
@@ -27,7 +26,7 @@ function DefaultError({
   );
 }
 
-type ImageProps = Omit<ImgProps, "className"> & {
+type ImageProps = any & {
   className?: {
     common?: string;
     img?: string;

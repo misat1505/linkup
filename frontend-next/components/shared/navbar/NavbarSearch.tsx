@@ -42,6 +42,8 @@ function NavbarSearchContent() {
   const [text, setText] = useState("");
   const [debouncedText] = useDebounce(text, 300);
   const commandListRef = useRef<HTMLDivElement>(null);
+
+  // @ts-expect-error commandListRef is not null
   useClickOutside(commandListRef, () => setIsExpanded(false));
 
   const { data: users = [], isFetching } = useQuery({
@@ -220,7 +222,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
 type ActionButtonProps = {
   tooltipText: React.ReactNode;
   onClick: () => void;
-  Icon: JSX.Element;
+  Icon: React.ReactNode;
 };
 
 export function ActionButton({

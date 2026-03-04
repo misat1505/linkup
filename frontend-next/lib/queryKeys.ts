@@ -1,6 +1,15 @@
-import { Post } from "@/types/Post";
-import { Chat } from "@/types/Chat";
-import { Message } from "@/types/Message";
+// TODO: change to proper types
+type Chat = {
+  id: string;
+};
+
+type Post = {
+  id: string;
+};
+
+type Message = {
+  id: string;
+};
 
 export const queryKeys = {
   searchUsers: (text: string) => ["search-users", { text }] as const,

@@ -57,7 +57,7 @@ export default function NavbarSheet() {
 }
 
 type ButtonsType = {
-  icon: JSX.Element;
+  icon: React.ReactNode;
   text: React.ReactNode;
   onClick: () => void;
 };
