@@ -5,6 +5,7 @@ import BgGradient from "@/components/shared/BgGradient";
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/shared/navbar/Navbar";
+import "github-markdown-css/github-markdown.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

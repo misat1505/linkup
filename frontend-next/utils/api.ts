@@ -40,3 +40,7 @@ export const AUTH_API = createAPIInstance({
 export const USER_API = createAPIInstance({
   baseURL: `${API_URL}/users`,
 });
+
+export const POSTS_API = createAPIInstance({
+  baseURL: `${API_URL}/posts`,
+});
