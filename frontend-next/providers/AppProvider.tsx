@@ -1,6 +1,5 @@
 "use client";
 
-import { getMe } from "@/features/auth/actions/getMe";
 import { useRefreshToken } from "@/features/auth/hooks/useRefreshToken";
 import { User } from "@/features/auth/schemas/user";
 import { queryKeys } from "@/lib/queryKeys";

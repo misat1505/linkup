@@ -8,7 +8,7 @@ export async function POST() {
     return NextResponse.json({
       accessToken,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { message: "Failed to refresh token" },
       { status: 401 },
