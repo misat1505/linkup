@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { User } from "../schemas/user";
-import { refreshToken } from "../actions/refreshToken";
+import axios from "axios";
 
 export const useRefreshToken = (user: User | null | undefined) => {
   const refreshTokenIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -10,15 +10,13 @@ export const useRefreshToken = (user: User | null | undefined) => {
       if (!user) return;
 
       try {
-        await refreshToken();
+        await axios.post("/api/auth/refresh");
       } catch (error) {
         console.error("Error refreshing token:", error);
       }
     };
 
-    // TODO: there is some race condition here
-
-    // handleRefreshToken();
+    handleRefreshToken();
 
     refreshTokenIntervalRef.current = setInterval(
       handleRefreshToken,

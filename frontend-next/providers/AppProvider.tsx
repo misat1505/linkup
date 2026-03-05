@@ -5,6 +5,7 @@ import { useRefreshToken } from "@/features/auth/hooks/useRefreshToken";
 import { User } from "@/features/auth/schemas/user";
 import { queryKeys } from "@/lib/queryKeys";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { createContext, PropsWithChildren, useContext } from "react";
 
 type AppContextProps = PropsWithChildren;
@@ -23,7 +24,10 @@ export const AppProvider = ({ children }: AppContextProps) => {
   const queryClient = useQueryClient();
   const { data: user, isLoading } = useQuery({
     queryKey: queryKeys.me(),
-    queryFn: getMe,
+    queryFn: async () => {
+      const response = await axios.get("/api/auth/me");
+      return response.data;
+    },
   });
 
   function invalidateCurrentUser() {
