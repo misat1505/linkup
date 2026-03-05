@@ -1,22 +1,9 @@
 import { NextResponse } from "next/server";
-import { AUTH_API } from "@/utils/api";
-import { setAccessTokenCookie } from "@/features/auth/utils/setAccessTokenCookie";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { refreshToken } from "@/features/auth/utils/refreshToken";
 
 export async function POST() {
   try {
-    const api = await serverSideRequestFactory({
-      base: AUTH_API,
-      include: {
-        refreshToken: true,
-      },
-    });
-
-    const response = await api.post("/refresh");
-
-    const accessToken = response.data.accessToken;
-
-    await setAccessTokenCookie(accessToken);
+    const accessToken = await refreshToken();
 
     return NextResponse.json({
       accessToken,

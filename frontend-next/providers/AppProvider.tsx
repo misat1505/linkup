@@ -26,7 +26,7 @@ export const AppProvider = ({ children }: AppContextProps) => {
     queryKey: queryKeys.me(),
     queryFn: async () => {
       const response = await axios.get("/api/auth/me");
-      return response.data;
+      return User.parse(response.data);
     },
   });
 
