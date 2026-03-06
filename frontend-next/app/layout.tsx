@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/shared/navbar/Navbar";
 import "github-markdown-css/github-markdown.css";
+import ReportWebVitals from "@/components/ReportWebVitals";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
           <div className="relative z-10">{children}</div>
           <Toaster />
         </Providers>
+        <ReportWebVitals />
       </body>
     </html>
   );

@@ -113,6 +113,9 @@ importers:
       use-local-storage:
         specifier: ^3.0.0
         version: 3.0.0(react@19.2.3)
+      web-vitals:
+        specifier: ^5.1.0
+        version: 5.1.0
       zod:
         specifier: 3.25.76
         version: 3.25.76
@@ -4160,6 +4163,9 @@ packages:
   web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
     engines: {node: '>= 8'}
+
+  web-vitals@5.1.0:
+    resolution: {integrity: sha512-ArI3kx5jI0atlTtmV0fWU3fjpLmq/nD3Zr1iFFlJLaqa5wLBkUSzINwBPySCX/8jRyjlmy1Volw1kz1g9XE4Jg==}
 
   which-boxed-primitive@1.1.1:
     resolution: {integrity: sha512-TbX3mj8n0odCBFVlY8AxkqcHASw3L60jIuF8jFP78az3C2YhmGvqbHBpAjTRH2/xqYunrJ9g1jSyjCjpoWzIAA==}
@@ -8851,6 +8857,8 @@ snapshots:
       vfile-message: 4.0.3
 
   web-streams-polyfill@3.3.3: {}
+
+  web-vitals@5.1.0: {}
 
   which-boxed-primitive@1.1.1:
     dependencies:
