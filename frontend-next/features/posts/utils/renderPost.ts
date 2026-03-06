@@ -14,7 +14,10 @@ export async function renderMarkdown(markdown: string) {
     .use(rehypeSanitize)
     .use(rehypeStringify)
     .use(rehypeShiki, {
-      theme: "github-light",
+      themes: {
+        light: "github-light",
+        dark: "github-dark",
+      },
     })
     .process(markdown);
 
@@ -35,6 +38,6 @@ export async function getCachedRenderedPost(post: Post) {
       return renderedPost;
     },
     ["post-render", post.id],
-    { revalidate: 86400 },
+    { revalidate: 1 },
   )();
 }

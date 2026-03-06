@@ -9,6 +9,17 @@
   --color-post-dark: #0c1117;
 }
 
+@layer base {
+  .dark .shiki {
+    background-color: var(--shiki-dark-bg) !important;
+    color: var(--shiki-dark) !important;
+  }
+
+  .dark .shiki span {
+    color: var(--shiki-dark) !important;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
