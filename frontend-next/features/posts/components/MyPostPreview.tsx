@@ -12,12 +12,13 @@ export default function MyPostPreview({
 }: {
   post: PostWithRenderedContent;
 }) {
+  console.log(post.content);
   return (
     <MyPostPreviewCollapse>
       <MyPostHeader post={post} />
       <div
         dangerouslySetInnerHTML={{ __html: post.renderedContent }}
-        className="markdown-body"
+        className="markdown-body bg-post-light! text-post-dark! dark:bg-post-dark! dark:text-post-light!"
       ></div>
       <PostActions postId={post.id} />
     </MyPostPreviewCollapse>

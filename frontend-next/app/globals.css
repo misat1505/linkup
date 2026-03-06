@@ -2,6 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@plugin "@tailwindcss/typography";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -10,6 +12,10 @@
 }
 
 @layer base {
+  .shiki {
+    background-color: var(--bgColor-neutral-muted) !important;
+  }
+
   .dark .shiki {
     background-color: var(--shiki-dark-bg) !important;
     color: var(--shiki-dark) !important;
