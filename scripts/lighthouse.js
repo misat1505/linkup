@@ -18,15 +18,39 @@ const importantMetrics = [
 const debugDir = path.join("debug");
 const outputDir = path.join("benchmark-output");
 
-async function runLighthouseAfterLogin(mode) {
-  try {
-    const chrome = await launch({ chromeFlags: ["--headless"] });
+async function runSingleLighthouse(page, url, mode, options) {
+  const runnerResult = await lighthouse(url, options);
+  const { audits } = runnerResult.lhr;
 
-    // podłącz puppeteer do tego samego chrome
+  const results = {};
+  for (const metric of importantMetrics) {
+    const audit = audits[metric];
+    results[metric] = {
+      value: audit.numericValue ?? null,
+      display: audit.displayValue ?? null,
+      score: audit.score ?? null,
+    };
+  }
+
+  const html = await page.content();
+  await fs.writeFile(
+    path.join(debugDir, `after-lighthouse-${mode}.html`),
+    html,
+    "utf-8",
+  );
+
+  return results;
+}
+
+async function runLighthouseAfterLogin(mode, iterations = 10) {
+  try {
+    await fs.mkdir(debugDir, { recursive: true });
+    await fs.mkdir(outputDir, { recursive: true });
+
+    const chrome = await launch({ chromeFlags: ["--headless"] });
     const browser = await puppeteer.connect({
       browserURL: `http://localhost:${chrome.port}`,
     });
-
     const page = await browser.newPage();
 
     console.log("Opening login page...");
@@ -34,7 +58,6 @@ async function runLighthouseAfterLogin(mode) {
     await page.goto("http://localhost:3000/login", {
       waitUntil: "networkidle0",
     });
-
     await page.type('input[name="login"]', "login6");
     await page.type('input[name="password"]', "pass6");
 
@@ -44,8 +67,11 @@ async function runLighthouseAfterLogin(mode) {
     ]);
 
     await new Promise((res) => setTimeout(res, 1000));
-
     console.log("Logged in");
+
+    const url = "http://localhost:3000/posts";
+    const waitUntil = mode === "react" ? "networkidle0" : "domcontentloaded";
+    await page.goto(url, { waitUntil });
 
     const options = {
       port: chrome.port,
@@ -55,52 +81,53 @@ async function runLighthouseAfterLogin(mode) {
       screenEmulation: { disabled: true },
     };
 
-    const url = "http://localhost:3000/posts";
+    console.log("\nRunning warmup...");
+    await lighthouse(url, options); // warmup
 
-    const waitUntil = mode === "react" ? "networkidle0" : "domcontentloaded";
-
-    await page.goto(url, {
-      waitUntil,
-    });
-
-    console.log(`\nRunning lighthouse on ${page.url()} in ${mode} mode.\n`);
-
-    console.log("Running warmup...");
-    await lighthouse(url, options);
-
-    console.log("Running benchmark...");
-    const runnerResult = await lighthouse(url, options);
-
-    await fs.mkdir(debugDir, { recursive: true });
-    await fs.mkdir(outputDir, { recursive: true });
-
-    const html = await page.content();
-    await fs.writeFile(
-      path.join(debugDir, `after-lighthouse-${mode}.html`),
-      html,
-      "utf-8",
+    console.log(
+      `\nRunning ${iterations} Lighthouse benchmarks on ${mode}...\n`,
     );
 
-    const { audits } = runnerResult.lhr;
+    const allResults = [];
 
-    const results = {};
+    for (let i = 0; i < iterations; i++) {
+      console.log(`Running test #${i + 1}...`);
+      const start = performance.now();
+      const result = await runSingleLighthouse(page, url, mode, options);
+      const durationMs = performance.now() - start;
+      console.log(`Done in ${(durationMs / 1000).toFixed(2)} s\n`);
+      allResults.push(result);
+    }
 
+    const avgResults = {};
     for (const metric of importantMetrics) {
-      const audit = audits[metric];
-      results[metric] = {
-        value: audit.numericValue ?? null,
-        display: audit.displayValue ?? null,
-        score: audit.score ?? null,
+      let sum = 0;
+      let count = 0;
+      for (const r of allResults) {
+        if (r[metric].value !== null) {
+          sum += r[metric].value;
+          count++;
+        }
+      }
+      avgResults[metric] = {
+        value: count ? sum / count : null,
+        display: count ? `${(sum / count).toFixed(2)} ms` : null,
       };
     }
 
     await fs.writeFile(
-      path.join(outputDir, `${mode}.json`),
-      JSON.stringify(results, null, 2),
+      path.join(outputDir, `${mode}-all.json`),
+      JSON.stringify(allResults, null, 2),
+      "utf-8",
+    );
+    await fs.writeFile(
+      path.join(outputDir, `${mode}-avg.json`),
+      JSON.stringify(avgResults, null, 2),
       "utf-8",
     );
 
-    console.table(results);
+    console.log("\nŚrednie wyniki:");
+    console.table(avgResults);
 
     await browser.disconnect();
     chrome.kill();
@@ -109,4 +136,4 @@ async function runLighthouseAfterLogin(mode) {
   }
 }
 
-runLighthouseAfterLogin("nextjs");
+runLighthouseAfterLogin("nextjs", 10);

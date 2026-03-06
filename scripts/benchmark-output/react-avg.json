@@ -1,0 +1,34 @@
+{
+  "largest-contentful-paint": {
+    "value": 903.3277,
+    "display": "903.33 ms"
+  },
+  "first-contentful-paint": {
+    "value": 202.5524,
+    "display": "202.55 ms"
+  },
+  "speed-index": {
+    "value": 516.7,
+    "display": "516.70 ms"
+  },
+  "total-blocking-time": {
+    "value": 402.07009997558595,
+    "display": "402.07 ms"
+  },
+  "max-potential-fid": {
+    "value": 330.9571,
+    "display": "330.96 ms"
+  },
+  "cumulative-layout-shift": {
+    "value": 6.960069016556767e-7,
+    "display": "0.00 ms"
+  },
+  "interactive": {
+    "value": 888.5602999755858,
+    "display": "888.56 ms"
+  },
+  "server-response-time": {
+    "value": 1.5244,
+    "display": "1.52 ms"
+  }
+}
