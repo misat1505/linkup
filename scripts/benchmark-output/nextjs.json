@@ -1,0 +1,42 @@
+{
+  "largest-contentful-paint": {
+    "value": 460.589,
+    "display": "0.5 s",
+    "score": 1
+  },
+  "first-contentful-paint": {
+    "value": 460.589,
+    "display": "0.5 s",
+    "score": 1
+  },
+  "speed-index": {
+    "value": 467,
+    "display": "0.5 s",
+    "score": 1
+  },
+  "total-blocking-time": {
+    "value": 0,
+    "display": "0 ms",
+    "score": 1
+  },
+  "max-potential-fid": {
+    "value": 21.151,
+    "display": "20 ms",
+    "score": 1
+  },
+  "cumulative-layout-shift": {
+    "value": 0,
+    "display": "0",
+    "score": 1
+  },
+  "interactive": {
+    "value": 460.589,
+    "display": "0.5 s",
+    "score": 1
+  },
+  "server-response-time": {
+    "value": 14.996999999999998,
+    "display": "Root document took 10 ms",
+    "score": 1
+  }
+}
