@@ -5,14 +5,13 @@ import Link from "next/link";
 import { Post, PostWithRenderedContent } from "../schemas/post";
 import Tooltip from "@/components/shared/Tooltip";
 import MyPostHeader from "./MyPostHeader";
-import DeletePostDialog from "./DeetePostDialog";
+import DeletePostDialog from "./DeletePostDialog";
 
 export default function MyPostPreview({
   post,
 }: {
   post: PostWithRenderedContent;
 }) {
-  console.log(post.content);
   return (
     <MyPostPreviewCollapse>
       <MyPostHeader post={post} />
