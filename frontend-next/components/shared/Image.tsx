@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
