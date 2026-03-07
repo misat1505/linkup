@@ -1,34 +1,29 @@
 import { launch } from "chrome-launcher";
-import lighthouse from "lighthouse";
-import puppeteer from "puppeteer-core";
+import lighthouse, { Flags } from "lighthouse";
+import puppeteer, { type Page } from "puppeteer-core";
 import fs from "fs/promises";
 import path from "path";
+import type { MetricKey, MetricResult, Mode } from "./types";
+import { debugDir, importantMetrics, outputDir } from "./constants";
 
-const importantMetrics = [
-  "largest-contentful-paint",
-  "first-contentful-paint",
-  "speed-index",
-  "total-blocking-time",
-  "max-potential-fid",
-  "cumulative-layout-shift",
-  "interactive",
-  "server-response-time",
-];
-
-const debugDir = path.join("debug");
-const outputDir = path.join("benchmark-output");
-
-async function runSingleLighthouse(page, url, mode, options) {
-  const runnerResult = await lighthouse(url, options);
+async function runSingleLighthouse(
+  page: Page,
+  url: string,
+  mode: Mode,
+  flags: Flags,
+): Promise<Record<MetricKey, MetricResult>> {
+  const runnerResult = await lighthouse(url, flags);
+  if (!runnerResult) throw new Error("Lighthouse test failed");
   const { audits } = runnerResult.lhr;
 
-  const results = {};
+  const results = {} as Record<MetricKey, MetricResult>;
+
   for (const metric of importantMetrics) {
     const audit = audits[metric];
     results[metric] = {
-      value: audit.numericValue ?? null,
-      display: audit.displayValue ?? null,
-      score: audit.score ?? null,
+      value: audit?.numericValue ?? null,
+      display: audit?.displayValue ?? null,
+      score: audit?.score ?? null,
     };
   }
 
@@ -42,7 +37,13 @@ async function runSingleLighthouse(page, url, mode, options) {
   return results;
 }
 
-async function runLighthouseAfterLogin(mode, iterations = 10) {
+async function runLighthouseAfterLogin({
+  mode,
+  iterations,
+}: {
+  mode: Mode;
+  iterations: number;
+}) {
   try {
     await fs.mkdir(debugDir, { recursive: true });
     await fs.mkdir(outputDir, { recursive: true });
@@ -73,7 +74,7 @@ async function runLighthouseAfterLogin(mode, iterations = 10) {
     const waitUntil = mode === "react" ? "networkidle0" : "domcontentloaded";
     await page.goto(url, { waitUntil });
 
-    const options = {
+    const options: Flags = {
       port: chrome.port,
       output: "json",
       throttlingMethod: "provided",
@@ -88,7 +89,7 @@ async function runLighthouseAfterLogin(mode, iterations = 10) {
       `\nRunning ${iterations} Lighthouse benchmarks on ${mode}...\n`,
     );
 
-    const allResults = [];
+    const allResults: Record<MetricKey, MetricResult>[] = [];
 
     for (let i = 0; i < iterations; i++) {
       console.log(`Running test #${i + 1}...`);
@@ -99,7 +100,11 @@ async function runLighthouseAfterLogin(mode, iterations = 10) {
       allResults.push(result);
     }
 
-    const avgResults = {};
+    const avgResults: Record<
+      MetricKey,
+      { value: number | null; display: string | null }
+    > = {} as any;
+
     for (const metric of importantMetrics) {
       let sum = 0;
       let count = 0;
@@ -132,8 +137,11 @@ async function runLighthouseAfterLogin(mode, iterations = 10) {
     await browser.disconnect();
     chrome.kill();
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 }
 
-runLighthouseAfterLogin("nextjs", 10);
+runLighthouseAfterLogin({
+  mode: "nextjs",
+  iterations: 10,
+});
