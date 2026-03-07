@@ -20,8 +20,8 @@ export async function updatePost({
 
   const post = Post.parse(response.data.post);
 
-  // revalidateTag(`post-${post.id}`, "max");
-  revalidatePath("/posts");
+  revalidateTag(`post-${post.id}`, "max");
+  // revalidatePath("/posts");
 
   return post;
 }
