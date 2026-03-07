@@ -8,7 +8,7 @@ import { useLanguageContext } from "@/providers/LanguageProvider";
 import { useTheme } from "next-themes";
 import { useEditorContext } from "../providers/EditorProvider";
 import { markdownPreviewOptions } from "../utils/markdownPreviewOptions";
-// import FileDialog from "./FileDialog";
+import FileDialog from "./FileDialog";
 
 export default function Editor() {
   const router = useRouter();
@@ -54,14 +54,14 @@ export default function Editor() {
     },
   ];
 
-  // const customCommands: ICommand[] = [
-  //   {
-  //     name: "files",
-  //     keyCommand: "files",
-  //     buttonProps: { "aria-label": buttonText, title: "show files" },
-  //     icon: <FileDialog content={markdown} />,
-  //   },
-  // ];
+  const customCommands: ICommand[] = [
+    {
+      name: "files",
+      keyCommand: "files",
+      buttonProps: { "aria-label": buttonText, title: "show files" },
+      icon: <FileDialog content={markdown} />,
+    },
+  ];
 
   return (
     <div data-color-mode={theme} className="w-full">
@@ -69,7 +69,7 @@ export default function Editor() {
         data-testid="cy-post-editor"
         value={markdown}
         onChange={(text) => handleSafeChange(text || "")}
-        commands={[...commands.getCommands()]}
+        commands={[...commands.getCommands(), ...customCommands]}
         extraCommands={[...commands.getExtraCommands(), ...customExtraCommands]}
         className="h-[calc(100vh-5rem)]! grow overflow-auto!"
         highlightEnable={true}
