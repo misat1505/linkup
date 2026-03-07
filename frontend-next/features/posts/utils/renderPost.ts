@@ -38,6 +38,6 @@ export async function getCachedRenderedPost(post: Post) {
       return renderedPost;
     },
     ["post-render", post.id],
-    { revalidate: 86400 },
+    { revalidate: 86400, tags: [`post-${post.id}`] },
   )();
 }
