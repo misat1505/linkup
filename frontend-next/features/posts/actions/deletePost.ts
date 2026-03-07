@@ -2,7 +2,18 @@
 
 import { POSTS_API } from "@/utils/api";
 import { Post } from "../schemas/post";
+import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { revalidatePath } from "next/cache";
 
 export async function deletePost(id: Post["id"]): Promise<void> {
-  await POSTS_API.delete(`/${id}`);
+  const api = await serverSideRequestFactory({
+    base: POSTS_API,
+    include: {
+      accessToken: true,
+    },
+  });
+
+  await api.delete(`/${id}`);
+
+  revalidatePath("/posts");
 }
