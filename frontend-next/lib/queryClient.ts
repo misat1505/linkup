@@ -1,16 +1,6 @@
 "use client";
 import { isServer, QueryClient } from "@tanstack/react-query";
-
-function makeQueryClient() {
-  return new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        refetchOnWindowFocus: false,
-      },
-    },
-  });
-}
+import { makeQueryClient } from "./makeQueryClient";
 
 let browserQueryClient: QueryClient | undefined = undefined;
 

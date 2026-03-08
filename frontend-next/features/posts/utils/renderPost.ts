@@ -37,7 +37,7 @@ export const renderMarkdownCached = async (
 ) => {
   "use cache";
   cacheTag(`post-${postId}`);
-  cacheLife({ revalidate: 1 });
+  cacheLife({ revalidate: 86400 });
 
   const withReplacedLinks = replaceLinks(markdown);
 
