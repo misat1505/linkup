@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import rehypeShiki from "@shikijs/rehype";
 import { cacheTag } from "next/cache";
 import { cacheLife } from "next/cache";
+import { replaceLinks } from "./replaceLinks";
 
 export const renderMarkdownCached = async (
   postId: string,
@@ -15,6 +16,8 @@ export const renderMarkdownCached = async (
   "use cache";
   cacheTag(`post-${postId}`);
   cacheLife({ revalidate: 86400 });
+
+  const withReplacedLinks = replaceLinks(markdown);
 
   const result = await remark()
     .use(remarkGfm)
@@ -27,7 +30,7 @@ export const renderMarkdownCached = async (
       },
     })
     .use(rehypeStringify)
-    .process(markdown);
+    .process(withReplacedLinks);
 
   console.log("RENDER MARKDOWN", postId);
 

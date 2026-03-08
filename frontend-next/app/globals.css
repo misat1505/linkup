@@ -24,6 +24,10 @@
   .dark .shiki span {
     color: var(--shiki-dark) !important;
   }
+
+  .markdown-body img {
+    width: 100% !important;
+  }
 }
 
 @theme inline {
