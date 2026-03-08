@@ -142,6 +142,6 @@ async function runLighthouseAfterLogin({
 }
 
 runLighthouseAfterLogin({
-  mode: "nextjs",
-  iterations: 10,
+  mode: "react",
+  iterations: 2,
 });

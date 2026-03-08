@@ -1,407 +1,71 @@
 [
   {
     "largest-contentful-paint": {
-      "value": 1056.766,
+      "value": 1756.474,
+      "display": "1.8 s",
+      "score": 0.71
+    },
+    "first-contentful-paint": {
+      "value": 388.411,
+      "display": "0.4 s",
+      "score": 1
+    },
+    "speed-index": {
+      "value": 1082,
       "display": "1.1 s",
+      "score": 0.96
+    },
+    "total-blocking-time": {
+      "value": 986.991,
+      "display": "990 ms",
+      "score": 0.05
+    },
+    "max-potential-fid": {
+      "value": 710.907,
+      "display": "710 ms",
+      "score": 0.02
+    },
+    "cumulative-layout-shift": {
+      "value": 0.000001238294487608259,
+      "display": "0",
+      "score": 1
+    },
+    "interactive": {
+      "value": 1739.525,
+      "display": "1.7 s",
+      "score": 0.98
+    },
+    "server-response-time": {
+      "value": 3.138,
+      "display": "Root document took 0 ms",
+      "score": 1
+    }
+  },
+  {
+    "largest-contentful-paint": {
+      "value": 1915.465,
+      "display": "1.9 s",
+      "score": 0.66
+    },
+    "first-contentful-paint": {
+      "value": 430.598,
+      "display": "0.4 s",
+      "score": 1
+    },
+    "speed-index": {
+      "value": 1186,
+      "display": "1.2 s",
       "score": 0.93
     },
-    "first-contentful-paint": {
-      "value": 239.252,
-      "display": "0.2 s",
-      "score": 1
-    },
-    "speed-index": {
-      "value": 613,
-      "display": "0.6 s",
-      "score": 1
-    },
     "total-blocking-time": {
-      "value": 456.01499987792965,
-      "display": "460 ms",
-      "score": 0.34
+      "value": 1081.1149998779297,
+      "display": "1,080 ms",
+      "score": 0.04
     },
     "max-potential-fid": {
-      "value": 355.236,
-      "display": "360 ms",
-      "score": 0.24
-    },
-    "cumulative-layout-shift": {
-      "value": 9.393958181855757e-7,
-      "display": "0",
-      "score": 1
-    },
-    "interactive": {
-      "value": 1040.4839998779296,
-      "display": "1.0 s",
-      "score": 1
-    },
-    "server-response-time": {
-      "value": 1.374,
-      "display": "Root document took 0 ms",
-      "score": 1
-    }
-  },
-  {
-    "largest-contentful-paint": {
-      "value": 844.092,
-      "display": "0.8 s",
-      "score": 0.97
-    },
-    "first-contentful-paint": {
-      "value": 193.228,
-      "display": "0.2 s",
-      "score": 1
-    },
-    "speed-index": {
-      "value": 478,
-      "display": "0.5 s",
-      "score": 1
-    },
-    "total-blocking-time": {
-      "value": 366.51699999999994,
-      "display": "370 ms",
-      "score": 0.47
-    },
-    "max-potential-fid": {
-      "value": 313.495,
-      "display": "310 ms",
-      "score": 0.32
-    },
-    "cumulative-layout-shift": {
-      "value": 7.685965785154711e-7,
-      "display": "0",
-      "score": 1
-    },
-    "interactive": {
-      "value": 828.3830001220703,
-      "display": "0.8 s",
-      "score": 1
-    },
-    "server-response-time": {
-      "value": 1.615,
-      "display": "Root document took 0 ms",
-      "score": 1
-    }
-  },
-  {
-    "largest-contentful-paint": {
-      "value": 933.506,
-      "display": "0.9 s",
-      "score": 0.96
-    },
-    "first-contentful-paint": {
-      "value": 182.76,
-      "display": "0.2 s",
-      "score": 1
-    },
-    "speed-index": {
-      "value": 518,
-      "display": "0.5 s",
-      "score": 1
-    },
-    "total-blocking-time": {
-      "value": 451.43899999999996,
-      "display": "450 ms",
-      "score": 0.35
-    },
-    "max-potential-fid": {
-      "value": 344.731,
-      "display": "340 ms",
-      "score": 0.26
-    },
-    "cumulative-layout-shift": {
-      "value": 0.000001238294487608259,
-      "display": "0",
-      "score": 1
-    },
-    "interactive": {
-      "value": 917.933,
-      "display": "0.9 s",
-      "score": 1
-    },
-    "server-response-time": {
-      "value": 1.578,
-      "display": "Root document took 0 ms",
-      "score": 1
-    }
-  },
-  {
-    "largest-contentful-paint": {
-      "value": 941.014,
-      "display": "0.9 s",
-      "score": 0.96
-    },
-    "first-contentful-paint": {
-      "value": 156.872,
-      "display": "0.2 s",
-      "score": 1
-    },
-    "speed-index": {
-      "value": 526,
-      "display": "0.5 s",
-      "score": 1
-    },
-    "total-blocking-time": {
-      "value": 483.7289998779296,
-      "display": "480 ms",
-      "score": 0.31
-    },
-    "max-potential-fid": {
-      "value": 409.281,
-      "display": "410 ms",
-      "score": 0.16
-    },
-    "cumulative-layout-shift": {
-      "value": 0,
-      "display": "0",
-      "score": 1
-    },
-    "interactive": {
-      "value": 932.0729998779296,
-      "display": "0.9 s",
-      "score": 1
-    },
-    "server-response-time": {
-      "value": 2.081,
-      "display": "Root document took 0 ms",
-      "score": 1
-    }
-  },
-  {
-    "largest-contentful-paint": {
-      "value": 904.293,
-      "display": "0.9 s",
-      "score": 0.96
-    },
-    "first-contentful-paint": {
-      "value": 203.38,
-      "display": "0.2 s",
-      "score": 1
-    },
-    "speed-index": {
-      "value": 513,
-      "display": "0.5 s",
-      "score": 1
-    },
-    "total-blocking-time": {
-      "value": 394.37199987792974,
-      "display": "390 ms",
-      "score": 0.42
-    },
-    "max-potential-fid": {
-      "value": 338.618,
-      "display": "340 ms",
-      "score": 0.27
-    },
-    "cumulative-layout-shift": {
-      "value": 0.000001238294487608259,
-      "display": "0",
-      "score": 1
-    },
-    "interactive": {
-      "value": 881.7029998779296,
-      "display": "0.9 s",
-      "score": 1
-    },
-    "server-response-time": {
-      "value": 1.4249999999999998,
-      "display": "Root document took 0 ms",
-      "score": 1
-    }
-  },
-  {
-    "largest-contentful-paint": {
-      "value": 1102.888,
-      "display": "1.1 s",
-      "score": 0.92
-    },
-    "first-contentful-paint": {
-      "value": 268.506,
-      "display": "0.3 s",
-      "score": 1
-    },
-    "speed-index": {
-      "value": 650,
-      "display": "0.7 s",
-      "score": 1
-    },
-    "total-blocking-time": {
-      "value": 477.53300000000013,
-      "display": "480 ms",
-      "score": 0.31
-    },
-    "max-potential-fid": {
-      "value": 404.43,
-      "display": "400 ms",
-      "score": 0.17
-    },
-    "cumulative-layout-shift": {
-      "value": 3.8429828925773556e-7,
-      "display": "0",
-      "score": 1
-    },
-    "interactive": {
-      "value": 1086.943,
-      "display": "1.1 s",
-      "score": 1
-    },
-    "server-response-time": {
-      "value": 2.6470000000000002,
-      "display": "Root document took 0 ms",
-      "score": 1
-    }
-  },
-  {
-    "largest-contentful-paint": {
-      "value": 1029.659,
-      "display": "1.0 s",
-      "score": 0.94
-    },
-    "first-contentful-paint": {
-      "value": 195.463,
-      "display": "0.2 s",
-      "score": 1
-    },
-    "speed-index": {
-      "value": 575,
-      "display": "0.6 s",
-      "score": 1
-    },
-    "total-blocking-time": {
-      "value": 483.4020000000001,
-      "display": "480 ms",
-      "score": 0.31
-    },
-    "max-potential-fid": {
-      "value": 412.33,
-      "display": "410 ms",
-      "score": 0.16
-    },
-    "cumulative-layout-shift": {
-      "value": 0.000001238294487608259,
-      "display": "0",
-      "score": 1
-    },
-    "interactive": {
-      "value": 1010.543,
-      "display": "1.0 s",
-      "score": 1
-    },
-    "server-response-time": {
-      "value": 1.5540000000000003,
-      "display": "Root document took 0 ms",
-      "score": 1
-    }
-  },
-  {
-    "largest-contentful-paint": {
-      "value": 824.812,
-      "display": "0.8 s",
-      "score": 0.97
-    },
-    "first-contentful-paint": {
-      "value": 157.487,
-      "display": "0.2 s",
-      "score": 1
-    },
-    "speed-index": {
-      "value": 471,
-      "display": "0.5 s",
-      "score": 1
-    },
-    "total-blocking-time": {
-      "value": 368.30799987792966,
-      "display": "370 ms",
-      "score": 0.46
-    },
-    "max-potential-fid": {
-      "value": 316.919,
-      "display": "320 ms",
-      "score": 0.32
-    },
-    "cumulative-layout-shift": {
-      "value": 0,
-      "display": "0",
-      "score": 1
-    },
-    "interactive": {
-      "value": 814.8279998779296,
-      "display": "0.8 s",
-      "score": 1
-    },
-    "server-response-time": {
-      "value": 1.287,
-      "display": "Root document took 0 ms",
-      "score": 1
-    }
-  },
-  {
-    "largest-contentful-paint": {
-      "value": 860.836,
-      "display": "0.9 s",
-      "score": 0.97
-    },
-    "first-contentful-paint": {
-      "value": 193.398,
-      "display": "0.2 s",
-      "score": 1
-    },
-    "speed-index": {
-      "value": 492,
-      "display": "0.5 s",
-      "score": 1
-    },
-    "total-blocking-time": {
-      "value": 367.97700000000003,
-      "display": "370 ms",
-      "score": 0.46
-    },
-    "max-potential-fid": {
-      "value": 310.973,
-      "display": "310 ms",
-      "score": 0.33
-    },
-    "cumulative-layout-shift": {
-      "value": 0.000001238294487608259,
-      "display": "0",
-      "score": 1
-    },
-    "interactive": {
-      "value": 847.5950001220704,
-      "display": "0.8 s",
-      "score": 1
-    },
-    "server-response-time": {
-      "value": 1.7009999999999998,
-      "display": "Root document took 0 ms",
-      "score": 1
-    }
-  },
-  {
-    "largest-contentful-paint": {
-      "value": 1031.499,
-      "display": "1.0 s",
-      "score": 0.94
-    },
-    "first-contentful-paint": {
-      "value": 247.357,
-      "display": "0.2 s",
-      "score": 1
-    },
-    "speed-index": {
-      "value": 603,
-      "display": "0.6 s",
-      "score": 1
-    },
-    "total-blocking-time": {
-      "value": 445.79699987792975,
-      "display": "450 ms",
-      "score": 0.35
-    },
-    "max-potential-fid": {
-      "value": 365.97,
-      "display": "370 ms",
-      "score": 0.22
+      "value": 813.45,
+      "display": "810 ms",
+      "score": 0.01
     },
     "cumulative-layout-shift": {
       "value": 0.0000018787916363711515,
@@ -409,12 +73,12 @@
       "score": 1
     },
     "interactive": {
-      "value": 1020.0599998779297,
-      "display": "1.0 s",
-      "score": 1
+      "value": 1894.0319998779296,
+      "display": "1.9 s",
+      "score": 0.97
     },
     "server-response-time": {
-      "value": 1.385,
+      "value": 2.608,
       "display": "Root document took 0 ms",
       "score": 1
     }
