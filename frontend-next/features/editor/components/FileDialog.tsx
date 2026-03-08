@@ -260,7 +260,7 @@ function CopyElementToClipboardButton({ file }: { file: string }) {
 
     if (["mp4"].includes(ext))
       await navigator.clipboard.writeText(
-        `<video>
+        `<video controls>
   <source src="${file}" />
 </video>`,
       );
