@@ -1,34 +1,34 @@
 {
   "largest-contentful-paint": {
-    "value": 1835.9695,
-    "display": "1835.97 ms"
+    "value": 1020.891,
+    "display": "1020.89 ms"
   },
   "first-contentful-paint": {
-    "value": 409.5045,
-    "display": "409.50 ms"
+    "value": 195.078,
+    "display": "195.08 ms"
   },
   "speed-index": {
-    "value": 1134,
-    "display": "1134.00 ms"
+    "value": 495,
+    "display": "495.00 ms"
   },
   "total-blocking-time": {
-    "value": 1034.0529999389648,
-    "display": "1034.05 ms"
+    "value": 437.382,
+    "display": "437.38 ms"
   },
   "max-potential-fid": {
-    "value": 762.1785,
-    "display": "762.18 ms"
+    "value": 329.8875,
+    "display": "329.89 ms"
   },
   "cumulative-layout-shift": {
-    "value": 0.0000015585430619897053,
-    "display": "0.00 ms"
+    "value": 0.0881844573426516,
+    "display": "0.09 ms"
   },
   "interactive": {
-    "value": 1816.7784999389648,
-    "display": "1816.78 ms"
+    "value": 942.9295,
+    "display": "942.93 ms"
   },
   "server-response-time": {
-    "value": 2.873,
-    "display": "2.87 ms"
+    "value": 2.329,
+    "display": "2.33 ms"
   }
 }
