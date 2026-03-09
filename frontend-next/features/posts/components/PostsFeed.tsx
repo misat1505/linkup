@@ -7,9 +7,9 @@ import { queryKeys } from "@/lib/queryKeys";
 import { PostWithRenderedContent } from "../schemas/post";
 import Loading from "@/components/shared/Loading";
 import { getRecommendedPosts } from "../actions/getRecommededPosts";
-import MyPostPreview from "./MyPostPreview";
 import EmptyFeed from "./EmptyFeed";
 import { DEFAULT_POSTS_FEED_PAGE_LENGTH } from "@/utils/constants";
+import PostPreview from "./PostPreview";
 
 export function PostsFeed() {
   const { ref: bottomRef, inView } = useInView({
@@ -55,7 +55,7 @@ export function PostsFeed() {
   return (
     <div>
       {posts.map((post) => (
-        <MyPostPreview post={post} key={post.id} />
+        <PostPreview post={post} key={post.id} />
       ))}
 
       {hasNextPage && <div ref={bottomRef} className="h-6" />}
