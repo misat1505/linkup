@@ -1,15 +1,6 @@
-// TODO: change to proper types
-type Chat = {
-  id: string;
-};
-
-type Post = {
-  id: string;
-};
-
-type Message = {
-  id: string;
-};
+import { Chat } from "@/features/chats/schemas/chat";
+import { Message } from "@/features/chats/schemas/message";
+import { Post } from "@/features/posts/schemas/post";
 
 export const queryKeys = {
   searchUsers: (text: string) => ["search-users", { text }] as const,

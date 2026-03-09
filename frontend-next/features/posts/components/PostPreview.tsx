@@ -5,6 +5,8 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import PostHeader from "./PostHeader";
 import { I18nText } from "@/components/shared/I18nText";
+import PostCommentsSectionProvider from "../providers/PostCommentSectionProvider";
+import PostCommentSection from "./PostCommentSection";
 
 export default function PostPreview({
   post,
@@ -60,11 +62,11 @@ export default function PostPreview({
           )}
         </Button>
       </div>
-      {/*{isExpanded && (
+      {isExpanded && (
         <PostCommentsSectionProvider chat={post.chat}>
           <PostCommentSection />
         </PostCommentsSectionProvider>
-      )}*/}
+      )}
     </div>
   );
 }

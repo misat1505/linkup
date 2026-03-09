@@ -1,14 +1,12 @@
 import { User } from "@/features/auth/schemas/user";
+import { Chat } from "@/features/chats/schemas/chat";
 import z from "zod";
 
-const Chat = z.object({});
-
-// TODO: use proper Chat
 export const Post = z.object({
   id: z.string(),
   content: z.string(),
   createdAt: z.coerce.date(),
-  chat: Chat,
+  chat: Chat.pick({ id: true, createdAt: true, type: true }),
   author: User,
 });
 
