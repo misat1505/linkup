@@ -35,9 +35,6 @@ export const AppProvider = ({ children }: AppContextProps) => {
 
   useRefreshToken(user);
 
-  // TODO: create an auth guard for protected routes
-  if (!user) return null;
-
   return (
     <AppContext.Provider
       value={{
