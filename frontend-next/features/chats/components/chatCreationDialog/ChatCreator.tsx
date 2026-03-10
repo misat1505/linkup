@@ -13,6 +13,7 @@ import PrivateChatForm from "./PrivateChatForm";
 import GroupChatForm from "./GroupChatForm";
 import { I18nText } from "@/components/shared/I18nText";
 import GroupChatFormProvider from "../../providers/GroupChatFormProvider";
+import { CreateChatButton } from "../CreateChatTrigger";
 
 export default function ChatCreator() {
   return (
@@ -24,14 +25,12 @@ export default function ChatCreator() {
               <I18nText translationKey="chats.create-new-chat.trigger.tooltip" />
             }
           >
-            {/* TODO: check what createChatTriggerRef does */}
-            {/*<div ref={createChatTriggerRef}>*/}
-            <div>
+            <CreateChatButton>
               <IoIosAddCircleOutline
                 size={20}
                 className="text-black transition-all hover:scale-125 hover:cursor-pointer dark:text-white md:text-white dark:md:text-black"
               />
-            </div>
+            </CreateChatButton>
           </Tooltip>
         </button>
       </DialogTrigger>
