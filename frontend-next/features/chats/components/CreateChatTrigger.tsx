@@ -1,11 +1,12 @@
 "use client";
 
-import { I18nText } from "@/components/shared/I18nText";
 import { Button } from "@/components/ui/button";
 import { useChatPageContext } from "../providers/ChatPageProvider";
 import { PropsWithChildren } from "react";
 
-export function CreateChatTrigger() {
+type CreateChatTriggerProps = PropsWithChildren;
+
+export function CreateChatTrigger({ children }: CreateChatTriggerProps) {
   const { createChatTriggerRef } = useChatPageContext();
 
   return (
@@ -13,14 +14,14 @@ export function CreateChatTrigger() {
       onClick={() => createChatTriggerRef.current!.click()}
       className="mt-4 mx-auto"
     >
-      <I18nText translationKey="chats.no-chat-selected.action" />
+      {children}
     </Button>
   );
 }
 
-type CreateChatButtonProps = PropsWithChildren;
+type CreateChatTargetProps = PropsWithChildren;
 
-export function CreateChatButton({ children }: CreateChatButtonProps) {
+export function CreateChatTarget({ children }: CreateChatTargetProps) {
   const { createChatTriggerRef } = useChatPageContext();
 
   return <div ref={createChatTriggerRef}>{children}</div>;

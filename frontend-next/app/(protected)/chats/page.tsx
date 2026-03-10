@@ -13,7 +13,9 @@ export default function ChatsPage() {
         <p className="max-w-64 text-muted-foreground text-sm text-center">
           <I18nText translationKey="chats.no-chat-selected.description" />
         </p>
-        <CreateChatTrigger />
+        <CreateChatTrigger>
+          <I18nText translationKey="chats.no-chat-selected.action" />
+        </CreateChatTrigger>
       </div>
     </div>
   );
