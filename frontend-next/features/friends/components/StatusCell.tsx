@@ -11,7 +11,7 @@ import { FaTrash } from "react-icons/fa";
 import { MoreVertical } from "lucide-react";
 import { TiTick } from "react-icons/ti";
 import { I18nText } from "@/components/shared/I18nText";
-import { Friendship } from "../schemas/Friendship";
+import { Friendship } from "../schemas/friendship";
 import { useAppContext } from "@/providers/AppProvider";
 import { useLanguageContext } from "@/providers/LanguageProvider";
 import { useToast } from "@/components/ui/use-toast";

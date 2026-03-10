@@ -6,7 +6,7 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Friendship } from "../schemas/Friendship";
+import { Friendship } from "../schemas/friendship";
 import Avatar from "@/components/shared/Avatar";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { getInitials } from "@/utils/getInitials";

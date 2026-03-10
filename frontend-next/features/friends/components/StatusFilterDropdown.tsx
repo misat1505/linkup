@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { I18nText } from "@/components/shared/I18nText";
 import Tooltip from "@/components/shared/Tooltip";
-import { Friendship } from "../schemas/Friendship";
+import { Friendship } from "../schemas/friendship";
 import useCountStatusCategories from "../hooks/useCountStatusCategories";
 
 type StatusFilterDropdownProps = {

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/table";
 import FocusableSpan from "@/components/shared/FocusableSpan";
 import { I18nText } from "@/components/shared/I18nText";
-import { Friendship } from "../schemas/Friendship";
+import { Friendship } from "../schemas/friendship";
 
 type FriendsTableProps = {
   table: TableType<Friendship>;
