@@ -3,6 +3,7 @@ import { ChatNavigationHide } from "./ChatNavigationHide";
 import { getChats } from "../actions/getChats";
 import { I18nText } from "@/components/shared/I18nText";
 import NavigationItem from "./ChatNavigationItem";
+import ChatCreator from "./chatCreationDialog/ChatCreator";
 
 export default async function ChatNavigation() {
   const chats = await getChats();
@@ -29,7 +30,7 @@ function ChatNavigationHeader() {
       <h2 className="text-lg font-semibold">
         <I18nText translationKey="chats.navigation.title" />
       </h2>
-      {/*<ChatCreator />*/}
+      <ChatCreator />
     </div>
   );
 }

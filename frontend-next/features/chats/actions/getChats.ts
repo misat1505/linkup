@@ -13,6 +13,6 @@ export async function getChats(): Promise<Chat[]> {
     },
   });
 
-  const response = await api.get("");
+  const response = await api.get("/");
   return z.array(Chat).parse(response.data.chats);
 }
