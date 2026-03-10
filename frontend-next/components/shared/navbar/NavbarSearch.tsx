@@ -27,6 +27,10 @@ import { useAppContext } from "@/providers/AppProvider";
 import { User } from "@/features/auth/schemas/user";
 import useClickOutside from "@/hooks/useClickOutside";
 import { searchUsers } from "@/features/auth/actions/searchUsers";
+import { createFriendship } from "@/features/friends/actions/createFriendship";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function NavbarSearch() {
   const { user } = useAppContext();
@@ -118,6 +122,8 @@ type SearchResultItemProps = {
 
 function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
   const { user: me } = useAppContext();
+  const { t } = useLanguageContext();
+  const router = useRouter();
 
   const handleCreateChat = async (userId: User["id"]) => {
     // TODO: redo this function
@@ -131,55 +137,40 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
   };
 
   const handleAddFriend = async (userId: User["id"]) => {
-    // TODO: redo this function
-    // const friendship = await FriendService.createFriendship(me!.id, userId);
-    // setIsExpanded(false);
-    // if (!friendship)
-    //   return toast({
-    //     variant: "destructive",
-    //     title: t(
-    //       "common.navbar.search.friendships.toasts.already-exists.title",
-    //     ),
-    //     description: t(
-    //       "common.navbar.search.friendships.toasts.already-exists.description",
-    //       { fullName: createFullName(user) },
-    //     ),
-    //     action: (
-    //       <Button onClick={() => navigate(ROUTES.FRIENDS.$path())}>
-    //         {t("common.navbar.search.friendships.toasts.already-exists.action")}
-    //       </Button>
-    //     ),
-    //   });
-    // queryClient.setQueryData<Friendship[]>(
-    //   queryKeys.friends(),
-    //   (oldFriends) => {
-    //     if (
-    //       oldFriends?.find(
-    //         (f) =>
-    //           f.requester.id === friendship.requester.id &&
-    //           f.acceptor.id === friendship.acceptor.id,
-    //       )
-    //     )
-    //       return oldFriends;
-    //     return oldFriends ? [...oldFriends, friendship] : [friendship];
-    //   },
-    // );
-    // toast({
-    //   title: t(
-    //     "common.navbar.search.friendships.toasts.successfully-created.title",
-    //   ),
-    //   description: t(
-    //     "common.navbar.search.friendships.toasts.successfully-created.description",
-    //     { fullName: createFullName(user) },
-    //   ),
-    //   action: (
-    //     <Button onClick={() => navigate(ROUTES.FRIENDS.$path())}>
-    //       {t(
-    //         "common.navbar.search.friendships.toasts.successfully-created.action",
-    //       )}
-    //     </Button>
-    //   ),
-    // });
+    const friendship = await createFriendship(me!.id, userId);
+    setIsExpanded(false);
+
+    if (!friendship)
+      return toast({
+        variant: "destructive",
+        title: t(
+          "common.navbar.search.friendships.toasts.already-exists.title",
+        ),
+        description: t(
+          "common.navbar.search.friendships.toasts.already-exists.description",
+          { fullName: createFullName(user) },
+        ),
+        action: (
+          <Button onClick={() => router.push("/friends")}>
+            <I18nText translationKey="common.navbar.search.friendships.toasts.already-exists.action" />
+          </Button>
+        ),
+      });
+
+    toast({
+      title: t(
+        "common.navbar.search.friendships.toasts.successfully-created.title",
+      ),
+      description: t(
+        "common.navbar.search.friendships.toasts.successfully-created.description",
+        { fullName: createFullName(user) },
+      ),
+      action: (
+        <Button onClick={() => router.push("/friends")}>
+          <I18nText translationKey="common.navbar.search.friendships.toasts.successfully-created.action" />
+        </Button>
+      ),
+    });
   };
 
   return (
