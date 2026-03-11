@@ -62,11 +62,11 @@ export const ChatProvider = ({ children, chat }: ChatContextProps) => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery<
-    Message[], // page type
+    Message[],
     Error,
-    Message[], // select return type
+    Message[],
     ReturnType<typeof queryKeys.messages>,
-    string | null // pageParam type 👈 IMPORTANT
+    string | null
   >({
     queryKey: queryKeys.messages(chat.id),
     queryFn: ({ pageParam }) =>

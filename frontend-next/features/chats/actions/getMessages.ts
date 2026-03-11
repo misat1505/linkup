@@ -15,7 +15,10 @@ export async function getMessages(
   if (responseId !== undefined) params.set("responseId", responseId || "null");
   if (lastMessageId !== undefined) {
     params.set("lastMessageId", lastMessageId || "null");
-    params.set("limit", localStorage.getItem("messages-limit") || "20");
+
+    // TODO: maybe do sth about it
+    // params.set("limit", localStorage.getItem("messages-limit") || "20");
+    params.set("limit", "20");
   }
 
   const api = await serverSideRequestFactory({

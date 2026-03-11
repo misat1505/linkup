@@ -1,5 +1,5 @@
-import { useChatContext } from "@/contexts/ChatProvider";
 import { useLayoutEffect, useRef } from "react";
+import { useChatContext } from "../providers/ChatProvider";
 
 type useChatScrollValue = {
   containerRef: React.RefObject<HTMLDivElement>;
