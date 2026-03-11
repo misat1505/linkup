@@ -99,10 +99,6 @@ export const ChatPageProvider = ({
   );
 
   useEffect(() => {
-    socketClient.onReceiveMessage((message) => {
-      addMessage(message);
-    });
-
     socketClient.on(SocketErrors.JOINING_ROOM_ERROR, () => {
       toast({
         title: t("chats.sockets.errors.connection.toast.title"),
@@ -110,7 +106,7 @@ export const ChatPageProvider = ({
         variant: "destructive",
       });
     });
-  }, [addMessage, t]);
+  }, [t]);
 
   useEffect(() => {
     chatsArg.forEach((chat) => {

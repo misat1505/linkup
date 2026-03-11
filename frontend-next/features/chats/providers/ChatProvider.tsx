@@ -2,7 +2,9 @@
 import React, {
   createContext,
   PropsWithChildren,
+  useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -18,6 +20,7 @@ import { getMessages } from "../actions/getMessages";
 import { Reaction } from "../schemas/reaction";
 import { Message } from "../schemas/message";
 import { Chat } from "../schemas/chat";
+import { SocketAction, socketClient } from "@/lib/socketClient";
 
 type ChatContextProps = PropsWithChildren & {
   chat: Chat;
@@ -87,49 +90,50 @@ export const ChatProvider = ({ children, chat }: ChatContextProps) => {
   const incomeMessage =
     messages?.find((message) => message.id === incomeMessageId) || null;
 
-  const addReaction = (reaction: Reaction) => {};
+  const addReaction = useCallback(
+    (reaction: Reaction) => {
+      queryClient.setQueryData(queryKeys.messages(chat!.id), (oldData: any) => {
+        if (!oldData) return oldData;
 
-  // const addReaction = (reaction: Reaction) => {
-  //   queryClient.setQueryData(queryKeys.messages(chat!.id), (oldData: any) => {
-  //     if (!oldData) return oldData;
+        const newPages = oldData.pages.map((page: Message[]) =>
+          page.map((m) => {
+            if (m.id !== reaction.messageId) return m;
 
-  //     const newPages = oldData.pages.map((page: Message[]) =>
-  //       page.map((m) => {
-  //         if (m.id !== reaction.messageId) return m;
+            const alreadyReacted = m.reactions.some(
+              (r) => r.user.id === reaction.user.id,
+            );
+            if (alreadyReacted) return m;
 
-  //         const alreadyReacted = m.reactions.some(
-  //           (r) => r.user.id === reaction.user.id
-  //         );
-  //         if (alreadyReacted) return m;
+            return {
+              ...m,
+              reactions: [...m.reactions, reaction],
+            };
+          }),
+        );
 
-  //         return {
-  //           ...m,
-  //           reactions: [...m.reactions, reaction],
-  //         };
-  //       })
-  //     );
+        return {
+          pages: newPages,
+          pageParams: [...oldData.pageParams],
+        };
+      });
+    },
+    [chat, queryClient],
+  );
 
-  //     return {
-  //       pages: newPages,
-  //       pageParams: [...oldData.pageParams],
-  //     };
-  //   });
-  // };
+  useEffect(() => {
+    socketClient.onReceiveMessage((message) => {
+      addMessage(message);
+      if (message.chatId === chat.id) setIncomeMessageId(message.id);
+    });
 
-  // useEffect(() => {
-  //   socketClient.onReceiveMessage((message) => {
-  //     addMessage(message);
-  //     if (message.chatId === chatId) setIncomeMessageId(message.id);
-  //   });
+    socketClient.onReceiveReaction((reaction) => {
+      addReaction(reaction);
+    });
 
-  //   socketClient.onReceiveReaction((reaction) => {
-  //     addReaction(reaction);
-  //   });
-
-  //   return () => {
-  //     socketClient.off(SocketAction.RECEIVE_MESSAGE);
-  //   };
-  // }, [socketClient]);
+    return () => {
+      socketClient.off(SocketAction.RECEIVE_MESSAGE);
+    };
+  }, [addMessage, chat.id, addReaction]);
 
   return (
     <ChatContext.Provider

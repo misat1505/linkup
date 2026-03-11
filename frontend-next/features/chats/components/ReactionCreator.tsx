@@ -23,6 +23,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useChatContext } from "../providers/ChatProvider";
 import { TranslationPath } from "@/providers/LanguageProvider";
 import { createReaction } from "../actions/createReaction";
+import { socketClient } from "@/lib/socketClient";
 
 export default function ReactionCreator({ message }: { message: Message }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -137,7 +138,7 @@ function ReactionCreatorContentItem({
 
       addReaction(reactionResponse);
 
-      // socketClient.sendReaction(reactionResponse, chat!.id);
+      socketClient.sendReaction(reactionResponse, chat!.id);
 
       setIsOpen(false);
       setIncomeMessageId(null);

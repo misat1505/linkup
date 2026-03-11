@@ -2,6 +2,7 @@
 
 import { useRefreshToken } from "@/features/auth/hooks/useRefreshToken";
 import { User } from "@/features/auth/schemas/user";
+import { getReactions } from "@/features/chats/actions/getReactions";
 import { queryKeys } from "@/lib/queryKeys";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -29,6 +30,11 @@ export const AppProvider = ({ children }: AppContextProps) => {
     },
   });
 
+  const { isLoading: isLoadingReactions } = useQuery({
+    queryFn: getReactions,
+    queryKey: queryKeys.reactions(),
+  });
+
   function invalidateCurrentUser() {
     queryClient.invalidateQueries({ queryKey: queryKeys.me() });
   }
@@ -40,7 +46,7 @@ export const AppProvider = ({ children }: AppContextProps) => {
       value={{
         user,
         invalidateCurrentUser,
-        isLoading,
+        isLoading: isLoading || isLoadingReactions,
       }}
     >
       {children}
