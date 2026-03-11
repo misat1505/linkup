@@ -2,9 +2,9 @@ import { useLayoutEffect, useRef } from "react";
 import { useChatContext } from "../providers/ChatProvider";
 
 type useChatScrollValue = {
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
   handleScroll: () => void;
-  bottomRef: React.RefObject<HTMLDivElement>;
+  bottomRef: React.RefObject<HTMLDivElement | null>;
   wasAtBottomRef: React.MutableRefObject<boolean>;
   scrollToBottom: () => void;
 };

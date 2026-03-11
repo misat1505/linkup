@@ -14,6 +14,7 @@ import { useChatContext } from "../providers/ChatProvider";
 import { chatFormSchema, ChatFormType } from "../schemas/chatValidators";
 import { createMessage } from "../actions/createMessage";
 import { useLanguageContext } from "@/providers/LanguageProvider";
+import { socketClient } from "@/lib/socketClient";
 
 export type ChatFormEntries = {
   content: string;
@@ -65,7 +66,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
       reset();
       setIncomeMessageId(null);
       addMessage(message);
-      // socketClient.sendMessage(message);
+      socketClient.sendMessage(message);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         toast({
