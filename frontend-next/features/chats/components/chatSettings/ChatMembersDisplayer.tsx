@@ -1,3 +1,5 @@
+"use client";
+
 import { IoIosChatbubbles } from "react-icons/io";
 import Avatar from "@/components/shared/Avatar";
 import { buildFileURL } from "@/utils/buildFileURL";
@@ -7,10 +9,10 @@ import Tooltip from "@/components/shared/Tooltip";
 import FocusableSpan from "@/components/shared/FocusableSpan";
 import { Chat, UserInChat } from "../../schemas/chat";
 import { I18nText } from "@/components/shared/I18nText";
-import { getMeCached } from "@/features/auth/actions/getMe";
 import { createPrivateChat } from "../../actions/createPrivateChats";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import AliasUpdateModal from "./AliasUpdateModal";
+import { useAppContext } from "@/providers/AppProvider";
 
 type ChatMembersDisplayerProps = {
   chat: Chat;
@@ -62,16 +64,14 @@ function ChatMemberDisplayItem({
   );
 }
 
-async function CreateMessageButton({ user }: { user: UserInChat }) {
-  const me = await getMeCached();
+function CreateMessageButton({ user }: { user: UserInChat }) {
+  const { user: me } = useAppContext();
+  const router = useRouter();
 
   const handleClick = async () => {
-    const chat = await createPrivateChat(me.id, user.id);
-    // queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-    //   if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
-    //   return oldChats ? [...oldChats, chat] : [chat];
-    // });
-    redirect(`/chats/${chat.id}`);
+    const chat = await createPrivateChat(me!.id, user.id);
+
+    router.push(`/chats/${chat.id}`);
   };
 
   return (

@@ -49,7 +49,11 @@ export default function ChatSettingsDialog({ chat }: ChatSettingsDialogProps) {
             )}
           </DialogDescription>
         </DialogHeader>
-        {chat.type === "PRIVATE" ? <ChatMembersDisplayer chat={chat} /> : null}
+        {chat.type === "PRIVATE" ? (
+          <ChatMembersDisplayer chat={chat} />
+        ) : (
+          <GroupChatContent chat={chat} />
+        )}
       </DialogContent>
     </Dialog>
   );

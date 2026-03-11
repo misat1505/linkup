@@ -1,27 +1,41 @@
-import Loading from "@/components/common/Loading";
+"use client";
+import Loading from "@/components/shared/Loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useChatContext } from "@/contexts/ChatProvider";
+import { downloadFile } from "@/features/files/actions/downloadFile";
 import { queryKeys } from "@/lib/queryKeys";
-import { ChatService } from "@/services/Chat.service";
-import { FileService } from "@/services/File.service";
-import { Chat } from "@/types/Chat";
+import { useAppContext } from "@/providers/AppProvider";
 import { buildFileURL } from "@/utils/buildFileURL";
-import { sortChatsByActivity } from "@/utils/sortChatsByActivity";
+import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { FaUserGroup } from "react-icons/fa6";
-import { useQuery, useQueryClient } from "react-query";
+import { Chat } from "../../schemas/chat";
+import { I18nText } from "@/components/shared/I18nText";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { updateChat } from "../../actions/updateChat";
 
-export default function ChatInfoUpdater() {
-  const { chat } = useChatContext();
+type ChatInfoUpdaterProps = {
+  chat: Chat;
+};
+
+export default function ChatInfoUpdater({ chat }: ChatInfoUpdaterProps) {
+  const { user: me } = useAppContext();
   const { data, isLoading } = useQuery({
-    queryKey: queryKeys.downloadFile(chat!.photoURL!),
-    queryFn: () =>
-      FileService.downloadFile(
-        buildFileURL(chat!.photoURL, { type: "chat-photo", id: chat!.id }),
-        chat!.photoURL
-      ),
+    queryKey: queryKeys.downloadFile(me!.photoURL!),
+    queryFn: async () => {
+      if (!me!.photoURL) return null;
+
+      const data = await downloadFile(
+        buildFileURL(chat.photoURL, { type: "chat-photo", id: chat.id }),
+      );
+      if (!data) return null;
+
+      const file = new File([data.buffer], me!.photoURL, {
+        type: data.type,
+      });
+
+      return file;
+    },
   });
 
   if (isLoading)
@@ -31,18 +45,16 @@ export default function ChatInfoUpdater() {
       </div>
     );
 
-  return <Updater file={data || null} />;
+  return <Updater file={data || null} chat={chat} />;
 }
 
-function Updater({ file }: { file: File | null }) {
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const { chat } = useChatContext();
+function Updater({ file, chat }: { file: File | null; chat: Chat }) {
+  const { t } = useLanguageContext();
   const [image, setImage] = useState(file);
-  const [groupName, setGroupName] = useState(chat?.name);
+  const [groupName, setGroupName] = useState(chat.name);
 
   const handleRemoveFile = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     setImage(null);
@@ -64,19 +76,12 @@ function Updater({ file }: { file: File | null }) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const updatedChat = await ChatService.updateChat(
-      chat!.id,
-      groupName || null,
-      image
-    );
+    const formData = new FormData();
 
-    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-      if (!oldChats) return [];
+    if (groupName) formData.append("name", groupName);
+    if (image) formData.append("file", image);
 
-      const filteredChats = oldChats.filter((c) => c.id !== chat!.id);
-      filteredChats.push(updatedChat);
-      return sortChatsByActivity(filteredChats);
-    });
+    await updateChat(chat.id, formData);
   };
 
   const source = useMemo(() => {
@@ -107,7 +112,7 @@ function Updater({ file }: { file: File | null }) {
             onClick={handleRemoveFile}
             className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100"
           >
-            {t("chats.settings.group.info.input.file.remove")}
+            <I18nText translationKey="chats.settings.group.info.input.file.remove" />
           </button>
         )}
       </div>
@@ -118,7 +123,7 @@ function Updater({ file }: { file: File | null }) {
         accept=".jpg, .png, .webp"
       />
       <Button className="self-end" type="submit">
-        {t("chats.settings.group.info.submit")}
+        <I18nText translationKey="chats.settings.group.info.submit" />
       </Button>
     </form>
   );
