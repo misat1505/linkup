@@ -4,8 +4,9 @@ import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
 import { Chat } from "../schemas/chat";
 import { CHAT_API } from "@/utils/api";
 import z from "zod";
+import { cache } from "react";
 
-export async function getChats(): Promise<Chat[]> {
+export const getChatsCached = cache(async () => {
   const api = await serverSideRequestFactory({
     base: CHAT_API,
     include: {
@@ -15,4 +16,4 @@ export async function getChats(): Promise<Chat[]> {
 
   const response = await api.get("/");
   return z.array(Chat).parse(response.data.chats);
-}
+});

@@ -1,12 +1,12 @@
 import NoChats from "./NoChats";
 import { ChatNavigationHide } from "./ChatNavigationHide";
-import { getChats } from "../actions/getChats";
+import { getChatsCached } from "../actions/getChats";
 import { I18nText } from "@/components/shared/I18nText";
 import NavigationItem from "./ChatNavigationItem";
 import ChatCreator from "./chatCreationDialog/ChatCreator";
 
 export default async function ChatNavigation() {
-  const chats = await getChats();
+  const chats = await getChatsCached();
 
   return (
     <ChatNavigationHide>
