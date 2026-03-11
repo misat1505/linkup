@@ -9,6 +9,7 @@ import Link from "next/link";
 import { Chat } from "../schemas/chat";
 import Avatar from "@/components/shared/Avatar";
 import Tooltip from "@/components/shared/Tooltip";
+import ChatSettingsDialog from "./chatSettings/ChatSettingsDialog";
 
 export default async function ChatHeader({ chat }: { chat: Chat }) {
   const me = await getMeCached();
@@ -46,8 +47,8 @@ export default async function ChatHeader({ chat }: { chat: Chat }) {
         </div>
       </div>
       <div className="flex items-center gap-x-2">
-        {/*{chat.type === "GROUP" && <ChatLeaveDialog />}
-        <ChatSettingsDialog />*/}
+        {/*{chat.type === "GROUP" && <ChatLeaveDialog />}*/}
+        <ChatSettingsDialog chat={chat} />
         <Tooltip content={<I18nText translationKey="chats.close.tooltip" />}>
           <span className="transition-all hover:scale-125">
             <Link href="/chats">
