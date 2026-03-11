@@ -99,7 +99,7 @@ function UserAddDialog({ user }: { user: User }) {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
-    await addUserToChat(id, user.id);
+    await addUserToChat(id as Chat["id"], user.id);
   };
 
   return (
