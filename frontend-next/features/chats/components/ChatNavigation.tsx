@@ -2,8 +2,8 @@ import NoChats from "./NoChats";
 import { ChatNavigationHide } from "./ChatNavigationHide";
 import { getChatsCached } from "../actions/getChats";
 import { I18nText } from "@/components/shared/I18nText";
-import NavigationItem from "./ChatNavigationItem";
 import ChatCreator from "./chatCreationDialog/ChatCreator";
+import NavigationList from "./ChatNavigationItem";
 
 export default async function ChatNavigation() {
   const chats = await getChatsCached();
@@ -16,9 +16,7 @@ export default async function ChatNavigation() {
         data-testid="cy-chat-nav"
       >
         {chats.length === 0 && <NoChats />}
-        {chats.map((chat) => (
-          <NavigationItem key={chat.id} chat={chat} />
-        ))}
+        <NavigationList />
       </div>
     </ChatNavigationHide>
   );

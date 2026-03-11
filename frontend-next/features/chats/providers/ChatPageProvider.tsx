@@ -1,15 +1,20 @@
 "use client";
 
-import React, { createContext, useContext, useRef } from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
+import { Chat } from "../schemas/chat";
+import { Message } from "../schemas/message";
+import { sortChatsByActivity } from "../utils/sortChatsByActivity";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/queryKeys";
 
 type ChatPageContextProps = {
   children: React.ReactNode;
+  chats: Chat[];
 };
 
 type ChatPageContextValue = {
-  // chats: Chat[] | undefined;
-  // isLoading: boolean;
-  // addMessage: (message: Message) => void;
+  chats: Chat[];
+  addMessage: (message: Message) => void;
   createChatTriggerRef: React.RefObject<HTMLDivElement | null>;
 };
 
@@ -19,11 +24,15 @@ const ChatPageContext = createContext<ChatPageContextValue>(
 
 export const useChatPageContext = () => useContext(ChatPageContext);
 
-export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
+export const ChatPageProvider = ({
+  children,
+  chats: chatsArg,
+}: ChatPageContextProps) => {
   // const { t } = useTranslation();
+  const [chats, setChats] = useState(sortChatsByActivity(chatsArg));
   const createChatTriggerRef = useRef<HTMLDivElement>(null);
   // const { toast } = useToast();
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   // const { data: chats, isLoading } = useQuery({
   //   queryKey: queryKeys.chats(),
   //   queryFn: ChatService.getChats,
@@ -39,43 +48,42 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
   //   },
   // });
 
-  // const addMessage = (message: Message): void => {
-  //   queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-  //     const updatedChats = oldChats!.map((chat) => {
-  //       if (chat.id !== message.chatId) return chat;
-  //       chat.lastMessage = message;
-  //       return { ...chat };
-  //     });
+  const addMessage = (message: Message): void => {
+    setChats((prev) => {
+      const updatedChats = prev.map((c) => {
+        if (c.id !== message.chatId) return c;
+        c.lastMessage = message;
+        return c;
+      });
+      return sortChatsByActivity(updatedChats);
+    });
 
-  //     return sortChatsByActivity(updatedChats);
-  //   });
+    queryClient.setQueryData(
+      queryKeys.messages(message.chatId),
+      (oldData: any) => {
+        if (!oldData) {
+          return {
+            pages: [[message]],
+            pageParams: [undefined],
+          };
+        }
 
-  //   queryClient.setQueryData(
-  //     queryKeys.messages(message.chatId),
-  //     (oldData: any) => {
-  //       if (!oldData) {
-  //         return {
-  //           pages: [[message]],
-  //           pageParams: [undefined],
-  //         };
-  //       }
+        const allMessages = oldData.pages.flat();
+        const isDuplicate = allMessages.some(
+          (m: Message) => m.id === message.id,
+        );
 
-  //       const allMessages = oldData.pages.flat();
-  //       const isDuplicate = allMessages.some(
-  //         (m: Message) => m.id === message.id
-  //       );
+        if (isDuplicate) {
+          return oldData;
+        }
 
-  //       if (isDuplicate) {
-  //         return oldData;
-  //       }
-
-  //       return {
-  //         pages: [[message], ...oldData.pages],
-  //         pageParams: [undefined, ...oldData.pageParams],
-  //       };
-  //     }
-  //   );
-  // };
+        return {
+          pages: [[message], ...oldData.pages],
+          pageParams: [undefined, ...oldData.pageParams],
+        };
+      },
+    );
+  };
 
   // useEffect(() => {
   //   socketClient.onReceiveMessage((message) => {
@@ -104,7 +112,9 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
   // }, []);
 
   return (
-    <ChatPageContext.Provider value={{ createChatTriggerRef }}>
+    <ChatPageContext.Provider
+      value={{ createChatTriggerRef, addMessage, chats }}
+    >
       {children}
     </ChatPageContext.Provider>
   );

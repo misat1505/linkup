@@ -37,7 +37,7 @@ export type useChatFormValue = {
 
 export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
   const { t } = useLanguageContext();
-  // const { addMessage } = useChatPageContext();
+  const { addMessage } = useChatPageContext();
   const { setIncomeMessageId } = useChatContext();
   const { toast } = useToast();
   const {
@@ -64,7 +64,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
       const message = await createMessage(chatId, formData);
       reset();
       setIncomeMessageId(null);
-      // addMessage(message);
+      addMessage(message);
       // socketClient.sendMessage(message);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {

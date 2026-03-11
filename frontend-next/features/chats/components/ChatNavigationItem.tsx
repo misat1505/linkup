@@ -1,3 +1,5 @@
+"use client";
+
 import { buildFileURL, Filter } from "@/utils/buildFileURL";
 import { Chat } from "../schemas/chat";
 import { FaUserGroup } from "react-icons/fa6";
@@ -5,14 +7,27 @@ import Tooltip from "@/components/shared/Tooltip";
 import Avatar from "@/components/shared/Avatar";
 import { I18nText } from "@/components/shared/I18nText";
 import Link from "next/link";
-import { getMeCached } from "@/features/auth/actions/getMe";
 import { ChatUtils } from "../utils/chatUtils";
 import LastMessageDisplayer from "./LastMessageDisplay";
+import { useAppContext } from "@/providers/AppProvider";
+import { useChatPageContext } from "../providers/ChatPageProvider";
 
-export default async function NavigationItem({ chat }: { chat: Chat }) {
-  const me = await getMeCached();
+export default function NavigationList() {
+  const { chats } = useChatPageContext();
 
-  const utils = new ChatUtils(chat, me);
+  return (
+    <>
+      {chats.map((chat) => (
+        <NavigationItem key={chat.id} chat={chat} />
+      ))}
+    </>
+  );
+}
+
+function NavigationItem({ chat }: { chat: Chat }) {
+  const { user: me } = useAppContext();
+
+  const utils = new ChatUtils(chat, me!);
 
   const src = utils.getImageURL()!;
   const alt =
@@ -52,7 +67,7 @@ export default async function NavigationItem({ chat }: { chat: Chat }) {
               <LastMessageDisplayer
                 chat={chat}
                 lastMessage={chat.lastMessage}
-                me={me}
+                me={me!}
               />
             </div>
           </div>
