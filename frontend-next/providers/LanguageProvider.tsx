@@ -19,7 +19,7 @@ type DotPaths<T> = T extends object
 
 export type TranslationPath = DotPaths<Translation>;
 
-type TranslateFn = (
+export type TranslateFn = (
   key: TranslationPath,
   vars?: Record<string, string>,
 ) => string;
