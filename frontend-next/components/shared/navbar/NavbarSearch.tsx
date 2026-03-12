@@ -31,6 +31,7 @@ import { createFriendship } from "@/features/friends/actions/createFriendship";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { createPrivateChat } from "@/features/chats/actions/createPrivateChats";
 
 export default function NavbarSearch() {
   const { user } = useAppContext();
@@ -126,14 +127,9 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
   const router = useRouter();
 
   const handleCreateChat = async (userId: User["id"]) => {
-    // TODO: redo this function
-    // const chat = await ChatService.createPrivateChat(me!.id, userId);
-    // setIsExpanded(false);
-    // queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-    //   if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
-    //   return oldChats ? [...oldChats, chat] : [chat];
-    // });
-    // navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId: chat.id } }));
+    const chat = await createPrivateChat(me!.id, userId);
+
+    router.push(`/chats/${chat.id}`);
   };
 
   const handleAddFriend = async (userId: User["id"]) => {

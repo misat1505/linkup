@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useFetchProtectedURL } from "@/hooks/useFetchProtectedURL";
+import ImageNextjs from "next/image";
 
 function DefaultLoader({ className }: { className?: string }) {
   return <Skeleton className={cn("h-full w-full", className)} />;
@@ -28,13 +29,17 @@ function DefaultError({
   );
 }
 
-type ImageProps = any & {
+type ImageProps = {
+  src: string;
+  alt?: string;
   className?: {
     common?: string;
     img?: string;
     loader?: string;
     error?: string;
   };
+  loader?: ReactNode;
+  unloader?: ReactNode;
   errorContent?: ReactNode;
 };
 
@@ -44,6 +49,7 @@ export default function Image({
   loader: LoaderComponent,
   unloader,
   src,
+  alt,
 }: ImageProps) {
   const { data, isError, isLoading } = useFetchProtectedURL(src as string);
 
@@ -63,10 +69,13 @@ export default function Image({
   }
 
   return (
-    <img
-      className={cn("h-full w-full", common, img)}
-      src={data!}
-      alt={src as string}
-    />
+    <div className={cn("relative h-full w-full", common)}>
+      <ImageNextjs
+        src={data!}
+        alt={alt || "image"}
+        fill
+        className={cn("object-cover", common, img)}
+      />
+    </div>
   );
 }

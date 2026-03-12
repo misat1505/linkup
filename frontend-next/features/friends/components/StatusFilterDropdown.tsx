@@ -66,7 +66,9 @@ export default function StatusFilterDropdown({
           <I18nText
             translationKey="friends.filter.statuses.all"
             values={{
-              count: Object.values(counts).reduce((acc, curr) => acc + curr, 0),
+              count: String(
+                Object.values(counts).reduce((acc, curr) => acc + curr, 0),
+              ),
             }}
           />
         </DropdownMenuItem>
@@ -75,7 +77,7 @@ export default function StatusFilterDropdown({
         >
           <I18nText
             translationKey="friends.filter.statuses.accepted"
-            values={{ count: counts.accepted }}
+            values={{ count: String(counts.accepted) }}
           />
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -86,7 +88,7 @@ export default function StatusFilterDropdown({
           <I18nText
             translationKey="friends.filter.statuses.awaiting-me"
             values={{
-              count: counts.awaitingMe,
+              count: String(counts.awaitingMe),
             }}
           />
         </DropdownMenuItem>
@@ -98,7 +100,7 @@ export default function StatusFilterDropdown({
           <I18nText
             translationKey="friends.filter.statuses.awaiting-other"
             values={{
-              count: counts.awaitingOther,
+              count: String(counts.awaitingOther),
             }}
           />
         </DropdownMenuItem>

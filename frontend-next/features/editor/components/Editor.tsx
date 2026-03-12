@@ -36,6 +36,7 @@ export default function Editor() {
       keyCommand: buttonText,
       buttonProps: { "aria-label": buttonText, title: buttonText },
       icon: <FaSave />,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       execute: async (_, __) => {
         try {
           const post = await handleSave();

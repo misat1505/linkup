@@ -13,6 +13,7 @@ import { Chat } from "../../schemas/chat";
 import { I18nText } from "@/components/shared/I18nText";
 import { useLanguageContext } from "@/providers/LanguageProvider";
 import { updateChat } from "../../actions/updateChat";
+import Image from "next/image";
 
 type ChatInfoUpdaterProps = {
   chat: Chat;
@@ -100,9 +101,12 @@ function Updater({ file, chat }: { file: File | null; chat: Chat }) {
       />
       <div className="group relative mt-8">
         {source ? (
-          <img
-            className="h-32 w-32 overflow-hidden rounded-full object-cover"
+          <Image
             src={source}
+            alt="Group image"
+            width={128}
+            height={128}
+            className="overflow-hidden rounded-full object-cover"
           />
         ) : (
           <FaUserGroup className="h-32 w-32 overflow-hidden rounded-full pt-8" />

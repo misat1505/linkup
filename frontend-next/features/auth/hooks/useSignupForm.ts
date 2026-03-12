@@ -20,14 +20,16 @@ export type SignupFormEntries = {
   file: File | null;
 };
 
+type FormSubmitEvent =
+  | React.BaseSyntheticEvent<object, unknown, unknown>
+  | undefined;
+
 export type useSubmitFormValue = {
   register: UseFormRegister<SignupFormEntries>;
   errors: FieldErrors<SignupFormEntries>;
   isSubmitting: boolean;
   file: File | null;
-  submitForm: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined,
-  ) => Promise<void>;
+  submitForm: (e?: FormSubmitEvent) => Promise<void>;
   removeFile: () => void;
   data: SignupFormEntries;
   setValue: UseFormSetValue<SignupFormEntries>;
@@ -55,6 +57,7 @@ export default function useSignupForm({
 
   const submitForm = handleSubmit(onSubmit);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const data = watch();
   const file = data.file;
 

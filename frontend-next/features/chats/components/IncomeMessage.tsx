@@ -45,7 +45,7 @@ export default function IncomeMessage({
         translationKey="chats.income-message.only-files"
         values={{
           name: displayName,
-          count: message.files.length,
+          count: String(message.files.length),
         }}
       />
     );

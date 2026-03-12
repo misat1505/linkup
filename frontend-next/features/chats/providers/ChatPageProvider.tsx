@@ -41,22 +41,7 @@ export const ChatPageProvider = ({
   const { t } = useLanguageContext();
   const [chats, setChats] = useState(sortChatsByActivity(chatsArg));
   const createChatTriggerRef = useRef<HTMLDivElement>(null);
-  // const { toast } = useToast();
   const queryClient = useQueryClient();
-  // const { data: chats, isLoading } = useQuery({
-  //   queryKey: queryKeys.chats(),
-  //   queryFn: ChatService.getChats,
-  //   refetchOnMount: true,
-  //   onSuccess: (data) => {
-  //     queryClient.setQueryData<Chat[]>(
-  //       queryKeys.chats(),
-  //       sortChatsByActivity(data)
-  //     );
-  //     data.forEach((chat) => {
-  //       socketClient.joinRoom(chat.id);
-  //     });
-  //   },
-  // });
 
   const addMessage = useCallback(
     (message: Message): void => {
@@ -71,6 +56,7 @@ export const ChatPageProvider = ({
 
       queryClient.setQueryData(
         queryKeys.messages(message.chatId),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (oldData: any) => {
           if (!oldData) {
             return {

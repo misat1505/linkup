@@ -24,6 +24,8 @@ export type TranslateFn = (
   vars?: Record<string, string>,
 ) => string;
 
+export type TVars = Record<string, string>;
+
 type LanguageContextProps = {
   locale: string;
   t: TranslateFn;
@@ -46,6 +48,7 @@ type Props = {
   children: ReactNode;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getNested = (obj: any, path: string) => {
   return path.split(".").reduce((acc, part) => acc?.[part], obj);
 };
@@ -84,7 +87,7 @@ export const LanguageProvider = ({ children }: Props) => {
 
   if (isLoading || !translations) return null;
 
-  const t = (path: string, vars?: Record<string, string>) => {
+  const t = (path: string, vars?: TVars) => {
     const value = getNested(translations, path);
     if (typeof value === "string") return interpolate(value, vars);
     return value;

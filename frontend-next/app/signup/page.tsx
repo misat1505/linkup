@@ -1,6 +1,5 @@
 "use client";
 import { SubmitHandler } from "react-hook-form";
-import { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
 import { useLanguageContext } from "@/providers/LanguageProvider";
 import SignupSlogan from "@/features/auth/components/SignupSlogan";

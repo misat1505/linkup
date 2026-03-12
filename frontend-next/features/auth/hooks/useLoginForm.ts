@@ -2,7 +2,6 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useLanguageContext } from "@/providers/LanguageProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import {
   FieldErrors,
@@ -20,13 +19,15 @@ type LoginFormEntries = {
   password: string;
 };
 
+type FormSubmitEvent =
+  | React.BaseSyntheticEvent<object, unknown, unknown>
+  | undefined;
+
 export type useLoginFormValue = {
   register: UseFormRegister<LoginFormEntries>;
   errors: FieldErrors<LoginFormEntries>;
   isSubmitting: boolean;
-  submitForm: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined,
-  ) => Promise<void>;
+  submitForm: (e?: FormSubmitEvent) => Promise<void>;
 };
 
 export default function useLoginForm(): useLoginFormValue {

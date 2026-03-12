@@ -26,6 +26,10 @@ export type PostChatFormEntries = {
   responseId?: Message["id"] | null;
 };
 
+type FormSubmitEvent =
+  | React.BaseSyntheticEvent<object, unknown, unknown>
+  | undefined;
+
 export type usePostChatFormValue = {
   register: UseFormRegister<PostChatFormEntries>;
   errors: FieldErrors<PostChatFormEntries>;
@@ -36,9 +40,7 @@ export type usePostChatFormValue = {
   setResponse: (message: Message | null) => void;
   responseId: Message["id"] | null | undefined;
   response: Message | null;
-  submitForm: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined,
-  ) => Promise<void>;
+  submitForm: (e?: FormSubmitEvent) => Promise<void>;
 };
 
 export default function usePostChatForm(
@@ -115,6 +117,7 @@ export default function usePostChatForm(
 
   const submitForm = handleSubmit(onSubmit);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const { files, responseId } = watch();
 
   return {

@@ -24,6 +24,8 @@ export default function Avatar({
     <div className="relative">
       <Image
         src={src}
+        // @ts-expect-error alt can be react node
+        alt={alt}
         className={{
           common: cn(
             "h-12 w-12 rounded-full bg-slate-200 dark:bg-slate-800",

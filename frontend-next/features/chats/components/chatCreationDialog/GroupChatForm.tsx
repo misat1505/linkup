@@ -9,6 +9,7 @@ import { useLanguageContext } from "@/providers/LanguageProvider";
 import { User } from "@/features/auth/schemas/user";
 import { I18nText } from "@/components/shared/I18nText";
 import useUserSearch from "@/hooks/useUserSearch";
+import Image from "next/image";
 
 export default function GroupChatForm() {
   const { submitForm } = useGroupChatFormContext();
@@ -45,8 +46,11 @@ function ChatNameAndImage() {
       />
       <div>
         {file ? (
-          <img
-            src={file!}
+          <Image
+            src={file}
+            alt="Group photo"
+            height={144}
+            width={144}
             className="mx-auto mb-4 h-36 w-36 overflow-hidden rounded-full object-cover"
           />
         ) : (

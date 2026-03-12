@@ -14,6 +14,7 @@ import Tooltip from "@/components/shared/Tooltip";
 import { I18nText } from "@/components/shared/I18nText";
 import { useAppContext } from "@/providers/AppProvider";
 import { ChatFooterUtils } from "../utils/chatFooterUtils";
+import Image from "next/image";
 
 export default function ChatFooter() {
   const { t } = useLanguageContext();
@@ -83,6 +84,7 @@ function FileAdder() {
     e.currentTarget.value = "";
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { ref, ...rest } = register("files");
 
   return (
@@ -152,7 +154,7 @@ function FileDisplayerItem({ file }: { file: File }) {
 
   if (type === "image")
     return (
-      <img
+      <Image
         src={URL.createObjectURL(file)}
         className="h-full w-full object-cover"
         alt={file.name}

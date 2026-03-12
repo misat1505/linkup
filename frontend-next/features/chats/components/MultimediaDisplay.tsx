@@ -27,6 +27,7 @@ function MultimediaDisplayItem({ file }: { file: File }) {
   if (type === "image")
     return (
       <Image
+        alt={file.url}
         src={buildFileURL(file.url, { type: "chat-message", id: chatId })}
         className={{
           common: "h-40 w-40 object-cover",

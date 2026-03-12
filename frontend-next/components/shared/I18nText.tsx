@@ -2,12 +2,13 @@
 
 import {
   TranslationPath,
+  TVars,
   useLanguageContext,
 } from "@/providers/LanguageProvider";
 
 type I18nTextProps = {
   translationKey: TranslationPath;
-  values?: Record<string, any>;
+  values?: TVars;
 };
 
 export function I18nText({ translationKey, values }: I18nTextProps) {

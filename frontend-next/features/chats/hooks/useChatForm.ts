@@ -22,6 +22,10 @@ export type ChatFormEntries = {
   responseId?: Message["id"] | null;
 };
 
+type FormSubmitEvent =
+  | React.BaseSyntheticEvent<object, unknown, unknown>
+  | undefined;
+
 export type useChatFormValue = {
   register: UseFormRegister<ChatFormEntries>;
   errors: FieldErrors<ChatFormEntries>;
@@ -31,9 +35,7 @@ export type useChatFormValue = {
   removeFile: (id: number) => void;
   setResponse: (id: Message["id"] | null) => void;
   responseId: Message["id"] | null | undefined;
-  submitForm: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined,
-  ) => Promise<void>;
+  submitForm: (e?: FormSubmitEvent) => Promise<void>;
 };
 
 export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
@@ -99,6 +101,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
 
   const submitForm = handleSubmit(onSubmit);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const { files, responseId } = watch();
 
   return {

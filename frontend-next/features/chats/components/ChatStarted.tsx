@@ -1,4 +1,3 @@
-import Image from "@/components/shared/Image";
 import { buildFileURL, Filter } from "@/utils/buildFileURL";
 import { FaUserGroup } from "react-icons/fa6";
 import { ChatUtils } from "../utils/chatUtils";
@@ -6,6 +5,7 @@ import { useChatContext } from "../providers/ChatProvider";
 import { useAppContext } from "@/providers/AppProvider";
 import { useLanguageContext } from "@/providers/LanguageProvider";
 import { I18nText } from "@/components/shared/I18nText";
+import Image from "@/components/shared/Image";
 
 export default function ChatStarted() {
   const { t } = useLanguageContext();
@@ -33,6 +33,7 @@ export default function ChatStarted() {
       <Image
         src={buildFileURL(src, buildFilter())}
         errorContent={alt}
+        alt={chatName}
         className={{
           common: "h-40 w-40 mb-4 rounded-full",
           error:

@@ -25,6 +25,10 @@ type GroupChatFormEntries = {
   file?: FileList | undefined;
 };
 
+type FormSubmitEvent =
+  | React.BaseSyntheticEvent<object, unknown, unknown>
+  | undefined;
+
 export type useNewGroupChatFormValue = {
   register: UseFormRegister<GroupChatFormEntries>;
   errors: FieldErrors<GroupChatFormEntries>;
@@ -33,9 +37,7 @@ export type useNewGroupChatFormValue = {
   users: User[];
   appendUser: (user: User) => void;
   removeUser: (user: User) => void;
-  submitForm: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined,
-  ) => Promise<void>;
+  submitForm: (e?: FormSubmitEvent) => Promise<void>;
 };
 
 export default function useNewGroupChatForm(): useNewGroupChatFormValue {
@@ -81,8 +83,9 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
 
   useEffect(() => {
     setValue("users", [me!]);
-  }, []);
+  }, [me, setValue]);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const { file: filelist, users } = watch();
   const file = filelist?.[0];
 

@@ -26,12 +26,18 @@ import FocusableSpan from "@/components/shared/FocusableSpan";
 import { useToast } from "@/components/ui/use-toast";
 import { useLanguageContext } from "@/providers/LanguageProvider";
 import { reportPost } from "../actions/reportPost";
+import { createPrivateChat } from "@/features/chats/actions/createPrivateChats";
+import { useAppContext } from "@/providers/AppProvider";
+import { useRouter } from "next/navigation";
 
 export default function PostHeader({
   post,
 }: {
   post: PostWithRenderedContent;
 }) {
+  const { user: me } = useAppContext();
+  const router = useRouter();
+
   const getTimeText = (): React.ReactNode => {
     const timeDiff = timeDifference(post.createdAt);
 
@@ -39,21 +45,21 @@ export default function PostHeader({
       return (
         <I18nText
           translationKey="common.time.days"
-          values={{ count: timeDiff.days }}
+          values={{ count: String(timeDiff.days) }}
         />
       );
     } else if (timeDiff.hours) {
       return (
         <I18nText
           translationKey="common.time.hours"
-          values={{ count: timeDiff.hours }}
+          values={{ count: String(timeDiff.hours) }}
         />
       );
     } else if (timeDiff.minutes > 5) {
       return (
         <I18nText
           translationKey="common.time.minutes"
-          values={{ count: timeDiff.minutes }}
+          values={{ count: String(timeDiff.minutes) }}
         />
       );
     } else {
@@ -64,13 +70,8 @@ export default function PostHeader({
   const { author } = post;
 
   const handleCreateChat = async (userId: User["id"]) => {
-    // TODO: make this function work
-    // const chat = await ChatService.createPrivateChat(me!.id, userId);
-    // queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-    //   if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
-    //   return oldChats ? [...oldChats, chat] : [chat];
-    // });
-    // navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId: chat.id } }));
+    const chat = await createPrivateChat(me!.id, userId);
+    router.push(`/chats/${chat.id}`);
   };
 
   return (

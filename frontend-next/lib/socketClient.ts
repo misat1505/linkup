@@ -64,6 +64,7 @@ class SocketClient {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   on(action: SocketAction | SocketErrors, cb: (...args: any[]) => void) {
     this.socket.on(action, cb);
   }

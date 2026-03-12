@@ -1,11 +1,9 @@
-import { useLanguageContext } from "@/providers/LanguageProvider";
 import { ClipLoader } from "react-spinners";
 import { useSignupFormContext } from "../providers/SignupFormProvider";
 import { Button } from "@/components/ui/button";
 import { I18nText } from "@/components/shared/I18nText";
 
 export default function SignupSubmitButton() {
-  const { t } = useLanguageContext();
   const { isSubmitting, type } = useSignupFormContext();
 
   const loadingText =

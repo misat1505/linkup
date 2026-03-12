@@ -169,6 +169,7 @@ type SheetItemType = HTMLAttributes<HTMLButtonElement> & {
   text: React.ReactNode;
 };
 
+// eslint-disable-next-line react/display-name
 const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
   ({ text, className, Icon, ...rest }, ref) => {
     return (

@@ -55,7 +55,7 @@ export const ChatProvider = ({ children, chat }: ChatContextProps) => {
   const [incomeMessageId, setIncomeMessageId] = useState<Message["id"] | null>(
     null,
   );
-  const { chats, addMessage } = useChatPageContext();
+  const { addMessage } = useChatPageContext();
 
   const {
     data,
@@ -92,6 +92,7 @@ export const ChatProvider = ({ children, chat }: ChatContextProps) => {
 
   const addReaction = useCallback(
     (reaction: Reaction) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       queryClient.setQueryData(queryKeys.messages(chat!.id), (oldData: any) => {
         if (!oldData) return oldData;
 

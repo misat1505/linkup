@@ -14,21 +14,21 @@ export default function MyPostHeader({ post }: { post: Post }) {
       return (
         <I18nText
           translationKey="common.time.days"
-          values={{ count: timeDiff.days }}
+          values={{ count: String(timeDiff.days) }}
         />
       );
     } else if (timeDiff.hours) {
       return (
         <I18nText
           translationKey="common.time.hours"
-          values={{ count: timeDiff.hours }}
+          values={{ count: String(timeDiff.hours) }}
         />
       );
     } else if (timeDiff.minutes > 5) {
       return (
         <I18nText
           translationKey="common.time.minutes"
-          values={{ count: timeDiff.minutes }}
+          values={{ count: String(timeDiff.minutes) }}
         />
       );
     } else {

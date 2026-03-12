@@ -22,7 +22,7 @@ export default function Response({ message }: ResponseProps) {
           translationKey="chats.message.reply.only-files"
           values={{
             name: t("common.you"),
-            count: message.files.length,
+            count: String(message.files.length),
           }}
         />
       );
@@ -32,7 +32,7 @@ export default function Response({ message }: ResponseProps) {
         translationKey="chats.message.reply.only-files"
         values={{
           name: createFullName(message.author),
-          count: message.files.length,
+          count: String(message.files.length),
         }}
       />
     );
