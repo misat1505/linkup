@@ -8,7 +8,7 @@ import rehypeShiki from "@shikijs/rehype";
 import { cacheTag } from "next/cache";
 import { cacheLife } from "next/cache";
 import rehypeRaw from "rehype-raw";
-import { replaceLinks } from "./replaceLinks";
+import { replaceLinksCachedUnsafe } from "./replaceLinks";
 
 const schema = {
   ...defaultSchema,
@@ -39,8 +39,6 @@ export const renderMarkdownCached = async (
   cacheTag(`post-${postId}`);
   cacheLife({ revalidate: 86400 });
 
-  const withReplacedLinks = replaceLinks(markdown);
-
   const result = await remark()
     .use(remarkGfm)
     .use(remarkRehype, { allowDangerousHtml: true })
@@ -53,7 +51,7 @@ export const renderMarkdownCached = async (
       },
     })
     .use(rehypeStringify, { allowDangerousHtml: true })
-    .process(withReplacedLinks);
+    .process(markdown);
 
   console.log("RENDER MARKDOWN", postId);
 
@@ -64,9 +62,10 @@ export const getCachedRenderedPost = async (
   post: Post,
 ): Promise<PostWithRenderedContent> => {
   const html = await renderMarkdownCached(post.id, post.content);
+  const htmlWithLinks = await replaceLinksCachedUnsafe(html);
 
   return {
     ...post,
-    renderedContent: html,
+    renderedContent: htmlWithLinks,
   };
 };
