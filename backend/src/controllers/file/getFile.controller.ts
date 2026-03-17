@@ -125,7 +125,7 @@ export const getFileController = async (
       case "cache": {
         const path = `cache/${userId}/${filename}`;
         try {
-          const url = await fileStorage.getSignedUrl(path, 86400);
+          const url = await fileStorage.getSignedUrl(path);
           return res.status(StatusCodes.OK).json({ url });
         } catch {
           return res
@@ -137,7 +137,7 @@ export const getFileController = async (
       case "post": {
         const path = `posts/${query.post}/${filename}`;
         try {
-          const url = await fileStorage.getSignedUrl(path);
+          const url = await fileStorage.getSignedUrl(path, 86400);
           return res.status(StatusCodes.OK).json({ url });
         } catch {
           return res
