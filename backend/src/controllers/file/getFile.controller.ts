@@ -6,7 +6,7 @@ const sendFileBuilder =
   (filename: string, req: Request, res: Response) =>
   async (
     validator: () => Promise<boolean>,
-    errorMessage = req.t("files.controllers.get-file.default-error-message")
+    errorMessage = req.t("files.controllers.get-file.default-error-message"),
   ) => {
     const fileStorage = req.app.services.fileStorage;
     const result = await validator();
@@ -14,8 +14,10 @@ const sendFileBuilder =
     if (!result)
       return res.status(StatusCodes.FORBIDDEN).json({ message: errorMessage });
 
+    const expiresIn = filename.startsWith("posts") ? 86400 : 60;
+
     try {
-      const url = await fileStorage.getSignedUrl(filename);
+      const url = await fileStorage.getSignedUrl(filename, expiresIn);
       return res.status(StatusCodes.OK).json({ url });
     } catch (e) {
       return res
@@ -87,7 +89,7 @@ const sendFileBuilder =
 export const getFileController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { filename } = req.validated!.params! as Filename;
@@ -102,7 +104,7 @@ export const getFileController = async (
         const path = `avatars/${filename}`;
         return sendFile(path)(
           () => fileService.isUserAvatar(filename),
-          req.t("files.controllers.get-file.avatar-not-found")
+          req.t("files.controllers.get-file.avatar-not-found"),
         );
       }
 
@@ -110,7 +112,7 @@ export const getFileController = async (
         const path = `chats/${query.chat}/${filename}`;
         return sendFile(path)(
           () => fileService.isChatPhoto(filename, userId),
-          req.t("files.controllers.get-file.group-photo-not-found")
+          req.t("files.controllers.get-file.group-photo-not-found"),
         );
       }
 
@@ -118,7 +120,7 @@ export const getFileController = async (
         const path = `chats/${query.chat}/${filename}`;
         return sendFile(path)(
           () => fileService.isChatMessage(filename, userId),
-          req.t("files.controllers.get-file.group-photo-not-found")
+          req.t("files.controllers.get-file.group-photo-not-found"),
         );
       }
 
