@@ -1,7 +1,5 @@
-// TODO: create .env
-
-export const API_URL = "http://localhost:5500";
+export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const DEFAULT_POSTS_FEED_PAGE_LENGTH = 10;
 
-export const SOCKET_URL = "http://localhost:5501";
+export const SOCKET_URL = process.env.NEXT_PUBLIC_SCOKET_URL;

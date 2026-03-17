@@ -1,7 +1,4 @@
-// TODO: use proper Chat
-type Chat = {
-  id: string;
-};
+import { Chat } from "@/features/chats/schemas/chat";
 
 export type Filter =
   | { type: "avatar" }
