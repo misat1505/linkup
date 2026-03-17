@@ -1,14 +1,13 @@
 "use client";
 
-import Loading from "@/components/shared/Loading";
 import { useAppContext } from "@/providers/AppProvider";
+import Loading from "./shared/Loading";
 import { redirect } from "next/navigation";
+import { PropsWithChildren } from "react";
 
-export default function ProtectedLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+type AuthGuardProps = PropsWithChildren;
+
+export default function AuthGuard({ children }: AuthGuardProps) {
   const { user, isLoading } = useAppContext();
 
   if (isLoading)
@@ -17,6 +16,7 @@ export default function ProtectedLayout({
         <Loading />
       </div>
     );
+
   if (!user) redirect("/login");
 
   return children;

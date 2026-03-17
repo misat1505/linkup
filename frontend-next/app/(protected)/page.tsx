@@ -5,6 +5,7 @@ import { PostWithRenderedContent } from "@/features/posts/schemas/post";
 import { PostsFeed } from "@/features/posts/components/PostsFeed";
 import { makeQueryClient } from "@/lib/makeQueryClient";
 import { DEFAULT_POSTS_FEED_PAGE_LENGTH } from "@/utils/constants";
+import AuthGuard from "@/components/AuthGuard";
 
 export default async function Page() {
   const queryClient = makeQueryClient();
@@ -27,10 +28,12 @@ export default async function Page() {
   });
 
   return (
-    <div>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <PostsFeed />
-      </HydrationBoundary>
-    </div>
+    <AuthGuard>
+      <div>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <PostsFeed />
+        </HydrationBoundary>
+      </div>
+    </AuthGuard>
   );
 }

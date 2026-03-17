@@ -2,6 +2,7 @@ import { getPost } from "@/features/posts/actions/getPost";
 import Editor from "@/features/editor/components/Editor";
 import EditorProvider from "@/features/editor/providers/EditorProvider";
 import { notFound } from "next/navigation";
+import AuthGuard from "@/components/AuthGuard";
 
 export default async function PostEditorUpdatePage({
   params,
@@ -15,8 +16,10 @@ export default async function PostEditorUpdatePage({
   if (!post) return notFound();
 
   return (
-    <EditorProvider variant="update" post={post}>
-      <Editor />
-    </EditorProvider>
+    <AuthGuard>
+      <EditorProvider variant="update" post={post}>
+        <Editor />
+      </EditorProvider>
+    </AuthGuard>
   );
 }

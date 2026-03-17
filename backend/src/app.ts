@@ -46,6 +46,12 @@ if (env.NODE_ENV === "development") {
   });
 }
 
+app.use(async (req, res, next) => {
+  console.log(req.url);
+  // await new Promise((res) => setTimeout(res, 100));
+  next();
+});
+
 app.use("/", Routers.publicRoutes);
 app.use("/", Routers.protectedRoutes);
 

@@ -16,8 +16,17 @@ import SignupFormProvider from "@/features/auth/providers/SignupFormProvider";
 import SignupForm from "@/features/auth/components/SignupForm";
 import SettingsSlogan from "@/features/settings/components/SettingsSlogan";
 import SettingsCards from "@/features/settings/components/SettingsCards";
+import AuthGuard from "@/components/AuthGuard";
 
 export default function Settings() {
+  return (
+    <AuthGuard>
+      <SettingsContent />
+    </AuthGuard>
+  );
+}
+
+function SettingsContent() {
   const { t } = useLanguageContext();
   const { user: me, invalidateCurrentUser } = useAppContext();
   const { data, isLoading } = useQuery({

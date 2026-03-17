@@ -1,3 +1,5 @@
+import AuthGuard from "@/components/AuthGuard";
+import { getMeCached } from "@/features/auth/actions/getMe";
 import { getChatByIdCached } from "@/features/chats/actions/getChatById";
 import { getChatsCached } from "@/features/chats/actions/getChats";
 import Chat from "@/features/chats/components/Chat";
@@ -19,18 +21,21 @@ export default async function ChatPage({
     getChatsCached(),
     getChatByIdCached(id),
     prefetchFirstPage(queryClient, id),
+    getMeCached(),
   ]);
 
   if (!chat) throw new Error("Chat not found");
 
   return (
-    <ChatPageProvider chats={allChats}>
-      <div className="flex h-[calc(100vh-5rem)] w-screen">
-        <ChatNavigation />
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <Chat chat={chat} />
-        </HydrationBoundary>
-      </div>
-    </ChatPageProvider>
+    <AuthGuard>
+      <ChatPageProvider chats={allChats}>
+        <div className="flex h-[calc(100vh-5rem)] w-screen">
+          <ChatNavigation />
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <Chat chat={chat} />
+          </HydrationBoundary>
+        </div>
+      </ChatPageProvider>
+    </AuthGuard>
   );
 }
