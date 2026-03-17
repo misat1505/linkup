@@ -33,12 +33,14 @@ export const markdownPreviewOptions = {
       return <div>{props.alt || "Image not available"}</div>;
     }
     return (
-      <Image
-        src={props.src!}
-        alt={props.alt || "image"}
-        unloader={<div>{props.alt}</div>}
-        sizes="100px"
-      />
+      <div className="h-96">
+        <Image
+          src={props.src!}
+          alt={props.alt || "image"}
+          unloader={<div>{props.alt}</div>}
+          sizes="100vw"
+        />
+      </div>
     );
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
