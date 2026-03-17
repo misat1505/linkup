@@ -21,13 +21,7 @@ export function PostsFeed() {
     useInfiniteQuery({
       queryKey: queryKeys.posts(),
       queryFn: ({ pageParam }) =>
-        getRecommendedPosts(
-          pageParam || null,
-          parseInt(
-            localStorage.getItem("posts-limit") ??
-              String(DEFAULT_POSTS_FEED_PAGE_LENGTH),
-          ),
-        ),
+        getRecommendedPosts(pageParam || null, DEFAULT_POSTS_FEED_PAGE_LENGTH),
       getNextPageParam: (
         lastPage: PostWithRenderedContent[],
       ): string | null => {

@@ -11,6 +11,9 @@ export async function getRecommendedPosts(
   lastPostId: Post["id"] | null,
   limit: number,
 ): Promise<PostWithRenderedContent[]> {
+  console.log(
+    `Getting recommended posts ${JSON.stringify({ lastPostId, limit })}`,
+  );
   const params = new URLSearchParams();
   params.set("lastPostId", lastPostId || "null");
   params.set("limit", limit.toString());

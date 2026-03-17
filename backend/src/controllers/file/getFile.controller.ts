@@ -14,10 +14,8 @@ const sendFileBuilder =
     if (!result)
       return res.status(StatusCodes.FORBIDDEN).json({ message: errorMessage });
 
-    const expiresIn = filename.startsWith("posts") ? 86400 : 60;
-
     try {
-      const url = await fileStorage.getSignedUrl(filename, expiresIn);
+      const url = await fileStorage.getSignedUrl(filename);
       return res.status(StatusCodes.OK).json({ url });
     } catch (e) {
       return res
@@ -127,7 +125,7 @@ export const getFileController = async (
       case "cache": {
         const path = `cache/${userId}/${filename}`;
         try {
-          const url = await fileStorage.getSignedUrl(path);
+          const url = await fileStorage.getSignedUrl(path, 86400);
           return res.status(StatusCodes.OK).json({ url });
         } catch {
           return res
