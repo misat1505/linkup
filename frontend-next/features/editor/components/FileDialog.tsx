@@ -144,6 +144,7 @@ function FileDialogContent({
                       src={file}
                       alt="image"
                       className={{ common: "h-full w-full object-cover" }}
+                      sizes="128px"
                     />
                   ) : (
                     <div className="h-32 w-32 overflow-hidden">
@@ -173,6 +174,7 @@ function FileDialogContent({
                   src={file}
                   alt="image"
                   className={{ common: "h-full w-full object-cover" }}
+                  sizes="128px"
                 />
               ) : (
                 <div className="h-32 w-32 overflow-hidden">

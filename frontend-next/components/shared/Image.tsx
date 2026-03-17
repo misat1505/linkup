@@ -41,6 +41,7 @@ type ImageProps = {
   loader?: ReactNode;
   unloader?: ReactNode;
   errorContent?: ReactNode;
+  sizes?: string;
 };
 
 export default function Image({
@@ -50,6 +51,7 @@ export default function Image({
   unloader,
   src,
   alt,
+  sizes,
 }: ImageProps) {
   const { data, isError, isLoading } = useFetchProtectedURL(src);
 
@@ -74,7 +76,7 @@ export default function Image({
         src={data!}
         alt={alt || "image"}
         fill
-        sizes="48px"
+        sizes={sizes ?? "48px"}
         className={cn("object-cover", common, img)}
       />
     </div>

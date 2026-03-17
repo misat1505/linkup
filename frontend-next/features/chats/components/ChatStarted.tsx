@@ -39,6 +39,7 @@ export default function ChatStarted() {
           error:
             "text-6xl font-semibold bg-white dark:bg-black overflow-hidden",
         }}
+        sizes="160px"
       />
       <h2 className="font-bold text-2xl mb-4">{chatName}</h2>
       <p className="text-muted-foreground mb-2 font-bold text-balance text-center">

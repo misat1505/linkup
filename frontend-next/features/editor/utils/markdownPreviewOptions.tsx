@@ -1,8 +1,15 @@
 import Image from "@/components/shared/Image";
 import { useFetchProtectedURL } from "@/hooks/useFetchProtectedURL";
+import { cn } from "@/lib/utils";
 import { API_URL } from "@/utils/constants";
 
 export const markdownPreviewOptions = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  p({ node, className, ...props }: any) {
+    return (
+      <div className={cn(className, "w-full h-full max-h-fit")} {...props} />
+    );
+  },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
   video({ node, ...props }: any) {
     if (typeof props.children === "string") return null;
@@ -30,6 +37,7 @@ export const markdownPreviewOptions = {
         src={props.src!}
         alt={props.alt || "image"}
         unloader={<div>{props.alt}</div>}
+        sizes="100px"
       />
     );
   },

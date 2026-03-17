@@ -68,6 +68,7 @@ function MultimediaDisplayItem({ file }: { file: File }) {
         }}
         alt="image"
         errorContent="Error loading image."
+        sizes="160px"
       />
     );
 

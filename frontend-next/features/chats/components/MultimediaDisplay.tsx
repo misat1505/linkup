@@ -34,6 +34,7 @@ function MultimediaDisplayItem({ file }: { file: File }) {
           error: "bg-slate-200 font-semibold",
         }}
         errorContent="Error loading image."
+        sizes="160px"
       />
     );
 
