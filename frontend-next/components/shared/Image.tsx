@@ -51,7 +51,7 @@ export default function Image({
   src,
   alt,
 }: ImageProps) {
-  const { data, isError, isLoading } = useFetchProtectedURL(src as string);
+  const { data, isError, isLoading } = useFetchProtectedURL(src);
 
   if (!src || isError) {
     return (
@@ -74,6 +74,7 @@ export default function Image({
         src={data!}
         alt={alt || "image"}
         fill
+        sizes="48px"
         className={cn("object-cover", common, img)}
       />
     </div>
