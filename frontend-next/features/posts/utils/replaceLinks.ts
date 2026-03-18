@@ -61,13 +61,18 @@ export async function replaceLinksCachedUnsafe(
     matches.map(async ([fullMatch, filename, query]) => {
       const decodedQuery = decodeHtmlEntities(query ?? "");
       const signedUrl = await getSignedUrlCachedUnsafe(filename, decodedQuery);
-      return { fullMatch, signedUrl };
+
+      const width = 1200;
+      const quality = 75;
+      const url = `/_next/image?url=${encodeURI(signedUrl)}&w=${width}&q=${quality}`;
+
+      return { fullMatch, url };
     }),
   );
 
   let result = markdown;
-  for (const { fullMatch, signedUrl } of replacements) {
-    result = result.replace(fullMatch, signedUrl);
+  for (const { fullMatch, url } of replacements) {
+    result = result.replace(fullMatch, url);
   }
 
   return result;
