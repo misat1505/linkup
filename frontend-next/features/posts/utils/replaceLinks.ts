@@ -58,9 +58,20 @@ export async function replaceLinksCachedUnsafe(
   const matches = Array.from(markdown.matchAll(fileLinkRegex));
 
   const replacements = await Promise.all(
-    matches.map(async ([fullMatch, filename, query]) => {
+    matches.map(async (match) => {
+      const [fullMatch, filename, query] = match;
+
+      const index = match.index!;
+      const before = markdown.slice(Math.max(0, index - 20), index);
+
+      const isInsideSource = before.includes("<source");
+
       const decodedQuery = decodeHtmlEntities(query ?? "");
       const signedUrl = await getSignedUrlCachedUnsafe(filename, decodedQuery);
+
+      if (isInsideSource) {
+        return { fullMatch, url: signedUrl };
+      }
 
       const width = 1200;
       const quality = 75;
