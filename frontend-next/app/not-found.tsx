@@ -11,7 +11,9 @@ export default function NotFound() {
         <Image
           src={logo}
           alt="logo"
-          className="h-40 w-40 rounded-full object-cover"
+          width={160}
+          height={160}
+          className="rounded-full object-cover"
         />
         <p className="mb-4 mt-6 text-center text-muted-foreground text-sm">
           <I18nText translationKey="not-found.description" />

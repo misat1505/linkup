@@ -21,7 +21,9 @@ export default function Navbar() {
                   <Image
                     src={logo}
                     alt="logo"
-                    className="h-12 w-12 rounded-full"
+                    width={48}
+                    height={48}
+                    className="rounded-full"
                     loading="eager"
                   />
                 </Link>

@@ -9,7 +9,9 @@ export default function EmptyFeed() {
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-200 dark:bg-slate-800 p-6 shadow-lg flex flex-col items-center text-center space-y-4 w-72 max-w-[calc(100vw-1rem)]">
       <Image
         src={logo}
-        className="w-36 h-36 rounded-full object-cover"
+        width={144}
+        height={144}
+        className="rounded-full object-cover"
         alt="Logo"
       />
       <h2 className="text-xl font-semibold">

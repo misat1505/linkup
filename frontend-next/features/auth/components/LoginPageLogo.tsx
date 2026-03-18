@@ -5,7 +5,9 @@ export default function LoginPageLogo() {
   return (
     <Image
       src={logo}
-      className="mx-auto mb-20 aspect-square w-64 rounded-full"
+      width={256}
+      height={256}
+      className="mx-auto mb-20 rounded-full"
       alt="Couldn't display logo"
     />
   );
