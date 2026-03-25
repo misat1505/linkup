@@ -5,7 +5,10 @@
   "main": "lighthouse.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lighthouse": "npx tsc && node ./dist/lighthouse.js"
+    "benchmark:react": "npx tsc && node ./dist/benchmark.js --mode react",
+    "benchmark:nextjs": "npx tsc && node ./dist/benchmark.js --mode nextjs",
+    "benchmark:quick": "npx tsc && node ./dist/benchmark.js --iterations 2",
+    "benchmark:mobile": "npx tsc && node ./dist/benchmark.js --profile mobile-mid-3g"
   },
   "keywords": [],
   "author": "",
