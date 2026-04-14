@@ -1,2 +1,2 @@
-cd backend
+cd apps/backend
 npm test

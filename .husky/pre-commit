@@ -1,1 +1,1 @@
-npx lint-staged --cwd frontend-next
+npx lint-staged --cwd apps/web-next

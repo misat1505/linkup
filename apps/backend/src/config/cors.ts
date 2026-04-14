@@ -13,7 +13,7 @@ export const corsConfig = {
   origin: env.FRONTEND_URL,
   credentials: true,
 };
-
+console.log(corsConfig);
 /**
  * CORS middleware configured using `corsConfig`.
  *

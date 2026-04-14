@@ -4,7 +4,7 @@ import { ImCancelCircle } from "react-icons/im";
 import { User } from "@/types/User";
 import { getStatus, Status, timeDifference } from "@/utils/timeDifference";
 import { cn } from "@/lib/utils";
-import { useLanguageContext } from "@/contexts/LanguageProvider";
+import { useTranslation } from "react-i18next";
 
 type AvatarProps = {
   src: string;
@@ -39,7 +39,7 @@ export default function Avatar({
 }
 
 function ActivityStatus({ lastActive }: { lastActive: User["lastActive"] }) {
-  const { t } = useLanguageContext();
+  const { t } = useTranslation();
   const difference = timeDifference(lastActive);
   const status = getStatus(difference, t);
 

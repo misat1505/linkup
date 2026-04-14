@@ -12,7 +12,6 @@ dotenv.config({
   path: getEnvPath(),
 });
 
-
 const envSchema = z.object({
   NODE_ENV: z.enum(["production", "development", "test", "e2e"], {
     message:
@@ -31,9 +30,16 @@ const envSchema = z.object({
     message: "'REFRESH_TOKEN_SECRET' needs to be at least 20 characters long.",
   }),
   DATABASE_URL: z.string({ message: "'DATABASE_URL' must be a string" }),
-  FRONTEND_URL: z.string().url({
-    message: "'FRONTEND_URL' must be a valid URL.",
-  }),
+  FRONTEND_URL: z
+    .string()
+    .transform((val) => val.split(",").map((url) => url.trim()))
+    .pipe(
+      z.array(
+        z.string().url({
+          message: "'FRONTEND_URL' must contain valid URLs.",
+        }),
+      ),
+    ),
 
   AWS_ACCESS_KEY_ID: z.string({
     message: "'AWS_ACCESS_KEY_ID' must be a string",
