@@ -61,7 +61,7 @@ import { StatusCodes } from "http-status-codes";
 export const createReactionController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -93,7 +93,7 @@ export const createReactionController = async (
     });
 
     return res.status(StatusCodes.CREATED).json({ reaction });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("chats.controllers.create-reaction.failure")));
   }
 };

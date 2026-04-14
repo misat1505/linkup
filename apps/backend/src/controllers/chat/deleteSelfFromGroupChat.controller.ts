@@ -37,7 +37,7 @@ import { StatusCodes } from "http-status-codes";
 export const deleteSelfFromGroupChatController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { chatId } = req.validated!.params! as ChatId;
@@ -54,7 +54,7 @@ export const deleteSelfFromGroupChatController = async (
     if (!iAmInChat)
       return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t(
-          "chats.controllers.delete-self-from-chat.not-belonging-to-you"
+          "chats.controllers.delete-self-from-chat.not-belonging-to-you",
         ),
       });
 
@@ -62,7 +62,7 @@ export const deleteSelfFromGroupChatController = async (
     return res.status(StatusCodes.OK).json({
       message: req.t("chats.controllers.delete-self-from-chat.success"),
     });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("chats.controllers.delete-self-from-chat.failure")));
   }
 };

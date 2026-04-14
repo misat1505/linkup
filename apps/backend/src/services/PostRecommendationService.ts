@@ -17,7 +17,7 @@ export class PostRecommendationService {
   constructor(
     prisma: PrismaClientOrTransaction,
     postService: PostService,
-    friendshipService: FriendshipService
+    friendshipService: FriendshipService,
   ) {
     this.prisma = prisma;
     this.postService = postService;
@@ -66,7 +66,7 @@ export class PostRecommendationService {
     deadline: Date | undefined,
     friends: User["id"][],
     userId: User["id"],
-    limit: number
+    limit: number,
   ): Promise<Post[]> {
     const posts = await this.prisma.post.findMany({
       where: {
@@ -94,7 +94,7 @@ export class PostRecommendationService {
   async fetchFriendsPostsOnly(
     lastPost: Post | null,
     friends: User["id"][],
-    limit: number
+    limit: number,
   ): Promise<Post[]> {
     const createdAtFilter = lastPost?.createdAt
       ? { lt: lastPost.createdAt }
@@ -130,7 +130,7 @@ export class PostRecommendationService {
   static getOthersPostsCreatedAtFilter(
     lastPost: Post | null,
     friendsPosts: Post[],
-    friends: User["id"][]
+    friends: User["id"][],
   ): { lt: Date } | undefined {
     // user's friends have no posts
     if (!lastPost) return undefined;
@@ -139,10 +139,10 @@ export class PostRecommendationService {
     if (friendsPosts.length > 0) return undefined;
 
     // last post was a friend post but this page will have only others
-    if (friends.includes(lastPost!.author.id)) return undefined;
+    if (friends.includes(lastPost?.author.id)) return undefined;
 
     // last post was not-friend post
-    return { lt: lastPost!.createdAt };
+    return { lt: lastPost?.createdAt };
   }
 
   /**
@@ -155,7 +155,7 @@ export class PostRecommendationService {
   async getRecommendedPosts(
     userId: User["id"],
     lastPostId: Post["id"] | null,
-    limit: number
+    limit: number,
   ): Promise<Post[]> {
     const lastPost = await this.getLastPost(lastPostId);
     const friends = await this.getUserFriends(userId);
@@ -166,14 +166,14 @@ export class PostRecommendationService {
         lastPost.createdAt,
         friends,
         userId,
-        limit
+        limit,
       );
     }
 
     const friendsPosts = await this.fetchFriendsPostsOnly(
       lastPost,
       friends,
-      limit
+      limit,
     );
 
     const remainingPosts = limit - friendsPosts.length;
@@ -184,14 +184,14 @@ export class PostRecommendationService {
       PostRecommendationService.getOthersPostsCreatedAtFilter(
         lastPost,
         friendsPosts,
-        friends
+        friends,
       );
 
     const otherPosts = await this.fetchNonFriendsPostsOnly(
       othersPostsCreatedAtFilter?.lt,
       friends,
       userId,
-      remainingPosts
+      remainingPosts,
     );
 
     return [...friendsPosts, ...otherPosts].map((p) => Post.parse(p));

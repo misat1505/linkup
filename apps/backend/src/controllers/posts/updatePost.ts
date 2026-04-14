@@ -62,7 +62,7 @@ import { StatusCodes } from "http-status-codes";
 export const updatePost = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { id } = req.validated!.params! as PostId;
@@ -86,7 +86,7 @@ export const updatePost = async (
       fileStorage,
       content,
       userId,
-      id
+      id,
     );
 
     const newPost = await postService.updatePost({
@@ -95,7 +95,7 @@ export const updatePost = async (
     });
 
     return res.status(StatusCodes.OK).json({ post: newPost });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("posts.controllers.update.failure")));
   }
 };

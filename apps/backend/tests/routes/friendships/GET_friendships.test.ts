@@ -24,7 +24,7 @@ describe("[GET] /friendships", () => {
         .set("Authorization", `Bearer ${tokens[0]}`);
 
       expect(res1.body.friendships.length).toBe(1);
-      res1.body.friendships.forEach((friendship: any) => {
+      res1.body.friendships.forEach((friendship: unknown) => {
         Friendship.strict().parse(friendship);
       });
 
@@ -33,7 +33,7 @@ describe("[GET] /friendships", () => {
         .set("Authorization", `Bearer ${tokens[1]}`);
 
       expect(res2.body.friendships.length).toBe(1);
-      res2.body.friendships.forEach((friendship: any) => {
+      res2.body.friendships.forEach((friendship: unknown) => {
         Friendship.strict().parse(friendship);
       });
     });

@@ -61,7 +61,7 @@ import { StatusCodes } from "http-status-codes";
 export const deleteFromCache = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -73,7 +73,7 @@ export const deleteFromCache = async (
     return res
       .status(StatusCodes.OK)
       .json({ message: req.t("files.controllers.delete-from-cache.success") });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("files.controllers.delete-from-cache.failure")));
   }
 };

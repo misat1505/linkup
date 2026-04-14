@@ -39,7 +39,7 @@ import { StatusCodes } from "http-status-codes";
 export const validate = (validations: RequestValidation) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const validated = {} as RequestValidatedValues;
-    const errors: ZodError<any>[] = [];
+    const errors: ZodError<unknown>[] = [];
 
     Object.entries(validations).forEach(([key, schema]) => {
       const typedKey = key as keyof RequestValidatedValues;

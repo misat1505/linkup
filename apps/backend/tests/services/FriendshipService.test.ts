@@ -8,7 +8,7 @@ describe("FriendshipService", () => {
       await testWithTransaction(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.getUserFriendships(
-          seed.users[0].id
+          seed.users[0].id,
         );
         expect(Array.isArray(result)).toBeTruthy();
         expect(result.length).toBe(0);
@@ -20,11 +20,11 @@ describe("FriendshipService", () => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
           seed.users[0].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
 
         const result = await friendshipService.getUserFriendships(
-          seed.users[0].id
+          seed.users[0].id,
         );
         expect(Array.isArray(result)).toBeTruthy();
         expect(result.length).toBe(1);
@@ -42,13 +42,13 @@ describe("FriendshipService", () => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.createFriendship(
           seed.users[0].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
 
         expect(result).not.toBeNull();
-        expect(result!.requester.id).toBe(seed.users[0].id);
-        expect(result!.acceptor.id).toBe(seed.users[1].id);
-        expect(result!.status).toBe("PENDING");
+        expect(result?.requester.id).toBe(seed.users[0].id);
+        expect(result?.acceptor.id).toBe(seed.users[1].id);
+        expect(result?.status).toBe("PENDING");
         Friendship.strict().parse(result);
       });
     });
@@ -58,11 +58,11 @@ describe("FriendshipService", () => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
           seed.users[0].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
         const result = await friendshipService.createFriendship(
           seed.users[0].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
         expect(result).toBeNull();
       });
@@ -75,17 +75,17 @@ describe("FriendshipService", () => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
           seed.users[0].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
         const result = await friendshipService.acceptFriendship(
           seed.users[0].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
 
         expect(result).not.toBeNull();
-        expect(result!.requester.id).toBe(seed.users[0].id);
-        expect(result!.acceptor.id).toBe(seed.users[1].id);
-        expect(result!.status).toBe("ACCEPTED");
+        expect(result?.requester.id).toBe(seed.users[0].id);
+        expect(result?.acceptor.id).toBe(seed.users[1].id);
+        expect(result?.status).toBe("ACCEPTED");
         Friendship.strict().parse(result);
       });
     });
@@ -95,7 +95,7 @@ describe("FriendshipService", () => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.acceptFriendship(
           seed.users[0].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
         expect(result).toBeNull();
       });
@@ -108,17 +108,17 @@ describe("FriendshipService", () => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
           seed.users[0].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
         const result = await friendshipService.deleteFriendship(
           seed.users[0].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
 
         expect(result).toBeTruthy();
 
         const friendships = await friendshipService.getUserFriendships(
-          seed.users[0].id
+          seed.users[0].id,
         );
         expect(friendships.length).toBe(0);
       });
@@ -129,7 +129,7 @@ describe("FriendshipService", () => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.deleteFriendship(
           seed.users[0].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
         expect(result).toBeFalsy();
       });

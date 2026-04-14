@@ -26,7 +26,7 @@ describe("FileSevice", () => {
         const fileService = new FileService(tx);
         const result = await fileService.isChatPhoto(
           "chat-photo.webp",
-          seed.users[0].id
+          seed.users[0].id,
         );
         expect(result).toBeTruthy();
       });
@@ -37,7 +37,7 @@ describe("FileSevice", () => {
         const fileService = new FileService(tx);
         const result = await fileService.isChatPhoto(
           "chat-photo-invalid.webp",
-          seed.users[0].id
+          seed.users[0].id,
         );
         expect(result).toBeFalsy();
       });
@@ -50,7 +50,7 @@ describe("FileSevice", () => {
         const fileService = new FileService(tx);
         const result = await fileService.isChatMessage(
           "chat-message.webp",
-          seed.users[0].id
+          seed.users[0].id,
         );
         expect(result).toBeTruthy();
       });
@@ -61,7 +61,7 @@ describe("FileSevice", () => {
         const fileService = new FileService(tx);
         const result = await fileService.isChatMessage(
           "chat-message-invalid.webp",
-          seed.users[0].id
+          seed.users[0].id,
         );
         expect(result).toBeFalsy();
       });

@@ -3,9 +3,9 @@ import { createFriendship as createFriendshipController } from "./createFriendsh
 import { deleteFriendship as deleteFriendshipController } from "./deleteFriendship.controller";
 import { getUserFriendships as getUserFriendshipsController } from "./getUserFriendships.controller";
 
-export namespace FriendshipControllers {
-  export const acceptFriendship = acceptFriendshipController;
-  export const createFriendship = createFriendshipController;
-  export const deleteFriendship = deleteFriendshipController;
-  export const getUserFriendships = getUserFriendshipsController;
-}
+export const FriendshipControllers = {
+  acceptFriendship: acceptFriendshipController,
+  createFriendship: createFriendshipController,
+  deleteFriendship: deleteFriendshipController,
+  getUserFriendships: getUserFriendshipsController,
+};

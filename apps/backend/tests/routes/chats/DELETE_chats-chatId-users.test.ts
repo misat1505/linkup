@@ -13,6 +13,7 @@ describe("[DELETE] /chats/:chatId/users", () => {
       const res1 = await request(app)
         .get("/chats")
         .set("Authorization", `Bearer ${token}`);
+
       const chat1 = res1.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
 
       Chat.strict().parse(chat1);
@@ -25,6 +26,7 @@ describe("[DELETE] /chats/:chatId/users", () => {
       const res3 = await request(app)
         .get("/chats")
         .set("Authorization", `Bearer ${token}`);
+
       const chat3 = res3.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
       expect(chat3).toBeUndefined();
     });

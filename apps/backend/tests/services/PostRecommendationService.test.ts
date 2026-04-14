@@ -42,12 +42,14 @@ const STRANGER: User = {
 
 describe("PostRecommendationService", () => {
   function _initService(
-    tx: PrismaClientOrTransaction
+    tx: PrismaClientOrTransaction,
   ): PostRecommendationService {
     return new PostRecommendationService(
       tx,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       mockPostService as any,
-      mockFriendshipService as any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      mockFriendshipService as any,
     );
   }
 
@@ -83,7 +85,7 @@ describe("PostRecommendationService", () => {
         mockPostService.getPost.mockResolvedValue(null);
 
         await expect(
-          postRecommendationService.getLastPost("post1")
+          postRecommendationService.getLastPost("post1"),
         ).rejects.toThrow("Last post not found.");
       });
     });
@@ -99,7 +101,7 @@ describe("PostRecommendationService", () => {
           { status: "PENDING", acceptor: USER, requester: STRANGER },
         ];
         mockFriendshipService.getUserFriendships.mockResolvedValue(
-          mockFriendships
+          mockFriendships,
         );
 
         const result = await postRecommendationService.getUserFriends(USER.id);
@@ -133,7 +135,7 @@ describe("PostRecommendationService", () => {
         const result = await postRecommendationService.fetchFriendsPostsOnly(
           mockPost,
           [FRIEND1.id],
-          10
+          10,
         );
         expect(result).toEqual([mockPost]);
         expect(fetchSpy).toHaveBeenCalledWith(mockPost, [FRIEND1.id], 10);
@@ -160,14 +162,14 @@ describe("PostRecommendationService", () => {
           deadline,
           [FRIEND1.id],
           USER.id,
-          10
+          10,
         );
         expect(result).toEqual([mockPost]);
         expect(fetchSpy).toHaveBeenCalledWith(
           deadline,
           [FRIEND1.id],
           USER.id,
-          10
+          10,
         );
         fetchSpy.mockRestore();
       });
@@ -179,7 +181,7 @@ describe("PostRecommendationService", () => {
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         null,
         [],
-        [FRIEND1.id]
+        [FRIEND1.id],
       );
       expect(result).toBeUndefined();
     });
@@ -188,7 +190,7 @@ describe("PostRecommendationService", () => {
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         { id: "post1", author: STRANGER, createdAt: new Date() } as Post,
         [{ id: "post2", author: FRIEND1, createdAt: new Date() } as Post],
-        [FRIEND1.id]
+        [FRIEND1.id],
       );
       expect(result).toBeUndefined();
     });
@@ -197,7 +199,7 @@ describe("PostRecommendationService", () => {
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         { id: "post1", author: FRIEND1, createdAt: new Date() } as Post,
         [],
-        [FRIEND1.id]
+        [FRIEND1.id],
       );
       expect(result).toBeUndefined();
     });
@@ -207,7 +209,7 @@ describe("PostRecommendationService", () => {
       const result = PostRecommendationService.getOthersPostsCreatedAtFilter(
         { id: "post1", author: STRANGER, createdAt: date } as Post,
         [],
-        [FRIEND1.id]
+        [FRIEND1.id],
       );
       expect(result).toEqual({ lt: date });
     });
@@ -242,7 +244,7 @@ describe("PostRecommendationService", () => {
         const result = await postRecommendationService.getRecommendedPosts(
           USER.id,
           "post1",
-          10
+          10,
         );
         expect(result).toEqual(mockPosts);
         expect(getLastPostSpy).toHaveBeenCalledWith("post1");
@@ -251,7 +253,7 @@ describe("PostRecommendationService", () => {
           lastPost.createdAt,
           [FRIEND1.id],
           USER.id,
-          10
+          10,
         );
 
         getLastPostSpy.mockRestore();
@@ -292,7 +294,7 @@ describe("PostRecommendationService", () => {
         const result = await postRecommendationService.getRecommendedPosts(
           USER.id,
           null,
-          1
+          1,
         );
 
         expect(result).toHaveLength(1);
@@ -351,7 +353,7 @@ describe("PostRecommendationService", () => {
         const result = await postRecommendationService.getRecommendedPosts(
           USER.id,
           null,
-          2
+          2,
         );
         expect(result).toHaveLength(2);
         expect(result).toContainEqual(friendPost);

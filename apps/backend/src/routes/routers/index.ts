@@ -6,11 +6,11 @@ import friendshipRouter from "./friendship.router";
 import postRouter from "./post.router";
 import userRouter from "./user.router";
 
-export namespace Routers {
-  export const auth = { public: authRouter, protected: authRouterProtected };
-  export const chat = chatRouter;
-  export const file = fileRouter;
-  export const friendship = friendshipRouter;
-  export const post = postRouter;
-  export const user = userRouter;
-}
+export const Routers = {
+  auth: { public: authRouter, protected: authRouterProtected },
+  chat: chatRouter,
+  file: fileRouter,
+  friendship: friendshipRouter,
+  post: postRouter,
+  user: userRouter,
+};

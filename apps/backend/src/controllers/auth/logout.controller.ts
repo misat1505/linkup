@@ -33,14 +33,14 @@ import { StatusCodes } from "http-status-codes";
 export const logoutController = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     res.clearCookie(refreshTokenCookieName);
     res
       .status(StatusCodes.OK)
       .json({ message: req.t("auth.controllers.logout.success") });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("auth.controllers.logout.failure")));
   }
 };

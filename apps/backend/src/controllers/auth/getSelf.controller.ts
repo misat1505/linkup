@@ -42,7 +42,7 @@ import { StatusCodes } from "http-status-codes";
 export const getSelfController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -57,7 +57,7 @@ export const getSelfController = async (
     }
 
     return res.status(StatusCodes.OK).json({ user: User.parse(user) });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("auth.controllers.get-self.failure")));
   }
 };

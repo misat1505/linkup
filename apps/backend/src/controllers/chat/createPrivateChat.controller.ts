@@ -54,7 +54,7 @@ import { StatusCodes } from "http-status-codes";
 export const createPrivateChatController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -64,7 +64,7 @@ export const createPrivateChatController = async (
     if (!users.includes(userId))
       return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t(
-          "chats.controllers.create-private-chat.not-belonging-to-you"
+          "chats.controllers.create-private-chat.not-belonging-to-you",
         ),
       });
 
@@ -75,7 +75,7 @@ export const createPrivateChatController = async (
     const createdChat = await chatService.createPrivateChat(users[0], users[1]);
 
     return res.status(StatusCodes.CREATED).json({ chat: createdChat });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("chats.controllers.create-private-chat.failure")));
   }
 };

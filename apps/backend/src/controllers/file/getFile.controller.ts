@@ -17,7 +17,7 @@ const sendFileBuilder =
     try {
       const url = await fileStorage.getSignedUrl(filename);
       return res.status(StatusCodes.OK).json({ url });
-    } catch (e) {
+    } catch {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: req.t("files.controllers.get-file.not-found") });
@@ -146,7 +146,7 @@ export const getFileController = async (
         }
       }
     }
-  } catch (error) {
+  } catch {
     next(new Error(req.t("files.controllers.get-file.failure")));
   }
 };

@@ -1,5 +1,6 @@
 import { handleMarkdownUpdate } from "@/utils/updatePost";
 import { mockFileStorage } from "../utils/mocks";
+import { FileStorage } from "@/lib/FileStorage";
 
 describe("handleMarkdownUpdate", () => {
   const mockUserId = "user-1";
@@ -17,27 +18,27 @@ describe("handleMarkdownUpdate", () => {
     ]);
 
     const updatedContent = await handleMarkdownUpdate(
-      mockFileStorage as any,
+      mockFileStorage as unknown as FileStorage,
       mockMarkdown,
       mockUserId,
-      mockPostId
+      mockPostId,
     );
 
     expect(mockFileStorage.copyFile).toHaveBeenCalledWith(
       "cache/user-1/file1.png",
-      "posts/123/file1.png"
+      "posts/123/file1.png",
     );
     expect(mockFileStorage.copyFile).toHaveBeenCalledWith(
       "cache/user-1/file3.png",
-      "posts/123/file3.png"
+      "posts/123/file3.png",
     );
     expect(mockFileStorage.copyFile).toHaveBeenCalledWith(
       "cache/user-1/file4.png",
-      "posts/123/file4.png"
+      "posts/123/file4.png",
     );
 
     expect(mockFileStorage.deleteFile).toHaveBeenCalledWith(
-      "posts/123/file2.png"
+      "posts/123/file2.png",
     );
     expect(updatedContent).toContain("filter=post&post=123");
   });

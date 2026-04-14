@@ -89,7 +89,7 @@ import { StatusCodes } from "http-status-codes";
 export const createFriendship = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -104,7 +104,7 @@ export const createFriendship = async (
 
     const friendship = await friendshipService.createFriendship(
       requesterId,
-      acceptorId
+      acceptorId,
     );
 
     if (!friendship)
@@ -113,7 +113,7 @@ export const createFriendship = async (
         .json({ message: req.t("friends.controllers.create.already-exists") });
 
     return res.status(StatusCodes.CREATED).json({ friendship });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("friends.controllers.create.failure")));
   }
 };

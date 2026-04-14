@@ -28,7 +28,7 @@ export class FriendshipService {
       },
     });
 
-    return friendships.map((f) => Friendship.parse(f)!);
+    return friendships.map((f) => Friendship.parse(f));
   }
 
   /**
@@ -39,7 +39,7 @@ export class FriendshipService {
    */
   async createFriendship(
     requesterId: User["id"],
-    acceptorId: User["id"]
+    acceptorId: User["id"],
   ): Promise<Friendship | null> {
     const existingFriendship = await this.prisma.friend.findFirst({
       where: {
@@ -75,7 +75,7 @@ export class FriendshipService {
    */
   async acceptFriendship(
     requesterId: User["id"],
-    acceptorId: User["id"]
+    acceptorId: User["id"],
   ): Promise<Friendship | null> {
     const friendship = await this.prisma.friend.findFirst({
       where: {
@@ -114,7 +114,7 @@ export class FriendshipService {
    */
   async deleteFriendship(
     requesterId: User["id"],
-    acceptorId: User["id"]
+    acceptorId: User["id"],
   ): Promise<boolean> {
     const deletedCount = await this.prisma.friend.deleteMany({
       where: {

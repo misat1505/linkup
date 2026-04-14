@@ -1,13 +1,11 @@
 import {
   S3Client,
   PutObjectCommand,
-  GetObjectCommand,
   ListObjectsV2Command,
   DeleteObjectCommand,
   CopyObjectCommand,
   DeleteObjectsCommand,
 } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { FileStorage } from "@/lib/FileStorage";
 
 jest.mock("@aws-sdk/client-s3");
@@ -39,7 +37,7 @@ describe("FileStorage", () => {
     const result = await fileStorage.uploadFile(
       Buffer.from("test"),
       "text/plain",
-      "path/test.txt"
+      "path/test.txt",
     );
 
     expect(mockSend).toHaveBeenCalledWith(expect.any(PutObjectCommand));

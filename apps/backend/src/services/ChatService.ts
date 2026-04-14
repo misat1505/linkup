@@ -7,9 +7,11 @@ import { messageWithoutResponseSelect } from "@/utils/prisma/messageWithoutRespo
 import { Reaction } from "@/types/Reaction";
 import { PrismaClientOrTransaction } from "@/types/Prisma";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function sanitizeChat(chat: any): Chat | null {
   if (!chat) return null;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   chat.users = chat.users.map(({ alias, user }: any) => ({
     alias,
     ...user,
@@ -17,7 +19,9 @@ function sanitizeChat(chat: any): Chat | null {
   return chat as Chat;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function sanitizeMessage(message: any): Message {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   message.reactions = message.reactions.map(({ reaction, ...rest }: any) => ({
     ...rest,
     ...reaction,
@@ -231,7 +235,7 @@ export class ChatService {
    */
   async getPostChatMessages(
     chatId: Chat["id"],
-    responseId: Message["id"] | null
+    responseId: Message["id"] | null,
   ): Promise<Message[]> {
     const result = await this.prisma.message.findMany({
       where: {
@@ -263,7 +267,7 @@ export class ChatService {
   async getChatMessages(
     chatId: Chat["id"],
     lastMessageId: Message["id"] | undefined = undefined,
-    limit: number | undefined = undefined
+    limit: number | undefined = undefined,
   ): Promise<Message[]> {
     const lastMessage = lastMessageId
       ? await this.prisma.message.findFirst({
@@ -438,7 +442,7 @@ export class ChatService {
    */
   async getPrivateChatByUserIds(
     id1: string,
-    id2: string
+    id2: string,
   ): Promise<Chat | null> {
     const result = await this.prisma.chat.findMany({
       where: {
@@ -518,7 +522,7 @@ export class ChatService {
   async createGroupChat(
     users: User["id"][],
     name: Chat["name"],
-    photoURL: Chat["photoURL"]
+    photoURL: Chat["photoURL"],
   ): Promise<Chat> {
     users = Array.from(new Set(users));
 

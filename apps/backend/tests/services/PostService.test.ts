@@ -47,7 +47,8 @@ describe("PostService", () => {
         const result = await postService.getPost(postId);
 
         Post.strict().parse(result);
-        expect(result!.id).toBe(postId);
+
+        expect(result?.id).toBe(postId);
       });
     });
 
@@ -74,7 +75,7 @@ describe("PostService", () => {
         });
 
         Post.strict().parse(result);
-        expect(result!.content).toBe(newContent);
+        expect(result?.content).toBe(newContent);
       });
     });
 

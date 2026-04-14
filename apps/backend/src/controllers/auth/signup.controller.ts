@@ -70,7 +70,7 @@ import { StatusCodes } from "http-status-codes";
 export const signupController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { firstName, lastName, login, password } = req.validated!
@@ -105,19 +105,18 @@ export const signupController = async (
     const refreshToken = TokenProcessor.encode(
       { userId: user.id },
       env.REFRESH_TOKEN_SECRET,
-      refreshTokenSignOptions
+      refreshTokenSignOptions,
     );
     const accessToken = TokenProcessor.encode(
       { userId: user.id },
       env.ACCESS_TOKEN_SECRET,
-      accessTokenSignOptions
+      accessTokenSignOptions,
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
     return res
       .status(StatusCodes.CREATED)
       .json({ user: User.parse(user), accessToken });
-  } catch (e) {
-    console.log(e);
+  } catch {
     next(new Error(req.t("auth.controllers.signup.failure")));
   }
 };

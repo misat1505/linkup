@@ -32,7 +32,7 @@ describe("[POST] /chats/:chatId/reactions", () => {
         .get(`/chats/${chatId}/messages?lastMessageId=null&limit=20`)
         .set("Authorization", `Bearer ${token}`);
       expect((res3.body.messages[0] as Message).reactions.length).toBe(
-        initialReactions + 1
+        initialReactions + 1,
       );
     });
   });

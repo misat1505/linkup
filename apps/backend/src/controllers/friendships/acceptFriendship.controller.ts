@@ -89,7 +89,7 @@ import { StatusCodes } from "http-status-codes";
 export const acceptFriendship = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -104,7 +104,7 @@ export const acceptFriendship = async (
 
     const friendship = await friendshipService.acceptFriendship(
       requesterId,
-      acceptorId
+      acceptorId,
     );
 
     if (!friendship)
@@ -113,7 +113,7 @@ export const acceptFriendship = async (
         .json({ message: req.t("friends.controllers.accept.not-found") });
 
     return res.status(StatusCodes.OK).json({ friendship });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("friends.controllers.accept.failure")));
   }
 };

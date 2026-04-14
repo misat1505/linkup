@@ -58,7 +58,7 @@ export const CACHE_CAPACITY = 10;
 export const insertToCache = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const file = req.file;
@@ -85,11 +85,11 @@ export const insertToCache = async (
     await fileStorage.uploadFile(
       file.buffer,
       file.mimetype,
-      `cache/${userId}/${filename}`
+      `cache/${userId}/${filename}`,
     );
 
     return res.status(StatusCodes.CREATED).json({ file: filename });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("files.controllers.insert-to-cache.failure")));
   }
 };

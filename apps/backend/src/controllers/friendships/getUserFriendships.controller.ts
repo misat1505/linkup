@@ -55,7 +55,7 @@ import { StatusCodes } from "http-status-codes";
 export const getUserFriendships = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -64,7 +64,7 @@ export const getUserFriendships = async (
     const friendships = await friendshipService.getUserFriendships(userId);
 
     return res.status(StatusCodes.OK).json({ friendships });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("friends.controllers.get.failure")));
   }
 };

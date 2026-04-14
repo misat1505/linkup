@@ -60,7 +60,7 @@ import { StatusCodes } from "http-status-codes";
 export const updateGroupChatController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -85,7 +85,7 @@ export const updateGroupChatController = async (
       fileStorage,
       req.file,
       `chats/${chatId}/`,
-      newFilename + ".webp"
+      newFilename + ".webp",
     );
 
     if (oldChat.photoURL) {
@@ -99,7 +99,7 @@ export const updateGroupChatController = async (
     });
 
     return res.status(StatusCodes.OK).json({ chat });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("chats.controllers.update-group-chat.failure")));
   }
 };

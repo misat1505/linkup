@@ -9,15 +9,15 @@ import { getSelfChatsController } from "./getSelfChats.controller";
 import { updateGroupChatController } from "./updateGroupChat.controller";
 import { updateAliasController } from "./updateUserAlias.controller";
 
-export namespace ChatControllers {
-  export const addUserToGroupChat = addUserToGroupChatController;
-  export const createGroupChat = createGroupChatController;
-  export const createMessage = createMessageController;
-  export const createPrivateChat = createPrivateChatController;
-  export const createReaction = createReactionController;
-  export const deleteSelfFromGroupChat = deleteSelfFromGroupChatController;
-  export const getChatMessages = getChatMessagesController;
-  export const getSelfChats = getSelfChatsController;
-  export const updateGroupChat = updateGroupChatController;
-  export const updateAlias = updateAliasController;
-}
+export const ChatControllers = {
+  addUserToGroupChat: addUserToGroupChatController,
+  createGroupChat: createGroupChatController,
+  createMessage: createMessageController,
+  createPrivateChat: createPrivateChatController,
+  createReaction: createReactionController,
+  deleteSelfFromGroupChat: deleteSelfFromGroupChatController,
+  getChatMessages: getChatMessagesController,
+  getSelfChats: getSelfChatsController,
+  updateGroupChat: updateGroupChatController,
+  updateAlias: updateAliasController,
+};

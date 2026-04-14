@@ -154,7 +154,7 @@ export async function seedDatabase(prisma: PrismaClient): Promise<TestSeed> {
 
   const seed: TestSeed = {
     users,
-    posts: posts as any,
+    posts,
     chats: [chat1, chat2],
     messages: [message1, message2],
     reactions,

@@ -15,7 +15,7 @@ describe("[GET] /search", () => {
         .expect(StatusCodes.OK);
 
       expect(response.body.users.length).toBe(1);
-      response.body.users.forEach((user: any) => {
+      response.body.users.forEach((user: unknown) => {
         User.strict().parse(user);
       });
     });

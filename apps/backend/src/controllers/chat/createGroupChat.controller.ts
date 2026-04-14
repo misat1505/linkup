@@ -57,7 +57,7 @@ import { StatusCodes } from "http-status-codes";
 export const createGroupChatController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -67,7 +67,7 @@ export const createGroupChatController = async (
     if (!users.includes(userId))
       return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t(
-          "chats.controllers.create-group-chat.not-belonging-to-you"
+          "chats.controllers.create-group-chat.not-belonging-to-you",
         ),
       });
 
@@ -76,7 +76,7 @@ export const createGroupChatController = async (
     const chat = await chatService.createGroupChat(
       users,
       name || null,
-      newFilename
+      newFilename,
     );
 
     if (newFilename)
@@ -84,11 +84,11 @@ export const createGroupChatController = async (
         fileStorage,
         req.file,
         `chats/${chat.id}/`,
-        newFilename
+        newFilename,
       );
 
     return res.status(StatusCodes.CREATED).json({ chat });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("chats.controllers.create-group-chat.failure")));
   }
 };

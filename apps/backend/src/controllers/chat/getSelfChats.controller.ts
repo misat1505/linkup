@@ -36,7 +36,7 @@ import { StatusCodes } from "http-status-codes";
 export const getSelfChatsController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -45,7 +45,7 @@ export const getSelfChatsController = async (
     const chats = await chatService.getUserChats(userId);
 
     return res.status(StatusCodes.OK).json({ chats });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("chats.controllers.get-self-chats.failure")));
   }
 };

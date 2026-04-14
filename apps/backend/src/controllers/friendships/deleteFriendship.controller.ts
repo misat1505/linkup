@@ -79,7 +79,7 @@ import { StatusCodes } from "http-status-codes";
 export const deleteFriendship = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -94,7 +94,7 @@ export const deleteFriendship = async (
 
     const isDeleted = await friendshipService.deleteFriendship(
       requesterId,
-      acceptorId
+      acceptorId,
     );
 
     if (!isDeleted)
@@ -105,7 +105,7 @@ export const deleteFriendship = async (
     return res
       .status(StatusCodes.OK)
       .json({ message: req.t("friends.controllers.delete.success") });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("friends.controllers.delete.failure")));
   }
 };

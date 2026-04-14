@@ -49,7 +49,7 @@ import { StatusCodes } from "http-status-codes";
 export const reportPost = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { id } = req.validated!.params! as PostId;

@@ -269,7 +269,7 @@ describe("ChatService", () => {
         const chatService = new ChatService(tx);
         const result = await chatService.getPrivateChatByUserIds(
           seed.users[1].id,
-          seed.users[0].id
+          seed.users[0].id,
         );
 
         Chat.strict().parse(result);
@@ -281,7 +281,7 @@ describe("ChatService", () => {
         const chatService = new ChatService(tx);
         const result = await chatService.getPrivateChatByUserIds(
           seed.users[1].id,
-          seed.users[1].id
+          seed.users[1].id,
         );
 
         expect(result).toBeNull();
@@ -295,7 +295,7 @@ describe("ChatService", () => {
         const chatService = new ChatService(tx);
         const result = await chatService.createPrivateChat(
           seed.users[1].id,
-          seed.users[0].id
+          seed.users[0].id,
         );
 
         Chat.strict().parse(result);
@@ -311,7 +311,7 @@ describe("ChatService", () => {
         const result = await chatService.createGroupChat(
           [seed.users[1].id],
           "name",
-          "photo.webp"
+          "photo.webp",
         );
 
         Chat.strict().parse(result);
@@ -354,7 +354,7 @@ describe("ChatService", () => {
 
         const result = await chatService.getPostChatMessages(
           seed.chats[0].id,
-          null
+          null,
         );
         expect(result.length).toBe(1);
         result.forEach((message) => {

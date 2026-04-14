@@ -17,7 +17,7 @@ export const resetDB = async (): Promise<void> => {
   await prisma.$transaction(async (prisma) => {
     for (const table of tables) {
       await prisma.$executeRawUnsafe(
-        `ALTER TABLE "${table}" DISABLE TRIGGER ALL;`
+        `ALTER TABLE "${table}" DISABLE TRIGGER ALL;`,
       );
     }
 
@@ -27,7 +27,7 @@ export const resetDB = async (): Promise<void> => {
 
     for (const table of tables) {
       await prisma.$executeRawUnsafe(
-        `ALTER TABLE "${table}" ENABLE TRIGGER ALL;`
+        `ALTER TABLE "${table}" ENABLE TRIGGER ALL;`,
       );
     }
 
@@ -88,7 +88,7 @@ export const resetDB = async (): Promise<void> => {
       },
     });
 
-    const message2 = await prisma.message.create({
+    await prisma.message.create({
       data: {
         id: "01918dfc-01b4-70f5-967b-aeecbe07a2b1",
         content: "Welcome to chat2",
@@ -109,7 +109,7 @@ export const resetDB = async (): Promise<void> => {
       data: { type: "POST" },
     });
 
-    const post = await prisma.post.create({
+    await prisma.post.create({
       data: {
         id: "25776a73-a5c6-40cf-b77f-76288a34cfa7",
         content: "### hello post",

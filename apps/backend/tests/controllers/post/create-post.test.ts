@@ -7,7 +7,7 @@ import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 jest.mock("@/utils/updatePost");
 
 describe("createPost", () => {
-  (handleMarkdownUpdate as jest.Mock).mockImplementation((a, b, c, d) => b);
+  (handleMarkdownUpdate as jest.Mock).mockImplementation((_a, b, _c, _d) => b);
 
   it("creates post successfully", async () => {
     const postContent = "This is a new post.";

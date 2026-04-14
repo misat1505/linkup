@@ -28,7 +28,7 @@ describe("reportPost", () => {
       new Prisma.PrismaClientKnownRequestError("Unique constraint", {
         clientVersion: "4.0.0",
         code: "P2002",
-      } as any)
+      }),
     );
 
     const req = mockRequest({

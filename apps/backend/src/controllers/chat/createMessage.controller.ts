@@ -65,7 +65,7 @@ import { StatusCodes } from "http-status-codes";
 export const createMessageController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { content, responseId } = req.validated!.body! as CreateMessageDTO;
@@ -81,7 +81,7 @@ export const createMessageController = async (
         chatService.isMessageInChat({
           chatId,
           messageId: responseId,
-        })
+        }),
       );
     }
 
@@ -90,7 +90,7 @@ export const createMessageController = async (
     if (!isUserAuthorized) {
       return res.status(StatusCodes.FORBIDDEN).json({
         message: req.t(
-          "chats.controllers.create-message.user-not-belonging-to-chat"
+          "chats.controllers.create-message.user-not-belonging-to-chat",
         ),
       });
     }
@@ -98,7 +98,7 @@ export const createMessageController = async (
     if (responseId && !isResponseInChat) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t(
-          "chats.controllers.create-message.response-not-existent"
+          "chats.controllers.create-message.response-not-existent",
         ),
       });
     }
@@ -109,7 +109,7 @@ export const createMessageController = async (
         const key = `chats/${chatId}/${name}`;
         await fileStorage.uploadFile(file.buffer, file.mimetype, key);
         return name;
-      })
+      }),
     );
 
     const message = await chatService.createMessage({
@@ -121,7 +121,7 @@ export const createMessageController = async (
     });
 
     return res.status(StatusCodes.CREATED).json({ message });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("chats.controllers.create-message.failure")));
   }
 };

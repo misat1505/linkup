@@ -71,7 +71,7 @@ export class FileStorage {
 
     if (!region || !accessKeyId || !secretAccessKey || !bucketName) {
       throw new Error(
-        "Missing required S3 configuration. Check environment variables or provide them explicitly."
+        "Missing required S3 configuration. Check environment variables or provide them explicitly.",
       );
     }
 
@@ -103,7 +103,7 @@ export class FileStorage {
   async uploadFile(
     fileBuffer: Buffer,
     contentType: string,
-    path: string
+    path: string,
   ): Promise<string> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
@@ -221,7 +221,7 @@ export class FileStorage {
     if (!listedObjects.Contents || listedObjects.Contents.length === 0) return;
 
     const objectsToDelete = listedObjects.Contents.map((object) => ({
-      Key: object.Key!,
+      Key: object.Key,
     }));
 
     const deleteCommand = new DeleteObjectsCommand({

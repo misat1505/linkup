@@ -37,7 +37,7 @@ import { StatusCodes } from "http-status-codes";
 export const getUserPosts = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -46,7 +46,7 @@ export const getUserPosts = async (
     const posts = await postService.getUserPosts(userId);
 
     return res.status(StatusCodes.OK).json({ posts });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("posts.controllers.get-users.failure")));
   }
 };

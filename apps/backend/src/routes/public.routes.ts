@@ -26,7 +26,7 @@ if (env.NODE_ENV === "e2e") {
       return res
         .status(StatusCodes.OK)
         .json({ message: "Successfully reset db." });
-    } catch (e) {
+    } catch {
       next(new Error("Error when resetting db."));
     }
   });

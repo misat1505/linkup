@@ -46,7 +46,7 @@ import { StatusCodes } from "http-status-codes";
 export const getCache = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -60,7 +60,7 @@ export const getCache = async (
     });
 
     return res.status(StatusCodes.OK).json({ files: filenames });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("files.controllers.get-cache.failure")));
   }
 };

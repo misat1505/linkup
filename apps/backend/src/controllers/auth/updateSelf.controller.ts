@@ -61,7 +61,7 @@ import { StatusCodes } from "http-status-codes";
 export const updateSelfController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { firstName, lastName, login, password } = req.validated!
@@ -102,7 +102,7 @@ export const updateSelfController = async (
     }
 
     return res.status(StatusCodes.OK).json({ user: User.parse(user) });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("auth.controllers.update.failure")));
   }
 };

@@ -5,6 +5,7 @@ import { PrismaClientOrTransaction } from "@/types/Prisma";
 import app from "@/app";
 import { initializeServices } from "@/utils/initializeServices";
 import { mockFileStorage } from "./mocks";
+import { FileStorage } from "@/lib/FileStorage";
 
 type TransactionProvidedValues = {
   tx: PrismaClientOrTransaction;
@@ -19,13 +20,13 @@ class RollbackError extends Error {
 }
 
 export const testWithTransaction = async (
-  testFn: ({ tx, app, seed }: TransactionProvidedValues) => Promise<void>
+  testFn: ({ tx, app, seed }: TransactionProvidedValues) => Promise<void>,
 ): Promise<void> => {
   try {
     const { prisma, seed } = initializeTestCase();
     return await prisma.$transaction(async (tx) => {
       app.services = initializeServices(tx);
-      app.services.fileStorage = mockFileStorage as any;
+      app.services.fileStorage = mockFileStorage as unknown as FileStorage;
       await testFn({ tx, app, seed });
       throw new RollbackError();
     });

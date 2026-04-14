@@ -53,7 +53,7 @@ import { StatusCodes } from "http-status-codes";
 export const searchUserController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { term } = req.validated!.query! as SearchUserQuery;
@@ -62,7 +62,7 @@ export const searchUserController = async (
     const users = await userService.searchUsers(term);
 
     return res.status(StatusCodes.OK).json({ users });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("users.controllers.search.failure")));
   }
 };

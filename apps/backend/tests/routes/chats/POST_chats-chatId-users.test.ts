@@ -15,6 +15,7 @@ describe("[POST] /chats/:chatId/users", () => {
       const res1 = await request(app)
         .get("/chats")
         .set("Authorization", `Bearer ${token}`);
+
       const chat1 = res1.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
       const user1 = chat1.users?.find((u) => u.id === userId);
       expect(user1).toBeUndefined();
@@ -28,6 +29,7 @@ describe("[POST] /chats/:chatId/users", () => {
       const res3 = await request(app)
         .get("/chats")
         .set("Authorization", `Bearer ${token}`);
+
       const chat3 = res3.body.chats.find((c: Chat) => c.id === chatId)! as Chat;
       const user3 = chat3.users?.find((u) => u.id === userId);
       UserInChat.strict().parse(user3);

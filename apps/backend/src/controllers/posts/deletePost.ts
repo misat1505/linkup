@@ -48,7 +48,7 @@ import { StatusCodes } from "http-status-codes";
 export const deletePost = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { id } = req.validated!.params! as PostId;
@@ -76,7 +76,7 @@ export const deletePost = async (
     return res
       .status(StatusCodes.OK)
       .json({ message: req.t("posts.controllers.delete.success") });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("posts.controllers.delete.failure")));
   }
 };

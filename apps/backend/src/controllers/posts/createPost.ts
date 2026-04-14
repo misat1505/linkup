@@ -50,7 +50,7 @@ import { StatusCodes } from "http-status-codes";
 export const createPost = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -63,7 +63,7 @@ export const createPost = async (
       fileStorage,
       content,
       userId,
-      id
+      id,
     );
 
     const post = await postService.createPost({
@@ -73,7 +73,7 @@ export const createPost = async (
     });
 
     return res.status(StatusCodes.CREATED).json({ post });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("posts.controllers.create.failure")));
   }
 };

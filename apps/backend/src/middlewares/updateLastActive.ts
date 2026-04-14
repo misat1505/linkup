@@ -16,7 +16,7 @@ import { NextFunction, Request, Response } from "express";
 export const updateLastActive = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const userId = req.user!.id;
   const userService = req.app.services.userService;

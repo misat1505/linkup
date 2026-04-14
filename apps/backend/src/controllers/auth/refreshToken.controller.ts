@@ -38,7 +38,7 @@ import { StatusCodes } from "http-status-codes";
 export const refreshTokenController = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { id: userId } = req.user!;
@@ -46,19 +46,19 @@ export const refreshTokenController = (
     const refreshToken = TokenProcessor.encode(
       { userId },
       env.REFRESH_TOKEN_SECRET,
-      refreshTokenSignOptions
+      refreshTokenSignOptions,
     );
     const accessToken = TokenProcessor.encode(
       { userId },
       env.ACCESS_TOKEN_SECRET,
-      accessTokenSignOptions
+      accessTokenSignOptions,
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
     return res.status(StatusCodes.OK).json({
       message: req.t("auth.controllers.refresh.success"),
       accessToken,
     });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("auth.controllers.refresh.failure")));
   }
 };

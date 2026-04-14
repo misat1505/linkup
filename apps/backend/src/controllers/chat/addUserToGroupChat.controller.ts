@@ -62,7 +62,7 @@ import { StatusCodes } from "http-status-codes";
 export const addUserToGroupChatController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const chatService = req.app.services.chatService;
@@ -79,27 +79,27 @@ export const addUserToGroupChatController = async (
     if (chatType !== "GROUP")
       return res.status(StatusCodes.BAD_REQUEST).json({
         message: req.t(
-          "chats.controllers.add-user-to-group-chat.bad-chat-type"
+          "chats.controllers.add-user-to-group-chat.bad-chat-type",
         ),
       });
 
     if (!iAmInChat)
       return res.status(StatusCodes.FORBIDDEN).json({
         message: req.t(
-          "chats.controllers.add-user-to-group-chat.i-am-not-in-chat"
+          "chats.controllers.add-user-to-group-chat.i-am-not-in-chat",
         ),
       });
 
     if (isOtherInChat)
       return res.status(StatusCodes.CONFLICT).json({
         message: req.t(
-          "chats.controllers.add-user-to-group-chat.user-already-in-chat"
+          "chats.controllers.add-user-to-group-chat.user-already-in-chat",
         ),
       });
 
     const user = await chatService.addUserToChat({ chatId, userId });
     return res.status(StatusCodes.CREATED).json({ user });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("chats.controllers.add-user-to-group-chat.failure")));
   }
 };

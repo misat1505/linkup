@@ -54,7 +54,7 @@ import { StatusCodes } from "http-status-codes";
 export const getPosts = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -65,11 +65,11 @@ export const getPosts = async (
     const posts = await postRecommendationService.getRecommendedPosts(
       userId,
       lastPostId,
-      limit
+      limit,
     );
 
     return res.status(StatusCodes.OK).json({ posts });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("posts.controllers.get-all.failure")));
   }
 };

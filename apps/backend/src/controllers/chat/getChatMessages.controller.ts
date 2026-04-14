@@ -70,7 +70,7 @@ import { StatusCodes } from "http-status-codes";
 export const getChatMessagesController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user!.id;
@@ -90,18 +90,18 @@ export const getChatMessagesController = async (
     if ("responseId" in query) {
       messages = await chatService.getPostChatMessages(
         chatId,
-        query.responseId
+        query.responseId,
       );
     } else {
       messages = await chatService.getChatMessages(
         chatId,
         query.lastMessageId ?? undefined,
-        query.limit
+        query.limit,
       );
     }
 
     return res.status(StatusCodes.OK).json({ messages });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("chats.controllers.get-messages.failure")));
   }
 };

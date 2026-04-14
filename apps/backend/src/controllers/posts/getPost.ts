@@ -45,7 +45,7 @@ import { StatusCodes } from "http-status-codes";
 export const getPost = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { id } = req.validated!.params! as PostId;
@@ -59,7 +59,7 @@ export const getPost = async (
         .json({ message: req.t("posts.controllers.get-single.not-found") });
 
     return res.status(StatusCodes.OK).json({ post });
-  } catch (e) {
+  } catch {
     next(new Error(req.t("posts.controllers.get-single.failure")));
   }
 };

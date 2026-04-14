@@ -6,12 +6,12 @@ import { getUserPosts as getUserPostsController } from "./getUserPosts";
 import { reportPost as reportPostController } from "./reportPost";
 import { updatePost as updatePostController } from "./updatePost";
 
-export namespace PostControllers {
-  export const createPost = createPostController;
-  export const deletePost = deletePostController;
-  export const getPost = getPostController;
-  export const getPosts = getPostsController;
-  export const getUserPosts = getUserPostsController;
-  export const reportPost = reportPostController;
-  export const updatePost = updatePostController;
-}
+export const PostControllers = {
+  createPost: createPostController,
+  deletePost: deletePostController,
+  getPost: getPostController,
+  getPosts: getPostsController,
+  getUserPosts: getUserPostsController,
+  reportPost: reportPostController,
+  updatePost: updatePostController,
+};
