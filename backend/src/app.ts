@@ -13,8 +13,14 @@ import middleware from "i18next-http-middleware";
 import { initializeServices } from "./utils/initializeServices";
 import { Routers } from "./routes";
 import { StatusCodes } from "http-status-codes";
+import http from "http";
+import { initializeSocket } from "./utils/initializeSocket";
 
 const app = express();
+
+const server = http.createServer(app);
+
+initializeSocket(server);
 
 app.services = initializeServices(prisma);
 
@@ -66,7 +72,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 if (env.NODE_ENV !== "test") {
   initReactions();
 
-  app.listen(env.PORT, () => {
+  server.listen(env.PORT, () => {
     console.log(`Server running on port ${env.PORT}.`);
   });
 }
