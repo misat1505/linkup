@@ -1,3 +1,4 @@
 /countlines*
 /frontend/src/config/security/
 bash.exe*
+node_modules
