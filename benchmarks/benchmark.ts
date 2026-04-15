@@ -194,7 +194,7 @@ async function runProfile(
   mode: Mode,
   iterations: number,
 ): Promise<ProfileResult> {
-  const url = "http://localhost:3000";
+  const url = getFrontendUrlBase(mode);
   const flags = buildFlags(profile, chromePort, cookieHeader);
 
   banner(`${profile.emoji}  Starting: ${profile.label}`, "·");
@@ -231,6 +231,13 @@ async function runProfile(
   return { profile, iterations: allResults, stats, durationMs };
 }
 
+function getFrontendUrlBase(mode: Mode): string {
+  const common = "http://localhost:";
+  if (mode === "nextjs") return `${common}${3000}`;
+  else if (mode === "react") return `${common}${3001}`;
+  throw new Error(`Unknown mode: ${mode}`);
+}
+
 async function main() {
   const activeProfiles = PROFILE_FILTER
     ? profiles.filter((p) => p.id === PROFILE_FILTER)
@@ -258,8 +265,8 @@ async function main() {
 
     const page = await browser.newPage();
 
-    console.log("\nOpening login page...");
-    await page.goto("http://localhost:3000/login", {
+    console.log(`\nOpening login page at ${getFrontendUrlBase(MODE)}/login...`);
+    await page.goto(`${getFrontendUrlBase(MODE)}/login`, {
       waitUntil: "networkidle0",
     });
     await page.type('input[name="login"]', "login6");
@@ -274,7 +281,7 @@ async function main() {
     const cookieHeader = cookies.map((c) => `${c.name}=${c.value}`).join("; ");
 
     const waitUntil = MODE === "react" ? "networkidle0" : "domcontentloaded";
-    await page.goto("http://localhost:3000", { waitUntil });
+    await page.goto(getFrontendUrlBase(MODE), { waitUntil });
     console.log("Logged in ✓");
 
     const totalStart = performance.now();
