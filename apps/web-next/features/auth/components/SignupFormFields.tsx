@@ -1,0 +1,41 @@
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { useSignupFormContext } from "../providers/SignupFormProvider";
+import { SignupFormType } from "../schemas/auth.validators";
+import FormField from "@/components/shared/forms/FormField";
+
+export default function SignupFormFields() {
+  const { t } = useLanguageContext();
+  const { register, errors } = useSignupFormContext();
+
+  const renderFormField = (
+    name: keyof SignupFormType,
+    placeholder: string,
+    type = "text",
+  ) => (
+    <FormField
+      {...register(name)}
+      placeholder={placeholder}
+      type={type}
+      error={errors[name]?.message}
+      data-testid={`cy-signup-form-${name}`}
+    />
+  );
+
+  return (
+    <div>
+      {renderFormField("firstName", t("signup.form.placeholders.firstname"))}
+      {renderFormField("lastName", t("signup.form.placeholders.lastname"))}
+      {renderFormField("login", t("signup.form.placeholders.login"))}
+      {renderFormField(
+        "password",
+        t("signup.form.placeholders.password"),
+        "password",
+      )}
+      {renderFormField(
+        "confirmPassword",
+        t("signup.form.placeholders.confirm-password"),
+        "password",
+      )}
+    </div>
+  );
+}

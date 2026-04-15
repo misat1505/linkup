@@ -1,0 +1,22 @@
+{
+  "name": "scripts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lighthouse.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "benchmark:react": "npx tsc && node ./dist/benchmark.js --mode react",
+    "benchmark:nextjs": "npx tsc && node ./dist/benchmark.js --mode nextjs",
+    "benchmark:quick": "npx tsc && node ./dist/benchmark.js --iterations 2",
+    "benchmark:mobile": "npx tsc && node ./dist/benchmark.js --profile mobile-mid-3g"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chrome-launcher": "^1.2.1",
+    "lighthouse": "^12.8.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

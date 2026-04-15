@@ -1,0 +1,54 @@
+import { createFullName } from "@/utils/createFullName";
+import { Message } from "../schemas/message";
+import { useChatContext } from "../providers/ChatProvider";
+import { useAppContext } from "@/providers/AppProvider";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { I18nText } from "@/components/shared/I18nText";
+
+type ResponseProps = { message: Message["response"] };
+
+export default function Response({ message }: ResponseProps) {
+  const { t } = useLanguageContext();
+  const { messageRefs } = useChatContext();
+  const { user: me } = useAppContext();
+
+  if (!message) throw new Error("Message is required in Response component");
+
+  const getText = () => {
+    if (message.content) return message.content.substring(0, 20);
+    if (me!.id === message.author.id)
+      return (
+        <I18nText
+          translationKey="chats.message.reply.only-files"
+          values={{
+            name: t("common.you"),
+            count: String(message.files.length),
+          }}
+        />
+      );
+
+    return (
+      <I18nText
+        translationKey="chats.message.reply.only-files"
+        values={{
+          name: createFullName(message.author),
+          count: String(message.files.length),
+        }}
+      />
+    );
+  };
+
+  const onclick = () => {
+    messageRefs.current[message.id]?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <div
+      onClick={onclick}
+      className="w-fit rounded-md bg-black p-2 text-muted-foreground shadow-lg transition-all hover:cursor-pointer hover:text-slate-400"
+      style={{ boxShadow: "0 10px black" }}
+    >
+      {getText()}
+    </div>
+  );
+}

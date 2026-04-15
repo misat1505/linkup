@@ -34,7 +34,7 @@ services:
 
   e2e-backend:
     build:
-      context: ../backend
+      context: ../apps/backend
       dockerfile: ../docker/Dockerfile.backend.e2e
     depends_on:
       database:

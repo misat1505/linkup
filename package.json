@@ -1,0 +1,26 @@
+{
+  "name": "inzynierka",
+  "version": "1.0.0",
+  "description": "LinkUp is a social media platform developed as a Bachelor's thesis project. It enables seamless communication and content sharing among users. The platform offers real-time chats, group conversations, file sharing, and Markdown-based posts — all wrapped in a clean, responsive user interface. The focus is on delivering a reliable, user-friendly experience that supports modern social interaction needs.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab-stud.elka.pw.edu.pl/msatala/praca_inzynierska.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "husky": "^9.1.7"
+  }
+}

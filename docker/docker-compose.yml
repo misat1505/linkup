@@ -35,7 +35,7 @@ services:
 
   backend:
     build:
-      context: ../backend
+      context: ../apps/backend
       dockerfile: ../docker/Dockerfile.backend
     depends_on:
       database:
@@ -43,16 +43,9 @@ services:
     ports:
       - "5500:5500"
 
-  socket:
-    build:
-      context: ../socket
-      dockerfile: ../docker/Dockerfile.socket
-    ports:
-      - "5501:5501"
-
   frontend:
     build:
-      context: ../frontend
+      context: ../apps/web-react
       dockerfile: ../docker/Dockerfile.frontend
     ports:
       - "3000:80"
