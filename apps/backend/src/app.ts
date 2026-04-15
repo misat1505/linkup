@@ -53,9 +53,10 @@ if (env.NODE_ENV === "development") {
 }
 
 app.use(async (req, _res, next) => {
-  // eslint-disable-next-line no-console
-  console.log(req.url);
-  // await new Promise((res) => setTimeout(res, 100));
+  if (env.NODE_ENV === "development") {
+    // eslint-disable-next-line no-console
+    console.log(req.url);
+  }
   next();
 });
 
