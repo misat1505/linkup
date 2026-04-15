@@ -5,7 +5,13 @@ import { ChatService } from "@/services/Chat.service";
 import { Chat } from "@/types/Chat";
 import { Message } from "@/types/Message";
 import { sortChatsByActivity } from "@/utils/sortChatsByActivity";
-import React, { createContext, useContext, useEffect, useRef } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "react-query";
 
@@ -21,9 +27,10 @@ type ChatPageContextValue = {
 };
 
 const ChatPageContext = createContext<ChatPageContextValue>(
-  {} as ChatPageContextValue
+  {} as ChatPageContextValue,
 );
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useChatPageContext = () => useContext(ChatPageContext);
 
 export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
@@ -38,7 +45,7 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
     onSuccess: (data) => {
       queryClient.setQueryData<Chat[]>(
         queryKeys.chats(),
-        sortChatsByActivity(data)
+        sortChatsByActivity(data),
       );
       data.forEach((chat) => {
         socketClient.joinRoom(chat.id);
@@ -46,43 +53,47 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
     },
   });
 
-  const addMessage = (message: Message): void => {
-    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-      const updatedChats = oldChats!.map((chat) => {
-        if (chat.id !== message.chatId) return chat;
-        chat.lastMessage = message;
-        return { ...chat };
+  const addMessage = useCallback(
+    (message: Message): void => {
+      queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+        const updatedChats = oldChats!.map((chat) => {
+          if (chat.id !== message.chatId) return chat;
+          chat.lastMessage = message;
+          return { ...chat };
+        });
+
+        return sortChatsByActivity(updatedChats);
       });
 
-      return sortChatsByActivity(updatedChats);
-    });
+      queryClient.setQueryData(
+        queryKeys.messages(message.chatId),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (oldData: any) => {
+          if (!oldData) {
+            return {
+              pages: [[message]],
+              pageParams: [undefined],
+            };
+          }
 
-    queryClient.setQueryData(
-      queryKeys.messages(message.chatId),
-      (oldData: any) => {
-        if (!oldData) {
+          const allMessages = oldData.pages.flat();
+          const isDuplicate = allMessages.some(
+            (m: Message) => m.id === message.id,
+          );
+
+          if (isDuplicate) {
+            return oldData;
+          }
+
           return {
-            pages: [[message]],
-            pageParams: [undefined],
+            pages: [[message], ...oldData.pages],
+            pageParams: [undefined, ...oldData.pageParams],
           };
-        }
-
-        const allMessages = oldData.pages.flat();
-        const isDuplicate = allMessages.some(
-          (m: Message) => m.id === message.id
-        );
-
-        if (isDuplicate) {
-          return oldData;
-        }
-
-        return {
-          pages: [[message], ...oldData.pages],
-          pageParams: [undefined, ...oldData.pageParams],
-        };
-      }
-    );
-  };
+        },
+      );
+    },
+    [queryClient],
+  );
 
   useEffect(() => {
     socketClient.onReceiveMessage((message) => {
@@ -100,7 +111,7 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
     return () => {
       socketClient.off(SocketAction.RECEIVE_MESSAGE);
     };
-  }, [socketClient]);
+  }, [addMessage, t, toast]);
 
   useEffect(() => {
     return () => {
@@ -108,7 +119,7 @@ export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
         socketClient.leaveRoom(chat.id);
       });
     };
-  }, []);
+  }, [queryClient]);
 
   return (
     <ChatPageContext.Provider

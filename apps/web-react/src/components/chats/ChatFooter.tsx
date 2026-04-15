@@ -79,6 +79,7 @@ function FileAdder() {
     e.currentTarget.value = "";
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { ref, ...rest } = register("files");
 
   return (

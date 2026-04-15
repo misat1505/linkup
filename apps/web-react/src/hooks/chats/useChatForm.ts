@@ -32,7 +32,7 @@ export type useChatFormValue = {
   setResponse: (id: Message["id"] | null) => void;
   responseId: Message["id"] | null | undefined;
   submitForm: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined
+    e?: React.BaseSyntheticEvent<object, unknown, unknown> | undefined,
   ) => Promise<void>;
 };
 
@@ -81,7 +81,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
 
     setValue(
       "files",
-      prevFiles.filter((_, idx) => idx !== id)
+      prevFiles.filter((_, idx) => idx !== id),
     );
   };
 

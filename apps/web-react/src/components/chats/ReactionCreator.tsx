@@ -74,7 +74,7 @@ function ReactionCreatorContent({
     return <div>{t("chats.message.controls.reaction.already-reacted")}</div>;
 
   const availbleReactions = queryClient.getQueryData<ReactionType[]>(
-    queryKeys.reactions()
+    queryKeys.reactions(),
   );
 
   if (!availbleReactions)
@@ -96,6 +96,7 @@ function ReactionCreatorContent({
 
 const commonClasses = "h-8 w-8";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const reactionsMap = {
   happy: <IoMdHappy className={cn("text-yellow-500", commonClasses)} />,
   sad: <HiOutlineEmojiSad className={cn("text-yellow-500", commonClasses)} />,
@@ -125,7 +126,7 @@ function ReactionCreatorContentItem({
       const reactionResponse = await ChatService.createReaction(
         messageId,
         reaction.id,
-        chat!.id
+        chat!.id,
       );
 
       addReaction(reactionResponse);
@@ -142,7 +143,8 @@ function ReactionCreatorContentItem({
   return (
     <Tooltip
       content={t(
-        `chats.message.controls.reaction.values.${reaction.name}` as any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        `chats.message.controls.reaction.values.${reaction.name}` as any,
       )}
     >
       <span>

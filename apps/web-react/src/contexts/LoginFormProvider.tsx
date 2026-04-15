@@ -8,9 +8,10 @@ type LoginFormContextProps = {
 type LoginContextValue = useLoginFormValue;
 
 const LoginFormContext = createContext<LoginContextValue>(
-  {} as LoginContextValue
+  {} as LoginContextValue,
 );
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useLoginFormContext = () => useContext(LoginFormContext);
 
 export const LoginFormProvider = ({ children }: LoginFormContextProps) => {

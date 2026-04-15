@@ -85,7 +85,9 @@ function FileDialogContent({
         const urlObject = new URL(url);
         const filter = urlObject.searchParams.get("filter");
         if (!validURLs.includes(url) && filter === "post") validURLs.push(url);
-      } catch (e) {}
+      } catch {
+        /* empty */
+      }
     }
     return validURLs;
   };
@@ -247,7 +249,7 @@ function CopyElementToClipboardButton({ file }: { file: string }) {
       await navigator.clipboard.writeText(
         `<video>
   <source src="${file}" />
-</video>`
+</video>`,
       );
 
     toast({

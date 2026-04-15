@@ -27,7 +27,7 @@ export type useLoginFormValue = {
   errors: FieldErrors<LoginFormEntries>;
   isSubmitting: boolean;
   submitForm: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined
+    e?: React.BaseSyntheticEvent<object, unknown, unknown> | undefined,
   ) => Promise<void>;
 };
 

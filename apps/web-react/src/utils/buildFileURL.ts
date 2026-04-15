@@ -20,7 +20,7 @@ export function buildFileURL(baseUrl: string | null, filter: Filter) {
     url.search = searchParams.toString();
 
     return url.toString();
-  } catch (e) {
+  } catch {
     return "";
   }
 }

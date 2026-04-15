@@ -8,9 +8,10 @@ type GroupChatFormContextProps = PropsWithChildren;
 type GroupChatFormContextValue = useNewGroupChatFormValue;
 
 const GroupChatFormContext = createContext<GroupChatFormContextValue>(
-  {} as GroupChatFormContextValue
+  {} as GroupChatFormContextValue,
 );
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useGroupChatFormContext = () => useContext(GroupChatFormContext);
 
 export const GroupChatFormProvider = ({

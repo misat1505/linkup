@@ -111,7 +111,7 @@ function AliasUpdateModal({ user }: { user: UserInChat }) {
   };
 
   const handleClick = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     try {
       e.preventDefault();
@@ -122,6 +122,7 @@ function AliasUpdateModal({ user }: { user: UserInChat }) {
         if (!oldChats) return [];
 
         const chat = oldChats.find((chat) => chat.id === chatId)!;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         const cacheUser = chat.users?.find((u) => u.id === user.id)!;
         cacheUser.alias = text;
 
@@ -157,7 +158,7 @@ function AliasUpdateModal({ user }: { user: UserInChat }) {
           <Input
             value={text || ""}
             placeholder={t(
-              "chats.settings.update-alias-dialog.input.placeholder"
+              "chats.settings.update-alias-dialog.input.placeholder",
             )}
             onChange={handleChange}
             className="text-sm"

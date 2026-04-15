@@ -9,9 +9,10 @@ type ChatFooterContextProps = PropsWithChildren & {
 type ChatFooterContextValue = useChatFormValue;
 
 const ChatFooterContext = createContext<ChatFooterContextValue>(
-  {} as ChatFooterContextValue
+  {} as ChatFooterContextValue,
 );
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useChatFooterContext = () => useContext(ChatFooterContext);
 
 export const ChatFooterProvider = ({

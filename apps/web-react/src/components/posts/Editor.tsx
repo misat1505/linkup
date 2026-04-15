@@ -38,6 +38,7 @@ export default function Editor() {
       keyCommand: buttonText,
       buttonProps: { "aria-label": buttonText, title: buttonText },
       icon: <FaSave />,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       execute: async (_, __) => {
         try {
           const post = await handleSave();
@@ -45,16 +46,16 @@ export default function Editor() {
             ["posts", { postId: post.id }],
             () => ({
               ...post,
-            })
+            }),
           );
           handleSafeChange(post.content);
           navigate(
-            ROUTES.POST_EDITOR.$buildPath({ params: { postId: post.id } })
+            ROUTES.POST_EDITOR.$buildPath({ params: { postId: post.id } }),
           );
           toast({
             title: successText,
           });
-        } catch (e) {
+        } catch {
           toast({
             variant: "destructive",
             title: failureText,

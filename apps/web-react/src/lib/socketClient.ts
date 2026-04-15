@@ -48,7 +48,9 @@ class SocketClient {
   }
 
   onReceiveMessage(callback: (message: Message) => void) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.socket.on(SocketAction.RECEIVE_MESSAGE, (dirtyMessage: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const convertedMessage = convertDates(dirtyMessage) as any;
       const message: Message = convertedMessage;
       callback(message);
@@ -60,11 +62,13 @@ class SocketClient {
   }
 
   onReceiveReaction(callback: (reaction: Reaction) => void) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.socket.on(SocketAction.RECEIVE_REACTION, (reaction: any) => {
       callback(reaction);
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   on(action: SocketAction | SocketErrors, cb: (...args: any[]) => void) {
     this.socket.on(action, cb);
   }

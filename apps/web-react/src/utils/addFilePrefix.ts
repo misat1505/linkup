@@ -4,12 +4,12 @@ type JSONValue = string | number | boolean | null | JSONObject | JSONArray;
 interface JSONObject {
   [key: string]: JSONValue;
 }
-interface JSONArray extends Array<JSONValue> {}
+type JSONArray = Array<JSONValue>;
 
 export function addFilePrefix(
   obj: JSONValue,
   urlKeys: string[] = ["photoURL", "url"],
-  prefix: string = `${API_URL}/files/`
+  prefix: string = `${API_URL}/files/`,
 ): JSONValue {
   if (obj === null || typeof obj !== "object") {
     return obj;
@@ -22,7 +22,7 @@ export function addFilePrefix(
   const newObj: JSONObject = { ...obj };
 
   for (const key in newObj) {
-    if (!newObj.hasOwnProperty(key)) continue;
+    if (!Object.prototype.hasOwnProperty.call(newObj, key)) continue;
 
     if (urlKeys.includes(key) && typeof newObj[key] === "string") {
       newObj[key] = prefix + newObj[key];

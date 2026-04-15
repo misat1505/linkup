@@ -26,7 +26,7 @@ export type useSubmitFormValue = {
   isSubmitting: boolean;
   file: File | null;
   submitForm: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined
+    e?: React.BaseSyntheticEvent<object, unknown, unknown> | undefined,
   ) => Promise<void>;
   removeFile: () => void;
   data: SignupFormEntries;

@@ -27,9 +27,10 @@ type EditorContextProvidedValues = {
 };
 
 const EditorContext = createContext<EditorContextProvidedValues | undefined>(
-  undefined
+  undefined,
 );
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useEditorContext = () => {
   const context = useContext(EditorContext);
   if (context === undefined)
@@ -40,7 +41,7 @@ export const useEditorContext = () => {
 const EditorProvider = ({ children, ...props }: EditorContextProps) => {
   const queryClient = useQueryClient();
   const [markdown, setMarkdown] = useState(
-    props.variant === "update" ? props.post.content : ""
+    props.variant === "update" ? props.post.content : "",
   );
 
   const handleSafeChange = (text: string) => {

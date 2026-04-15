@@ -3,6 +3,7 @@ import { Message } from "@/types/Message";
 import React, {
   createContext,
   PropsWithChildren,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -36,7 +37,7 @@ type ChatContextValue = {
   >;
   setIncomeMessageId: React.Dispatch<React.SetStateAction<string | null>>;
   fetchNextPage: (
-    options?: FetchNextPageOptions
+    options?: FetchNextPageOptions,
   ) => Promise<InfiniteQueryObserverResult<Message, unknown>>;
   hasNextPage?: boolean;
   isFetchingNextPage: boolean;
@@ -45,13 +46,14 @@ type ChatContextValue = {
 
 const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useChatContext = () => useContext(ChatContext);
 
 export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
   const queryClient = useQueryClient();
   const messageRefs = useRef<Record<Message["id"], HTMLDivElement | null>>({});
   const [incomeMessageId, setIncomeMessageId] = useState<Message["id"] | null>(
-    null
+    null,
   );
   const { chats, addMessage } = useChatPageContext();
 
@@ -84,32 +86,38 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
   const incomeMessage =
     messages?.find((message) => message.id === incomeMessageId) || null;
 
-  const addReaction = (reaction: Reaction) => {
-    queryClient.setQueryData(queryKeys.messages(chat!.id), (oldData: any) => {
-      if (!oldData) return oldData;
+  const chat = chats?.find((c) => c.id === chatId) || null;
 
-      const newPages = oldData.pages.map((page: Message[]) =>
-        page.map((m) => {
-          if (m.id !== reaction.messageId) return m;
+  const addReaction = useCallback(
+    (reaction: Reaction) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.setQueryData(queryKeys.messages(chat!.id), (oldData: any) => {
+        if (!oldData) return oldData;
 
-          const alreadyReacted = m.reactions.some(
-            (r) => r.user.id === reaction.user.id
-          );
-          if (alreadyReacted) return m;
+        const newPages = oldData.pages.map((page: Message[]) =>
+          page.map((m) => {
+            if (m.id !== reaction.messageId) return m;
 
-          return {
-            ...m,
-            reactions: [...m.reactions, reaction],
-          };
-        })
-      );
+            const alreadyReacted = m.reactions.some(
+              (r) => r.user.id === reaction.user.id,
+            );
+            if (alreadyReacted) return m;
 
-      return {
-        pages: newPages,
-        pageParams: [...oldData.pageParams],
-      };
-    });
-  };
+            return {
+              ...m,
+              reactions: [...m.reactions, reaction],
+            };
+          }),
+        );
+
+        return {
+          pages: newPages,
+          pageParams: [...oldData.pageParams],
+        };
+      });
+    },
+    [chat, queryClient],
+  );
 
   useEffect(() => {
     socketClient.onReceiveMessage((message) => {
@@ -124,9 +132,7 @@ export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
     return () => {
       socketClient.off(SocketAction.RECEIVE_MESSAGE);
     };
-  }, [socketClient]);
-
-  const chat = chats?.find((c) => c.id === chatId) || null;
+  }, [addMessage, addReaction, chatId]);
 
   return (
     <ChatContext.Provider

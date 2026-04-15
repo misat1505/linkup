@@ -33,12 +33,12 @@ export type usePostChatFormValue = {
   responseId: Message["id"] | null | undefined;
   response: Message | null;
   submitForm: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined
+    e?: React.BaseSyntheticEvent<object, unknown, unknown> | undefined,
   ) => Promise<void>;
 };
 
 export default function usePostChatForm(
-  chatId: Chat["id"]
+  chatId: Chat["id"],
 ): usePostChatFormValue {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -64,7 +64,7 @@ export default function usePostChatForm(
         (oldMessages) => {
           if (!oldMessages) return [message];
           return [...oldMessages, message];
-        }
+        },
       );
       setResponseInner(null);
       toast({
@@ -92,7 +92,7 @@ export default function usePostChatForm(
 
     setValue(
       "files",
-      prevFiles.filter((_, idx) => idx !== id)
+      prevFiles.filter((_, idx) => idx !== id),
     );
   };
 

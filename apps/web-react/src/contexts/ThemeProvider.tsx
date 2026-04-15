@@ -11,6 +11,7 @@ type ThemeContextValue = {
 
 const ThemeContext = createContext<ThemeContextValue>({} as ThemeContextValue);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useThemeContext = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }: ThemeContextProps) => {

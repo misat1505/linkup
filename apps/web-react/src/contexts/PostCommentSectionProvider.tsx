@@ -16,11 +16,12 @@ const PostCommentsSectionContext = createContext<
   PostCommentsSectionContextProvidedValues | undefined
 >(undefined);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const usePostCommentsSectionContext = () => {
   const context = useContext(PostCommentsSectionContext);
   if (context === undefined)
     throw new Error(
-      "usePostCommentsSectionContext called outside its provider."
+      "usePostCommentsSectionContext called outside its provider.",
     );
   return context;
 };

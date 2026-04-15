@@ -28,6 +28,7 @@ export default function Reactions({
 
 const commonClasses = "h-4 w-4";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const reactionsMap = {
   happy: <IoMdHappy className={cn("text-yellow-500", commonClasses)} />,
   sad: <HiOutlineEmojiSad className={cn("text-yellow-500", commonClasses)} />,

@@ -37,7 +37,7 @@ export type useNewGroupChatFormValue = {
   appendUser: (user: User) => void;
   removeUser: (user: User) => void;
   submitForm: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined
+    e?: React.BaseSyntheticEvent<object, unknown, unknown> | undefined,
   ) => Promise<void>;
 };
 
@@ -80,7 +80,7 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
 
   useEffect(() => {
     setValue("users", [me!]);
-  }, []);
+  }, [me, setValue]);
 
   const { file: filelist, users } = watch();
   const file = filelist?.[0];
@@ -94,7 +94,7 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
     if (user.id === me!.id) return;
     setValue(
       "users",
-      users.filter((u) => u.id !== user.id)
+      users.filter((u) => u.id !== user.id),
     );
   };
 

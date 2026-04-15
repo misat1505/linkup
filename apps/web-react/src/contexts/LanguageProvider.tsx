@@ -1,6 +1,7 @@
 import {
   createContext,
   PropsWithChildren,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -18,6 +19,7 @@ const LanguageContext = createContext<
   LanguageContextProvidedValues | undefined
 >(undefined);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useLanguageContext = () => {
   const context = useContext(LanguageContext);
   if (context === undefined)
@@ -28,7 +30,7 @@ export const useLanguageContext = () => {
 const LanguageProvider = ({ children }: LanguageContextProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const loadLanguage = async (lng: string) => {
+  const loadLanguage = useCallback(async (lng: string) => {
     try {
       const module = await import(`../i18n/locales/${lng}.json`);
       return module.translation;
@@ -36,16 +38,19 @@ const LanguageProvider = ({ children }: LanguageContextProps) => {
       console.error(`Error loading language file for ${lng}:`, error);
       return loadLanguage("en");
     }
-  };
+  }, []);
 
-  const changeLanguage = async (lng: string) => {
-    setIsLoading(true);
-    const translations = await loadLanguage(lng);
-    i18n.addResourceBundle(lng, "translation", translations, true, true);
-    await i18n.changeLanguage(lng);
-    localStorage.setItem("lang", lng);
-    setIsLoading(false);
-  };
+  const changeLanguage = useCallback(
+    async (lng: string) => {
+      setIsLoading(true);
+      const translations = await loadLanguage(lng);
+      i18n.addResourceBundle(lng, "translation", translations, true, true);
+      await i18n.changeLanguage(lng);
+      localStorage.setItem("lang", lng);
+      setIsLoading(false);
+    },
+    [loadLanguage],
+  );
 
   useEffect(() => {
     const initLanguage = async () => {
@@ -54,7 +59,7 @@ const LanguageProvider = ({ children }: LanguageContextProps) => {
     };
 
     initLanguage();
-  }, []);
+  }, [changeLanguage]);
 
   return (
     <LanguageContext.Provider value={{ isLoading, changeLanguage }}>

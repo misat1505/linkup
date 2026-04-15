@@ -34,6 +34,7 @@ export class AuthService {
     return user;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static async refreshToken(): Promise<AxiosResponse<any>> {
     const response = await AUTH_API.post("/refresh");
     setAccessToken(response.data.accessToken);
@@ -73,6 +74,7 @@ export class AuthService {
     return user;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static async logout(): Promise<any> {
     const response = await AUTH_API.post("/logout");
     setAccessToken(null);

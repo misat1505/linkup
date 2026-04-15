@@ -14,9 +14,10 @@ type SignupFormContextProps = useSignupFormProps & {
 type SignupContextValue = useSubmitFormValue & { type: FormType };
 
 const SignupFormContext = createContext<SignupContextValue>(
-  {} as SignupContextValue
+  {} as SignupContextValue,
 );
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSignupFormContext = () => useContext(SignupFormContext);
 
 export const SignupFormProvider = ({
