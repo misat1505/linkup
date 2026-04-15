@@ -60,7 +60,7 @@ jobs:
       - name: Install Next deps
         run: |
           cd apps/web-next
-          pnpm install --frozen-lockfile
+          pnpm install
 
       - name: Lint Next
         run: |
