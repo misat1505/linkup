@@ -55,6 +55,7 @@ jobs:
         with:
           node-version: "22"
           cache: "pnpm"
+          cache-dependency-path: apps/web-next/pnpm-lock.yaml
 
       - name: Install Next deps
         run: |
