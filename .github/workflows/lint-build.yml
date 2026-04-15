@@ -6,46 +6,38 @@ on:
       - main
 
 jobs:
-  lint-and-build:
+  backend:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "npm"
+          cache: npm
 
-      - name: Install backend deps
-        run: |
-          cd apps/backend
-          npm ci
+      - run: cd apps/backend && npm ci
+      - run: cd apps/backend && npm run lint
+      - run: cd apps/backend && npm run build
 
-      - name: Lint backend
-        run: |
-          cd apps/backend
-          npm run lint
+  react:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Build backend
-        run: |
-          cd apps/backend
-          npm run build
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
 
-      - name: Install React deps
-        run: |
-          cd apps/web-react
-          npm ci
+      - run: cd apps/web-react && npm ci
+      - run: cd apps/web-react && npm run lint
+      - run: cd apps/web-react && npm run build
 
-      - name: Lint React
-        run: |
-          cd apps/web-react
-          npm run lint
-
-      - name: Build React
-        run: |
-          cd apps/web-react
-          npm run build
+  next:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
         with:
@@ -54,20 +46,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "pnpm"
+          cache: pnpm
           cache-dependency-path: apps/web-next/pnpm-lock.yaml
 
-      - name: Install Next deps
-        run: |
-          cd apps/web-next
-          pnpm install
-
-      - name: Lint Next
-        run: |
-          cd apps/web-next
-          pnpm lint
-
-      - name: Build Next
-        run: |
-          cd apps/web-next
-          pnpm build
+      - run: cd apps/web-next && pnpm install
+      - run: cd apps/web-next && pnpm lint
+      - run: cd apps/web-next && pnpm build
