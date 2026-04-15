@@ -21,13 +21,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd backend
-          npm i
+          cd apps/backend
+          npm ci
 
       - name: Copy envs for tests
-        run: cp backend/env.example backend/.env.test
+        run: cp apps/backend/env.example apps/backend/.env.test
 
       - name: Run Tests
         run: |
-          cd backend
+          cd apps/backend
           npm run test

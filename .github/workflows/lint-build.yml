@@ -1,0 +1,72 @@
+name: Lint & Build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install backend deps
+        run: |
+          cd apps/backend
+          npm ci
+
+      - name: Lint backend
+        run: |
+          cd apps/backend
+          npm run lint
+
+      - name: Build backend
+        run: |
+          cd apps/backend
+          npm run build
+
+      - name: Install React deps
+        run: |
+          cd apps/web-react
+          npm ci
+
+      - name: Lint React
+        run: |
+          cd apps/web-react
+          npm run lint
+
+      - name: Build React
+        run: |
+          cd apps/web-react
+          npm run build
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install Next deps
+        run: |
+          cd apps/web-next
+          pnpm install --frozen-lockfile
+
+      - name: Lint Next
+        run: |
+          cd apps/web-next
+          pnpm lint
+
+      - name: Build Next
+        run: |
+          cd apps/web-next
+          pnpm build
