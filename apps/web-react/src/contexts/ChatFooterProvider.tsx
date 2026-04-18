@@ -1,5 +1,5 @@
 import useChatForm, { useChatFormValue } from "@/hooks/chats/useChatForm";
-import { Chat } from "@/types/Chat";
+import { Chat } from "@packages/schemas";
 import { createContext, PropsWithChildren, useContext } from "react";
 
 type ChatFooterContextProps = PropsWithChildren & {

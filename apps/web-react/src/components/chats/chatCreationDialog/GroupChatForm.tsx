@@ -1,12 +1,12 @@
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGroupChatFormContext } from "@/contexts/GroupChatFormProvider";
 import useUserSearch from "@/hooks/useUserSearch";
-import { User } from "@/types/User";
+import { User } from "@packages/schemas";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FaUserGroup } from "react-icons/fa6";
 import UserDisplay from "./UserDisplay";
-import { Button } from "@/components/ui/button";
-import { useTranslation } from "react-i18next";
 
 export default function GroupChatForm() {
   const { submitForm } = useGroupChatFormContext();
@@ -29,14 +29,14 @@ function ChatNameAndImage() {
 
   const file = useMemo(
     () => (fileData ? URL.createObjectURL(fileData) : null),
-    [fileData]
+    [fileData],
   );
 
   return (
     <div className="flex flex-col items-center justify-between">
       <Input
         placeholder={t(
-          "chats.create-new-chat.group.form.inputs.name.placeholder"
+          "chats.create-new-chat.group.form.inputs.name.placeholder",
         )}
         className="my-2"
         {...register("name")}
@@ -74,14 +74,14 @@ function UserSearch() {
     };
 
   const filteredUsers = data?.filter(
-    (user) => !users.some((u) => u.id === user.id)
+    (user) => !users.some((u) => u.id === user.id),
   );
 
   return (
     <div>
       <Input
         placeholder={t(
-          "chats.create-new-chat.group.form.inputs.search.placeholder"
+          "chats.create-new-chat.group.form.inputs.search.placeholder",
         )}
         className="my-2"
         onChange={(e) => setText(e.currentTarget.value)}

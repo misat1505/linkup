@@ -1,6 +1,6 @@
 import { queryKeys } from "@/lib/queryKeys";
 import { UserService } from "@/services/User.service";
-import { User } from "@/types/User";
+import { User } from "@packages/schemas";
 import { useQuery, UseQueryResult } from "react-query";
 import { useDebounce } from "use-debounce";
 
@@ -14,7 +14,7 @@ const defaultOptions: useUserSearchOptions = {
 
 export default function useUserSearch(
   text: string,
-  options = defaultOptions
+  options = defaultOptions,
 ): UseQueryResult<User[], unknown> {
   const [debouncedText] = useDebounce(text, options.timeout);
 

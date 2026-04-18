@@ -1,15 +1,15 @@
 import { useEditorContext } from "@/contexts/EditorProvider";
-import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
-import { FaSave } from "react-icons/fa";
-import { useToast } from "../ui/use-toast";
 import { useThemeContext } from "@/contexts/ThemeProvider";
+import { ROUTES } from "@/lib/routes";
+import { markdownPreviewOptions } from "@/utils/markdownPreviewOptions";
+import { Post } from "@packages/schemas";
+import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
+import { useTranslation } from "react-i18next";
+import { FaSave } from "react-icons/fa";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { Post } from "@/types/Post";
-import { ROUTES } from "@/lib/routes";
+import { useToast } from "../ui/use-toast";
 import FileDialog from "./FileDialog";
-import { markdownPreviewOptions } from "@/utils/markdownPreviewOptions";
-import { useTranslation } from "react-i18next";
 
 export default function Editor() {
   const { t } = useTranslation();

@@ -1,14 +1,14 @@
 import { useChatFooterContext } from "@/contexts/ChatFooterProvider";
-import { Message } from "@/types/Message";
+import { Message } from "@packages/schemas";
+import { useTranslation } from "react-i18next";
+import { RiReplyFill } from "react-icons/ri";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { RiReplyFill } from "react-icons/ri";
 import ReactionCreator from "./ReactionCreator";
-import { useTranslation } from "react-i18next";
 
 type MessageControlsProps = { message: Message };
 

@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import { useQueryClient } from "react-query";
-import { TbLogout2 } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
 import { useChatContext } from "@/contexts/ChatProvider";
-import { ChatService } from "@/services/Chat.service";
-import { Chat } from "@/types/Chat";
 import { queryKeys } from "@/lib/queryKeys";
 import { ROUTES } from "@/lib/routes";
+import { ChatService } from "@/services/Chat.service";
+import { Chat } from "@packages/schemas";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { TbLogout2 } from "react-icons/tb";
+import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
+import FocusableSpan from "../common/FocusableSpan";
+import Tooltip from "../common/Tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,9 +20,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
-import Tooltip from "../common/Tooltip";
-import FocusableSpan from "../common/FocusableSpan";
-import { useTranslation } from "react-i18next";
 
 export default function ChatLeaveDialog() {
   const { t } = useTranslation();
@@ -29,7 +29,7 @@ export default function ChatLeaveDialog() {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     await ChatService.leaveChat(chatId);

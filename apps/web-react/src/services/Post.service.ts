@@ -1,4 +1,4 @@
-import { Post } from "@/types/Post";
+import { Post } from "@packages/schemas";
 import { POSTS_API } from "./utils";
 
 export class PostService {
@@ -29,7 +29,7 @@ export class PostService {
 
   static async getRecommendedPosts(
     lastPostId: Post["id"] | null,
-    limit: number
+    limit: number,
   ): Promise<Post[]> {
     const params = new URLSearchParams();
     params.set("lastPostId", lastPostId || "null");

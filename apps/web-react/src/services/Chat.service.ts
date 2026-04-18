@@ -1,19 +1,16 @@
-import { Chat, UserInChat } from "@/types/Chat";
-import { AxiosError, HttpStatusCode } from "axios";
-import { CHAT_API } from "./utils";
-import { User } from "@/types/User";
-import { Message } from "@/types/Message";
-import { Reaction } from "@/types/Reaction";
 import {
   ChatFormType,
   NewGroupChatFormType,
 } from "@/validators/chat.validators";
+import { Chat, Message, Reaction, User, UserInChat } from "@packages/schemas";
+import { AxiosError, HttpStatusCode } from "axios";
+import { CHAT_API } from "./utils";
 
 export class ChatService {
   static async updateChat(
     chatId: Chat["id"],
     name: string | null,
-    file: File | null
+    file: File | null,
   ): Promise<Chat> {
     const formData = new FormData();
 
@@ -30,7 +27,7 @@ export class ChatService {
 
   static async addUserToChat(
     chatId: Chat["id"],
-    userId: User["id"]
+    userId: User["id"],
   ): Promise<UserInChat> {
     const response = await CHAT_API.post(`${chatId}/users`, { userId });
     return response.data.user;
@@ -39,7 +36,7 @@ export class ChatService {
   static async updateAlias(
     chatId: Chat["id"],
     userId: User["id"],
-    alias: UserInChat["alias"]
+    alias: UserInChat["alias"],
   ): Promise<void> {
     await CHAT_API.put(`/${chatId}/users/${userId}/alias`, { alias });
   }
@@ -47,7 +44,7 @@ export class ChatService {
   static async createReaction(
     messageId: Message["id"],
     reactionId: Reaction["id"],
-    chatId: Chat["id"]
+    chatId: Chat["id"],
   ): Promise<Reaction> {
     const response = await CHAT_API.post(`/${chatId}/reactions`, {
       messageId,
@@ -63,7 +60,7 @@ export class ChatService {
 
   static async createPrivateChat(
     user1: User["id"],
-    user2: User["id"]
+    user2: User["id"],
   ): Promise<Chat> {
     try {
       const body = {
@@ -91,7 +88,7 @@ export class ChatService {
   static async getMessages(
     chatId: Chat["id"],
     responseId?: Message["id"] | null,
-    lastMessageId?: Message["id"] | null
+    lastMessageId?: Message["id"] | null,
   ): Promise<Message[]> {
     const params = new URLSearchParams();
     if (responseId !== undefined)
@@ -107,7 +104,7 @@ export class ChatService {
 
   static async createMessage(
     chatId: Chat["id"],
-    payload: ChatFormType
+    payload: ChatFormType,
   ): Promise<Message> {
     const formData = new FormData();
     formData.append("content", payload.content);

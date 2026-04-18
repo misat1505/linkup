@@ -1,19 +1,19 @@
 import { useAppContext } from "@/contexts/AppProvider";
 import { useChatPageContext } from "@/contexts/ChatPageProvider";
-import { Chat } from "@/types/Chat";
+import { ROUTES } from "@/lib/routes";
 import { buildFileURL, Filter } from "@/utils/buildFileURL";
 import { ChatUtils } from "@/utils/chatUtils";
 import { getStatus, Status, timeDifference } from "@/utils/timeDifference";
+import { Chat } from "@packages/schemas";
+import { useTranslation } from "react-i18next";
 import { FaUserGroup } from "react-icons/fa6";
+import { RxCross1 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import Avatar from "../common/Avatar";
+import FocusableSpan from "../common/FocusableSpan";
+import Tooltip from "../common/Tooltip";
 import ChatLeaveDialog from "./ChatLeaveDialog";
 import ChatSettingsDialog from "./chatSettings/ChatSettingsDialog";
-import Tooltip from "../common/Tooltip";
-import FocusableSpan from "../common/FocusableSpan";
-import { RxCross1 } from "react-icons/rx";
-import { ROUTES } from "@/lib/routes";
-import { useTranslation } from "react-i18next";
 
 export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   const { t } = useTranslation();

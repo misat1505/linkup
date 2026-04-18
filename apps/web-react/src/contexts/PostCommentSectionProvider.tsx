@@ -1,13 +1,15 @@
 import usePostChatForm, {
   usePostChatFormValue,
 } from "@/hooks/chats/usePostChatForm";
-import { Chat } from "@/types/Chat";
+import { Post } from "@packages/schemas";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 
-type PostCommentsSectionContextProps = PropsWithChildren & { chat: Chat };
+type PostCommentsSectionContextProps = PropsWithChildren & {
+  chat: Post["chat"];
+};
 
 type PostCommentsSectionContextProvidedValues = usePostChatFormValue & {
-  chat: Chat;
+  chat: Post["chat"];
   isCommentSectionOpen: boolean;
   toggleIsCommentSectionOpen: () => void;
 };

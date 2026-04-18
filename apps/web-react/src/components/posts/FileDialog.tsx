@@ -1,14 +1,17 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import { queryKeys } from "@/lib/queryKeys";
+import { FileService } from "@/services/File.service";
+import { Post } from "@packages/schemas";
+import { useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { AiFillDelete } from "react-icons/ai";
+import { FaCopy } from "react-icons/fa";
+import { IoMdAdd } from "react-icons/io";
 import { PiFilesFill } from "react-icons/pi";
 import { useQuery, useQueryClient } from "react-query";
-import { AiFillDelete } from "react-icons/ai";
+import Image from "../common/Image";
+import Loading from "../common/Loading";
+import ProtectedVideo from "../common/ProtectedVideo";
+import Tooltip from "../common/Tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,18 +23,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { IoMdAdd } from "react-icons/io";
-import { FaCopy } from "react-icons/fa";
-import { useRef } from "react";
-import { Post } from "@/types/Post";
-import { queryKeys } from "@/lib/queryKeys";
-import { FileService } from "@/services/File.service";
-import Loading from "../common/Loading";
-import Image from "../common/Image";
-import ProtectedVideo from "../common/ProtectedVideo";
-import Tooltip from "../common/Tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import { useToast } from "../ui/use-toast";
-import { useTranslation } from "react-i18next";
 
 export default function FileDialog({ content }: { content?: Post["content"] }) {
   function extractUrlsFromMarkdown(content: Post["content"]): string[] {

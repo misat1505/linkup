@@ -1,9 +1,7 @@
-import { io, Socket } from "socket.io-client";
 import { SOCKET_URL } from "@/constants";
-import { Message } from "@/types/Message";
 import { convertDates } from "@/utils/convertDates";
-import { Reaction } from "@/types/Reaction";
-import { Chat } from "@/types/Chat";
+import { Chat, Message, Reaction } from "@packages/schemas";
+import { io, Socket } from "socket.io-client";
 
 type Room = string;
 

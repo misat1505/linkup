@@ -1,4 +1,7 @@
+import { Friendship } from "@packages/schemas";
 import { flexRender, Table as TableType } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
+import FocusableSpan from "../common/FocusableSpan";
 import {
   TableBody,
   TableCell,
@@ -6,9 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Friendship } from "@/types/Friendship";
-import FocusableSpan from "../common/FocusableSpan";
-import { useTranslation } from "react-i18next";
 
 type FriendsTableProps = {
   table: TableType<Friendship>;
@@ -18,7 +18,7 @@ export default function FriendsTable({ table }: FriendsTableProps) {
   const { t } = useTranslation();
   const focusNavigationBar = () => {
     const navSearch = document.querySelector(
-      "[data-testid=cy-nav-search-input]"
+      "[data-testid=cy-nav-search-input]",
     ) as HTMLInputElement;
     navSearch?.focus();
   };
@@ -35,7 +35,7 @@ export default function FriendsTable({ table }: FriendsTableProps) {
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </TableHead>
               );

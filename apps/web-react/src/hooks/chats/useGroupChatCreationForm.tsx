@@ -3,13 +3,12 @@ import { useAppContext } from "@/contexts/AppProvider";
 import { queryKeys } from "@/lib/queryKeys";
 import { ROUTES } from "@/lib/routes";
 import { ChatService } from "@/services/Chat.service";
-import { Chat } from "@/types/Chat";
-import { User } from "@/types/User";
 import {
   newGroupChatFormSchema,
   NewGroupChatFormType,
 } from "@/validators/chat.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Chat, User } from "@packages/schemas";
 import { AxiosError } from "axios";
 import { useEffect } from "react";
 import {

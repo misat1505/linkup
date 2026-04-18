@@ -1,16 +1,16 @@
+import useCountStatusCategories from "@/hooks/friends/useCountStatusCategories";
+import { Friendship } from "@packages/schemas";
 import { Table } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import Tooltip from "../common/Tooltip";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { Friendship } from "@/types/Friendship";
-import useCountStatusCategories from "@/hooks/friends/useCountStatusCategories";
-import Tooltip from "../common/Tooltip";
-import { useTranslation } from "react-i18next";
 
 type StatusFilterDropdownProps = {
   table: Table<Friendship>;

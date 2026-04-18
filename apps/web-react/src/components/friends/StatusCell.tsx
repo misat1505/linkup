@@ -1,8 +1,8 @@
 import { useAppContext } from "@/contexts/AppProvider";
 import { queryKeys } from "@/lib/queryKeys";
 import { FriendService } from "@/services/Friend.service";
-import { Friendship } from "@/types/Friendship";
 import { createFullName } from "@/utils/createFullName";
+import { Friendship } from "@packages/schemas";
 import { MoreVertical } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";

@@ -1,4 +1,4 @@
-import { User } from "@/types/User";
+import { User } from "@packages/schemas";
 import { USER_API } from "./utils";
 
 export class UserService {

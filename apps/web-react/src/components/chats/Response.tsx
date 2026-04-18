@@ -1,7 +1,7 @@
 import { useAppContext } from "@/contexts/AppProvider";
 import { useChatContext } from "@/contexts/ChatProvider";
-import { Message } from "@/types/Message";
 import { createFullName } from "@/utils/createFullName";
+import { Message } from "@packages/schemas";
 import { useTranslation } from "react-i18next";
 
 type ResponseProps = { message: Message["response"] };

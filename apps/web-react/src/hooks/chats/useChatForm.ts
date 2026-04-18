@@ -3,10 +3,9 @@ import { useChatPageContext } from "@/contexts/ChatPageProvider";
 import { useChatContext } from "@/contexts/ChatProvider";
 import { socketClient } from "@/lib/socketClient";
 import { ChatService } from "@/services/Chat.service";
-import { Chat } from "@/types/Chat";
-import { Message } from "@/types/Message";
 import { chatFormSchema, ChatFormType } from "@/validators/chat.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Chat, Message } from "@packages/schemas";
 import { AxiosError } from "axios";
 import {
   FieldErrors,

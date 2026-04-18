@@ -3,13 +3,13 @@ import { useChatContext } from "@/contexts/ChatProvider";
 import useDelay from "@/hooks/useDelay";
 import { cn } from "@/lib/utils";
 import styles from "@/styles/incomeMessage.module.css";
-import { Message } from "@/types/Message";
-import { ChatUtils } from "@/utils/chatUtils";
-import { useState } from "react";
-import Avatar from "../common/Avatar";
 import { buildFileURL } from "@/utils/buildFileURL";
+import { ChatUtils } from "@/utils/chatUtils";
 import { getInitials } from "@/utils/getInitials";
+import { Message } from "@packages/schemas";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import Avatar from "../common/Avatar";
 
 type IncomeMessageProps = {
   message: Message;
@@ -55,7 +55,7 @@ export default function IncomeMessage({
       className={cn(
         "absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-x-4 rounded-md bg-slate-300 p-4 transition-all hover:bg-slate-400 dark:bg-slate-700 dark:hover:bg-slate-600",
         styles.incomeMessage,
-        { hidden: isClicked }
+        { hidden: isClicked },
       )}
     >
       <Avatar

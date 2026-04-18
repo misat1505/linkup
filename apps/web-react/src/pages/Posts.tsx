@@ -1,15 +1,15 @@
+import Loading from "@/components/common/Loading";
+import MyPostPreview from "@/components/posts/MyPostPreview";
+import { Button } from "@/components/ui/button";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
+import { queryKeys } from "@/lib/queryKeys";
+import { ROUTES } from "@/lib/routes";
+import { PostService } from "@/services/Post.service";
+import { Post } from "@packages/schemas";
+import { orderBy } from "lodash";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { orderBy } from "lodash";
-import { queryKeys } from "@/lib/queryKeys";
-import { PostService } from "@/services/Post.service";
-import Loading from "@/components/common/Loading";
-import { Post } from "@/types/Post";
-import { Button } from "@/components/ui/button";
-import MyPostPreview from "@/components/posts/MyPostPreview";
-import { ROUTES } from "@/lib/routes";
-import { useTranslation } from "react-i18next";
-import useChangeTabTitle from "@/hooks/useChangeTabTitle";
 
 export default function Posts() {
   const { t } = useTranslation();
@@ -32,7 +32,7 @@ export default function Posts() {
     return orderBy(
       posts,
       [(post) => new Date(post.createdAt).getTime()],
-      ["desc"]
+      ["desc"],
     );
   };
 
@@ -43,7 +43,7 @@ export default function Posts() {
         data-testid="cy-redirect-to-create-post-btn"
         onClick={() =>
           navigate(
-            ROUTES.POST_EDITOR.$buildPath({ params: { postId: undefined } })
+            ROUTES.POST_EDITOR.$buildPath({ params: { postId: undefined } }),
           )
         }
       >

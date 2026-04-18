@@ -5,9 +5,9 @@ import { useChatContext } from "@/contexts/ChatProvider";
 import { queryKeys } from "@/lib/queryKeys";
 import { ChatService } from "@/services/Chat.service";
 import { FileService } from "@/services/File.service";
-import { Chat } from "@/types/Chat";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { sortChatsByActivity } from "@/utils/sortChatsByActivity";
+import { Chat } from "@packages/schemas";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaUserGroup } from "react-icons/fa6";
@@ -20,7 +20,7 @@ export default function ChatInfoUpdater() {
     queryFn: () =>
       FileService.downloadFile(
         buildFileURL(chat!.photoURL, { type: "chat-photo", id: chat!.id }),
-        chat!.photoURL
+        chat!.photoURL,
       ),
   });
 
@@ -42,7 +42,7 @@ function Updater({ file }: { file: File | null }) {
   const [groupName, setGroupName] = useState(chat?.name);
 
   const handleRemoveFile = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     setImage(null);
@@ -67,7 +67,7 @@ function Updater({ file }: { file: File | null }) {
     const updatedChat = await ChatService.updateChat(
       chat!.id,
       groupName || null,
-      image
+      image,
     );
 
     queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {

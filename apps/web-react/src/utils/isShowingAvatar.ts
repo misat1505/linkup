@@ -1,8 +1,8 @@
-import { Message } from "@/types/Message";
+import { Message } from "@packages/schemas";
 
 export function isShowingAvatar(
   messages: Message[],
-  currentMessage: Message
+  currentMessage: Message,
 ): boolean {
   const messageIdx = messages.findIndex((m) => m.id === currentMessage.id);
   if (messageIdx === messages.length - 1) return true;

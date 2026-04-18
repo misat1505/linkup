@@ -1,21 +1,24 @@
-import { Post } from "@/types/Post";
-import { timeDifference } from "@/utils/timeDifference";
-import Avatar from "../common/Avatar";
-import { buildFileURL } from "@/utils/buildFileURL";
-import { getInitials } from "@/utils/getInitials";
-import { createFullName } from "@/utils/createFullName";
-import { useTranslation } from "react-i18next";
-import { IoIosChatbubbles } from "react-icons/io";
-import { ActionButton } from "../common/navbar/NavbarSearch";
-import { ChatService } from "@/services/Chat.service";
-import { User } from "@/types/User";
 import { useAppContext } from "@/contexts/AppProvider";
-import { Chat } from "@/types/Chat";
 import { queryKeys } from "@/lib/queryKeys";
 import { ROUTES } from "@/lib/routes";
+import { ChatService } from "@/services/Chat.service";
+import { PostService } from "@/services/Post.service";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
+import { getInitials } from "@/utils/getInitials";
+import { timeDifference } from "@/utils/timeDifference";
+import { Chat, Post, User } from "@packages/schemas";
+import { AxiosError } from "axios";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { IoIosChatbubbles } from "react-icons/io";
+import { MdOutlineReport } from "react-icons/md";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import Avatar from "../common/Avatar";
+import FocusableSpan from "../common/FocusableSpan";
+import { ActionButton } from "../common/navbar/NavbarSearch";
+import Tooltip from "../common/Tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,12 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
-import Tooltip from "../common/Tooltip";
-import FocusableSpan from "../common/FocusableSpan";
-import { MdOutlineReport } from "react-icons/md";
 import { useToast } from "../ui/use-toast";
-import { PostService } from "@/services/Post.service";
-import { AxiosError } from "axios";
 
 export default function PostHeader({ post }: { post: Post }) {
   const queryClient = useQueryClient();

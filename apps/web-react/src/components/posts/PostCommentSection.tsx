@@ -1,17 +1,17 @@
-import { FaArrowDown, FaReply } from "react-icons/fa";
-import React, { useState } from "react";
-import { usePostCommentsSectionContext } from "@/contexts/PostCommentSectionProvider";
-import PostCommentForm from "./PostCommentForm";
-import Tooltip from "../common/Tooltip";
-import { cn } from "@/lib/utils";
 import { useAppContext } from "@/contexts/AppProvider";
-import { useQuery } from "react-query";
+import { usePostCommentsSectionContext } from "@/contexts/PostCommentSectionProvider";
 import { queryKeys } from "@/lib/queryKeys";
+import { cn } from "@/lib/utils";
 import { ChatService } from "@/services/Chat.service";
-import { Message } from "@/types/Message";
-import Comment from "./Comment";
-import { useTranslation } from "react-i18next";
 import { createFullName } from "@/utils/createFullName";
+import { Message } from "@packages/schemas";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { FaArrowDown, FaReply } from "react-icons/fa";
+import { useQuery } from "react-query";
+import Tooltip from "../common/Tooltip";
+import Comment from "./Comment";
+import PostCommentForm from "./PostCommentForm";
 
 export default function PostCommentSection() {
   const { isCommentSectionOpen } = usePostCommentsSectionContext();
@@ -43,7 +43,7 @@ function CommentSectionOpenButton() {
       <button
         className={cn(
           "mt-4 flex w-full justify-center rounded-md p-4 transition-all hover:bg-post-dark/20 hover:opacity-50 dark:hover:bg-post-light/20",
-          { "my-4": isCommentSectionOpen }
+          { "my-4": isCommentSectionOpen },
         )}
         onClick={toggleIsCommentSectionOpen}
       >
@@ -88,10 +88,10 @@ function CommentSection({
     return t("posts.comments.tooltip.messageInfo", {
       name,
       date: message.createdAt.toLocaleDateString(
-        t("posts.comments.tooltip.locale")
+        t("posts.comments.tooltip.locale"),
       ),
       time: message.createdAt.toLocaleTimeString(
-        t("posts.comments.tooltip.locale")
+        t("posts.comments.tooltip.locale"),
       ),
     });
   };
@@ -145,7 +145,7 @@ function ResponseSetButton({
             {
               "text-slate-600 dark:text-slate-400": isActive,
               "text-transparent": !isActive,
-            }
+            },
           )}
         />
       </button>
@@ -176,7 +176,7 @@ function ToggleSubsectionOpenButton({
               "rotate-180 text-slate-400 group-hover:text-slate-400 dark:text-slate-600 dark:group-hover:text-slate-600":
                 isActive,
               "text-transparent": !isActive,
-            }
+            },
           )}
         />
       </button>

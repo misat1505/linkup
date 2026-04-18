@@ -1,22 +1,21 @@
-import { buildFileURL } from "@/utils/buildFileURL";
-import { getInitials } from "@/utils/getInitials";
-import { Message } from "@/types/Message";
-import Avatar from "../common/Avatar";
-import {
-  useGetReadableCommentUploadDate,
-  timeDifference,
-} from "@/utils/timeDifference";
-import { getFileType } from "@/utils/getFileType";
 import { usePostCommentsSectionContext } from "@/contexts/PostCommentSectionProvider";
-import { File } from "@/types/File";
-import Image from "../common/Image";
-import ProtectedVideo from "../common/ProtectedVideo";
-import ProtectedFile from "../common/ProtectedFile";
+import { buildFileURL } from "@/utils/buildFileURL";
 import { createFullName } from "@/utils/createFullName";
+import { getFileType } from "@/utils/getFileType";
+import { getInitials } from "@/utils/getInitials";
+import {
+  timeDifference,
+  useGetReadableCommentUploadDate,
+} from "@/utils/timeDifference";
+import { File, Message } from "@packages/schemas";
+import Avatar from "../common/Avatar";
+import Image from "../common/Image";
+import ProtectedFile from "../common/ProtectedFile";
+import ProtectedVideo from "../common/ProtectedVideo";
 
 export default function Comment({ message }: { message: Message }) {
   const uploadDate = useGetReadableCommentUploadDate(
-    timeDifference(message.createdAt)
+    timeDifference(message.createdAt),
   );
 
   return (

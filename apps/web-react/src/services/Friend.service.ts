@@ -1,19 +1,18 @@
-import { Friendship } from "@/types/Friendship";
+import { Friendship, User } from "@packages/schemas";
 import { AxiosError, HttpStatusCode } from "axios";
 import { FRIENDS_API } from "./utils";
-import { User } from "@/types/User";
 
 export class FriendService {
   static async getMyFriendships(): Promise<Friendship[]> {
     const response = await FRIENDS_API.get("/");
     return response.data.friendships.filter(
-      (fr: Friendship) => fr.requester.id !== fr.acceptor.id
+      (fr: Friendship) => fr.requester.id !== fr.acceptor.id,
     );
   }
 
   static async createFriendship(
     requesterId: User["id"],
-    acceptorId: User["id"]
+    acceptorId: User["id"],
   ): Promise<Friendship | null> {
     try {
       const body = {
@@ -36,7 +35,7 @@ export class FriendService {
 
   static async acceptFriendship(
     requesterId: User["id"],
-    acceptorId: User["id"]
+    acceptorId: User["id"],
   ): Promise<Friendship> {
     const body = {
       requesterId,
@@ -48,7 +47,7 @@ export class FriendService {
 
   static async deleteFriendship(
     requesterId: User["id"],
-    acceptorId: User["id"]
+    acceptorId: User["id"],
   ): Promise<void> {
     const body = {
       requesterId,

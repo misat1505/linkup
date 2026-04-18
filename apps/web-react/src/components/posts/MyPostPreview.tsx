@@ -1,8 +1,19 @@
+import { useThemeContext } from "@/contexts/ThemeProvider";
+import { queryKeys } from "@/lib/queryKeys";
+import { ROUTES } from "@/lib/routes";
+import { cn } from "@/lib/utils";
+import { PostService } from "@/services/Post.service";
+import { markdownPreviewOptions } from "@/utils/markdownPreviewOptions";
+import { Post } from "@packages/schemas";
 import MDEditor from "@uiw/react-md-editor";
 import { useState } from "react";
-import { IoPencil } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { IoPencil } from "react-icons/io5";
+import { useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
+import FocusableSpan from "../common/FocusableSpan";
+import Tooltip from "../common/Tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,19 +24,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
-import { useQueryClient } from "react-query";
-import PostHeader from "./PostHeader";
-import { markdownPreviewOptions } from "@/utils/markdownPreviewOptions";
 import { Button } from "../ui/button";
-import Tooltip from "../common/Tooltip";
-import { ROUTES } from "@/lib/routes";
-import { Post } from "@/types/Post";
-import { PostService } from "@/services/Post.service";
-import { queryKeys } from "@/lib/queryKeys";
-import FocusableSpan from "../common/FocusableSpan";
-import { useThemeContext } from "@/contexts/ThemeProvider";
-import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
+import PostHeader from "./PostHeader";
 
 export default function MyPostPreview({ post }: { post: Post }) {
   const { t } = useTranslation();
@@ -39,7 +39,7 @@ export default function MyPostPreview({ post }: { post: Post }) {
         "relative m-auto my-4 w-[95%] overflow-hidden p-4 lg:w-[60%]",
         {
           "max-h-72": !isExpanded,
-        }
+        },
       )}
       style={{ backgroundColor: theme === "light" ? "white" : "#0c1117" }}
     >
@@ -90,10 +90,10 @@ function DeletePostDialog({ postId }: { postId: Post["id"] }) {
     };
 
     queryClient.setQueryData<Post[]>(queryKeys.myPosts(), (oldPosts) =>
-      updaterFn(oldPosts)
+      updaterFn(oldPosts),
     );
     queryClient.setQueryData<Post[]>(queryKeys.posts(), (oldPosts) =>
-      updaterFn(oldPosts)
+      updaterFn(oldPosts),
     );
 
     setIsOpen(false);

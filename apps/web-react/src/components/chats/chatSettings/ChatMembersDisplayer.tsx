@@ -1,20 +1,6 @@
-import React, { useState } from "react";
-import { MdEdit } from "react-icons/md";
-import { IoIosChatbubbles } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
-import { useChatContext } from "@/contexts/ChatProvider";
-import { Chat, UserInChat } from "@/types/Chat";
 import Avatar from "@/components/common/Avatar";
-import { buildFileURL } from "@/utils/buildFileURL";
-import { getInitials } from "@/utils/getInitials";
-import { createFullName } from "@/utils/createFullName";
-import { useAppContext } from "@/contexts/AppProvider";
-import { ChatService } from "@/services/Chat.service";
-import { queryKeys } from "@/lib/queryKeys";
-import { ROUTES } from "@/lib/routes";
-import Tooltip from "@/components/common/Tooltip";
 import FocusableSpan from "@/components/common/FocusableSpan";
-import { useQueryClient } from "react-query";
+import Tooltip from "@/components/common/Tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,7 +12,21 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
+import { useAppContext } from "@/contexts/AppProvider";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { queryKeys } from "@/lib/queryKeys";
+import { ROUTES } from "@/lib/routes";
+import { ChatService } from "@/services/Chat.service";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
+import { getInitials } from "@/utils/getInitials";
+import { Chat, UserInChat } from "@packages/schemas";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { IoIosChatbubbles } from "react-icons/io";
+import { MdEdit } from "react-icons/md";
+import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 export default function ChatMembersDisplayer() {
   const { chat } = useChatContext();

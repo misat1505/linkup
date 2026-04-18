@@ -1,14 +1,14 @@
+import PostCommentsSectionProvider from "@/contexts/PostCommentSectionProvider";
 import { useThemeContext } from "@/contexts/ThemeProvider";
 import { cn } from "@/lib/utils";
-import { Post } from "@/types/Post";
+import { markdownPreviewOptions } from "@/utils/markdownPreviewOptions";
+import { Post } from "@packages/schemas";
 import MDEditor from "@uiw/react-md-editor";
 import { useRef, useState } from "react";
-import PostHeader from "./PostHeader";
-import { markdownPreviewOptions } from "@/utils/markdownPreviewOptions";
-import { Button } from "../ui/button";
-import PostCommentsSectionProvider from "@/contexts/PostCommentSectionProvider";
-import PostCommentSection from "./PostCommentSection";
 import { useTranslation } from "react-i18next";
+import { Button } from "../ui/button";
+import PostCommentSection from "./PostCommentSection";
+import PostHeader from "./PostHeader";
 
 export default function PostPreview({ post }: { post: Post }) {
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ export default function PostPreview({ post }: { post: Post }) {
   return (
     <div
       className={cn(
-        "relative m-auto my-4 w-[95%] bg-post-light p-4 dark:bg-post-dark lg:w-[60%]"
+        "relative m-auto my-4 w-[95%] bg-post-light p-4 dark:bg-post-dark lg:w-[60%]",
       )}
     >
       <div className="absolute -top-20" ref={postRef}></div>

@@ -1,18 +1,18 @@
+import { useAppContext } from "@/contexts/AppProvider";
 import { useChatPageContext } from "@/contexts/ChatPageProvider";
+import { ROUTES } from "@/lib/routes";
 import { cn } from "@/lib/utils";
+import { buildFileURL, Filter } from "@/utils/buildFileURL";
+import { ChatUtils } from "@/utils/chatUtils";
+import { Chat } from "@packages/schemas";
+import { useTranslation } from "react-i18next";
 import { FaUserGroup } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router-dom";
-import Loading from "../common/Loading";
-import ChatCreator from "./chatCreationDialog/ChatCreator";
-import { Chat } from "@/types/Chat";
-import { useAppContext } from "@/contexts/AppProvider";
-import { ChatUtils } from "@/utils/chatUtils";
-import { ROUTES } from "@/lib/routes";
-import { buildFileURL, Filter } from "@/utils/buildFileURL";
-import Tooltip from "../common/Tooltip";
 import Avatar from "../common/Avatar";
+import Loading from "../common/Loading";
+import Tooltip from "../common/Tooltip";
+import ChatCreator from "./chatCreationDialog/ChatCreator";
 import NoChats from "./NoChats";
-import { useTranslation } from "react-i18next";
 
 export default function ChatNavigation() {
   const { chatId } = useParams();
@@ -127,7 +127,7 @@ function LastMessageDisplayer({
   const utils = new ChatUtils(chat!, me!);
 
   const displayName = utils.getNavigationLastMessageDisplayName(
-    t("common.you")
+    t("common.you"),
   );
 
   if (lastMessage.content)

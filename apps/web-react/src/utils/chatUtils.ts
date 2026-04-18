@@ -1,5 +1,4 @@
-import { Chat, UserInChat } from "@/types/Chat";
-import { User } from "@/types/User";
+import { Chat, User, UserInChat } from "@packages/schemas";
 import { createFullName } from "./createFullName";
 import { getInitials } from "./getInitials";
 
@@ -70,7 +69,7 @@ export class ChatUtils {
         return this.chat.name;
       }
       const names = this.chat.users?.map(
-        (user) => `${user.firstName} ${user.lastName}`
+        (user) => `${user.firstName} ${user.lastName}`,
       );
       return names?.join(", ") || "";
     }
@@ -120,7 +119,7 @@ export class ChatUtils {
   }
 
   public getNavigationLastMessageDisplayName(
-    youTranslation?: string
+    youTranslation?: string,
   ): string | null {
     const lastMessage = this.chat.lastMessage;
     if (!lastMessage) return null;

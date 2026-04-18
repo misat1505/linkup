@@ -1,8 +1,8 @@
 import Avatar from "@/components/common/Avatar";
 import Tooltip from "@/components/common/Tooltip";
 import {
-  AlertDialogAction,
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -16,11 +16,10 @@ import { useChatContext } from "@/contexts/ChatProvider";
 import useUserSearch from "@/hooks/useUserSearch";
 import { queryKeys } from "@/lib/queryKeys";
 import { ChatService } from "@/services/Chat.service";
-import { Chat } from "@/types/Chat";
-import { User } from "@/types/User";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { createFullName } from "@/utils/createFullName";
 import { getInitials } from "@/utils/getInitials";
+import { Chat, User } from "@packages/schemas";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HiUserAdd } from "react-icons/hi";
@@ -33,7 +32,7 @@ export default function UserInvite() {
   const { chat } = useChatContext();
 
   const filteredUsers = data?.filter(
-    (user) => !chat!.users!.some((u) => u.id === user.id)
+    (user) => !chat!.users!.some((u) => u.id === user.id),
   );
 
   return (
@@ -92,7 +91,7 @@ function UserAddDialog({ user }: { user: User }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     const newUser = await ChatService.addUserToChat(chatId, user.id);

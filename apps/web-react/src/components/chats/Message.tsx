@@ -1,13 +1,13 @@
 import { useAppContext } from "@/contexts/AppProvider";
 import { useChatContext } from "@/contexts/ChatProvider";
 import { cn } from "@/lib/utils";
-import { Message as MessageType } from "@/types/Message";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { ChatUtils } from "@/utils/chatUtils";
 import { createFullName } from "@/utils/createFullName";
 import { getInitials } from "@/utils/getInitials";
 import { isShowingAvatar } from "@/utils/isShowingAvatar";
 import { timeDifference } from "@/utils/timeDifference";
+import { Message as MessageType } from "@packages/schemas";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import Avatar from "../common/Avatar";

@@ -1,16 +1,15 @@
-import { IoMdHappy, IoMdHeart } from "react-icons/io";
-import { HiOutlineEmojiSad } from "react-icons/hi";
-import { TbMoodCry } from "react-icons/tb";
-import { FaSkull } from "react-icons/fa";
-import { Message } from "@/types/Message";
-import { cn } from "@/lib/utils";
-import { Reaction } from "@/types/Reaction";
-import { useChatContext } from "@/contexts/ChatProvider";
 import { useAppContext } from "@/contexts/AppProvider";
+import { useChatContext } from "@/contexts/ChatProvider";
+import { cn } from "@/lib/utils";
 import { ChatUtils } from "@/utils/chatUtils";
 import { createFullName } from "@/utils/createFullName";
-import Tooltip from "../common/Tooltip";
+import { Message, Reaction } from "@packages/schemas";
 import { useTranslation } from "react-i18next";
+import { FaSkull } from "react-icons/fa";
+import { HiOutlineEmojiSad } from "react-icons/hi";
+import { IoMdHappy, IoMdHeart } from "react-icons/io";
+import { TbMoodCry } from "react-icons/tb";
+import Tooltip from "../common/Tooltip";
 
 export default function Reactions({
   reactions,

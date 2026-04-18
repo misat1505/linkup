@@ -1,8 +1,8 @@
-import { User } from "@/types/User";
+import { setAccessToken } from "@/lib/token";
 import { LoginFormType, SignupFormType } from "@/validators/auth.validators";
+import { User } from "@packages/schemas";
 import { AxiosResponse } from "axios";
 import { AUTH_API } from "./utils";
-import { setAccessToken } from "@/lib/token";
 
 export class AuthService {
   static async updateMe(data: SignupFormType): Promise<User> {

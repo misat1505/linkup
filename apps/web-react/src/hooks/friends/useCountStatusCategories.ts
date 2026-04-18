@@ -1,6 +1,6 @@
 import { useAppContext } from "@/contexts/AppProvider";
 import { queryKeys } from "@/lib/queryKeys";
-import { Friendship } from "@/types/Friendship";
+import { Friendship } from "@packages/schemas";
 import { useQueryClient } from "react-query";
 
 export default function useCountStatusCategories() {

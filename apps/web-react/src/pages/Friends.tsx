@@ -1,4 +1,18 @@
-import { useState } from "react";
+import Avatar from "@/components/common/Avatar";
+import Loading from "@/components/common/Loading";
+import FriendsTable from "@/components/friends/FriendsTable";
+import StatusCell from "@/components/friends/StatusCell";
+import StatusFilterDropdown from "@/components/friends/StatusFilterDropdown";
+import { Input } from "@/components/ui/input";
+import { Table } from "@/components/ui/table";
+import { useAppContext } from "@/contexts/AppProvider";
+import useChangeTabTitle from "@/hooks/useChangeTabTitle";
+import { queryKeys } from "@/lib/queryKeys";
+import { FriendService } from "@/services/Friend.service";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
+import { getInitials } from "@/utils/getInitials";
+import { Friendship } from "@packages/schemas";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -6,23 +20,9 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useQuery, useQueryClient } from "react-query";
-import { queryKeys } from "@/lib/queryKeys";
-import { FriendService } from "@/services/Friend.service";
-import Loading from "@/components/common/Loading";
-import { useAppContext } from "@/contexts/AppProvider";
-import { Friendship } from "@/types/Friendship";
-import Avatar from "@/components/common/Avatar";
-import { buildFileURL } from "@/utils/buildFileURL";
-import { getInitials } from "@/utils/getInitials";
-import { createFullName } from "@/utils/createFullName";
-import StatusCell from "@/components/friends/StatusCell";
-import { Input } from "@/components/ui/input";
-import StatusFilterDropdown from "@/components/friends/StatusFilterDropdown";
-import { Table } from "@/components/ui/table";
-import FriendsTable from "@/components/friends/FriendsTable";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import useChangeTabTitle from "@/hooks/useChangeTabTitle";
+import { useQuery, useQueryClient } from "react-query";
 
 export default function Friends() {
   const { t } = useTranslation();

@@ -1,9 +1,9 @@
 import Avatar from "@/components/common/Avatar";
 import { cn } from "@/lib/utils";
-import { User } from "@/types/User";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { createFullName } from "@/utils/createFullName";
 import { getInitials } from "@/utils/getInitials";
+import { User } from "@packages/schemas";
 import { ButtonHTMLAttributes } from "react";
 
 type UserDisplayProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -20,7 +20,7 @@ export default function UserDisplay({
       {...rest}
       className={cn(
         "my-1 flex w-full items-center gap-x-2 bg-slate-100 p-2 text-sm transition-all hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800",
-        className
+        className,
       )}
     >
       <Avatar

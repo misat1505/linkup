@@ -1,16 +1,15 @@
+import { Input } from "@/components/ui/input";
+import { useAppContext } from "@/contexts/AppProvider";
+import useUserSearch from "@/hooks/useUserSearch";
+import { queryKeys } from "@/lib/queryKeys";
+import { ROUTES } from "@/lib/routes";
+import { ChatService } from "@/services/Chat.service";
+import { Chat, User } from "@packages/schemas";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import UserDisplay from "./UserDisplay";
-import useUserSearch from "@/hooks/useUserSearch";
-import { useAppContext } from "@/contexts/AppProvider";
-import { User } from "@/types/User";
-import { ChatService } from "@/services/Chat.service";
-import { Chat } from "@/types/Chat";
-import { queryKeys } from "@/lib/queryKeys";
-import { ROUTES } from "@/lib/routes";
-import { Input } from "@/components/ui/input";
-import { useTranslation } from "react-i18next";
 
 export default function PrivateChatForm() {
   const { t } = useTranslation();

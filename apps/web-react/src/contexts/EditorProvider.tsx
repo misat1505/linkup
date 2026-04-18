@@ -1,10 +1,10 @@
 import { queryKeys } from "@/lib/queryKeys";
 import { PostService } from "@/services/Post.service";
-import { Post } from "@/types/Post";
 import {
   decodeHTMLEntities,
   sanitizeMarkdownWithCodeBlocks,
 } from "@/utils/editorUtils";
+import { Post } from "@packages/schemas";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { useQueryClient } from "react-query";
 

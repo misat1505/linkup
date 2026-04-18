@@ -1,9 +1,7 @@
-import { Chat } from "@/types/Chat";
-import { Message } from "@/types/Message";
-import { User } from "@/types/User";
+import { Chat, Message, User } from "@packages/schemas";
+import { TFunction } from "i18next";
 import { ChatUtils } from "./chatUtils";
 import { createFullName } from "./createFullName";
-import { TFunction } from "i18next";
 
 export class ChatFooterUtils {
   private chat: Chat;
@@ -15,7 +13,7 @@ export class ChatFooterUtils {
     chat: Chat,
     message: Message,
     me: User,
-    translations: TFunction<"translation", undefined>
+    translations: TFunction<"translation", undefined>,
   ) {
     this.chat = chat;
     this.message = message;

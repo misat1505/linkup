@@ -2,7 +2,7 @@ import { useRefreshToken } from "@/hooks/useRefreshToken";
 import { queryKeys } from "@/lib/queryKeys";
 import { AuthService } from "@/services/Auth.service";
 import { ChatService } from "@/services/Chat.service";
-import { User } from "@/types/User";
+import { User } from "@packages/schemas";
 import { createContext, PropsWithChildren, useContext } from "react";
 import { useQuery, useQueryClient } from "react-query";
 

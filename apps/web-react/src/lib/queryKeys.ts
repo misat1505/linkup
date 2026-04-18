@@ -1,6 +1,4 @@
-import { Post } from "@/types/Post";
-import { Chat } from "@/types/Chat";
-import { Message } from "@/types/Message";
+import { Chat, Message, Post } from "@packages/schemas";
 
 export const queryKeys = {
   searchUsers: (text: string) => ["search-users", { text }] as const,

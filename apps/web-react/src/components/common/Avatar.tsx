@@ -1,10 +1,10 @@
-import React from "react";
-import Image from "./Image";
-import { ImCancelCircle } from "react-icons/im";
-import { User } from "@/types/User";
-import { getStatus, Status, timeDifference } from "@/utils/timeDifference";
 import { cn } from "@/lib/utils";
+import { getStatus, Status, timeDifference } from "@/utils/timeDifference";
+import { User } from "@packages/schemas";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { ImCancelCircle } from "react-icons/im";
+import Image from "./Image";
 
 type AvatarProps = {
   src: string;

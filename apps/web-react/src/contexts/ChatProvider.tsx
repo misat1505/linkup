@@ -1,5 +1,7 @@
-import { Chat } from "@/types/Chat";
-import { Message } from "@/types/Message";
+import { queryKeys } from "@/lib/queryKeys";
+import { SocketAction, socketClient } from "@/lib/socketClient";
+import { ChatService } from "@/services/Chat.service";
+import { Chat, Message, Reaction } from "@packages/schemas";
 import React, {
   createContext,
   PropsWithChildren,
@@ -16,10 +18,6 @@ import {
   useQueryClient,
 } from "react-query";
 import { useChatPageContext } from "./ChatPageProvider";
-import { queryKeys } from "@/lib/queryKeys";
-import { ChatService } from "@/services/Chat.service";
-import { SocketAction, socketClient } from "@/lib/socketClient";
-import { Reaction } from "@/types/Reaction";
 
 type ChatContextProps = PropsWithChildren & {
   chatId: Chat["id"];
