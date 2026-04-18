@@ -1,4 +1,4 @@
-import { Chat } from "@/features/chats/schemas/chat";
+import { Chat } from "@packages/schemas";
 
 export type Filter =
   | { type: "avatar" }

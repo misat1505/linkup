@@ -1,9 +1,8 @@
 "use server";
 
-import { User } from "@/features/auth/schemas/user";
-import { Chat } from "../schemas/chat";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
 import { CHAT_API } from "@/utils/api";
+import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Chat, User } from "@packages/schemas";
 import { AxiosError, HttpStatusCode } from "axios";
 
 export async function createPrivateChat(

@@ -1,4 +1,4 @@
-import { Message } from "../schemas/message";
+import { Message } from "@packages/schemas";
 
 export function isShowingAvatar(
   messages: Message[],

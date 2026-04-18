@@ -1,24 +1,23 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
-import {
-  FieldErrors,
-  SubmitHandler,
-  UseFormRegister,
-  useForm,
-} from "react-hook-form";
-import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { queryKeys } from "@/lib/queryKeys";
-import { Message } from "@/features/chats/schemas/message";
-import { Chat } from "@/features/chats/schemas/chat";
-import { useQueryClient } from "@tanstack/react-query";
-import { useLanguageContext } from "@/providers/LanguageProvider";
 import { createMessage } from "@/features/chats/actions/createMessage";
 import {
   chatFormSchema,
   ChatFormType,
 } from "@/features/chats/schemas/chatForm";
+import { queryKeys } from "@/lib/queryKeys";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Chat, Message } from "@packages/schemas";
+import { useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useState } from "react";
+import {
+  FieldErrors,
+  SubmitHandler,
+  useForm,
+  UseFormRegister,
+} from "react-hook-form";
 
 export type PostChatFormEntries = {
   content: string;

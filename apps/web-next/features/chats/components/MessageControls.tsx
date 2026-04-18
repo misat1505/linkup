@@ -1,14 +1,14 @@
+import { I18nText } from "@/components/shared/I18nText";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Message } from "@packages/schemas";
 import { RiReplyFill } from "react-icons/ri";
-import ReactionCreator from "./ReactionCreator";
-import { Message } from "../schemas/message";
 import { useChatFooterContext } from "../providers/ChatFooterProvider";
-import { I18nText } from "@/components/shared/I18nText";
+import ReactionCreator from "./ReactionCreator";
 
 type MessageControlsProps = { message: Message };
 

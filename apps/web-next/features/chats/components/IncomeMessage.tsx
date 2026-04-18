@@ -1,15 +1,15 @@
-import useDelay from "@/hooks/useDelay";
-import { cn } from "@/lib/utils";
-import styles from "./styles/incomeMessage.module.css";
-import { useState } from "react";
-import { buildFileURL } from "@/utils/buildFileURL";
-import { getInitials } from "@/utils/getInitials";
 import Avatar from "@/components/shared/Avatar";
 import { I18nText } from "@/components/shared/I18nText";
-import { ChatUtils } from "../utils/chatUtils";
-import { useChatContext } from "../providers/ChatProvider";
+import useDelay from "@/hooks/useDelay";
+import { cn } from "@/lib/utils";
 import { useAppContext } from "@/providers/AppProvider";
-import { Message } from "../schemas/message";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { getInitials } from "@/utils/getInitials";
+import { Message } from "@packages/schemas";
+import { useState } from "react";
+import { useChatContext } from "../providers/ChatProvider";
+import { ChatUtils } from "../utils/chatUtils";
+import styles from "./styles/incomeMessage.module.css";
 
 type IncomeMessageProps = {
   message: Message;

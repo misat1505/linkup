@@ -1,14 +1,14 @@
 "use client";
 
+import Loading from "@/components/shared/Loading";
+import { queryKeys } from "@/lib/queryKeys";
+import { DEFAULT_POSTS_FEED_PAGE_LENGTH } from "@/utils/constants";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { queryKeys } from "@/lib/queryKeys";
-import { PostWithRenderedContent } from "../schemas/post";
-import Loading from "@/components/shared/Loading";
 import { getRecommendedPosts } from "../actions/getRecommededPosts";
+import { PostWithRenderedContent } from "../schemas/post-with-rendered-content";
 import EmptyFeed from "./EmptyFeed";
-import { DEFAULT_POSTS_FEED_PAGE_LENGTH } from "@/utils/constants";
 import PostPreview from "./PostPreview";
 
 export function PostsFeed() {

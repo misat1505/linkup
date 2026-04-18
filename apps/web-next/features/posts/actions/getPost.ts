@@ -1,8 +1,8 @@
 "use server";
 
-import { Post } from "@/features/posts/schemas/post";
 import { POSTS_API } from "@/utils/api";
 import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Post } from "@packages/schemas";
 
 export async function getPost(id: Post["id"]): Promise<Post | null> {
   const api = await serverSideRequestFactory({

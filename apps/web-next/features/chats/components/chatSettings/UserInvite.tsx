@@ -4,8 +4,8 @@ import Avatar from "@/components/shared/Avatar";
 import { I18nText } from "@/components/shared/I18nText";
 import Tooltip from "@/components/shared/Tooltip";
 import {
-  AlertDialogAction,
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -15,16 +15,15 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
-import { User } from "@/features/auth/schemas/user";
 import useUserSearch from "@/hooks/useUserSearch";
 import { useLanguageContext } from "@/providers/LanguageProvider";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { createFullName } from "@/utils/createFullName";
 import { getInitials } from "@/utils/getInitials";
+import { Chat, User } from "@packages/schemas";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import { HiUserAdd } from "react-icons/hi";
-import { Chat } from "../../schemas/chat";
-import { useParams } from "next/navigation";
 import { addUserToChat } from "../../actions/addUserToChat";
 
 export default function UserInvite({ chat }: { chat: Chat }) {

@@ -1,8 +1,8 @@
 "use server";
 
 import { POSTS_API } from "@/utils/api";
-import { Post } from "../schemas/post";
 import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Post } from "@packages/schemas";
 import { revalidatePath } from "next/cache";
 
 export async function deletePost(id: Post["id"]): Promise<void> {

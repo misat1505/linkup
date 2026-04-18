@@ -1,7 +1,6 @@
-import { User } from "@/features/auth/schemas/user";
-import { Chat, UserInChat } from "../schemas/chat";
 import { createFullName } from "@/utils/createFullName";
 import { getInitials } from "@/utils/getInitials";
+import { Chat, User, UserInChat } from "@packages/schemas";
 
 export class ChatUtils {
   private chat: Chat;

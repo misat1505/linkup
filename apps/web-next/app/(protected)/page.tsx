@@ -1,11 +1,11 @@
-import { queryKeys } from "@/lib/queryKeys";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { getRecommendedPosts } from "@/features/posts/actions/getRecommededPosts";
-import { PostWithRenderedContent } from "@/features/posts/schemas/post";
-import { PostsFeed } from "@/features/posts/components/PostsFeed";
-import { makeQueryClient } from "@/lib/makeQueryClient";
-import { DEFAULT_POSTS_FEED_PAGE_LENGTH } from "@/utils/constants";
 import AuthGuard from "@/components/AuthGuard";
+import { getRecommendedPosts } from "@/features/posts/actions/getRecommededPosts";
+import { PostsFeed } from "@/features/posts/components/PostsFeed";
+import { PostWithRenderedContent } from "@/features/posts/schemas/post-with-rendered-content";
+import { makeQueryClient } from "@/lib/makeQueryClient";
+import { queryKeys } from "@/lib/queryKeys";
+import { DEFAULT_POSTS_FEED_PAGE_LENGTH } from "@/utils/constants";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function Page() {
   const queryClient = makeQueryClient();

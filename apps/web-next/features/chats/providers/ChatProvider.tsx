@@ -1,4 +1,13 @@
 "use client";
+import { queryKeys } from "@/lib/queryKeys";
+import { SocketAction, socketClient } from "@/lib/socketClient";
+import { Chat, Message, Reaction } from "@packages/schemas";
+import {
+  FetchNextPageOptions,
+  InfiniteQueryObserverResult,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import React, {
   createContext,
   PropsWithChildren,
@@ -8,19 +17,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  FetchNextPageOptions,
-  InfiniteQueryObserverResult,
-  useInfiniteQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { useChatPageContext } from "./ChatPageProvider";
-import { queryKeys } from "@/lib/queryKeys";
 import { getMessages } from "../actions/getMessages";
-import { Reaction } from "../schemas/reaction";
-import { Message } from "../schemas/message";
-import { Chat } from "../schemas/chat";
-import { SocketAction, socketClient } from "@/lib/socketClient";
+import { useChatPageContext } from "./ChatPageProvider";
 
 type ChatContextProps = PropsWithChildren & {
   chat: Chat;

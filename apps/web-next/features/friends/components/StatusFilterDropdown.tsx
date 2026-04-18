@@ -1,15 +1,15 @@
-import { Table } from "@tanstack/react-table";
+import { I18nText } from "@/components/shared/I18nText";
+import Tooltip from "@/components/shared/Tooltip";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Friendship } from "@packages/schemas";
+import { Table } from "@tanstack/react-table";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { I18nText } from "@/components/shared/I18nText";
-import Tooltip from "@/components/shared/Tooltip";
-import { Friendship } from "../schemas/friendship";
 import useCountStatusCategories from "../hooks/useCountStatusCategories";
 
 type StatusFilterDropdownProps = {

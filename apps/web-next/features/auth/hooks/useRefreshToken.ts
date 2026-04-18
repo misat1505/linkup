@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { User } from "../schemas/user";
+import { User } from "@packages/schemas";
 import axios from "axios";
+import { useEffect, useRef } from "react";
 
 export const useRefreshToken = (user: User | null | undefined) => {
   const refreshTokenIntervalRef = useRef<NodeJS.Timeout | null>(null);

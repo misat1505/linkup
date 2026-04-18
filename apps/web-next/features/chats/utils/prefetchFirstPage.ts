@@ -1,7 +1,6 @@
-import { QueryClient } from "@tanstack/react-query";
-import { Chat } from "../schemas/chat";
-import { Message } from "../schemas/message";
 import { queryKeys } from "@/lib/queryKeys";
+import { Chat, Message } from "@packages/schemas";
+import { QueryClient } from "@tanstack/react-query";
 import { getMessages } from "../actions/getMessages";
 
 export async function prefetchFirstPage(

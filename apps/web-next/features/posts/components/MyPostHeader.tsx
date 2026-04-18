@@ -1,10 +1,10 @@
-import { timeDifference } from "@/utils/timeDifference";
-import { buildFileURL } from "@/utils/buildFileURL";
-import { getInitials } from "@/utils/getInitials";
-import { createFullName } from "@/utils/createFullName";
-import { I18nText } from "@/components/shared/I18nText";
-import { Post } from "../schemas/post";
 import Avatar from "@/components/shared/Avatar";
+import { I18nText } from "@/components/shared/I18nText";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
+import { getInitials } from "@/utils/getInitials";
+import { timeDifference } from "@/utils/timeDifference";
+import { Post } from "@packages/schemas";
 
 export default function MyPostHeader({ post }: { post: Post }) {
   const getTimeText = (): React.ReactNode => {

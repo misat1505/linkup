@@ -1,5 +1,5 @@
 import { useAppContext } from "@/providers/AppProvider";
-import { Friendship } from "../schemas/friendship";
+import { Friendship } from "@packages/schemas";
 
 export default function useCountStatusCategories(friendships: Friendship[]) {
   const { user: me } = useAppContext();

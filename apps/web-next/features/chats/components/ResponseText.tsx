@@ -1,7 +1,7 @@
-import { useLanguageContext } from "@/providers/LanguageProvider";
-import { RiReplyFill } from "react-icons/ri";
-import { Message } from "../schemas/message";
 import { useAppContext } from "@/providers/AppProvider";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { Message } from "@packages/schemas";
+import { RiReplyFill } from "react-icons/ri";
 import { useChatContext } from "../providers/ChatProvider";
 import { MessageUtils } from "../utils/messageUtils";
 

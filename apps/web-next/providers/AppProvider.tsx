@@ -1,9 +1,9 @@
 "use client";
 
 import { useRefreshToken } from "@/features/auth/hooks/useRefreshToken";
-import { User } from "@/features/auth/schemas/user";
 import { getReactions } from "@/features/chats/actions/getReactions";
 import { queryKeys } from "@/lib/queryKeys";
+import { User } from "@packages/schemas";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { createContext, PropsWithChildren, useContext } from "react";

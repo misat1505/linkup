@@ -1,4 +1,13 @@
 "use client";
+import Avatar from "@/components/shared/Avatar";
+import { Input } from "@/components/ui/input";
+import { Table } from "@/components/ui/table";
+import { useAppContext } from "@/providers/AppProvider";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
+import { getInitials } from "@/utils/getInitials";
+import { Friendship } from "@packages/schemas";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -6,19 +15,10 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Friendship } from "../schemas/friendship";
-import Avatar from "@/components/shared/Avatar";
-import { buildFileURL } from "@/utils/buildFileURL";
-import { getInitials } from "@/utils/getInitials";
-import { createFullName } from "@/utils/createFullName";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Table } from "@/components/ui/table";
+import FriendsTable from "./FriendsTable";
 import StatusCell from "./StatusCell";
 import StatusFilterDropdown from "./StatusFilterDropdown";
-import FriendsTable from "./FriendsTable";
-import { useLanguageContext } from "@/providers/LanguageProvider";
-import { useAppContext } from "@/providers/AppProvider";
 
 type FriendsPageContentProps = {
   friendships: Friendship[];

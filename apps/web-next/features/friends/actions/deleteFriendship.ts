@@ -1,8 +1,8 @@
 "use server";
 
-import { User } from "@/features/auth/schemas/user";
 import { FRIENDS_API } from "@/utils/api";
 import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { User } from "@packages/schemas";
 import { revalidatePath } from "next/cache";
 
 export async function deleteFriendship(

@@ -1,15 +1,15 @@
 "use client";
+import { I18nText } from "@/components/shared/I18nText";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import useUserSearch from "@/hooks/useUserSearch";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { User } from "@packages/schemas";
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import { FaUserGroup } from "react-icons/fa6";
-import UserDisplay from "./UserDisplay";
-import { Button } from "@/components/ui/button";
 import { useGroupChatFormContext } from "../../providers/GroupChatFormProvider";
-import { useLanguageContext } from "@/providers/LanguageProvider";
-import { User } from "@/features/auth/schemas/user";
-import { I18nText } from "@/components/shared/I18nText";
-import useUserSearch from "@/hooks/useUserSearch";
-import Image from "next/image";
+import UserDisplay from "./UserDisplay";
 
 export default function GroupChatForm() {
   const { submitForm } = useGroupChatFormContext();

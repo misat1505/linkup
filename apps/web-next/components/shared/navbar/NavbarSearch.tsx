@@ -11,7 +11,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/components/ui/use-toast";
 import { searchUsers } from "@/features/auth/actions/searchUsers";
-import { User } from "@/features/auth/schemas/user";
 import { createPrivateChat } from "@/features/chats/actions/createPrivateChats";
 import { createFriendship } from "@/features/friends/actions/createFriendship";
 import useClickOutside from "@/hooks/useClickOutside";
@@ -22,6 +21,7 @@ import { useLanguageContext } from "@/providers/LanguageProvider";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { createFullName } from "@/utils/createFullName";
 import { getInitials } from "@/utils/getInitials";
+import { User } from "@packages/schemas";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";

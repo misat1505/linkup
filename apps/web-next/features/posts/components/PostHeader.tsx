@@ -1,9 +1,8 @@
-import { timeDifference } from "@/utils/timeDifference";
-import { buildFileURL } from "@/utils/buildFileURL";
-import { getInitials } from "@/utils/getInitials";
-import { createFullName } from "@/utils/createFullName";
-import { IoIosChatbubbles } from "react-icons/io";
-import { useState } from "react";
+import Avatar from "@/components/shared/Avatar";
+import FocusableSpan from "@/components/shared/FocusableSpan";
+import { I18nText } from "@/components/shared/I18nText";
+import { ActionButton } from "@/components/shared/navbar/NavbarSearch";
+import Tooltip from "@/components/shared/Tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,21 +13,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { MdOutlineReport } from "react-icons/md";
-import { AxiosError } from "axios";
-import { PostWithRenderedContent } from "../schemas/post";
-import { I18nText } from "@/components/shared/I18nText";
-import { User } from "@/features/auth/schemas/user";
-import Avatar from "@/components/shared/Avatar";
-import { ActionButton } from "@/components/shared/navbar/NavbarSearch";
-import Tooltip from "@/components/shared/Tooltip";
-import FocusableSpan from "@/components/shared/FocusableSpan";
 import { useToast } from "@/components/ui/use-toast";
-import { useLanguageContext } from "@/providers/LanguageProvider";
-import { reportPost } from "../actions/reportPost";
 import { createPrivateChat } from "@/features/chats/actions/createPrivateChats";
 import { useAppContext } from "@/providers/AppProvider";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
+import { getInitials } from "@/utils/getInitials";
+import { timeDifference } from "@/utils/timeDifference";
+import { User } from "@packages/schemas";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { IoIosChatbubbles } from "react-icons/io";
+import { MdOutlineReport } from "react-icons/md";
+import { reportPost } from "../actions/reportPost";
+import { PostWithRenderedContent } from "../schemas/post-with-rendered-content";
 
 export default function PostHeader({
   post,

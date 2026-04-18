@@ -1,4 +1,5 @@
-import { flexRender, Table as TableType } from "@tanstack/react-table";
+import FocusableSpan from "@/components/shared/FocusableSpan";
+import { I18nText } from "@/components/shared/I18nText";
 import {
   TableBody,
   TableCell,
@@ -6,9 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import FocusableSpan from "@/components/shared/FocusableSpan";
-import { I18nText } from "@/components/shared/I18nText";
-import { Friendship } from "../schemas/friendship";
+import { Friendship } from "@packages/schemas";
+import { flexRender, Table as TableType } from "@tanstack/react-table";
 
 type FriendsTableProps = {
   table: TableType<Friendship>;

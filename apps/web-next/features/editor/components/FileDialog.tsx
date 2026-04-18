@@ -1,13 +1,8 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { PiFilesFill } from "react-icons/pi";
-import { AiFillDelete } from "react-icons/ai";
+import { I18nText } from "@/components/shared/I18nText";
+import Image from "@/components/shared/Image";
+import Loading from "@/components/shared/Loading";
+import ProtectedVideo from "@/components/shared/ProtectedVideo";
+import Tooltip from "@/components/shared/Tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,22 +14,27 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { IoMdAdd } from "react-icons/io";
-import { FaCopy } from "react-icons/fa";
-import { useRef } from "react";
-import { queryKeys } from "@/lib/queryKeys";
-import { I18nText } from "@/components/shared/I18nText";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import Image from "@/components/shared/Image";
-import Tooltip from "@/components/shared/Tooltip";
-import { useLanguageContext } from "@/providers/LanguageProvider";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
-import Loading from "@/components/shared/Loading";
-import ProtectedVideo from "@/components/shared/ProtectedVideo";
-import { Post } from "@/features/posts/schemas/post";
+import { queryKeys } from "@/lib/queryKeys";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { Post } from "@packages/schemas";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRef } from "react";
+import { AiFillDelete } from "react-icons/ai";
+import { FaCopy } from "react-icons/fa";
+import { IoMdAdd } from "react-icons/io";
+import { PiFilesFill } from "react-icons/pi";
 import { getCache } from "../actions/getCache";
-import { removeFromCache } from "../actions/removeFromCache";
 import { insertFileToCache } from "../actions/insertFileToCache";
+import { removeFromCache } from "../actions/removeFromCache";
 
 export default function FileDialog({ content }: { content?: Post["content"] }) {
   function extractUrlsFromMarkdown(content: Post["content"]): string[] {

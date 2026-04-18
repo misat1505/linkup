@@ -1,13 +1,13 @@
 "use client";
-import { useState } from "react";
-import UserDisplay from "./UserDisplay";
-import useUserSearch from "@/hooks/useUserSearch";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import { createPrivateChat } from "../../actions/createPrivateChats";
-import { useLanguageContext } from "@/providers/LanguageProvider";
+import useUserSearch from "@/hooks/useUserSearch";
 import { useAppContext } from "@/providers/AppProvider";
-import { User } from "@/features/auth/schemas/user";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { User } from "@packages/schemas";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { createPrivateChat } from "../../actions/createPrivateChats";
+import UserDisplay from "./UserDisplay";
 
 export default function PrivateChatForm() {
   const { t } = useLanguageContext();

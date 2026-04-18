@@ -1,23 +1,23 @@
 "use client";
 import { useToast } from "@/components/ui/use-toast";
+import { useAppContext } from "@/providers/AppProvider";
+import { useLanguageContext } from "@/providers/LanguageProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "@packages/schemas";
 import { AxiosError } from "axios";
+import { redirect } from "next/navigation";
 import { useEffect } from "react";
 import {
   FieldErrors,
   SubmitHandler,
-  UseFormRegister,
   useForm,
+  UseFormRegister,
 } from "react-hook-form";
 import { createGroupChat } from "../actions/createGroupChat";
-import { redirect } from "next/navigation";
-import { useLanguageContext } from "@/providers/LanguageProvider";
 import {
   newGroupChatFormSchema,
   NewGroupChatFormType,
 } from "../schemas/chatValidators";
-import { useAppContext } from "@/providers/AppProvider";
-import { User } from "@/features/auth/schemas/user";
 
 type GroupChatFormEntries = {
   users: User[];

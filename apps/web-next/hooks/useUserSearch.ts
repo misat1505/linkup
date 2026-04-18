@@ -1,6 +1,6 @@
 import { searchUsers } from "@/features/auth/actions/searchUsers";
-import { User } from "@/features/auth/schemas/user";
 import { queryKeys } from "@/lib/queryKeys";
+import { User } from "@packages/schemas";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 

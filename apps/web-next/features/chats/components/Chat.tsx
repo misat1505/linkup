@@ -1,9 +1,9 @@
-import ChatHeader from "./ChatHeader";
-import { Chat as ChatType } from "../schemas/chat";
-import ChatFooter from "./ChatFooter";
+import { Chat as ChatType } from "@packages/schemas";
 import ChatFooterProvider from "../providers/ChatFooterProvider";
 import ChatProvider from "../providers/ChatProvider";
 import ChatContent from "./ChatContent";
+import ChatFooter from "./ChatFooter";
+import ChatHeader from "./ChatHeader";
 
 type ChatProps = { chat: ChatType };
 

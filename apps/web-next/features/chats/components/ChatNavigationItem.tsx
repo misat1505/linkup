@@ -1,7 +1,7 @@
 "use client";
 
 import { buildFileURL, Filter } from "@/utils/buildFileURL";
-import { Chat } from "../schemas/chat";
+import { Chat } from "@packages/schemas";
 import { FaUserGroup } from "react-icons/fa6";
 import Tooltip from "@/components/shared/Tooltip";
 import Avatar from "@/components/shared/Avatar";

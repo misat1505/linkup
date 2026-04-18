@@ -1,10 +1,8 @@
 "use server";
 
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
-import { Chat } from "../schemas/chat";
-import { Message } from "../schemas/message";
-import { Reaction } from "../schemas/reaction";
 import { CHAT_API } from "@/utils/api";
+import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Chat, Message, Reaction } from "@packages/schemas";
 
 export async function createReaction(
   messageId: Message["id"],

@@ -1,9 +1,7 @@
-import { User } from "@/features/auth/schemas/user";
-import { Chat } from "../schemas/chat";
-import { Message } from "../schemas/message";
-import { ChatUtils } from "./chatUtils";
 import { TranslateFn } from "@/providers/LanguageProvider";
 import { createFullName } from "@/utils/createFullName";
+import { Chat, Message, User } from "@packages/schemas";
+import { ChatUtils } from "./chatUtils";
 
 export class ChatFooterUtils {
   private chat: Chat;

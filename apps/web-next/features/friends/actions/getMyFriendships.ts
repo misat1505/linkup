@@ -1,8 +1,8 @@
 "use server";
 
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
-import { Friendship } from "../schemas/friendship";
 import { FRIENDS_API } from "@/utils/api";
+import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Friendship } from "@packages/schemas";
 import z from "zod";
 
 export async function getMyFriendships(): Promise<Friendship[]> {

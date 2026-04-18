@@ -1,9 +1,8 @@
 "use server";
 
-import { User } from "@/features/auth/schemas/user";
-import { Friendship } from "../schemas/friendship";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
 import { FRIENDS_API } from "@/utils/api";
+import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Friendship, User } from "@packages/schemas";
 import { revalidatePath } from "next/cache";
 
 export async function acceptFriendship(

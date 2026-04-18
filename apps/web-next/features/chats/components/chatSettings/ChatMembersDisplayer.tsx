@@ -1,18 +1,18 @@
 "use client";
 
-import { IoIosChatbubbles } from "react-icons/io";
 import Avatar from "@/components/shared/Avatar";
-import { buildFileURL } from "@/utils/buildFileURL";
-import { getInitials } from "@/utils/getInitials";
-import { createFullName } from "@/utils/createFullName";
-import Tooltip from "@/components/shared/Tooltip";
 import FocusableSpan from "@/components/shared/FocusableSpan";
-import { Chat, UserInChat } from "../../schemas/chat";
 import { I18nText } from "@/components/shared/I18nText";
-import { createPrivateChat } from "../../actions/createPrivateChats";
-import { useRouter } from "next/navigation";
-import AliasUpdateModal from "./AliasUpdateModal";
+import Tooltip from "@/components/shared/Tooltip";
 import { useAppContext } from "@/providers/AppProvider";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
+import { getInitials } from "@/utils/getInitials";
+import { Chat, UserInChat } from "@packages/schemas";
+import { useRouter } from "next/navigation";
+import { IoIosChatbubbles } from "react-icons/io";
+import { createPrivateChat } from "../../actions/createPrivateChats";
+import AliasUpdateModal from "./AliasUpdateModal";
 
 type ChatMembersDisplayerProps = {
   chat: Chat;

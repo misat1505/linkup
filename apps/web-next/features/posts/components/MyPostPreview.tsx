@@ -1,11 +1,14 @@
-import { IoPencil } from "react-icons/io5";
-import { MyPostPreviewCollapse } from "./MyPostPreviewCollapse";
 import { I18nText } from "@/components/shared/I18nText";
-import Link from "next/link";
-import { Post, PostWithRenderedContent } from "../schemas/post";
 import Tooltip from "@/components/shared/Tooltip";
-import MyPostHeader from "./MyPostHeader";
+import { Post } from "@packages/schemas";
+import Link from "next/link";
+import { IoPencil } from "react-icons/io5";
+import {
+  PostWithRenderedContent,
+} from "../schemas/post-with-rendered-content";
 import DeletePostDialog from "./DeletePostDialog";
+import MyPostHeader from "./MyPostHeader";
+import { MyPostPreviewCollapse } from "./MyPostPreviewCollapse";
 
 export default function MyPostPreview({
   post,

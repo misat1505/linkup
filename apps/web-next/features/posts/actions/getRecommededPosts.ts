@@ -1,11 +1,12 @@
 "use server";
 
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
-import { Post, PostWithRenderedContent } from "../schemas/post";
 import { POSTS_API } from "@/utils/api";
+import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Post } from "@packages/schemas";
 import z from "zod";
-import { sortPosts } from "../utils/sortPosts";
+import { PostWithRenderedContent } from "../schemas/post-with-rendered-content";
 import { getCachedRenderedPost } from "../utils/renderPost";
+import { sortPosts } from "../utils/sortPosts";
 
 export async function getRecommendedPosts(
   lastPostId: Post["id"] | null,

@@ -1,7 +1,7 @@
 "use server";
 
+import { Chat } from "@packages/schemas";
 import { cache } from "react";
-import { Chat } from "../schemas/chat";
 import { getChatsCached } from "./getChats";
 
 export const getChatByIdCached = cache(async (id: Chat["id"]) => {

@@ -1,7 +1,7 @@
 "use client";
-import { useParams } from "next/navigation";
-import { Chat, UserInChat } from "../../schemas/chat";
-import { useState } from "react";
+import FocusableSpan from "@/components/shared/FocusableSpan";
+import { I18nText } from "@/components/shared/I18nText";
+import Tooltip from "@/components/shared/Tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,14 +12,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import Tooltip from "@/components/shared/Tooltip";
-import { I18nText } from "@/components/shared/I18nText";
-import FocusableSpan from "@/components/shared/FocusableSpan";
-import { MdEdit } from "react-icons/md";
 import { Input } from "@/components/ui/input";
 import { useLanguageContext } from "@/providers/LanguageProvider";
-import { updateAlias } from "../../actions/updateAlias";
 import { createFullName } from "@/utils/createFullName";
+import { Chat, UserInChat } from "@packages/schemas";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import { MdEdit } from "react-icons/md";
+import { updateAlias } from "../../actions/updateAlias";
 
 export default function AliasUpdateModal({ user }: { user: UserInChat }) {
   const { t } = useLanguageContext();

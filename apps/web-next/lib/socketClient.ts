@@ -1,7 +1,5 @@
-import { Chat } from "@/features/chats/schemas/chat";
-import { Message } from "@/features/chats/schemas/message";
-import { Reaction } from "@/features/chats/schemas/reaction";
 import { SOCKET_URL } from "@/utils/constants";
+import { Chat, Message, Reaction } from "@packages/schemas";
 import { io, Socket } from "socket.io-client";
 
 type Room = string;

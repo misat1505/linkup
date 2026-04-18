@@ -1,19 +1,19 @@
 "use client";
+import { I18nText } from "@/components/shared/I18nText";
 import Loading from "@/components/shared/Loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { downloadFile } from "@/features/files/actions/downloadFile";
 import { queryKeys } from "@/lib/queryKeys";
 import { useAppContext } from "@/providers/AppProvider";
+import { useLanguageContext } from "@/providers/LanguageProvider";
 import { buildFileURL } from "@/utils/buildFileURL";
+import { Chat } from "@packages/schemas";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import React, { useMemo, useState } from "react";
 import { FaUserGroup } from "react-icons/fa6";
-import { Chat } from "../../schemas/chat";
-import { I18nText } from "@/components/shared/I18nText";
-import { useLanguageContext } from "@/providers/LanguageProvider";
 import { updateChat } from "../../actions/updateChat";
-import Image from "next/image";
 
 type ChatInfoUpdaterProps = {
   chat: Chat;

@@ -1,7 +1,7 @@
 "use server";
-import { Post } from "@/features/posts/schemas/post";
 import { POSTS_API } from "@/utils/api";
 import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Post } from "@packages/schemas";
 import { revalidateTag } from "next/cache";
 
 export async function updatePost({

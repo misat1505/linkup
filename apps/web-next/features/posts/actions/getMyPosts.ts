@@ -1,8 +1,9 @@
 "use server";
 import { POSTS_API } from "@/utils/api";
-import { Post, PostWithRenderedContent } from "../schemas/post";
-import z from "zod";
 import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Post } from "@packages/schemas";
+import z from "zod";
+import { PostWithRenderedContent } from "../schemas/post-with-rendered-content";
 import { getCachedRenderedPost } from "../utils/renderPost";
 import { sortPosts } from "../utils/sortPosts";
 

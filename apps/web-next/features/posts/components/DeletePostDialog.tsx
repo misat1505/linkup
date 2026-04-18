@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Post } from "../schemas/post";
-import { deletePost } from "../actions/deletePost";
+import FocusableSpan from "@/components/shared/FocusableSpan";
+import { I18nText } from "@/components/shared/I18nText";
+import Tooltip from "@/components/shared/Tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,10 +13,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { I18nText } from "@/components/shared/I18nText";
-import FocusableSpan from "@/components/shared/FocusableSpan";
+import { Post } from "@packages/schemas";
+import { useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
-import Tooltip from "@/components/shared/Tooltip";
+import { deletePost } from "../actions/deletePost";
 
 export default function DeletePostDialog({ postId }: { postId: Post["id"] }) {
   const [isOpen, setIsOpen] = useState(false);

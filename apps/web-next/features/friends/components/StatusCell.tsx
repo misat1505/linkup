@@ -1,4 +1,6 @@
-import React from "react";
+import { I18nText } from "@/components/shared/I18nText";
+import Tooltip from "@/components/shared/Tooltip";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,19 +8,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { createFullName } from "@/utils/createFullName";
-import { FaTrash } from "react-icons/fa";
-import { MoreVertical } from "lucide-react";
-import { TiTick } from "react-icons/ti";
-import { I18nText } from "@/components/shared/I18nText";
-import { Friendship } from "../schemas/friendship";
+import { useToast } from "@/components/ui/use-toast";
 import { useAppContext } from "@/providers/AppProvider";
 import { useLanguageContext } from "@/providers/LanguageProvider";
-import { useToast } from "@/components/ui/use-toast";
+import { createFullName } from "@/utils/createFullName";
+import { Friendship } from "@packages/schemas";
+import { MoreVertical } from "lucide-react";
+import React from "react";
+import { FaTrash } from "react-icons/fa";
+import { TiTick } from "react-icons/ti";
 import { acceptFriendship } from "../actions/acceptFriendship";
 import { deleteFriendship } from "../actions/deleteFriendship";
-import Tooltip from "@/components/shared/Tooltip";
-import { Button } from "@/components/ui/button";
 
 type StatusCellProps = { friendship: Friendship };
 

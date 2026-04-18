@@ -1,8 +1,8 @@
 "use server";
 import { USER_API } from "@/utils/api";
-import { User } from "../schemas/user";
-import z from "zod";
 import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { User } from "@packages/schemas";
+import z from "zod";
 
 export async function searchUsers(term: string): Promise<User[]> {
   const api = await serverSideRequestFactory({

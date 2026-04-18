@@ -1,7 +1,7 @@
 "use client";
 
+import { Chat } from "@packages/schemas";
 import { createContext, PropsWithChildren, useContext } from "react";
-import { Chat } from "../schemas/chat";
 import useChatForm, { useChatFormValue } from "../hooks/useChatForm";
 
 type ChatFooterContextProps = PropsWithChildren & {

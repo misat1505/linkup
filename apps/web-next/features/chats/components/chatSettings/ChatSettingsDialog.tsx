@@ -1,3 +1,4 @@
+import { I18nText } from "@/components/shared/I18nText";
 import Tooltip from "@/components/shared/Tooltip";
 import {
   Dialog,
@@ -7,11 +8,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Chat } from "@packages/schemas";
 import { CiSettings } from "react-icons/ci";
 import ChatMembersDisplayer from "./ChatMembersDisplayer";
 import GroupChatContent from "./GroupChatContent";
-import { Chat } from "../../schemas/chat";
-import { I18nText } from "@/components/shared/I18nText";
 
 type ChatSettingsDialogProps = {
   chat: Chat;

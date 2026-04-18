@@ -1,8 +1,8 @@
+import { Post } from "@packages/schemas";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import usePostChatForm, {
   usePostChatFormValue,
 } from "../hooks/usePostChatForm";
-import { Post } from "../schemas/post";
 
 type PostCommentsSectionContextProps = PropsWithChildren & {
   chat: Post["chat"];

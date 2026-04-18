@@ -1,5 +1,11 @@
 "use client";
 
+import { toast } from "@/components/ui/use-toast";
+import { queryKeys } from "@/lib/queryKeys";
+import { socketClient, SocketErrors } from "@/lib/socketClient";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { Chat, Message } from "@packages/schemas";
+import { useQueryClient } from "@tanstack/react-query";
 import React, {
   createContext,
   useCallback,
@@ -8,14 +14,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Chat } from "../schemas/chat";
-import { Message } from "../schemas/message";
 import { sortChatsByActivity } from "../utils/sortChatsByActivity";
-import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/lib/queryKeys";
-import { socketClient, SocketErrors } from "@/lib/socketClient";
-import { toast } from "@/components/ui/use-toast";
-import { useLanguageContext } from "@/providers/LanguageProvider";
 
 type ChatPageContextProps = {
   children: React.ReactNode;

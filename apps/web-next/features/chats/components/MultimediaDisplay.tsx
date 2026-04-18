@@ -1,10 +1,10 @@
-import { getFileType } from "@/utils/getFileType";
-import { buildFileURL } from "@/utils/buildFileURL";
-import { File } from "../schemas/file";
-import { useChatContext } from "../providers/ChatProvider";
 import Image from "@/components/shared/Image";
-import ProtectedVideo from "@/components/shared/ProtectedVideo";
 import ProtectedFile from "@/components/shared/ProtectedFile";
+import ProtectedVideo from "@/components/shared/ProtectedVideo";
+import { buildFileURL } from "@/utils/buildFileURL";
+import { getFileType } from "@/utils/getFileType";
+import { File } from "@packages/schemas";
+import { useChatContext } from "../providers/ChatProvider";
 
 export default function MultimediaDisplay({ files }: { files: File[] }) {
   if (files.length === 0) return null;

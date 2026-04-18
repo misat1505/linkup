@@ -2,7 +2,7 @@
 
 import { CHAT_API } from "@/utils/api";
 import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
-import { Chat } from "../schemas/chat";
+import { Chat } from "@packages/schemas";
 
 export async function createGroupChat(formData: FormData): Promise<Chat> {
   const api = await serverSideRequestFactory({

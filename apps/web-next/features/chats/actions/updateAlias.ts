@@ -1,8 +1,7 @@
 "use server";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
-import { Chat, UserInChat } from "../schemas/chat";
 import { CHAT_API } from "@/utils/api";
-import { User } from "@/features/auth/schemas/user";
+import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Chat, User, UserInChat } from "@packages/schemas";
 import { revalidatePath } from "next/cache";
 
 export async function updateAlias(

@@ -1,12 +1,12 @@
 "use server";
 
 import { AUTH_API } from "@/utils/api";
-import { LoginFormType } from "../schemas/auth.validators";
-import { User } from "../schemas/user";
-import { setRefreshTokenCookie } from "../utils/setRefreshTokenCookie";
-import { setAccessTokenCookie } from "../utils/setAccessTokenCookie";
-import { extractRefreshTokenFromSetCookieString } from "../utils/extractRefreshTokenFromSetCookieString";
+import { User } from "@packages/schemas";
 import { AxiosError } from "axios";
+import { LoginFormType } from "../schemas/auth.validators";
+import { extractRefreshTokenFromSetCookieString } from "../utils/extractRefreshTokenFromSetCookieString";
+import { setAccessTokenCookie } from "../utils/setAccessTokenCookie";
+import { setRefreshTokenCookie } from "../utils/setRefreshTokenCookie";
 
 // @ts-expect-error User isn't returned when request fails
 export async function loginUser(payload: LoginFormType): Promise<User> {

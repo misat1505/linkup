@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { TbLogout2 } from "react-icons/tb";
+import FocusableSpan from "@/components/shared/FocusableSpan";
+import { I18nText } from "@/components/shared/I18nText";
+import Tooltip from "@/components/shared/Tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,11 +13,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import Tooltip from "@/components/shared/Tooltip";
-import FocusableSpan from "@/components/shared/FocusableSpan";
-import { I18nText } from "@/components/shared/I18nText";
+import { Chat } from "@packages/schemas";
 import { useParams } from "next/navigation";
-import { Chat } from "../schemas/chat";
+import React, { useState } from "react";
+import { TbLogout2 } from "react-icons/tb";
 import { leaveChat } from "../actions/leaveChat";
 
 export default function ChatLeaveDialog() {

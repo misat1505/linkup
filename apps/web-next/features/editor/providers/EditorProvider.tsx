@@ -1,12 +1,12 @@
 "use client";
-import { Post } from "@/features/posts/schemas/post";
+import { createPost } from "@/features/posts/actions/createPost";
+import { updatePost } from "@/features/posts/actions/updatePost";
+import { Post } from "@packages/schemas";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import {
   decodeHTMLEntities,
   sanitizeMarkdownWithCodeBlocks,
 } from "../utils/editorUtils";
-import { createPost } from "@/features/posts/actions/createPost";
-import { updatePost } from "@/features/posts/actions/updatePost";
 
 type EditorContextConfig =
   | {

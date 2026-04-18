@@ -1,4 +1,4 @@
-import { Chat } from "../schemas/chat";
+import { Chat } from "@packages/schemas";
 
 function getChatLastActivity(chat: Chat): Date {
   return chat.lastMessage ? chat.lastMessage.createdAt : chat.createdAt;

@@ -1,8 +1,8 @@
 "use server";
 
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
-import { Chat } from "../schemas/chat";
 import { CHAT_API } from "@/utils/api";
+import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { Chat } from "@packages/schemas";
 import { revalidatePath } from "next/cache";
 
 export async function updateChat(

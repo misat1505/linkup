@@ -1,8 +1,8 @@
 "use server";
 
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
-import { User } from "../schemas/user";
 import { AUTH_API } from "@/utils/api";
+import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { User } from "@packages/schemas";
 
 export async function updateMe(formData: FormData): Promise<User> {
   const api = await serverSideRequestFactory({

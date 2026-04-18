@@ -1,9 +1,8 @@
 "use client";
 
-import { User } from "@/features/auth/schemas/user";
-import { Chat } from "../schemas/chat";
-import { ChatUtils } from "../utils/chatUtils";
 import { useLanguageContext } from "@/providers/LanguageProvider";
+import { Chat, User } from "@packages/schemas";
+import { ChatUtils } from "../utils/chatUtils";
 
 export default function LastMessageDisplayer({
   lastMessage,

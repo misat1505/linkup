@@ -1,12 +1,12 @@
-import { cn } from "@/lib/utils";
-import { useRef, useState } from "react";
-import { PostWithRenderedContent } from "../schemas/post";
-import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
-import PostHeader from "./PostHeader";
 import { I18nText } from "@/components/shared/I18nText";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
+import { useRef, useState } from "react";
 import PostCommentsSectionProvider from "../providers/PostCommentSectionProvider";
+import { PostWithRenderedContent } from "../schemas/post-with-rendered-content";
 import PostCommentSection from "./PostCommentSection";
+import PostHeader from "./PostHeader";
 
 export default function PostPreview({
   post,

@@ -17,7 +17,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import { cn } from "@/lib/utils";
 import { I18nText } from "@/components/shared/I18nText";
 import Tooltip from "@/components/shared/Tooltip";
-import { Message } from "../schemas/message";
+import { Message } from "@packages/schemas";
 import { useAppContext } from "@/providers/AppProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { useChatContext } from "../providers/ChatProvider";

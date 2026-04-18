@@ -1,18 +1,18 @@
-import { FaArrowDown, FaReply } from "react-icons/fa";
-import React, { useState } from "react";
-import PostCommentForm from "./PostCommentForm";
-import { cn } from "@/lib/utils";
-import { queryKeys } from "@/lib/queryKeys";
-import { createFullName } from "@/utils/createFullName";
-import { usePostCommentsSectionContext } from "../providers/PostCommentSectionProvider";
-import { useLanguageContext } from "@/providers/LanguageProvider";
-import Tooltip from "@/components/shared/Tooltip";
 import { I18nText } from "@/components/shared/I18nText";
-import { Message } from "@/features/chats/schemas/message";
-import { useAppContext } from "@/providers/AppProvider";
-import { useQuery } from "@tanstack/react-query";
+import Tooltip from "@/components/shared/Tooltip";
 import { getMessages } from "@/features/chats/actions/getMessages";
+import { queryKeys } from "@/lib/queryKeys";
+import { cn } from "@/lib/utils";
+import { useAppContext } from "@/providers/AppProvider";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { createFullName } from "@/utils/createFullName";
+import { Message } from "@packages/schemas";
+import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { FaArrowDown, FaReply } from "react-icons/fa";
+import { usePostCommentsSectionContext } from "../providers/PostCommentSectionProvider";
 import Comment from "./Comment";
+import PostCommentForm from "./PostCommentForm";
 
 export default function PostCommentSection() {
   const { isCommentSectionOpen } = usePostCommentsSectionContext();

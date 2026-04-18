@@ -1,18 +1,17 @@
+import Avatar from "@/components/shared/Avatar";
+import Image from "@/components/shared/Image";
+import ProtectedFile from "@/components/shared/ProtectedFile";
+import ProtectedVideo from "@/components/shared/ProtectedVideo";
 import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
+import { getFileType } from "@/utils/getFileType";
 import { getInitials } from "@/utils/getInitials";
 import {
-  useGetReadableCommentUploadDate,
   timeDifference,
+  useGetReadableCommentUploadDate,
 } from "@/utils/timeDifference";
-import { createFullName } from "@/utils/createFullName";
-import Avatar from "@/components/shared/Avatar";
-import { Message } from "@/features/chats/schemas/message";
+import { File, Message } from "@packages/schemas";
 import { usePostCommentsSectionContext } from "../providers/PostCommentSectionProvider";
-import Image from "@/components/shared/Image";
-import ProtectedVideo from "@/components/shared/ProtectedVideo";
-import { getFileType } from "@/utils/getFileType";
-import { File } from "@/features/chats/schemas/file";
-import ProtectedFile from "@/components/shared/ProtectedFile";
 
 export default function Comment({ message }: { message: Message }) {
   const uploadDate = useGetReadableCommentUploadDate(

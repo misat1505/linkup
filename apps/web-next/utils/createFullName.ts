@@ -1,4 +1,4 @@
-import { User } from "@/features/auth/schemas/user";
+import { User } from "@packages/schemas";
 
 export function createFullName(user: User, maxLength = Infinity): string {
   const fullName = `${user.firstName} ${user.lastName}`;

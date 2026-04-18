@@ -1,9 +1,9 @@
-import { createFullName } from "@/utils/createFullName";
-import { Message } from "../schemas/message";
-import { useChatContext } from "../providers/ChatProvider";
+import { I18nText } from "@/components/shared/I18nText";
 import { useAppContext } from "@/providers/AppProvider";
 import { useLanguageContext } from "@/providers/LanguageProvider";
-import { I18nText } from "@/components/shared/I18nText";
+import { createFullName } from "@/utils/createFullName";
+import { Message } from "@packages/schemas";
+import { useChatContext } from "../providers/ChatProvider";
 
 type ResponseProps = { message: Message["response"] };
 

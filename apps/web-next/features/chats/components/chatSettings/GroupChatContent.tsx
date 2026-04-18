@@ -1,10 +1,10 @@
 "use client";
 
+import { I18nText } from "@/components/shared/I18nText";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Chat } from "@packages/schemas";
 import ChatInfoUpdater from "./ChatInfoUpdater";
 import ChatMembersDisplayer from "./ChatMembersDisplayer";
-import { I18nText } from "@/components/shared/I18nText";
-import { Chat } from "../../schemas/chat";
 import UserInvite from "./UserInvite";
 
 type GroupChatContentProps = {

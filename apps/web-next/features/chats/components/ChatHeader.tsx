@@ -6,7 +6,7 @@ import { ChatUtils } from "../utils/chatUtils";
 import ChatHeaderStatus from "./ChatHeaderStatus";
 import { I18nText } from "@/components/shared/I18nText";
 import Link from "next/link";
-import { Chat } from "../schemas/chat";
+import { Chat } from "@packages/schemas";
 import Avatar from "@/components/shared/Avatar";
 import Tooltip from "@/components/shared/Tooltip";
 import ChatSettingsDialog from "./chatSettings/ChatSettingsDialog";
