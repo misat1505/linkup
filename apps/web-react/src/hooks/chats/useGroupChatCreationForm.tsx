@@ -15,8 +15,8 @@ import { useEffect } from "react";
 import {
   FieldErrors,
   SubmitHandler,
-  UseFormRegister,
   useForm,
+  UseFormRegister,
 } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -54,7 +54,7 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<NewGroupChatFormType>({
-    resolver: zodResolver(newGroupChatFormSchema),
+    resolver: zodResolver(newGroupChatFormSchema as any),
   });
 
   const onSubmit: SubmitHandler<NewGroupChatFormType> = async (data) => {

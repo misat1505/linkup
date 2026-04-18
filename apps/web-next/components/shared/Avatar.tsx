@@ -1,11 +1,11 @@
 "use client";
+import { cn } from "@/lib/utils";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import { getStatus, Status, timeDifference } from "@/utils/timeDifference";
+import { User } from "@packages/schemas";
 import React from "react";
 import { ImCancelCircle } from "react-icons/im";
-import { getStatus, Status, timeDifference } from "@/utils/timeDifference";
-import { cn } from "@/lib/utils";
 import Image from "./Image";
-import { useLanguageContext } from "@/providers/LanguageProvider";
-import { User } from "@/features/auth/schemas/user";
 
 type AvatarProps = {
   src: string;

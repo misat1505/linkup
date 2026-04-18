@@ -23,7 +23,7 @@ type ChatPageContextValue = {
   chats: Chat[] | undefined;
   isLoading: boolean;
   addMessage: (message: Message) => void;
-  createChatTriggerRef: React.RefObject<HTMLDivElement>;
+  createChatTriggerRef: React.RefObject<HTMLDivElement | null>;
 };
 
 const ChatPageContext = createContext<ChatPageContextValue>(
@@ -35,7 +35,7 @@ export const useChatPageContext = () => useContext(ChatPageContext);
 
 export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
   const { t } = useTranslation();
-  const createChatTriggerRef = useRef<HTMLDivElement>(null);
+  const createChatTriggerRef = useRef<HTMLDivElement | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { data: chats, isLoading } = useQuery({

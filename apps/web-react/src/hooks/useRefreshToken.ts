@@ -3,7 +3,9 @@ import { User } from "@/types/User";
 import { useEffect, useRef } from "react";
 
 export const useRefreshToken = (user: User | null | undefined) => {
-  const refreshTokenIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const refreshTokenIntervalRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   useEffect(() => {
     const handleRefreshToken = async () => {
@@ -20,7 +22,7 @@ export const useRefreshToken = (user: User | null | undefined) => {
 
     refreshTokenIntervalRef.current = setInterval(
       handleRefreshToken,
-      10 * 60 * 1000
+      10 * 60 * 1000,
     );
 
     return () => {

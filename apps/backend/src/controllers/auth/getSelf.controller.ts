@@ -1,5 +1,5 @@
+import { User } from "@packages/schemas";
 import { NextFunction, Request, Response } from "express";
-import { User } from "@/types/User";
 import { StatusCodes } from "http-status-codes";
 
 /**

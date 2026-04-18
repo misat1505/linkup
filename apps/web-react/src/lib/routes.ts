@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import React, { lazy } from "react";
 import { route } from "react-router-typesafe-routes";
 
 const Home = lazy(() => import("../pages/Home"));
@@ -13,7 +13,7 @@ const Friends = lazy(() => import("../pages/Friends"));
 
 type RouteType = {
   path: string;
-  component: React.LazyExoticComponent<() => JSX.Element>;
+  component: React.LazyExoticComponent<() => React.JSX.Element>;
 };
 
 export const ROUTES = {

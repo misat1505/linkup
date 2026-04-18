@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -6,33 +7,32 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/components/ui/use-toast";
+import { useAppContext } from "@/contexts/AppProvider";
 import useClickOutside from "@/hooks/useClickOutside";
 import { queryKeys } from "@/lib/queryKeys";
-import { UserService } from "@/services/User.service";
-import { useRef, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
-import { useDebounce } from "use-debounce";
-import Tooltip from "../Tooltip";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
-import { User } from "@/types/User";
-import { useAppContext } from "@/contexts/AppProvider";
-import { useToast } from "@/components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
-import { ChatService } from "@/services/Chat.service";
-import { Chat } from "@/types/Chat";
 import { ROUTES } from "@/lib/routes";
+import { cn } from "@/lib/utils";
+import { ChatService } from "@/services/Chat.service";
 import { FriendService } from "@/services/Friend.service";
-import { createFullName } from "@/utils/createFullName";
-import { Button } from "@/components/ui/button";
+import { UserService } from "@/services/User.service";
+import { Chat } from "@/types/Chat";
 import { Friendship } from "@/types/Friendship";
-import Avatar from "../Avatar";
+import { User } from "@/types/User";
 import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
 import { getInitials } from "@/utils/getInitials";
+import React, { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FaUserFriends } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
+import { useQuery, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { useDebounce } from "use-debounce";
+import Avatar from "../Avatar";
 import FocusableSpan from "../FocusableSpan";
-import { useTranslation } from "react-i18next";
+import Tooltip from "../Tooltip";
 
 export default function NavbarSearch() {
   const { t } = useTranslation();
@@ -64,7 +64,7 @@ export default function NavbarSearch() {
           "no-scrollbar absolute top-14 w-[238px] bg-white shadow-md",
           {
             hidden: !isExpanded,
-          }
+          },
         )}
       >
         {isFetching ? (
@@ -133,11 +133,11 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
       return toast({
         variant: "destructive",
         title: t(
-          "common.navbar.search.friendships.toasts.already-exists.title"
+          "common.navbar.search.friendships.toasts.already-exists.title",
         ),
         description: t(
           "common.navbar.search.friendships.toasts.already-exists.description",
-          { fullName: createFullName(user) }
+          { fullName: createFullName(user) },
         ),
         action: (
           <Button onClick={() => navigate(ROUTES.FRIENDS.$path())}>
@@ -153,26 +153,26 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
           oldFriends?.find(
             (f) =>
               f.requester.id === friendship.requester.id &&
-              f.acceptor.id === friendship.acceptor.id
+              f.acceptor.id === friendship.acceptor.id,
           )
         )
           return oldFriends;
         return oldFriends ? [...oldFriends, friendship] : [friendship];
-      }
+      },
     );
 
     toast({
       title: t(
-        "common.navbar.search.friendships.toasts.successfully-created.title"
+        "common.navbar.search.friendships.toasts.successfully-created.title",
       ),
       description: t(
         "common.navbar.search.friendships.toasts.successfully-created.description",
-        { fullName: createFullName(user) }
+        { fullName: createFullName(user) },
       ),
       action: (
         <Button onClick={() => navigate(ROUTES.FRIENDS.$path())}>
           {t(
-            "common.navbar.search.friendships.toasts.successfully-created.action"
+            "common.navbar.search.friendships.toasts.successfully-created.action",
           )}
         </Button>
       ),
@@ -215,7 +215,7 @@ function SearchResultItem({ user, setIsExpanded }: SearchResultItemProps) {
 type ActionButtonProps = {
   tooltipText: string;
   onClick: () => void;
-  Icon: JSX.Element;
+  Icon: React.JSX.Element;
 };
 
 export function ActionButton({

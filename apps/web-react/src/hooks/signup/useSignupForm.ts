@@ -1,6 +1,6 @@
 import {
-  useSignupFormSchema,
   SignupFormType,
+  useSignupFormSchema,
 } from "@/validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -49,7 +49,7 @@ export default function useSignupForm({
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormType>({
-    resolver: zodResolver(signupFormSchema),
+    resolver: zodResolver(signupFormSchema as any),
     ...formOptions,
   });
 

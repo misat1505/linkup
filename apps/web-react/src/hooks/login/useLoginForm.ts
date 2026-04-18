@@ -3,8 +3,8 @@ import { useAppContext } from "@/contexts/AppProvider";
 import { ROUTES } from "@/lib/routes";
 import { AuthService } from "@/services/Auth.service";
 import {
-  useLoginFormSchema,
   LoginFormType,
+  useLoginFormSchema,
 } from "@/validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
@@ -42,7 +42,7 @@ export default function useLoginForm(): useLoginFormValue {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormType>({
-    resolver: zodResolver(loginFormSchema),
+    resolver: zodResolver(loginFormSchema as any),
   });
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {

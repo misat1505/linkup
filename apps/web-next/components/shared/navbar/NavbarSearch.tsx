@@ -48,6 +48,7 @@ function NavbarSearchContent() {
   const [debouncedText] = useDebounce(text, 300);
   const commandListRef = useRef<HTMLDivElement>(null);
 
+  // @ts-expect-error it's good
   useClickOutside(commandListRef, () => setIsExpanded(false));
 
   const { data: users = [], isFetching } = useQuery({
@@ -69,7 +70,6 @@ function NavbarSearchContent() {
         />
       </Tooltip>
       <CommandList
-        // @ts-expect-error passing ref like that is fine
         ref={commandListRef}
         className={cn(
           "no-scrollbar absolute top-14 w-[238px] bg-white shadow-md",

@@ -3,3 +3,4 @@
 bash.exe*
 node_modules
 *.turbo
+**/dist

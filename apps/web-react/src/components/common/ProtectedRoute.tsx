@@ -1,14 +1,15 @@
 import { useAppContext } from "@/contexts/AppProvider";
-import Loading from "./Loading";
-import { getAccessToken } from "@/lib/token";
 import { ROUTES } from "@/lib/routes";
-import { Navigate } from "react-router-dom";
+import { getAccessToken } from "@/lib/token";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { Navigate } from "react-router-dom";
+import Loading from "./Loading";
 
 export default function ProtectedRoute({
   children,
 }: {
-  children: JSX.Element;
+  children: React.JSX.Element;
 }) {
   const { isLoading, user } = useAppContext();
   const { t } = useTranslation();

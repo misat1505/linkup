@@ -1,26 +1,3 @@
-import React, { HTMLAttributes, ReactNode } from "react";
-import NavbarAvatar from "./NavbarAvatar";
-import { CiLogin, CiLogout } from "react-icons/ci";
-import { MdOutlineSupervisorAccount, MdArticle } from "react-icons/md";
-import { FaHome, FaUserFriends } from "react-icons/fa";
-import { PiChatsCircleFill } from "react-icons/pi";
-import { IoIosSettings } from "react-icons/io";
-import { useAppContext } from "@/contexts/AppProvider";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import Tooltip from "../Tooltip";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/lib/routes";
-import { cn } from "@/lib/utils";
-import { useQueryClient } from "react-query";
-import { AuthService } from "@/services/Auth.service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,8 +9,31 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useTranslation } from "react-i18next";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { useAppContext } from "@/contexts/AppProvider";
+import { ROUTES } from "@/lib/routes";
+import { cn } from "@/lib/utils";
+import { AuthService } from "@/services/Auth.service";
 import { createFullName } from "@/utils/createFullName";
+import React, { HTMLAttributes, ReactNode } from "react";
+import { useTranslation } from "react-i18next";
+import { CiLogin, CiLogout } from "react-icons/ci";
+import { FaHome, FaUserFriends } from "react-icons/fa";
+import { IoIosSettings } from "react-icons/io";
+import { MdArticle, MdOutlineSupervisorAccount } from "react-icons/md";
+import { PiChatsCircleFill } from "react-icons/pi";
+import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
+import Tooltip from "../Tooltip";
+import NavbarAvatar from "./NavbarAvatar";
 
 export default function NavbarSheet() {
   const { t } = useTranslation();
@@ -55,7 +55,7 @@ export default function NavbarSheet() {
 }
 
 type ButtonsType = {
-  icon: JSX.Element;
+  icon: React.JSX.Element;
   text: string;
   onClick: () => void;
 };
@@ -168,7 +168,7 @@ const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
         ref={ref}
         className={cn(
           "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200 dark:bg-background dark:hover:bg-slate-800",
-          className
+          className,
         )}
         {...rest}
       >
@@ -179,7 +179,7 @@ const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
         <div></div>
       </SheetClose>
     );
-  }
+  },
 );
 
 function LogoutDialog() {

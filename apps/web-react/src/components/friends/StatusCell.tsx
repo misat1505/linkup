@@ -1,4 +1,16 @@
+import { useAppContext } from "@/contexts/AppProvider";
+import { queryKeys } from "@/lib/queryKeys";
+import { FriendService } from "@/services/Friend.service";
+import { Friendship } from "@/types/Friendship";
+import { createFullName } from "@/utils/createFullName";
+import { MoreVertical } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
+import { FaTrash } from "react-icons/fa";
+import { TiTick } from "react-icons/ti";
+import { useQueryClient } from "react-query";
+import Tooltip from "../common/Tooltip";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,19 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Friendship } from "@/types/Friendship";
-import { useAppContext } from "@/contexts/AppProvider";
 import { useToast } from "../ui/use-toast";
-import { queryKeys } from "@/lib/queryKeys";
-import { FriendService } from "@/services/Friend.service";
-import { useQueryClient } from "react-query";
-import { createFullName } from "@/utils/createFullName";
-import { FaTrash } from "react-icons/fa";
-import Tooltip from "../common/Tooltip";
-import { Button } from "../ui/button";
-import { MoreVertical } from "lucide-react";
-import { TiTick } from "react-icons/ti";
-import { useTranslation } from "react-i18next";
 
 type StatusCellProps = { friendship: Friendship };
 
@@ -61,14 +61,14 @@ function StatusDropdown({ friendship }: StatusCellProps) {
   const { user: me } = useAppContext();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const dropdownItems: JSX.Element[] = [];
+  const dropdownItems: React.JSX.Element[] = [];
 
   const isMineRequest = friendship.requester.id === me!.id;
 
   const handleAcceptFriendship = async () => {
     const newFriendship = await FriendService.acceptFriendship(
       friendship.requester.id,
-      friendship.acceptor.id
+      friendship.acceptor.id,
     );
     queryClient.setQueryData<Friendship[]>(
       queryKeys.friends(),
@@ -82,7 +82,7 @@ function StatusDropdown({ friendship }: StatusCellProps) {
             return newFriendship;
           return fr;
         });
-      }
+      },
     );
 
     const otherUser = isMineRequest
@@ -100,7 +100,7 @@ function StatusDropdown({ friendship }: StatusCellProps) {
   const handleDeleteFriendship = async () => {
     await FriendService.deleteFriendship(
       friendship.requester.id,
-      friendship.acceptor.id
+      friendship.acceptor.id,
     );
     queryClient.setQueryData<Friendship[]>(
       queryKeys.friends(),
@@ -109,9 +109,9 @@ function StatusDropdown({ friendship }: StatusCellProps) {
         return oldFriendships.filter(
           (fr) =>
             fr.acceptor.id !== friendship.acceptor.id ||
-            fr.requester.id !== friendship.requester.id
+            fr.requester.id !== friendship.requester.id,
         );
-      }
+      },
     );
 
     const otherUser = isMineRequest
@@ -146,7 +146,7 @@ function StatusDropdown({ friendship }: StatusCellProps) {
           <span>{t("friends.cells.actions.accept")}</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-      </>
+      </>,
     );
 
   dropdownItems.push(
@@ -156,7 +156,7 @@ function StatusDropdown({ friendship }: StatusCellProps) {
     >
       <FaTrash />
       <span>{t("friends.cells.actions.delete")}</span>
-    </DropdownMenuItem>
+    </DropdownMenuItem>,
   );
 
   return (

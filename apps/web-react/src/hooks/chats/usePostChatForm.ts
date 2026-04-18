@@ -1,20 +1,20 @@
+import { useToast } from "@/components/ui/use-toast";
+import { queryKeys } from "@/lib/queryKeys";
+import { ChatService } from "@/services/Chat.service";
+import { Chat } from "@/types/Chat";
+import { Message } from "@/types/Message";
+import { chatFormSchema, ChatFormType } from "@/validators/chat.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
+import { useState } from "react";
 import {
   FieldErrors,
   SubmitHandler,
-  UseFormRegister,
   useForm,
+  UseFormRegister,
 } from "react-hook-form";
-import { useState } from "react";
-import { Message } from "@/types/Message";
-import { useQueryClient } from "react-query";
-import { Chat } from "@/types/Chat";
-import { useToast } from "@/components/ui/use-toast";
-import { chatFormSchema, ChatFormType } from "@/validators/chat.validators";
-import { ChatService } from "@/services/Chat.service";
-import { queryKeys } from "@/lib/queryKeys";
 import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
 
 export type PostChatFormEntries = {
   content: string;
@@ -53,7 +53,7 @@ export default function usePostChatForm(
     watch,
     setValue,
   } = useForm<ChatFormType>({
-    resolver: zodResolver(chatFormSchema),
+    resolver: zodResolver(chatFormSchema as any),
   });
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {

@@ -11,8 +11,8 @@ import { AxiosError } from "axios";
 import {
   FieldErrors,
   SubmitHandler,
-  UseFormRegister,
   useForm,
+  UseFormRegister,
 } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -50,7 +50,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     watch,
     setValue,
   } = useForm<ChatFormType>({
-    resolver: zodResolver(chatFormSchema),
+    resolver: zodResolver(chatFormSchema as any),
   });
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {

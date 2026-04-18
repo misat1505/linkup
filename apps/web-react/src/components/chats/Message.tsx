@@ -1,22 +1,22 @@
 import { useAppContext } from "@/contexts/AppProvider";
 import { useChatContext } from "@/contexts/ChatProvider";
-import { Message as MessageType } from "@/types/Message";
-import { timeDifference } from "@/utils/timeDifference";
-import moment from "moment";
-import MessageControls from "./MessageControls";
-import Tooltip from "../common/Tooltip";
-import ResponseText from "./ResponseText";
-import Response from "./Response";
-import MultimediaDisplay from "./MultimediaDisplay";
 import { cn } from "@/lib/utils";
-import Reactions from "./Reactions";
-import { isShowingAvatar } from "@/utils/isShowingAvatar";
+import { Message as MessageType } from "@/types/Message";
+import { buildFileURL } from "@/utils/buildFileURL";
 import { ChatUtils } from "@/utils/chatUtils";
 import { createFullName } from "@/utils/createFullName";
-import Avatar from "../common/Avatar";
-import { buildFileURL } from "@/utils/buildFileURL";
 import { getInitials } from "@/utils/getInitials";
+import { isShowingAvatar } from "@/utils/isShowingAvatar";
+import { timeDifference } from "@/utils/timeDifference";
+import moment from "moment";
 import { useTranslation } from "react-i18next";
+import Avatar from "../common/Avatar";
+import Tooltip from "../common/Tooltip";
+import MessageControls from "./MessageControls";
+import MultimediaDisplay from "./MultimediaDisplay";
+import Reactions from "./Reactions";
+import Response from "./Response";
+import ResponseText from "./ResponseText";
 
 export default function Message({ message }: { message: MessageType }) {
   const { t } = useTranslation();
@@ -34,18 +34,18 @@ export default function Message({ message }: { message: MessageType }) {
     if (diffWithNow.days === 0)
       return message.createdAt.toLocaleTimeString(
         t("chats.date-seperator.locale"),
-        JSON.parse(t("chats.date-seperator.options.short"))
+        JSON.parse(t("chats.date-seperator.options.short")),
       );
 
     if (diffWithNow.days < 7)
       return message.createdAt.toLocaleDateString(
         t("chats.date-seperator.locale"),
-        JSON.parse(t("chats.date-seperator.options.long"))
+        JSON.parse(t("chats.date-seperator.options.long")),
       );
 
     return message.createdAt.toLocaleDateString(
       t("chats.date-seperator.locale"),
-      JSON.parse(t("chats.date-seperator.options.message-tooltip"))
+      JSON.parse(t("chats.date-seperator.options.message-tooltip")),
     );
   };
 
@@ -56,7 +56,7 @@ export default function Message({ message }: { message: MessageType }) {
     const prevMessage = messages[idx + 1];
     const diff = timeDifference(
       prevMessage.createdAt,
-      moment(message.createdAt)
+      moment(message.createdAt),
     );
 
     if (diff.days === 0 && diff.hours === 0) return "";
@@ -84,7 +84,7 @@ function MyMessage({ message }: { message: MessageType }) {
 
   const date = message.createdAt.toLocaleDateString(
     t("chats.date-seperator.locale"),
-    JSON.parse(t("chats.date-seperator.options.message-tooltip"))
+    JSON.parse(t("chats.date-seperator.options.message-tooltip")),
   );
 
   const tooltipText = t("chats.message.tooltip.mine", {
@@ -97,7 +97,9 @@ function MyMessage({ message }: { message: MessageType }) {
       <Tooltip content={tooltipText}>
         <div
           className="flex w-fit max-w-[75%] flex-col items-end"
-          ref={(el) => (messageRefs.current[message.id] = el)}
+          ref={(el) => {
+            messageRefs.current[message.id] = el;
+          }}
         >
           {message.response && (
             <>
@@ -115,7 +117,7 @@ function MyMessage({ message }: { message: MessageType }) {
                 {
                   "rounded-md": message.files.length === 0,
                   "mb-1": message.reactions.length === 0,
-                }
+                },
               )}
             >
               {message.content}
@@ -144,7 +146,7 @@ function ForeignMessage({ message }: { message: MessageType }) {
 
   const date = message.createdAt.toLocaleDateString(
     t("chats.date-seperator.locale"),
-    JSON.parse(t("chats.date-seperator.options.message-tooltip"))
+    JSON.parse(t("chats.date-seperator.options.message-tooltip")),
   );
 
   const tooltipText = t("chats.message.tooltip.foreign", {
@@ -161,7 +163,9 @@ function ForeignMessage({ message }: { message: MessageType }) {
       <Tooltip content={tooltipText}>
         <div
           className="flex w-fit max-w-[75%] flex-col items-start"
-          ref={(el) => (messageRefs.current[message.id] = el)}
+          ref={(el) => {
+            messageRefs.current[message.id] = el;
+          }}
         >
           {message.response && (
             <div className="ml-10">
@@ -192,7 +196,7 @@ function ForeignMessage({ message }: { message: MessageType }) {
                     {
                       "rounded-md": message.files.length === 0,
                       "mb-1": message.reactions.length === 0,
-                    }
+                    },
                   )}
                 >
                   {message.content}

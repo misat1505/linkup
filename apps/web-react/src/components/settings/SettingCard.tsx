@@ -1,7 +1,9 @@
+import React from "react";
+
 type SettingCardProps = {
   title: string;
   description: string;
-  switchComponent: JSX.Element;
+  switchComponent: React.JSX.Element;
 };
 
 export default function SettingCard({
