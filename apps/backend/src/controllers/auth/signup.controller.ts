@@ -1,19 +1,20 @@
-import { NextFunction, Request, Response } from "express";
-import { processAvatar } from "@/utils/processAvatar";
-import { Hasher } from "@/lib/Hasher";
-import { User, UserWithCredentials } from "@/types/User";
-import { TokenProcessor } from "@/lib/TokenProcessor";
+import { env } from "@/config/env";
 import {
   accessTokenSignOptions,
   refreshTokenCookieName,
   refreshTokenCookieOptions,
   refreshTokenSignOptions,
 } from "@/config/jwt-cookie";
-import bcrypt from "bcryptjs";
-import { v4 as uuidv4 } from "uuid";
-import { env } from "@/config/env";
+import { Hasher } from "@/lib/Hasher";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { processAvatar } from "@/utils/processAvatar";
 import { SignupDTO } from "@/validators/auth/signup.validators";
+import { User } from "@packages/schemas";
+import bcrypt from "bcryptjs";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Controller to sign up a new user, hash the user's password, and return access and refresh tokens.

@@ -1,11 +1,8 @@
-import { Chat, UserInChat } from "@/types/Chat";
-import { Message } from "@/types/Message";
-import { User } from "@/types/User";
-import { v7 as uuidv7 } from "uuid";
-import { userSelect } from "@/utils/prisma/userSelect";
-import { messageWithoutResponseSelect } from "@/utils/prisma/messageWithoutResponseSelect";
-import { Reaction } from "@/types/Reaction";
 import { PrismaClientOrTransaction } from "@/types/Prisma";
+import { messageWithoutResponseSelect } from "@/utils/prisma/messageWithoutResponseSelect";
+import { userSelect } from "@/utils/prisma/userSelect";
+import { Chat, Message, Reaction, User, UserInChat } from "@packages/schemas";
+import { v7 as uuidv7 } from "uuid";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function sanitizeChat(chat: any): Chat | null {

@@ -1,5 +1,5 @@
+import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { z } from "zod";
-import { UserWithCredentials } from "@/types/User";
 
 export const LoginDTO = UserWithCredentials.pick({
   login: true,

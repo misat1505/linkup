@@ -1,6 +1,7 @@
-import { User, UserWithCredentials } from "@/types/User";
-import { userSelect } from "@/utils/prisma/userSelect";
 import { PrismaClientOrTransaction } from "@/types/Prisma";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { userSelect } from "@/utils/prisma/userSelect";
+import { User } from "@packages/schemas";
 
 /**
  * Service class responsible for managing user-related operations in the database using Prisma.
@@ -85,7 +86,7 @@ export class UserService {
    * @returns The user object, or `null` if the user is not found.
    */
   async getUserByLogin(
-    login: UserWithCredentials["login"]
+    login: UserWithCredentials["login"],
   ): Promise<UserWithCredentials | null> {
     const user: UserWithCredentials | null = await this.prisma.user.findFirst({
       where: { login },
@@ -102,7 +103,7 @@ export class UserService {
    * @returns The user object, or `null` if the user is not found.
    */
   async getUser(
-    id: UserWithCredentials["id"]
+    id: UserWithCredentials["id"],
   ): Promise<UserWithCredentials | null> {
     const user: UserWithCredentials | null = await this.prisma.user.findFirst({
       where: { id },

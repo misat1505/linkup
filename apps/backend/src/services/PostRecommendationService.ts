@@ -1,8 +1,7 @@
-import { Post } from "@/types/Post";
 import { PrismaClientOrTransaction } from "@/types/Prisma";
-import { User } from "@/types/User";
 import { postChatSelect } from "@/utils/prisma/postChatSelect";
 import { userSelect } from "@/utils/prisma/userSelect";
+import { Post, User } from "@packages/schemas";
 import { FriendshipService } from "./FriendshipService";
 import { PostService } from "./PostService";
 

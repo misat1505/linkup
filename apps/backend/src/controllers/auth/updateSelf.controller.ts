@@ -1,9 +1,10 @@
-import { NextFunction, Request, Response } from "express";
-import { processAvatar } from "@/utils/processAvatar";
 import { Hasher } from "@/lib/Hasher";
-import { User, UserWithCredentials } from "@/types/User";
-import bcrypt from "bcryptjs";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { processAvatar } from "@/utils/processAvatar";
 import { SignupDTO } from "@/validators/auth/signup.validators";
+import { User } from "@packages/schemas";
+import bcrypt from "bcryptjs";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**

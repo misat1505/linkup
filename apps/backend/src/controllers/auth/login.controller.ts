@@ -7,8 +7,8 @@ import {
 } from "@/config/jwt-cookie";
 import { Hasher } from "@/lib/Hasher";
 import { TokenProcessor } from "@/lib/TokenProcessor";
-import { User } from "@/types/User";
 import { LoginDTO } from "@/validators/auth/login.validators";
+import { User } from "@packages/schemas";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 

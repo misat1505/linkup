@@ -7,6 +7,9 @@
   "scripts": {
     "build": "tsc"
   },
+  "peerDependencies": {
+    "zod": "^3.23.8"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
