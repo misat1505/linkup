@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { User } from "./User";
 import { Message } from "./Message";
+import { User } from "./User";
 
 export const UserInChat = User.extend({
   alias: z.string().nullable(),
@@ -8,11 +8,7 @@ export const UserInChat = User.extend({
 
 export const Chat = z.object({
   id: z.string().uuid(),
-  createdAt: z
-    .union([z.string(), z.date()])
-    .transform((value) =>
-      typeof value === "string" ? new Date(value) : value
-    ),
+  createdAt: z.coerce.date(),
   name: z.string().nullable(),
   photoURL: z.string().nullable(),
   type: z.enum(["PRIVATE", "GROUP", "POST"]),

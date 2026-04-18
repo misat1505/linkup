@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -7,31 +8,30 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { queryKeys } from "@/lib/queryKeys";
-import { useRef, useState } from "react";
-import Tooltip from "../Tooltip";
-import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createFullName } from "@/utils/createFullName";
-import Avatar from "../Avatar";
+import { toast } from "@/components/ui/use-toast";
+import { searchUsers } from "@/features/auth/actions/searchUsers";
+import { User } from "@/features/auth/schemas/user";
+import { createPrivateChat } from "@/features/chats/actions/createPrivateChats";
+import { createFriendship } from "@/features/friends/actions/createFriendship";
+import useClickOutside from "@/hooks/useClickOutside";
+import { queryKeys } from "@/lib/queryKeys";
+import { cn } from "@/lib/utils";
+import { useAppContext } from "@/providers/AppProvider";
+import { useLanguageContext } from "@/providers/LanguageProvider";
 import { buildFileURL } from "@/utils/buildFileURL";
+import { createFullName } from "@/utils/createFullName";
 import { getInitials } from "@/utils/getInitials";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 import { FaUserFriends } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
-import FocusableSpan from "../FocusableSpan";
-import { useLanguageContext } from "@/providers/LanguageProvider";
 import { useDebounce } from "use-debounce";
-import { useQuery } from "@tanstack/react-query";
+import Avatar from "../Avatar";
+import FocusableSpan from "../FocusableSpan";
 import { I18nText } from "../I18nText";
-import { useAppContext } from "@/providers/AppProvider";
-import { User } from "@/features/auth/schemas/user";
-import useClickOutside from "@/hooks/useClickOutside";
-import { searchUsers } from "@/features/auth/actions/searchUsers";
-import { createFriendship } from "@/features/friends/actions/createFriendship";
-import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
-import { createPrivateChat } from "@/features/chats/actions/createPrivateChats";
+import Tooltip from "../Tooltip";
 
 export default function NavbarSearch() {
   const { user } = useAppContext();
@@ -48,7 +48,6 @@ function NavbarSearchContent() {
   const [debouncedText] = useDebounce(text, 300);
   const commandListRef = useRef<HTMLDivElement>(null);
 
-  // @ts-expect-error commandListRef is not null
   useClickOutside(commandListRef, () => setIsExpanded(false));
 
   const { data: users = [], isFetching } = useQuery({
@@ -70,6 +69,7 @@ function NavbarSearchContent() {
         />
       </Tooltip>
       <CommandList
+        // @ts-expect-error passing ref like that is fine
         ref={commandListRef}
         className={cn(
           "no-scrollbar absolute top-14 w-[238px] bg-white shadow-md",

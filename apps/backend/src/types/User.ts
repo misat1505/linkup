@@ -5,11 +5,7 @@ export const User = z.object({
   firstName: z.string().min(1).max(50),
   lastName: z.string().min(1).max(50),
   photoURL: z.string().nullable(),
-  lastActive: z
-    .union([z.string(), z.date()])
-    .transform((value) =>
-      typeof value === "string" ? new Date(value) : value
-    ),
+  lastActive: z.coerce.date()
 });
 
 export type User = z.infer<typeof User>;

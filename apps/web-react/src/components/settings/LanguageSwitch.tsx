@@ -1,14 +1,14 @@
+import { useLanguageContext } from "@/contexts/LanguageProvider";
 import { useTranslation } from "react-i18next";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import Flag from "react-world-flags";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import Flag from "react-world-flags";
-import { useLanguageContext } from "@/contexts/LanguageProvider";
 
 export default function LanguageSwitch() {
   const { changeLanguage } = useLanguageContext();
@@ -62,6 +62,9 @@ export default function LanguageSwitch() {
 
   const language = getSelectedLanguage();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const FlagComponent = Flag as unknown as React.FC<any>;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -70,7 +73,7 @@ export default function LanguageSwitch() {
           className="flex items-center space-x-2 transition-colors hover:bg-slate-200 dark:hover:bg-slate-800"
         >
           <div className="flex gap-x-2 items-center">
-            <Flag code={language.flagCode} width={26} />
+            <FlagComponent code={language.flagCode} width={26} />
             <span>{language.displayLang}</span>
           </div>
           <MdKeyboardArrowDown />
@@ -101,10 +104,13 @@ function LanguageSwitchItem({ onclick, flagCode, displayLang }: Language) {
     }, 100);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const FlagComponent = Flag as unknown as React.FC<any>;
+
   return (
     <DropdownMenuItem onClick={handleClick}>
       <div className="flex gap-x-2 items-center">
-        <Flag code={flagCode} width={26} />
+        <FlagComponent code={flagCode} width={26} />
         <span>{displayLang}</span>
       </div>
     </DropdownMenuItem>

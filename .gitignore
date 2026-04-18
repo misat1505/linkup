@@ -2,3 +2,4 @@
 /frontend/src/config/security/
 bash.exe*
 node_modules
+*.turbo
