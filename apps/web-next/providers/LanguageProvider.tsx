@@ -3,10 +3,10 @@
 import { Translation } from "@/i18n/types";
 import {
   createContext,
+  ReactNode,
   useContext,
   useEffect,
   useState,
-  ReactNode,
 } from "react";
 
 type DotPrefix<T extends string> = T extends "" ? "" : `.${T}`;
@@ -81,6 +81,7 @@ export const LanguageProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const storedLang = localStorage.getItem("lang") || "en";
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocale(storedLang);
     loadTranslations(storedLang).then(() => setIsLoading(false));
   }, []);
