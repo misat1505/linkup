@@ -1,2 +1,2 @@
 cd apps/backend
-npm test
+pnpm test

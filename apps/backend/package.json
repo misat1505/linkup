@@ -16,10 +16,6 @@
     "docs": "typedoc",
     "lint": "eslint src/ tests/"
   },
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": "eslint --fix",
-    "tests/**/*.{ts,tsx}": "eslint --fix"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

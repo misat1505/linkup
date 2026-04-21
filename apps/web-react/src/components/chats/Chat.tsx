@@ -1,15 +1,15 @@
-import { Link, useParams } from "react-router-dom";
-import { BsChatLeftTextFill } from "react-icons/bs";
+import ChatFooterProvider from "@/contexts/ChatFooterProvider";
 import { useChatPageContext } from "@/contexts/ChatPageProvider";
 import ChatProvider, { useChatContext } from "@/contexts/ChatProvider";
-import { Button, buttonVariants } from "../ui/button";
 import { ROUTES } from "@/lib/routes";
-import ChatHeader from "./ChatHeader";
-import ChatFooterProvider from "@/contexts/ChatFooterProvider";
-import ChatContent from "./ChatContent";
-import ChatFooter from "./ChatFooter";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { BsChatLeftTextFill } from "react-icons/bs";
+import { Link, useParams } from "react-router-dom";
+import { Button, buttonVariants } from "../ui/button";
+import ChatContent from "./ChatContent";
+import ChatFooter from "./ChatFooter";
+import ChatHeader from "./ChatHeader";
 
 export default function ChatGuard() {
   const { t } = useTranslation();
@@ -65,7 +65,7 @@ function Chat() {
           <Link
             className={cn(
               "mx-auto mt-4",
-              buttonVariants({ variant: "default" })
+              buttonVariants({ variant: "default" }),
             )}
             to={ROUTES.CHATS.$path()}
           >
