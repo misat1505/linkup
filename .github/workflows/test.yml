@@ -14,20 +14,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: "pnpm"
+
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
 
       - name: Install dependencies
-        run: |
-          cd apps/backend
-          npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Copy envs for tests
         run: cp apps/backend/env.example apps/backend/.env.test
 
-      - name: Run Tests
-        run: |
-          cd apps/backend
-          npm run test
+      - name: Run Backend Tests
+        run: pnpm --filter backend test

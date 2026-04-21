@@ -6,49 +6,27 @@ on:
       - main
 
 jobs:
-  backend:
+  lint-build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
+          cache: "pnpm"
 
-      - run: cd apps/backend && npm ci
-      - run: cd apps/backend && npm run lint
-      - run: cd apps/backend && npm run build
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
 
-  react:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
+      - name: Run lint (monorepo)
+        run: pnpm lint
 
-      - run: cd apps/web-react && npm ci
-      - run: cd apps/web-react && npm run lint
-      - run: cd apps/web-react && npm run build
-
-  next:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: pnpm
-          cache-dependency-path: apps/web-next/pnpm-lock.yaml
-
-      - run: cd apps/web-next && pnpm install
-      - run: cd apps/web-next && pnpm lint
-      - run: cd apps/web-next && pnpm build
+      - name: Run build (monorepo)
+        run: pnpm build
