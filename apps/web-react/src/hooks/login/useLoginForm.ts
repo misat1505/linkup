@@ -42,7 +42,7 @@ export default function useLoginForm(): useLoginFormValue {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormType>({
-    resolver: zodResolver(loginFormSchema as any),
+    resolver: zodResolver(loginFormSchema),
   });
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {

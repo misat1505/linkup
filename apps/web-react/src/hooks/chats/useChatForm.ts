@@ -49,7 +49,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
     watch,
     setValue,
   } = useForm<ChatFormType>({
-    resolver: zodResolver(chatFormSchema as any),
+    resolver: zodResolver(chatFormSchema),
   });
   const onSubmit: SubmitHandler<ChatFormType> = async (data) => {
     try {

@@ -53,7 +53,7 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<NewGroupChatFormType>({
-    resolver: zodResolver(newGroupChatFormSchema as any),
+    resolver: zodResolver(newGroupChatFormSchema),
   });
 
   const onSubmit: SubmitHandler<NewGroupChatFormType> = async (data) => {
