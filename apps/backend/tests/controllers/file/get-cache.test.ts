@@ -1,12 +1,12 @@
-import { StatusCodes } from "http-status-codes";
 import { FileControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
 import {
   mockFileService,
   mockFileStorage,
   mockRequest,
   mockResponse,
 } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
 
 describe("getCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);

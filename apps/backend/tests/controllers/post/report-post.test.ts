@@ -1,7 +1,7 @@
-import { Prisma } from "@prisma/client";
 import { PostControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { Prisma } from "@prisma/client";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
-import { UserWithCredentials } from "@/types/User";
 import { StatusCodes } from "http-status-codes";
 
 describe("reportPost", () => {

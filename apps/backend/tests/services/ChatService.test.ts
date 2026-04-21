@@ -1,8 +1,6 @@
-import { Reaction } from "@/types/Reaction";
 import { ChatService } from "@/services/ChatService";
+import { Chat, Message, Reaction, UserInChat } from "@packages/schemas";
 import { testWithTransaction } from "../utils/testWithTransaction";
-import { Chat, UserInChat } from "@/types/Chat";
-import { Message } from "@/types/Message";
 
 describe("ChatService", () => {
   describe("updateGroupChat", () => {

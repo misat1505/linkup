@@ -1,8 +1,8 @@
-import { v4 as uuidv4 } from "uuid";
-import { UserWithCredentials } from "@/types/User";
-import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { AuthControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { v4 as uuidv4 } from "uuid";
 
 describe("loginUser", () => {
   it("logs in user with valid credentials", async () => {

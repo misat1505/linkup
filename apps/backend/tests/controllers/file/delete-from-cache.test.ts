@@ -1,12 +1,12 @@
-import { StatusCodes } from "http-status-codes";
 import { FileControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
 import {
   mockFileService,
   mockFileStorage,
   mockRequest,
   mockResponse,
 } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
 
 describe("deleteFromCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
@@ -30,7 +30,7 @@ describe("deleteFromCache", () => {
 
     expect(mockFileStorage.deleteFile).toHaveBeenCalledTimes(1);
     expect(mockFileStorage.deleteFile).toHaveBeenCalledWith(
-      `cache/${"userId"}/url1`
+      `cache/${"userId"}/url1`,
     );
   });
 

@@ -18,5 +18,5 @@
     "outDir": "build",
     "rootDir": "."
   },
-  "include": ["src"]
+  "include": ["src", "tests"]
 }

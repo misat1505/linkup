@@ -1,7 +1,7 @@
-import { StatusCodes } from "http-status-codes";
 import { PostControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
 
 describe("getUserPosts", () => {
   it("retrieves user’s posts successfully", async () => {

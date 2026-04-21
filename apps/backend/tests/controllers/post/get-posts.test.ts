@@ -1,11 +1,11 @@
-import { StatusCodes } from "http-status-codes";
 import { PostControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
 import {
   mockPostRecommendationService,
   mockRequest,
   mockResponse,
 } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
 
 describe("getPosts", () => {
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe("getPosts", () => {
 
     expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(
-      mockPostRecommendationService.getRecommendedPosts
+      mockPostRecommendationService.getRecommendedPosts,
     ).toHaveBeenCalled();
   });
 
@@ -50,13 +50,13 @@ describe("getPosts", () => {
 
     expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(
-      mockPostRecommendationService.getRecommendedPosts
+      mockPostRecommendationService.getRecommendedPosts,
     ).toHaveBeenCalledWith("user-id", "post-id-5", 5);
   });
 
   it("passes errors to error middleware", async () => {
     mockPostRecommendationService.getRecommendedPosts.mockRejectedValue(
-      new Error("Error")
+      new Error("Error"),
     );
     const mockNextFunction = jest.fn();
 
@@ -88,7 +88,7 @@ describe("getPosts", () => {
 
     expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
     expect(
-      mockPostRecommendationService.getRecommendedPosts
+      mockPostRecommendationService.getRecommendedPosts,
     ).toHaveBeenCalledWith("user-id", null, 5);
   });
 });

@@ -1,5 +1,5 @@
+import { User } from "@packages/schemas";
 import jwt, { SignOptions } from "jsonwebtoken";
-import { User } from "@/types/User";
 
 /**
  * Type representing the payload for JWT tokens.

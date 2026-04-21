@@ -1,6 +1,5 @@
-import { User } from "@/types/User";
-import { Post } from "@/types/Post";
 import { FileStorage } from "@/lib/FileStorage";
+import { Post, User } from "@packages/schemas";
 
 /**
  * Handles updating a post's content with new file references.
@@ -18,7 +17,7 @@ export async function handleMarkdownUpdate(
   fileStorage: FileStorage,
   content: string,
   userId: User["id"],
-  postId: Post["id"]
+  postId: Post["id"],
 ): Promise<string> {
   const urls = extractUrlsFromMarkdown(content);
   const filesInfo = extractFileInfo(urls);
@@ -64,7 +63,7 @@ async function migrateFiles(
   fileStorage: FileStorage,
   files: FileInfo[],
   userId: User["id"],
-  postId: Post["id"]
+  postId: Post["id"],
 ) {
   await Promise.all(
     files.map(async (file) => {
@@ -72,16 +71,16 @@ async function migrateFiles(
 
       await fileStorage.copyFile(
         `cache/${userId}/${file.filename}`,
-        `posts/${postId}/${file.filename}`
+        `posts/${postId}/${file.filename}`,
       );
-    })
+    }),
   );
 }
 
 function updateUrlsInContent(
   content: string,
   filesInfo: FileInfo[],
-  postId: Post["id"]
+  postId: Post["id"],
 ): string {
   return filesInfo.reduce((updatedContent, file) => {
     if (file.type === "cache") {
@@ -96,7 +95,7 @@ function updateUrlsInContent(
 async function removeUnusedFiles(
   fileStorage: FileStorage,
   files: FileInfo[],
-  postId: Post["id"]
+  postId: Post["id"],
 ) {
   const paths = await fileStorage.listFiles(`posts/${postId}`);
 

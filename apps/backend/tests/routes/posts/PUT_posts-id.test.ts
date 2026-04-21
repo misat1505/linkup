@@ -1,8 +1,8 @@
-import { StatusCodes } from "http-status-codes";
-import { Post } from "@/types/Post";
+import { Post } from "@packages/schemas";
 import { TestHelpers } from "@tests/utils/helpers";
 import { mockFileStorage } from "@tests/utils/mocks";
 import { testWithTransaction } from "@tests/utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 
 describe("[PUT] /posts/:id", () => {
@@ -22,7 +22,7 @@ describe("[PUT] /posts/:id", () => {
 
       Post.strict().parse(res.body.post);
       expect(res.body.post.content).toBe(
-        "This is the updated content of the post."
+        "This is the updated content of the post.",
       );
     });
   });

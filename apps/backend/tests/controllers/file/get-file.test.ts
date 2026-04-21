@@ -1,12 +1,12 @@
-import { StatusCodes } from "http-status-codes";
 import { FileControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
 import {
   mockFileService,
   mockFileStorage,
   mockRequest,
   mockResponse,
 } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
 
 describe("getFile", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
@@ -54,7 +54,7 @@ describe("getFile", () => {
 
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.any(String) })
+        expect.objectContaining({ url: expect.any(String) }),
       );
     });
   });
@@ -76,7 +76,7 @@ describe("getFile", () => {
 
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.any(String) })
+        expect.objectContaining({ url: expect.any(String) }),
       );
     });
 
@@ -96,7 +96,7 @@ describe("getFile", () => {
 
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.any(String) })
+        expect.objectContaining({ url: expect.any(String) }),
       );
     });
   });
@@ -118,7 +118,7 @@ describe("getFile", () => {
 
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.any(String) })
+        expect.objectContaining({ url: expect.any(String) }),
       );
     });
 
@@ -157,7 +157,7 @@ describe("getFile", () => {
 
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.any(String) })
+        expect.objectContaining({ url: expect.any(String) }),
       );
     });
 

@@ -1,4 +1,5 @@
-import { User, UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { User } from "@packages/schemas";
 import path from "path";
 
 export const USER: UserWithCredentials = {

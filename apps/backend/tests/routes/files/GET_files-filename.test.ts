@@ -1,14 +1,13 @@
-import { Application } from "express";
-import { User } from "@/types/User";
-import { testWithTransaction } from "@tests/utils/testWithTransaction";
-import { TestHelpers } from "@tests/utils/helpers";
-import request from "supertest";
-import { TokenProcessor } from "@/lib/TokenProcessor";
 import { env } from "@/config/env";
-import { Message } from "@/types/Message";
-import { v4 as uuidv4 } from "uuid";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { Message, User } from "@packages/schemas";
 import { TEST_FILENAME_PATH } from "@tests/utils/constants";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/testWithTransaction";
+import { Application } from "express";
 import { StatusCodes } from "http-status-codes";
+import request from "supertest";
+import { v4 as uuidv4 } from "uuid";
 
 jest.mock("@/lib/FileStorage");
 
@@ -79,7 +78,7 @@ describe("[GET] /files/:filename", () => {
         {
           userId: seed.users[1].id,
         },
-        env.ACCESS_TOKEN_SECRET
+        env.ACCESS_TOKEN_SECRET,
       );
 
       await request(app)
@@ -130,7 +129,7 @@ describe("[GET] /files/:filename", () => {
         {
           userId: seed.users[1].id,
         },
-        env.ACCESS_TOKEN_SECRET
+        env.ACCESS_TOKEN_SECRET,
       );
 
       await request(app)

@@ -1,7 +1,7 @@
-import { StatusCodes } from "http-status-codes";
-import { User } from "@/types/User";
+import { User } from "@packages/schemas";
 import { TestHelpers } from "@tests/utils/helpers";
 import { testWithTransaction } from "@tests/utils/testWithTransaction";
+import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 
 describe("[GET] /search", () => {

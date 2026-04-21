@@ -1,9 +1,9 @@
-import { User } from "@/types/User";
+import { User } from "@packages/schemas";
+import { TEST_FILENAME_PATH } from "@tests/utils/constants";
 import { mockFileStorage } from "@tests/utils/mocks";
 import { testWithTransaction } from "@tests/utils/testWithTransaction";
-import request from "supertest";
-import { TEST_FILENAME_PATH } from "@tests/utils/constants";
 import { StatusCodes } from "http-status-codes";
+import request from "supertest";
 
 describe("[POST] /auth/signup", () => {
   it("signs up new user", async () => {

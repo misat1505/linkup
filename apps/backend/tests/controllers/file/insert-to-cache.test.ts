@@ -1,13 +1,13 @@
-import { StatusCodes } from "http-status-codes";
 import { FileControllers } from "@/controllers";
 import { CACHE_CAPACITY } from "@/controllers/file/insertToCache.controller";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
 import {
   mockFileService,
   mockFileStorage,
   mockRequest,
   mockResponse,
 } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
 
 describe("insertToCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
@@ -35,14 +35,14 @@ describe("insertToCache", () => {
 
     expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
     expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({ file: expect.any(String) })
+      expect.objectContaining({ file: expect.any(String) }),
     );
     expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
   });
 
   it(`blocks cache insertion at ${CACHE_CAPACITY}-file limit`, async () => {
     mockFileStorage.listFiles.mockResolvedValue(
-      new Array(CACHE_CAPACITY).fill("existing-file.jpg")
+      new Array(CACHE_CAPACITY).fill("existing-file.jpg"),
     );
 
     const req = mockRequest({

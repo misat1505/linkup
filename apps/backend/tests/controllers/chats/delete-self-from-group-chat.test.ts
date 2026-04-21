@@ -1,7 +1,7 @@
-import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
 
 describe("deleteUserFromGroupChat", () => {
   beforeEach(() => {

@@ -1,10 +1,9 @@
 import { PostRecommendationService } from "@/services/PostRecommendationService";
-import { Post } from "@/types/Post";
-import { User } from "@/types/User";
-import { testWithTransaction } from "../utils/testWithTransaction";
-import { mockFriendshipService, mockPostService } from "../utils/mocks";
 import { PrismaClientOrTransaction } from "@/types/Prisma";
+import { Post, User } from "@packages/schemas";
 import { v4 as uuidv4 } from "uuid";
+import { mockFriendshipService, mockPostService } from "../utils/mocks";
+import { testWithTransaction } from "../utils/testWithTransaction";
 
 jest.mock("@/services/PostService");
 

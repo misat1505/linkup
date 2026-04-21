@@ -1,11 +1,11 @@
-import { StatusCodes } from "http-status-codes";
 import { FriendshipControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/UserWithCredentials";
 import {
   mockFriendshipService,
   mockRequest,
   mockResponse,
 } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
 import { mockFriendship } from "./setup";
 
 describe("getUserFriendships", () => {

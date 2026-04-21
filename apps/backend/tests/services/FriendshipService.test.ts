@@ -1,5 +1,5 @@
 import { FriendshipService } from "@/services/FriendshipService";
-import { Friendship } from "@/types/Friendship";
+import { Friendship } from "@packages/schemas";
 import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("FriendshipService", () => {
