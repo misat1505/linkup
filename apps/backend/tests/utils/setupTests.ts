@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import {
   PostgreSqlContainer,
   StartedPostgreSqlContainer,
@@ -5,7 +6,6 @@ import {
 import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
-import { PrismaClient } from "@prisma/client";
 import { seedDatabase, TestSeed } from "./seed";
 
 let container: StartedPostgreSqlContainer;
@@ -22,7 +22,7 @@ export async function startContainer() {
   const dbUrl = container.getConnectionUri();
   process.env.DATABASE_URL = dbUrl;
 
-  execSync("npx prisma db push", {
+  execSync("pnpm exec prisma db push", {
     env: { ...process.env, DATABASE_URL: dbUrl },
     stdio: "inherit",
   });
@@ -33,7 +33,7 @@ export async function startContainer() {
 
   fs.writeFileSync(
     configFilePath,
-    JSON.stringify({ database_url: dbUrl, seed })
+    JSON.stringify({ database_url: dbUrl, seed }),
   );
 }
 

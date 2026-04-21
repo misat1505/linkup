@@ -29,8 +29,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Copy envs for tests
-        run: cp apps/backend/env.example apps/backend/.env.test
-
       - name: Run Backend Tests
         run: pnpm --filter backend test
