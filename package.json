@@ -10,6 +10,7 @@
     "start": "concurrently \"pnpm --filter backend start\" \"pnpm --filter web-react preview\" \"pnpm --filter web-next start\"",
     "dev": "concurrently \"pnpm --filter backend dev\" \"pnpm --filter web-react dev\" \"pnpm --filter web-next dev\"",
     "build": "turbo build",
+    "build:packages": "turbo run build --filter=@packages/*",
     "lint": "concurrently \"pnpm --filter backend lint\" \"pnpm --filter web-react lint\" \"pnpm --filter web-next lint\"",
     "prepare": "husky"
   },

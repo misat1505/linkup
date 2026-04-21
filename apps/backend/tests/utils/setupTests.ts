@@ -22,12 +22,10 @@ export async function startContainer() {
   const dbUrl = container.getConnectionUri();
   process.env.DATABASE_URL = dbUrl;
 
-  console.log("before generate");
   execSync("pnpm exec prisma db push", {
     env: { ...process.env, DATABASE_URL: dbUrl },
     stdio: "inherit",
   });
-  console.log("after generate");
 
   _prisma = new PrismaClient({ datasources: { db: { url: dbUrl } } });
 
