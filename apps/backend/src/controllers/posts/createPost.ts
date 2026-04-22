@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
 import { CreatePostDTO } from "@/validators/posts/posts.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Controller to create a new post.
@@ -15,37 +15,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts:
- *   post:
- *     summary: Create a new post
- *     tags: [Posts]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *                 description: The content of the post
- *                 example: "This is a new post."
- *             required:
- *               - content
- *     responses:
- *       201:
- *         description: Post created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 post:
- *                   $ref: '#/components/schemas/Post'
- *       500:
- *         description: Server error, could not create post
  */
 export const createPost = async (
   req: Request,

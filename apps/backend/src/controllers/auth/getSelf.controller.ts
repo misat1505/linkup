@@ -18,26 +18,6 @@ import { StatusCodes } from "http-status-codes";
  * @source
  *
  * @throws {Error} If there is an error fetching the user, the next middleware will be called with an error.
- *
- * @swagger
- * /auth/user:
- *   get:
- *     summary: Get current user details
- *     tags: [Auth]
- *     responses:
- *       200:
- *         description: User fetched successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       404:
- *         description: User not found
- *       500:
- *         description: Cannot fetch user
  */
 export const getSelfController = async (
   req: Request,

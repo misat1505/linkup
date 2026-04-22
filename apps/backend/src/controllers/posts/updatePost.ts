@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
 import { UpdatePostDTO } from "@/validators/posts/posts.validators";
 import { PostId } from "@/validators/shared.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -18,46 +18,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts/{id}:
- *   put:
- *     summary: Update an existing post by ID
- *     tags: [Posts]
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: The ID of the post to update.
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *                 description: The updated content of the post
- *                 example: "This is the updated content of the post."
- *     responses:
- *       200:
- *         description: Post updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 post:
- *                   $ref: '#/components/schemas/Post'
- *       403:
- *         description: Unauthorized, user cannot edit this post
- *       404:
- *         description: Post not found
- *       500:
- *         description: Server error, couldn't update post
  */
 export const updatePost = async (
   req: Request,

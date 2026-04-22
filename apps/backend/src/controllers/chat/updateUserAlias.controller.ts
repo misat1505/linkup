@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
 import { UpdateAliasDTO } from "@/validators/chats/chats.validatotors";
 import { ChatId } from "@/validators/chats/messages.validators";
 import { UserId } from "@/validators/shared.validators";
-import { z } from "zod";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { z } from "zod";
 
 /**
  * Controller to update a user's alias in a group chat.
@@ -16,45 +16,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/{chatId}/alias/{userId}:
- *   put:
- *     summary: Update a user's alias in a group chat
- *     tags: [Chats]
- *     parameters:
- *       - name: chatId
- *         in: path
- *         required: true
- *         description: The ID of the chat where the alias will be updated.
- *         schema:
- *           type: string
- *       - name: userId
- *         in: path
- *         required: true
- *         description: The ID of the user whose alias will be updated.
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               alias:
- *                 type: string
- *             required:
- *               - alias
- *     responses:
- *       200:
- *         description: Alias updated successfully
- *       400:
- *         description: This user doesn't belong to this chat.
- *       403:
- *         description: User not authorized to update alias
- *       500:
- *         description: Server error when updating alias
  */
 export const updateAliasController = async (
   req: Request,

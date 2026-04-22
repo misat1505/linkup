@@ -12,26 +12,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats:
- *   get:
- *     summary: Get all chats for a user
- *     tags: [Chats]
- *     responses:
- *       200:
- *         description: Chats retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 chats:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Chat'
- *       500:
- *         description: Server error when fetching user's chats
  */
 export const getSelfChatsController = async (
   req: Request,

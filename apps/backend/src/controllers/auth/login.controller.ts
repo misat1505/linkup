@@ -28,37 +28,6 @@ import { StatusCodes } from "http-status-codes";
  * @throws {Error} If there is an error during the login process, the next middleware will be called with an error.
  *
  * @source
- *
- * @swagger
- * /auth/login:
- *   post:
- *     summary: Log in an existing user
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               login:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: User logged in successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       401:
- *         description: Invalid login or password
- *       500:
- *         description: Cannot log in
  */
 
 export const loginController = async (

@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
 import { PostId } from "@/validators/shared.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,37 +13,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts/{id}:
- *   delete:
- *     summary: Delete a post
- *     tags: [Posts]
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: ID of the post to delete
- *         schema:
- *           type: string
- *           example: "12a627e8-83cb-40c9-a7a2-ca0708be7763"
- *     responses:
- *       200:
- *         description: Post deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Post deleted successfully."
- *       403:
- *         description: Unauthorized access. The user is not allowed to delete this post.
- *       404:
- *         description: Post not found.
- *       500:
- *         description: Couldn't delete the post.
  */
 export const deletePost = async (
   req: Request,

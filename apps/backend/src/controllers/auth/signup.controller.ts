@@ -29,44 +29,6 @@ import { v4 as uuidv4 } from "uuid";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /auth/signup:
- *   post:
- *     summary: Sign up a new user
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               firstName:
- *                 type: string
- *               lastName:
- *                 type: string
- *               login:
- *                 type: string
- *               password:
- *                 type: string
- *               file:
- *                 type: string
- *                 format: binary
- *     responses:
- *       201:
- *         description: User created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       409:
- *         description: Login already taken
- *       500:
- *         description: Cannot create new user
  */
 export const signupController = async (
   req: Request,

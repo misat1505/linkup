@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from "express";
 import { processAvatar } from "@/utils/processAvatar";
-import { v4 as uuidv4 } from "uuid";
 import { CreateGroupChatDTO } from "@/validators/chats/chats.validatotors";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Controller to create a new group chat.
@@ -17,42 +17,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/group:
- *   post:
- *     summary: Create a new group chat
- *     tags: [Chats]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               users:
- *                 type: array
- *                 items:
- *                   type: string
- *               name:
- *                 type: string
- *             required:
- *               - users
- *               - name
- *     responses:
- *       201:
- *         description: Group chat created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 chat:
- *                   $ref: '#/components/schemas/Chat'
- *       400:
- *         description: User not authorized to create group chat
- *       500:
- *         description: Server error when creating group chat
  */
 export const createGroupChatController = async (
   req: Request,

@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
 import { CreatePrivateChatDTO } from "@/validators/chats/chats.validatotors";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -15,41 +15,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/private:
- *   post:
- *     summary: Create a new private chat
- *     tags: [Chats]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               users:
- *                 type: array
- *                 items:
- *                   type: string
- *             required:
- *               - users
- *     responses:
- *       201:
- *         description: Private chat created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 chat:
- *                   $ref: '#/components/schemas/Chat'
- *       409:
- *         description: Chat already exists
- *       400:
- *         description: User not in chat
- *       500:
- *         description: Server error when creating private chat
  */
 export const createPrivateChatController = async (
   req: Request,

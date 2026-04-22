@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
 import { Filename, FileQuery } from "@/validators/files/getFiles.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 const sendFileBuilder =
@@ -35,54 +35,6 @@ const sendFileBuilder =
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /files/{filename}:
- *   get:
- *     summary: Retrieve a file
- *     tags: [Files]
- *     parameters:
- *       - name: filename
- *         in: path
- *         required: true
- *         description: The name of the file to retrieve.
- *         schema:
- *           type: string
- *       - name: filter
- *         in: query
- *         required: true
- *         description: The type of file to filter (avatar, chat-message, chat-photo, cache or post).
- *         schema:
- *           type: string
- *           enum: [avatar, chat-message, chat-photo, cache, post]
- *       - name: chat
- *         in: query
- *         required: false
- *         description: Optional chat ID for chat-specific files. Required if filter is 'chat-message' or 'chat-photo'.
- *         schema:
- *           type: string
- *       - name: post
- *         in: query
- *         required: false
- *         description: Optional post ID for post-specific files. Required if filter is 'post'.
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: File retrieved successfully
- *         content:
- *           application/octet-stream:
- *             schema:
- *               type: string
- *               format: binary
- *       400:
- *         description: Invalid request parameters
- *       403:
- *         description: Unauthorized access or query failed
- *       404:
- *         description: File not found
- *       500:
- *         description: Server error when fetching the file
  */
 export const getFileController = async (
   req: Request,

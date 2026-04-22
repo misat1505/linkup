@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
 import { Filename } from "@/validators/files/getFiles.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,50 +13,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /files/cache/{filename}:
- *   delete:
- *     summary: Delete a file from the user's cache
- *     tags: [Files]
- *     parameters:
- *       - in: path
- *         name: filename
- *         required: true
- *         schema:
- *           type: string
- *         description: The name of the file to delete from the cache
- *     responses:
- *       200:
- *         description: File deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "File deleted successfully."
- *       404:
- *         description: File not found in cache
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "File not found."
- *       500:
- *         description: Server error during file deletion
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Cannot delete file from cache."
  */
 export const deleteFromCache = async (
   req: Request,

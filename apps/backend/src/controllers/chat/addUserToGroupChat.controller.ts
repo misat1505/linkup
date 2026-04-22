@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
 import { ChatId } from "@/validators/chats/messages.validators";
 import { UserId } from "@/validators/shared.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -16,48 +16,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/{chatId}/users:
- *   post:
- *     summary: Add a user to a group chat
- *     tags: [Chats]
- *     parameters:
- *       - name: chatId
- *         in: path
- *         required: true
- *         description: The ID of the chat to which to add the user.
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               userId:
- *                 type: string
- *             required:
- *               - userId
- *     responses:
- *       201:
- *         description: User added to chat successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       400:
- *         description: Cannot add people to chat of this type.
- *       403:
- *         description: User not authorized to add to this chat
- *       409:
- *         description: User is already in this chat
- *       500:
- *         description: Server error when adding user to chat
  */
 export const addUserToGroupChatController = async (
   req: Request,

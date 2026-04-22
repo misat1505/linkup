@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
 import { ChatId } from "@/validators/chats/messages.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,26 +13,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/{chatId}/users:
- *   delete:
- *     summary: Remove a user from a group chat
- *     tags: [Chats]
- *     parameters:
- *       - name: chatId
- *         in: path
- *         required: true
- *         description: The ID of the chat from which to remove the user.
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Successfully deleted from chat
- *       400:
- *         description: Bad request – either the user is not in the chat or cannot remove themselves from this chat type.
- *       500:
- *         description: Server error when removing user from chat
  */
 export const deleteSelfFromGroupChatController = async (
   req: Request,

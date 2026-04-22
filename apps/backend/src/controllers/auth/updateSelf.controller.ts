@@ -20,44 +20,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /auth/user:
- *   put:
- *     summary: Update user details
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               firstName:
- *                 type: string
- *               lastName:
- *                 type: string
- *               login:
- *                 type: string
- *               password:
- *                 type: string
- *               file:
- *                 type: string
- *                 format: binary
- *     responses:
- *       200:
- *         description: User updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       409:
- *         description: Login already taken
- *       500:
- *         description: Cannot update user
  */
 export const updateSelfController = async (
   req: Request,

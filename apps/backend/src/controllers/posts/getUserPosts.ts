@@ -13,26 +13,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts/mine:
- *   get:
- *     summary: Retrieve posts by the authenticated user
- *     tags: [Posts]
- *     responses:
- *       200:
- *         description: User's posts retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 posts:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Post'
- *       500:
- *         description: Server error, couldn't retrieve user posts
  */
 export const getUserPosts = async (
   req: Request,

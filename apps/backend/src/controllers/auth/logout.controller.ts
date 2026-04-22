@@ -17,17 +17,6 @@ import { StatusCodes } from "http-status-codes";
  * @source
  *
  * @throws {Error} If there is an error during the logout process, the next middleware will be called with an error.
- *
- * @swagger
- * /auth/logout:
- *   post:
- *     summary: Log out a user
- *     tags: [Auth]
- *     responses:
- *       200:
- *         description: User logged out successfully
- *       500:
- *         description: Cannot log out
  */
 
 export const logoutController = (

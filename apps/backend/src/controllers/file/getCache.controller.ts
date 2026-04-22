@@ -12,36 +12,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /files/cache:
- *   get:
- *     summary: Retrieve a list of files from the user's cache
- *     tags: [Files]
- *     responses:
- *       200:
- *         description: Files in the cache listed successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 files:
- *                   type: array
- *                   items:
- *                     type: string
- *                     description: List of file names in the user's cache.
- *                     example: ["file1.jpg", "file2.png", "file3.pdf"]
- *       500:
- *         description: Cannot read cache due to a server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Cannot read cache."
  */
 export const getCache = async (
   req: Request,

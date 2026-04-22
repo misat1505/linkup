@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { Prisma } from "@prisma/client";
 import { PostId } from "@/validators/shared.validators";
+import { Prisma } from "@prisma/client";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -16,35 +16,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling and forwarding localized error messages.
  *
  * @source
- *
- * @swagger
- * /posts/{id}/report:
- *   post:
- *     summary: Report a post
- *     tags: [Posts]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the post to report
- *     responses:
- *       200:
- *         description: Post reported successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *       400:
- *         description: Post reported successfully.
- *       409:
- *         description: This post had been previously reported by you.
- *       500:
- *         description: Couldn't report post.
  */
 export const reportPost = async (
   req: Request,

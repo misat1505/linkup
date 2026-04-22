@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
 import { generateNewFilename } from "@/utils/generateNewFilename";
 import {
   ChatId,
   CreateMessageDTO,
 } from "@/validators/chats/messages.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -19,48 +19,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/{chatId}/messages:
- *   post:
- *     summary: Create a new message in a chat
- *     tags: [Chats]
- *     parameters:
- *       - name: chatId
- *         in: path
- *         required: true
- *         description: The ID of the chat where the message will be sent.
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *               responseId:
- *                 type: string
- *             required:
- *               - content
- *     responses:
- *       201:
- *         description: Message created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   $ref: '#/components/schemas/Message'
- *       403:
- *         description: User not authorized to send a message
- *       400:
- *         description: Response message does not exist in this chat
- *       500:
- *         description: Server error when creating message
  */
 export const createMessageController = async (
   req: Request,

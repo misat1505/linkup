@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
 import { generateNewFilename } from "@/utils/generateNewFilename";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 export const CACHE_CAPACITY = 10;
@@ -15,45 +15,6 @@ export const CACHE_CAPACITY = 10;
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /files/cache:
- *   post:
- *     summary: Upload a file to the user's cache
- *     tags: [Files]
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               file:
- *                 type: string
- *                 format: binary
- *                 description: The file to be inserted into the cache.
- *     responses:
- *       201:
- *         description: File uploaded successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 file:
- *                   type: string
- *                   description: The new UUID filename of the uploaded file.
- *                   example: "a1b2c3d4-5678-9101-1234-56789abcdef0.jpg"
- *       400:
- *         description: Cache limit reached or server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Cache limit reached. Maximum number of files in cache: 10"
  */
 export const insertToCache = async (
   req: Request,

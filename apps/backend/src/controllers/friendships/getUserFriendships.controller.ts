@@ -12,45 +12,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /friendships:
- *   get:
- *     summary: Retrieve a list of user friendships
- *     tags: [Friendships]
- *     responses:
- *       200:
- *         description: Friendships retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 friendships:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       status:
- *                         type: string
- *                         description: Current status of the friendship
- *                         example: "ACCEPTED"
- *                       requester:
- *                         description: Details of the requester user
- *                         $ref: '#/components/schemas/User'
- *                       acceptor:
- *                         description: Details of the acceptor user
- *                         $ref: '#/components/schemas/User'
- *       500:
- *         description: Cannot retrieve user friendships due to a server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Cannot get user friendships."
  */
 export const getUserFriendships = async (
   req: Request,

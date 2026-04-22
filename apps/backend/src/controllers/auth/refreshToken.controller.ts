@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from "express";
-import { TokenProcessor } from "@/lib/TokenProcessor";
+import { env } from "@/config/env";
 import {
   accessTokenSignOptions,
   refreshTokenCookieName,
   refreshTokenCookieOptions,
   refreshTokenSignOptions,
 } from "@/config/jwt-cookie";
-import { env } from "@/config/env";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -22,18 +22,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function for error handling.
  *
  * @source
- *
- * @swagger
- * /auth/refresh:
- *   post:
- *     summary: Refresh access token and refresh token
- *     description: This endpoint reads the refresh token from the request to authorize the user and generate a new access token.
- *     tags: [Auth]
- *     responses:
- *       200:
- *         description: Token refreshed successfully
- *       500:
- *         description: Cannot refresh token
  */
 export const refreshTokenController = (
   req: Request,

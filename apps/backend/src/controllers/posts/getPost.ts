@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
 import { PostId } from "@/validators/shared.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,34 +13,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts/{id}:
- *   get:
- *     summary: Get a post by its ID
- *     tags: [Posts]
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: The ID of the post to retrieve
- *         schema:
- *           type: string
- *           example: "d0683f62-4c30-4eef-9578-7eac5c814c47"
- *     responses:
- *       200:
- *         description: Post retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 post:
- *                   $ref: '#/components/schemas/Post'
- *       404:
- *         description: Post not found
- *       500:
- *         description: Server error, could not retrieve post
  */
 export const getPost = async (
   req: Request,

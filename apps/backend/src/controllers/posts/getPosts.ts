@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
 import { GetPostsQuery } from "@/validators/posts/posts.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,43 +13,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts:
- *   get:
- *     summary: Retrieve a list of posts
- *     tags: [Posts]
- *     parameters:
- *       - name: lastPostId
- *         in: query
- *         description: The ID of the last post, used for pagination.
- *         required: false
- *         schema:
- *           type: string
- *       - name: limit
- *         in: query
- *         description: The number of posts to retrieve.
- *         required: false
- *         schema:
- *           type: integer
- *           default: 10
- *           maximum: 10
- *     responses:
- *       200:
- *         description: A list of posts retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 posts:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Post'
- *       400:
- *         description: Invalid query parameter (e.g., limit exceeds 10)
- *       500:
- *         description: Server error, could not retrieve posts
  */
 export const getPosts = async (
   req: Request,

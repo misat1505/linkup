@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
 import { AcceptFriendshipDTO } from "@/validators/friendships/friendships.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,78 +13,6 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /friendships/accept:
- *   post:
- *     summary: Accept an existing friendship request
- *     tags: [Friendships]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               requesterId:
- *                 type: string
- *                 description: ID of the user who sent the friendship request
- *                 example: "3b6431d2-43a4-427d-9f28-ab9001ad4f63"
- *               acceptorId:
- *                 type: string
- *                 description: ID of the user accepting the friendship request
- *                 example: "9a2e94ad-604c-46ea-b96c-44c490d1a91a"
- *     responses:
- *       200:
- *         description: Friendship accepted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 friendship:
- *                   type: object
- *                   properties:
- *                     status:
- *                       type: string
- *                       description: Current status of the friendship
- *                       example: "ACCEPTED"
- *                     requester:
- *                       description: Details of the requester user
- *                       $ref: '#/components/schemas/User'
- *                     acceptor:
- *                       description: Details of the acceptor user
- *                       $ref: '#/components/schemas/User'
- *       400:
- *         description: The acceptor ID does not match the user making the request
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Cannot accept friendship not being meant to be accepted by you."
- *       409:
- *         description: Friendship between users does not exist
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Friendship between users doesn't exist."
- *       500:
- *         description: Server error while accepting friendship
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Cannot get user friendships."
  */
 export const acceptFriendship = async (
   req: Request,
