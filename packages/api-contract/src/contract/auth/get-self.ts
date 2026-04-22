@@ -1,3 +1,4 @@
+import { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { User } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
@@ -26,4 +27,4 @@ export const getSelfRoute = {
       description: "Cannot fetch user",
     },
   },
-} as const;
+} satisfies RouteConfig;

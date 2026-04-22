@@ -9,6 +9,9 @@ export const SCHEMA_REGISTRY = {
   POST: "Post",
   POST_CHAT: "PostChat",
   FRIENDSHIP: "Friendship",
+  DTO: {
+    LOGIN_DTO: "LoginDTO",
+  },
 } as const;
 
 export type SchemaName = (typeof SCHEMA_REGISTRY)[keyof typeof SCHEMA_REGISTRY];
