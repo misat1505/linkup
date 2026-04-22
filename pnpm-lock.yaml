@@ -57,6 +57,9 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.726.1
         version: 3.1033.0
+      '@packages/api-contract':
+        specifier: workspace:*
+        version: link:../../packages/api-contract
       '@packages/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas
