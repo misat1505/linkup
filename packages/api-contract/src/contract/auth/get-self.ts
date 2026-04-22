@@ -1,14 +1,16 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { User } from "@packages/schemas";
+import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
+import { TAGS } from "../../utils/constants";
 
 export const getSelfRoute: RouteConfig = {
   method: "get",
   path: "/auth/user",
   summary: "Get current user details",
-  tags: ["Auth"],
+  tags: [TAGS.AUTH],
   responses: {
-    200: {
+    [StatusCodes.OK]: {
       description: "User fetched successfully",
       content: {
         "application/json": {
@@ -18,10 +20,10 @@ export const getSelfRoute: RouteConfig = {
         },
       },
     },
-    404: {
+    [StatusCodes.NOT_FOUND]: {
       description: "User not found",
     },
-    500: {
+    [StatusCodes.INTERNAL_SERVER_ERROR]: {
       description: "Cannot fetch user",
     },
   },
