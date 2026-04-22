@@ -11,6 +11,16 @@ export const SCHEMA_REGISTRY = {
   FRIENDSHIP: "Friendship",
   DTO: {
     LOGIN_DTO: "LoginDTO",
+    SIGNUP_DTO: "SignupDTO",
+    CREATE_GROUP_CHAT_DTO: "CreateGroupChatDTO",
+    CREATE_MESSAGE_DTO: "CreateMessageDTO",
+    CREATE_PRIVATE_CHAT_DTO: "CreatePrivateChatDTO",
+    CREATE_REACTION_DTO: "CreateReactionDTO",
+    UPDATE_USER_ALIAS_DTO: "UpdateUserAliasDTO",
+    UPDATE_GROUP_CHAT_DTO: "UpdateGroupChatDTO",
+  },
+  MISC: {
+    ERROR_MESSAGE: "ErrorMessage",
   },
 } as const;
 

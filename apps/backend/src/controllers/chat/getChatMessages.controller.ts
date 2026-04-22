@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
-import { Message } from "@/types/Message";
 import {
   ChatId,
   GetMessagesQuery,
 } from "@/validators/chats/messages.validators";
+import { Message } from "@packages/schemas";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**

@@ -2,6 +2,7 @@ import { API_CONTRACT } from "../contract";
 
 export const TAGS = {
   AUTH: "Auth",
+  CHATS: "Chats",
 };
 
 export const CONTRACT_KEYS = {
