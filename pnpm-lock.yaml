@@ -604,6 +604,18 @@ importers:
         specifier: ^6.0.1
         version: 6.4.2(@types/node@22.19.17)(jiti@1.21.7)(lightningcss@1.32.0)(yaml@2.8.3)
 
+  packages/api-contract:
+    dependencies:
+      '@asteasolutions/zod-to-openapi':
+        specifier: ^8.5.0
+        version: 8.5.0(zod@4.3.6)
+      '@packages/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
+
   packages/schemas:
     dependencies:
       '@asteasolutions/zod-to-openapi':
