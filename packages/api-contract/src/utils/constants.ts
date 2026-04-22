@@ -5,6 +5,8 @@ export const TAGS = {
   CHATS: "Chats",
   FILES: "Files",
   FRIENDSHIPS: "Friendships",
+  POSTS: "Posts",
+  USERS: "Users",
 };
 
 export const CONTRACT_KEYS = {

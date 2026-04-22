@@ -18,6 +18,8 @@ export const SCHEMA_REGISTRY = {
     CREATE_REACTION_DTO: "CreateReactionDTO",
     UPDATE_USER_ALIAS_DTO: "UpdateUserAliasDTO",
     UPDATE_GROUP_CHAT_DTO: "UpdateGroupChatDTO",
+    CREATE_POST_DTO: "CreatePostDTO",
+    UPDATE_POST_DTO: "UpdatePostDTO",
   },
   MISC: {
     ERROR_MESSAGE: "ErrorMessage",

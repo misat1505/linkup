@@ -5,6 +5,7 @@ export * from "./create-reaction-dto";
 export * from "./friendship-dtos";
 export * from "./insert-to-cache-dto";
 export * from "./login-dto";
+export * from "./post-dtos";
 export * from "./signup-dto";
 export * from "./udpate-user-alias-dto";
 export * from "./update-group-chat-dto";
