@@ -51,6 +51,9 @@ importers:
 
   apps/backend:
     dependencies:
+      '@asteasolutions/zod-to-openapi':
+        specifier: ^8.5.0
+        version: 8.5.0(zod@4.3.6)
       '@aws-sdk/client-s3':
         specifier: ^3.726.1
         version: 3.1033.0
