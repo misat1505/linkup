@@ -1,29 +1,22 @@
-import { Router } from "express";
-import { upload } from "@/middlewares/multer";
-import { authorizeWithRefreshToken } from "@/middlewares/authorize";
 import { AuthControllers } from "@/controllers";
-import { LoginDTO } from "@/validators/auth/login.validators";
-import { SignupDTO } from "@/validators/auth/signup.validators";
-import { validate } from "@/middlewares/validate";
+import { authorizeWithRefreshToken } from "@/middlewares/authorize";
+import { upload } from "@/middlewares/multer";
+import { buildRoute, buildRouter } from "@/utils/buildRouter";
+import { API_CONTRACT } from "@packages/api-contract";
 
 /**
  * Public Authentication Routes Router.
  *
  * This router handles authentication-related routes, including signup, login, and token refresh that doesn't require authorization via access token.
  */
-const authRouter = Router();
+const routes = [
+  buildRoute(API_CONTRACT.SIGNUP, AuthControllers.signup, {
+    extraMiddlewares: [upload.single("file")],
+  }),
+  buildRoute(API_CONTRACT.LOGIN, AuthControllers.login),
+  buildRoute(API_CONTRACT.REFRESH_TOKEN, AuthControllers.refreshToken, {
+    extraMiddlewares: [authorizeWithRefreshToken],
+  }),
+];
 
-authRouter.post(
-  "/signup",
-  upload.single("file"),
-  validate({ body: SignupDTO }),
-  AuthControllers.signup
-);
-authRouter.post("/login", validate({ body: LoginDTO }), AuthControllers.login);
-authRouter.post(
-  "/refresh",
-  authorizeWithRefreshToken,
-  AuthControllers.refreshToken
-);
-
-export default authRouter;
+export default buildRouter(routes);

@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { reactions } from "@/config/reactions";
 import { env } from "@/config/env";
+import { reactions } from "@/config/reactions";
 import { resetDB } from "@tests/utils/setup";
-import { Routers } from "./routers";
+import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
+import { Routers } from "./routers";
 
 /**
  * Public Routes Router.
@@ -14,7 +14,7 @@ import { StatusCodes } from "http-status-codes";
  */
 const publicRoutes = Router();
 
-publicRoutes.use("/auth", Routers.auth.public);
+publicRoutes.use(Routers.auth.public);
 publicRoutes.get("/chats/reactions", (req, res) => {
   return res.status(StatusCodes.OK).json({ reactions });
 });

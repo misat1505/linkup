@@ -7,6 +7,44 @@ import { TAGS } from "../../utils/constants";
 import { errors } from "../../utils/error-responses";
 import { response } from "../../utils/responses";
 
+const querySchema = z
+  .object({
+    responseId: z.string().optional(),
+    lastMessageId: z.string().optional(),
+    limit: z.coerce.number().min(1).max(20).optional(),
+  })
+  .superRefine((data, ctx) => {
+    const hasResponseId = !!data.responseId;
+    const hasPagination = !!data.lastMessageId && data.limit !== undefined;
+
+    if (!hasResponseId && !hasPagination) {
+      ctx.addIssue({
+        code: "custom",
+        message:
+          "You must provide either responseId or lastMessageId with limit.",
+      });
+      return;
+    }
+
+    if (!hasResponseId) {
+      if (!data.lastMessageId) {
+        ctx.addIssue({
+          code: "custom",
+          message: "lastMessageId is required when using pagination.",
+          path: ["lastMessageId"],
+        });
+      }
+
+      if (data.limit === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          message: "limit is required when using pagination.",
+          path: ["limit"],
+        });
+      }
+    }
+  });
+
 export const getChatMessagesRoute = {
   method: "get",
   path: "/chats/{chatId}/messages",
@@ -18,11 +56,7 @@ export const getChatMessagesRoute = {
       chatId: z.string(),
     }),
 
-    query: z.object({
-      responseId: z.string().optional(),
-      lastMessageId: z.string().optional(),
-      limit: z.coerce.number().min(1).max(10).optional(),
-    }),
+    query: querySchema,
   },
 
   responses: {

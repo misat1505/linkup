@@ -10,7 +10,7 @@ import { response } from "../../utils/responses";
 
 export const updateAliasRoute = {
   method: "put",
-  path: "/chats/{chatId}/alias/{userId}",
+  path: "/chats/{chatId}/users/{userId}/alias",
   summary: "Update a user's alias in a group chat",
   tags: [TAGS.CHATS],
 
