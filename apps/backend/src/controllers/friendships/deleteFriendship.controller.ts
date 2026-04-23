@@ -1,4 +1,5 @@
-import { DeleteFriendshipDTO } from "@/validators/friendships/friendships.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,9 +21,10 @@ export const deleteFriendship = async (
   next: NextFunction,
 ) => {
   try {
+    const {
+      body: { acceptorId, requesterId },
+    } = extractValidatedRequest(req, API_CONTRACT.DELETE_FRIENDSHIP);
     const userId = req.user!.id;
-    const { requesterId, acceptorId } = req.validated!
-      .body! as DeleteFriendshipDTO;
     const friendshipService = req.app.services.friendshipService;
 
     if (![requesterId, acceptorId].includes(userId))

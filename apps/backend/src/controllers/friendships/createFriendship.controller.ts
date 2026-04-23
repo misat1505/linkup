@@ -1,4 +1,5 @@
-import { CreateFriendshipDTO } from "@/validators/friendships/friendships.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,9 +21,10 @@ export const createFriendship = async (
   next: NextFunction,
 ) => {
   try {
+    const {
+      body: { acceptorId, requesterId },
+    } = extractValidatedRequest(req, API_CONTRACT.CREATE_FRIENDSHIP);
     const userId = req.user!.id;
-    const { requesterId, acceptorId } = req.validated!
-      .body! as CreateFriendshipDTO;
     const friendshipService = req.app.services.friendshipService;
 
     if (userId !== requesterId)

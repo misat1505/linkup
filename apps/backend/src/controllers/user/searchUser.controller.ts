@@ -1,4 +1,5 @@
-import { SearchUserQuery } from "@/validators/users/users.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -24,7 +25,9 @@ export const searchUserController = async (
   next: NextFunction,
 ) => {
   try {
-    const { term } = req.validated!.query! as SearchUserQuery;
+    const {
+      query: { term },
+    } = extractValidatedRequest(req, API_CONTRACT.SEARCH_USER);
     const userService = req.app.services.userService;
 
     const users = await userService.searchUsers(term);

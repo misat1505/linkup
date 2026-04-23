@@ -1,5 +1,6 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { processAvatar } from "@/utils/processAvatar";
-import { CreateGroupChatDTO } from "@/validators/chats/chats.validatotors";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { v4 as uuidv4 } from "uuid";
@@ -25,7 +26,9 @@ export const createGroupChatController = async (
 ) => {
   try {
     const userId = req.user!.id;
-    const { users, name } = req.validated!.body! as CreateGroupChatDTO;
+    const {
+      body: { users, name },
+    } = extractValidatedRequest(req, API_CONTRACT.CREATE_GROUP_CHAT);
     const { chatService, fileStorage } = req.app.services;
 
     if (!users.includes(userId))

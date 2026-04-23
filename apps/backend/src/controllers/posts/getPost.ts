@@ -1,4 +1,5 @@
-import { PostId } from "@/validators/shared.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,7 +21,9 @@ export const getPost = async (
   next: NextFunction,
 ) => {
   try {
-    const { id } = req.validated!.params! as PostId;
+    const {
+      params: { id },
+    } = extractValidatedRequest(req, API_CONTRACT.GET_POST);
     const postService = req.app.services.postService;
 
     const post = await postService.getPost(id);

@@ -1,7 +1,5 @@
-import {
-  ChatId,
-  CreateReactionDTO,
-} from "@/validators/chats/messages.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -23,10 +21,12 @@ export const createReactionController = async (
   next: NextFunction,
 ) => {
   try {
+    const {
+      body: { messageId, reactionId },
+      params: { chatId },
+    } = extractValidatedRequest(req, API_CONTRACT.CREATE_REACTION);
     const userId = req.user!.id;
-    const { reactionId, messageId } = req.validated!.body! as CreateReactionDTO;
     const chatService = req.app.services.chatService;
-    const { chatId } = req.validated!.params! as ChatId;
 
     const isUserAuthorized = await chatService.isUserInChat({ chatId, userId });
 

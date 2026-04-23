@@ -8,8 +8,9 @@ import {
 import { Hasher } from "@/lib/Hasher";
 import { TokenProcessor } from "@/lib/TokenProcessor";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { processAvatar } from "@/utils/processAvatar";
-import { SignupDTO } from "@/validators/auth/signup.validators";
+import { API_CONTRACT } from "@packages/api-contract";
 import { User } from "@packages/schemas";
 import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";
@@ -36,8 +37,8 @@ export const signupController = async (
   next: NextFunction,
 ) => {
   try {
-    const { firstName, lastName, login, password } = req.validated!
-      .body! as SignupDTO;
+    const { body } = extractValidatedRequest(req, API_CONTRACT.SIGNUP);
+    const { firstName, lastName, login, password } = body;
     const { userService, fileStorage } = req.app.services;
     const file = await processAvatar(fileStorage, req.file);
 

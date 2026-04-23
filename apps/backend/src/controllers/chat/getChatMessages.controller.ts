@@ -1,7 +1,5 @@
-import {
-  ChatId,
-  GetMessagesQuery,
-} from "@/validators/chats/messages.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { Message } from "@packages/schemas";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -24,9 +22,11 @@ export const getChatMessagesController = async (
   next: NextFunction,
 ) => {
   try {
+    const {
+      params: { chatId },
+      query,
+    } = extractValidatedRequest(req, API_CONTRACT.GET_CHAT_MESSAGES);
     const userId = req.user!.id;
-    const { chatId } = req.validated!.params! as ChatId;
-    const query = req.validated!.query! as GetMessagesQuery;
     const chatService = req.app.services.chatService;
 
     const isUserAuthorized = await chatService.isUserInChat({ chatId, userId });
@@ -41,7 +41,7 @@ export const getChatMessagesController = async (
     if ("responseId" in query) {
       messages = await chatService.getPostChatMessages(
         chatId,
-        query.responseId,
+        query.responseId!,
       );
     } else {
       messages = await chatService.getChatMessages(

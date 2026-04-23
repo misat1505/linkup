@@ -5,7 +5,7 @@ import { RequestValidation } from "@/types/RequestValidation";
 import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response, Router } from "express";
 
-type ContractRoute = (typeof API_CONTRACT)[keyof typeof API_CONTRACT];
+export type ContractRoute = (typeof API_CONTRACT)[keyof typeof API_CONTRACT];
 
 export function toExpressPath(path: string): string {
   return path.replace(/{([^}]+)}/g, ":$1");

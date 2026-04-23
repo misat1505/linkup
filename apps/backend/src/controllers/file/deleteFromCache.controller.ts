@@ -1,4 +1,5 @@
-import { Filename } from "@/validators/files/getFiles.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,8 +21,10 @@ export const deleteFromCache = async (
   next: NextFunction,
 ) => {
   try {
+    const {
+      params: { filename },
+    } = extractValidatedRequest(req, API_CONTRACT.DELETE_FROM_CACHE);
     const userId = req.user!.id;
-    const { filename } = req.validated!.params! as Filename;
     const fileStorage = req.app.services.fileStorage;
 
     await fileStorage.deleteFile(`cache/${userId}/${filename}`);

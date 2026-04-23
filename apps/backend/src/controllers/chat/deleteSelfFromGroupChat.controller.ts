@@ -1,4 +1,5 @@
-import { ChatId } from "@/validators/chats/messages.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,7 +21,9 @@ export const deleteSelfFromGroupChatController = async (
   next: NextFunction,
 ) => {
   try {
-    const { chatId } = req.validated!.params! as ChatId;
+    const {
+      params: { chatId },
+    } = extractValidatedRequest(req, API_CONTRACT.DELETE_SELF_FROM_GROUP_CHAT);
     const userId = req.user!.id;
     const chatService = req.app.services.chatService;
 

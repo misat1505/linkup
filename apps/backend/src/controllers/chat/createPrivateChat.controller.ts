@@ -1,4 +1,5 @@
-import { CreatePrivateChatDTO } from "@/validators/chats/chats.validatotors";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -23,7 +24,9 @@ export const createPrivateChatController = async (
 ) => {
   try {
     const userId = req.user!.id;
-    const { users } = req.validated!.body! as CreatePrivateChatDTO;
+    const {
+      body: { users },
+    } = extractValidatedRequest(req, API_CONTRACT.CREATE_PRIVATE_CHAT);
     const chatService = req.app.services.chatService;
 
     if (!users.includes(userId))

@@ -1,6 +1,6 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
-import { UpdatePostDTO } from "@/validators/posts/posts.validators";
-import { PostId } from "@/validators/shared.validators";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -25,9 +25,11 @@ export const updatePost = async (
   next: NextFunction,
 ) => {
   try {
-    const { id } = req.validated!.params! as PostId;
+    const {
+      body: { content },
+      params: { id },
+    } = extractValidatedRequest(req, API_CONTRACT.UPDATE_POST);
     const userId = req.user!.id;
-    const { content } = req.validated!.body! as UpdatePostDTO;
     const { postService, fileStorage } = req.app.services;
 
     const post = await postService.getPost(id);

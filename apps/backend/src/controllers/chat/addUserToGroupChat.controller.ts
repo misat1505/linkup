@@ -1,5 +1,5 @@
-import { ChatId } from "@/validators/chats/messages.validators";
-import { UserId } from "@/validators/shared.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -24,9 +24,11 @@ export const addUserToGroupChatController = async (
 ) => {
   try {
     const chatService = req.app.services.chatService;
-    const { chatId } = req.validated!.params! as ChatId;
+    const {
+      params: { chatId },
+      body: { userId },
+    } = extractValidatedRequest(req, API_CONTRACT.ADD_USER_TO_GROUP_CHAT);
     const myId = req.user!.id;
-    const { userId } = req.validated!.body! as UserId;
 
     const [chatType, iAmInChat, isOtherInChat] = await Promise.all([
       chatService.getChatType(chatId),

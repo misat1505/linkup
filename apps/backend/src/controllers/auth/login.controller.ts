@@ -7,7 +7,8 @@ import {
 } from "@/config/jwt-cookie";
 import { Hasher } from "@/lib/Hasher";
 import { TokenProcessor } from "@/lib/TokenProcessor";
-import { LoginDTO } from "@/validators/auth/login.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { User } from "@packages/schemas";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -36,7 +37,9 @@ export const loginController = async (
   next: NextFunction,
 ) => {
   try {
-    const { login, password } = req.validated!.body! as LoginDTO;
+    const {
+      body: { login, password },
+    } = extractValidatedRequest(req, API_CONTRACT.LOGIN);
     const userService = req.app.services.userService;
 
     const user = await userService.getUserByLogin(login);

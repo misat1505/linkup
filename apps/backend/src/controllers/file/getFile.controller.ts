@@ -1,4 +1,5 @@
-import { Filename, FileQuery } from "@/validators/files/getFiles.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -42,8 +43,10 @@ export const getFileController = async (
   next: NextFunction,
 ) => {
   try {
-    const { filename } = req.validated!.params! as Filename;
-    const query = req.validated!.query! as FileQuery;
+    const {
+      params: { filename },
+      query,
+    } = extractValidatedRequest(req, API_CONTRACT.GET_FILE);
     const userId = req.user!.id;
     const { fileService, fileStorage } = req.app.services;
 

@@ -1,4 +1,5 @@
-import { GetPostsQuery } from "@/validators/posts/posts.validators";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,8 +21,10 @@ export const getPosts = async (
   next: NextFunction,
 ) => {
   try {
+    const {
+      query: { lastPostId, limit },
+    } = extractValidatedRequest(req, API_CONTRACT.GET_POSTS);
     const userId = req.user!.id;
-    const { lastPostId, limit } = req.validated!.query! as GetPostsQuery;
     const postRecommendationService =
       req.app.services.postRecommendationService;
 

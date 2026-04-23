@@ -1,6 +1,6 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { processAvatar } from "@/utils/processAvatar";
-import { UpdateGroupChatDTO } from "@/validators/chats/chats.validatotors";
-import { ChatId } from "@/validators/chats/messages.validators";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { v4 as uuidv4 } from "uuid";
@@ -23,9 +23,11 @@ export const updateGroupChatController = async (
   next: NextFunction,
 ) => {
   try {
+    const {
+      body: { name },
+      params: { chatId },
+    } = extractValidatedRequest(req, API_CONTRACT.UPDATE_GROUP_CHAT);
     const userId = req.user!.id;
-    const { name } = req.validated!.body! as UpdateGroupChatDTO;
-    const { chatId } = req.validated!.params! as ChatId;
     const { chatService, fileStorage } = req.app.services;
 
     const isAuthorized = await chatService.isUserInChat({ chatId, userId });

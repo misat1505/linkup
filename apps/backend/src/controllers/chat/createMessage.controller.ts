@@ -1,8 +1,6 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { generateNewFilename } from "@/utils/generateNewFilename";
-import {
-  ChatId,
-  CreateMessageDTO,
-} from "@/validators/chats/messages.validators";
+import { API_CONTRACT } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -26,9 +24,11 @@ export const createMessageController = async (
   next: NextFunction,
 ) => {
   try {
-    const { content, responseId } = req.validated!.body! as CreateMessageDTO;
+    const {
+      body: { content, responseId },
+      params: { chatId },
+    } = extractValidatedRequest(req, API_CONTRACT.CREATE_MESSAGE);
     const userId = req.user!.id;
-    const { chatId } = req.validated!.params! as ChatId;
     const files = req.files as Express.Multer.File[];
     const { chatService, fileStorage } = req.app.services;
 
