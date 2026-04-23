@@ -4,6 +4,10 @@ import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
 
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
+
 export const loginRoute = {
   method: "post",
   path: "/auth/login",
@@ -11,34 +15,23 @@ export const loginRoute = {
   tags: [TAGS.AUTH],
 
   request: {
-    body: {
-      content: {
-        "application/json": {
-          schema: LoginDTO,
-        },
-      },
-    },
+    body: request.json({
+      schema: LoginDTO,
+      description: "Login credentials",
+    }),
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        user: User,
+        accessToken: z.string(),
+      }),
       description: "User logged in successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            user: User,
-            accessToken: z.string(),
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.UNAUTHORIZED]: {
+    [StatusCodes.UNAUTHORIZED]: errors.unauthorized({
       description: "Invalid login or password",
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Cannot log in",
-    },
+    }),
   },
 } satisfies RouteConfig;

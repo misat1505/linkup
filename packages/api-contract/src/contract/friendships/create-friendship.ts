@@ -1,11 +1,11 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import {
-  CreateFriendshipDTO,
-  ErrorMessage,
-  Friendship,
-} from "@packages/schemas";
+import { CreateFriendshipDTO, Friendship } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const createFriendshipRoute = {
   method: "post",
@@ -14,50 +14,23 @@ export const createFriendshipRoute = {
   tags: [TAGS.FRIENDSHIPS],
 
   request: {
-    body: {
-      content: {
-        "application/json": {
-          schema: CreateFriendshipDTO,
-        },
-      },
-    },
+    body: request.json({
+      schema: CreateFriendshipDTO,
+    }),
   },
 
   responses: {
-    [StatusCodes.CREATED]: {
-      description: "Friendship created successfully",
-      content: {
-        "application/json": {
-          schema: Friendship,
-        },
-      },
-    },
+    [StatusCodes.CREATED]: response.json({
+      schema: Friendship,
+      description: "Friendship request created successfully",
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
-      description: "Requester mismatch",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
+      description: "Invalid requester or malformed friendship request",
+    }),
 
-    [StatusCodes.CONFLICT]: {
-      description: "Friendship already exists",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error while creating friendship",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    [StatusCodes.CONFLICT]: errors.conflict({
+      description: "Friendship already exists or is pending",
+    }),
   },
 } satisfies RouteConfig;

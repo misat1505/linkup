@@ -1,8 +1,12 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { ErrorMessage, SignupDTO, User } from "@packages/schemas";
+import { SignupDTO, User } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const updateSelfRoute = {
   method: "put",
@@ -11,38 +15,21 @@ export const updateSelfRoute = {
   tags: [TAGS.AUTH],
 
   request: {
-    body: {
-      content: {
-        "multipart/form-data": {
-          schema: SignupDTO,
-        },
-      },
-    },
+    body: request.multipart({
+      schema: SignupDTO,
+    }),
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        user: User,
+      }),
       description: "User updated successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            user: User,
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.CONFLICT]: {
+    [StatusCodes.CONFLICT]: errors.conflict({
       description: "Login already taken",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Cannot update user",
-    },
+    }),
   },
 } satisfies RouteConfig;

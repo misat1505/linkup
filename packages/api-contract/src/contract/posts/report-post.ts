@@ -2,8 +2,11 @@ import { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
 
-import { ErrorMessage, Post } from "@packages/schemas";
+import { Post } from "@packages/schemas";
 import z from "zod";
+
+import { errors } from "../../utils/error-responses";
+import { response } from "../../utils/responses";
 
 export const reportPostRoute = {
   method: "post",
@@ -16,31 +19,13 @@ export const reportPostRoute = {
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({ message: z.string() }),
       description: "Post reported successfully",
-      content: {
-        "application/json": {
-          schema: z.object({ message: z.string() }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.CONFLICT]: {
-      description: "This post had been previously reported by you.",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Couldn't report post.",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    [StatusCodes.CONFLICT]: errors.conflict({
+      description: "This post has already been reported by you.",
+    }),
   },
 } satisfies RouteConfig;

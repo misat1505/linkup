@@ -23,6 +23,7 @@ export const SCHEMA_REGISTRY = {
   },
   MISC: {
     ERROR_MESSAGE: "ErrorMessage",
+    SUCCESS_MESSAGE: "SuccessMessage",
   },
 } as const;
 

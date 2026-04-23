@@ -1,8 +1,9 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { ErrorMessage } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { response } from "../../utils/responses";
 
 export const getCacheRoute = {
   method: "get",
@@ -11,24 +12,11 @@ export const getCacheRoute = {
   tags: [TAGS.FILES],
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        files: z.array(z.string()),
+      }),
       description: "Files in the cache listed successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            files: z.array(z.string()),
-          }),
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Cannot read cache due to a server error",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
   },
 } satisfies RouteConfig;

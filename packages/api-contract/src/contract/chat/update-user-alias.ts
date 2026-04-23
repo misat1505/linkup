@@ -1,8 +1,12 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { ErrorMessage, UpdateUserAliasDTO } from "@packages/schemas";
+import { UpdateUserAliasDTO } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const updateAliasRoute = {
   method: "put",
@@ -16,47 +20,25 @@ export const updateAliasRoute = {
       userId: z.string(),
     }),
 
-    body: {
-      content: {
-        "application/json": {
-          schema: UpdateUserAliasDTO,
-        },
-      },
-    },
+    body: request.json({
+      schema: UpdateUserAliasDTO,
+    }),
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        alias: z.string(),
+      }),
       description: "Alias updated successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            alias: z.string(),
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
-      description: "User does not belong to this chat",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
+      description: "User is not a member of this chat",
+    }),
 
-    [StatusCodes.FORBIDDEN]: {
-      description: "User not authorized to update alias",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when updating alias",
-    },
+    [StatusCodes.FORBIDDEN]: errors.forbidden({
+      description: "User not authorized to update aliases in this chat",
+    }),
   },
 } satisfies RouteConfig;

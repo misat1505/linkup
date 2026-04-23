@@ -1,8 +1,12 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { DeleteFriendshipDTO, ErrorMessage } from "@packages/schemas";
+import { DeleteFriendshipDTO } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
-import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import z from "zod";
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const deleteFriendshipRoute = {
   method: "delete",
@@ -11,52 +15,25 @@ export const deleteFriendshipRoute = {
   tags: [TAGS.FRIENDSHIPS],
 
   request: {
-    body: {
-      content: {
-        "application/json": {
-          schema: DeleteFriendshipDTO,
-        },
-      },
-    },
+    body: request.json({
+      schema: DeleteFriendshipDTO,
+    }),
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        message: z.string(),
+      }),
       description: "Friendship deleted successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
+    [StatusCodes.NOT_FOUND]: errors.notFound({
+      description: "Friendship does not exist",
+    }),
+
+    [StatusCodes.FORBIDDEN]: errors.forbidden({
       description: "User not authorized to delete this friendship",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.NOT_FOUND]: {
-      description: "Friendship not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error while deleting friendship",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
   },
 } satisfies RouteConfig;

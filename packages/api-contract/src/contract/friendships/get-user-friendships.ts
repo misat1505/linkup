@@ -1,8 +1,10 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { ErrorMessage, Friendship } from "@packages/schemas";
+import { Friendship } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { response } from "../../utils/responses";
 
 export const getUserFriendshipsRoute = {
   method: "get",
@@ -11,24 +13,11 @@ export const getUserFriendshipsRoute = {
   tags: [TAGS.FRIENDSHIPS],
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        friendships: z.array(Friendship),
+      }),
       description: "Friendships retrieved successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            friendships: z.array(Friendship),
-          }),
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Cannot retrieve user friendships due to a server error",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
   },
 } satisfies RouteConfig;

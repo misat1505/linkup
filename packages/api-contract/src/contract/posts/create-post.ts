@@ -1,7 +1,9 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { CreatePostDTO, ErrorMessage, Post } from "@packages/schemas";
+import { CreatePostDTO, Post } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const createPostRoute = {
   method: "post",
@@ -10,32 +12,13 @@ export const createPostRoute = {
   tags: [TAGS.POSTS],
 
   request: {
-    body: {
-      content: {
-        "application/json": {
-          schema: CreatePostDTO,
-        },
-      },
-    },
+    body: request.json({ schema: CreatePostDTO }),
   },
 
   responses: {
-    [StatusCodes.CREATED]: {
+    [StatusCodes.CREATED]: response.json({
+      schema: Post,
       description: "Post created successfully",
-      content: {
-        "application/json": {
-          schema: Post,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error, could not create post",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
   },
 } satisfies RouteConfig;

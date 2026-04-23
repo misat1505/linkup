@@ -1,8 +1,11 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { ErrorMessage, Message } from "@packages/schemas";
+import { Message } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { response } from "../../utils/responses";
 
 export const getChatMessagesRoute = {
   method: "get",
@@ -23,28 +26,15 @@ export const getChatMessagesRoute = {
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        messages: z.array(Message),
+      }),
       description: "Messages retrieved successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            messages: z.array(Message),
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.FORBIDDEN]: {
+    [StatusCodes.FORBIDDEN]: errors.forbidden({
       description: "User not authorized to read messages from this chat",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when fetching messages",
-    },
+    }),
   },
 } satisfies RouteConfig;

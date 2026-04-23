@@ -1,8 +1,10 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { ErrorMessage } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { response } from "../../utils/responses";
 
 export const deleteSelfFromGroupChatRoute = {
   method: "delete",
@@ -17,28 +19,15 @@ export const deleteSelfFromGroupChatRoute = {
   },
 
   responses: {
-    [StatusCodes.OK]: {
-      description: "Successfully deleted from chat",
-      content: {
-        "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
-        },
-      },
-    },
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        message: z.string(),
+      }),
+      description: "Successfully removed from chat",
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
-      description: "Bad request - user not in chat or wrong chat type",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when removing user from chat",
-    },
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
+      description: "User is not in chat or chat type does not allow removal",
+    }),
   },
 } satisfies RouteConfig;

@@ -2,8 +2,12 @@ import { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
 
-import { ErrorMessage, Post, UpdatePostDTO } from "@packages/schemas";
+import { Post, UpdatePostDTO } from "@packages/schemas";
 import z from "zod";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const updatePostRoute = {
   method: "put",
@@ -13,50 +17,24 @@ export const updatePostRoute = {
 
   request: {
     params: Post.pick({ id: true }),
-    body: {
-      content: {
-        "application/json": {
-          schema: UpdatePostDTO,
-        },
-      },
-    },
+    body: request.json({
+      schema: UpdatePostDTO,
+      description: "Post update payload",
+    }),
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({ post: Post }),
       description: "Post updated successfully",
-      content: {
-        "application/json": {
-          schema: z.object({ post: Post }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.FORBIDDEN]: {
-      description: "Unauthorized, user cannot edit this post",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    [StatusCodes.FORBIDDEN]: errors.forbidden({
+      description: "User is not allowed to edit this post",
+    }),
 
-    [StatusCodes.NOT_FOUND]: {
+    [StatusCodes.NOT_FOUND]: errors.notFound({
       description: "Post not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error, couldn't update post",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
   },
 } satisfies RouteConfig;

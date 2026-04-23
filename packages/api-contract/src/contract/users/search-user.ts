@@ -1,9 +1,11 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
+import { SearchUserQuery, User } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
+import { z } from "zod";
 import { TAGS } from "../../utils/constants";
 
-import { ErrorMessage, SearchUserQuery, User } from "@packages/schemas";
-import z from "zod";
+import { errors } from "../../utils/error-responses";
+import { response } from "../../utils/responses";
 
 export const searchUserRoute = {
   method: "get",
@@ -17,31 +19,15 @@ export const searchUserRoute = {
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        users: z.array(User),
+      }),
       description: "A list of users matching the search term",
-      content: {
-        "application/json": {
-          schema: z.object({ users: z.array(User) }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
-      description: "Missing or invalid 'term' query parameter",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Couldn't search users",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
+      description: "Missing or invalid search query parameter",
+    }),
   },
 } satisfies RouteConfig;

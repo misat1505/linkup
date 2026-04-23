@@ -2,8 +2,9 @@ import { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
 
-import { ErrorMessage, Post } from "@packages/schemas";
-import z from "zod";
+import { Post, SuccessMessage } from "@packages/schemas";
+import { errors } from "../../utils/error-responses";
+import { response } from "../../utils/responses";
 
 export const deletePostRoute = {
   method: "delete",
@@ -16,43 +17,18 @@ export const deletePostRoute = {
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: SuccessMessage,
       description: "Post deleted successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.FORBIDDEN]: {
+    [StatusCodes.FORBIDDEN]: errors.forbidden({
       description:
         "Unauthorized access. The user is not allowed to delete this post.",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.NOT_FOUND]: {
+    [StatusCodes.NOT_FOUND]: errors.notFound({
       description: "Post not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Couldn't delete the post",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
   },
 } satisfies RouteConfig;

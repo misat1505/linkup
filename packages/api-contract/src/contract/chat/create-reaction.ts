@@ -1,8 +1,12 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { CreateReactionDTO, ErrorMessage, Reaction } from "@packages/schemas";
+import { CreateReactionDTO, Reaction } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const createReactionRoute = {
   method: "post",
@@ -15,47 +19,25 @@ export const createReactionRoute = {
       chatId: z.string(),
     }),
 
-    body: {
-      content: {
-        "application/json": {
-          schema: CreateReactionDTO,
-        },
-      },
-    },
+    body: request.json({
+      schema: CreateReactionDTO,
+    }),
   },
 
   responses: {
-    [StatusCodes.CREATED]: {
+    [StatusCodes.CREATED]: response.json({
+      schema: z.object({
+        reaction: Reaction,
+      }),
       description: "Reaction created successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            reaction: Reaction,
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.FORBIDDEN]: {
+    [StatusCodes.FORBIDDEN]: errors.forbidden({
       description: "User not authorized to create reaction",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
       description: "Message does not exist in this chat",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when creating reaction",
-    },
+    }),
   },
 } satisfies RouteConfig;

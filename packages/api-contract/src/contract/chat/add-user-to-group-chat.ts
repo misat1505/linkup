@@ -1,8 +1,13 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { ErrorMessage, User } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
-import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { User } from "@packages/schemas";
+import { z } from "zod";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const addUserToGroupChatRoute = {
   method: "post",
@@ -15,58 +20,31 @@ export const addUserToGroupChatRoute = {
       chatId: z.string(),
     }),
 
-    body: {
-      content: {
-        "application/json": {
-          schema: z.object({
-            userId: z.string(),
-          }),
-        },
-      },
-    },
+    body: request.json({
+      schema: z.object({
+        userId: z.string(),
+      }),
+    }),
   },
 
   responses: {
-    [StatusCodes.CREATED]: {
+    [StatusCodes.CREATED]: response.json({
+      schema: z.object({
+        user: User,
+      }),
       description: "User added to chat successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            user: User,
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
-      description: "Cannot add people to chat of this type",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
+      description: "Cannot add users to this type of chat",
+    }),
 
-    [StatusCodes.FORBIDDEN]: {
+    [StatusCodes.FORBIDDEN]: errors.forbidden({
       description: "User not authorized to add to this chat",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.CONFLICT]: {
+    [StatusCodes.CONFLICT]: errors.conflict({
       description: "User is already in this chat",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when adding user to chat",
-    },
+    }),
   },
 } satisfies RouteConfig;

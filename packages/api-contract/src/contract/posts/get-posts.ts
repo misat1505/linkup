@@ -2,8 +2,11 @@ import { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
 
-import { ErrorMessage, GetPostsQuery, Post } from "@packages/schemas";
+import { GetPostsQuery, Post } from "@packages/schemas";
 import z from "zod";
+
+import { errors } from "../../utils/error-responses";
+import { response } from "../../utils/responses";
 
 export const getPostsRoute = {
   method: "get",
@@ -16,31 +19,13 @@ export const getPostsRoute = {
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.array(Post),
       description: "A list of posts retrieved successfully",
-      content: {
-        "application/json": {
-          schema: z.array(Post),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
       description: "Invalid query parameter (e.g., limit exceeds 10)",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error, could not retrieve posts",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
   },
 } satisfies RouteConfig;

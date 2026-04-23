@@ -12,9 +12,5 @@ export const logoutRoute = {
     [StatusCodes.OK]: {
       description: "User logged out successfully",
     },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Cannot log out",
-    },
   },
 } satisfies RouteConfig;

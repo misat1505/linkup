@@ -1,8 +1,12 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { ErrorMessage, InsertToCacheDTO } from "@packages/schemas";
+import { InsertToCacheDTO } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const insertToCacheRoute = {
   method: "post",
@@ -11,38 +15,21 @@ export const insertToCacheRoute = {
   tags: [TAGS.FILES],
 
   request: {
-    body: {
-      content: {
-        "multipart/form-data": {
-          schema: InsertToCacheDTO,
-        },
-      },
-    },
+    body: request.multipart({
+      schema: InsertToCacheDTO,
+    }),
   },
 
   responses: {
-    [StatusCodes.CREATED]: {
+    [StatusCodes.CREATED]: response.json({
+      schema: z.object({
+        file: z.string(),
+      }),
       description: "File uploaded successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            file: z.string(),
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
       description: "Cache limit reached or no file provided",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error during upload",
-    },
+    }),
   },
 } satisfies RouteConfig;

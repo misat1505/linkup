@@ -1,8 +1,11 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { ErrorMessage, Filename } from "@packages/schemas";
+import { Filename } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { response } from "../../utils/responses";
 
 export const FileQueryOpenApi = z
   .object({
@@ -26,46 +29,23 @@ export const getFileRoute = {
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        url: z.string(),
+      }),
       description: "File retrieved successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            url: z.string(),
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
-      description: "Invalid request parameters",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
+      description: "Invalid file query parameters",
+    }),
 
-    [StatusCodes.FORBIDDEN]: {
-      description: "Unauthorized access",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    [StatusCodes.FORBIDDEN]: errors.forbidden({
+      description: "You are not allowed to access this file",
+    }),
 
-    [StatusCodes.NOT_FOUND]: {
+    [StatusCodes.NOT_FOUND]: errors.notFound({
       description: "File not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when fetching the file",
-    },
+    }),
   },
 } satisfies RouteConfig;

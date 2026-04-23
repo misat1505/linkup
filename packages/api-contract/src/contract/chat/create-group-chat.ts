@@ -1,8 +1,12 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { Chat, CreateGroupChatDTO, ErrorMessage } from "@packages/schemas";
+import { Chat, CreateGroupChatDTO } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const createGroupChatRoute = {
   method: "post",
@@ -11,38 +15,21 @@ export const createGroupChatRoute = {
   tags: [TAGS.CHATS],
 
   request: {
-    body: {
-      content: {
-        "multipart/form-data": {
-          schema: CreateGroupChatDTO,
-        },
-      },
-    },
+    body: request.multipart({
+      schema: CreateGroupChatDTO,
+    }),
   },
 
   responses: {
-    [StatusCodes.CREATED]: {
+    [StatusCodes.CREATED]: response.json({
+      schema: z.object({
+        chat: Chat,
+      }),
       description: "Group chat created successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            chat: Chat,
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
-      description: "User not authorized to create group chat",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when creating group chat",
-    },
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
+      description: "Invalid data for group chat creation",
+    }),
   },
 } satisfies RouteConfig;

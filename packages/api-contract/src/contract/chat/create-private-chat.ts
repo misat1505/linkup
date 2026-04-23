@@ -1,8 +1,12 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { Chat, CreatePrivateChatDTO, ErrorMessage } from "@packages/schemas";
+import { Chat, CreatePrivateChatDTO } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const createPrivateChatRoute = {
   method: "post",
@@ -11,49 +15,28 @@ export const createPrivateChatRoute = {
   tags: [TAGS.CHATS],
 
   request: {
-    body: {
-      content: {
-        "application/json": {
-          schema: CreatePrivateChatDTO,
-        },
-      },
-    },
+    body: request.json({
+      schema: CreatePrivateChatDTO,
+    }),
   },
 
   responses: {
-    [StatusCodes.CREATED]: {
+    [StatusCodes.CREATED]: response.json({
+      schema: z.object({
+        chat: Chat,
+      }),
       description: "Private chat created successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            chat: Chat,
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.CONFLICT]: {
+    [StatusCodes.CONFLICT]: response.json({
+      schema: z.object({
+        chat: Chat,
+      }),
       description: "Chat already exists",
-      content: {
-        "application/json": {
-          schema: z.object({
-            chat: Chat,
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
-      description: "User not in chat",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when creating private chat",
-    },
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
+      description: "Invalid request or users cannot create chat",
+    }),
   },
 } satisfies RouteConfig;

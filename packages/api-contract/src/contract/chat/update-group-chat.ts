@@ -1,8 +1,12 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { Chat, ErrorMessage, UpdateGroupChatDTO } from "@packages/schemas";
+import { Chat, UpdateGroupChatDTO } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const updateGroupChatRoute = {
   method: "put",
@@ -15,47 +19,25 @@ export const updateGroupChatRoute = {
       chatId: z.string(),
     }),
 
-    body: {
-      content: {
-        "multipart/form-data": {
-          schema: UpdateGroupChatDTO,
-        },
-      },
-    },
+    body: request.multipart({
+      schema: UpdateGroupChatDTO,
+    }),
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        chat: Chat,
+      }),
       description: "Chat updated successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            chat: Chat,
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.FORBIDDEN]: {
+    [StatusCodes.FORBIDDEN]: errors.forbidden({
       description: "User not authorized to update this chat",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
-      description: "Cannot update chat of this type",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when updating chat",
-    },
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
+      description: "Cannot update this type of chat",
+    }),
   },
 } satisfies RouteConfig;

@@ -1,8 +1,12 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { CreateMessageDTO, ErrorMessage, Message } from "@packages/schemas";
+import { CreateMessageDTO, Message } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { errors } from "../../utils/error-responses";
+import { request } from "../../utils/requests";
+import { response } from "../../utils/responses";
 
 export const createMessageRoute = {
   method: "post",
@@ -15,47 +19,25 @@ export const createMessageRoute = {
       chatId: z.string(),
     }),
 
-    body: {
-      content: {
-        "multipart/form-data": {
-          schema: CreateMessageDTO,
-        },
-      },
-    },
+    body: request.multipart({
+      schema: CreateMessageDTO,
+    }),
   },
 
   responses: {
-    [StatusCodes.CREATED]: {
+    [StatusCodes.CREATED]: response.json({
+      schema: z.object({
+        message: Message,
+      }),
       description: "Message created successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            message: Message,
-          }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.FORBIDDEN]: {
+    [StatusCodes.FORBIDDEN]: errors.forbidden({
       description: "User not authorized to send a message",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.BAD_REQUEST]: {
-      description: "Response message does not exist in this chat",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when creating message",
-    },
+    [StatusCodes.BAD_REQUEST]: errors.badRequest({
+      description: "Invalid message payload or chat state",
+    }),
   },
 } satisfies RouteConfig;

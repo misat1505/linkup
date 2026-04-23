@@ -2,8 +2,11 @@ import { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
 
-import { ErrorMessage, Post } from "@packages/schemas";
+import { Post } from "@packages/schemas";
 import z from "zod";
+
+import { errors } from "../../utils/error-responses";
+import { response } from "../../utils/responses";
 
 export const getPostRoute = {
   method: "get",
@@ -16,31 +19,13 @@ export const getPostRoute = {
   },
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({ post: Post }),
       description: "Post retrieved successfully",
-      content: {
-        "application/json": {
-          schema: z.object({ post: Post }),
-        },
-      },
-    },
+    }),
 
-    [StatusCodes.NOT_FOUND]: {
+    [StatusCodes.NOT_FOUND]: errors.notFound({
       description: "Post not found",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error, could not retrieve post",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
   },
 } satisfies RouteConfig;

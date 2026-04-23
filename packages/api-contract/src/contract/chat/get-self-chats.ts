@@ -1,8 +1,10 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { Chat, ErrorMessage } from "@packages/schemas";
+import { Chat } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
+
+import { response } from "../../utils/responses";
 
 export const getSelfChatsRoute = {
   method: "get",
@@ -11,24 +13,11 @@ export const getSelfChatsRoute = {
   tags: [TAGS.CHATS],
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
+      schema: z.object({
+        chats: z.array(Chat),
+      }),
       description: "Chats retrieved successfully",
-      content: {
-        "application/json": {
-          schema: z.object({
-            chats: z.array(Chat),
-          }),
-        },
-      },
-    },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Server error when fetching user's chats",
-      content: {
-        "application/json": {
-          schema: ErrorMessage,
-        },
-      },
-    },
+    }),
   },
 } satisfies RouteConfig;

@@ -14,9 +14,5 @@ export const refreshTokenRoute = {
     [StatusCodes.OK]: {
       description: "Token refreshed successfully",
     },
-
-    [StatusCodes.INTERNAL_SERVER_ERROR]: {
-      description: "Cannot refresh token",
-    },
   },
 } satisfies RouteConfig;
