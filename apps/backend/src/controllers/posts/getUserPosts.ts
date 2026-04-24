@@ -1,3 +1,5 @@
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -19,13 +21,16 @@ export const getUserPosts = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_USER_POSTS;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const userId = req.user!.id;
     const postService = req.app.services.postService;
 
     const posts = await postService.getUserPosts(userId);
 
-    return res.status(StatusCodes.OK).json({ posts });
+    return respond(StatusCodes.OK, { posts });
   } catch {
     next(new Error(req.t("posts.controllers.get-users.failure")));
   }

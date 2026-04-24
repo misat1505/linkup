@@ -2,8 +2,7 @@ import { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
 
-import { Post } from "@packages/schemas";
-import z from "zod";
+import { Post, SuccessMessage } from "@packages/schemas";
 
 import { errors } from "../../utils/error-responses";
 import { response } from "../../utils/responses";
@@ -20,7 +19,7 @@ export const reportPostRoute = {
 
   responses: {
     [StatusCodes.OK]: response.json({
-      schema: z.object({ message: z.string() }),
+      schema: SuccessMessage,
       description: "Post reported successfully",
     }),
 

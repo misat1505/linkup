@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -12,16 +13,17 @@ const sendFileBuilder =
     const fileStorage = req.app.services.fileStorage;
     const result = await validator();
 
-    if (!result)
+    if (!result) {
       return res.status(StatusCodes.FORBIDDEN).json({ message: errorMessage });
+    }
 
     try {
       const url = await fileStorage.getSignedUrl(filename);
       return res.status(StatusCodes.OK).json({ url });
     } catch {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("files.controllers.get-file.not-found") });
+      return res.status(StatusCodes.NOT_FOUND).json({
+        message: req.t("files.controllers.get-file.not-found"),
+      });
     }
   };
 
@@ -42,11 +44,15 @@ export const getFileController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_FILE;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       params: { filename },
       query,
-    } = extractValidatedRequest(req, API_CONTRACT.GET_FILE);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const { fileService, fileStorage } = req.app.services;
 
@@ -79,25 +85,29 @@ export const getFileController = async (
 
       case "cache": {
         const path = `cache/${userId}/${filename}`;
+
         try {
           const url = await fileStorage.getSignedUrl(path);
-          return res.status(StatusCodes.OK).json({ url });
+
+          return respond(StatusCodes.OK, { url });
         } catch {
-          return res
-            .status(StatusCodes.NOT_FOUND)
-            .json({ message: req.t("files.controllers.get-file.not-found") });
+          return respond(StatusCodes.NOT_FOUND, {
+            message: req.t("files.controllers.get-file.not-found"),
+          });
         }
       }
 
       case "post": {
         const path = `posts/${query.post}/${filename}`;
+
         try {
           const url = await fileStorage.getSignedUrl(path, 86400);
-          return res.status(StatusCodes.OK).json({ url });
+
+          return respond(StatusCodes.OK, { url });
         } catch {
-          return res
-            .status(StatusCodes.NOT_FOUND)
-            .json({ message: req.t("files.controllers.get-file.not-found") });
+          return respond(StatusCodes.NOT_FOUND, {
+            message: req.t("files.controllers.get-file.not-found"),
+          });
         }
       }
     }

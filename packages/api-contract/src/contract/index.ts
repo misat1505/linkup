@@ -13,3 +13,7 @@ export const API_CONTRACT = {
   ...postsContract,
   ...usersContract,
 };
+
+export const CONTRACT_KEYS = Object.fromEntries(
+  Object.keys(API_CONTRACT).map((key) => [key, key]),
+) as { [K in keyof typeof API_CONTRACT]: K };

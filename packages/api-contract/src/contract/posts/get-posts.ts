@@ -20,7 +20,7 @@ export const getPostsRoute = {
 
   responses: {
     [StatusCodes.OK]: response.json({
-      schema: z.array(Post),
+      schema: z.object({ posts: z.array(Post) }),
       description: "A list of posts retrieved successfully",
     }),
 

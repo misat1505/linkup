@@ -1,6 +1,7 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { v4 as uuidv4 } from "uuid";
@@ -22,10 +23,14 @@ export const createPost = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.CREATE_POST;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       body: { content },
-    } = extractValidatedRequest(req, API_CONTRACT.CREATE_POST);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const { postService, fileStorage } = req.app.services;
 
@@ -44,7 +49,7 @@ export const createPost = async (
       authorId: userId,
     });
 
-    return res.status(StatusCodes.CREATED).json({ post });
+    return respond(StatusCodes.CREATED, { post });
   } catch {
     next(new Error(req.t("posts.controllers.create.failure")));
   }

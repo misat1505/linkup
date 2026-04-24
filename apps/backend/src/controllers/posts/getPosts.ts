@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,10 +21,14 @@ export const getPosts = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_POSTS;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       query: { lastPostId, limit },
-    } = extractValidatedRequest(req, API_CONTRACT.GET_POSTS);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const postRecommendationService =
       req.app.services.postRecommendationService;
@@ -34,7 +39,7 @@ export const getPosts = async (
       limit,
     );
 
-    return res.status(StatusCodes.OK).json({ posts });
+    return respond(StatusCodes.OK, { posts });
   } catch {
     next(new Error(req.t("posts.controllers.get-all.failure")));
   }

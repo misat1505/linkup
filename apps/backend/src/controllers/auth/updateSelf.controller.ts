@@ -2,8 +2,8 @@ import { Hasher } from "@/lib/Hasher";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { processAvatar } from "@/utils/processAvatar";
-import { API_CONTRACT } from "@packages/api-contract";
-import { User } from "@packages/schemas";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -27,11 +27,16 @@ export const updateSelfController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.UPDATE_SELF;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
-    const { body } = extractValidatedRequest(req, API_CONTRACT.UPDATE_SELF);
+    const { body } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
     const { firstName, lastName, login, password } = body;
+
     const userId = req.user!.id;
     const { userService, fileStorage } = req.app.services;
+
     const file = await processAvatar(fileStorage, req.file);
 
     const salt = await bcrypt.genSalt(10);
@@ -43,7 +48,7 @@ export const updateSelfController = async (
       fetchedUser && fetchedUser.login === login && fetchedUser.id !== userId;
 
     if (isLoginTaken) {
-      return res.status(StatusCodes.CONFLICT).json({
+      return respond(StatusCodes.CONFLICT, {
         message: req.t("auth.controllers.update.login-already-exists"),
       });
     }
@@ -65,7 +70,7 @@ export const updateSelfController = async (
       await fileStorage.deleteFile(`avatars/${fetchedUser.photoURL}`);
     }
 
-    return res.status(StatusCodes.OK).json({ user: User.parse(user) });
+    return respond(StatusCodes.OK, { user });
   } catch {
     next(new Error(req.t("auth.controllers.update.failure")));
   }

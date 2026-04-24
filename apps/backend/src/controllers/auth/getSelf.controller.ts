@@ -1,4 +1,5 @@
-import { CONTRACT_KEYS, extractResponseSchema } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -25,6 +26,7 @@ export const getSelfController = async (
   next: NextFunction,
 ) => {
   const contractKey = CONTRACT_KEYS.GET_SELF;
+  const respond = buildValidatedResponder(res, contractKey);
   try {
     const userId = req.user!.id;
     const userService = req.app.services.userService;
@@ -32,13 +34,12 @@ export const getSelfController = async (
     const user = await userService.getUser(userId);
 
     if (!user) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("auth.controllers.get-self.user-not-found") });
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("auth.controllers.get-self.user-not-found"),
+      });
     }
 
-    const schema = extractResponseSchema(contractKey, StatusCodes.OK);
-    return res.status(StatusCodes.OK).json(schema.parse({ user }));
+    return respond(StatusCodes.OK, { user });
   } catch {
     next(new Error(req.t("auth.controllers.get-self.failure")));
   }

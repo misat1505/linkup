@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,30 +21,39 @@ export const createReactionController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.CREATE_REACTION;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       body: { messageId, reactionId },
       params: { chatId },
-    } = extractValidatedRequest(req, API_CONTRACT.CREATE_REACTION);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const chatService = req.app.services.chatService;
 
-    const isUserAuthorized = await chatService.isUserInChat({ chatId, userId });
+    const isUserAuthorized = await chatService.isUserInChat({
+      chatId,
+      userId,
+    });
 
-    if (!isUserAuthorized)
-      return res.status(StatusCodes.FORBIDDEN).json({
+    if (!isUserAuthorized) {
+      return respond(StatusCodes.FORBIDDEN, {
         message: req.t("chats.controllers.create-reaction.bad-chat"),
       });
+    }
 
     const isMessageInChat = await chatService.isMessageInChat({
       chatId,
       messageId,
     });
 
-    if (!isMessageInChat)
-      return res.status(StatusCodes.BAD_REQUEST).json({
+    if (!isMessageInChat) {
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t("chats.controllers.create-reaction.bad-message"),
       });
+    }
 
     const reaction = await chatService.createReactionToMessage({
       userId,
@@ -51,7 +61,9 @@ export const createReactionController = async (
       messageId,
     });
 
-    return res.status(StatusCodes.CREATED).json({ reaction });
+    return respond(StatusCodes.CREATED, {
+      reaction,
+    });
   } catch {
     next(new Error(req.t("chats.controllers.create-reaction.failure")));
   }

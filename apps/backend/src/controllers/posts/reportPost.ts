@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { Prisma } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -23,27 +24,30 @@ export const reportPost = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.REPORT_POST;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       params: { id },
-    } = extractValidatedRequest(req, API_CONTRACT.REPORT_POST);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const postService = req.app.services.postService;
 
     await postService.reportPost(userId, id);
 
-    res
-      .status(StatusCodes.OK)
-      .json({ message: req.t("posts.controllers.report.success") });
+    return respond(StatusCodes.OK, {
+      message: req.t("posts.controllers.report.success"),
+    });
   } catch (e) {
     const violatedUniqueConstraint =
       e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002";
 
     if (violatedUniqueConstraint) {
-      res
-        .status(StatusCodes.CONFLICT)
-        .json({ message: req.t("posts.controllers.report.already-reported") });
-      return;
+      return respond(StatusCodes.CONFLICT, {
+        message: req.t("posts.controllers.report.already-reported"),
+      });
     }
 
     next(new Error(req.t("posts.controllers.report.failure")));

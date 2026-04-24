@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,29 +21,37 @@ export const createFriendship = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.CREATE_FRIENDSHIP;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       body: { acceptorId, requesterId },
-    } = extractValidatedRequest(req, API_CONTRACT.CREATE_FRIENDSHIP);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const friendshipService = req.app.services.friendshipService;
 
-    if (userId !== requesterId)
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ message: req.t("friends.controllers.create.unauthorized") });
+    if (userId !== requesterId) {
+      return respond(StatusCodes.BAD_REQUEST, {
+        message: req.t("friends.controllers.create.unauthorized"),
+      });
+    }
 
     const friendship = await friendshipService.createFriendship(
       requesterId,
       acceptorId,
     );
 
-    if (!friendship)
-      return res
-        .status(StatusCodes.CONFLICT)
-        .json({ message: req.t("friends.controllers.create.already-exists") });
+    if (!friendship) {
+      return respond(StatusCodes.CONFLICT, {
+        message: req.t("friends.controllers.create.already-exists"),
+      });
+    }
 
-    return res.status(StatusCodes.CREATED).json({ friendship });
+    return respond(StatusCodes.CREATED, {
+      friendship,
+    });
   } catch {
     next(new Error(req.t("friends.controllers.create.failure")));
   }

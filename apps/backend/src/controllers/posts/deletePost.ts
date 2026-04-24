@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,24 +21,30 @@ export const deletePost = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.DELETE_POST;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       params: { id },
-    } = extractValidatedRequest(req, API_CONTRACT.DELETE_POST);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const { postService, fileStorage } = req.app.services;
 
     const post = await postService.getPost(id);
 
-    if (!post)
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("posts.controllers.delete.not-found") });
+    if (!post) {
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("posts.controllers.delete.not-found"),
+      });
+    }
 
-    if (post.author.id !== userId)
-      return res
-        .status(StatusCodes.FORBIDDEN)
-        .json({ message: req.t("posts.controllers.delete.unauthorized") });
+    if (post.author.id !== userId) {
+      return respond(StatusCodes.FORBIDDEN, {
+        message: req.t("posts.controllers.delete.unauthorized"),
+      });
+    }
 
     await Promise.all([
       postService.deletePost(id),
@@ -45,9 +52,9 @@ export const deletePost = async (
       fileStorage.deleteAllFilesInDirectory(`chats/${post.chat.id}`),
     ]);
 
-    return res
-      .status(StatusCodes.OK)
-      .json({ message: req.t("posts.controllers.delete.success") });
+    return respond(StatusCodes.OK, {
+      message: req.t("posts.controllers.delete.success"),
+    });
   } catch {
     next(new Error(req.t("posts.controllers.delete.failure")));
   }

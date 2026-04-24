@@ -1,4 +1,6 @@
 import { generateNewFilename } from "@/utils/generateNewFilename";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -21,20 +23,24 @@ export const insertToCache = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.INSERT_TO_CACHE;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const file = req.file;
     const userId = req.user!.id;
     const fileStorage = req.app.services.fileStorage;
 
-    if (!file)
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ message: req.t("files.controllers.insert-to-cache.no-file") });
+    if (!file) {
+      return respond(StatusCodes.BAD_REQUEST, {
+        message: req.t("files.controllers.insert-to-cache.no-file"),
+      });
+    }
 
     const cachePaths = await fileStorage.listFiles(`cache/${userId}`);
 
     if (cachePaths.length >= CACHE_CAPACITY) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t("files.controllers.insert-to-cache.limit-reached", {
           count: CACHE_CAPACITY,
         }),
@@ -49,7 +55,9 @@ export const insertToCache = async (
       `cache/${userId}/${filename}`,
     );
 
-    return res.status(StatusCodes.CREATED).json({ file: filename });
+    return respond(StatusCodes.CREATED, {
+      file: filename,
+    });
   } catch {
     next(new Error(req.t("files.controllers.insert-to-cache.failure")));
   }

@@ -3,6 +3,7 @@ import { AcceptFriendshipDTO, Friendship } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
 
+import z from "zod";
 import { errors } from "../../utils/error-responses";
 import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
@@ -21,7 +22,7 @@ export const acceptFriendshipRoute = {
 
   responses: {
     [StatusCodes.OK]: response.json({
-      schema: Friendship,
+      schema: z.object({ friendship: Friendship }),
       description: "Friendship accepted successfully",
     }),
 

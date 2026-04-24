@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,18 +21,22 @@ export const deleteFromCache = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.DELETE_FROM_CACHE;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       params: { filename },
-    } = extractValidatedRequest(req, API_CONTRACT.DELETE_FROM_CACHE);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const fileStorage = req.app.services.fileStorage;
 
     await fileStorage.deleteFile(`cache/${userId}/${filename}`);
 
-    return res
-      .status(StatusCodes.OK)
-      .json({ message: req.t("files.controllers.delete-from-cache.success") });
+    return respond(StatusCodes.OK, {
+      message: req.t("files.controllers.delete-from-cache.success"),
+    });
   } catch {
     next(new Error(req.t("files.controllers.delete-from-cache.failure")));
   }

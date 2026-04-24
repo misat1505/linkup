@@ -1,3 +1,5 @@
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -18,6 +20,9 @@ export const getCache = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_CACHE;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const userId = req.user!.id;
     const fileStorage = req.app.services.fileStorage;
@@ -29,7 +34,9 @@ export const getCache = async (
       return splitted[splitted.length - 1];
     });
 
-    return res.status(StatusCodes.OK).json({ files: filenames });
+    return respond(StatusCodes.OK, {
+      files: filenames,
+    });
   } catch {
     next(new Error(req.t("files.controllers.get-cache.failure")));
   }

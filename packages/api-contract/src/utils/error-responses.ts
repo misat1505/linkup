@@ -1,12 +1,24 @@
 import { ErrorMessage } from "@packages/schemas";
 import { ZodType } from "zod";
 
-type ErrorResponse = {
+type ErrorResponse<T extends ZodType = typeof ErrorMessage> = {
   description: string;
-  schema?: ZodType;
+  schema?: T;
 };
 
-function errorResponse(response: ErrorResponse) {
+function errorResponse(response: ErrorResponse): {
+  description: string;
+  content: { "application/json": { schema: typeof ErrorMessage } };
+};
+function errorResponse<T extends ZodType>(
+  response: ErrorResponse<T>,
+): {
+  description: string;
+  content: { "application/json": { schema: T } };
+};
+function errorResponse<T extends ZodType = typeof ErrorMessage>(
+  response: ErrorResponse<T>,
+) {
   const schema = response.schema ?? ErrorMessage;
 
   return {

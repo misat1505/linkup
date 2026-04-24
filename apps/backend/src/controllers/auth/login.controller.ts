@@ -8,8 +8,8 @@ import {
 import { Hasher } from "@/lib/Hasher";
 import { TokenProcessor } from "@/lib/TokenProcessor";
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
-import { User } from "@packages/schemas";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -36,25 +36,27 @@ export const loginController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.LOGIN;
+  const respond = buildValidatedResponder(res, contractKey);
   try {
     const {
       body: { login, password },
-    } = extractValidatedRequest(req, API_CONTRACT.LOGIN);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
     const userService = req.app.services.userService;
 
     const user = await userService.getUserByLogin(login);
 
     if (!user) {
-      return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: req.t("auth.controllers.login.invalid-login") });
+      return respond(StatusCodes.UNAUTHORIZED, {
+        message: req.t("auth.controllers.login.invalid-login"),
+      });
     }
 
     const hashedPassword = Hasher.hash(password + user.salt);
     if (hashedPassword !== user.password) {
-      return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: req.t("auth.controllers.login.invalid-password") });
+      return respond(StatusCodes.UNAUTHORIZED, {
+        message: req.t("auth.controllers.login.invalid-password"),
+      });
     }
 
     const refreshToken = TokenProcessor.encode(
@@ -68,9 +70,7 @@ export const loginController = async (
       accessTokenSignOptions,
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res
-      .status(StatusCodes.OK)
-      .json({ user: User.parse(user), accessToken });
+    return respond(StatusCodes.OK, { user, accessToken });
   } catch {
     next(new Error(req.t("auth.controllers.login.failure")));
   }

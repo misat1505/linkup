@@ -1,11 +1,11 @@
 import { ZodType } from "zod";
 
-type JsonResponse = {
-  schema: ZodType;
+type JsonResponse<T extends ZodType> = {
+  schema: T;
   description?: string;
 };
 
-const jsonResponse = (response: JsonResponse) => ({
+const jsonResponse = <T extends ZodType>(response: JsonResponse<T>) => ({
   description: response.description ?? "",
   content: {
     "application/json": {

@@ -1,11 +1,11 @@
-import { ZodTypeAny } from "zod";
+import { ZodType } from "zod";
 
-type JsonRequest<T extends ZodTypeAny> = {
+type JsonRequest<T extends ZodType> = {
   schema: T;
   description?: string;
 };
 
-const jsonRequest = <T extends ZodTypeAny>(request: JsonRequest<T>) => ({
+const jsonRequest = <T extends ZodType>(request: JsonRequest<T>) => ({
   description: request.description ?? "",
   content: {
     "application/json": {
@@ -14,7 +14,7 @@ const jsonRequest = <T extends ZodTypeAny>(request: JsonRequest<T>) => ({
   },
 });
 
-const multipartRequest = <T extends ZodTypeAny>(request: JsonRequest<T>) => ({
+const multipartRequest = <T extends ZodType>(request: JsonRequest<T>) => ({
   description: request.description ?? "",
   content: {
     "multipart/form-data": {

@@ -1,3 +1,5 @@
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -18,13 +20,18 @@ export const getUserFriendships = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_USER_FRIENDSHIPS;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const userId = req.user!.id;
     const friendshipService = req.app.services.friendshipService;
 
     const friendships = await friendshipService.getUserFriendships(userId);
 
-    return res.status(StatusCodes.OK).json({ friendships });
+    return respond(StatusCodes.OK, {
+      friendships,
+    });
   } catch {
     next(new Error(req.t("friends.controllers.get.failure")));
   }

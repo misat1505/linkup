@@ -1,6 +1,7 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { processAvatar } from "@/utils/processAvatar";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { v4 as uuidv4 } from "uuid";
@@ -24,19 +25,25 @@ export const createGroupChatController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.CREATE_GROUP_CHAT;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const userId = req.user!.id;
+
     const {
       body: { users, name },
-    } = extractValidatedRequest(req, API_CONTRACT.CREATE_GROUP_CHAT);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const { chatService, fileStorage } = req.app.services;
 
-    if (!users.includes(userId))
-      return res.status(StatusCodes.BAD_REQUEST).json({
+    if (!users.includes(userId)) {
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t(
           "chats.controllers.create-group-chat.not-belonging-to-you",
         ),
       });
+    }
 
     const newFilename = req.file ? uuidv4() + ".webp" : null;
 
@@ -46,15 +53,16 @@ export const createGroupChatController = async (
       newFilename,
     );
 
-    if (newFilename)
+    if (newFilename) {
       await processAvatar(
         fileStorage,
         req.file,
         `chats/${chat.id}/`,
         newFilename,
       );
+    }
 
-    return res.status(StatusCodes.CREATED).json({ chat });
+    return respond(StatusCodes.CREATED, { chat });
   } catch {
     next(new Error(req.t("chats.controllers.create-group-chat.failure")));
   }

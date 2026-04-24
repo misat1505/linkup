@@ -1,4 +1,6 @@
 import { refreshTokenCookieName } from "@/config/jwt-cookie";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -24,11 +26,14 @@ export const logoutController = (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.LOGOUT;
+  const respond = buildValidatedResponder(res, contractKey);
   try {
     res.clearCookie(refreshTokenCookieName);
-    res
-      .status(StatusCodes.OK)
-      .json({ message: req.t("auth.controllers.logout.success") });
+
+    return respond(StatusCodes.OK, {
+      message: req.t("auth.controllers.logout.success"),
+    });
   } catch {
     next(new Error(req.t("auth.controllers.logout.failure")));
   }

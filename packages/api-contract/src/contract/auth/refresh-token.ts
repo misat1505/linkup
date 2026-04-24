@@ -1,6 +1,9 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
+import { SuccessMessage } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
+import z from "zod";
 import { TAGS } from "../../utils/constants";
+import { response } from "../../utils/responses";
 
 export const refreshTokenRoute = {
   method: "post",
@@ -11,8 +14,9 @@ export const refreshTokenRoute = {
   tags: [TAGS.AUTH],
 
   responses: {
-    [StatusCodes.OK]: {
+    [StatusCodes.OK]: response.json({
       description: "Token refreshed successfully",
-    },
+      schema: SuccessMessage.extend({ accessToken: z.string() }),
+    }),
   },
 } satisfies RouteConfig;

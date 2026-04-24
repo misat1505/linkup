@@ -1,5 +1,5 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { UpdateUserAliasDTO } from "@packages/schemas";
+import { UpdateUserAliasDTO, UserInChat } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
@@ -27,9 +27,7 @@ export const updateAliasRoute = {
 
   responses: {
     [StatusCodes.OK]: response.json({
-      schema: z.object({
-        alias: z.string(),
-      }),
+      schema: UserInChat.pick({ alias: true }),
       description: "Alias updated successfully",
     }),
 

@@ -1,3 +1,5 @@
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -18,13 +20,18 @@ export const getSelfChatsController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_SELF_CHATS;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const userId = req.user!.id;
     const chatService = req.app.services.chatService;
 
     const chats = await chatService.getUserChats(userId);
 
-    return res.status(StatusCodes.OK).json({ chats });
+    return respond(StatusCodes.OK, {
+      chats,
+    });
   } catch {
     next(new Error(req.t("chats.controllers.get-self-chats.failure")));
   }

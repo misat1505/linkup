@@ -1,6 +1,6 @@
 import { API_CONTRACT } from "../contract";
 
-type ExtractSchema<
+export type ExtractSchema<
   K extends keyof typeof API_CONTRACT,
   S extends keyof (typeof API_CONTRACT)[K]["responses"],
 > = (typeof API_CONTRACT)[K]["responses"][S] extends {

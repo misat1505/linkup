@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,31 +21,37 @@ export const deleteFriendship = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.DELETE_FRIENDSHIP;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       body: { acceptorId, requesterId },
-    } = extractValidatedRequest(req, API_CONTRACT.DELETE_FRIENDSHIP);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const friendshipService = req.app.services.friendshipService;
 
-    if (![requesterId, acceptorId].includes(userId))
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ message: req.t("friends.controllers.delete.unauthorized") });
+    if (![requesterId, acceptorId].includes(userId)) {
+      return respond(StatusCodes.FORBIDDEN, {
+        message: req.t("friends.controllers.delete.unauthorized"),
+      });
+    }
 
     const isDeleted = await friendshipService.deleteFriendship(
       requesterId,
       acceptorId,
     );
 
-    if (!isDeleted)
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("friends.controllers.delete.not-found") });
+    if (!isDeleted) {
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("friends.controllers.delete.not-found"),
+      });
+    }
 
-    return res
-      .status(StatusCodes.OK)
-      .json({ message: req.t("friends.controllers.delete.success") });
+    return respond(StatusCodes.OK, {
+      message: req.t("friends.controllers.delete.success"),
+    });
   } catch {
     next(new Error(req.t("friends.controllers.delete.failure")));
   }

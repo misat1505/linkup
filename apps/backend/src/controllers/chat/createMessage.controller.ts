@@ -1,6 +1,7 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { generateNewFilename } from "@/utils/generateNewFilename";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -23,13 +24,18 @@ export const createMessageController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.CREATE_MESSAGE;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       body: { content, responseId },
       params: { chatId },
-    } = extractValidatedRequest(req, API_CONTRACT.CREATE_MESSAGE);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const files = req.files as Express.Multer.File[];
+
     const { chatService, fileStorage } = req.app.services;
 
     const checks = [chatService.isUserInChat({ chatId, userId })];
@@ -46,7 +52,7 @@ export const createMessageController = async (
     const [isUserAuthorized, isResponseInChat] = await Promise.all(checks);
 
     if (!isUserAuthorized) {
-      return res.status(StatusCodes.FORBIDDEN).json({
+      return respond(StatusCodes.FORBIDDEN, {
         message: req.t(
           "chats.controllers.create-message.user-not-belonging-to-chat",
         ),
@@ -54,7 +60,7 @@ export const createMessageController = async (
     }
 
     if (responseId && !isResponseInChat) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t(
           "chats.controllers.create-message.response-not-existent",
         ),
@@ -78,7 +84,9 @@ export const createMessageController = async (
       responseId: responseId ?? null,
     });
 
-    return res.status(StatusCodes.CREATED).json({ message });
+    return respond(StatusCodes.CREATED, {
+      message,
+    });
   } catch {
     next(new Error(req.t("chats.controllers.create-message.failure")));
   }

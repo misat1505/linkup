@@ -1,6 +1,7 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -24,25 +25,31 @@ export const updatePost = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.UPDATE_POST;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       body: { content },
       params: { id },
-    } = extractValidatedRequest(req, API_CONTRACT.UPDATE_POST);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const { postService, fileStorage } = req.app.services;
 
     const post = await postService.getPost(id);
 
-    if (!post)
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("posts.controllers.update.not-found") });
+    if (!post) {
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("posts.controllers.update.not-found"),
+      });
+    }
 
-    if (post.author.id !== userId)
-      return res
-        .status(StatusCodes.FORBIDDEN)
-        .json({ message: req.t("posts.controllers.update.unauthorized") });
+    if (post.author.id !== userId) {
+      return respond(StatusCodes.FORBIDDEN, {
+        message: req.t("posts.controllers.update.unauthorized"),
+      });
+    }
 
     const updatedContent = await handleMarkdownUpdate(
       fileStorage,
@@ -56,7 +63,7 @@ export const updatePost = async (
       content: updatedContent,
     });
 
-    return res.status(StatusCodes.OK).json({ post: newPost });
+    return respond(StatusCodes.OK, { post: newPost! });
   } catch {
     next(new Error(req.t("posts.controllers.update.failure")));
   }

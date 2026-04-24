@@ -10,8 +10,8 @@ import { TokenProcessor } from "@/lib/TokenProcessor";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { processAvatar } from "@/utils/processAvatar";
-import { API_CONTRACT } from "@packages/api-contract";
-import { User } from "@packages/schemas";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -36,9 +36,13 @@ export const signupController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.SIGNUP;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
-    const { body } = extractValidatedRequest(req, API_CONTRACT.SIGNUP);
+    const { body } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
     const { firstName, lastName, login, password } = body;
+
     const { userService, fileStorage } = req.app.services;
     const file = await processAvatar(fileStorage, req.file);
 
@@ -48,7 +52,7 @@ export const signupController = async (
     const isLoginTaken = await userService.isLoginTaken(login);
 
     if (isLoginTaken) {
-      return res.status(StatusCodes.CONFLICT).json({
+      return respond(StatusCodes.CONFLICT, {
         message: req.t("auth.controllers.signup.login-already-exists"),
       });
     }
@@ -71,15 +75,19 @@ export const signupController = async (
       env.REFRESH_TOKEN_SECRET,
       refreshTokenSignOptions,
     );
+
     const accessToken = TokenProcessor.encode(
       { userId: user.id },
       env.ACCESS_TOKEN_SECRET,
       accessTokenSignOptions,
     );
+
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res
-      .status(StatusCodes.CREATED)
-      .json({ user: User.parse(user), accessToken });
+
+    return respond(StatusCodes.CREATED, {
+      user,
+      accessToken,
+    });
   } catch {
     next(new Error(req.t("auth.controllers.signup.failure")));
   }

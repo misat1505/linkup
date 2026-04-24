@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,29 +21,37 @@ export const acceptFriendship = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.ACCEPT_FRIENDSHIP;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       body: { acceptorId, requesterId },
-    } = extractValidatedRequest(req, API_CONTRACT.ACCEPT_FRIENDSHIP);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const friendshipService = req.app.services.friendshipService;
 
-    if (userId !== acceptorId)
-      return res.status(StatusCodes.BAD_REQUEST).json({
+    if (userId !== acceptorId) {
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t("friends.controllers.accept.unauthorized"),
       });
+    }
 
     const friendship = await friendshipService.acceptFriendship(
       requesterId,
       acceptorId,
     );
 
-    if (!friendship)
-      return res
-        .status(StatusCodes.CONFLICT)
-        .json({ message: req.t("friends.controllers.accept.not-found") });
+    if (!friendship) {
+      return respond(StatusCodes.CONFLICT, {
+        message: req.t("friends.controllers.accept.not-found"),
+      });
+    }
 
-    return res.status(StatusCodes.OK).json({ friendship });
+    return respond(StatusCodes.OK, {
+      friendship,
+    });
   } catch {
     next(new Error(req.t("friends.controllers.accept.failure")));
   }

@@ -1,9 +1,8 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { DeleteFriendshipDTO } from "@packages/schemas";
+import { DeleteFriendshipDTO, SuccessMessage } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
 
-import z from "zod";
 import { errors } from "../../utils/error-responses";
 import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
@@ -22,9 +21,7 @@ export const deleteFriendshipRoute = {
 
   responses: {
     [StatusCodes.OK]: response.json({
-      schema: z.object({
-        message: z.string(),
-      }),
+      schema: SuccessMessage,
       description: "Friendship deleted successfully",
     }),
 

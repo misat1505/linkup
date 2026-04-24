@@ -6,6 +6,8 @@ import {
   refreshTokenSignOptions,
 } from "@/config/jwt-cookie";
 import { TokenProcessor } from "@/lib/TokenProcessor";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -28,6 +30,9 @@ export const refreshTokenController = (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.REFRESH_TOKEN;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const { id: userId } = req.user!;
 
@@ -36,13 +41,16 @@ export const refreshTokenController = (
       env.REFRESH_TOKEN_SECRET,
       refreshTokenSignOptions,
     );
+
     const accessToken = TokenProcessor.encode(
       { userId },
       env.ACCESS_TOKEN_SECRET,
       accessTokenSignOptions,
     );
+
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res.status(StatusCodes.OK).json({
+
+    return respond(StatusCodes.OK, {
       message: req.t("auth.controllers.refresh.success"),
       accessToken,
     });

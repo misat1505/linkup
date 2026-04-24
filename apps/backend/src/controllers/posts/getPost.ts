@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -20,20 +21,25 @@ export const getPost = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_POST;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       params: { id },
-    } = extractValidatedRequest(req, API_CONTRACT.GET_POST);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const postService = req.app.services.postService;
 
     const post = await postService.getPost(id);
 
-    if (!post)
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("posts.controllers.get-single.not-found") });
+    if (!post) {
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("posts.controllers.get-single.not-found"),
+      });
+    }
 
-    return res.status(StatusCodes.OK).json({ post });
+    return respond(StatusCodes.OK, { post });
   } catch {
     next(new Error(req.t("posts.controllers.get-single.failure")));
   }

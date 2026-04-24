@@ -75,7 +75,7 @@ export class ChatService {
     chatId: Chat["id"];
     name: Chat["name"];
     file: Chat["photoURL"];
-  }): Promise<Chat | null> {
+  }): Promise<Chat> {
     const result = await this.prisma.chat.update({
       data: { name, photoURL: file },
       where: { id: chatId },

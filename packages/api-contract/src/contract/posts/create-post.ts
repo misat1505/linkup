@@ -1,6 +1,7 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { CreatePostDTO, Post } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
+import z from "zod";
 import { TAGS } from "../../utils/constants";
 import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
@@ -17,7 +18,7 @@ export const createPostRoute = {
 
   responses: {
     [StatusCodes.CREATED]: response.json({
-      schema: Post,
+      schema: z.object({ post: Post }),
       description: "Post created successfully",
     }),
   },

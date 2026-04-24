@@ -15,7 +15,7 @@ export const getUserPostsRoute = {
 
   responses: {
     [StatusCodes.OK]: response.json({
-      schema: z.array(Post),
+      schema: z.object({ posts: z.array(Post) }),
       description: "User's posts retrieved successfully",
     }),
   },

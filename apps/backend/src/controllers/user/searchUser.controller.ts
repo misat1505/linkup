@@ -1,5 +1,6 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -24,15 +25,19 @@ export const searchUserController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.SEARCH_USER;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       query: { term },
-    } = extractValidatedRequest(req, API_CONTRACT.SEARCH_USER);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userService = req.app.services.userService;
 
     const users = await userService.searchUsers(term);
 
-    return res.status(StatusCodes.OK).json({ users });
+    return respond(StatusCodes.OK, { users });
   } catch {
     next(new Error(req.t("users.controllers.search.failure")));
   }

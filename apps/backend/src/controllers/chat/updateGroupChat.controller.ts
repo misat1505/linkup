@@ -1,6 +1,7 @@
 import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { processAvatar } from "@/utils/processAvatar";
-import { API_CONTRACT } from "@packages/api-contract";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { v4 as uuidv4 } from "uuid";
@@ -22,27 +23,39 @@ export const updateGroupChatController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.UPDATE_GROUP_CHAT;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const {
       body: { name },
       params: { chatId },
-    } = extractValidatedRequest(req, API_CONTRACT.UPDATE_GROUP_CHAT);
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const { chatService, fileStorage } = req.app.services;
 
-    const isAuthorized = await chatService.isUserInChat({ chatId, userId });
-    if (!isAuthorized)
-      return res.status(StatusCodes.FORBIDDEN).json({
+    const isAuthorized = await chatService.isUserInChat({
+      chatId,
+      userId,
+    });
+
+    if (!isAuthorized) {
+      return respond(StatusCodes.FORBIDDEN, {
         message: req.t("chats.controllers.update-group-chat.unauthorized"),
       });
+    }
 
     const oldChat = await chatService.getChatById(chatId);
-    if (!oldChat || oldChat.type !== "GROUP")
-      return res.status(StatusCodes.BAD_REQUEST).json({
+
+    if (!oldChat || oldChat.type !== "GROUP") {
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t("chats.controllers.update-group-chat.bad-type"),
       });
+    }
 
     const newFilename = uuidv4();
+
     const file = await processAvatar(
       fileStorage,
       req.file,
@@ -60,7 +73,9 @@ export const updateGroupChatController = async (
       name: name || null,
     });
 
-    return res.status(StatusCodes.OK).json({ chat });
+    return respond(StatusCodes.OK, {
+      chat,
+    });
   } catch {
     next(new Error(req.t("chats.controllers.update-group-chat.failure")));
   }
