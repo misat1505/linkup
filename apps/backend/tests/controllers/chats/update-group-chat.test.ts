@@ -6,6 +6,11 @@ import { StatusCodes } from "http-status-codes";
 
 jest.mock("@/utils/processAvatar");
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("updateGroupChat", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -31,7 +36,7 @@ describe("updateGroupChat", () => {
 
     await ChatControllers.updateGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       chatId: "123",
       userId: "789",
@@ -55,7 +60,10 @@ describe("updateGroupChat", () => {
 
     await ChatControllers.updateGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       chatId: "123",
       userId: "789",
@@ -79,7 +87,10 @@ describe("updateGroupChat", () => {
 
     await ChatControllers.updateGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       chatId: "123",
       userId: "789",

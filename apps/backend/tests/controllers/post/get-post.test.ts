@@ -1,8 +1,17 @@
-import { StatusCodes } from "http-status-codes";
 import { PostControllers } from "@/controllers";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
+
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
 
 describe("getPost", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("retrieves post by ID successfully", async () => {
     const post = {
       id: "post-id",
@@ -18,7 +27,7 @@ describe("getPost", () => {
 
     await PostControllers.getPost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockPostService.getPost).toHaveBeenCalledWith(post.id);
   });
 
@@ -32,7 +41,10 @@ describe("getPost", () => {
 
     await PostControllers.getPost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.NOT_FOUND,
+      expect.anything(),
+    );
   });
 
   it("passes errors to error middleware", async () => {

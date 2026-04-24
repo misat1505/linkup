@@ -6,7 +6,16 @@ import { StatusCodes } from "http-status-codes";
 
 jest.mock("@/utils/updatePost");
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("updatePost", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   (handleMarkdownUpdate as jest.Mock).mockImplementation((_a, b, _c, _d) => b);
 
   it("updates post successfully", async () => {
@@ -34,7 +43,7 @@ describe("updatePost", () => {
 
     await PostControllers.updatePost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockPostService.getPost).toHaveBeenCalledWith("post-id");
     expect(mockPostService.updatePost).toHaveBeenCalledWith({
       id: "post-id",
@@ -58,7 +67,10 @@ describe("updatePost", () => {
 
     await PostControllers.updatePost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.NOT_FOUND,
+      expect.anything(),
+    );
   });
 
   it("returns 403 for unauthorized user", async () => {
@@ -82,7 +94,10 @@ describe("updatePost", () => {
 
     await PostControllers.updatePost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
   });
 
   it("passes errors to error middleware", async () => {

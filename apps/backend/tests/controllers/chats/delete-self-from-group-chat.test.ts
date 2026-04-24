@@ -3,6 +3,11 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("deleteUserFromGroupChat", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -20,7 +25,7 @@ describe("deleteUserFromGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       userId: "789",
@@ -42,7 +47,10 @@ describe("deleteUserFromGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).not.toHaveBeenCalled();
     expect(mockChatService.deleteFromChat).not.toHaveBeenCalled();
@@ -59,7 +67,10 @@ describe("deleteUserFromGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       userId: "789",

@@ -3,6 +3,11 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("addUserToGroupChat", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -24,7 +29,10 @@ describe("addUserToGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
+    );
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
@@ -51,12 +59,15 @@ describe("addUserToGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.addUserToChat).not.toHaveBeenCalled();
   });
 
-  it("returns 400 for non-member requester", async () => {
+  it("returns 403 for non-member requester", async () => {
     mockChatService.getChatType.mockResolvedValue("GROUP");
     mockChatService.isUserInChat.mockResolvedValueOnce(false);
 
@@ -67,7 +78,10 @@ describe("addUserToGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.addUserToChat).not.toHaveBeenCalled();
   });
@@ -84,7 +98,10 @@ describe("addUserToGroupChat", () => {
     const res = mockResponse();
     await ChatControllers.addUserToGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CONFLICT,
+      expect.anything(),
+    );
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
     expect(mockChatService.addUserToChat).not.toHaveBeenCalled();

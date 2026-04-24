@@ -7,6 +7,11 @@ import {
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("getPosts", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -27,7 +32,7 @@ describe("getPosts", () => {
 
     await PostControllers.getPosts(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(
       mockPostRecommendationService.getRecommendedPosts,
     ).toHaveBeenCalled();
@@ -48,7 +53,7 @@ describe("getPosts", () => {
 
     await PostControllers.getPosts(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(
       mockPostRecommendationService.getRecommendedPosts,
     ).toHaveBeenCalledWith("user-id", "post-id-5", 5);
@@ -86,7 +91,7 @@ describe("getPosts", () => {
 
     await PostControllers.getPosts(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(
       mockPostRecommendationService.getRecommendedPosts,
     ).toHaveBeenCalledWith("user-id", null, 5);

@@ -9,8 +9,6 @@ import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 import { v4 as uuidv4 } from "uuid";
 
-jest.mock("@/lib/FileStorage");
-
 async function createNewUser(app: Application) {
   const login = "valid_login";
   const password = "valid_password";
@@ -27,10 +25,6 @@ async function createNewUser(app: Application) {
 }
 
 describe("[GET] /files/:filename", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it("allows public access to user avatar", async () => {
     await testWithTransaction(async ({ app, seed }) => {
       const createdUser = await createNewUser(app);

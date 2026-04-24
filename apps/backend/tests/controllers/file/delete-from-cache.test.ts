@@ -8,6 +8,11 @@ import {
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("deleteFromCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
   mockFileService.isChatMessage.mockResolvedValue(true);
@@ -26,7 +31,7 @@ describe("deleteFromCache", () => {
 
     await FileControllers.deleteFromCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
 
     expect(mockFileStorage.deleteFile).toHaveBeenCalledTimes(1);
     expect(mockFileStorage.deleteFile).toHaveBeenCalledWith(

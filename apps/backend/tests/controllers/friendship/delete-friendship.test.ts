@@ -8,7 +8,16 @@ import {
 import { StatusCodes } from "http-status-codes";
 import { mockFriendship } from "./setup";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("deleteFriendship", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("deletes friendship successfully", async () => {
     mockFriendshipService.deleteFriendship.mockResolvedValue(true);
 
@@ -25,7 +34,7 @@ describe("deleteFriendship", () => {
 
     await FriendshipControllers.deleteFriendship(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
   });
 
   it("fails for non-participant user", async () => {
@@ -44,7 +53,10 @@ describe("deleteFriendship", () => {
 
     await FriendshipControllers.deleteFriendship(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
   });
 
   it("fails for non-existent friendship", async () => {
@@ -63,6 +75,9 @@ describe("deleteFriendship", () => {
 
     await FriendshipControllers.deleteFriendship(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.NOT_FOUND,
+      expect.anything(),
+    );
   });
 });

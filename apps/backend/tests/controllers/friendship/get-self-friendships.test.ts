@@ -8,7 +8,16 @@ import {
 import { StatusCodes } from "http-status-codes";
 import { mockFriendship } from "./setup";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("getUserFriendships", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("retrieves all user friendships", async () => {
     const mockFriendships = [
       {
@@ -27,6 +36,6 @@ describe("getUserFriendships", () => {
 
     await FriendshipControllers.getUserFriendships(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
   });
 });

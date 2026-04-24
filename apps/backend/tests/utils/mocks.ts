@@ -54,7 +54,7 @@ export const mockFileStorage = {
   copyFile: jest.fn(),
   deleteAllFilesInDirectory: jest.fn(),
   deleteFile: jest.fn(),
-  getSignedUrl: jest.fn(),
+  getSignedUrl: jest.fn().mockResolvedValue("https://signed-url.com/file"),
   listFiles: jest.fn(),
   uploadFile: jest.fn(),
 };

@@ -3,8 +3,17 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("getUserPosts", () => {
-  it("retrieves user’s posts successfully", async () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("retrieves user's posts successfully", async () => {
     const posts = [{ id: "post-id-1", content: "User Post 1" }];
     mockPostService.getUserPosts.mockResolvedValue(posts);
 
@@ -13,7 +22,7 @@ describe("getUserPosts", () => {
 
     await PostControllers.getUserPosts(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockPostService.getUserPosts).toHaveBeenCalledWith("user-id");
   });
 

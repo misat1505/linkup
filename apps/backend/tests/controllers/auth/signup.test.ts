@@ -1,8 +1,17 @@
-import { StatusCodes } from "http-status-codes";
 import { AuthControllers } from "@/controllers";
 import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
+
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
 
 describe("signupUser", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("signs up new user successfully", async () => {
     mockUserService.isLoginTaken.mockResolvedValue(false);
 
@@ -20,7 +29,10 @@ describe("signupUser", () => {
 
     await AuthControllers.signup(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
+    );
     expect(res.cookie).toHaveBeenCalled();
   });
 
@@ -41,7 +53,10 @@ describe("signupUser", () => {
 
     await AuthControllers.signup(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CONFLICT,
+      expect.anything(),
+    );
     expect(res.cookie).not.toHaveBeenCalled();
   });
 });

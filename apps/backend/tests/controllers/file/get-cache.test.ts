@@ -8,6 +8,11 @@ import {
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("getCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
   mockFileService.isChatMessage.mockResolvedValue(true);
@@ -17,7 +22,7 @@ describe("getCache", () => {
     jest.clearAllMocks();
   });
 
-  it("retrieves user’s cache files", async () => {
+  it("retrieves user's cache files", async () => {
     mockFileStorage.listFiles.mockResolvedValue(["url", "url2"]);
 
     const req = mockRequest({
@@ -31,7 +36,7 @@ describe("getCache", () => {
 
     await FileControllers.getCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
 
     expect(mockFileStorage.listFiles).toHaveBeenCalledTimes(1);
     expect(mockFileStorage.listFiles).toHaveBeenCalledWith(`cache/${"userId"}`);

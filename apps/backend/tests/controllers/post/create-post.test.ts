@@ -6,7 +6,16 @@ import { StatusCodes } from "http-status-codes";
 
 jest.mock("@/utils/updatePost");
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("createPost", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   (handleMarkdownUpdate as jest.Mock).mockImplementation((_a, b, _c, _d) => b);
 
   it("creates post successfully", async () => {
@@ -25,7 +34,10 @@ describe("createPost", () => {
 
     await PostControllers.createPost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
+    );
     expect(mockPostService.createPost).toHaveBeenCalledWith({
       content: postContent,
       authorId: "user-id",

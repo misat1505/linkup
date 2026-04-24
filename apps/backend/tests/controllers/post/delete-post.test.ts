@@ -3,7 +3,16 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("deletePost", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("deletes post successfully", async () => {
     const post = {
       id: "post-id",
@@ -22,7 +31,7 @@ describe("deletePost", () => {
 
     await PostControllers.deletePost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockPostService.getPost).toHaveBeenCalledWith(post.id);
     expect(mockPostService.deletePost).toHaveBeenCalledWith(post.id);
   });
@@ -38,7 +47,10 @@ describe("deletePost", () => {
 
     await PostControllers.deletePost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.NOT_FOUND,
+      expect.anything(),
+    );
   });
 
   it("returns 403 for unauthorized user", async () => {
@@ -57,6 +69,9 @@ describe("deletePost", () => {
 
     await PostControllers.deletePost(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
   });
 });

@@ -3,7 +3,16 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("getChatMessages", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("retrieves chat messages for authorized user", async () => {
     const messages = [{ id: "message1" }, { id: "message2" }];
     mockChatService.isUserInChat.mockResolvedValue(true);
@@ -16,7 +25,7 @@ describe("getChatMessages", () => {
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
   });
 
   it("blocks message access by non-chat member", async () => {
@@ -29,7 +38,10 @@ describe("getChatMessages", () => {
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
   });
 
   it("retrieves chat messages without responseId", async () => {
@@ -47,11 +59,11 @@ describe("getChatMessages", () => {
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.getChatMessages).toHaveBeenCalledWith(
       "someId",
       "message1",
-      5
+      5,
     );
   });
 
@@ -70,10 +82,10 @@ describe("getChatMessages", () => {
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.getPostChatMessages).toHaveBeenCalledWith(
       "someId",
-      "response123"
+      "response123",
     );
   });
 
@@ -92,10 +104,10 @@ describe("getChatMessages", () => {
     const res = mockResponse();
     await ChatControllers.getChatMessages(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.getPostChatMessages).toHaveBeenCalledWith(
       "someId",
-      null
+      null,
     );
   });
 

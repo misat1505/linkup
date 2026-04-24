@@ -6,9 +6,19 @@ import { StatusCodes } from "http-status-codes";
 
 jest.mock("@/utils/processAvatar");
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("createGroupChat", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("creates group chat with user included", async () => {
     const chat = { id: "chat1" };
+
     (processAvatar as jest.Mock).mockResolvedValue("file");
     mockChatService.createGroupChat.mockResolvedValue(chat);
 
@@ -21,10 +31,15 @@ describe("createGroupChat", () => {
         },
       },
     });
+
     const res = mockResponse();
+
     await ChatControllers.createGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
+    );
   });
 
   it("blocks group chat creation without user", async () => {
@@ -39,9 +54,14 @@ describe("createGroupChat", () => {
         },
       },
     });
+
     const res = mockResponse();
+
     await ChatControllers.createGroupChat(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
   });
 });

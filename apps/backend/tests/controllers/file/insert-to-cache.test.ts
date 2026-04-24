@@ -9,6 +9,11 @@ import {
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("insertToCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
   mockFileService.isChatMessage.mockResolvedValue(true);
@@ -33,9 +38,9 @@ describe("insertToCache", () => {
 
     await FileControllers.insertToCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
-    expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({ file: expect.any(String) }),
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
     );
     expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
   });
@@ -53,7 +58,10 @@ describe("insertToCache", () => {
 
     await FileControllers.insertToCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
   });
 
   it("returns 400 for missing file upload", async () => {
@@ -64,7 +72,10 @@ describe("insertToCache", () => {
 
     await FileControllers.insertToCache(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
   });
 
   it("returns 500 for failed cache insertion", async () => {

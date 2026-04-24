@@ -1,9 +1,18 @@
-import { StatusCodes } from "http-status-codes";
 import { AuthControllers } from "@/controllers";
 import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { seedProvider } from "@tests/utils/seedProvider";
+import { StatusCodes } from "http-status-codes";
+
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
 
 describe("updateUser", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("updates authenticated user profile", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUserByLogin.mockResolvedValue({
@@ -26,7 +35,7 @@ describe("updateUser", () => {
       const res = mockResponse();
       await AuthControllers.updateSelf(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
   });
 
@@ -53,7 +62,7 @@ describe("updateUser", () => {
 
       await AuthControllers.updateSelf(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
   });
 
@@ -80,7 +89,10 @@ describe("updateUser", () => {
 
       await AuthControllers.updateSelf(req, res, jest.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
+      expect(respond).toHaveBeenCalledWith(
+        StatusCodes.CONFLICT,
+        expect.anything(),
+      );
     });
   });
 });

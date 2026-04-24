@@ -4,7 +4,16 @@ import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 import { v4 as uuidv4 } from "uuid";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("loginUser", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("logs in user with valid credentials", async () => {
     const id = uuidv4();
     const salt = "salt";
@@ -30,7 +39,7 @@ describe("loginUser", () => {
 
     await AuthControllers.login(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(res.cookie).toHaveBeenCalled();
   });
 
@@ -44,7 +53,10 @@ describe("loginUser", () => {
 
     await AuthControllers.login(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.UNAUTHORIZED,
+      expect.anything(),
+    );
     expect(res.cookie).not.toHaveBeenCalled();
   });
 
@@ -69,7 +81,10 @@ describe("loginUser", () => {
 
     await AuthControllers.login(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.UNAUTHORIZED,
+      expect.anything(),
+    );
     expect(res.cookie).not.toHaveBeenCalled();
   });
 });

@@ -4,24 +4,28 @@ import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
+const contractKey = CONTRACT_KEYS.GET_FILE;
+
 const sendFileBuilder =
   (filename: string, req: Request, res: Response) =>
   async (
     validator: () => Promise<boolean>,
     errorMessage = req.t("files.controllers.get-file.default-error-message"),
   ) => {
+    const respond = buildValidatedResponder(res, contractKey);
+
     const fileStorage = req.app.services.fileStorage;
     const result = await validator();
 
     if (!result) {
-      return res.status(StatusCodes.FORBIDDEN).json({ message: errorMessage });
+      return respond(StatusCodes.FORBIDDEN, { message: errorMessage });
     }
 
     try {
       const url = await fileStorage.getSignedUrl(filename);
-      return res.status(StatusCodes.OK).json({ url });
+      return respond(StatusCodes.OK, { url });
     } catch {
-      return res.status(StatusCodes.NOT_FOUND).json({
+      return respond(StatusCodes.NOT_FOUND, {
         message: req.t("files.controllers.get-file.not-found"),
       });
     }
@@ -44,7 +48,6 @@ export const getFileController = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const contractKey = CONTRACT_KEYS.GET_FILE;
   const respond = buildValidatedResponder(res, contractKey);
 
   try {

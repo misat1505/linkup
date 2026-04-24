@@ -3,7 +3,16 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 
+const respond = jest.fn();
+jest.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: jest.fn(() => respond),
+}));
+
 describe("createReaction", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("creates message reaction", async () => {
     const newReactionData = "reaction";
     mockChatService.isUserInChat.mockResolvedValue(true);
@@ -23,7 +32,10 @@ describe("createReaction", () => {
     const res = mockResponse();
     await ChatControllers.createReaction(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
+    );
   });
 
   it("blocks reaction for message outside chat", async () => {
@@ -43,7 +55,10 @@ describe("createReaction", () => {
     const res = mockResponse();
     await ChatControllers.createReaction(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
   });
 
   it("blocks reaction by non-chat member", async () => {
@@ -62,6 +77,9 @@ describe("createReaction", () => {
     const res = mockResponse();
     await ChatControllers.createReaction(req, res, jest.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
   });
 });
