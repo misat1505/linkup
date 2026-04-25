@@ -13,25 +13,26 @@ export class ChatService {
     name: string | null,
     file: File | null,
   ): Promise<Chat> {
-    const formData = new FormData();
-
-    if (name) formData.append("name", name);
-    if (file) formData.append("file", file);
-
-    const response = await CHAT_API.put(`${chatId}`, formData);
-    return response.data.chat;
+    const res = await apiContractClient.updateGroupChat({
+      body: { name, file },
+      params: { chatId },
+    });
+    return res.chat;
   }
 
   static async leaveChat(chatId: Chat["id"]): Promise<void> {
-    await CHAT_API.delete(`${chatId}/users`);
+    await apiContractClient.deleteSelfFromGroupChat({ params: { chatId } });
   }
 
   static async addUserToChat(
     chatId: Chat["id"],
     userId: User["id"],
   ): Promise<UserInChat> {
-    const response = await CHAT_API.post(`${chatId}/users`, { userId });
-    return response.data.user;
+    const res = await apiContractClient.addUserToGroupChat({
+      body: { userId },
+      params: { chatId },
+    });
+    return res.user;
   }
 
   static async updateAlias(
@@ -39,7 +40,10 @@ export class ChatService {
     userId: User["id"],
     alias: UserInChat["alias"],
   ): Promise<void> {
-    await CHAT_API.put(`/${chatId}/users/${userId}/alias`, { alias });
+    await apiContractClient.updateUserAlias({
+      body: { alias },
+      params: { chatId, userId },
+    });
   }
 
   static async createReaction(
@@ -47,14 +51,15 @@ export class ChatService {
     reactionId: Reaction["id"],
     chatId: Chat["id"],
   ): Promise<Reaction> {
-    const response = await CHAT_API.post(`/${chatId}/reactions`, {
-      messageId,
-      reactionId,
+    const res = await apiContractClient.createReaction({
+      body: { messageId, reactionId },
+      params: { chatId },
     });
-    return response.data.reaction;
+    return res.reaction;
   }
 
   static async getReactions(): Promise<Reaction[]> {
+    // TODO: we don't have get reactions in api-contract
     const response = await CHAT_API.get("/reactions");
     return response.data.reactions;
   }
@@ -64,13 +69,10 @@ export class ChatService {
     user2: User["id"],
   ): Promise<Chat> {
     try {
-      const body = {
-        users: [user1, user2],
-      };
-
-      const response = await CHAT_API.post("/private", body);
-
-      return response.data.chat;
+      const res = await apiContractClient.createPrivateChat({
+        body: { users: [user1, user2] },
+      });
+      return res.chat;
     } catch (e) {
       if (e instanceof AxiosError) {
         if (e.response?.status === HttpStatusCode.Conflict) {
@@ -82,8 +84,8 @@ export class ChatService {
   }
 
   static async getChats(): Promise<Chat[]> {
-    const response = await CHAT_API.get("");
-    return response.data.chats;
+    const res = await apiContractClient.getSelfChats();
+    return res.chats;
   }
 
   static async getMessages(
@@ -91,16 +93,17 @@ export class ChatService {
     responseId?: Message["id"] | null,
     lastMessageId?: Message["id"] | null,
   ): Promise<Message[]> {
-    const params = new URLSearchParams();
-    if (responseId !== undefined)
-      params.set("responseId", responseId || "null");
-    if (lastMessageId !== undefined) {
-      params.set("lastMessageId", lastMessageId || "null");
-      params.set("limit", localStorage.getItem("messages-limit") || "20");
-    }
-
-    const response = await CHAT_API.get(`/${chatId}/messages`, { params });
-    return response.data.messages;
+    const respId = responseId === null ? "null" : responseId;
+    const lmId = lastMessageId === null ? "null" : lastMessageId;
+    const res = await apiContractClient.getChatMessages({
+      params: { chatId },
+      query: {
+        lastMessageId: lmId,
+        limit: Number(localStorage.getItem("messages-limit")) || 20,
+        responseId: respId,
+      },
+    });
+    return res.messages;
   }
 
   static async createMessage(
@@ -115,17 +118,13 @@ export class ChatService {
   }
 
   static async createGroupChat(payload: NewGroupChatFormType): Promise<Chat> {
-    const { users, file, name } = payload;
-    const formData = new FormData();
-
-    if (name) formData.append("name", name);
-    if (file) formData.append("file", file?.[0]);
-
-    users.forEach((user) => {
-      formData.append("users[]", user.id);
+    const res = await apiContractClient.createGroupChat({
+      body: {
+        name: payload.name ?? null,
+        file: payload.file?.[0],
+        users: payload.users.map((u) => u.id),
+      },
     });
-
-    const response = await CHAT_API.post(`/group`, formData);
-    return response.data.chat;
+    return res.chat;
   }
 }

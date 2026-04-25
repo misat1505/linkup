@@ -1,12 +1,9 @@
+import { apiContractClient } from "@/lib/apiContractClient";
 import { User } from "@packages/schemas";
-import { USER_API } from "./utils";
 
 export class UserService {
   static async search(term: string): Promise<User[]> {
-    const {
-      data: { users },
-    } = await USER_API.get(`/search?term=${term}`);
-
-    return users;
+    const res = await apiContractClient.searchUser({ query: { term } });
+    return res.users;
   }
 }

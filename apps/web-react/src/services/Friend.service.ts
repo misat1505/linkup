@@ -1,11 +1,11 @@
+import { apiContractClient } from "@/lib/apiContractClient";
 import { Friendship, User } from "@packages/schemas";
 import { AxiosError, HttpStatusCode } from "axios";
-import { FRIENDS_API } from "./utils";
 
 export class FriendService {
   static async getMyFriendships(): Promise<Friendship[]> {
-    const response = await FRIENDS_API.get("/");
-    return response.data.friendships.filter(
+    const res = await apiContractClient.getUserFriendships();
+    return res.friendships.filter(
       (fr: Friendship) => fr.requester.id !== fr.acceptor.id,
     );
   }
@@ -15,14 +15,10 @@ export class FriendService {
     acceptorId: User["id"],
   ): Promise<Friendship | null> {
     try {
-      const body = {
-        requesterId,
-        acceptorId,
-      };
-
-      const response = await FRIENDS_API.post("/", body);
-
-      return response.data.friendship;
+      const res = await apiContractClient.createFriendship({
+        body: { acceptorId, requesterId },
+      });
+      return res.friendship;
     } catch (e) {
       if (e instanceof AxiosError) {
         if (e.response?.status === HttpStatusCode.Conflict) {
@@ -37,27 +33,18 @@ export class FriendService {
     requesterId: User["id"],
     acceptorId: User["id"],
   ): Promise<Friendship> {
-    const body = {
-      requesterId,
-      acceptorId,
-    };
-    const response = await FRIENDS_API.post("/accept", body);
-    return response.data.friendship;
+    const res = await apiContractClient.acceptFriendship({
+      body: { acceptorId, requesterId },
+    });
+    return res.friendship;
   }
 
   static async deleteFriendship(
     requesterId: User["id"],
     acceptorId: User["id"],
   ): Promise<void> {
-    const body = {
-      requesterId,
-      acceptorId,
-    };
-    await FRIENDS_API.request({
-      url: "/",
-      method: "DELETE",
-      data: body,
+    await apiContractClient.deleteFriendship({
+      body: { acceptorId, requesterId },
     });
-    return;
   }
 }

@@ -10,7 +10,7 @@ import { response } from "../../utils/responses";
 const querySchema = z
   .object({
     responseId: z.string().nullable().optional(),
-    lastMessageId: z.string().optional(),
+    lastMessageId: z.string().nullable().optional(),
     limit: z.coerce.number().min(1).max(20).optional(),
   })
   .superRefine((data, ctx) => {
