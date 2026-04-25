@@ -7,10 +7,15 @@ import { TAGS } from "../../utils/constants";
 import { errors } from "../../utils/error-responses";
 import { response } from "../../utils/responses";
 
+const nullableMessageId = z
+  .union([Message.shape.id, z.literal("null")])
+  .nullable()
+  .optional();
+
 const querySchema = z
   .object({
-    responseId: Message.shape.id.nullable().optional(),
-    lastMessageId: Message.shape.id.nullable().optional(),
+    responseId: nullableMessageId,
+    lastMessageId: nullableMessageId,
     limit: z.coerce.number().min(1).max(20).optional(),
   })
   .superRefine((data, ctx) => {

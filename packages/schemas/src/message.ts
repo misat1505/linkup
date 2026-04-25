@@ -4,8 +4,8 @@ import { Reaction } from "./reaction";
 import { SCHEMA_REGISTRY } from "./registry";
 import { User } from "./user";
 
-const MessageId = z.union([z.uuid(), z.literal("null")]).openapi({
-  description: "UUID of the message or string 'null'",
+const MessageId = z.uuid().openapi({
+  description: "UUID of the message",
   example: "550e8400-e29b-41d4-a716-446655440000",
 });
 
