@@ -4,7 +4,7 @@
     "module": "node16",
     "moduleResolution": "node16",
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "declaration": true,
     "declarationDir": "dist",
     "types": ["jest"]
