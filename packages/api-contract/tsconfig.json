@@ -6,7 +6,8 @@
     "outDir": "dist",
     "rootDir": "src",
     "declaration": true,
-    "declarationDir": "dist"
+    "declarationDir": "dist",
+    "types": ["jest"]
   },
-  "include": ["src"]
+  "include": ["src", "tests"]
 }

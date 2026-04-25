@@ -1,2 +1,1 @@
-cd apps/backend
 pnpm test
