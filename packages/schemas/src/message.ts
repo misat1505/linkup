@@ -4,12 +4,14 @@ import { Reaction } from "./reaction";
 import { SCHEMA_REGISTRY } from "./registry";
 import { User } from "./user";
 
+const MessageId = z.union([z.uuid(), z.literal("null")]).openapi({
+  description: "UUID of the message or string 'null'",
+  example: "550e8400-e29b-41d4-a716-446655440000",
+});
+
 const MessageResponse = z
   .object({
-    id: z.uuid().openapi({
-      description: "Unique identifier of the message",
-      example: "550e8400-e29b-41d4-a716-446655440000",
-    }),
+    id: MessageId,
     content: z.string().nullable().openapi({
       description: "Content of the replied message",
       example: "Hello there!",
@@ -31,10 +33,7 @@ const MessageResponse = z
 
 export const Message = z
   .object({
-    id: z.uuid().openapi({
-      description: "Unique identifier of the message",
-      example: "550e8400-e29b-41d4-a716-446655440000",
-    }),
+    id: MessageId,
     content: z.string().nullable().openapi({
       description: "Message content",
       example: "Hi!",
