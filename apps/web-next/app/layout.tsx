@@ -1,12 +1,13 @@
+import Providers from "@/components/Providers";
+import ReportWebVitals from "@/components/ReportWebVitals";
+import BgGradient from "@/components/shared/BgGradient";
+import Navbar from "@/components/shared/navbar/Navbar";
+import { Toaster } from "@/components/ui/toaster";
+import { CONTRACT_KEYS } from "@packages/api-contract";
+import "github-markdown-css/github-markdown.css";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import BgGradient from "@/components/shared/BgGradient";
-import { Toaster } from "@/components/ui/toaster";
-import Providers from "@/components/Providers";
-import Navbar from "@/components/shared/navbar/Navbar";
-import "github-markdown-css/github-markdown.css";
-import ReportWebVitals from "@/components/ReportWebVitals";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log(CONTRACT_KEYS);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body

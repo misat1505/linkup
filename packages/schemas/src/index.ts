@@ -1,7 +1,4 @@
-import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
-import z from "zod";
-
-extendZodWithOpenApi(z);
+export * from "./utils/extend-zod-with-openapi";
 
 export * from "./chat";
 export * from "./dto";
