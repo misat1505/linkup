@@ -4,7 +4,7 @@ import { SCHEMA_REGISTRY } from "../registry";
 
 export const CreateMessageDTO = Message.pick({ content: true })
   .extend({
-    responseId: z.string().optional().openapi({
+    responseId: z.string().nullable().optional().openapi({
       description: "Optional message this is replying to",
       example: "msg_123",
     }),

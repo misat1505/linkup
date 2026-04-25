@@ -48,10 +48,9 @@ export const getChatMessagesController = async (
     let messages: Message[];
 
     if ("responseId" in query) {
-      messages = await chatService.getPostChatMessages(
-        chatId,
-        query.responseId!,
-      );
+      const responseId =
+        query.responseId! === "null" ? null : query.responseId!;
+      messages = await chatService.getPostChatMessages(chatId, responseId);
     } else {
       messages = await chatService.getChatMessages(
         chatId,
@@ -60,9 +59,7 @@ export const getChatMessagesController = async (
       );
     }
 
-    return respond(StatusCodes.OK, {
-      messages,
-    });
+    return respond(StatusCodes.OK, { messages });
   } catch {
     next(new Error(req.t("chats.controllers.get-messages.failure")));
   }

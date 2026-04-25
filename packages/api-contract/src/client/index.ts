@@ -1,77 +1,68 @@
-import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
+import { ClientBody } from "./types";
+
+import { AxiosInstance } from "axios";
 import { StatusCodes } from "http-status-codes";
-import z from "zod";
 import { API_CONTRACT, CONTRACT_KEYS } from "../contract";
-import { extractResponseSchema, ExtractSchema } from "../utils";
-
-type ExtractRequestBody<K extends keyof typeof API_CONTRACT> =
-  (typeof API_CONTRACT)[K] extends {
-    request: { body: { content: { "application/json": { schema: infer S } } } };
-  }
-    ? S extends z.ZodTypeAny
-      ? z.infer<S>
-      : never
-    : (typeof API_CONTRACT)[K] extends {
-          request: {
-            body: { content: { "multipart/form-data": { schema: infer S } } };
-          };
-        }
-      ? S extends z.ZodTypeAny
-        ? z.infer<S>
-        : never
-      : never;
-
-type ExtractQuery<K extends keyof typeof API_CONTRACT> =
-  (typeof API_CONTRACT)[K] extends {
-    request: { query: infer S };
-  }
-    ? S extends z.ZodTypeAny
-      ? z.infer<S>
-      : never
-    : never;
-
-type ExtractResponse<
-  K extends keyof typeof API_CONTRACT,
-  S extends keyof (typeof API_CONTRACT)[K]["responses"],
-> =
-  ExtractSchema<K, S> extends z.ZodTypeAny
-    ? z.infer<ExtractSchema<K, S>>
-    : never;
+import { extractResponseSchema } from "../utils";
+import { buildFormData } from "./build-form-data";
+import { ExtractResponse } from "./types";
 
 export class ApiContractClient {
-  api: AxiosInstance;
+  constructor(private readonly api: AxiosInstance) {}
 
-  constructor(options?: CreateAxiosDefaults) {
-    this.api = axios.create(options);
-  }
+  private async request<
+    TKey extends keyof typeof API_CONTRACT,
+    TStatus extends keyof (typeof API_CONTRACT)[TKey]["responses"],
+  >(
+    key: TKey,
+    status: TStatus,
+    {
+      body,
+      params,
+      query,
+    }: { body?: unknown; params?: Record<string, string>; query?: unknown },
+    asFormData = false,
+  ): Promise<ExtractResponse<TKey, TStatus>> {
+    const contract = API_CONTRACT[key];
 
-  async signup(
-    body: Omit<ExtractRequestBody<typeof CONTRACT_KEYS.SIGNUP>, "file"> & {
-      file?: File | null;
-    },
-  ): Promise<
-    ExtractResponse<typeof CONTRACT_KEYS.SIGNUP, typeof StatusCodes.CREATED>
-  > {
-    const formData = new FormData();
+    const url = params
+      ? contract.path.replace(/{(\w+)}/g, (_, k) => params[k] ?? `{${k}}`)
+      : contract.path;
 
-    const { file, ...rest } = body;
-
-    Object.entries(rest).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        formData.append(key, value as string);
-      }
+    const { data: responseData } = await this.api.request({
+      method: contract.method,
+      url,
+      data:
+        body !== undefined
+          ? asFormData
+            ? buildFormData(body as any)
+            : body
+          : undefined,
+      params: query,
     });
 
-    if (file) {
-      formData.append("file", file);
-    }
+    const schema = extractResponseSchema(key, status) as any;
+    return schema.parse(responseData);
+  }
 
-    const { data } = await this.api.post(API_CONTRACT.SIGNUP.path, formData);
+  login(args: ClientBody<typeof CONTRACT_KEYS.LOGIN>) {
+    return this.request(CONTRACT_KEYS.LOGIN, StatusCodes.OK, args);
+  }
 
-    const schema = extractResponseSchema(
-      CONTRACT_KEYS.SIGNUP,
+  signup(args: ClientBody<typeof CONTRACT_KEYS.SIGNUP>) {
+    return this.request(CONTRACT_KEYS.SIGNUP, StatusCodes.CREATED, args, true);
+  }
+
+  createMessage(args: ClientBody<typeof CONTRACT_KEYS.CREATE_MESSAGE>) {
+    return this.request(
+      CONTRACT_KEYS.CREATE_MESSAGE,
       StatusCodes.CREATED,
+      args,
+      true,
     );
-    return schema!.parse(data);
+  }
+
+  getSelfChats(args: ClientBody<typeof CONTRACT_KEYS.GET_SELF_CHATS>) {
+    return this.request(CONTRACT_KEYS.GET_SELF_CHATS, StatusCodes.OK, args);
   }
 }

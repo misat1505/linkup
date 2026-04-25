@@ -9,7 +9,7 @@ import { response } from "../../utils/responses";
 
 const querySchema = z
   .object({
-    responseId: z.string().optional(),
+    responseId: z.string().nullable().optional(),
     lastMessageId: z.string().optional(),
     limit: z.coerce.number().min(1).max(20).optional(),
   })

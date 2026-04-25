@@ -1,3 +1,4 @@
+import { apiContractClient } from "@/lib/apiContractClient";
 import {
   ChatFormType,
   NewGroupChatFormType,
@@ -106,15 +107,11 @@ export class ChatService {
     chatId: Chat["id"],
     payload: ChatFormType,
   ): Promise<Message> {
-    const formData = new FormData();
-    formData.append("content", payload.content);
-    if (payload.responseId) formData.append("responseId", payload.responseId);
-
-    payload.files?.forEach((file) => {
-      formData.append("files", file);
+    const res = await apiContractClient.createMessage({
+      params: { chatId },
+      body: payload,
     });
-    const response = await CHAT_API.post(`/${chatId}/messages`, formData);
-    return response.data.message;
+    return res.message;
   }
 
   static async createGroupChat(payload: NewGroupChatFormType): Promise<Chat> {
