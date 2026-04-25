@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -18,12 +17,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config) => {
-    config.resolve.alias["@packages"] = path.resolve(
-      __dirname,
-      "../../packages",
-    );
-    return config;
+  turbopack: {
+    resolveAlias: {
+      "@packages/api-contract": "../../packages/api-contract/src",
+      "@packages/schemas": "../../packages/schemas/src",
+    },
   },
 };
 
