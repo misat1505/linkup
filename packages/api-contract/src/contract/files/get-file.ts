@@ -1,5 +1,5 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { Filename } from "@packages/schemas";
+import { Chat, Filename, Post } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
@@ -10,8 +10,8 @@ import { response } from "../../utils/responses";
 export const FileQueryOpenApi = z
   .object({
     filter: z.enum(["avatar", "chat-message", "chat-photo", "cache", "post"]),
-    chat: z.uuid().optional(),
-    post: z.uuid().optional(),
+    chat: Chat.shape.id.optional(),
+    post: Post.shape.id.optional(),
   })
   .openapi({
     description: "File filter query",

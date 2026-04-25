@@ -1,5 +1,5 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { Message } from "@packages/schemas";
+import { Chat, Message } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
@@ -9,8 +9,8 @@ import { response } from "../../utils/responses";
 
 const querySchema = z
   .object({
-    responseId: z.string().nullable().optional(),
-    lastMessageId: z.string().nullable().optional(),
+    responseId: Message.shape.id.nullable().optional(),
+    lastMessageId: Message.shape.id.nullable().optional(),
     limit: z.coerce.number().min(1).max(20).optional(),
   })
   .superRefine((data, ctx) => {
@@ -53,7 +53,7 @@ export const getChatMessagesRoute = {
 
   request: {
     params: z.object({
-      chatId: z.string(),
+      chatId: Chat.shape.id,
     }),
 
     query: querySchema,

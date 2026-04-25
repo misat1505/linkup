@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
 
+import { Chat } from "@packages/schemas";
 import { errors } from "../../utils/error-responses";
 import { response } from "../../utils/responses";
 
@@ -14,7 +15,7 @@ export const deleteSelfFromGroupChatRoute = {
 
   request: {
     params: z.object({
-      chatId: z.string(),
+      chatId: Chat.shape.id,
     }),
   },
 

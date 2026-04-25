@@ -13,6 +13,7 @@ export const UserInChat = User.extend({
 export const Chat = z
   .object({
     id: z.uuid().openapi({
+      description: "Unique identifier of the chat",
       example: "550e8400-e29b-41d4-a716-446655440000",
     }),
     createdAt: z.coerce.date().openapi({

@@ -16,7 +16,7 @@ export const updateGroupChatRoute = {
 
   request: {
     params: z.object({
-      chatId: z.string(),
+      chatId: Chat.shape.id,
     }),
 
     body: request.multipart({

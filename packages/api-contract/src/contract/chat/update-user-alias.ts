@@ -1,5 +1,5 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { UpdateUserAliasDTO, UserInChat } from "@packages/schemas";
+import { Chat, UpdateUserAliasDTO, User, UserInChat } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
@@ -16,8 +16,8 @@ export const updateAliasRoute = {
 
   request: {
     params: z.object({
-      chatId: z.string(),
-      userId: z.string(),
+      chatId: Chat.shape.id,
+      userId: User.shape.id,
     }),
 
     body: request.json({

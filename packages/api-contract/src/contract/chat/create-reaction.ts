@@ -1,5 +1,5 @@
 import { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { CreateReactionDTO, Reaction } from "@packages/schemas";
+import { Chat, CreateReactionDTO, Reaction } from "@packages/schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import { TAGS } from "../../utils/constants";
@@ -16,7 +16,7 @@ export const createReactionRoute = {
 
   request: {
     params: z.object({
-      chatId: z.string(),
+      chatId: Chat.shape.id,
     }),
 
     body: request.json({

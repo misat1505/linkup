@@ -2,7 +2,7 @@ import { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import { TAGS } from "../../utils/constants";
 
-import { UserInChat } from "@packages/schemas";
+import { Chat, User, UserInChat } from "@packages/schemas";
 import { z } from "zod";
 
 import { errors } from "../../utils/error-responses";
@@ -17,12 +17,12 @@ export const addUserToGroupChatRoute = {
 
   request: {
     params: z.object({
-      chatId: z.string(),
+      chatId: Chat.shape.id,
     }),
 
     body: request.json({
       schema: z.object({
-        userId: z.string(),
+        userId: User.shape.id,
       }),
     }),
   },
