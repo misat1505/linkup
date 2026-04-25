@@ -1,5 +1,10 @@
 import { API_CONTRACT } from "@packages/api-contract";
-import { LOGIN_VALIDATION, SIGNUP_VALIDATION } from "@packages/schemas";
+import {
+  LOGIN_VALIDATION,
+  LoginDTO,
+  SIGNUP_VALIDATION,
+  SignupDTO,
+} from "@packages/schemas";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -22,7 +27,8 @@ export const useLoginFormSchema = () => {
   return schema;
 };
 
-export type LoginFormType = z.infer<ReturnType<typeof useLoginFormSchema>>;
+// CICD build requires not to infer types from ReturnType
+export type LoginFormType = LoginDTO;
 
 export const useSignupFormSchema = () => {
   const { t } = useTranslation();
@@ -75,4 +81,8 @@ export const useSignupFormSchema = () => {
   return schema;
 };
 
-export type SignupFormType = z.infer<ReturnType<typeof useSignupFormSchema>>;
+// CICD build requires not to infer types from ReturnType
+export type SignupFormType = Omit<SignupDTO, "file"> & {
+  confirmPassword: string;
+  file: File | null;
+};
