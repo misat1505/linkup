@@ -1,3 +1,4 @@
+import { User } from "@packages/schemas";
 import { z } from "zod";
 
 export const chatFormSchema = z
@@ -20,11 +21,7 @@ export const chatFormSchema = z
 
 export type ChatFormType = z.infer<typeof chatFormSchema>;
 
-const userSchema = z.object({
-  id: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  photoURL: z.string().nullable(),
+const userSchema = User.omit({ lastActive: true }).extend({
   lastActive: z.date(),
 });
 

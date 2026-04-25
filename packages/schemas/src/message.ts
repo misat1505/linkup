@@ -6,8 +6,9 @@ import { User } from "./user";
 
 const MessageResponse = z
   .object({
-    id: z.string().openapi({
-      example: "msg_123",
+    id: z.uuid().openapi({
+      description: "Unique identifier of the message",
+      example: "550e8400-e29b-41d4-a716-446655440000",
     }),
     content: z.string().nullable().openapi({
       description: "Content of the replied message",
@@ -30,8 +31,9 @@ const MessageResponse = z
 
 export const Message = z
   .object({
-    id: z.string().openapi({
-      example: "msg_456",
+    id: z.uuid().openapi({
+      description: "Unique identifier of the message",
+      example: "550e8400-e29b-41d4-a716-446655440000",
     }),
     content: z.string().nullable().openapi({
       description: "Message content",
