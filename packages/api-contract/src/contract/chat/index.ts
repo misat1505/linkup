@@ -5,6 +5,7 @@ import { createPrivateChatRoute } from "./create-private-chat";
 import { createReactionRoute } from "./create-reaction";
 import { deleteSelfFromGroupChatRoute } from "./delete-self-from-group-chat";
 import { getChatMessagesRoute } from "./get-chat-messages";
+import { getReactionsRoute } from "./get-reactions";
 import { getSelfChatsRoute } from "./get-self-chats";
 import { updateGroupChatRoute } from "./update-group-chat";
 import { updateAliasRoute } from "./update-user-alias";
@@ -17,6 +18,7 @@ export const chatsContract = {
   CREATE_REACTION: createReactionRoute,
   DELETE_SELF_FROM_GROUP_CHAT: deleteSelfFromGroupChatRoute,
   GET_CHAT_MESSAGES: getChatMessagesRoute,
+  GET_REACTIONS: getReactionsRoute,
   GET_SELF_CHATS: getSelfChatsRoute,
   UPDATE_GROUP_CHAT: updateGroupChatRoute,
   UDPATE_USER_ALIAS: updateAliasRoute,

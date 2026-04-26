@@ -5,7 +5,6 @@ import {
 } from "@/validators/chat.validators";
 import { Chat, Message, Reaction, User, UserInChat } from "@packages/schemas";
 import { AxiosError, HttpStatusCode } from "axios";
-import { CHAT_API } from "./utils";
 
 export class ChatService {
   static async updateChat(
@@ -59,9 +58,9 @@ export class ChatService {
   }
 
   static async getReactions(): Promise<Reaction[]> {
-    // TODO: we don't have get reactions in api-contract
-    const response = await CHAT_API.get("/reactions");
-    return response.data.reactions;
+    const res = await apiContractClient.getReactions();
+    // @ts-expect-error deprecated type
+    return res.reactions;
   }
 
   static async createPrivateChat(

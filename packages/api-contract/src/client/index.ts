@@ -121,6 +121,9 @@ export class ApiContractClient {
     if (args.query.responseId === null) args.query.responseId = "null";
     return this.request(CONTRACT_KEYS.GET_CHAT_MESSAGES, StatusCodes.OK, args);
   }
+  getReactions() {
+    return this.request(CONTRACT_KEYS.GET_REACTIONS, StatusCodes.OK, {});
+  }
   getSelfChats() {
     return this.request(CONTRACT_KEYS.GET_SELF_CHATS, StatusCodes.OK, {});
   }

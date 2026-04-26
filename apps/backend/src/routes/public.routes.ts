@@ -1,5 +1,7 @@
 import { env } from "@/config/env";
 import { reactions } from "@/config/reactions";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { resetDB } from "@tests/utils/setup";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -15,9 +17,13 @@ import { Routers } from "./routers";
 const publicRoutes = Router();
 
 publicRoutes.use(Routers.auth.public);
-publicRoutes.get("/chats/reactions", (req, res) => {
-  return res.status(StatusCodes.OK).json({ reactions });
-});
+publicRoutes[API_CONTRACT.GET_REACTIONS.method](
+  API_CONTRACT.GET_REACTIONS.path,
+  (req, res) => {
+    const respond = buildValidatedResponder(res, CONTRACT_KEYS.GET_REACTIONS);
+    return respond(StatusCodes.OK, { reactions });
+  },
+);
 
 if (env.NODE_ENV === "e2e") {
   publicRoutes.post("/reset-db", async (req, res, next) => {

@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "100mb",
+    },
+  },
   turbopack: {
     resolveAlias: {
       "@packages/api-contract": "../../packages/api-contract/src",

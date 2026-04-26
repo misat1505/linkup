@@ -1,20 +1,20 @@
 "use client";
 
+import { I18nText } from "@/components/shared/I18nText";
+import Tooltip from "@/components/shared/Tooltip";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { useAppContext } from "@/providers/AppProvider";
+import { useLanguageContext } from "@/providers/LanguageProvider";
+import Image from "next/image";
 import React, { useRef } from "react";
 import { FaFileAlt } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import { ClipLoader } from "react-spinners";
-import { cn } from "@/lib/utils";
-import { useLanguageContext } from "@/providers/LanguageProvider";
-import { useChatContext } from "../providers/ChatProvider";
 import { useChatFooterContext } from "../providers/ChatFooterProvider";
-import { Input } from "@/components/ui/input";
-import Tooltip from "@/components/shared/Tooltip";
-import { I18nText } from "@/components/shared/I18nText";
-import { useAppContext } from "@/providers/AppProvider";
+import { useChatContext } from "../providers/ChatProvider";
 import { ChatFooterUtils } from "../utils/chatFooterUtils";
-import Image from "next/image";
 
 export default function ChatFooter() {
   const { t } = useLanguageContext();
@@ -158,6 +158,8 @@ function FileDisplayerItem({ file }: { file: File }) {
         src={URL.createObjectURL(file)}
         className="h-full w-full object-cover"
         alt={file.name}
+        width={200}
+        height={200}
       />
     );
 
