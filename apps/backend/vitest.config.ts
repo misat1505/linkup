@@ -5,8 +5,8 @@ export default defineConfig({
   test: {
     environment: "node",
 
-    globalSetup: ["./tests/utils/jest.global-setup.ts"],
-    globalTeardown: ["./tests/utils/jest.global-teardown.ts"],
+    globalSetup: ["./tests/utils/test-global-setup.ts"],
+    globalTeardown: ["./tests/utils/test-global-teardown.ts"],
 
     pool: "vmThreads",
     maxWorkers: 8,
