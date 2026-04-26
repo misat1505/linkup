@@ -4,7 +4,7 @@
     "target": "esnext",
     "module": "node16",
     "moduleResolution": "node16",
-    "types": ["jest", "./src/types/express.d.ts"],
+    "types": ["./src/types/express.d.ts"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
