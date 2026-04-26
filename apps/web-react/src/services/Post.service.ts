@@ -35,7 +35,7 @@ export class PostService {
     limit: number,
   ): Promise<Post[]> {
     const res = await apiContractClient.getPosts({
-      query: { lastPostId: lastPostId ?? "null", limit },
+      query: { lastPostId, limit },
     });
     return res.posts;
   }

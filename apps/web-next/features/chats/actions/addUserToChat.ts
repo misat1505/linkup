@@ -1,21 +1,15 @@
 "use server";
 
-import { CHAT_API } from "@/utils/api";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { apiContractClient } from "@/lib/apiQueryClient";
 import { Chat, User, UserInChat } from "@packages/schemas";
-import { revalidatePath } from "next/cache";
 
 export async function addUserToChat(
   chatId: Chat["id"],
   userId: User["id"],
 ): Promise<UserInChat> {
-  const api = await serverSideRequestFactory({
-    base: CHAT_API,
-    include: { accessToken: true },
+  const res = await apiContractClient.addUserToGroupChat({
+    body: { userId },
+    params: { chatId },
   });
-
-  const response = await api.post(`${chatId}/users`, { userId });
-
-  revalidatePath(`/chats/${chatId}`);
-  return UserInChat.parse(response.data.user);
+  return res.user;
 }

@@ -1,7 +1,6 @@
 "use server";
 
-import { FRIENDS_API } from "@/utils/api";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { apiContractClient } from "@/lib/apiQueryClient";
 import { Friendship, User } from "@packages/schemas";
 import { revalidatePath } from "next/cache";
 
@@ -14,14 +13,10 @@ export async function acceptFriendship(
     acceptorId,
   };
 
-  const api = await serverSideRequestFactory({
-    base: FRIENDS_API,
-    include: {
-      accessToken: true,
-    },
+  const res = await apiContractClient.acceptFriendship({
+    body,
   });
 
-  const response = await api.post("/accept", body);
   revalidatePath("/friends");
-  return Friendship.parse(response.data.friendship);
+  return res.friendship;
 }

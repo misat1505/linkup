@@ -93,14 +93,12 @@ export class ChatService {
     responseId?: Message["id"] | null,
     lastMessageId?: Message["id"] | null,
   ): Promise<Message[]> {
-    const respId = responseId === null ? "null" : responseId;
-    const lmId = lastMessageId === null ? "null" : lastMessageId;
     const res = await apiContractClient.getChatMessages({
       params: { chatId },
       query: {
-        lastMessageId: lmId,
+        lastMessageId,
         limit: Number(localStorage.getItem("messages-limit")) || 20,
-        responseId: respId,
+        responseId,
       },
     });
     return res.messages;

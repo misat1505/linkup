@@ -1,6 +1,5 @@
 "use server";
-import { POSTS_API } from "@/utils/api";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { apiContractClient } from "@/lib/apiQueryClient";
 import { Post } from "@packages/schemas";
 import { revalidateTag } from "next/cache";
 
@@ -8,18 +7,10 @@ export async function updatePost({
   id,
   content,
 }: Pick<Post, "id" | "content">): Promise<Post> {
-  const api = await serverSideRequestFactory({
-    base: POSTS_API,
-    include: {
-      accessToken: true,
-    },
+  const res = await apiContractClient.updatePost({
+    params: { id },
+    body: { content },
   });
-
-  const response = await api.put(`/${id}`, { content });
-
-  const post = Post.parse(response.data.post);
-
-  revalidateTag(`post-${post.id}`, "max");
-
-  return post;
+  revalidateTag(`post-${res.post.id}`, "max");
+  return res.post;
 }

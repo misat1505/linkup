@@ -117,6 +117,8 @@ export class ApiContractClient {
     );
   }
   getChatMessages(args: ClientBody<typeof CONTRACT_KEYS.GET_CHAT_MESSAGES>) {
+    if (args.query.lastMessageId === null) args.query.lastMessageId = "null";
+    if (args.query.responseId === null) args.query.responseId = "null";
     return this.request(CONTRACT_KEYS.GET_CHAT_MESSAGES, StatusCodes.OK, args);
   }
   getSelfChats() {
@@ -182,6 +184,7 @@ export class ApiContractClient {
     return this.request(CONTRACT_KEYS.GET_POST, StatusCodes.OK, args);
   }
   getPosts(args: ClientBody<typeof CONTRACT_KEYS.GET_POSTS>) {
+    if (args.query.lastPostId === null) args.query.lastPostId = "null";
     return this.request(CONTRACT_KEYS.GET_POSTS, StatusCodes.OK, args);
   }
   getUserPosts() {
