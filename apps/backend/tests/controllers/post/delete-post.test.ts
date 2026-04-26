@@ -2,15 +2,16 @@ import { PostControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("deletePost", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("deletes post successfully", async () => {
@@ -29,7 +30,7 @@ describe("deletePost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.deletePost(req, res, jest.fn());
+    await PostControllers.deletePost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockPostService.getPost).toHaveBeenCalledWith(post.id);
@@ -37,7 +38,7 @@ describe("deletePost", () => {
   });
 
   it("returns 404 for non-existent post", async () => {
-    (mockPostService.getPost as jest.Mock).mockResolvedValue(null);
+    (mockPostService.getPost as Mock).mockResolvedValue(null);
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
@@ -45,7 +46,7 @@ describe("deletePost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.deletePost(req, res, jest.fn());
+    await PostControllers.deletePost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.NOT_FOUND,
@@ -67,7 +68,7 @@ describe("deletePost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.deletePost(req, res, jest.fn());
+    await PostControllers.deletePost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.FORBIDDEN,

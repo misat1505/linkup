@@ -1,9 +1,10 @@
+import { describe, expect, it, vi } from "vitest";
 import { ApiContractClient } from "../src";
 
 describe("ApiContractClient", () => {
   it("parses response using schema", async () => {
     const mockApi = {
-      request: jest.fn().mockResolvedValue({
+      request: vi.fn().mockResolvedValue({
         data: {
           user: {
             id: "550e8400-e29b-41d4-a716-446655440000",
@@ -25,7 +26,7 @@ describe("ApiContractClient", () => {
 
   it("throws on invalid response", async () => {
     const mockApi = {
-      request: jest.fn().mockResolvedValue({
+      request: vi.fn().mockResolvedValue({
         data: { user: { id: "bad-id" } },
       }),
     };

@@ -2,15 +2,16 @@ import { ChatControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("getChatMessages", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("retrieves chat messages for authorized user", async () => {
@@ -23,7 +24,7 @@ describe("getChatMessages", () => {
       validated: { params: { chatId: "someId" }, query: {} },
     });
     const res = mockResponse();
-    await ChatControllers.getChatMessages(req, res, jest.fn());
+    await ChatControllers.getChatMessages(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
   });
@@ -36,7 +37,7 @@ describe("getChatMessages", () => {
       validated: { params: { chatId: "someId" }, query: {} },
     });
     const res = mockResponse();
-    await ChatControllers.getChatMessages(req, res, jest.fn());
+    await ChatControllers.getChatMessages(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.FORBIDDEN,
@@ -57,7 +58,7 @@ describe("getChatMessages", () => {
       },
     });
     const res = mockResponse();
-    await ChatControllers.getChatMessages(req, res, jest.fn());
+    await ChatControllers.getChatMessages(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.getChatMessages).toHaveBeenCalledWith(
@@ -80,7 +81,7 @@ describe("getChatMessages", () => {
       },
     });
     const res = mockResponse();
-    await ChatControllers.getChatMessages(req, res, jest.fn());
+    await ChatControllers.getChatMessages(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.getPostChatMessages).toHaveBeenCalledWith(
@@ -102,7 +103,7 @@ describe("getChatMessages", () => {
       },
     });
     const res = mockResponse();
-    await ChatControllers.getChatMessages(req, res, jest.fn());
+    await ChatControllers.getChatMessages(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.getPostChatMessages).toHaveBeenCalledWith(
@@ -115,7 +116,7 @@ describe("getChatMessages", () => {
     const errorMessage = "Error in processing request";
     mockChatService.isUserInChat.mockRejectedValue(new Error(errorMessage));
 
-    const mockNextFunction = jest.fn();
+    const mockNextFunction = vi.fn();
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,

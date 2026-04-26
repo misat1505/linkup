@@ -3,6 +3,7 @@ import { TestHelpers } from "@tests/utils/helpers";
 import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
+import { describe, expect, it } from "vitest";
 
 describe("[GET] /posts/:id", () => {
   it("retrieves post by ID", async () => {

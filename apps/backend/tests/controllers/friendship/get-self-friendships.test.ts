@@ -6,16 +6,17 @@ import {
   mockResponse,
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockFriendship } from "./setup";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("getUserFriendships", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("retrieves all user friendships", async () => {
@@ -34,7 +35,7 @@ describe("getUserFriendships", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.getUserFriendships(req, res, jest.fn());
+    await FriendshipControllers.getUserFriendships(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
   });

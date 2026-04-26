@@ -4,6 +4,7 @@ import { mockFileStorage } from "@tests/utils/mocks";
 import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
+import { describe, expect, it } from "vitest";
 
 describe("[POST] /posts", () => {
   it("creates new post", async () => {

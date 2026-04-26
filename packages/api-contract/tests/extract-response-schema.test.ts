@@ -1,4 +1,5 @@
 import { StatusCodes } from "http-status-codes";
+import { describe, expect, it } from "vitest";
 import { CONTRACT_KEYS, extractResponseSchema } from "../src";
 
 describe("extractResponseSchema", () => {

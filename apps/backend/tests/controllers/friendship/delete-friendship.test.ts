@@ -6,16 +6,17 @@ import {
   mockResponse,
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockFriendship } from "./setup";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("deleteFriendship", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("deletes friendship successfully", async () => {
@@ -32,7 +33,7 @@ describe("deleteFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.deleteFriendship(req, res, jest.fn());
+    await FriendshipControllers.deleteFriendship(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
   });
@@ -51,7 +52,7 @@ describe("deleteFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.deleteFriendship(req, res, jest.fn());
+    await FriendshipControllers.deleteFriendship(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.FORBIDDEN,
@@ -73,7 +74,7 @@ describe("deleteFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.deleteFriendship(req, res, jest.fn());
+    await FriendshipControllers.deleteFriendship(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.NOT_FOUND,

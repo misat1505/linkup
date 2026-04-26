@@ -48,7 +48,11 @@ export function initializeTestCase(): { prisma: PrismaClient; seed: TestSeed } {
   const dbUrl = jsonData.database_url;
   seed = jsonData.seed;
 
-  _prisma = new PrismaClient({ datasources: { db: { url: dbUrl } } });
+  if (!_prisma) {
+    _prisma = new PrismaClient({
+      datasources: { db: { url: dbUrl + "?connection_limit=2" } },
+    });
+  }
 
   return { prisma: _prisma, seed };
 }

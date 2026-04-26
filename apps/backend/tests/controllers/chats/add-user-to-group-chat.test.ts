@@ -2,15 +2,16 @@ import { ChatControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("addUserToGroupChat", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("adds user to group chat successfully", async () => {
@@ -27,7 +28,7 @@ describe("addUserToGroupChat", () => {
       validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
-    await ChatControllers.addUserToGroupChat(req, res, jest.fn());
+    await ChatControllers.addUserToGroupChat(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.CREATED,
@@ -57,7 +58,7 @@ describe("addUserToGroupChat", () => {
       validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
-    await ChatControllers.addUserToGroupChat(req, res, jest.fn());
+    await ChatControllers.addUserToGroupChat(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.BAD_REQUEST,
@@ -76,7 +77,7 @@ describe("addUserToGroupChat", () => {
       validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
-    await ChatControllers.addUserToGroupChat(req, res, jest.fn());
+    await ChatControllers.addUserToGroupChat(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.FORBIDDEN,
@@ -96,7 +97,7 @@ describe("addUserToGroupChat", () => {
       validated: { body: { userId: "456" }, params: { chatId: "123" } },
     });
     const res = mockResponse();
-    await ChatControllers.addUserToGroupChat(req, res, jest.fn());
+    await ChatControllers.addUserToGroupChat(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.CONFLICT,

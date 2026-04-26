@@ -3,20 +3,21 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-jest.mock("@/utils/updatePost");
+vi.mock("@/utils/updatePost");
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("createPost", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  (handleMarkdownUpdate as jest.Mock).mockImplementation((_a, b, _c, _d) => b);
+  (handleMarkdownUpdate as Mock).mockImplementation((_a, b, _c, _d) => b);
 
   it("creates post successfully", async () => {
     const postContent = "This is a new post.";
@@ -32,7 +33,7 @@ describe("createPost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.createPost(req, res, jest.fn());
+    await PostControllers.createPost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.CREATED,
@@ -47,7 +48,7 @@ describe("createPost", () => {
 
   it("passes errors to error middleware", async () => {
     mockPostService.createPost.mockRejectedValue(new Error("Error"));
-    const mockNextFunction = jest.fn();
+    const mockNextFunction = vi.fn();
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,

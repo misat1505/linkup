@@ -6,15 +6,16 @@ import {
   mockResponse,
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("getPosts", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("retrieves list of posts successfully", async () => {
@@ -30,7 +31,7 @@ describe("getPosts", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.getPosts(req, res, jest.fn());
+    await PostControllers.getPosts(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(
@@ -51,7 +52,7 @@ describe("getPosts", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.getPosts(req, res, jest.fn());
+    await PostControllers.getPosts(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(
@@ -63,7 +64,7 @@ describe("getPosts", () => {
     mockPostRecommendationService.getRecommendedPosts.mockRejectedValue(
       new Error("Error"),
     );
-    const mockNextFunction = jest.fn();
+    const mockNextFunction = vi.fn();
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,
@@ -89,7 +90,7 @@ describe("getPosts", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.getPosts(req, res, jest.fn());
+    await PostControllers.getPosts(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(

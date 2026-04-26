@@ -1,15 +1,16 @@
 import { AuthControllers } from "@/controllers";
 import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("signupUser", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("signs up new user successfully", async () => {
@@ -27,7 +28,7 @@ describe("signupUser", () => {
     });
     const res = mockResponse();
 
-    await AuthControllers.signup(req, res, jest.fn());
+    await AuthControllers.signup(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.CREATED,
@@ -51,7 +52,7 @@ describe("signupUser", () => {
     });
     const res = mockResponse();
 
-    await AuthControllers.signup(req, res, jest.fn());
+    await AuthControllers.signup(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.CONFLICT,

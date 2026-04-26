@@ -2,15 +2,16 @@ import { ChatControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("createMessage", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("creates message for authorized user", async () => {
@@ -24,7 +25,7 @@ describe("createMessage", () => {
       files: [],
     });
     const res = mockResponse();
-    await ChatControllers.createMessage(req, res, jest.fn());
+    await ChatControllers.createMessage(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.CREATED,
@@ -41,7 +42,7 @@ describe("createMessage", () => {
       files: [],
     });
     const res = mockResponse();
-    await ChatControllers.createMessage(req, res, jest.fn());
+    await ChatControllers.createMessage(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.FORBIDDEN,
@@ -65,7 +66,7 @@ describe("createMessage", () => {
       files: [],
     });
     const res = mockResponse();
-    await ChatControllers.createMessage(req, res, jest.fn());
+    await ChatControllers.createMessage(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.BAD_REQUEST,

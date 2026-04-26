@@ -7,10 +7,11 @@ import {
   mockResponse,
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("deleteFromCache", () => {
@@ -19,7 +20,7 @@ describe("deleteFromCache", () => {
   mockFileService.isChatPhoto.mockResolvedValue(true);
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("deletes file from cache successfully", async () => {
@@ -29,7 +30,7 @@ describe("deleteFromCache", () => {
     });
     const res = mockResponse();
 
-    await FileControllers.deleteFromCache(req, res, jest.fn());
+    await FileControllers.deleteFromCache(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
 
@@ -42,7 +43,7 @@ describe("deleteFromCache", () => {
   it("returns 500 for failed cache deletion", async () => {
     mockFileStorage.deleteFile.mockRejectedValue(new Error());
 
-    const mockNextFunction = jest.fn();
+    const mockNextFunction = vi.fn();
 
     const req = mockRequest({
       user: { id: "userId" } as UserWithCredentials,

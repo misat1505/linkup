@@ -3,20 +3,21 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-jest.mock("@/utils/updatePost");
+vi.mock("@/utils/updatePost");
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("updatePost", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  (handleMarkdownUpdate as jest.Mock).mockImplementation((_a, b, _c, _d) => b);
+  (handleMarkdownUpdate as Mock).mockImplementation((_a, b, _c, _d) => b);
 
   it("updates post successfully", async () => {
     const post = {
@@ -41,7 +42,7 @@ describe("updatePost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.updatePost(req, res, jest.fn());
+    await PostControllers.updatePost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockPostService.getPost).toHaveBeenCalledWith("post-id");
@@ -65,7 +66,7 @@ describe("updatePost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.updatePost(req, res, jest.fn());
+    await PostControllers.updatePost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.NOT_FOUND,
@@ -92,7 +93,7 @@ describe("updatePost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.updatePost(req, res, jest.fn());
+    await PostControllers.updatePost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.FORBIDDEN,
@@ -108,7 +109,7 @@ describe("updatePost", () => {
     };
     mockPostService.getPost.mockResolvedValue(post);
     mockPostService.updatePost.mockRejectedValue(new Error("Error"));
-    const mockNextFunction = jest.fn();
+    const mockNextFunction = vi.fn();
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,

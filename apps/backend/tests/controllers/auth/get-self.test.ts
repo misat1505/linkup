@@ -2,15 +2,16 @@ import { AuthControllers } from "@/controllers";
 import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { seedProvider } from "@tests/utils/seedProvider";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("getUser", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("retrieves authenticated user by ID", async () => {
@@ -21,7 +22,7 @@ describe("getUser", () => {
       const req = mockRequest({ user });
       const res = mockResponse();
 
-      await AuthControllers.getSelf(req, res, jest.fn());
+      await AuthControllers.getSelf(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
@@ -35,7 +36,7 @@ describe("getUser", () => {
       const req = mockRequest({ user });
       const res = mockResponse();
 
-      await AuthControllers.getSelf(req, res, jest.fn());
+      await AuthControllers.getSelf(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(
         StatusCodes.NOT_FOUND,

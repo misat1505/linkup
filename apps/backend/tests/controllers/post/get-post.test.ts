@@ -1,15 +1,16 @@
 import { PostControllers } from "@/controllers";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("getPost", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("retrieves post by ID successfully", async () => {
@@ -25,7 +26,7 @@ describe("getPost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.getPost(req, res, jest.fn());
+    await PostControllers.getPost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockPostService.getPost).toHaveBeenCalledWith(post.id);
@@ -39,7 +40,7 @@ describe("getPost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.getPost(req, res, jest.fn());
+    await PostControllers.getPost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.NOT_FOUND,
@@ -49,7 +50,7 @@ describe("getPost", () => {
 
   it("passes errors to error middleware", async () => {
     mockPostService.getPost.mockRejectedValue(new Error("Error"));
-    const mockNextFunction = jest.fn();
+    const mockNextFunction = vi.fn();
 
     const req = mockRequest({
       validated: { params: { id: "post-id" } },

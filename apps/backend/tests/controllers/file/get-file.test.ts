@@ -7,10 +7,11 @@ import {
   mockResponse,
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("getFile", () => {
@@ -22,7 +23,7 @@ describe("getFile", () => {
   const mockPostId = "post-id";
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("avatar", () => {
@@ -38,7 +39,7 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(
         StatusCodes.NOT_FOUND,
@@ -58,7 +59,7 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
@@ -77,7 +78,7 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
@@ -94,7 +95,7 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
@@ -113,7 +114,7 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
@@ -130,7 +131,7 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(
         StatusCodes.NOT_FOUND,
@@ -152,7 +153,7 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
@@ -169,7 +170,7 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(
         StatusCodes.NOT_FOUND,

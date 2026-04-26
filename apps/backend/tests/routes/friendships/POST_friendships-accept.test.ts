@@ -3,6 +3,7 @@ import { TestHelpers } from "@tests/utils/helpers";
 import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
+import { describe, it } from "vitest";
 
 describe("[GET] /friendships/accept", () => {
   it("accepts pending friendship request", async () => {

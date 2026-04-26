@@ -2,15 +2,16 @@ import { ChatControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("createPrivateChat", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("creates private chat with user included", async () => {
@@ -27,7 +28,7 @@ describe("createPrivateChat", () => {
       },
     });
     const res = mockResponse();
-    await ChatControllers.createPrivateChat(req, res, jest.fn());
+    await ChatControllers.createPrivateChat(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.CREATED,
@@ -48,7 +49,7 @@ describe("createPrivateChat", () => {
       },
     });
     const res = mockResponse();
-    await ChatControllers.createPrivateChat(req, res, jest.fn());
+    await ChatControllers.createPrivateChat(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.CONFLICT,
@@ -66,7 +67,7 @@ describe("createPrivateChat", () => {
       },
     });
     const res = mockResponse();
-    await ChatControllers.createPrivateChat(req, res, jest.fn());
+    await ChatControllers.createPrivateChat(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.BAD_REQUEST,

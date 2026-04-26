@@ -4,6 +4,7 @@ import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 import { v4 as uuidv4 } from "uuid";
+import { describe, expect, it } from "vitest";
 
 describe("[POST] /chats/:chatId/users", () => {
   it("adds user to group chat", async () => {

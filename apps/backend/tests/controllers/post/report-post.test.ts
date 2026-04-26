@@ -3,15 +3,16 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { Prisma } from "@prisma/client";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("reportPost", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const postId = "123";
@@ -26,7 +27,7 @@ describe("reportPost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.reportPost(req, res, jest.fn());
+    await PostControllers.reportPost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockPostService.reportPost).toHaveBeenCalledWith(userId, postId);
@@ -46,7 +47,7 @@ describe("reportPost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.reportPost(req, res, jest.fn());
+    await PostControllers.reportPost(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(
       StatusCodes.CONFLICT,
@@ -56,7 +57,7 @@ describe("reportPost", () => {
 
   it("passes errors to error middleware", async () => {
     mockPostService.reportPost.mockRejectedValue(new Error("Unexpected error"));
-    const mockNextFunction = jest.fn();
+    const mockNextFunction = vi.fn();
 
     const req = mockRequest({
       user: { id: userId } as UserWithCredentials,

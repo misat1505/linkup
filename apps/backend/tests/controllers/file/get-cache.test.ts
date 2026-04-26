@@ -7,10 +7,11 @@ import {
   mockResponse,
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("getCache", () => {
@@ -19,7 +20,7 @@ describe("getCache", () => {
   mockFileService.isChatPhoto.mockResolvedValue(true);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("retrieves user's cache files", async () => {
@@ -34,7 +35,7 @@ describe("getCache", () => {
     });
     const res = mockResponse();
 
-    await FileControllers.getCache(req, res, jest.fn());
+    await FileControllers.getCache(req, res, vi.fn());
 
     expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
 

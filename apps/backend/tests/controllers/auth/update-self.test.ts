@@ -2,15 +2,16 @@ import { AuthControllers } from "@/controllers";
 import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { seedProvider } from "@tests/utils/seedProvider";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const respond = jest.fn();
-jest.mock("@/utils/validatedResponder", () => ({
-  buildValidatedResponder: jest.fn(() => respond),
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("updateUser", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("updates authenticated user profile", async () => {
@@ -33,7 +34,7 @@ describe("updateUser", () => {
         user: seed.users[0],
       });
       const res = mockResponse();
-      await AuthControllers.updateSelf(req, res, jest.fn());
+      await AuthControllers.updateSelf(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
@@ -60,7 +61,7 @@ describe("updateUser", () => {
       });
       const res = mockResponse();
 
-      await AuthControllers.updateSelf(req, res, jest.fn());
+      await AuthControllers.updateSelf(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
@@ -87,7 +88,7 @@ describe("updateUser", () => {
       });
       const res = mockResponse();
 
-      await AuthControllers.updateSelf(req, res, jest.fn());
+      await AuthControllers.updateSelf(req, res, vi.fn());
 
       expect(respond).toHaveBeenCalledWith(
         StatusCodes.CONFLICT,

@@ -2,6 +2,7 @@ import { User } from "@packages/schemas";
 import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
+import { describe, expect, it } from "vitest";
 
 describe("[POST] /auth/login", () => {
   it("logs in user with valid credentials", async () => {

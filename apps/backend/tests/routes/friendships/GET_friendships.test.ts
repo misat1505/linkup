@@ -2,6 +2,7 @@ import { Friendship } from "@packages/schemas";
 import { TestHelpers } from "@tests/utils/helpers";
 import { testWithTransaction } from "@tests/utils/testWithTransaction";
 import request from "supertest";
+import { describe, expect, it } from "vitest";
 
 describe("[GET] /friendships", () => {
   it("retrieves user friendships", async () => {

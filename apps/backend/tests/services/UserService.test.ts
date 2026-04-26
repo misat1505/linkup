@@ -3,6 +3,7 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { User } from "@packages/schemas";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
+import { describe, expect, it } from "vitest";
 import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("UserService", () => {

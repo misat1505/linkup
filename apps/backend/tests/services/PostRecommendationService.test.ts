@@ -2,10 +2,11 @@ import { PostRecommendationService } from "@/services/PostRecommendationService"
 import { PrismaClientOrTransaction } from "@/types/Prisma";
 import { Post, User } from "@packages/schemas";
 import { v4 as uuidv4 } from "uuid";
+import { describe, expect, it, vi } from "vitest";
 import { mockFriendshipService, mockPostService } from "../utils/mocks";
 import { testWithTransaction } from "../utils/testWithTransaction";
 
-jest.mock("@/services/PostService");
+vi.mock("@/services/PostService");
 
 const USER: User = {
   id: uuidv4(),
@@ -127,7 +128,7 @@ describe("PostRecommendationService", () => {
           createdAt: new Date(),
           author: FRIEND1,
         } as Post;
-        const fetchSpy = jest
+        const fetchSpy = vi
           .spyOn(postRecommendationService, "fetchFriendsPostsOnly")
           .mockResolvedValue([mockPost]);
 
@@ -152,7 +153,7 @@ describe("PostRecommendationService", () => {
           author: STRANGER,
           createdAt: new Date(),
         } as Post;
-        const fetchSpy = jest
+        const fetchSpy = vi
           .spyOn(postRecommendationService, "fetchNonFriendsPostsOnly")
           .mockResolvedValue([mockPost]);
 
@@ -223,10 +224,10 @@ describe("PostRecommendationService", () => {
           author: STRANGER,
           createdAt: new Date(),
         } as Post;
-        const getLastPostSpy = jest
+        const getLastPostSpy = vi
           .spyOn(postRecommendationService, "getLastPost")
           .mockResolvedValue(lastPost);
-        const getUserFriendsSpy = jest
+        const getUserFriendsSpy = vi
           .spyOn(postRecommendationService, "getUserFriends")
           .mockResolvedValue([FRIEND1.id]);
         const mockPosts = [
@@ -236,7 +237,7 @@ describe("PostRecommendationService", () => {
             createdAt: new Date(),
           } as Post,
         ];
-        const fetchNonFriendsSpy = jest
+        const fetchNonFriendsSpy = vi
           .spyOn(postRecommendationService, "fetchNonFriendsPostsOnly")
           .mockResolvedValue(mockPosts);
 
@@ -264,10 +265,10 @@ describe("PostRecommendationService", () => {
     it("returns only friends' posts when limit reached", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
-        const getLastPostSpy = jest
+        const getLastPostSpy = vi
           .spyOn(postRecommendationService, "getLastPost")
           .mockResolvedValue(null);
-        const getUserFriendsSpy = jest
+        const getUserFriendsSpy = vi
           .spyOn(postRecommendationService, "getUserFriends")
           .mockResolvedValue([FRIEND1.id]);
         const mockPosts: Post[] = [
@@ -283,10 +284,10 @@ describe("PostRecommendationService", () => {
             },
           },
         ];
-        const fetchFriendsSpy = jest
+        const fetchFriendsSpy = vi
           .spyOn(postRecommendationService, "fetchFriendsPostsOnly")
           .mockResolvedValue(mockPosts);
-        const fetchNonFriendsSpy = jest
+        const fetchNonFriendsSpy = vi
           .spyOn(postRecommendationService, "fetchNonFriendsPostsOnly")
           .mockResolvedValue([]);
 
@@ -314,10 +315,10 @@ describe("PostRecommendationService", () => {
     it("returns mixed friends and non-friends' posts", async () => {
       await testWithTransaction(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
-        const getLastPostSpy = jest
+        const getLastPostSpy = vi
           .spyOn(postRecommendationService, "getLastPost")
           .mockResolvedValue(null);
-        const getUserFriendsSpy = jest
+        const getUserFriendsSpy = vi
           .spyOn(postRecommendationService, "getUserFriends")
           .mockResolvedValue([FRIEND1.id]);
         const friendPost: Post = {
@@ -342,10 +343,10 @@ describe("PostRecommendationService", () => {
             type: "POST",
           },
         };
-        const fetchFriendsSpy = jest
+        const fetchFriendsSpy = vi
           .spyOn(postRecommendationService, "fetchFriendsPostsOnly")
           .mockResolvedValue([friendPost]);
-        const fetchNonFriendsSpy = jest
+        const fetchNonFriendsSpy = vi
           .spyOn(postRecommendationService, "fetchNonFriendsPostsOnly")
           .mockResolvedValue([strangerPost]);
 

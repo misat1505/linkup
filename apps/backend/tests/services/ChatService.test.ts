@@ -1,5 +1,6 @@
 import { ChatService } from "@/services/ChatService";
 import { Chat, Message, Reaction, UserInChat } from "@packages/schemas";
+import { describe, expect, it } from "vitest";
 import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("ChatService", () => {

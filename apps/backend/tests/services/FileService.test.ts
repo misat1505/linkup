@@ -1,4 +1,5 @@
 import { FileService } from "@/services/FileService";
+import { describe, expect, it } from "vitest";
 import { testWithTransaction } from "../utils/testWithTransaction";
 
 describe("FileSevice", () => {

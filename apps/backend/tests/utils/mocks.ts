@@ -1,72 +1,73 @@
 import { Request, Response } from "express";
+import { vi } from "vitest";
 
 export const mockPostRecommendationService = {
-  fetchFriendsPostsOnly: jest.fn(),
-  fetchNonFriendsPostsOnly: jest.fn(),
-  getLastPost: jest.fn(),
-  getRecommendedPosts: jest.fn(),
-  getUserFriends: jest.fn(),
+  fetchFriendsPostsOnly: vi.fn(),
+  fetchNonFriendsPostsOnly: vi.fn(),
+  getLastPost: vi.fn(),
+  getRecommendedPosts: vi.fn(),
+  getUserFriends: vi.fn(),
 };
 
 export const mockFileService = {
-  isChatMessage: jest.fn(),
-  isChatPhoto: jest.fn(),
-  isUserAvatar: jest.fn(),
+  isChatMessage: vi.fn(),
+  isChatPhoto: vi.fn(),
+  isUserAvatar: vi.fn(),
 };
 
 export const mockChatService = {
-  addUserToChat: jest.fn(),
-  createGroupChat: jest.fn(),
-  createMessage: jest.fn(),
-  createPrivateChat: jest.fn(),
-  createReactionToMessage: jest.fn(),
-  deleteFromChat: jest.fn(),
-  getChatById: jest.fn(),
-  getChatMessages: jest.fn(),
-  getChatType: jest.fn(),
-  getPostChatMessages: jest.fn(),
-  getPrivateChatByUserIds: jest.fn(),
-  getUserChats: jest.fn(),
-  isMessageInChat: jest.fn(),
-  isUserInChat: jest.fn(),
-  updateAlias: jest.fn(),
-  updateGroupChat: jest.fn(),
+  addUserToChat: vi.fn(),
+  createGroupChat: vi.fn(),
+  createMessage: vi.fn(),
+  createPrivateChat: vi.fn(),
+  createReactionToMessage: vi.fn(),
+  deleteFromChat: vi.fn(),
+  getChatById: vi.fn(),
+  getChatMessages: vi.fn(),
+  getChatType: vi.fn(),
+  getPostChatMessages: vi.fn(),
+  getPrivateChatByUserIds: vi.fn(),
+  getUserChats: vi.fn(),
+  isMessageInChat: vi.fn(),
+  isUserInChat: vi.fn(),
+  updateAlias: vi.fn(),
+  updateGroupChat: vi.fn(),
 };
 
 export const mockFriendshipService = {
-  acceptFriendship: jest.fn(),
-  createFriendship: jest.fn(),
-  deleteFriendship: jest.fn(),
-  getUserFriendships: jest.fn(),
+  acceptFriendship: vi.fn(),
+  createFriendship: vi.fn(),
+  deleteFriendship: vi.fn(),
+  getUserFriendships: vi.fn(),
 };
 
 export const mockPostService = {
-  createPost: jest.fn(),
-  deletePost: jest.fn(),
-  getPost: jest.fn(),
-  getUserPosts: jest.fn(),
-  reportPost: jest.fn(),
-  updatePost: jest.fn(),
-  sanitizePost: jest.fn(),
+  createPost: vi.fn(),
+  deletePost: vi.fn(),
+  getPost: vi.fn(),
+  getUserPosts: vi.fn(),
+  reportPost: vi.fn(),
+  updatePost: vi.fn(),
+  sanitizePost: vi.fn(),
 };
 
 export const mockFileStorage = {
-  copyFile: jest.fn(),
-  deleteAllFilesInDirectory: jest.fn(),
-  deleteFile: jest.fn(),
-  getSignedUrl: jest.fn().mockResolvedValue("https://signed-url.com/file"),
-  listFiles: jest.fn(),
-  uploadFile: jest.fn(),
+  copyFile: vi.fn(),
+  deleteAllFilesInDirectory: vi.fn(),
+  deleteFile: vi.fn(),
+  getSignedUrl: vi.fn().mockResolvedValue("https://signed-url.com/file"),
+  listFiles: vi.fn(),
+  uploadFile: vi.fn(),
 };
 
 export const mockUserService = {
-  searchUsers: jest.fn(),
-  updateUser: jest.fn(),
-  isLoginTaken: jest.fn(),
-  insertUser: jest.fn(),
-  getUserByLogin: jest.fn(),
-  getUser: jest.fn(),
-  updateLastActive: jest.fn(),
+  searchUsers: vi.fn(),
+  updateUser: vi.fn(),
+  isLoginTaken: vi.fn(),
+  insertUser: vi.fn(),
+  getUserByLogin: vi.fn(),
+  getUser: vi.fn(),
+  updateLastActive: vi.fn(),
 };
 
 export function mockRequest(data: Partial<Request> = {}): Request {
@@ -82,16 +83,16 @@ export function mockRequest(data: Partial<Request> = {}): Request {
         postRecommendationService: mockPostRecommendationService,
       },
     },
-    t: jest.fn(),
+    t: vi.fn(),
     ...data,
   } as unknown as Request;
 }
 
 export function mockResponse(): Response {
   const res = {} as Response;
-  res.status = jest.fn().mockReturnValue(res);
-  res.json = jest.fn().mockReturnValue(res);
-  res.cookie = jest.fn().mockReturnValue(res);
-  res.clearCookie = jest.fn().mockReturnValue(res);
+  res.status = vi.fn().mockReturnValue(res);
+  res.json = vi.fn().mockReturnValue(res);
+  res.cookie = vi.fn().mockReturnValue(res);
+  res.clearCookie = vi.fn().mockReturnValue(res);
   return res;
 }

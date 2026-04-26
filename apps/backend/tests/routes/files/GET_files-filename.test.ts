@@ -8,6 +8,7 @@ import { Application } from "express";
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 import { v4 as uuidv4 } from "uuid";
+import { describe, it } from "vitest";
 
 async function createNewUser(app: Application) {
   const login = "valid_login";
