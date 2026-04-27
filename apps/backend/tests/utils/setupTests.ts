@@ -17,6 +17,7 @@ export async function startContainer() {
   if (container) return;
 
   container = await new PostgreSqlContainer()
+    .withReuse()
     .withCommand([
       "postgres",
       "-c",
@@ -31,7 +32,7 @@ export async function startContainer() {
   const dbUrl = container.getConnectionUri();
   process.env.DATABASE_URL = dbUrl;
 
-  execSync("pnpm exec prisma migrate deploy", {
+  execSync("pnpm exec prisma migrate reset --force", {
     env: { ...process.env, DATABASE_URL: dbUrl },
     stdio: "inherit",
   });

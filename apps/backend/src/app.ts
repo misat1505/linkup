@@ -20,13 +20,15 @@ const app = express();
 
 const server = http.createServer(app);
 
-initializeSocket(server);
+if (env.NODE_ENV !== "test") {
+  initializeSocket(server);
+}
 
 app.services = initializeServices(prisma);
 
 const isSentryActive = !!env.SENTRY_DSN;
 
-if (isSentryActive) {
+if (isSentryActive && env.NODE_ENV !== "test") {
   Sentry.init({
     dsn: env.SENTRY_DSN,
     tracesSampleRate: 1.0,

@@ -4,7 +4,7 @@ import { Post, User } from "@packages/schemas";
 import { v4 as uuidv4 } from "uuid";
 import { describe, expect, it, vi } from "vitest";
 import { mockFriendshipService, mockPostService } from "../utils/mocks";
-import { testWithTransaction } from "../utils/testWithTransaction";
+import { transactionProvider } from "../utils/transactionProvider";
 
 vi.mock("@/services/PostService");
 
@@ -55,7 +55,7 @@ describe("PostRecommendationService", () => {
 
   describe("getLastPost", () => {
     it("returns null for null postId", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const result = await postRecommendationService.getLastPost(null);
         expect(result).toBeNull();
@@ -64,7 +64,7 @@ describe("PostRecommendationService", () => {
     });
 
     it("retrieves post by ID", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockPost = {
           id: "post1",
@@ -80,7 +80,7 @@ describe("PostRecommendationService", () => {
     });
 
     it("throws error for non-existent post", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         mockPostService.getPost.mockResolvedValue(null);
 
@@ -93,7 +93,7 @@ describe("PostRecommendationService", () => {
 
   describe("getUserFriends", () => {
     it("retrieves friend IDs", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockFriendships = [
           { status: "ACCEPTED", acceptor: USER, requester: FRIEND1 },
@@ -110,7 +110,7 @@ describe("PostRecommendationService", () => {
     });
 
     it("returns empty array for no accepted friendships", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         mockFriendshipService.getUserFriendships.mockResolvedValue([]);
         const result = await postRecommendationService.getUserFriends(USER.id);
@@ -121,7 +121,7 @@ describe("PostRecommendationService", () => {
 
   describe("fetchFriendsPostsOnly", () => {
     it("fetches friends' posts with lastPost filter", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockPost = {
           id: "post1",
@@ -146,7 +146,7 @@ describe("PostRecommendationService", () => {
 
   describe("fetchNonFriendsPostsOnly", () => {
     it("fetches non-friends' posts with deadline", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const mockPost = {
           id: "post1",
@@ -217,7 +217,7 @@ describe("PostRecommendationService", () => {
 
   describe("getRecommendedPosts", () => {
     it("returns only non-friends' posts for non-friend lastPost", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const lastPost = {
           id: "post1",
@@ -263,7 +263,7 @@ describe("PostRecommendationService", () => {
     });
 
     it("returns only friends' posts when limit reached", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const getLastPostSpy = vi
           .spyOn(postRecommendationService, "getLastPost")
@@ -313,7 +313,7 @@ describe("PostRecommendationService", () => {
     });
 
     it("returns mixed friends and non-friends' posts", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postRecommendationService = _initService(tx);
         const getLastPostSpy = vi
           .spyOn(postRecommendationService, "getLastPost")
