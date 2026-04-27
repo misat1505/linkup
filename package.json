@@ -7,12 +7,12 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "concurrently \"pnpm --filter backend start\" \"pnpm --filter web-react preview\" \"pnpm --filter web-next start\"",
-    "dev": "concurrently \"pnpm --filter backend dev\" \"pnpm --filter web-react dev\" \"pnpm --filter web-next dev\"",
-    "test": "concurrently \"pnpm --filter backend test\" \"pnpm --filter @packages/api-contract test\"",
+    "start": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend start\" \"pnpm --filter web-react preview\" \"pnpm --filter web-next start\"",
+    "dev": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend dev\" \"pnpm --filter web-react dev\" \"pnpm --filter web-next dev\"",
+    "test": "concurrently -n \"backend,@packages/api-contract\" -c \"green,blue\" \"pnpm --filter backend test\" \"pnpm --filter @packages/api-contract test\"",
     "build": "turbo build",
     "build:packages": "turbo run build --filter=@packages/*",
-    "lint": "concurrently \"pnpm --filter backend lint\" \"pnpm --filter web-react lint\" \"pnpm --filter web-next lint\"",
+    "lint": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend lint\" \"pnpm --filter web-react lint\" \"pnpm --filter web-next lint\"",
     "prepare": "husky"
   },
   "lint-staged": {
