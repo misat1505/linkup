@@ -3,6 +3,7 @@ import { API_URL } from "./constants";
 
 export type Filter =
   | { type: "avatar" }
+  | { type: "cache" }
   | { type: "chat-photo"; id: Chat["id"] }
   | { type: "chat-message"; id: Chat["id"] };
 

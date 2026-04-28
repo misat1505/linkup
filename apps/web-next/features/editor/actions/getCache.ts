@@ -1,9 +1,9 @@
 "use server";
 
 import { apiContractClient } from "@/lib/apiQueryClient";
-import { API_URL } from "@/utils/constants";
+import { buildFileURL } from "@/utils/buildFileURL";
 
 export async function getCache(): Promise<string[]> {
   const res = await apiContractClient.getCache();
-  return res.files.map((file) => `${API_URL}/files/${file}?filter=cache`);
+  return res.files.map((file) => buildFileURL(file, { type: "cache" }));
 }

@@ -1,6 +1,6 @@
-import { API_URL } from "@/constants";
 import { apiContractClient } from "@/lib/apiContractClient";
 import { getAccessToken } from "@/lib/token";
+import { buildFileURL } from "@/utils/buildFileURL";
 
 export class FileService {
   static async downloadFile(
@@ -30,7 +30,7 @@ export class FileService {
 
   static async getCache(): Promise<string[]> {
     const res = await apiContractClient.getCache();
-    return res.files.map((file) => `${API_URL}/files/${file}?filter=cache`);
+    return res.files.map((file) => buildFileURL(file, { type: "cache" }));
   }
 
   static async removeFromCache(url: string): Promise<void> {
@@ -43,6 +43,6 @@ export class FileService {
 
   static async insertFileToCache(file: File): Promise<string> {
     const res = await apiContractClient.insertToCache({ body: { file } });
-    return `${API_URL}/files/${res.file}?filter=cache`;
+    return buildFileURL(res.file, { type: "cache" });
   }
 }
