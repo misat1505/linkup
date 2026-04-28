@@ -1,8 +1,20 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { API_URL } from "./constants";
+import { getLanguageCookie } from "./getLanguageCookie";
 
 function createAPIInstance(config: AxiosRequestConfig): AxiosInstance {
   const instance = axios.create(config);
+
+  instance.interceptors.request.use(
+    async (config) => {
+      config.headers["Accept-Language"] = (await getLanguageCookie()) ?? "en";
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    },
+  );
+
   return instance;
 }
 

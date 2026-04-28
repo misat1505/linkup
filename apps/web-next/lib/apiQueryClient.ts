@@ -1,6 +1,7 @@
 import { getAccessTokenFromCookie } from "@/features/auth/utils/getAccessTokenFromCookie";
 import { getRefreshTokenFromCookie } from "@/features/auth/utils/getRefreshTokenFromCookie";
 import { API_URL } from "@/utils/constants";
+import { getLanguageCookie } from "@/utils/getLanguageCookie";
 import { ApiContractClient } from "@packages/api-contract";
 import axios from "axios";
 
@@ -16,6 +17,9 @@ instance.interceptors.request.use(
 
     const refreshToken = await getRefreshTokenFromCookie();
     config.headers["cookie"] = `refresh-token=${refreshToken}`;
+
+    const language = await getLanguageCookie();
+    config.headers["Accept-Language"] = language;
     return config;
   },
   (error) => {

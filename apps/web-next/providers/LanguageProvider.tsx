@@ -1,6 +1,8 @@
 "use client";
 
+import { setLanguageCookie } from "@/actions/setLanguageCookie";
 import { Translation } from "@/i18n/types";
+import { getCookieValue } from "@/utils/getCookieValue";
 import {
   createContext,
   ReactNode,
@@ -29,7 +31,7 @@ export type TVars = Record<string, string>;
 type LanguageContextProps = {
   locale: string;
   t: TranslateFn;
-  changeLanguage: (lng: string) => void;
+  changeLanguage: (lng: string) => Promise<void>;
   isLoading: boolean;
 };
 
@@ -73,14 +75,14 @@ export const LanguageProvider = ({ children }: Props) => {
     }
   };
 
-  const changeLanguage = (lng: string) => {
-    localStorage.setItem("lang", lng);
+  const changeLanguage = async (lng: string) => {
+    await setLanguageCookie(lng);
     setLocale(lng);
     loadTranslations(lng);
   };
 
   useEffect(() => {
-    const storedLang = localStorage.getItem("lang") || "en";
+    const storedLang = getCookieValue("lang") || "en";
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocale(storedLang);
     loadTranslations(storedLang).then(() => setIsLoading(false));
