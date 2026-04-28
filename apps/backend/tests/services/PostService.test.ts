@@ -2,12 +2,13 @@ import { PostService } from "@/services/PostService";
 import { Post } from "@packages/schemas";
 import { Prisma } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
-import { testWithTransaction } from "../utils/testWithTransaction";
+import { describe, expect, it } from "vitest";
+import { transactionProvider } from "../utils/transactionProvider";
 
 describe("PostService", () => {
   describe("createPost", () => {
     it("creates new post", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const content = "This is a new post";
         const authorId = seed.users[0].id;
@@ -24,7 +25,7 @@ describe("PostService", () => {
 
   describe("getUserPosts", () => {
     it("retrieves posts for specific user", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const userId = seed.users[0].id;
 
@@ -41,7 +42,7 @@ describe("PostService", () => {
 
   describe("getPost", () => {
     it("retrieves post by ID", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const postId = seed.posts[0].id;
         const result = await postService.getPost(postId);
@@ -53,7 +54,7 @@ describe("PostService", () => {
     });
 
     it("returns null for non-existent post ID", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postService = new PostService(tx);
         const result = await postService.getPost("non-existent-id");
 
@@ -64,7 +65,7 @@ describe("PostService", () => {
 
   describe("updatePost", () => {
     it("updates existing post", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const postId = seed.posts[0].id;
         const newContent = "Updated post content";
@@ -80,7 +81,7 @@ describe("PostService", () => {
     });
 
     it("returns null for non-existent post update", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const postService = new PostService(tx);
         const result = await postService.updatePost({
           id: "non-existent-id",
@@ -94,7 +95,7 @@ describe("PostService", () => {
 
   describe("deletePost", () => {
     it("deletes existing post", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const postId = seed.posts[0].id;
 
@@ -107,7 +108,7 @@ describe("PostService", () => {
 
   describe("reportPost", () => {
     it("reports post successfully", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         await postService.reportPost(seed.users[0].id, seed.posts[0].id);
         expect(true).toBeTruthy();
@@ -115,7 +116,7 @@ describe("PostService", () => {
     });
 
     it("throws error for duplicate post report", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const postService = new PostService(tx);
         const userId = seed.users[0].id;
         const postId = seed.posts[0].id;

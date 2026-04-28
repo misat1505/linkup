@@ -1,6 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { Prisma } from "@prisma/client";
-import { PostId } from "@/validators/shared.validators";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -16,60 +18,36 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling and forwarding localized error messages.
  *
  * @source
- *
- * @swagger
- * /posts/{id}/report:
- *   post:
- *     summary: Report a post
- *     tags: [Posts]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the post to report
- *     responses:
- *       200:
- *         description: Post reported successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *       400:
- *         description: Post reported successfully.
- *       409:
- *         description: This post had been previously reported by you.
- *       500:
- *         description: Couldn't report post.
  */
 export const reportPost = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.REPORT_POST;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
-    const { id } = req.validated!.params! as PostId;
+    const {
+      params: { id },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const postService = req.app.services.postService;
 
     await postService.reportPost(userId, id);
 
-    res
-      .status(StatusCodes.OK)
-      .json({ message: req.t("posts.controllers.report.success") });
+    return respond(StatusCodes.OK, {
+      message: req.t("posts.controllers.report.success"),
+    });
   } catch (e) {
     const violatedUniqueConstraint =
       e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002";
 
     if (violatedUniqueConstraint) {
-      res
-        .status(StatusCodes.CONFLICT)
-        .json({ message: req.t("posts.controllers.report.already-reported") });
-      return;
+      return respond(StatusCodes.CONFLICT, {
+        message: req.t("posts.controllers.report.already-reported"),
+      });
     }
 
     next(new Error(req.t("posts.controllers.report.failure")));

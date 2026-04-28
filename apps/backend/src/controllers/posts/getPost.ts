@@ -1,5 +1,7 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
-import { PostId } from "@/validators/shared.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,52 +15,31 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts/{id}:
- *   get:
- *     summary: Get a post by its ID
- *     tags: [Posts]
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: The ID of the post to retrieve
- *         schema:
- *           type: string
- *           example: "d0683f62-4c30-4eef-9578-7eac5c814c47"
- *     responses:
- *       200:
- *         description: Post retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 post:
- *                   $ref: '#/components/schemas/Post'
- *       404:
- *         description: Post not found
- *       500:
- *         description: Server error, could not retrieve post
  */
 export const getPost = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_POST;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
-    const { id } = req.validated!.params! as PostId;
+    const {
+      params: { id },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const postService = req.app.services.postService;
 
     const post = await postService.getPost(id);
 
-    if (!post)
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("posts.controllers.get-single.not-found") });
+    if (!post) {
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("posts.controllers.get-single.not-found"),
+      });
+    }
 
-    return res.status(StatusCodes.OK).json({ post });
+    return respond(StatusCodes.OK, { post });
   } catch {
     next(new Error(req.t("posts.controllers.get-single.failure")));
   }

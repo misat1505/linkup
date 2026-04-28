@@ -1,7 +1,6 @@
 "use server";
 
-import { CHAT_API } from "@/utils/api";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { apiContractClient } from "@/lib/apiQueryClient";
 import { Chat, Message, Reaction } from "@packages/schemas";
 
 export async function createReaction(
@@ -9,14 +8,9 @@ export async function createReaction(
   reactionId: Reaction["id"],
   chatId: Chat["id"],
 ): Promise<Reaction> {
-  const api = await serverSideRequestFactory({
-    base: CHAT_API,
-    include: { accessToken: true },
+  const res = await apiContractClient.createReaction({
+    body: { messageId, reactionId },
+    params: { chatId },
   });
-
-  const response = await api.post(`/${chatId}/reactions`, {
-    messageId,
-    reactionId,
-  });
-  return Reaction.parse(response.data.reaction);
+  return res.reaction;
 }

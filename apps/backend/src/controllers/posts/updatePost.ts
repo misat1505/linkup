@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
-import { UpdatePostDTO } from "@/validators/posts/posts.validators";
-import { PostId } from "@/validators/shared.validators";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -18,69 +19,37 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts/{id}:
- *   put:
- *     summary: Update an existing post by ID
- *     tags: [Posts]
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: The ID of the post to update.
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *                 description: The updated content of the post
- *                 example: "This is the updated content of the post."
- *     responses:
- *       200:
- *         description: Post updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 post:
- *                   $ref: '#/components/schemas/Post'
- *       403:
- *         description: Unauthorized, user cannot edit this post
- *       404:
- *         description: Post not found
- *       500:
- *         description: Server error, couldn't update post
  */
 export const updatePost = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.UPDATE_POST;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
-    const { id } = req.validated!.params! as PostId;
+    const {
+      body: { content },
+      params: { id },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
-    const { content } = req.validated!.body! as UpdatePostDTO;
     const { postService, fileStorage } = req.app.services;
 
     const post = await postService.getPost(id);
 
-    if (!post)
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("posts.controllers.update.not-found") });
+    if (!post) {
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("posts.controllers.update.not-found"),
+      });
+    }
 
-    if (post.author.id !== userId)
-      return res
-        .status(StatusCodes.FORBIDDEN)
-        .json({ message: req.t("posts.controllers.update.unauthorized") });
+    if (post.author.id !== userId) {
+      return respond(StatusCodes.FORBIDDEN, {
+        message: req.t("posts.controllers.update.unauthorized"),
+      });
+    }
 
     const updatedContent = await handleMarkdownUpdate(
       fileStorage,
@@ -94,7 +63,7 @@ export const updatePost = async (
       content: updatedContent,
     });
 
-    return res.status(StatusCodes.OK).json({ post: newPost });
+    return respond(StatusCodes.OK, { post: newPost! });
   } catch {
     next(new Error(req.t("posts.controllers.update.failure")));
   }

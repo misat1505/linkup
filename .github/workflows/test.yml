@@ -38,5 +38,5 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm --filter backend exec prisma generate
 
-      - name: Run Backend Tests
-        run: pnpm --filter backend test
+      - name: Run Tests
+        run: pnpm test

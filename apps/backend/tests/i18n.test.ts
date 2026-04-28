@@ -1,4 +1,5 @@
 import request from "supertest";
+import { describe, expect, it } from "vitest";
 import { testWithTransaction } from "./utils/testWithTransaction";
 
 describe("i18n", () => {

@@ -1,8 +1,10 @@
-import { NextFunction, Request, Response } from "express";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { processAvatar } from "@/utils/processAvatar";
-import { v4 as uuidv4 } from "uuid";
-import { CreateGroupChatDTO } from "@/validators/chats/chats.validatotors";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Controller to create a new group chat.
@@ -17,59 +19,31 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/group:
- *   post:
- *     summary: Create a new group chat
- *     tags: [Chats]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               users:
- *                 type: array
- *                 items:
- *                   type: string
- *               name:
- *                 type: string
- *             required:
- *               - users
- *               - name
- *     responses:
- *       201:
- *         description: Group chat created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 chat:
- *                   $ref: '#/components/schemas/Chat'
- *       400:
- *         description: User not authorized to create group chat
- *       500:
- *         description: Server error when creating group chat
  */
 export const createGroupChatController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.CREATE_GROUP_CHAT;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const userId = req.user!.id;
-    const { users, name } = req.validated!.body! as CreateGroupChatDTO;
+
+    const {
+      body: { users, name },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const { chatService, fileStorage } = req.app.services;
 
-    if (!users.includes(userId))
-      return res.status(StatusCodes.BAD_REQUEST).json({
+    if (!users.includes(userId)) {
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t(
           "chats.controllers.create-group-chat.not-belonging-to-you",
         ),
       });
+    }
 
     const newFilename = req.file ? uuidv4() + ".webp" : null;
 
@@ -79,15 +53,16 @@ export const createGroupChatController = async (
       newFilename,
     );
 
-    if (newFilename)
+    if (newFilename) {
       await processAvatar(
         fileStorage,
         req.file,
         `chats/${chat.id}/`,
         newFilename,
       );
+    }
 
-    return res.status(StatusCodes.CREATED).json({ chat });
+    return respond(StatusCodes.CREATED, { chat });
   } catch {
     next(new Error(req.t("chats.controllers.create-group-chat.failure")));
   }

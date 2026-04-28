@@ -1,5 +1,7 @@
-import { NextFunction, Request, Response } from "express";
 import { generateNewFilename } from "@/utils/generateNewFilename";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 export const CACHE_CAPACITY = 10;
@@ -15,65 +17,30 @@ export const CACHE_CAPACITY = 10;
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /files/cache:
- *   post:
- *     summary: Upload a file to the user's cache
- *     tags: [Files]
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               file:
- *                 type: string
- *                 format: binary
- *                 description: The file to be inserted into the cache.
- *     responses:
- *       201:
- *         description: File uploaded successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 file:
- *                   type: string
- *                   description: The new UUID filename of the uploaded file.
- *                   example: "a1b2c3d4-5678-9101-1234-56789abcdef0.jpg"
- *       400:
- *         description: Cache limit reached or server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Cache limit reached. Maximum number of files in cache: 10"
  */
 export const insertToCache = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.INSERT_TO_CACHE;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const file = req.file;
     const userId = req.user!.id;
     const fileStorage = req.app.services.fileStorage;
 
-    if (!file)
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ message: req.t("files.controllers.insert-to-cache.no-file") });
+    if (!file) {
+      return respond(StatusCodes.BAD_REQUEST, {
+        message: req.t("files.controllers.insert-to-cache.no-file"),
+      });
+    }
 
     const cachePaths = await fileStorage.listFiles(`cache/${userId}`);
 
     if (cachePaths.length >= CACHE_CAPACITY) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t("files.controllers.insert-to-cache.limit-reached", {
           count: CACHE_CAPACITY,
         }),
@@ -88,7 +55,9 @@ export const insertToCache = async (
       `cache/${userId}/${filename}`,
     );
 
-    return res.status(StatusCodes.CREATED).json({ file: filename });
+    return respond(StatusCodes.CREATED, {
+      file: filename,
+    });
   } catch {
     next(new Error(req.t("files.controllers.insert-to-cache.failure")));
   }

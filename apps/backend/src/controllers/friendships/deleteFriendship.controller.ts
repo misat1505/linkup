@@ -1,5 +1,7 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
-import { DeleteFriendshipDTO } from "@/validators/friendships/friendships.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,98 +15,43 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /friendships:
- *   delete:
- *     summary: Delete an existing friendship
- *     tags: [Friendships]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               requesterId:
- *                 type: string
- *                 description: ID of the user who sent the friendship request
- *                 example: "3b6431d2-43a4-427d-9f28-ab9001ad4f63"
- *               acceptorId:
- *                 type: string
- *                 description: ID of the user who accepted the friendship request
- *                 example: "9a2e94ad-604c-46ea-b96c-44c490d1a91a"
- *     responses:
- *       200:
- *         description: Friendship deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Friendship deleted successfully."
- *       400:
- *         description: The user is not authorized to delete this friendship
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Cannot delete friendship not belonging to you."
- *       404:
- *         description: Friendship not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Friendship not found."
- *       500:
- *         description: Server error while deleting friendship
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Cannot delete friendship."
  */
 export const deleteFriendship = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.DELETE_FRIENDSHIP;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
+    const {
+      body: { acceptorId, requesterId },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
-    const { requesterId, acceptorId } = req.validated!
-      .body! as DeleteFriendshipDTO;
     const friendshipService = req.app.services.friendshipService;
 
-    if (![requesterId, acceptorId].includes(userId))
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ message: req.t("friends.controllers.delete.unauthorized") });
+    if (![requesterId, acceptorId].includes(userId)) {
+      return respond(StatusCodes.FORBIDDEN, {
+        message: req.t("friends.controllers.delete.unauthorized"),
+      });
+    }
 
     const isDeleted = await friendshipService.deleteFriendship(
       requesterId,
       acceptorId,
     );
 
-    if (!isDeleted)
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("friends.controllers.delete.not-found") });
+    if (!isDeleted) {
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("friends.controllers.delete.not-found"),
+      });
+    }
 
-    return res
-      .status(StatusCodes.OK)
-      .json({ message: req.t("friends.controllers.delete.success") });
+    return respond(StatusCodes.OK, {
+      message: req.t("friends.controllers.delete.success"),
+    });
   } catch {
     next(new Error(req.t("friends.controllers.delete.failure")));
   }

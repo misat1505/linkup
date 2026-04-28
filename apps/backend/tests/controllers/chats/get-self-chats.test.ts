@@ -2,9 +2,19 @@ import { ChatControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("getSelfChats", () => {
-  it("retrieves user’s chats", async () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("retrieves user's chats", async () => {
     const chats = [{ id: "chat1" }, { id: "chat2" }];
     mockChatService.getUserChats.mockResolvedValue(chats);
 
@@ -12,8 +22,8 @@ describe("getSelfChats", () => {
       user: { id: "userId" } as UserWithCredentials,
     });
     const res = mockResponse();
-    await ChatControllers.getSelfChats(req, res, jest.fn());
+    await ChatControllers.getSelfChats(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
   });
 });

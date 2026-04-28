@@ -7,6 +7,12 @@ import {
   mockResponse,
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("getFile", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
@@ -17,7 +23,7 @@ describe("getFile", () => {
   const mockPostId = "post-id";
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("avatar", () => {
@@ -33,9 +39,12 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
+      expect(respond).toHaveBeenCalledWith(
+        StatusCodes.NOT_FOUND,
+        expect.anything(),
+      );
     });
 
     it("returns avatar URL for existing file", async () => {
@@ -50,12 +59,9 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.any(String) }),
-      );
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
   });
 
@@ -72,12 +78,9 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.any(String) }),
-      );
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
 
     it("returns chat message file URL for existing file", async () => {
@@ -92,12 +95,9 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.any(String) }),
-      );
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
   });
 
@@ -114,12 +114,9 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.any(String) }),
-      );
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
 
     it("returns 404 for non-existent cache file", async () => {
@@ -134,9 +131,12 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
+      expect(respond).toHaveBeenCalledWith(
+        StatusCodes.NOT_FOUND,
+        expect.anything(),
+      );
     });
   });
 
@@ -153,12 +153,9 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ url: expect.any(String) }),
-      );
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
 
     it("returns 404 for non-existent post file", async () => {
@@ -173,9 +170,12 @@ describe("getFile", () => {
       });
       const res = mockResponse();
 
-      await FileControllers.getFile(req, res, jest.fn());
+      await FileControllers.getFile(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
+      expect(respond).toHaveBeenCalledWith(
+        StatusCodes.NOT_FOUND,
+        expect.anything(),
+      );
     });
   });
 });

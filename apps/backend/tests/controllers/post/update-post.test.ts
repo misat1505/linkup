@@ -3,11 +3,21 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-jest.mock("@/utils/updatePost");
+vi.mock("@/utils/updatePost");
+
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("updatePost", () => {
-  (handleMarkdownUpdate as jest.Mock).mockImplementation((_a, b, _c, _d) => b);
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  (handleMarkdownUpdate as Mock).mockImplementation((_a, b, _c, _d) => b);
 
   it("updates post successfully", async () => {
     const post = {
@@ -32,9 +42,9 @@ describe("updatePost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.updatePost(req, res, jest.fn());
+    await PostControllers.updatePost(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockPostService.getPost).toHaveBeenCalledWith("post-id");
     expect(mockPostService.updatePost).toHaveBeenCalledWith({
       id: "post-id",
@@ -56,9 +66,12 @@ describe("updatePost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.updatePost(req, res, jest.fn());
+    await PostControllers.updatePost(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.NOT_FOUND,
+      expect.anything(),
+    );
   });
 
   it("returns 403 for unauthorized user", async () => {
@@ -80,9 +93,12 @@ describe("updatePost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.updatePost(req, res, jest.fn());
+    await PostControllers.updatePost(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
   });
 
   it("passes errors to error middleware", async () => {
@@ -93,7 +109,7 @@ describe("updatePost", () => {
     };
     mockPostService.getPost.mockResolvedValue(post);
     mockPostService.updatePost.mockRejectedValue(new Error("Error"));
-    const mockNextFunction = jest.fn();
+    const mockNextFunction = vi.fn();
 
     const req = mockRequest({
       user: { id: "user-id" } as UserWithCredentials,

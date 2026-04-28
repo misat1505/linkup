@@ -1,12 +1,14 @@
-import { NextFunction, Request, Response } from "express";
-import { TokenProcessor } from "@/lib/TokenProcessor";
+import { env } from "@/config/env";
 import {
   accessTokenSignOptions,
   refreshTokenCookieName,
   refreshTokenCookieOptions,
   refreshTokenSignOptions,
 } from "@/config/jwt-cookie";
-import { env } from "@/config/env";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -22,24 +24,15 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function for error handling.
  *
  * @source
- *
- * @swagger
- * /auth/refresh:
- *   post:
- *     summary: Refresh access token and refresh token
- *     description: This endpoint reads the refresh token from the request to authorize the user and generate a new access token.
- *     tags: [Auth]
- *     responses:
- *       200:
- *         description: Token refreshed successfully
- *       500:
- *         description: Cannot refresh token
  */
 export const refreshTokenController = (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.REFRESH_TOKEN;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const { id: userId } = req.user!;
 
@@ -48,13 +41,16 @@ export const refreshTokenController = (
       env.REFRESH_TOKEN_SECRET,
       refreshTokenSignOptions,
     );
+
     const accessToken = TokenProcessor.encode(
       { userId },
       env.ACCESS_TOKEN_SECRET,
       accessTokenSignOptions,
     );
+
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res.status(StatusCodes.OK).json({
+
+    return respond(StatusCodes.OK, {
       message: req.t("auth.controllers.refresh.success"),
       accessToken,
     });

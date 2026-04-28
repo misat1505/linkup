@@ -2,10 +2,16 @@ import { ChatControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("updateAlias", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("updates alias successfully", async () => {
@@ -20,9 +26,9 @@ describe("updateAlias", () => {
       },
     });
     const res = mockResponse();
-    await ChatControllers.updateAlias(req, res, jest.fn());
+    await ChatControllers.updateAlias(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
     expect(mockChatService.updateAlias).toHaveBeenCalledWith({
       userId: "456",
@@ -39,9 +45,12 @@ describe("updateAlias", () => {
       validated: { body: {}, params: { chatId: "123", userId: "456" } },
     });
     const res = mockResponse();
-    await ChatControllers.updateAlias(req, res, jest.fn());
+    await ChatControllers.updateAlias(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
     expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(1);
     expect(mockChatService.updateAlias).not.toHaveBeenCalled();
   });
@@ -55,9 +64,12 @@ describe("updateAlias", () => {
       validated: { body: {}, params: { chatId: "123", userId: "456" } },
     });
     const res = mockResponse();
-    await ChatControllers.updateAlias(req, res, jest.fn());
+    await ChatControllers.updateAlias(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
     expect(mockChatService.isUserInChat).toHaveBeenCalledTimes(2);
     expect(mockChatService.updateAlias).not.toHaveBeenCalled();
   });

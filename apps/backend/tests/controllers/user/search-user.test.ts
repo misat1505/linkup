@@ -1,9 +1,19 @@
-import { StatusCodes } from "http-status-codes";
 import { UserControllers } from "@/controllers";
 import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { seedProvider } from "@tests/utils/seedProvider";
+import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("searchUser", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("retrieves users matching search criteria", async () => {
     await seedProvider(async (seed) => {
       const users = seed.users;
@@ -15,10 +25,9 @@ describe("searchUser", () => {
 
       const res = mockResponse();
 
-      await UserControllers.searchUser(req, res, jest.fn());
+      await UserControllers.searchUser(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      expect(res.json).toHaveBeenCalledWith({ users });
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
   });
 });

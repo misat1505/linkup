@@ -1,9 +1,9 @@
+import { apiContractClient } from "@/lib/apiContractClient";
 import { Post } from "@packages/schemas";
-import { POSTS_API } from "./utils";
 
 export class PostService {
   static async deletePost(id: Post["id"]): Promise<void> {
-    await POSTS_API.delete(`/${id}`);
+    await apiContractClient.deletePost({ params: { id } });
   }
 
   static async updatePost({
@@ -13,38 +13,39 @@ export class PostService {
     id: Post["id"];
     content: Post["content"];
   }): Promise<Post> {
-    const response = await POSTS_API.put(`/${id}`, { content });
-    return response.data.post;
+    const res = await apiContractClient.updatePost({
+      body: { content },
+      params: { id },
+    });
+    return res.post;
   }
 
   static async getPost(id: Post["id"]): Promise<Post | null> {
-    const response = await POSTS_API.get(`/${id}`);
-    return response.data.post;
+    const res = await apiContractClient.getPost({ params: { id } });
+    return res.post;
   }
 
   static async getMyPosts(): Promise<Post[]> {
-    const response = await POSTS_API.get("/mine");
-    return response.data.posts;
+    const res = await apiContractClient.getUserPosts();
+    return res.posts;
   }
 
   static async getRecommendedPosts(
     lastPostId: Post["id"] | null,
     limit: number,
   ): Promise<Post[]> {
-    const params = new URLSearchParams();
-    params.set("lastPostId", lastPostId || "null");
-    params.set("limit", limit.toString());
-
-    const response = await POSTS_API.get("/", { params });
-    return response.data.posts;
+    const res = await apiContractClient.getPosts({
+      query: { lastPostId, limit },
+    });
+    return res.posts;
   }
 
   static async createPost(content: string): Promise<Post> {
-    const response = await POSTS_API.post("/", { content });
-    return response.data.post;
+    const res = await apiContractClient.createPost({ body: { content } });
+    return res.post;
   }
 
   static async reportPost(postId: Post["id"]): Promise<void> {
-    await POSTS_API.post(`/${postId}/report`);
+    await apiContractClient.reportPost({ params: { id: postId } });
   }
 }

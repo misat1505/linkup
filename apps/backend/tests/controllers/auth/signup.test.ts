@@ -1,8 +1,18 @@
-import { StatusCodes } from "http-status-codes";
 import { AuthControllers } from "@/controllers";
 import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("signupUser", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("signs up new user successfully", async () => {
     mockUserService.isLoginTaken.mockResolvedValue(false);
 
@@ -18,9 +28,12 @@ describe("signupUser", () => {
     });
     const res = mockResponse();
 
-    await AuthControllers.signup(req, res, jest.fn());
+    await AuthControllers.signup(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
+    );
     expect(res.cookie).toHaveBeenCalled();
   });
 
@@ -39,9 +52,12 @@ describe("signupUser", () => {
     });
     const res = mockResponse();
 
-    await AuthControllers.signup(req, res, jest.fn());
+    await AuthControllers.signup(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CONFLICT,
+      expect.anything(),
+    );
     expect(res.cookie).not.toHaveBeenCalled();
   });
 });

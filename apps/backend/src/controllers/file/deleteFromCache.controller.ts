@@ -1,5 +1,7 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
-import { Filename } from "@/validators/files/getFiles.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,66 +15,28 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /files/cache/{filename}:
- *   delete:
- *     summary: Delete a file from the user's cache
- *     tags: [Files]
- *     parameters:
- *       - in: path
- *         name: filename
- *         required: true
- *         schema:
- *           type: string
- *         description: The name of the file to delete from the cache
- *     responses:
- *       200:
- *         description: File deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "File deleted successfully."
- *       404:
- *         description: File not found in cache
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "File not found."
- *       500:
- *         description: Server error during file deletion
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Cannot delete file from cache."
  */
 export const deleteFromCache = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.DELETE_FROM_CACHE;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
+    const {
+      params: { filename },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
-    const { filename } = req.validated!.params! as Filename;
     const fileStorage = req.app.services.fileStorage;
 
     await fileStorage.deleteFile(`cache/${userId}/${filename}`);
 
-    return res
-      .status(StatusCodes.OK)
-      .json({ message: req.t("files.controllers.delete-from-cache.success") });
+    return respond(StatusCodes.OK, {
+      message: req.t("files.controllers.delete-from-cache.success"),
+    });
   } catch {
     next(new Error(req.t("files.controllers.delete-from-cache.failure")));
   }

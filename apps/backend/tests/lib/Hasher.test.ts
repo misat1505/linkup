@@ -1,4 +1,5 @@
 import { Hasher } from "@/lib/Hasher";
+import { describe, expect, it } from "vitest";
 
 describe("Hasher", () => {
   it("hashes string correctly", () => {

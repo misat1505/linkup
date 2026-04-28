@@ -1,5 +1,7 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
-import { PostId } from "@/validators/shared.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,59 +15,36 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts/{id}:
- *   delete:
- *     summary: Delete a post
- *     tags: [Posts]
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: ID of the post to delete
- *         schema:
- *           type: string
- *           example: "12a627e8-83cb-40c9-a7a2-ca0708be7763"
- *     responses:
- *       200:
- *         description: Post deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Post deleted successfully."
- *       403:
- *         description: Unauthorized access. The user is not allowed to delete this post.
- *       404:
- *         description: Post not found.
- *       500:
- *         description: Couldn't delete the post.
  */
 export const deletePost = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.DELETE_POST;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
-    const { id } = req.validated!.params! as PostId;
+    const {
+      params: { id },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const { postService, fileStorage } = req.app.services;
 
     const post = await postService.getPost(id);
 
-    if (!post)
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("posts.controllers.delete.not-found") });
+    if (!post) {
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("posts.controllers.delete.not-found"),
+      });
+    }
 
-    if (post.author.id !== userId)
-      return res
-        .status(StatusCodes.FORBIDDEN)
-        .json({ message: req.t("posts.controllers.delete.unauthorized") });
+    if (post.author.id !== userId) {
+      return respond(StatusCodes.FORBIDDEN, {
+        message: req.t("posts.controllers.delete.unauthorized"),
+      });
+    }
 
     await Promise.all([
       postService.deletePost(id),
@@ -73,9 +52,9 @@ export const deletePost = async (
       fileStorage.deleteAllFilesInDirectory(`chats/${post.chat.id}`),
     ]);
 
-    return res
-      .status(StatusCodes.OK)
-      .json({ message: req.t("posts.controllers.delete.success") });
+    return respond(StatusCodes.OK, {
+      message: req.t("posts.controllers.delete.success"),
+    });
   } catch {
     next(new Error(req.t("posts.controllers.delete.failure")));
   }

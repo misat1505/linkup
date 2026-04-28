@@ -1,28 +1,32 @@
-import {
-  S3Client,
-  PutObjectCommand,
-  ListObjectsV2Command,
-  DeleteObjectCommand,
-  CopyObjectCommand,
-  DeleteObjectsCommand,
-} from "@aws-sdk/client-s3";
 import { FileStorage } from "@/lib/FileStorage";
+import {
+  CopyObjectCommand,
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-jest.mock("@aws-sdk/client-s3");
-jest.mock("@aws-sdk/s3-request-presigner", () => ({
-  getSignedUrl: jest.fn(),
+vi.mock("@aws-sdk/client-s3");
+vi.mock("@aws-sdk/s3-request-presigner", () => ({
+  getSignedUrl: vi.fn(),
 }));
 
-const mockSend = jest.fn();
-(S3Client as jest.Mock).mockImplementation(() => ({
-  send: mockSend,
-}));
+const mockSend = vi.fn();
+vi.mocked(S3Client).mockImplementation(
+  class {
+    send = mockSend;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any,
+);
 
 describe("FileStorage", () => {
   let fileStorage: FileStorage;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     fileStorage = new FileStorage({
       region: "us-east-1",
       accessKeyId: "test-access-key",
@@ -31,7 +35,7 @@ describe("FileStorage", () => {
     });
   });
 
-  test("uploads file successfully", async () => {
+  it("uploads file successfully", async () => {
     mockSend.mockResolvedValueOnce({});
 
     const result = await fileStorage.uploadFile(
@@ -44,20 +48,7 @@ describe("FileStorage", () => {
     expect(result).toBe("path/test.txt");
   });
 
-  // test("generates signed URL", async () => {
-  //   (getSignedUrl as jest.Mock).mockResolvedValueOnce("https://signed-url");
-
-  //   const url = await fileStorage.getSignedUrl("path/test.txt");
-
-  //   expect(getSignedUrl).toHaveBeenCalledWith(
-  //     expect.any(Object),
-  //     expect.any(GetObjectCommand),
-  //     { expiresIn: 60 }
-  //   );
-  //   expect(url).toBe("https://signed-url");
-  // });
-
-  test("lists stored files", async () => {
+  it("lists stored files", async () => {
     mockSend.mockResolvedValueOnce({
       Contents: [{ Key: "file1.txt" }, { Key: "file2.txt" }],
     });
@@ -68,7 +59,7 @@ describe("FileStorage", () => {
     expect(files).toEqual(["file1.txt", "file2.txt"]);
   });
 
-  test("returns empty array for no files", async () => {
+  it("returns empty array for no files", async () => {
     mockSend.mockResolvedValueOnce({ Contents: undefined });
 
     const files = await fileStorage.listFiles("empty-folder/");
@@ -76,7 +67,7 @@ describe("FileStorage", () => {
     expect(files).toEqual([]);
   });
 
-  test("deletes file successfully", async () => {
+  it("deletes file successfully", async () => {
     mockSend.mockResolvedValueOnce({});
 
     await fileStorage.deleteFile("file.txt");
@@ -84,7 +75,7 @@ describe("FileStorage", () => {
     expect(mockSend).toHaveBeenCalledWith(expect.any(DeleteObjectCommand));
   });
 
-  test("copies file successfully", async () => {
+  it("copies file successfully", async () => {
     mockSend.mockResolvedValueOnce({});
 
     await fileStorage.copyFile("source.txt", "destination.txt");
@@ -92,7 +83,7 @@ describe("FileStorage", () => {
     expect(mockSend).toHaveBeenCalledWith(expect.any(CopyObjectCommand));
   });
 
-  test("deletes all files in directory", async () => {
+  it("deletes all files in directory", async () => {
     mockSend
       .mockResolvedValueOnce({
         Contents: [{ Key: "file1.txt" }, { Key: "file2.txt" }],
@@ -105,7 +96,7 @@ describe("FileStorage", () => {
     expect(mockSend).toHaveBeenCalledWith(expect.any(DeleteObjectsCommand));
   });
 
-  test("handles empty directory deletion gracefully", async () => {
+  it("handles empty directory deletion gracefully", async () => {
     mockSend.mockResolvedValueOnce({ Contents: undefined });
 
     await fileStorage.deleteAllFilesInDirectory("empty-folder/");

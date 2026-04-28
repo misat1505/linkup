@@ -1,17 +1,11 @@
 "use server";
 
-import { POSTS_API } from "@/utils/api";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { apiContractClient } from "@/lib/apiQueryClient";
 import { Post } from "@packages/schemas";
 
 export async function createPost(content: Post["content"]): Promise<Post> {
-  const api = await serverSideRequestFactory({
-    base: POSTS_API,
-    include: {
-      accessToken: true,
-    },
+  const res = await apiContractClient.createPost({
+    body: { content },
   });
-
-  const response = await api.post("/", { content });
-  return Post.parse(response.data.post);
+  return res.post;
 }

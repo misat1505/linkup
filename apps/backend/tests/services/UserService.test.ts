@@ -3,12 +3,13 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { User } from "@packages/schemas";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
-import { testWithTransaction } from "../utils/testWithTransaction";
+import { describe, expect, it } from "vitest";
+import { transactionProvider } from "../utils/transactionProvider";
 
 describe("UserService", () => {
   describe("searchUsers", () => {
     it("retrieves users matching search term", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const userService = new UserService(tx);
         const result = await userService.searchUsers("Kyli");
         expect(result.length).toBe(1);
@@ -21,7 +22,7 @@ describe("UserService", () => {
 
   describe("isLoginTaken", () => {
     it("confirms login is taken", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const userService = new UserService(tx);
         const result = await userService.isLoginTaken(seed.users[0].login);
         expect(result).toBeTruthy();
@@ -29,7 +30,7 @@ describe("UserService", () => {
     });
 
     it("denies login is taken", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const userService = new UserService(tx);
         const result = await userService.isLoginTaken("not_taken");
         expect(result).toBeFalsy();
@@ -39,7 +40,7 @@ describe("UserService", () => {
 
   describe("insertUser", () => {
     it("inserts new user", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const userService = new UserService(tx);
         const login = "not_taken";
         const user: UserWithCredentials = {
@@ -60,7 +61,7 @@ describe("UserService", () => {
 
   describe("getUserByLogin", () => {
     it("retrieves existing user by login", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUserByLogin("login2");
         expect(user).not.toBeNull();
@@ -69,7 +70,7 @@ describe("UserService", () => {
     });
 
     it("returns null for non-existent user by login", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUserByLogin("not_existent");
         expect(user).toBeNull();
@@ -79,7 +80,7 @@ describe("UserService", () => {
 
   describe("getUser", () => {
     it("retrieves existing user by ID", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const userService = new UserService(tx);
         const user = await userService.getUser(seed.users[0].id);
         expect(user).not.toBeNull();
@@ -88,7 +89,7 @@ describe("UserService", () => {
     });
 
     it("returns null for non-existent user by ID", async () => {
-      await testWithTransaction(async ({ tx }) => {
+      await transactionProvider(async ({ tx }) => {
         const userService = new UserService(tx);
         const user = await userService.getUser("invalid");
         expect(user).toBeNull();

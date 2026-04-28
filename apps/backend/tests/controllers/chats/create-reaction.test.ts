@@ -2,8 +2,18 @@ import { ChatControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("createReaction", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("creates message reaction", async () => {
     const newReactionData = "reaction";
     mockChatService.isUserInChat.mockResolvedValue(true);
@@ -21,9 +31,12 @@ describe("createReaction", () => {
       },
     });
     const res = mockResponse();
-    await ChatControllers.createReaction(req, res, jest.fn());
+    await ChatControllers.createReaction(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
+    );
   });
 
   it("blocks reaction for message outside chat", async () => {
@@ -41,9 +54,12 @@ describe("createReaction", () => {
       },
     });
     const res = mockResponse();
-    await ChatControllers.createReaction(req, res, jest.fn());
+    await ChatControllers.createReaction(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
   });
 
   it("blocks reaction by non-chat member", async () => {
@@ -60,8 +76,11 @@ describe("createReaction", () => {
       },
     });
     const res = mockResponse();
-    await ChatControllers.createReaction(req, res, jest.fn());
+    await ChatControllers.createReaction(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
   });
 });

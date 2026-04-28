@@ -7,11 +7,12 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "concurrently \"pnpm --filter backend start\" \"pnpm --filter web-react preview\" \"pnpm --filter web-next start\"",
-    "dev": "concurrently \"pnpm --filter backend dev\" \"pnpm --filter web-react dev\" \"pnpm --filter web-next dev\"",
+    "start": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend start\" \"pnpm --filter web-react preview\" \"pnpm --filter web-next start\"",
+    "dev": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend dev\" \"pnpm --filter web-react dev\" \"pnpm --filter web-next dev\"",
+    "test": "concurrently -n \"backend,@packages/api-contract\" -c \"green,blue\" \"pnpm --filter backend test\" \"pnpm --filter @packages/api-contract test\"",
     "build": "turbo build",
     "build:packages": "turbo run build --filter=@packages/*",
-    "lint": "concurrently \"pnpm --filter backend lint\" \"pnpm --filter web-react lint\" \"pnpm --filter web-next lint\"",
+    "lint": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend lint\" \"pnpm --filter web-react lint\" \"pnpm --filter web-next lint\"",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -40,7 +41,9 @@
   },
   "dependencies": {
     "react": "^19.2.3",
-    "react-dom": "^19.2.3"
+    "react-dom": "^19.2.3",
+    "http-status-codes": "^2.3.0",
+    "@asteasolutions/zod-to-openapi": "^8.5.0"
   },
   "pnpm": {
     "overrides": {

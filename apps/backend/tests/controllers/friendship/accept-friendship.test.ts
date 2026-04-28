@@ -6,9 +6,19 @@ import {
   mockResponse,
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockFriendship } from "./setup";
 
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
+
 describe("acceptFriendship", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("accepts friendship successfully", async () => {
     mockFriendshipService.acceptFriendship.mockResolvedValue(mockFriendship);
 
@@ -23,9 +33,9 @@ describe("acceptFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.acceptFriendship(req, res, jest.fn());
+    await FriendshipControllers.acceptFriendship(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
   });
 
   it("fails for mismatched acceptorId", async () => {
@@ -40,9 +50,12 @@ describe("acceptFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.acceptFriendship(req, res, jest.fn());
+    await FriendshipControllers.acceptFriendship(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
   });
 
   it("fails for non-existent friendship", async () => {
@@ -59,8 +72,11 @@ describe("acceptFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.acceptFriendship(req, res, jest.fn());
+    await FriendshipControllers.acceptFriendship(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CONFLICT,
+      expect.anything(),
+    );
   });
 });

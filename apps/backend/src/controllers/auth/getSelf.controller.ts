@@ -1,4 +1,5 @@
-import { User } from "@packages/schemas";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -18,32 +19,14 @@ import { StatusCodes } from "http-status-codes";
  * @source
  *
  * @throws {Error} If there is an error fetching the user, the next middleware will be called with an error.
- *
- * @swagger
- * /auth/user:
- *   get:
- *     summary: Get current user details
- *     tags: [Auth]
- *     responses:
- *       200:
- *         description: User fetched successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       404:
- *         description: User not found
- *       500:
- *         description: Cannot fetch user
  */
 export const getSelfController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_SELF;
+  const respond = buildValidatedResponder(res, contractKey);
   try {
     const userId = req.user!.id;
     const userService = req.app.services.userService;
@@ -51,12 +34,12 @@ export const getSelfController = async (
     const user = await userService.getUser(userId);
 
     if (!user) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("auth.controllers.get-self.user-not-found") });
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("auth.controllers.get-self.user-not-found"),
+      });
     }
 
-    return res.status(StatusCodes.OK).json({ user: User.parse(user) });
+    return respond(StatusCodes.OK, { user });
   } catch {
     next(new Error(req.t("auth.controllers.get-self.failure")));
   }

@@ -2,10 +2,16 @@ import { ChatControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("deleteUserFromGroupChat", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("removes user from group chat successfully", async () => {
@@ -18,9 +24,9 @@ describe("deleteUserFromGroupChat", () => {
       validated: { params: { chatId: "123" } },
     });
     const res = mockResponse();
-    await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
+    await ChatControllers.deleteSelfFromGroupChat(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       userId: "789",
@@ -40,9 +46,12 @@ describe("deleteUserFromGroupChat", () => {
       validated: { params: { chatId: "123" } },
     });
     const res = mockResponse();
-    await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
+    await ChatControllers.deleteSelfFromGroupChat(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).not.toHaveBeenCalled();
     expect(mockChatService.deleteFromChat).not.toHaveBeenCalled();
@@ -57,9 +66,12 @@ describe("deleteUserFromGroupChat", () => {
       validated: { params: { chatId: "123" } },
     });
     const res = mockResponse();
-    await ChatControllers.deleteSelfFromGroupChat(req, res, jest.fn());
+    await ChatControllers.deleteSelfFromGroupChat(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
     expect(mockChatService.getChatType).toHaveBeenCalledWith("123");
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       userId: "789",

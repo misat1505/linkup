@@ -1,9 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { generateNewFilename } from "@/utils/generateNewFilename";
-import {
-  ChatId,
-  CreateMessageDTO,
-} from "@/validators/chats/messages.validators";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -19,59 +18,24 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/{chatId}/messages:
- *   post:
- *     summary: Create a new message in a chat
- *     tags: [Chats]
- *     parameters:
- *       - name: chatId
- *         in: path
- *         required: true
- *         description: The ID of the chat where the message will be sent.
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *               responseId:
- *                 type: string
- *             required:
- *               - content
- *     responses:
- *       201:
- *         description: Message created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   $ref: '#/components/schemas/Message'
- *       403:
- *         description: User not authorized to send a message
- *       400:
- *         description: Response message does not exist in this chat
- *       500:
- *         description: Server error when creating message
  */
 export const createMessageController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.CREATE_MESSAGE;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
-    const { content, responseId } = req.validated!.body! as CreateMessageDTO;
+    const {
+      body: { content, responseId },
+      params: { chatId },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
-    const { chatId } = req.validated!.params! as ChatId;
     const files = req.files as Express.Multer.File[];
+
     const { chatService, fileStorage } = req.app.services;
 
     const checks = [chatService.isUserInChat({ chatId, userId })];
@@ -88,7 +52,7 @@ export const createMessageController = async (
     const [isUserAuthorized, isResponseInChat] = await Promise.all(checks);
 
     if (!isUserAuthorized) {
-      return res.status(StatusCodes.FORBIDDEN).json({
+      return respond(StatusCodes.FORBIDDEN, {
         message: req.t(
           "chats.controllers.create-message.user-not-belonging-to-chat",
         ),
@@ -96,7 +60,7 @@ export const createMessageController = async (
     }
 
     if (responseId && !isResponseInChat) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t(
           "chats.controllers.create-message.response-not-existent",
         ),
@@ -120,7 +84,9 @@ export const createMessageController = async (
       responseId: responseId ?? null,
     });
 
-    return res.status(StatusCodes.CREATED).json({ message });
+    return respond(StatusCodes.CREATED, {
+      message,
+    });
   } catch {
     next(new Error(req.t("chats.controllers.create-message.failure")));
   }

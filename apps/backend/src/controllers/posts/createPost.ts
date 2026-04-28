@@ -1,8 +1,10 @@
-import { NextFunction, Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
 import { handleMarkdownUpdate } from "@/utils/updatePost";
-import { CreatePostDTO } from "@/validators/posts/posts.validators";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Controller to create a new post.
@@ -15,46 +17,21 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts:
- *   post:
- *     summary: Create a new post
- *     tags: [Posts]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *                 description: The content of the post
- *                 example: "This is a new post."
- *             required:
- *               - content
- *     responses:
- *       201:
- *         description: Post created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 post:
- *                   $ref: '#/components/schemas/Post'
- *       500:
- *         description: Server error, could not create post
  */
 export const createPost = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.CREATE_POST;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
+    const {
+      body: { content },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
-    const { content } = req.validated!.body! as CreatePostDTO;
     const { postService, fileStorage } = req.app.services;
 
     const id = uuidv4();
@@ -72,7 +49,7 @@ export const createPost = async (
       authorId: userId,
     });
 
-    return res.status(StatusCodes.CREATED).json({ post });
+    return respond(StatusCodes.CREATED, { post });
   } catch {
     next(new Error(req.t("posts.controllers.create.failure")));
   }

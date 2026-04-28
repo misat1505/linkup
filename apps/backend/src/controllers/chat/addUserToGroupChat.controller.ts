@@ -1,6 +1,7 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
-import { ChatId } from "@/validators/chats/messages.validators";
-import { UserId } from "@/validators/shared.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -16,59 +17,24 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/{chatId}/users:
- *   post:
- *     summary: Add a user to a group chat
- *     tags: [Chats]
- *     parameters:
- *       - name: chatId
- *         in: path
- *         required: true
- *         description: The ID of the chat to which to add the user.
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               userId:
- *                 type: string
- *             required:
- *               - userId
- *     responses:
- *       201:
- *         description: User added to chat successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       400:
- *         description: Cannot add people to chat of this type.
- *       403:
- *         description: User not authorized to add to this chat
- *       409:
- *         description: User is already in this chat
- *       500:
- *         description: Server error when adding user to chat
  */
 export const addUserToGroupChatController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.ADD_USER_TO_GROUP_CHAT;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const chatService = req.app.services.chatService;
-    const { chatId } = req.validated!.params! as ChatId;
+
+    const {
+      params: { chatId },
+      body: { userId },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const myId = req.user!.id;
-    const { userId } = req.validated!.body! as UserId;
 
     const [chatType, iAmInChat, isOtherInChat] = await Promise.all([
       chatService.getChatType(chatId),
@@ -76,29 +42,35 @@ export const addUserToGroupChatController = async (
       chatService.isUserInChat({ userId, chatId }),
     ]);
 
-    if (chatType !== "GROUP")
-      return res.status(StatusCodes.BAD_REQUEST).json({
+    if (chatType !== "GROUP") {
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t(
           "chats.controllers.add-user-to-group-chat.bad-chat-type",
         ),
       });
+    }
 
-    if (!iAmInChat)
-      return res.status(StatusCodes.FORBIDDEN).json({
+    if (!iAmInChat) {
+      return respond(StatusCodes.FORBIDDEN, {
         message: req.t(
           "chats.controllers.add-user-to-group-chat.i-am-not-in-chat",
         ),
       });
+    }
 
-    if (isOtherInChat)
-      return res.status(StatusCodes.CONFLICT).json({
+    if (isOtherInChat) {
+      return respond(StatusCodes.CONFLICT, {
         message: req.t(
           "chats.controllers.add-user-to-group-chat.user-already-in-chat",
         ),
       });
+    }
 
     const user = await chatService.addUserToChat({ chatId, userId });
-    return res.status(StatusCodes.CREATED).json({ user });
+
+    return respond(StatusCodes.CREATED, {
+      user,
+    });
   } catch {
     next(new Error(req.t("chats.controllers.add-user-to-group-chat.failure")));
   }

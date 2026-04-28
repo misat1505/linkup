@@ -1,9 +1,19 @@
-import { StatusCodes } from "http-status-codes";
 import { AuthControllers } from "@/controllers";
 import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { seedProvider } from "@tests/utils/seedProvider";
+import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("updateUser", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("updates authenticated user profile", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUserByLogin.mockResolvedValue({
@@ -24,9 +34,9 @@ describe("updateUser", () => {
         user: seed.users[0],
       });
       const res = mockResponse();
-      await AuthControllers.updateSelf(req, res, jest.fn());
+      await AuthControllers.updateSelf(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
   });
 
@@ -51,9 +61,9 @@ describe("updateUser", () => {
       });
       const res = mockResponse();
 
-      await AuthControllers.updateSelf(req, res, jest.fn());
+      await AuthControllers.updateSelf(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     });
   });
 
@@ -78,9 +88,12 @@ describe("updateUser", () => {
       });
       const res = mockResponse();
 
-      await AuthControllers.updateSelf(req, res, jest.fn());
+      await AuthControllers.updateSelf(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
+      expect(respond).toHaveBeenCalledWith(
+        StatusCodes.CONFLICT,
+        expect.anything(),
+      );
     });
   });
 });

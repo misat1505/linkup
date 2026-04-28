@@ -1,6 +1,5 @@
 "use server";
-import { CHAT_API } from "@/utils/api";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { apiContractClient } from "@/lib/apiQueryClient";
 import { Chat, User, UserInChat } from "@packages/schemas";
 import { revalidatePath } from "next/cache";
 
@@ -9,12 +8,10 @@ export async function updateAlias(
   userId: User["id"],
   alias: UserInChat["alias"],
 ): Promise<void> {
-  const api = await serverSideRequestFactory({
-    base: CHAT_API,
-    include: { accessToken: true },
+  await apiContractClient.updateUserAlias({
+    body: { alias },
+    params: { chatId, userId },
   });
-
-  await api.put(`/${chatId}/users/${userId}/alias`, { alias });
 
   revalidatePath(`/chats/${chatId}`);
 }

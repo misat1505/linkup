@@ -7,8 +7,9 @@ import {
 } from "@/config/jwt-cookie";
 import { Hasher } from "@/lib/Hasher";
 import { TokenProcessor } from "@/lib/TokenProcessor";
-import { LoginDTO } from "@/validators/auth/login.validators";
-import { User } from "@packages/schemas";
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -28,37 +29,6 @@ import { StatusCodes } from "http-status-codes";
  * @throws {Error} If there is an error during the login process, the next middleware will be called with an error.
  *
  * @source
- *
- * @swagger
- * /auth/login:
- *   post:
- *     summary: Log in an existing user
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               login:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: User logged in successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       401:
- *         description: Invalid login or password
- *       500:
- *         description: Cannot log in
  */
 
 export const loginController = async (
@@ -66,23 +36,27 @@ export const loginController = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.LOGIN;
+  const respond = buildValidatedResponder(res, contractKey);
   try {
-    const { login, password } = req.validated!.body! as LoginDTO;
+    const {
+      body: { login, password },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
     const userService = req.app.services.userService;
 
     const user = await userService.getUserByLogin(login);
 
     if (!user) {
-      return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: req.t("auth.controllers.login.invalid-login") });
+      return respond(StatusCodes.UNAUTHORIZED, {
+        message: req.t("auth.controllers.login.invalid-login"),
+      });
     }
 
     const hashedPassword = Hasher.hash(password + user.salt);
     if (hashedPassword !== user.password) {
-      return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: req.t("auth.controllers.login.invalid-password") });
+      return respond(StatusCodes.UNAUTHORIZED, {
+        message: req.t("auth.controllers.login.invalid-password"),
+      });
     }
 
     const refreshToken = TokenProcessor.encode(
@@ -96,9 +70,7 @@ export const loginController = async (
       accessTokenSignOptions,
     );
     res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return res
-      .status(StatusCodes.OK)
-      .json({ user: User.parse(user), accessToken });
+    return respond(StatusCodes.OK, { user, accessToken });
   } catch {
     next(new Error(req.t("auth.controllers.login.failure")));
   }

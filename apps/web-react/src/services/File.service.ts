@@ -1,11 +1,11 @@
-import { getAccessToken } from "@/lib/token";
-import { FILE_API } from "./utils";
 import { API_URL } from "@/constants";
+import { apiContractClient } from "@/lib/apiContractClient";
+import { getAccessToken } from "@/lib/token";
 
 export class FileService {
   static async downloadFile(
     url: string | null,
-    filename: string | null
+    filename: string | null,
   ): Promise<File | null> {
     if (url === null || filename === null) return null;
 
@@ -29,12 +29,8 @@ export class FileService {
   }
 
   static async getCache(): Promise<string[]> {
-    const result = await FILE_API.get("/cache");
-    const files = result.data.files as string[];
-    const fileURLs = files.map(
-      (file) => `${API_URL}/files/${file}?filter=cache`
-    );
-    return fileURLs;
+    const res = await apiContractClient.getCache();
+    return res.files.map((file) => `${API_URL}/files/${file}?filter=cache`);
   }
 
   static async removeFromCache(url: string): Promise<void> {
@@ -42,14 +38,11 @@ export class FileService {
     const lastPart = splitted[splitted.length - 1];
     const filename = lastPart.split("?")[0];
 
-    await FILE_API.delete(`/cache/${filename}`);
+    await apiContractClient.deleteFromCache({ params: { filename } });
   }
 
   static async insertFileToCache(file: File): Promise<string> {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const result = await FILE_API.post("/cache", formData);
-    return `${API_URL}/files/${result.data.file}?filter=cache`;
+    const res = await apiContractClient.insertToCache({ body: { file } });
+    return `${API_URL}/files/${res.file}?filter=cache`;
   }
 }

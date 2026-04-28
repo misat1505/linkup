@@ -1,19 +1,20 @@
-import { authorize } from "@/middlewares/authorize";
-import { TokenProcessor } from "@/lib/TokenProcessor";
 import { env } from "@/config/env";
-import { seedProvider } from "../utils/seedProvider";
-import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
+import { TokenProcessor } from "@/lib/TokenProcessor";
+import { authorize } from "@/middlewares/authorize";
 import { StatusCodes } from "http-status-codes";
+import { describe, expect, it, vi } from "vitest";
+import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
+import { seedProvider } from "../utils/seedProvider";
 
 describe("authorize middleware", () => {
-  const mockNextFunction = jest.fn();
+  const mockNextFunction = vi.fn();
 
   it("appends token for authorized user", async () => {
     await seedProvider(async (seed) => {
       mockUserService.getUser.mockResolvedValue(seed.users[0]);
       const token = TokenProcessor.encode(
         { userId: seed.users[0].id },
-        env.ACCESS_TOKEN_SECRET
+        env.ACCESS_TOKEN_SECRET,
       );
 
       const req = mockRequest({
@@ -33,7 +34,7 @@ describe("authorize middleware", () => {
       mockUserService.getUser.mockResolvedValue(null);
       const token = TokenProcessor.encode(
         { userId: seed.users[0].id },
-        env.ACCESS_TOKEN_SECRET
+        env.ACCESS_TOKEN_SECRET,
       );
 
       const req = mockRequest({

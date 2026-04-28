@@ -1,6 +1,10 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
-import { Filename, FileQuery } from "@/validators/files/getFiles.validators";
 import { StatusCodes } from "http-status-codes";
+
+const contractKey = CONTRACT_KEYS.GET_FILE;
 
 const sendFileBuilder =
   (filename: string, req: Request, res: Response) =>
@@ -8,19 +12,22 @@ const sendFileBuilder =
     validator: () => Promise<boolean>,
     errorMessage = req.t("files.controllers.get-file.default-error-message"),
   ) => {
+    const respond = buildValidatedResponder(res, contractKey);
+
     const fileStorage = req.app.services.fileStorage;
     const result = await validator();
 
-    if (!result)
-      return res.status(StatusCodes.FORBIDDEN).json({ message: errorMessage });
+    if (!result) {
+      return respond(StatusCodes.FORBIDDEN, { message: errorMessage });
+    }
 
     try {
       const url = await fileStorage.getSignedUrl(filename);
-      return res.status(StatusCodes.OK).json({ url });
+      return respond(StatusCodes.OK, { url });
     } catch {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: req.t("files.controllers.get-file.not-found") });
+      return respond(StatusCodes.NOT_FOUND, {
+        message: req.t("files.controllers.get-file.not-found"),
+      });
     }
   };
 
@@ -35,63 +42,20 @@ const sendFileBuilder =
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /files/{filename}:
- *   get:
- *     summary: Retrieve a file
- *     tags: [Files]
- *     parameters:
- *       - name: filename
- *         in: path
- *         required: true
- *         description: The name of the file to retrieve.
- *         schema:
- *           type: string
- *       - name: filter
- *         in: query
- *         required: true
- *         description: The type of file to filter (avatar, chat-message, chat-photo, cache or post).
- *         schema:
- *           type: string
- *           enum: [avatar, chat-message, chat-photo, cache, post]
- *       - name: chat
- *         in: query
- *         required: false
- *         description: Optional chat ID for chat-specific files. Required if filter is 'chat-message' or 'chat-photo'.
- *         schema:
- *           type: string
- *       - name: post
- *         in: query
- *         required: false
- *         description: Optional post ID for post-specific files. Required if filter is 'post'.
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: File retrieved successfully
- *         content:
- *           application/octet-stream:
- *             schema:
- *               type: string
- *               format: binary
- *       400:
- *         description: Invalid request parameters
- *       403:
- *         description: Unauthorized access or query failed
- *       404:
- *         description: File not found
- *       500:
- *         description: Server error when fetching the file
  */
 export const getFileController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
-    const { filename } = req.validated!.params! as Filename;
-    const query = req.validated!.query! as FileQuery;
+    const {
+      params: { filename },
+      query,
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
     const { fileService, fileStorage } = req.app.services;
 
@@ -124,25 +88,29 @@ export const getFileController = async (
 
       case "cache": {
         const path = `cache/${userId}/${filename}`;
+
         try {
           const url = await fileStorage.getSignedUrl(path);
-          return res.status(StatusCodes.OK).json({ url });
+
+          return respond(StatusCodes.OK, { url });
         } catch {
-          return res
-            .status(StatusCodes.NOT_FOUND)
-            .json({ message: req.t("files.controllers.get-file.not-found") });
+          return respond(StatusCodes.NOT_FOUND, {
+            message: req.t("files.controllers.get-file.not-found"),
+          });
         }
       }
 
       case "post": {
         const path = `posts/${query.post}/${filename}`;
+
         try {
           const url = await fileStorage.getSignedUrl(path, 86400);
-          return res.status(StatusCodes.OK).json({ url });
+
+          return respond(StatusCodes.OK, { url });
         } catch {
-          return res
-            .status(StatusCodes.NOT_FOUND)
-            .json({ message: req.t("files.controllers.get-file.not-found") });
+          return respond(StatusCodes.NOT_FOUND, {
+            message: req.t("files.controllers.get-file.not-found"),
+          });
         }
       }
     }

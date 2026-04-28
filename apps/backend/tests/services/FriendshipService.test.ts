@@ -1,11 +1,12 @@
 import { FriendshipService } from "@/services/FriendshipService";
 import { Friendship } from "@packages/schemas";
-import { testWithTransaction } from "../utils/testWithTransaction";
+import { describe, expect, it } from "vitest";
+import { transactionProvider } from "../utils/transactionProvider";
 
 describe("FriendshipService", () => {
   describe("getUserFriendships", () => {
     it("returns empty list for no friendships", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.getUserFriendships(
           seed.users[0].id,
@@ -16,7 +17,7 @@ describe("FriendshipService", () => {
     });
 
     it("retrieves user friendships", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
           seed.users[0].id,
@@ -38,7 +39,7 @@ describe("FriendshipService", () => {
 
   describe("createFriendship", () => {
     it("creates new friendship", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.createFriendship(
           seed.users[0].id,
@@ -54,7 +55,7 @@ describe("FriendshipService", () => {
     });
 
     it("returns null for existing friendship", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
           seed.users[0].id,
@@ -71,7 +72,7 @@ describe("FriendshipService", () => {
 
   describe("acceptFriendship", () => {
     it("accepts pending friendship request", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
           seed.users[0].id,
@@ -91,7 +92,7 @@ describe("FriendshipService", () => {
     });
 
     it("returns null for non-existent pending friendship", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.acceptFriendship(
           seed.users[0].id,
@@ -104,7 +105,7 @@ describe("FriendshipService", () => {
 
   describe("deleteFriendship", () => {
     it("deletes existing friendship", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         await friendshipService.createFriendship(
           seed.users[0].id,
@@ -125,7 +126,7 @@ describe("FriendshipService", () => {
     });
 
     it("returns false for non-existent friendship deletion", async () => {
-      await testWithTransaction(async ({ tx, seed }) => {
+      await transactionProvider(async ({ tx, seed }) => {
         const friendshipService = new FriendshipService(tx);
         const result = await friendshipService.deleteFriendship(
           seed.users[0].id,

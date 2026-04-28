@@ -1,8 +1,7 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
-import {
-  ChatId,
-  CreateReactionDTO,
-} from "@/validators/chats/messages.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -16,75 +15,45 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/{chatId}/reactions:
- *   post:
- *     summary: Create a reaction to a message in a chat
- *     tags: [Chats]
- *     parameters:
- *       - name: chatId
- *         in: path
- *         required: true
- *         description: The ID of the chat where the message exists.
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               reactionId:
- *                 type: string
- *               messageId:
- *                 type: string
- *             required:
- *               - reactionId
- *               - messageId
- *     responses:
- *       201:
- *         description: Reaction created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 reaction:
- *                   $ref: '#/components/schemas/Reaction'
- *       403:
- *         description: User not authorized to create reaction
- *       500:
- *         description: Server error when creating reaction
  */
 export const createReactionController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.CREATE_REACTION;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
+    const {
+      body: { messageId, reactionId },
+      params: { chatId },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
-    const { reactionId, messageId } = req.validated!.body! as CreateReactionDTO;
     const chatService = req.app.services.chatService;
-    const { chatId } = req.validated!.params! as ChatId;
 
-    const isUserAuthorized = await chatService.isUserInChat({ chatId, userId });
+    const isUserAuthorized = await chatService.isUserInChat({
+      chatId,
+      userId,
+    });
 
-    if (!isUserAuthorized)
-      return res.status(StatusCodes.FORBIDDEN).json({
+    if (!isUserAuthorized) {
+      return respond(StatusCodes.FORBIDDEN, {
         message: req.t("chats.controllers.create-reaction.bad-chat"),
       });
+    }
 
     const isMessageInChat = await chatService.isMessageInChat({
       chatId,
       messageId,
     });
 
-    if (!isMessageInChat)
-      return res.status(StatusCodes.BAD_REQUEST).json({
+    if (!isMessageInChat) {
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t("chats.controllers.create-reaction.bad-message"),
       });
+    }
 
     const reaction = await chatService.createReactionToMessage({
       userId,
@@ -92,7 +61,9 @@ export const createReactionController = async (
       messageId,
     });
 
-    return res.status(StatusCodes.CREATED).json({ reaction });
+    return respond(StatusCodes.CREATED, {
+      reaction,
+    });
   } catch {
     next(new Error(req.t("chats.controllers.create-reaction.failure")));
   }

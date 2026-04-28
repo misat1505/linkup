@@ -1,5 +1,7 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
-import { GetPostsQuery } from "@/validators/posts/posts.validators";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -13,52 +15,21 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /posts:
- *   get:
- *     summary: Retrieve a list of posts
- *     tags: [Posts]
- *     parameters:
- *       - name: lastPostId
- *         in: query
- *         description: The ID of the last post, used for pagination.
- *         required: false
- *         schema:
- *           type: string
- *       - name: limit
- *         in: query
- *         description: The number of posts to retrieve.
- *         required: false
- *         schema:
- *           type: integer
- *           default: 10
- *           maximum: 10
- *     responses:
- *       200:
- *         description: A list of posts retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 posts:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Post'
- *       400:
- *         description: Invalid query parameter (e.g., limit exceeds 10)
- *       500:
- *         description: Server error, could not retrieve posts
  */
 export const getPosts = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_POSTS;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
+    const {
+      query: { lastPostId, limit },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const userId = req.user!.id;
-    const { lastPostId, limit } = req.validated!.query! as GetPostsQuery;
     const postRecommendationService =
       req.app.services.postRecommendationService;
 
@@ -68,7 +39,7 @@ export const getPosts = async (
       limit,
     );
 
-    return res.status(StatusCodes.OK).json({ posts });
+    return respond(StatusCodes.OK, { posts });
   } catch {
     next(new Error(req.t("posts.controllers.get-all.failure")));
   }

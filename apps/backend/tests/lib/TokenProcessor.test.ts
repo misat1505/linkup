@@ -1,6 +1,7 @@
 import { env } from "@/config/env";
-import { TokenProcessor, JwtPayload } from "@/lib/TokenProcessor";
+import { JwtPayload, TokenProcessor } from "@/lib/TokenProcessor";
 import { v4 as uuidv4 } from "uuid";
+import { describe, expect, it } from "vitest";
 
 describe("TokenProcessor", () => {
   const payload: JwtPayload = { userId: uuidv4() };

@@ -3,8 +3,18 @@ import { UserWithCredentials } from "@/types/UserWithCredentials";
 import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 import { v4 as uuidv4 } from "uuid";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("loginUser", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("logs in user with valid credentials", async () => {
     const id = uuidv4();
     const salt = "salt";
@@ -28,9 +38,9 @@ describe("loginUser", () => {
     });
     const res = mockResponse();
 
-    await AuthControllers.login(req, res, jest.fn());
+    await AuthControllers.login(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(res.cookie).toHaveBeenCalled();
   });
 
@@ -42,9 +52,12 @@ describe("loginUser", () => {
     });
     const res = mockResponse();
 
-    await AuthControllers.login(req, res, jest.fn());
+    await AuthControllers.login(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.UNAUTHORIZED,
+      expect.anything(),
+    );
     expect(res.cookie).not.toHaveBeenCalled();
   });
 
@@ -67,9 +80,12 @@ describe("loginUser", () => {
     });
     const res = mockResponse();
 
-    await AuthControllers.login(req, res, jest.fn());
+    await AuthControllers.login(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.UNAUTHORIZED,
+      expect.anything(),
+    );
     expect(res.cookie).not.toHaveBeenCalled();
   });
 });

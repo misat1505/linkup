@@ -1,7 +1,6 @@
 "use server";
 
-import { CHAT_API } from "@/utils/api";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { apiContractClient } from "@/lib/apiQueryClient";
 import { Chat, User } from "@packages/schemas";
 import { AxiosError, HttpStatusCode } from "axios";
 
@@ -14,16 +13,8 @@ export async function createPrivateChat(
       users: [user1, user2],
     };
 
-    const api = await serverSideRequestFactory({
-      base: CHAT_API,
-      include: {
-        accessToken: true,
-      },
-    });
-
-    const response = await api.post("/private", body);
-
-    return Chat.parse(response.data.chat);
+    const res = await apiContractClient.createPrivateChat({ body });
+    return res.chat;
   } catch (e) {
     if (e instanceof AxiosError) {
       if (e.response?.status === HttpStatusCode.Conflict) {

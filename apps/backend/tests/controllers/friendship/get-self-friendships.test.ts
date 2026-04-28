@@ -6,9 +6,19 @@ import {
   mockResponse,
 } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockFriendship } from "./setup";
 
+const respond = vi.fn();
+vi.mock("@/utils/validatedResponder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
+
 describe("getUserFriendships", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("retrieves all user friendships", async () => {
     const mockFriendships = [
       {
@@ -25,8 +35,8 @@ describe("getUserFriendships", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.getUserFriendships(req, res, jest.fn());
+    await FriendshipControllers.getUserFriendships(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
   });
 });

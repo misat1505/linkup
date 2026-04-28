@@ -1,5 +1,7 @@
+import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
-import { CreatePrivateChatDTO } from "@/validators/chats/chats.validatotors";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -15,66 +17,41 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats/private:
- *   post:
- *     summary: Create a new private chat
- *     tags: [Chats]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               users:
- *                 type: array
- *                 items:
- *                   type: string
- *             required:
- *               - users
- *     responses:
- *       201:
- *         description: Private chat created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 chat:
- *                   $ref: '#/components/schemas/Chat'
- *       409:
- *         description: Chat already exists
- *       400:
- *         description: User not in chat
- *       500:
- *         description: Server error when creating private chat
  */
 export const createPrivateChatController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.CREATE_PRIVATE_CHAT;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const userId = req.user!.id;
-    const { users } = req.validated!.body! as CreatePrivateChatDTO;
+
+    const {
+      body: { users },
+    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+
     const chatService = req.app.services.chatService;
 
-    if (!users.includes(userId))
-      return res.status(StatusCodes.BAD_REQUEST).json({
+    if (!users.includes(userId)) {
+      return respond(StatusCodes.BAD_REQUEST, {
         message: req.t(
           "chats.controllers.create-private-chat.not-belonging-to-you",
         ),
       });
+    }
 
     const chat = await chatService.getPrivateChatByUserIds(users[0], users[1]);
 
-    if (chat) return res.status(StatusCodes.CONFLICT).json({ chat });
+    if (chat) {
+      return respond(StatusCodes.CONFLICT, { chat });
+    }
 
     const createdChat = await chatService.createPrivateChat(users[0], users[1]);
 
-    return res.status(StatusCodes.CREATED).json({ chat: createdChat });
+    return respond(StatusCodes.CREATED, { chat: createdChat });
   } catch {
     next(new Error(req.t("chats.controllers.create-private-chat.failure")));
   }

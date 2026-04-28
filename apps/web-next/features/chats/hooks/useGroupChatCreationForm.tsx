@@ -59,7 +59,7 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
       const { users, file, name } = data;
       const formData = new FormData();
 
-      if (name) formData.append("name", name);
+      formData.append("name", name ?? "");
       if (file) formData.append("file", file?.[0]);
 
       users.forEach((user) => {

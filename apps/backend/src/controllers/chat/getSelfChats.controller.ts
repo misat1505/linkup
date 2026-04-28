@@ -1,3 +1,5 @@
+import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -12,39 +14,24 @@ import { StatusCodes } from "http-status-codes";
  * @param {NextFunction} next - The Express next function used for error handling.
  *
  * @source
- *
- * @swagger
- * /chats:
- *   get:
- *     summary: Get all chats for a user
- *     tags: [Chats]
- *     responses:
- *       200:
- *         description: Chats retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 chats:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Chat'
- *       500:
- *         description: Server error when fetching user's chats
  */
 export const getSelfChatsController = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.GET_SELF_CHATS;
+  const respond = buildValidatedResponder(res, contractKey);
+
   try {
     const userId = req.user!.id;
     const chatService = req.app.services.chatService;
 
     const chats = await chatService.getUserChats(userId);
 
-    return res.status(StatusCodes.OK).json({ chats });
+    return respond(StatusCodes.OK, {
+      chats,
+    });
   } catch {
     next(new Error(req.t("chats.controllers.get-self-chats.failure")));
   }

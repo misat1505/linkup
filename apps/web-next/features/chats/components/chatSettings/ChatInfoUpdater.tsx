@@ -79,7 +79,7 @@ function Updater({ file, chat }: { file: File | null; chat: Chat }) {
 
     const formData = new FormData();
 
-    if (groupName) formData.append("name", groupName);
+    formData.append("name", groupName ?? "");
     if (image) formData.append("file", image);
 
     await updateChat(chat.id, formData);
