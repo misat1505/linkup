@@ -1,5 +1,4 @@
 import { SOCKET_URL } from "@/constants";
-import { convertDates } from "@/utils/convertDates";
 import { Chat, Message, Reaction } from "@packages/schemas";
 import { io, Socket } from "socket.io-client";
 
@@ -46,10 +45,8 @@ class SocketClient {
   }
 
   onReceiveMessage(callback: (message: Message) => void) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.socket.on(SocketAction.RECEIVE_MESSAGE, (dirtyMessage: any) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const convertedMessage = convertDates(dirtyMessage) as any;
+    this.socket.on(SocketAction.RECEIVE_MESSAGE, (dirtyMessage: unknown) => {
+      const convertedMessage = Message.parse(dirtyMessage);
       const message: Message = convertedMessage;
       callback(message);
     });
@@ -60,9 +57,8 @@ class SocketClient {
   }
 
   onReceiveReaction(callback: (reaction: Reaction) => void) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.socket.on(SocketAction.RECEIVE_REACTION, (reaction: any) => {
-      callback(reaction);
+    this.socket.on(SocketAction.RECEIVE_REACTION, (reaction: unknown) => {
+      callback(Reaction.parse(reaction));
     });
   }
 

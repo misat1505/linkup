@@ -1,6 +1,5 @@
 import { API_URL } from "@/constants";
 import { getAccessToken } from "@/lib/token";
-import { convertDates } from "@/utils/convertDates";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 function createAPIInstance(config: AxiosRequestConfig): AxiosInstance {
@@ -15,16 +14,6 @@ function createAPIInstance(config: AxiosRequestConfig): AxiosInstance {
           localStorage.getItem("lang") || "en";
       }
       return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    },
-  );
-
-  instance.interceptors.response.use(
-    (response) => {
-      response.data = convertDates(response.data);
-      return response;
     },
     (error) => {
       return Promise.reject(error);
