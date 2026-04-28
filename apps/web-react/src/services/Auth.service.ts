@@ -11,6 +11,7 @@ export class AuthService {
 
   static async login(payload: LoginFormType): Promise<User> {
     const res = await apiContractClient.login({ body: payload });
+    setAccessToken(res.accessToken);
     return res.user;
   }
 
