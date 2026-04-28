@@ -1,4 +1,5 @@
 import { Chat } from "@packages/schemas";
+import { API_URL } from "./constants";
 
 export type Filter =
   | { type: "avatar" }
@@ -9,7 +10,7 @@ export function buildFileURL(baseUrl: string | null, filter: Filter) {
   try {
     if (!baseUrl) return "";
 
-    const url = new URL(baseUrl);
+    const url = new URL(`${API_URL}/files/${baseUrl}`);
     const searchParams = new URLSearchParams();
 
     searchParams.set("filter", filter.type);

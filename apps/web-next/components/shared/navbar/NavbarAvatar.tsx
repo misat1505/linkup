@@ -1,7 +1,7 @@
+import { useAppContext } from "@/providers/AppProvider";
 import { buildFileURL } from "@/utils/buildFileURL";
 import { getInitials } from "@/utils/getInitials";
 import { FaUser } from "react-icons/fa";
-import { useAppContext } from "@/providers/AppProvider";
 import Avatar from "../Avatar";
 
 export default function NavbarAvatar() {

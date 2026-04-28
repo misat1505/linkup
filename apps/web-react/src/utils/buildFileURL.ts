@@ -1,3 +1,4 @@
+import { API_URL } from "@/constants";
 import { Chat } from "@packages/schemas";
 
 export type Filter =
@@ -9,7 +10,7 @@ export function buildFileURL(baseUrl: string | null, filter: Filter) {
   try {
     if (!baseUrl) return "";
 
-    const url = new URL(baseUrl);
+    const url = new URL(`${API_URL}/files/${baseUrl}`);
     const searchParams = new URLSearchParams();
 
     searchParams.set("filter", filter.type);
@@ -20,7 +21,8 @@ export function buildFileURL(baseUrl: string | null, filter: Filter) {
     url.search = searchParams.toString();
 
     return url.toString();
-  } catch {
+  } catch (e) {
+    console.log(e);
     return "";
   }
 }
