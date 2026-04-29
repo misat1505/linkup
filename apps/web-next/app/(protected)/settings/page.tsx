@@ -1,22 +1,22 @@
 "use client";
 import { DefaultValues, SubmitHandler } from "react-hook-form";
 import { AxiosError } from "axios";
-import { queryKeys } from "@/lib/queryKeys";
-import { buildFileURL } from "@/utils/buildFileURL";
+import { queryKeys } from "@/lib/query-keys";
+import { buildFileURL } from "@/utils/build-file-url";
 import { toast } from "@/components/ui/use-toast";
-import { downloadFile } from "@/features/files/actions/downloadFile";
-import { useAppContext } from "@/providers/AppProvider";
-import { updateMe } from "@/features/auth/actions/updateMe";
-import { useLanguageContext } from "@/providers/LanguageProvider";
+import { downloadFile } from "@/features/files/actions/download-file";
+import { useAppContext } from "@/providers/app-provider";
+import { updateMe } from "@/features/auth/actions/update-me";
+import { useLanguageContext } from "@/providers/language-provider";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/shared/Loading";
-import { SignupFormEntries } from "@/features/auth/hooks/useSignupForm";
+import Loading from "@/components/shared/loading";
+import { SignupFormEntries } from "@/features/auth/hooks/use-signup-form";
 import { SignupFormType } from "@/features/auth/schemas/auth.validators";
-import SignupFormProvider from "@/features/auth/providers/SignupFormProvider";
-import SignupForm from "@/features/auth/components/SignupForm";
-import SettingsSlogan from "@/features/settings/components/SettingsSlogan";
-import SettingsCards from "@/features/settings/components/SettingsCards";
-import AuthGuard from "@/components/AuthGuard";
+import SignupFormProvider from "@/features/auth/providers/signup-form-provider";
+import SignupForm from "@/features/auth/components/signup-form";
+import SettingsSlogan from "@/features/settings/components/settings-slogan";
+import SettingsCards from "@/features/settings/components/settings-cards";
+import AuthGuard from "@/components/auth-guard";
 
 export default function Settings() {
   return (

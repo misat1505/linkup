@@ -1,0 +1,110 @@
+import { useToast } from "@/components/ui/use-toast";
+import { useAppContext } from "@/contexts/app-provider";
+import { queryKeys } from "@/lib/query-keys";
+import { ROUTES } from "@/lib/routes";
+import { ChatService } from "@/services/chat.service";
+import {
+  newGroupChatFormSchema,
+  NewGroupChatFormType,
+} from "@/validators/chat.validators";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Chat, User } from "@packages/schemas";
+import { AxiosError } from "axios";
+import { useEffect } from "react";
+import {
+  FieldErrors,
+  SubmitHandler,
+  useForm,
+  UseFormRegister,
+} from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
+
+type GroupChatFormEntries = {
+  users: User[];
+  name?: string | undefined;
+  file?: FileList | undefined;
+};
+
+export type useNewGroupChatFormValue = {
+  register: UseFormRegister<GroupChatFormEntries>;
+  errors: FieldErrors<GroupChatFormEntries>;
+  isSubmitting: boolean;
+  file: File | undefined;
+  users: User[];
+  appendUser: (user: User) => void;
+  removeUser: (user: User) => void;
+  submitForm: (
+    e?: React.BaseSyntheticEvent<object, unknown, unknown> | undefined,
+  ) => Promise<void>;
+};
+
+export default function useNewGroupChatForm(): useNewGroupChatFormValue {
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { user: me } = useAppContext();
+  const { toast } = useToast();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<NewGroupChatFormType>({
+    resolver: zodResolver(newGroupChatFormSchema),
+  });
+
+  const onSubmit: SubmitHandler<NewGroupChatFormType> = async (data) => {
+    try {
+      const chat = await ChatService.createGroupChat(data);
+      queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+        if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
+        return oldChats ? [...oldChats, chat] : [chat];
+      });
+      navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId: chat.id } }));
+    } catch (e: unknown) {
+      if (e instanceof AxiosError) {
+        toast({
+          title: t("chats.create-new-chat.group.error.toast.title"),
+          description: e.response?.data.message,
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const submitForm = handleSubmit(onSubmit);
+
+  useEffect(() => {
+    setValue("users", [me!]);
+  }, [me, setValue]);
+
+  const { file: filelist, users } = watch();
+  const file = filelist?.[0];
+
+  const appendUser = (user: User) => {
+    if (users.some((u) => u.id === user.id)) return;
+    setValue("users", [...users, user]);
+  };
+
+  const removeUser = (user: User) => {
+    if (user.id === me!.id) return;
+    setValue(
+      "users",
+      users.filter((u) => u.id !== user.id),
+    );
+  };
+
+  return {
+    register,
+    errors,
+    isSubmitting,
+    submitForm,
+    file,
+    users,
+    appendUser,
+    removeUser,
+  };
+}

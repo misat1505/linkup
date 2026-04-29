@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { API_URL } from "./constants";
-import { getLanguageCookie } from "./getLanguageCookie";
+import { getLanguageCookie } from "./get-language-cookie";
 
 function createAPIInstance(config: AxiosRequestConfig): AxiosInstance {
   const instance = axios.create(config);

@@ -1,4 +1,4 @@
-import { getAccessTokenFromCookie } from "@/features/auth/utils/getAccessTokenFromCookie";
+import { getAccessTokenFromCookie } from "@/features/auth/utils/get-access-token-from-cookie";
 import { FILE_API } from "@/utils/api";
 
 export async function GET(

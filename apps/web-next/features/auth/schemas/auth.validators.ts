@@ -1,4 +1,4 @@
-import { useLanguageContext } from "@/providers/LanguageProvider";
+import { useLanguageContext } from "@/providers/language-provider";
 import {
   LOGIN_VALIDATION,
   LoginDTO,

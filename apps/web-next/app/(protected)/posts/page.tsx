@@ -1,8 +1,8 @@
-import AuthGuard from "@/components/AuthGuard";
-import { I18nText } from "@/components/shared/I18nText";
+import AuthGuard from "@/components/auth-guard";
+import { I18nText } from "@/components/shared/i18n-text";
 import { buttonVariants } from "@/components/ui/button";
-import { getMyPosts } from "@/features/posts/actions/getMyPosts";
-import MyPostPreview from "@/features/posts/components/MyPostPreview";
+import { getMyPosts } from "@/features/posts/actions/get-my-posts";
+import MyPostPreview from "@/features/posts/components/my-post-preview";
 import Link from "next/link";
 
 export default async function MyPostsPage() {

@@ -4,14 +4,14 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-import "./DELETE_chats-chatId-users.spec";
-import "./GET_chats-chatId-message.spec";
-import "./GET_chats-reactions.spec";
-import "./GET_chats.spec";
-import "./POST_chat-private.spec";
-import "./POST_chats-chatId-messages.spec";
-import "./POST_chats-chatId-reactions.spec";
-import "./POST_chats-chatId-users.spec";
-import "./POST_chats-group.spec";
-import "./PUT_chats-chatId-users-userId-alias.spec";
-import "./PUT_chats-chatId.spec";
+import "./delete_chats-chat-id-users.spec";
+import "./get_chats-chat-id-message.spec";
+import "./get_chats-reactions.spec";
+import "./get_chats.spec";
+import "./post_chat-private.spec";
+import "./post_chats-chat-id-messages.spec";
+import "./post_chats-chat-id-reactions.spec";
+import "./post_chats-chat-id-users.spec";
+import "./post_chats-group.spec";
+import "./put_chats-chat-id-users-user-id-alias.spec";
+import "./put_chats-chat-id.spec";

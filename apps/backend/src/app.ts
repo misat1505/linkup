@@ -11,10 +11,10 @@ import { env } from "./config/env";
 import { initReactions } from "./config/reactions";
 import i18next from "./i18n";
 import { generateOpenApiDocument } from "./lib/openapi";
-import { prisma } from "./lib/Prisma";
+import { prisma } from "./lib/prisma";
 import { Routers } from "./routes";
-import { initializeServices } from "./utils/initializeServices";
-import { initializeSocket } from "./utils/initializeSocket";
+import { initializeServices } from "./utils/initialize-services";
+import { initializeSocket } from "./utils/initialize-socket";
 
 const app = express();
 

@@ -1,10 +1,10 @@
 import { env } from "@/config/env";
-import { TokenProcessor } from "@/lib/TokenProcessor";
+import { TokenProcessor } from "@/lib/token-processor";
 import { authorize } from "@/middlewares/authorize";
 import { StatusCodes } from "http-status-codes";
 import { describe, expect, it, vi } from "vitest";
 import { mockRequest, mockResponse, mockUserService } from "../utils/mocks";
-import { seedProvider } from "../utils/seedProvider";
+import { seedProvider } from "../utils/seed-provider";
 
 describe("authorize middleware", () => {
   const mockNextFunction = vi.fn();

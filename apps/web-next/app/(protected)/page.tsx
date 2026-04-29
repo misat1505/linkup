@@ -1,9 +1,9 @@
-import AuthGuard from "@/components/AuthGuard";
-import { getRecommendedPosts } from "@/features/posts/actions/getRecommededPosts";
-import { PostsFeed } from "@/features/posts/components/PostsFeed";
+import AuthGuard from "@/components/auth-guard";
+import { getRecommendedPosts } from "@/features/posts/actions/get-recommeded-posts";
+import { PostsFeed } from "@/features/posts/components/posts-feed";
 import { PostWithRenderedContent } from "@/features/posts/schemas/post-with-rendered-content";
-import { makeQueryClient } from "@/lib/makeQueryClient";
-import { queryKeys } from "@/lib/queryKeys";
+import { makeQueryClient } from "@/lib/make-query-client";
+import { queryKeys } from "@/lib/query-keys";
 import { DEFAULT_POSTS_FEED_PAGE_LENGTH } from "@/utils/constants";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 

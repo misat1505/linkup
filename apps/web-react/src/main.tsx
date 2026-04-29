@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
-import App from "./App.tsx";
-import BgGradient from "./components/common/BgGradient.tsx";
-import LanguageProvider from "./contexts/LanguageProvider.tsx";
-import { ThemeProvider } from "./contexts/ThemeProvider.tsx";
+import App from "./app.tsx";
+import BgGradient from "./components/common/bg-gradient.tsx";
+import LanguageProvider from "./contexts/language-provider.tsx";
+import { ThemeProvider } from "./contexts/theme-provider.tsx";
 import "./index.css";
 
 const queryClient = new QueryClient({

@@ -1,4 +1,4 @@
-import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { UserWithCredentials } from "@/types/user-with-credentials";
 import { z } from "zod";
 
 export const SignupDTO = UserWithCredentials.pick({

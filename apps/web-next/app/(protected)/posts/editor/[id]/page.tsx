@@ -1,8 +1,8 @@
-import { getPost } from "@/features/posts/actions/getPost";
-import Editor from "@/features/editor/components/Editor";
-import EditorProvider from "@/features/editor/providers/EditorProvider";
+import { getPost } from "@/features/posts/actions/get-post";
+import Editor from "@/features/editor/components/editor";
+import EditorProvider from "@/features/editor/providers/editor-provider";
 import { notFound } from "next/navigation";
-import AuthGuard from "@/components/AuthGuard";
+import AuthGuard from "@/components/auth-guard";
 
 export default async function PostEditorUpdatePage({
   params,

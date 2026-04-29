@@ -1,4 +1,4 @@
-import { prisma as globalPrisma } from "../lib/Prisma";
+import { prisma as globalPrisma } from "../lib/prisma";
 
 type Reaction = { id: string; name: string };
 

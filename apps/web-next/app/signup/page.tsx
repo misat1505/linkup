@@ -1,16 +1,16 @@
 "use client";
 import { SubmitHandler } from "react-hook-form";
 import { toast } from "@/components/ui/use-toast";
-import { useLanguageContext } from "@/providers/LanguageProvider";
-import SignupSlogan from "@/features/auth/components/SignupSlogan";
-import SignupForm from "@/features/auth/components/SignupForm";
-import AlreadyHaveAccount from "@/features/auth/components/AlreadyHaveAccount";
-import SignupFormProvider from "@/features/auth/providers/SignupFormProvider";
+import { useLanguageContext } from "@/providers/language-provider";
+import SignupSlogan from "@/features/auth/components/signup-slogan";
+import SignupForm from "@/features/auth/components/signup-form";
+import AlreadyHaveAccount from "@/features/auth/components/already-have-account";
+import SignupFormProvider from "@/features/auth/providers/signup-form-provider";
 import { useRouter } from "next/navigation";
 import { SignupFormType } from "@/features/auth/schemas/auth.validators";
-import { SignupFormEntries } from "@/features/auth/hooks/useSignupForm";
-import { signupUser } from "@/features/auth/actions/signupUser";
-import { useAppContext } from "@/providers/AppProvider";
+import { SignupFormEntries } from "@/features/auth/hooks/use-signup-form";
+import { signupUser } from "@/features/auth/actions/signup-user";
+import { useAppContext } from "@/providers/app-provider";
 import { sleep } from "@/utils/sleep";
 
 export default function Signup() {

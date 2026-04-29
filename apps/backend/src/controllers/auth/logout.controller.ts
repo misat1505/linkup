@@ -1,5 +1,5 @@
 import { refreshTokenCookieName } from "@/config/jwt-cookie";
-import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { buildValidatedResponder } from "@/utils/validated-responder";
 import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
