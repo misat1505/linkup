@@ -1,11 +1,11 @@
 import { launch } from "chrome-launcher";
-import lighthouse, { Flags } from "lighthouse";
-import puppeteer, { type Page } from "puppeteer-core";
 import fs from "fs/promises";
+import lighthouse, { Flags } from "lighthouse";
 import path from "path";
-import type { MetricKey, MetricResult, Mode } from "./types";
+import puppeteer, { type Page } from "puppeteer-core";
 import { debugDir, importantMetrics, outputDir } from "./constants";
 import { type BenchmarkProfile, buildFlags, profiles } from "./profiles";
+import type { MetricKey, MetricResult, Mode } from "./types";
 
 const args = process.argv.slice(2);
 const getArg = (flag: string) => {
@@ -269,8 +269,8 @@ async function main() {
     await page.goto(`${getFrontendUrlBase(MODE)}/login`, {
       waitUntil: "networkidle0",
     });
-    await page.type('input[name="login"]', "login6");
-    await page.type('input[name="password"]', "pass6");
+    await page.type('input[name="login"]', "login1");
+    await page.type('input[name="password"]', "pass1");
     await Promise.all([
       page.click("button[type=submit]"),
       page.waitForNavigation({ waitUntil: "networkidle0" }),
