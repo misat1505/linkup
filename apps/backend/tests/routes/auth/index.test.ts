@@ -4,9 +4,9 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-import "./GET_auth-user.spec";
-import "./POST_auth-login.spec";
-import "./POST_auth-logout.spec";
-import "./POST_auth-refresh.spec";
-import "./POST_auth-signup.spec";
-import "./PUT_auth-user.spec";
+import "./get_auth-user.spec";
+import "./post_auth-login.spec";
+import "./post_auth-logout.spec";
+import "./post_auth-refresh.spec";
+import "./post_auth-signup.spec";
+import "./put_auth-user.spec";

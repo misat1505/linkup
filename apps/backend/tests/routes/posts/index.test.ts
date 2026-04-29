@@ -4,10 +4,10 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-import "./DELETE_posts-id.spec";
-import "./GET_posts-id.spec";
-import "./GET_posts-mine.spec";
-import "./GET_posts.spec";
-import "./POST_posts-id-report.spec";
-import "./POST_posts.spec";
-import "./PUT_posts-id.spec";
+import "./delete_posts-id.spec";
+import "./get_posts-id.spec";
+import "./get_posts-mine.spec";
+import "./get_posts.spec";
+import "./post_posts-id-report.spec";
+import "./post_posts.spec";
+import "./put_posts-id.spec";

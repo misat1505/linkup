@@ -3,22 +3,12 @@ import { TFunction } from "i18next";
 import { createFullName } from "./create-full-name";
 
 export class MessageUtils {
-  private chat: Chat;
-  private message: Message;
-  private me: User;
-  private t: TFunction<"translation", undefined>;
-
   constructor(
-    chat: Chat,
-    message: Message,
-    me: User,
-    t: TFunction<"translation", undefined>,
-  ) {
-    this.message = message;
-    this.me = me;
-    this.chat = chat;
-    this.t = t;
-  }
+    private readonly chat: Chat,
+    private readonly message: Message,
+    private readonly me: User,
+    private readonly t: TFunction<"translation", undefined>,
+  ) {}
 
   private getDisplayNameById(id: User["id"]): string {
     const user = this.chat.users?.find((u) => u.id === id);

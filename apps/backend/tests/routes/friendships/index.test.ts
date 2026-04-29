@@ -4,7 +4,7 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-import "./DELETE_friendships.spec";
-import "./GET_friendships.spec";
-import "./POST_friendships-accept.spec";
-import "./POST_friendships.spec";
+import "./delete_friendships.spec";
+import "./get_friendships.spec";
+import "./post_friendships-accept.spec";
+import "./post_friendships.spec";
