@@ -1,9 +1,12 @@
-import { User } from "@packages/schemas";
+import { LOGIN_VALIDATION, User } from "@packages/schemas";
 import { z } from "zod";
 
 export const UserWithCredentials = User.extend({
-  login: z.string().min(5).max(50),
-  password: z.string().min(5),
+  login: z
+    .string()
+    .min(LOGIN_VALIDATION.login.min)
+    .max(LOGIN_VALIDATION.login.max),
+  password: z.string().min(LOGIN_VALIDATION.password.min),
   salt: z.string(),
 });
 
