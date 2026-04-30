@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./app.tsx";
 import BgGradient from "./components/common/bg-gradient.tsx";
 import { SetUiPackageConfig } from "./components/common/set-ui-package-config.tsx";
+import AppProvider from "./contexts/app-provider.tsx";
 import LanguageProvider from "./contexts/language-provider.tsx";
 import { ThemeProvider } from "./contexts/theme-provider.tsx";
 import "./index.css";
@@ -21,13 +22,15 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <BgGradient />
-        <LanguageProvider>
-          <div className="relative z-10">
-            <SetUiPackageConfig />
-            <App />
-          </div>
-        </LanguageProvider>
+        <AppProvider>
+          <BgGradient />
+          <LanguageProvider>
+            <div className="relative z-10">
+              <SetUiPackageConfig />
+              <App />
+            </div>
+          </LanguageProvider>
+        </AppProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>,

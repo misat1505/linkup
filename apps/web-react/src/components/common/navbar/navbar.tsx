@@ -1,18 +1,20 @@
-import { useAppContext } from "@/contexts/app-provider";
-import { useNavigate } from "react-router-dom";
-import Tooltip from "../tooltip";
-import FocusableSpan from "../focusable-span";
-import { ROUTES } from "@/lib/routes";
 import { LOGO_PATH } from "@/constants";
-import NavbarSearch from "./navbar-search";
-import ThemeToggle from "./theme-toggle";
-import NavbarSheet from "./navbar-sheet";
+import { useAppContext } from "@/contexts/app-provider";
+import { useThemeContext } from "@/contexts/theme-provider";
+import { ROUTES } from "@/lib/routes";
+import { ThemeToggle } from "@packages/ui";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import FocusableSpan from "../focusable-span";
+import Tooltip from "../tooltip";
+import NavbarSearch from "./navbar-search";
+import NavbarSheet from "./navbar-sheet";
 
 export default function Navbar() {
   const { t } = useTranslation();
   const { user } = useAppContext();
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useThemeContext();
   const isLoggedIn = !!user;
 
   return (
@@ -33,7 +35,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-x-4">
           <div className="hidden sm:block">
-            <ThemeToggle />
+            <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
           </div>
           <NavbarSheet />
         </div>

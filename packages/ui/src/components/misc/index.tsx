@@ -3,6 +3,7 @@ export * from "./bg-gradient";
 export * from "./focusable-span";
 export * from "./image";
 export * from "./loading";
+export * from "./navbar";
 export * from "./protected-file";
 export * from "./protected-video";
 export * from "./tooltip";
