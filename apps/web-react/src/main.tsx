@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./app.tsx";
 import BgGradient from "./components/common/bg-gradient.tsx";
 import { I18nText } from "./components/common/i18n-text.tsx";
+import { LinkWrapper } from "./components/common/link-wrapper.tsx";
 import LanguageProvider from "./contexts/language-provider.tsx";
 import { ThemeProvider } from "./contexts/theme-provider.tsx";
 import "./index.css";
@@ -20,6 +21,7 @@ const queryClient = new QueryClient({
 
 setUiPackageConfig({
   translationComponent: I18nText,
+  linkComponent: LinkWrapper,
 });
 
 createRoot(document.getElementById("root")!).render(
