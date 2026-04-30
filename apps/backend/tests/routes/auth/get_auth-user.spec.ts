@@ -1,0 +1,21 @@
+import { User } from "@packages/schemas";
+import { TestHelpers } from "@tests/utils/helpers";
+import { testWithTransaction } from "@tests/utils/test-with-transaction";
+import { StatusCodes } from "http-status-codes";
+import request from "supertest";
+import { describe, it } from "vitest";
+
+describe("[GET] /auth/user", () => {
+  it("retrieves authenticated user", async () => {
+    await testWithTransaction(async ({ app, seed }) => {
+      const token = TestHelpers.createToken(seed.users[0].id);
+
+      const res = await request(app)
+        .get("/auth/user")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(StatusCodes.OK);
+
+      User.strict().parse(res.body.user);
+    });
+  });
+});

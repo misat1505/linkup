@@ -5,10 +5,10 @@ import {
   refreshTokenCookieOptions,
   refreshTokenSignOptions,
 } from "@/config/jwt-cookie";
-import { Hasher } from "@/lib/Hasher";
-import { TokenProcessor } from "@/lib/TokenProcessor";
-import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { Hasher } from "@/lib/hasher";
+import { TokenProcessor } from "@/lib/token-processor";
+import { extractValidatedRequest } from "@/utils/extract-validated-request";
+import { buildValidatedResponder } from "@/utils/validated-responder";
 import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";

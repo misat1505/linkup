@@ -1,5 +1,5 @@
 import { FriendshipControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { UserWithCredentials } from "@/types/user-with-credentials";
 import {
   mockFriendshipService,
   mockRequest,
@@ -10,7 +10,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockFriendship } from "./setup";
 
 const respond = vi.fn();
-vi.mock("@/utils/validatedResponder", () => ({
+vi.mock("@/utils/validated-responder", () => ({
   buildValidatedResponder: vi.fn(() => respond),
 }));
 

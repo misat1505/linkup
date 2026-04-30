@@ -21,6 +21,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         project: "./tsconfig.json",
+        tsconfigRootDir: import.meta.dirname,
       },
     },
   },
@@ -34,6 +35,10 @@ export default tseslint.config(
       "load-tests-report/**",
       "logs/**",
       "prisma/**",
+      "prisma.config.ts",
+      "tsup.config.ts",
+      "vitest.config.ts",
+      "eslint.config.mjs",
     ],
   },
 );

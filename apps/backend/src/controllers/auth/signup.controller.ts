@@ -5,12 +5,12 @@ import {
   refreshTokenCookieOptions,
   refreshTokenSignOptions,
 } from "@/config/jwt-cookie";
-import { Hasher } from "@/lib/Hasher";
-import { TokenProcessor } from "@/lib/TokenProcessor";
-import { UserWithCredentials } from "@/types/UserWithCredentials";
-import { extractValidatedRequest } from "@/utils/extractValidatedRequest";
-import { processAvatar } from "@/utils/processAvatar";
-import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { Hasher } from "@/lib/hasher";
+import { TokenProcessor } from "@/lib/token-processor";
+import { UserWithCredentials } from "@/types/user-with-credentials";
+import { extractValidatedRequest } from "@/utils/extract-validated-request";
+import { processAvatar } from "@/utils/process-avatar";
+import { buildValidatedResponder } from "@/utils/validated-responder";
 import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";

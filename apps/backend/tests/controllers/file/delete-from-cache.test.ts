@@ -1,5 +1,5 @@
 import { FileControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { UserWithCredentials } from "@/types/user-with-credentials";
 import {
   mockFileService,
   mockFileStorage,
@@ -10,7 +10,7 @@ import { StatusCodes } from "http-status-codes";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const respond = vi.fn();
-vi.mock("@/utils/validatedResponder", () => ({
+vi.mock("@/utils/validated-responder", () => ({
   buildValidatedResponder: vi.fn(() => respond),
 }));
 

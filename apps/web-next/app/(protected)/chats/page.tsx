@@ -1,9 +1,9 @@
-import AuthGuard from "@/components/AuthGuard";
-import { I18nText } from "@/components/shared/I18nText";
-import { getChatsCached } from "@/features/chats/actions/getChats";
-import ChatNavigation from "@/features/chats/components/ChatNavigation";
-import { CreateChatTrigger } from "@/features/chats/components/CreateChatTrigger";
-import ChatPageProvider from "@/features/chats/providers/ChatPageProvider";
+import AuthGuard from "@/components/auth-guard";
+import { I18nText } from "@/components/shared/i18n-text";
+import { getChatsCached } from "@/features/chats/actions/get-chats";
+import ChatNavigation from "@/features/chats/components/chat-navigation";
+import { CreateChatTrigger } from "@/features/chats/components/create-chat-trigger";
+import ChatPageProvider from "@/features/chats/providers/chat-page-provider";
 import { BsChatLeftTextFill } from "react-icons/bs";
 
 export default async function ChatsPage() {

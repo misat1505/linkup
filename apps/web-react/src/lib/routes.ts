@@ -1,15 +1,15 @@
 import React, { lazy } from "react";
 import { route } from "react-router-typesafe-routes";
 
-const Home = lazy(() => import("../pages/Home"));
-const Settings = lazy(() => import("../pages/Settings"));
-const NotFound = lazy(() => import("../pages/NotFound"));
-const Login = lazy(() => import("../pages/Login"));
-const Signup = lazy(() => import("../pages/Signup"));
-const Chats = lazy(() => import("../pages/Chats"));
-const PostEditor = lazy(() => import("../pages/PostEditor"));
-const Posts = lazy(() => import("../pages/Posts"));
-const Friends = lazy(() => import("../pages/Friends"));
+const Home = lazy(() => import("../pages/home"));
+const Settings = lazy(() => import("../pages/settings"));
+const NotFound = lazy(() => import("../pages/not-found"));
+const Login = lazy(() => import("../pages/login"));
+const Signup = lazy(() => import("../pages/signup"));
+const Chats = lazy(() => import("../pages/chats"));
+const PostEditor = lazy(() => import("../pages/post-editor"));
+const Posts = lazy(() => import("../pages/posts"));
+const Friends = lazy(() => import("../pages/friends"));
 
 type RouteType = {
   path: string;

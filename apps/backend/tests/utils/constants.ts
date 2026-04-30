@@ -1,4 +1,4 @@
-import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { UserWithCredentials } from "@/types/user-with-credentials";
 import { User } from "@packages/schemas";
 import path from "path";
 

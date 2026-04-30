@@ -1,12 +1,12 @@
-import AuthGuard from "@/components/AuthGuard";
-import { getMeCached } from "@/features/auth/actions/getMe";
-import { getChatByIdCached } from "@/features/chats/actions/getChatById";
-import { getChatsCached } from "@/features/chats/actions/getChats";
-import Chat from "@/features/chats/components/Chat";
-import ChatNavigation from "@/features/chats/components/ChatNavigation";
-import ChatPageProvider from "@/features/chats/providers/ChatPageProvider";
-import { prefetchFirstPage } from "@/features/chats/utils/prefetchFirstPage";
-import { makeQueryClient } from "@/lib/makeQueryClient";
+import AuthGuard from "@/components/auth-guard";
+import { getMeCached } from "@/features/auth/actions/get-me";
+import { getChatByIdCached } from "@/features/chats/actions/get-chat-by-id";
+import { getChatsCached } from "@/features/chats/actions/get-chats";
+import Chat from "@/features/chats/components/chat";
+import ChatNavigation from "@/features/chats/components/chat-navigation";
+import ChatPageProvider from "@/features/chats/providers/chat-page-provider";
+import { prefetchFirstPage } from "@/features/chats/utils/prefetch-first-page";
+import { makeQueryClient } from "@/lib/make-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function ChatPage({

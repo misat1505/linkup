@@ -1,12 +1,12 @@
 import { AuthControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/UserWithCredentials";
+import { UserWithCredentials } from "@/types/user-with-credentials";
 import { mockRequest, mockResponse, mockUserService } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 import { v4 as uuidv4 } from "uuid";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const respond = vi.fn();
-vi.mock("@/utils/validatedResponder", () => ({
+vi.mock("@/utils/validated-responder", () => ({
   buildValidatedResponder: vi.fn(() => respond),
 }));
 

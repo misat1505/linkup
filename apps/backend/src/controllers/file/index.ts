@@ -1,7 +1,7 @@
-import { deleteFromCache as deleteFromCacheController } from "./deleteFromCache.controller";
-import { getCache as getCacheController } from "./getCache.controller";
-import { getFileController } from "./getFile.controller";
-import { insertToCache as insertToCacheController } from "./insertToCache.controller";
+import { deleteFromCache as deleteFromCacheController } from "./delete-from-cache.controller";
+import { getCache as getCacheController } from "./get-cache.controller";
+import { getFileController } from "./get-file.controller";
+import { insertToCache as insertToCacheController } from "./insert-to-cache.controller";
 
 export const FileControllers = {
   deleteFromCache: deleteFromCacheController,

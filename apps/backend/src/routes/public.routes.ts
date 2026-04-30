@@ -1,6 +1,6 @@
 import { env } from "@/config/env";
 import { reactions } from "@/config/reactions";
-import { buildValidatedResponder } from "@/utils/validatedResponder";
+import { buildValidatedResponder } from "@/utils/validated-responder";
 import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
 import { resetDB } from "@tests/utils/setup";
 import { Router } from "express";

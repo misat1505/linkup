@@ -1,8 +1,8 @@
-import LoginForm from "@/features/auth/components/LoginForm";
-import LoginPageLogo from "@/features/auth/components/LoginPageLogo";
-import LoginSlogan from "@/features/auth/components/LoginSlogan";
-import NoAccount from "@/features/auth/components/NoAccount";
-import LoginFormProvider from "@/features/auth/providers/LoginFormProvider";
+import LoginForm from "@/features/auth/components/login-form";
+import LoginPageLogo from "@/features/auth/components/login-page-logo";
+import LoginSlogan from "@/features/auth/components/login-slogan";
+import NoAccount from "@/features/auth/components/no-account";
+import LoginFormProvider from "@/features/auth/providers/login-form-provider";
 
 export default function Login() {
   // const { t } = useTranslation();

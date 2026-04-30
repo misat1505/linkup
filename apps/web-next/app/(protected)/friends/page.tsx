@@ -1,6 +1,6 @@
-import AuthGuard from "@/components/AuthGuard";
-import { getMyFriendships } from "@/features/friends/actions/getMyFriendships";
-import { FriendsPageContent } from "@/features/friends/components/FriendsPageContent";
+import AuthGuard from "@/components/auth-guard";
+import { getMyFriendships } from "@/features/friends/actions/get-my-friendships";
+import { FriendsPageContent } from "@/features/friends/components/friends-page-content";
 
 export default async function FriendsPage() {
   const friendships = await getMyFriendships();

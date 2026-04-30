@@ -1,9 +1,9 @@
-import { getSelfController } from "./getSelf.controller";
+import { getSelfController } from "./get-self.controller";
 import { loginController } from "./login.controller";
 import { logoutController } from "./logout.controller";
-import { refreshTokenController } from "./refreshToken.controller";
+import { refreshTokenController } from "./refresh-token.controller";
 import { signupController } from "./signup.controller";
-import { updateSelfController } from "./updateSelf.controller";
+import { updateSelfController } from "./update-self.controller";
 
 export const AuthControllers = {
   getSelf: getSelfController,

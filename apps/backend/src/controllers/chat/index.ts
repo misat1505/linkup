@@ -1,13 +1,13 @@
-import { addUserToGroupChatController } from "./addUserToGroupChat.controller";
-import { createGroupChatController } from "./createGroupChat.controller";
-import { createMessageController } from "./createMessage.controller";
-import { createPrivateChatController } from "./createPrivateChat.controller";
-import { createReactionController } from "./createReaction.controller";
-import { deleteSelfFromGroupChatController } from "./deleteSelfFromGroupChat.controller";
-import { getChatMessagesController } from "./getChatMessages.controller";
-import { getSelfChatsController } from "./getSelfChats.controller";
-import { updateGroupChatController } from "./updateGroupChat.controller";
-import { updateAliasController } from "./updateUserAlias.controller";
+import { addUserToGroupChatController } from "./add-user-to-group-chat.controller";
+import { createGroupChatController } from "./create-group-chat.controller";
+import { createMessageController } from "./create-message.controller";
+import { createPrivateChatController } from "./create-private-chat.controller";
+import { createReactionController } from "./create-reaction.controller";
+import { deleteSelfFromGroupChatController } from "./delete-self-from-group-chat.controller";
+import { getChatMessagesController } from "./get-chat-messages.controller";
+import { getSelfChatsController } from "./get-self-chats.controller";
+import { updateGroupChatController } from "./update-group-chat.controller";
+import { updateAliasController } from "./update-user-alias.controller";
 
 export const ChatControllers = {
   addUserToGroupChat: addUserToGroupChatController,

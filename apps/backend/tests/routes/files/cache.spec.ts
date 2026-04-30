@@ -1,5 +1,5 @@
 import { TestHelpers } from "@tests/utils/helpers";
-import { testWithTransaction } from "@tests/utils/testWithTransaction";
+import { testWithTransaction } from "@tests/utils/test-with-transaction";
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 import { describe, it } from "vitest";

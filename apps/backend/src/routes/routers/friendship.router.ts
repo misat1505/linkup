@@ -1,5 +1,5 @@
 import { FriendshipControllers } from "@/controllers";
-import { buildProtectedRoute, buildRouter } from "@/utils/buildRouter";
+import { buildProtectedRoute, buildRouter } from "@/utils/build-router";
 import { API_CONTRACT } from "@packages/api-contract";
 
 /**

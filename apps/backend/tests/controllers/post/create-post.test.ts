@@ -1,14 +1,14 @@
 import { PostControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/UserWithCredentials";
-import { handleMarkdownUpdate } from "@/utils/updatePost";
+import { UserWithCredentials } from "@/types/user-with-credentials";
+import { handleMarkdownUpdate } from "@/utils/update-post";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-vi.mock("@/utils/updatePost");
+vi.mock("@/utils/update-post");
 
 const respond = vi.fn();
-vi.mock("@/utils/validatedResponder", () => ({
+vi.mock("@/utils/validated-responder", () => ({
   buildValidatedResponder: vi.fn(() => respond),
 }));
 

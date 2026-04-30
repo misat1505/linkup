@@ -1,7 +1,7 @@
 import { AuthControllers } from "@/controllers";
 import { authorizeWithRefreshToken } from "@/middlewares/authorize";
 import { upload } from "@/middlewares/multer";
-import { buildRoute, buildRouter } from "@/utils/buildRouter";
+import { buildRoute, buildRouter } from "@/utils/build-router";
 import { API_CONTRACT } from "@packages/api-contract";
 
 /**

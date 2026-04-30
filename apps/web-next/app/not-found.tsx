@@ -1,6 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
 import logo from "@/assets/logo.webp";
-import { I18nText } from "@/components/shared/I18nText";
+import { I18nText } from "@/components/shared/i18n-text";
 import Image from "next/image";
 import Link from "next/link";
 

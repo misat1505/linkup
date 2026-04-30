@@ -7,3 +7,4 @@
 /src/config/security/*
 /.env*
 /docs
+/tests/utils/test-config.json

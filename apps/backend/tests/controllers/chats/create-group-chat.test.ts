@@ -1,14 +1,14 @@
 import { ChatControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/UserWithCredentials";
-import { processAvatar } from "@/utils/processAvatar";
+import { UserWithCredentials } from "@/types/user-with-credentials";
+import { processAvatar } from "@/utils/process-avatar";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-vi.mock("@/utils/processAvatar");
+vi.mock("@/utils/process-avatar");
 
 const respond = vi.fn();
-vi.mock("@/utils/validatedResponder", () => ({
+vi.mock("@/utils/validated-responder", () => ({
   buildValidatedResponder: vi.fn(() => respond),
 }));
 

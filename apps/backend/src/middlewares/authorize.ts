@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { TokenProcessor } from "@/lib/TokenProcessor";
+import { TokenProcessor } from "@/lib/token-processor";
 import { env } from "@/config/env";
 import { refreshTokenCookieName } from "@/config/jwt-cookie";
 import { StatusCodes } from "http-status-codes";

@@ -1,6 +1,6 @@
-import AuthGuard from "@/components/AuthGuard";
-import Editor from "@/features/editor/components/Editor";
-import EditorProvider from "@/features/editor/providers/EditorProvider";
+import AuthGuard from "@/components/auth-guard";
+import Editor from "@/features/editor/components/editor";
+import EditorProvider from "@/features/editor/providers/editor-provider";
 
 export default function PostEditorPage() {
   return (

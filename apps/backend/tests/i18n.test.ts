@@ -1,6 +1,6 @@
 import request from "supertest";
 import { describe, expect, it } from "vitest";
-import { testWithTransaction } from "./utils/testWithTransaction";
+import { testWithTransaction } from "./utils/test-with-transaction";
 
 describe("i18n", () => {
   it("returns message in requested Accept-Language", async () => {

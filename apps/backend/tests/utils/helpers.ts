@@ -1,5 +1,5 @@
 import { env } from "@/config/env";
-import { TokenProcessor } from "@/lib/TokenProcessor";
+import { TokenProcessor } from "@/lib/token-processor";
 import { User } from "@packages/schemas";
 
 export const TestHelpers = {
