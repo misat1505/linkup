@@ -1,8 +1,10 @@
+import { setUiPackageConfig } from "@packages/ui";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./app.tsx";
 import BgGradient from "./components/common/bg-gradient.tsx";
+import { I18nText } from "./components/common/i18n-text.tsx";
 import LanguageProvider from "./contexts/language-provider.tsx";
 import { ThemeProvider } from "./contexts/theme-provider.tsx";
 import "./index.css";
@@ -14,6 +16,10 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
   },
+});
+
+setUiPackageConfig({
+  translationComponent: I18nText,
 });
 
 createRoot(document.getElementById("root")!).render(
