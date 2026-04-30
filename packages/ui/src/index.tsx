@@ -1,3 +1,1 @@
-export function PackageUiComponent({ text }: { text: string }) {
-  return <div>{text}</div>;
-}
+export * from "./components";

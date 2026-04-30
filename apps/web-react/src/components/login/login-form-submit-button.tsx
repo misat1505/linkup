@@ -1,7 +1,7 @@
 import { useLoginFormContext } from "@/contexts/login-form-provider";
-import { Button } from "../ui/button";
-import { ClipLoader } from "react-spinners";
+import { Button } from "@packages/ui";
 import { useTranslation } from "react-i18next";
+import { ClipLoader } from "react-spinners";
 
 export default function LoginFormSubmitButton() {
   const { t } = useTranslation();
