@@ -29,6 +29,7 @@ export default defineConfig({
         __dirname,
         "../../packages/api-contract/src",
       ),
+      "@packages/ui": path.resolve(__dirname, "../../packages/ui/src"),
     },
   },
 });

@@ -26,6 +26,7 @@ const nextConfig: NextConfig = {
     resolveAlias: {
       "@packages/api-contract": "../../packages/api-contract/src",
       "@packages/schemas": "../../packages/schemas/src",
+      "@packages/ui": "../../packages/ui/src",
     },
   },
 };
