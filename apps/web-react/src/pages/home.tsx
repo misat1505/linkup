@@ -1,13 +1,14 @@
-import { useInfiniteQuery } from "react-query";
-import { queryKeys } from "@/lib/query-keys";
-import { PostService } from "@/services/post.service";
 import Loading from "@/components/common/loading";
 import PostPreview from "@/components/posts/post-preview";
-import EmptyFeed from "@/components/home/empty-feed";
-import { useEffect } from "react";
-import { useInView } from "react-intersection-observer";
+import { LOGO_PATH } from "@/constants";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
+import { queryKeys } from "@/lib/query-keys";
+import { PostService } from "@/services/post.service";
+import { EmptyFeed } from "@packages/ui";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useInView } from "react-intersection-observer";
+import { useInfiniteQuery } from "react-query";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -19,7 +20,7 @@ export default function Home() {
       queryFn: ({ pageParam }) =>
         PostService.getRecommendedPosts(
           pageParam || null,
-          parseInt(localStorage.getItem("posts-limit")!) || 10
+          parseInt(localStorage.getItem("posts-limit")!) || 10,
         ),
       getNextPageParam: (lastPage) => {
         if (lastPage.length > 0) {
@@ -47,7 +48,15 @@ export default function Home() {
   if (posts?.length === 0)
     return (
       <div className="relative w-full h-[calc(100vh-5rem)]">
-        <EmptyFeed />
+        <EmptyFeed
+          logo={
+            <img
+              src={LOGO_PATH}
+              className="w-36 h-36 rounded-full object-cover"
+              alt="Logo"
+            />
+          }
+        />
       </div>
     );
 
