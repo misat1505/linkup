@@ -1,7 +1,6 @@
 import { User } from "@packages/schemas";
 import React from "react";
 import { ImCancelCircle } from "react-icons/im";
-import { TRANSLATION_FUNCTION } from "../../config";
 import { cn } from "../../lib/utils";
 import { getStatus, Status, timeDifference } from "../../utils/time-difference";
 import { Image } from "./image";
@@ -35,7 +34,7 @@ export function Avatar({ src, alt, lastActive, className }: AvatarProps) {
 
 function ActivityStatus({ lastActive }: { lastActive: User["lastActive"] }) {
   const difference = timeDifference(lastActive);
-  const status = getStatus(difference, TRANSLATION_FUNCTION);
+  const status = getStatus(difference);
 
   if (status.status === Status.ONLINE)
     return (

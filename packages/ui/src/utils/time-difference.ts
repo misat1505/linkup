@@ -1,6 +1,5 @@
 import moment from "moment";
 import { TRANSLATION_FUNCTION } from "../config";
-import { TranslationPath, TVars } from "./i18n";
 
 export type TimeDifference = {
   days: number;
@@ -36,10 +35,7 @@ type StatusType =
   | { status: Status.RECENTLY_ONLINE; text: string }
   | { status: Status.OFFLINE };
 
-export function getStatus(
-  difference: TimeDifference,
-  t: (key: TranslationPath, values?: TVars) => string,
-): StatusType {
+export function getStatus(difference: TimeDifference): StatusType {
   const { days, hours, minutes } = difference;
   if (days === 0 && hours === 0 && minutes <= 4)
     return { status: Status.ONLINE };
