@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
-import { getStatus, Status, timeDifference } from "@/utils/time-difference";
 import { User } from "@packages/schemas";
-import { Image } from "@packages/ui";
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { ImCancelCircle } from "react-icons/im";
+import { TRANSLATION_FUNCTION } from "../../config";
+import { cn } from "../../lib/utils";
+import { getStatus, Status, timeDifference } from "../../utils/time-difference";
+import { Image } from "./image";
 
 type AvatarProps = {
   src: string;
@@ -13,12 +13,7 @@ type AvatarProps = {
   className?: string;
 };
 
-export default function Avatar({
-  src,
-  alt,
-  lastActive,
-  className,
-}: AvatarProps) {
+export function Avatar({ src, alt, lastActive, className }: AvatarProps) {
   return (
     <div className="relative">
       <Image
@@ -39,9 +34,8 @@ export default function Avatar({
 }
 
 function ActivityStatus({ lastActive }: { lastActive: User["lastActive"] }) {
-  const { t } = useTranslation();
   const difference = timeDifference(lastActive);
-  const status = getStatus(difference, t);
+  const status = getStatus(difference, TRANSLATION_FUNCTION);
 
   if (status.status === Status.ONLINE)
     return (

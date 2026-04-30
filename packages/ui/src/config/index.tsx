@@ -6,6 +6,11 @@ export type TranslationProps = {
   values?: TVars;
 };
 
+type TranslateFn = (key: TranslationPath, values?: TVars) => string;
+
+// @ts-expect-error it will be null for now
+export let TRANSLATION_FUNCTION: TranslateFn = null;
+
 type TranslationComponent = React.ComponentType<TranslationProps>;
 
 // @ts-expect-error it will be null for now
@@ -21,12 +26,26 @@ type LinkComponent = React.ComponentType<LinkProps>;
 // @ts-expect-error it will be null for now
 export let LINK_COMPONENT: LinkComponent = null;
 
+type UseFetchProtectedURLType = (url: string) => {
+  data: string;
+  isError: boolean;
+  isLoading: boolean;
+};
+
+// @ts-expect-error it will be null for now
+export let useFetchProtectedURL: UseFetchProtectedURLType = null;
+
 type Config = {
-  translationComponent: TranslationComponent;
+  translationFunction: TranslateFn;
   linkComponent: LinkComponent;
+  useFetchProtectedURL: UseFetchProtectedURLType;
 };
 
 export function setUiPackageConfig(config: Config) {
-  TRANSLATION_COMPONENT = config.translationComponent;
+  TRANSLATION_FUNCTION = config.translationFunction;
+  TRANSLATION_COMPONENT = ({ translationKey, values }) => {
+    return <>{TRANSLATION_FUNCTION(translationKey, values)}</>;
+  };
   LINK_COMPONENT = config.linkComponent;
+  useFetchProtectedURL = config.useFetchProtectedURL;
 }
