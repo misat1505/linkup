@@ -35,10 +35,19 @@ type UseFetchProtectedURLType = (url: string) => {
 // @ts-expect-error it will be null for now
 export let useFetchProtectedURL: UseFetchProtectedURLType = null;
 
+// @ts-expect-error it will be null for now
+export let API_URL: string = null;
+
+type NavigateFn = (path: string) => void;
+// @ts-expect-error it will be null for now
+export let navigate: NavigateFn = null;
+
 type Config = {
   translationFunction: TranslateFn;
   linkComponent: LinkComponent;
   useFetchProtectedURL: UseFetchProtectedURLType;
+  apiUrl: string;
+  navigate: NavigateFn;
 };
 
 export function setUiPackageConfig(config: Config) {
@@ -48,4 +57,6 @@ export function setUiPackageConfig(config: Config) {
   };
   LINK_COMPONENT = config.linkComponent;
   useFetchProtectedURL = config.useFetchProtectedURL;
+  API_URL = config.apiUrl;
+  navigate = config.navigate;
 }

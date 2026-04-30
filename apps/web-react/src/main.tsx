@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter as Router } from "react-router-dom";
 import App from "./app.tsx";
 import BgGradient from "./components/common/bg-gradient.tsx";
 import { SetUiPackageConfig } from "./components/common/set-ui-package-config.tsx";
@@ -26,8 +27,10 @@ createRoot(document.getElementById("root")!).render(
           <BgGradient />
           <LanguageProvider>
             <div className="relative z-10">
-              <SetUiPackageConfig />
-              <App />
+              <Router>
+                <SetUiPackageConfig />
+                <App />
+              </Router>
             </div>
           </LanguageProvider>
         </AppProvider>

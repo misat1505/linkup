@@ -2,20 +2,29 @@ import { LOGO_PATH } from "@/constants";
 import { useAppContext } from "@/contexts/app-provider";
 import { useThemeContext } from "@/contexts/theme-provider";
 import { ROUTES } from "@/lib/routes";
-import { ThemeToggle } from "@packages/ui";
+import { AuthService } from "@/services/auth.service";
+import { NavbarSheet, ThemeToggle } from "@packages/ui";
 import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import FocusableSpan from "../focusable-span";
 import Tooltip from "../tooltip";
 import NavbarSearch from "./navbar-search";
-import NavbarSheet from "./navbar-sheet";
 
 export default function Navbar() {
   const { t } = useTranslation();
-  const { user } = useAppContext();
+  const queryClient = useQueryClient();
+  const { user, setUser } = useAppContext();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useThemeContext();
   const isLoggedIn = !!user;
+
+  const handleLogout = async () => {
+    await AuthService.logout();
+    setUser(null);
+    queryClient.clear();
+    navigate(ROUTES.LOGIN.$path());
+  };
 
   return (
     <>
@@ -37,7 +46,7 @@ export default function Navbar() {
           <div className="hidden sm:block">
             <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
           </div>
-          <NavbarSheet />
+          <NavbarSheet user={user ?? null} handleLogout={handleLogout} />
         </div>
       </header>
       <div className="h-20"></div>
