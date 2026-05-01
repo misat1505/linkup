@@ -27,6 +27,21 @@ type LinkComponent = React.ComponentType<LinkProps>;
 // @ts-expect-error it will be null for now
 export let LINK_COMPONENT: LinkComponent = null;
 
+export type ImageProps = PropsWithChildren & {
+  src: string;
+  alt: string;
+  className?: string;
+  fill?: boolean;
+  sizes?: string;
+  height?: number;
+  width?: number;
+};
+
+type ImageComponent = React.ComponentType<ImageProps>;
+
+// @ts-expect-error it will be null for now
+export let IMAGE_COMPONENT: ImageComponent = null;
+
 type UseFetchProtectedURLType = (url: string) => {
   data: string;
   isError: boolean;
@@ -55,11 +70,15 @@ export let navigate: NavigateFn = null;
 type Config = {
   translationFunction: TranslateFn;
   linkComponent: LinkComponent;
+  imageComponent: ImageComponent;
   useFetchProtectedURL: UseFetchProtectedURLType;
   useSearchUsersQuery: useSearchUsersQueryType;
   apiUrl: string;
   navigate: NavigateFn;
+  isNextjsImage?: boolean;
 };
+
+export let IS_NEXT_IMAGE: boolean = false;
 
 export function setUiPackageConfig(config: Config) {
   TRANSLATION_FUNCTION = config.translationFunction;
@@ -67,8 +86,10 @@ export function setUiPackageConfig(config: Config) {
     return <>{TRANSLATION_FUNCTION(translationKey, values)}</>;
   };
   LINK_COMPONENT = config.linkComponent;
+  IMAGE_COMPONENT = config.imageComponent;
   useFetchProtectedURL = config.useFetchProtectedURL;
   API_URL = config.apiUrl;
   navigate = config.navigate;
   useSearchUsersQuery = config.useSearchUsersQuery;
+  if (config.isNextjsImage) IS_NEXT_IMAGE = config.isNextjsImage;
 }

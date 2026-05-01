@@ -23,6 +23,10 @@ function useSearchUsersQuery() {
   return { users, isFetching, setText, debouncedText };
 }
 
+function ImageWrapper(props: { src: string; alt: string; className?: string }) {
+  return <img {...props} />;
+}
+
 export function SetUiPackageConfig() {
   const { setConfigIsLoaded } = useAppContext();
   const { t } = useTranslation();
@@ -32,6 +36,7 @@ export function SetUiPackageConfig() {
     setUiPackageConfig({
       translationFunction: t,
       linkComponent: LinkWrapper,
+      imageComponent: ImageWrapper,
       // @ts-expect-error it's fine
       useFetchProtectedURL: useFetchProtectedURL,
       useSearchUsersQuery,

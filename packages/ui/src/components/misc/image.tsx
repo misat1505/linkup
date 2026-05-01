@@ -1,6 +1,10 @@
 import { ReactNode } from "react";
 import { ImgProps } from "react-image";
-import { useFetchProtectedURL } from "../../config";
+import {
+  IMAGE_COMPONENT,
+  IS_NEXT_IMAGE,
+  useFetchProtectedURL,
+} from "../../config";
 import { cn } from "../../lib/utils";
 import { Skeleton } from "../shadcn";
 
@@ -35,6 +39,7 @@ type ImageProps = Omit<ImgProps, "className"> & {
     error?: string;
   };
   errorContent?: ReactNode;
+  sizes?: string;
 };
 
 export function Image({
@@ -43,6 +48,7 @@ export function Image({
   loader: LoaderComponent,
   unloader,
   src,
+  sizes,
 }: ImageProps) {
   const { data, isError, isLoading } = useFetchProtectedURL(src as string);
 
@@ -61,8 +67,22 @@ export function Image({
     return LoaderComponent || <DefaultLoader className={cn(common, loader)} />;
   }
 
+  if (IS_NEXT_IMAGE) {
+    return (
+      <div className={cn("relative h-full w-full", common)}>
+        <IMAGE_COMPONENT
+          src={data!}
+          alt={(src as string) || "image"}
+          fill
+          sizes={sizes ?? "48px"}
+          className={cn("object-cover", common, img)}
+        />
+      </div>
+    );
+  }
+
   return (
-    <img
+    <IMAGE_COMPONENT
       className={cn("h-full w-full", common, img)}
       src={data!}
       alt={src as string}

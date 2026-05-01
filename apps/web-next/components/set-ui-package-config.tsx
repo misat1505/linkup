@@ -8,6 +8,7 @@ import { useLanguageContext } from "@/providers/language-provider";
 import { API_URL } from "@/utils/constants";
 import { setUiPackageConfig } from "@packages/ui";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -34,6 +35,8 @@ const SetUiPackageConfig = () => {
     setUiPackageConfig({
       apiUrl: API_URL,
       linkComponent: Link,
+      imageComponent: Image,
+      isNextjsImage: true,
       // @ts-expect-error it's fine
       useFetchProtectedURL: useFetchProtectedURL,
       useSearchUsersQuery,
