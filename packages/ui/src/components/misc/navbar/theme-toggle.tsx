@@ -4,7 +4,7 @@ import { TRANSLATION_FUNCTION } from "../../../config";
 import { Switch } from "../../shadcn/theme-switch";
 import Tooltip from "../tooltip";
 
-type ThemeToggleProps = {
+export type ThemeToggleProps = {
   theme: "light" | "dark";
   toggleTheme: () => void;
 };

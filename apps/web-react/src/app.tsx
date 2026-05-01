@@ -2,7 +2,7 @@ import { Toaster } from "@packages/ui";
 import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Loading from "./components/common/loading";
-import Navbar from "./components/common/navbar/navbar";
+import NavbarWrapper from "./components/common/navbar";
 import ProtectedRoute from "./components/common/protected-route";
 import { useAppContext } from "./contexts/app-provider";
 import { protectedRoutes, publicRoutes } from "./lib/routes";
@@ -14,7 +14,7 @@ export default function App() {
 
   return (
     <>
-      <Navbar />
+      <NavbarWrapper />
       <Routes>
         {protectedRoutes.map((route, index) => (
           <Route

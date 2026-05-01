@@ -3,12 +3,12 @@
 import Loading from "@/components/shared/loading";
 import { queryKeys } from "@/lib/query-keys";
 import { DEFAULT_POSTS_FEED_PAGE_LENGTH } from "@/utils/constants";
+import { EmptyFeed } from "@packages/ui";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { getRecommendedPosts } from "../actions/get-recommeded-posts";
 import { PostWithRenderedContent } from "../schemas/post-with-rendered-content";
-import EmptyFeed from "./empty-feed";
 import PostPreview from "./post-preview";
 
 export function PostsFeed() {

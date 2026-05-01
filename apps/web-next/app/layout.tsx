@@ -1,7 +1,7 @@
 import Providers from "@/components/providers";
 import ReportWebVitals from "@/components/report-web-vitals";
 import BgGradient from "@/components/shared/bg-gradient";
-import Navbar from "@/components/shared/navbar/navbar";
+import NavbarWrapper from "@/components/shared/navbar";
 import { Toaster } from "@packages/ui";
 import "github-markdown-css/github-markdown.css";
 import type { Metadata, Viewport } from "next";
@@ -49,7 +49,7 @@ export default function RootLayout({
       >
         <Providers>
           <BgGradient />
-          <Navbar />
+          <NavbarWrapper />
           <div className="relative z-10">{children}</div>
           <Toaster />
         </Providers>

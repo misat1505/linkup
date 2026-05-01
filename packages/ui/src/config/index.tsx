@@ -35,6 +35,7 @@ export type ImageProps = PropsWithChildren & {
   sizes?: string;
   height?: number;
   width?: number;
+  loading?: "lazy" | "eager";
 };
 
 type ImageComponent = React.ComponentType<ImageProps>;

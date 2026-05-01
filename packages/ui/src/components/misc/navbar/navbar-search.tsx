@@ -29,7 +29,7 @@ import { Avatar } from "../avatar";
 import { FocusableSpan } from "../focusable-span";
 import Tooltip from "../tooltip";
 
-type NavbarSearchProps = {
+export type NavbarSearchProps = {
   user: User;
   createChatAction: (meId: User["id"], otherId: User["id"]) => Promise<Chat>;
   addFriendAction: (
