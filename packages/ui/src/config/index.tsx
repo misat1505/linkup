@@ -1,3 +1,4 @@
+import { User } from "@packages/schemas";
 import { PropsWithChildren } from "react";
 import { TranslationPath, TVars } from "../utils/i18n";
 
@@ -35,6 +36,15 @@ type UseFetchProtectedURLType = (url: string) => {
 // @ts-expect-error it will be null for now
 export let useFetchProtectedURL: UseFetchProtectedURLType = null;
 
+type useSearchUsersQueryType = () => {
+  users: User[];
+  isFetching: boolean;
+  setText: (text: string) => void;
+  debouncedText: string;
+};
+// @ts-expect-error it will be null for now
+export let useSearchUsersQuery: useSearchUsersQueryType = null;
+
 // @ts-expect-error it will be null for now
 export let API_URL: string = null;
 
@@ -46,6 +56,7 @@ type Config = {
   translationFunction: TranslateFn;
   linkComponent: LinkComponent;
   useFetchProtectedURL: UseFetchProtectedURLType;
+  useSearchUsersQuery: useSearchUsersQueryType;
   apiUrl: string;
   navigate: NavigateFn;
 };
@@ -59,4 +70,5 @@ export function setUiPackageConfig(config: Config) {
   useFetchProtectedURL = config.useFetchProtectedURL;
   API_URL = config.apiUrl;
   navigate = config.navigate;
+  useSearchUsersQuery = config.useSearchUsersQuery;
 }

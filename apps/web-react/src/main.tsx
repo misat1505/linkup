@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router } from "react-router-dom";
 import App from "./app.tsx";
 import BgGradient from "./components/common/bg-gradient.tsx";
-import { SetUiPackageConfig } from "./components/common/set-ui-package-config.tsx";
 import AppProvider from "./contexts/app-provider.tsx";
 import LanguageProvider from "./contexts/language-provider.tsx";
 import { ThemeProvider } from "./contexts/theme-provider.tsx";
@@ -23,17 +22,16 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <AppProvider>
-          <BgGradient />
-          <LanguageProvider>
-            <div className="relative z-10">
-              <Router>
-                <SetUiPackageConfig />
+        <BgGradient />
+        <LanguageProvider>
+          <div className="relative z-10">
+            <Router>
+              <AppProvider>
                 <App />
-              </Router>
-            </div>
-          </LanguageProvider>
-        </AppProvider>
+              </AppProvider>
+            </Router>
+          </div>
+        </LanguageProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>,

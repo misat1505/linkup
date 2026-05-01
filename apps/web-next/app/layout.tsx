@@ -2,7 +2,7 @@ import Providers from "@/components/providers";
 import ReportWebVitals from "@/components/report-web-vitals";
 import BgGradient from "@/components/shared/bg-gradient";
 import Navbar from "@/components/shared/navbar/navbar";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@packages/ui";
 import "github-markdown-css/github-markdown.css";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";

@@ -2,16 +2,17 @@
 import logo from "@/assets/logo.webp";
 import { Switch as ThemeSwitch } from "@/components/ui/theme-switch";
 import { logoutUser } from "@/features/auth/actions/logout";
+import { createPrivateChat } from "@/features/chats/actions/create-private-chats";
+import { createFriendship } from "@/features/friends/actions/create-friendship";
 import { useAppContext } from "@/providers/app-provider";
 import { sleep } from "@/utils/sleep";
-import { NavbarSheet } from "@packages/ui";
+import { NavbarSearch, NavbarSheet } from "@packages/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { I18nText } from "../i18n-text";
 import Tooltip from "../tooltip";
-import NavbarSearch from "./navbar-search";
 
 export default function Navbar() {
   const { user, invalidateCurrentUser } = useAppContext();
@@ -49,7 +50,13 @@ export default function Navbar() {
               </span>
             </Tooltip>
           </div>
-          <NavbarSearch />
+          {user && (
+            <NavbarSearch
+              user={user}
+              addFriendAction={createFriendship}
+              createChatAction={createPrivateChat}
+            />
+          )}
         </div>
 
         <div className="flex items-center gap-x-4">

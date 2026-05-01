@@ -1,6 +1,5 @@
 import { useAppContext } from "@/contexts/app-provider";
 import { ROUTES } from "@/lib/routes";
-import { getAccessToken } from "@/lib/token";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Navigate } from "react-router-dom";
@@ -22,7 +21,7 @@ export default function ProtectedRoute({
     );
   }
 
-  if (!user || !getAccessToken()) {
+  if (user === null) {
     return <Navigate to={ROUTES.LOGIN.$path()} />;
   }
 

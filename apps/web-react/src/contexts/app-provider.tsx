@@ -1,3 +1,4 @@
+import { SetUiPackageConfig } from "@/components/common/set-ui-package-config";
 import { useRefreshToken } from "@/hooks/use-refresh-token";
 import { queryKeys } from "@/lib/query-keys";
 import { AuthService } from "@/services/auth.service";
@@ -50,6 +51,7 @@ export const AppProvider = ({ children }: AppContextProps) => {
       }}
     >
       {children}
+      <SetUiPackageConfig />
     </AppContext.Provider>
   );
 };
