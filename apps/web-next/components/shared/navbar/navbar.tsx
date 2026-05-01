@@ -1,13 +1,32 @@
-import Tooltip from "../tooltip";
-import NavbarSearch from "./navbar-search";
-import NavbarSheet from "./navbar-sheet";
-import { I18nText } from "../i18n-text";
-import Link from "next/link";
-import Image from "next/image";
+"use client";
 import logo from "@/assets/logo.webp";
 import { Switch as ThemeSwitch } from "@/components/ui/theme-switch";
+import { logoutUser } from "@/features/auth/actions/logout";
+import { useAppContext } from "@/providers/app-provider";
+import { sleep } from "@/utils/sleep";
+import { NavbarSheet } from "@packages/ui";
+import { useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { I18nText } from "../i18n-text";
+import Tooltip from "../tooltip";
+import NavbarSearch from "./navbar-search";
 
 export default function Navbar() {
+  const { user, invalidateCurrentUser } = useAppContext();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    logoutUser();
+    invalidateCurrentUser();
+    queryClient.clear();
+
+    await sleep(10);
+    router.push("/login");
+  };
+
   return (
     <>
       <header className="fixed z-50 flex h-20 w-full items-center justify-between bg-slate-200 p-4 dark:bg-slate-800">
@@ -37,7 +56,7 @@ export default function Navbar() {
           <div className="hidden sm:block">
             <ThemeSwitch />
           </div>
-          <NavbarSheet />
+          <NavbarSheet user={user ?? null} handleLogout={handleLogout} />
         </div>
       </header>
       <div className="h-20"></div>
