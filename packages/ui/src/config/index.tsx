@@ -76,9 +76,13 @@ type Config = {
   apiUrl: string;
   navigate: NavigateFn;
   isNextjsImage?: boolean;
+  logoPath: string;
 };
 
 export let IS_NEXT_IMAGE: boolean = false;
+
+// @ts-expect-error it will be null for now
+export let LOGO_PATH: string = null;
 
 export function setUiPackageConfig(config: Config) {
   TRANSLATION_FUNCTION = config.translationFunction;
@@ -92,4 +96,5 @@ export function setUiPackageConfig(config: Config) {
   navigate = config.navigate;
   useSearchUsersQuery = config.useSearchUsersQuery;
   if (config.isNextjsImage) IS_NEXT_IMAGE = config.isNextjsImage;
+  LOGO_PATH = config.logoPath;
 }

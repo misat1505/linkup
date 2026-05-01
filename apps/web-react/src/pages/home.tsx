@@ -1,6 +1,5 @@
 import Loading from "@/components/common/loading";
 import PostPreview from "@/components/posts/post-preview";
-import { LOGO_PATH } from "@/constants";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { queryKeys } from "@/lib/query-keys";
 import { PostService } from "@/services/post.service";
@@ -48,15 +47,7 @@ export default function Home() {
   if (posts?.length === 0)
     return (
       <div className="relative w-full h-[calc(100vh-5rem)]">
-        <EmptyFeed
-          logo={
-            <img
-              src={LOGO_PATH}
-              className="w-36 h-36 rounded-full object-cover"
-              alt="Logo"
-            />
-          }
-        />
+        <EmptyFeed />
       </div>
     );
 

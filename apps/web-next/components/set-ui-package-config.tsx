@@ -1,5 +1,6 @@
 "use client";
 
+import logo from "@/assets/logo.webp";
 import { searchUsers } from "@/features/auth/actions/search-users";
 import { useFetchProtectedURL } from "@/hooks/use-fetch-protected-url";
 import { queryKeys } from "@/lib/query-keys";
@@ -42,6 +43,8 @@ const SetUiPackageConfig = () => {
       useSearchUsersQuery,
       translationFunction: t,
       navigate: router.push,
+      // @ts-expect-error it can be also StaticImageData
+      logoPath: logo,
     });
 
     setConfigIsLoaded();

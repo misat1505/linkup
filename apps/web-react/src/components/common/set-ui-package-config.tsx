@@ -1,4 +1,4 @@
-import { API_URL } from "@/constants";
+import { API_URL, LOGO_PATH } from "@/constants";
 import { useAppContext } from "@/contexts/app-provider";
 import { useFetchProtectedURL } from "@/hooks/use-fetch-protected-url";
 import { queryKeys } from "@/lib/query-keys";
@@ -42,6 +42,7 @@ export function SetUiPackageConfig() {
       useSearchUsersQuery,
       apiUrl: API_URL,
       navigate,
+      logoPath: LOGO_PATH,
     });
 
     setConfigIsLoaded();
