@@ -1,6 +1,7 @@
 import { User } from "@packages/schemas";
 import React from "react";
 import { ImCancelCircle } from "react-icons/im";
+import { useUiPackageContext } from "../../config";
 import { cn } from "../../lib/utils";
 import { getStatus, Status, timeDifference } from "../../utils/time-difference";
 import { Image } from "./image";
@@ -33,8 +34,9 @@ export function Avatar({ src, alt, lastActive, className }: AvatarProps) {
 }
 
 function ActivityStatus({ lastActive }: { lastActive: User["lastActive"] }) {
+  const { t } = useUiPackageContext();
   const difference = timeDifference(lastActive);
-  const status = getStatus(difference);
+  const status = getStatus(difference, t);
 
   if (status.status === Status.ONLINE)
     return (

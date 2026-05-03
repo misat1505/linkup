@@ -8,7 +8,7 @@ import { PiChatsCircleFill } from "react-icons/pi";
 import {
   navigate,
   TRANSLATION_COMPONENT,
-  TRANSLATION_FUNCTION,
+  useUiPackageContext,
 } from "../../../config";
 import { cn } from "../../../lib/utils";
 import { createFullName } from "../../../utils/create-full-name";
@@ -39,14 +39,13 @@ type LogoutFn = () => Promise<void>;
 type NavbarSheetProps = { user: User | null; handleLogout: LogoutFn };
 
 export function NavbarSheet({ user, handleLogout }: NavbarSheetProps) {
+  const { t } = useUiPackageContext();
   const isLoggedIn = !!user;
 
   return (
     <Sheet>
       <SheetTrigger data-testid="cy-nav-trigger">
-        <Tooltip
-          content={TRANSLATION_FUNCTION("common.navbar.sheet.trigger.tooltip")}
-        >
+        <Tooltip content={t("common.navbar.sheet.trigger.tooltip")}>
           <span>
             <NavbarAvatar user={user} />
           </span>
@@ -74,30 +73,31 @@ function LoggedInSheet({
   user: User;
   handleLogout: LogoutFn;
 }) {
+  const { t } = useUiPackageContext();
   const buttons: ButtonsType[] = [
     {
       icon: <FaHome size={20} className="text-blue-500" />,
-      text: TRANSLATION_FUNCTION("common.navbar.sheet.items.home"),
+      text: t("common.navbar.sheet.items.home"),
       onClick: () => navigate("/"),
     },
     {
       icon: <PiChatsCircleFill size={20} className="text-blue-500" />,
-      text: TRANSLATION_FUNCTION("common.navbar.sheet.items.chats"),
+      text: t("common.navbar.sheet.items.chats"),
       onClick: () => navigate("/chats"),
     },
     {
       icon: <IoIosSettings size={20} className="text-blue-500" />,
-      text: TRANSLATION_FUNCTION("common.navbar.sheet.items.settings"),
+      text: t("common.navbar.sheet.items.settings"),
       onClick: () => navigate("/settings"),
     },
     {
       icon: <MdArticle size={20} className="text-blue-500" />,
-      text: TRANSLATION_FUNCTION("common.navbar.sheet.items.posts"),
+      text: t("common.navbar.sheet.items.posts"),
       onClick: () => navigate("/posts"),
     },
     {
       icon: <FaUserFriends size={20} className="text-blue-500" />,
-      text: TRANSLATION_FUNCTION("common.navbar.sheet.items.friends"),
+      text: t("common.navbar.sheet.items.friends"),
       onClick: () => navigate("/friends"),
     },
   ];
@@ -132,15 +132,16 @@ function LoggedInSheet({
 }
 
 function GuestSheet() {
+  const { t } = useUiPackageContext();
   const buttons: ButtonsType[] = [
     {
       icon: <CiLogin size={20} className="text-emerald-500" />,
-      text: TRANSLATION_FUNCTION("common.navbar.sheet.items.login"),
+      text: t("common.navbar.sheet.items.login"),
       onClick: () => navigate("/login"),
     },
     {
       icon: <MdOutlineSupervisorAccount size={20} />,
-      text: TRANSLATION_FUNCTION("common.navbar.sheet.items.signup"),
+      text: t("common.navbar.sheet.items.signup"),
       onClick: () => navigate("/signup"),
     },
   ];
@@ -194,8 +195,9 @@ const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
 );
 
 function LogoutDialog({ handleLogout }: { handleLogout: LogoutFn }) {
+  const { t } = useUiPackageContext();
   const button: ButtonsType = {
-    text: TRANSLATION_FUNCTION("common.navbar.sheet.items.logout.trigger"),
+    text: t("common.navbar.sheet.items.logout.trigger"),
     icon: <CiLogout size={20} className="text-red-500" />,
     onClick: () => {},
   };

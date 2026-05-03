@@ -1,5 +1,5 @@
 import moment from "moment";
-import { TRANSLATION_FUNCTION } from "../config";
+import { TranslateFn } from "../config";
 
 export type TimeDifference = {
   days: number;
@@ -35,46 +35,50 @@ type StatusType =
   | { status: Status.RECENTLY_ONLINE; text: string }
   | { status: Status.OFFLINE };
 
-export function getStatus(difference: TimeDifference): StatusType {
+export function getStatus(
+  difference: TimeDifference,
+  t: TranslateFn,
+): StatusType {
   const { days, hours, minutes } = difference;
   if (days === 0 && hours === 0 && minutes <= 4)
     return { status: Status.ONLINE };
   if (days === 0 && hours === 0)
     return {
       status: Status.RECENTLY_ONLINE,
-      text: `${minutes} ${TRANSLATION_FUNCTION("chats.user-activity.time-units.min")}`,
+      text: `${minutes} ${t("chats.user-activity.time-units.min")}`,
     };
   if (days === 0)
     return {
       status: Status.RECENTLY_ONLINE,
-      text: `${hours} ${TRANSLATION_FUNCTION("chats.user-activity.time-units.hr")}`,
+      text: `${hours} ${t("chats.user-activity.time-units.hr")}`,
     };
   return { status: Status.OFFLINE };
 }
 
-export function useGetReadableCommentUploadDate(diff: TimeDifference): string {
+export function useGetReadableCommentUploadDate(
+  diff: TimeDifference,
+  t: TranslateFn,
+): string {
   const { days, hours, minutes } = diff;
 
   if (days >= 365)
-    return TRANSLATION_FUNCTION("common.time.years", {
+    return t("common.time.years", {
       count: String(Math.floor(days / 365)),
     });
   if (days >= 30)
-    return TRANSLATION_FUNCTION("common.time.months", {
+    return t("common.time.months", {
       count: String(Math.floor(days / 30)),
     });
   if (days >= 7)
-    return TRANSLATION_FUNCTION("common.time.weeks", {
+    return t("common.time.weeks", {
       count: String(Math.floor(days / 7)),
     });
-  if (days > 0)
-    return TRANSLATION_FUNCTION("common.time.days", { count: String(days) });
-  if (hours > 0)
-    return TRANSLATION_FUNCTION("common.time.hours", { count: String(hours) });
+  if (days > 0) return t("common.time.days", { count: String(days) });
+  if (hours > 0) return t("common.time.hours", { count: String(hours) });
   if (minutes > 0)
-    return TRANSLATION_FUNCTION("common.time.minutes", {
+    return t("common.time.minutes", {
       count: String(minutes),
     });
 
-  return TRANSLATION_FUNCTION("common.time.now");
+  return t("common.time.now");
 }

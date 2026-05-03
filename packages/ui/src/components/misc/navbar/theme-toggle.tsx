@@ -1,6 +1,6 @@
 import { IoMoon } from "react-icons/io5";
 import { MdSunny } from "react-icons/md";
-import { TRANSLATION_FUNCTION } from "../../../config";
+import { useUiPackageContext } from "../../../config";
 import { Switch } from "../../shadcn/theme-switch";
 import Tooltip from "../tooltip";
 
@@ -10,6 +10,8 @@ export type ThemeToggleProps = {
 };
 
 export function ThemeToggle({ theme, toggleTheme }: ThemeToggleProps) {
+  const { t } = useUiPackageContext();
+
   const component =
     theme === "light" ? (
       <MdSunny className="text-white" />
@@ -17,11 +19,8 @@ export function ThemeToggle({ theme, toggleTheme }: ThemeToggleProps) {
       <IoMoon className="text-black" />
     );
 
-  const tooltipText = TRANSLATION_FUNCTION("common.theme.switch.tooltip", {
-    mode:
-      theme === "light"
-        ? TRANSLATION_FUNCTION("common.theme.dark")
-        : TRANSLATION_FUNCTION("common.theme.light"),
+  const tooltipText = t("common.theme.switch.tooltip", {
+    mode: theme === "light" ? t("common.theme.dark") : t("common.theme.light"),
   });
 
   return (

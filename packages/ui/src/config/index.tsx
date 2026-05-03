@@ -1,5 +1,6 @@
+"use client";
 import { User } from "@packages/schemas";
-import { PropsWithChildren } from "react";
+import { createContext, PropsWithChildren, useContext } from "react";
 import { TranslationPath, TVars } from "../utils/i18n";
 
 export type TranslationProps = {
@@ -7,25 +8,13 @@ export type TranslationProps = {
   values?: TVars;
 };
 
-type TranslateFn = (key: TranslationPath, values?: TVars) => string;
-
-// @ts-expect-error it will be null for now
-export let TRANSLATION_FUNCTION: TranslateFn = null;
-
-type TranslationComponent = React.ComponentType<TranslationProps>;
-
-// @ts-expect-error it will be null for now
-export let TRANSLATION_COMPONENT: TranslationComponent = null;
+export type TranslateFn = (key: TranslationPath, values?: TVars) => string;
 
 export type LinkProps = PropsWithChildren & {
   href: string;
   className?: string;
 };
-
 type LinkComponent = React.ComponentType<LinkProps>;
-
-// @ts-expect-error it will be null for now
-export let LINK_COMPONENT: LinkComponent = null;
 
 export type ImageProps = PropsWithChildren & {
   src: string;
@@ -37,11 +26,7 @@ export type ImageProps = PropsWithChildren & {
   width?: number;
   loading?: "lazy" | "eager";
 };
-
 type ImageComponent = React.ComponentType<ImageProps>;
-
-// @ts-expect-error it will be null for now
-export let IMAGE_COMPONENT: ImageComponent = null;
 
 type UseFetchProtectedURLType = (url: string) => {
   data: string;
@@ -49,26 +34,53 @@ type UseFetchProtectedURLType = (url: string) => {
   isLoading: boolean;
 };
 
-// @ts-expect-error it will be null for now
-export let useFetchProtectedURL: UseFetchProtectedURLType = null;
-
 type useSearchUsersQueryType = () => {
   users: User[];
   isFetching: boolean;
   setText: (text: string) => void;
   debouncedText: string;
 };
-// @ts-expect-error it will be null for now
-export let useSearchUsersQuery: useSearchUsersQueryType = null;
-
-// @ts-expect-error it will be null for now
-export let API_URL: string = null;
 
 type NavigateFn = (path: string) => void;
+
+// @ts-expect-error it will be null for now
+export let LINK_COMPONENT: LinkComponent = null;
+// @ts-expect-error it will be null for now
+export let IMAGE_COMPONENT: ImageComponent = null;
+// @ts-expect-error it will be null for now
+export let useFetchProtectedURL: UseFetchProtectedURLType = null;
+// @ts-expect-error it will be null for now
+export let useSearchUsersQuery: useSearchUsersQueryType = null;
+// @ts-expect-error it will be null for now
+export let API_URL: string = null;
 // @ts-expect-error it will be null for now
 export let navigate: NavigateFn = null;
+export let IS_NEXT_IMAGE: boolean = false;
+// @ts-expect-error it will be null for now
+export let LOGO_PATH: string = null;
 
-type Config = {
+type UiPackageContextValue = { t: TranslateFn };
+
+const UiPackageContext = createContext<UiPackageContextValue | undefined>(
+  undefined,
+);
+
+export const useUiPackageContext = () => {
+  const context = useContext(UiPackageContext);
+  if (!context)
+    throw new Error("useUiPackageContext called outside UiPackageProvider.");
+  return context;
+};
+
+export const TRANSLATION_COMPONENT = ({
+  translationKey,
+  values,
+}: TranslationProps) => {
+  const { t } = useUiPackageContext();
+  return <>{t(translationKey, values)}</>;
+};
+
+type UiPackageProviderProps = PropsWithChildren & {
   translationFunction: TranslateFn;
   linkComponent: LinkComponent;
   imageComponent: ImageComponent;
@@ -80,22 +92,32 @@ type Config = {
   logoPath: string;
 };
 
-export let IS_NEXT_IMAGE: boolean = false;
+const UiPackageProvider = ({
+  children,
+  translationFunction,
+  linkComponent,
+  imageComponent,
+  useFetchProtectedURL: fetchProtectedURL,
+  useSearchUsersQuery: searchUsersQuery,
+  apiUrl,
+  navigate: navigateFn,
+  isNextjsImage,
+  logoPath,
+}: UiPackageProviderProps) => {
+  LINK_COMPONENT = linkComponent;
+  IMAGE_COMPONENT = imageComponent;
+  useFetchProtectedURL = fetchProtectedURL;
+  useSearchUsersQuery = searchUsersQuery;
+  API_URL = apiUrl;
+  navigate = navigateFn;
+  if (isNextjsImage) IS_NEXT_IMAGE = isNextjsImage;
+  LOGO_PATH = logoPath;
 
-// @ts-expect-error it will be null for now
-export let LOGO_PATH: string = null;
+  return (
+    <UiPackageContext.Provider value={{ t: translationFunction }}>
+      {children}
+    </UiPackageContext.Provider>
+  );
+};
 
-export function setUiPackageConfig(config: Config) {
-  TRANSLATION_FUNCTION = config.translationFunction;
-  TRANSLATION_COMPONENT = ({ translationKey, values }) => {
-    return <>{TRANSLATION_FUNCTION(translationKey, values)}</>;
-  };
-  LINK_COMPONENT = config.linkComponent;
-  IMAGE_COMPONENT = config.imageComponent;
-  useFetchProtectedURL = config.useFetchProtectedURL;
-  API_URL = config.apiUrl;
-  navigate = config.navigate;
-  useSearchUsersQuery = config.useSearchUsersQuery;
-  if (config.isNextjsImage) IS_NEXT_IMAGE = config.isNextjsImage;
-  LOGO_PATH = config.logoPath;
-}
+export { UiPackageProvider };

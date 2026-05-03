@@ -1,10 +1,9 @@
 import { API_URL, LOGO_PATH } from "@/constants";
-import { useAppContext } from "@/contexts/app-provider";
 import { useFetchProtectedURL } from "@/hooks/use-fetch-protected-url";
 import { queryKeys } from "@/lib/query-keys";
 import { UserService } from "@/services/user.service";
-import { setUiPackageConfig } from "@packages/ui";
-import { useEffect, useState } from "react";
+import { UiPackageProvider } from "@packages/ui";
+import { PropsWithChildren, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -27,26 +26,23 @@ function ImageWrapper(props: { src: string; alt: string; className?: string }) {
   return <img {...props} />;
 }
 
-export function SetUiPackageConfig() {
-  const { setConfigIsLoaded } = useAppContext();
+export default function UiPackageWrapper({ children }: PropsWithChildren) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setUiPackageConfig({
-      translationFunction: t,
-      linkComponent: LinkWrapper,
-      imageComponent: ImageWrapper,
+  return (
+    <UiPackageProvider
+      apiUrl={API_URL}
+      linkComponent={LinkWrapper}
+      imageComponent={ImageWrapper}
       // @ts-expect-error it's fine
-      useFetchProtectedURL: useFetchProtectedURL,
-      useSearchUsersQuery,
-      apiUrl: API_URL,
-      navigate,
-      logoPath: LOGO_PATH,
-    });
-
-    setConfigIsLoaded();
-  }, [t, setConfigIsLoaded, navigate]);
-
-  return null;
+      useFetchProtectedURL={useFetchProtectedURL}
+      useSearchUsersQuery={useSearchUsersQuery}
+      translationFunction={t}
+      navigate={navigate}
+      logoPath={LOGO_PATH}
+    >
+      {children}
+    </UiPackageProvider>
+  );
 }

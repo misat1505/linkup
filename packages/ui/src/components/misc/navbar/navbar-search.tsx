@@ -6,8 +6,8 @@ import { IoIosChatbubbles } from "react-icons/io";
 import {
   navigate,
   TRANSLATION_COMPONENT,
-  TRANSLATION_FUNCTION,
   useSearchUsersQuery,
+  useUiPackageContext,
 } from "../../../config";
 import useClickOutside from "../../../hooks/use-click-outside";
 import { cn } from "../../../lib/utils";
@@ -51,6 +51,7 @@ export function NavbarSearch({
   const commandListRef = useRef<HTMLDivElement>(null);
   useClickOutside(commandListRef, () => setIsExpanded(false));
   const { isFetching, setText, users, debouncedText } = useSearchUsersQuery();
+  const { t } = useUiPackageContext();
 
   return (
     <Command className="w-60 rounded-lg border bg-white shadow-md dark:bg-black">
@@ -60,7 +61,7 @@ export function NavbarSearch({
         }
       >
         <CommandInput
-          placeholder={TRANSLATION_FUNCTION("common.navbar.search.placeholder")}
+          placeholder={t("common.navbar.search.placeholder")}
           data-testid="cy-nav-search-input"
           onInput={(e) => setText(e.currentTarget.value)}
           onFocus={() => setIsExpanded(true)}
@@ -134,6 +135,7 @@ function SearchResultItem({
   createChatAction,
 }: SearchResultItemProps) {
   const handleCreateChat = async (userId: User["id"]) => {
+    const { t } = useUiPackageContext();
     const chat = await createChatAction(me!.id, userId);
     setIsExpanded(false);
     createChatCb?.(chat);
@@ -147,10 +149,10 @@ function SearchResultItem({
     if (!friendship)
       return toast({
         variant: "destructive",
-        title: TRANSLATION_FUNCTION(
+        title: t(
           "common.navbar.search.friendships.toasts.already-exists.title",
         ),
-        description: TRANSLATION_FUNCTION(
+        description: t(
           "common.navbar.search.friendships.toasts.already-exists.description",
           { fullName: createFullName(user) },
         ),
@@ -164,10 +166,10 @@ function SearchResultItem({
     addFriendCb?.(friendship);
 
     toast({
-      title: TRANSLATION_FUNCTION(
+      title: t(
         "common.navbar.search.friendships.toasts.successfully-created.title",
       ),
-      description: TRANSLATION_FUNCTION(
+      description: t(
         "common.navbar.search.friendships.toasts.successfully-created.description",
         { fullName: createFullName(user) },
       ),
