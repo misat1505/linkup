@@ -1,19 +1,22 @@
-import { useLanguageContext } from "@/contexts/language-provider";
-import { useTranslation } from "react-i18next";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Flag from "react-world-flags";
-import { Button } from "../ui/button";
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "../../shadcn";
 
-export default function LanguageSwitch() {
-  const { changeLanguage } = useLanguageContext();
-  const { i18n } = useTranslation();
+export type LanguageSwitchProps = {
+  language: string;
+  changeLanguage: (lang: string) => Promise<void>;
+};
 
+export function LanguageSwitch({
+  language,
+  changeLanguage,
+}: LanguageSwitchProps) {
   const languages: Language[] = [
     {
       onclick: () => changeLanguage("en"),
@@ -54,13 +57,13 @@ export default function LanguageSwitch() {
   ];
 
   const getSelectedLanguage = (): Language => {
-    const language = languages.find((lang) => lang.code === i18n.language);
-    if (language) return language;
+    const languageObj = languages.find((lang) => lang.code === language);
+    if (languageObj) return languageObj;
 
     return languages.find((lang) => lang.code === "en")!;
   };
 
-  const language = getSelectedLanguage();
+  const resolvedLanguage = getSelectedLanguage();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const FlagComponent = Flag as unknown as React.FC<any>;
@@ -73,8 +76,8 @@ export default function LanguageSwitch() {
           className="flex items-center space-x-2 transition-colors hover:bg-slate-200 dark:hover:bg-slate-800"
         >
           <div className="flex gap-x-2 items-center">
-            <FlagComponent code={language.flagCode} width={26} />
-            <span>{language.displayLang}</span>
+            <FlagComponent code={resolvedLanguage.flagCode} width={26} />
+            <span>{resolvedLanguage.displayLang}</span>
           </div>
           <MdKeyboardArrowDown />
         </Button>
@@ -96,12 +99,11 @@ type Language = {
 };
 
 function LanguageSwitchItem({ onclick, flagCode, displayLang }: Language) {
-  const { t } = useTranslation();
   const handleClick = () => {
     onclick();
-    setTimeout(() => {
-      document.title = `LinkUp - ${t("tabs.settings")}`;
-    }, 100);
+    // setTimeout(() => {
+    //   document.title = `LinkUp - ${TRANSLATION_FUNCTION("tabs.settings")}`;
+    // }, 100);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

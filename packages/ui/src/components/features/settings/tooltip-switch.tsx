@@ -1,11 +1,11 @@
 import useLocalStorage from "use-local-storage";
-import { Switch } from "../ui/switch";
-import Tooltip from "../common/tooltip";
+import Tooltip from "../../misc/tooltip";
+import { Switch } from "../../shadcn";
 
-export default function TooltipSwitch() {
+export function TooltipSwitch() {
   const [showTooltips, setShowTooltips] = useLocalStorage(
     "show-tooltips",
-    true
+    true,
   );
 
   const tooltipText = showTooltips ? "Hide tooltips" : "Show tooltips";

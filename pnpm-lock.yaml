@@ -712,6 +712,9 @@ importers:
       react-spinners:
         specifier: ^0.17.0
         version: 0.17.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-world-flags:
+        specifier: ^1.6.0
+        version: 1.6.0(react@19.0.0)
       tailwind-merge:
         specifier: ^3.5.0
         version: 3.5.0
@@ -728,6 +731,9 @@ importers:
       '@types/react-dom':
         specifier: 19.0.0
         version: 19.0.0
+      '@types/react-world-flags':
+        specifier: ^1.6.0
+        version: 1.6.0
       autoprefixer:
         specifier: ^10.5.0
         version: 10.5.0(postcss@8.5.11)

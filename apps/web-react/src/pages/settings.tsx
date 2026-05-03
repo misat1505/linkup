@@ -1,21 +1,20 @@
-import { useQuery } from "react-query";
-import { DefaultValues, SubmitHandler } from "react-hook-form";
-import { AxiosError } from "axios";
+import Loading from "@/components/common/loading";
+import SettingsWrapper from "@/components/settings/settings-wrapper";
+import SignupForm from "@/components/signup/signup-form";
+import { toast } from "@/components/ui/use-toast";
 import { useAppContext } from "@/contexts/app-provider";
+import SignupFormProvider from "@/contexts/signup-form-provider";
+import { SignupFormEntries } from "@/hooks/signup/use-signup-form";
+import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { queryKeys } from "@/lib/query-keys";
+import { AuthService } from "@/services/auth.service";
 import { FileService } from "@/services/file.service";
 import { buildFileURL } from "@/utils/build-file-url";
-import Loading from "@/components/common/loading";
-import { SignupFormEntries } from "@/hooks/signup/use-signup-form";
 import { SignupFormType } from "@/validators/auth.validators";
-import { AuthService } from "@/services/auth.service";
-import { toast } from "@/components/ui/use-toast";
-import SignupFormProvider from "@/contexts/signup-form-provider";
-import SignupForm from "@/components/signup/signup-form";
-import SettingsCards from "@/components/settings/settings-cards";
-import SettingsSlogan from "@/components/settings/settings-slogan";
+import { AxiosError } from "axios";
+import { DefaultValues, SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import useChangeTabTitle from "@/hooks/use-change-tab-title";
+import { useQuery } from "react-query";
 
 export default function Settings() {
   const { t } = useTranslation();
@@ -26,7 +25,7 @@ export default function Settings() {
     queryFn: () =>
       FileService.downloadFile(
         buildFileURL(me!.photoURL, { type: "avatar" }),
-        me!.photoURL
+        me!.photoURL,
       ),
   });
 
@@ -44,7 +43,7 @@ export default function Settings() {
   };
 
   const onSubmit: SubmitHandler<SignupFormType> = async (
-    data: SignupFormEntries
+    data: SignupFormEntries,
   ) => {
     try {
       const updated = await AuthService.updateMe(data);
@@ -63,8 +62,7 @@ export default function Settings() {
   return (
     <div className="my-auto min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-12 xl:grid mb-4 xl:mb-0">
       <div className="my-auto">
-        <SettingsSlogan />
-        <SettingsCards />
+        <SettingsWrapper />
       </div>
       <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
         <SignupFormProvider

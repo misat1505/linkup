@@ -1,12 +1,12 @@
 import React from "react";
 
 type SettingCardProps = {
-  title: string;
-  description: string;
+  title: React.JSX.Element;
+  description: React.JSX.Element;
   switchComponent: React.JSX.Element;
 };
 
-export default function SettingCard({
+export function SettingCard({
   title,
   description,
   switchComponent,
