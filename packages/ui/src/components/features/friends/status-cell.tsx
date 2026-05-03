@@ -1,44 +1,47 @@
-import { useAppContext } from "@/contexts/app-provider";
-import { queryKeys } from "@/lib/query-keys";
-import { FriendService } from "@/services/friend.service";
-import { createFullName } from "@/utils/create-full-name";
-import { Friendship } from "@packages/schemas";
+import { Friendship, User } from "@packages/schemas";
 import { MoreVertical } from "lucide-react";
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { FaTrash } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
-import { useQueryClient } from "react-query";
-import Tooltip from "../common/tooltip";
-import { Button } from "../ui/button";
+import { TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
+import { createFullName } from "../../../utils/create-full-name";
+import Tooltip from "../../misc/tooltip";
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { useToast } from "../ui/use-toast";
+  useToast,
+} from "../../shadcn";
 
-type StatusCellProps = { friendship: Friendship };
+export type StatusCellProps = {
+  friendship: Friendship;
+  me: User;
+  acceptFriendshipAction: (
+    id1: User["id"],
+    id2: User["id"],
+  ) => Promise<Friendship>;
+  acceptFriendshipCb?: (fr: Friendship) => void;
+  deleteFriendshipAction: (id1: User["id"], id2: User["id"]) => Promise<void>;
+  deleteFriendshipCb?: (fr: Friendship) => void;
+};
 
-export default function StatusCell({ friendship }: StatusCellProps) {
+export function StatusCell(props: StatusCellProps) {
   return (
     <div className="flex items-center justify-between">
-      <StatusDisplay friendship={friendship} />
-      <StatusDropdown friendship={friendship} />
+      <StatusDisplay {...props} />
+      <StatusDropdown {...props} />
     </div>
   );
 }
 
-function StatusDisplay({ friendship }: StatusCellProps) {
-  const { t } = useTranslation();
-  const { user: me } = useAppContext();
-
+function StatusDisplay({ friendship, me }: StatusCellProps) {
   if (friendship.status === "ACCEPTED")
     return (
       <div className="text-emerald-500">
-        {t("friends.cells.statuses.accepted")}
+        <TRANSLATION_COMPONENT translationKey="friends.cells.statuses.accepted" />
       </div>
     );
 
@@ -47,43 +50,42 @@ function StatusDisplay({ friendship }: StatusCellProps) {
   if (isMineRequest)
     return (
       <div>
-        {t("friends.cells.statuses.awaiting-other", {
-          fullName: createFullName(friendship.acceptor),
-        })}
+        <TRANSLATION_COMPONENT
+          translationKey="friends.cells.statuses.awaiting-other"
+          values={{
+            fullName: createFullName(friendship.acceptor),
+          }}
+        />
       </div>
     );
 
-  return <div>{t("friends.cells.statuses.awaiting-me")}</div>;
+  return (
+    <div>
+      <TRANSLATION_COMPONENT translationKey="friends.cells.statuses.awaiting-me" />
+    </div>
+  );
 }
 
-function StatusDropdown({ friendship }: StatusCellProps) {
-  const { t } = useTranslation();
-  const { user: me } = useAppContext();
+function StatusDropdown({
+  friendship,
+  me,
+  acceptFriendshipAction,
+  acceptFriendshipCb,
+  deleteFriendshipAction,
+  deleteFriendshipCb,
+}: StatusCellProps) {
+  const { t } = useUiPackageContext();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const dropdownItems: React.JSX.Element[] = [];
+  const dropdownItems: React.ReactNode[] = [];
 
   const isMineRequest = friendship.requester.id === me!.id;
 
   const handleAcceptFriendship = async () => {
-    const newFriendship = await FriendService.acceptFriendship(
+    const fr = await acceptFriendshipAction(
       friendship.requester.id,
       friendship.acceptor.id,
     );
-    queryClient.setQueryData<Friendship[]>(
-      queryKeys.friends(),
-      (oldFriendships) => {
-        if (!oldFriendships) return [newFriendship];
-        return oldFriendships.map((fr) => {
-          if (
-            fr.acceptor.id === newFriendship.acceptor.id &&
-            fr.requester.id === newFriendship.requester.id
-          )
-            return newFriendship;
-          return fr;
-        });
-      },
-    );
+    acceptFriendshipCb?.(fr);
 
     const otherUser = isMineRequest
       ? friendship.acceptor
@@ -98,21 +100,11 @@ function StatusDropdown({ friendship }: StatusCellProps) {
   };
 
   const handleDeleteFriendship = async () => {
-    await FriendService.deleteFriendship(
+    await deleteFriendshipAction(
       friendship.requester.id,
       friendship.acceptor.id,
     );
-    queryClient.setQueryData<Friendship[]>(
-      queryKeys.friends(),
-      (oldFriendships) => {
-        if (!oldFriendships) return [];
-        return oldFriendships.filter(
-          (fr) =>
-            fr.acceptor.id !== friendship.acceptor.id ||
-            fr.requester.id !== friendship.requester.id,
-        );
-      },
-    );
+    deleteFriendshipCb?.(friendship);
 
     const otherUser = isMineRequest
       ? friendship.acceptor
@@ -143,7 +135,9 @@ function StatusDropdown({ friendship }: StatusCellProps) {
       <>
         <DropdownMenuItem onClick={handleAcceptFriendship}>
           <TiTick />
-          <span>{t("friends.cells.actions.accept")}</span>
+          <span>
+            <TRANSLATION_COMPONENT translationKey="friends.cells.actions.accept" />
+          </span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
       </>,
@@ -155,13 +149,19 @@ function StatusDropdown({ friendship }: StatusCellProps) {
       className="!text-red-500"
     >
       <FaTrash />
-      <span>{t("friends.cells.actions.delete")}</span>
+      <span>
+        <TRANSLATION_COMPONENT translationKey="friends.cells.actions.delete" />
+      </span>
     </DropdownMenuItem>,
   );
 
   return (
     <DropdownMenu>
-      <Tooltip content={t("friends.cells.actions.trigger.tooltip")}>
+      <Tooltip
+        content={
+          <TRANSLATION_COMPONENT translationKey="friends.cells.actions.trigger.tooltip" />
+        }
+      >
         <span>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="p-0">

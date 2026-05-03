@@ -1,50 +1,51 @@
-import { I18nText } from "@/components/shared/i18n-text";
-import Tooltip from "@/components/shared/tooltip";
-import { Button } from "@/components/ui/button";
+import { Friendship, User } from "@packages/schemas";
+import { Table } from "@tanstack/react-table";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { TRANSLATION_COMPONENT } from "../../../config";
+import useCountStatusCategories from "../../../hooks/use-count-status-categories";
+import Tooltip from "../../misc/tooltip";
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Friendship } from "@packages/schemas";
-import { Table } from "@tanstack/react-table";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import useCountStatusCategories from "../hooks/use-count-status-categories";
+} from "../../shadcn";
 
 type StatusFilterDropdownProps = {
+  me: User;
   table: Table<Friendship>;
 };
 
-export default function StatusFilterDropdown({
-  table,
-}: StatusFilterDropdownProps) {
+export function StatusFilterDropdown({ me, table }: StatusFilterDropdownProps) {
   const friendships = table.options.data;
-  const counts = useCountStatusCategories(friendships);
+  const counts = useCountStatusCategories(me, friendships);
 
   const getButtonText = (): React.ReactNode => {
     const filterValue = table.getColumn("status")?.getFilterValue() as string;
 
     if (filterValue === "Accepted")
       return (
-        <I18nText translationKey="friends.filter.statuses.input.accepted" />
+        <TRANSLATION_COMPONENT translationKey="friends.filter.statuses.input.accepted" />
       );
     if (filterValue === "Awaiting me")
       return (
-        <I18nText translationKey="friends.filter.statuses.input.awaiting-me" />
+        <TRANSLATION_COMPONENT translationKey="friends.filter.statuses.input.awaiting-me" />
       );
     if (filterValue === "Awaiting other")
       return (
-        <I18nText translationKey="friends.filter.statuses.input.awaiting-other" />
+        <TRANSLATION_COMPONENT translationKey="friends.filter.statuses.input.awaiting-other" />
       );
-    return <I18nText translationKey="friends.filter.statuses.input.all" />;
+    return (
+      <TRANSLATION_COMPONENT translationKey="friends.filter.statuses.input.all" />
+    );
   };
 
   return (
     <DropdownMenu>
       <Tooltip
         content={
-          <I18nText translationKey="friends.filter.statuses.input.placeholder" />
+          <TRANSLATION_COMPONENT translationKey="friends.filter.statuses.input.placeholder" />
         }
       >
         <span>
@@ -63,7 +64,7 @@ export default function StatusFilterDropdown({
         <DropdownMenuItem
           onClick={() => table.getColumn("status")?.setFilterValue("")}
         >
-          <I18nText
+          <TRANSLATION_COMPONENT
             translationKey="friends.filter.statuses.all"
             values={{
               count: String(
@@ -75,7 +76,7 @@ export default function StatusFilterDropdown({
         <DropdownMenuItem
           onClick={() => table.getColumn("status")?.setFilterValue("Accepted")}
         >
-          <I18nText
+          <TRANSLATION_COMPONENT
             translationKey="friends.filter.statuses.accepted"
             values={{ count: String(counts.accepted) }}
           />
@@ -85,7 +86,7 @@ export default function StatusFilterDropdown({
             table.getColumn("status")?.setFilterValue("Awaiting me")
           }
         >
-          <I18nText
+          <TRANSLATION_COMPONENT
             translationKey="friends.filter.statuses.awaiting-me"
             values={{
               count: String(counts.awaitingMe),
@@ -97,7 +98,7 @@ export default function StatusFilterDropdown({
             table.getColumn("status")?.setFilterValue("Awaiting other")
           }
         >
-          <I18nText
+          <TRANSLATION_COMPONENT
             translationKey="friends.filter.statuses.awaiting-other"
             values={{
               count: String(counts.awaitingOther),

@@ -1,12 +1,4 @@
 "use client";
-import Avatar from "@/components/shared/avatar";
-import { Input } from "@/components/ui/input";
-import { Table } from "@/components/ui/table";
-import { useAppContext } from "@/providers/app-provider";
-import { useLanguageContext } from "@/providers/language-provider";
-import { buildFileURL } from "@/utils/build-file-url";
-import { createFullName } from "@/utils/create-full-name";
-import { getInitials } from "@/utils/get-initials";
 import { Friendship } from "@packages/schemas";
 import {
   ColumnDef,
@@ -16,17 +8,26 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import FriendsTable from "./friends-table";
-import StatusCell from "./status-cell";
-import StatusFilterDropdown from "./status-filter-dropdown";
+import { useUiPackageContext } from "../../../config";
+import { buildFileURL } from "../../../utils/build-file-url";
+import { createFullName } from "../../../utils/create-full-name";
+import { getInitials } from "../../../utils/get-initials";
+import { Avatar } from "../../misc";
+import { Input, Table } from "../../shadcn";
+import { FriendsTable } from "./friends-table";
+import { StatusCell, StatusCellProps } from "./status-cell";
+import { StatusFilterDropdown } from "./status-filter-dropdown";
 
-type FriendsPageContentProps = {
+type FriendsPageContentProps = Omit<StatusCellProps, "friendship"> & {
   friendships: Friendship[];
 };
 
-export function FriendsPageContent({ friendships }: FriendsPageContentProps) {
-  const { t } = useLanguageContext();
-  const { user: me } = useAppContext();
+export function FriendsPageContent({
+  friendships,
+  me,
+  ...actions
+}: FriendsPageContentProps) {
+  const { t } = useUiPackageContext();
   const columns: ColumnDef<Friendship>[] = [
     {
       cell: ({ row }) => {
@@ -66,7 +67,7 @@ export function FriendsPageContent({ friendships }: FriendsPageContentProps) {
       cell: ({ row }) => {
         const friendship = row.original;
 
-        return <StatusCell friendship={friendship} />;
+        return <StatusCell friendship={friendship} me={me} {...actions} />;
       },
       header: t("friends.column.status.title"),
       accessorKey: "status",
@@ -109,7 +110,7 @@ export function FriendsPageContent({ friendships }: FriendsPageContentProps) {
           className="max-w-sm"
         />
 
-        <StatusFilterDropdown table={table} />
+        <StatusFilterDropdown table={table} me={me} />
       </div>
       <Table className="rounded-md border">
         <FriendsTable table={table} />

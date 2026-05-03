@@ -1,3 +1,4 @@
+export * from "./friends";
 export * from "./home";
 export * from "./login";
 export * from "./settings";

@@ -1,21 +1,20 @@
 import { Friendship } from "@packages/schemas";
 import { flexRender, Table as TableType } from "@tanstack/react-table";
-import { useTranslation } from "react-i18next";
-import FocusableSpan from "../common/focusable-span";
+import { TRANSLATION_COMPONENT } from "../../../config";
+import { FocusableSpan } from "../../misc";
 import {
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from "../../shadcn";
 
 type FriendsTableProps = {
   table: TableType<Friendship>;
 };
 
-export default function FriendsTable({ table }: FriendsTableProps) {
-  const { t } = useTranslation();
+export function FriendsTable({ table }: FriendsTableProps) {
   const focusNavigationBar = () => {
     const navSearch = document.querySelector(
       "[data-testid=cy-nav-search-input]",
@@ -64,15 +63,15 @@ export default function FriendsTable({ table }: FriendsTableProps) {
               className="h-32 text-center"
             >
               <h2 className="text-lg font-semibold">
-                {t("friends.no-result.title")}
+                <TRANSLATION_COMPONENT translationKey="friends.no-result.title" />
               </h2>
               <p className="text-muted-foreground">
-                {t("friends.no-result.description")}{" "}
+                <TRANSLATION_COMPONENT translationKey="friends.no-result.description" />{" "}
                 <FocusableSpan
                   fn={focusNavigationBar}
                   className="text-blue-500 underline hover:cursor-pointer"
                 >
-                  {t("friends.no-result.link.text")}
+                  <TRANSLATION_COMPONENT translationKey="friends.no-result.link.text" />
                 </FocusableSpan>
                 .
               </p>
