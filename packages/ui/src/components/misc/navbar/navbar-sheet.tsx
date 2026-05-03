@@ -6,7 +6,7 @@ import { IoIosSettings } from "react-icons/io";
 import { MdArticle, MdOutlineSupervisorAccount } from "react-icons/md";
 import { PiChatsCircleFill } from "react-icons/pi";
 import {
-  navigate,
+  LINK_COMPONENT,
   TRANSLATION_COMPONENT,
   useUiPackageContext,
 } from "../../../config";
@@ -63,7 +63,7 @@ export function NavbarSheet({ user, handleLogout }: NavbarSheetProps) {
 type ButtonsType = {
   icon: React.JSX.Element;
   text: string;
-  onClick: () => void;
+  href: string;
 };
 
 function LoggedInSheet({
@@ -78,27 +78,27 @@ function LoggedInSheet({
     {
       icon: <FaHome size={20} className="text-blue-500" />,
       text: t("common.navbar.sheet.items.home"),
-      onClick: () => navigate("/"),
+      href: "/",
     },
     {
       icon: <PiChatsCircleFill size={20} className="text-blue-500" />,
       text: t("common.navbar.sheet.items.chats"),
-      onClick: () => navigate("/chats"),
+      href: "/chats",
     },
     {
       icon: <IoIosSettings size={20} className="text-blue-500" />,
       text: t("common.navbar.sheet.items.settings"),
-      onClick: () => navigate("/settings"),
+      href: "/settings",
     },
     {
       icon: <MdArticle size={20} className="text-blue-500" />,
       text: t("common.navbar.sheet.items.posts"),
-      onClick: () => navigate("/posts"),
+      href: "/posts",
     },
     {
       icon: <FaUserFriends size={20} className="text-blue-500" />,
       text: t("common.navbar.sheet.items.friends"),
-      onClick: () => navigate("/friends"),
+      href: "/friends",
     },
   ];
 
@@ -121,7 +121,7 @@ function LoggedInSheet({
               key={idx}
               text={button.text}
               Icon={button.icon}
-              onClick={button.onClick}
+              href={button.href}
             />
           ))}
         </span>
@@ -137,12 +137,12 @@ function GuestSheet() {
     {
       icon: <CiLogin size={20} className="text-emerald-500" />,
       text: t("common.navbar.sheet.items.login"),
-      onClick: () => navigate("/login"),
+      href: "/login",
     },
     {
       icon: <MdOutlineSupervisorAccount size={20} />,
       text: t("common.navbar.sheet.items.signup"),
-      onClick: () => navigate("/signup"),
+      href: "/signup",
     },
   ];
 
@@ -159,7 +159,7 @@ function GuestSheet() {
             key={idx}
             text={button.text}
             Icon={button.icon}
-            onClick={button.onClick}
+            href={button.href}
           />
         ))}
       </SheetDescription>
@@ -170,36 +170,39 @@ function GuestSheet() {
 type SheetItemType = HTMLAttributes<HTMLButtonElement> & {
   Icon: ReactNode;
   text: string;
+  href: string;
 };
 
 const SheetItem = React.forwardRef<HTMLButtonElement, SheetItemType>(
-  ({ text, className, Icon, ...rest }, ref) => {
+  ({ text, className, Icon, href, ...rest }, ref) => {
     return (
-      <SheetClose
-        data-testid={`cy-nav-sheet-item-${text.toLowerCase()}`}
-        ref={ref}
-        className={cn(
-          "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200 dark:bg-background dark:hover:bg-slate-800",
-          className,
-        )}
-        {...rest}
-      >
-        <div className="flex items-center gap-x-4">
-          {Icon}
-          {text}
-        </div>
-        <div></div>
-      </SheetClose>
+      <LINK_COMPONENT href={href}>
+        <SheetClose
+          data-testid={`cy-nav-sheet-item-${text.toLowerCase()}`}
+          ref={ref}
+          tabIndex={-1}
+          className={cn(
+            "mb-2 flex w-full items-center justify-between bg-white p-4 transition-all duration-500 ease-in-out hover:bg-slate-200 dark:bg-background dark:hover:bg-slate-800",
+            className,
+          )}
+          {...rest}
+        >
+          <div className="flex items-center gap-x-4">
+            {Icon}
+            {text}
+          </div>
+          <div></div>
+        </SheetClose>
+      </LINK_COMPONENT>
     );
   },
 );
 
 function LogoutDialog({ handleLogout }: { handleLogout: LogoutFn }) {
   const { t } = useUiPackageContext();
-  const button: ButtonsType = {
+  const button: Omit<ButtonsType, "href"> = {
     text: t("common.navbar.sheet.items.logout.trigger"),
     icon: <CiLogout size={20} className="text-red-500" />,
-    onClick: () => {},
   };
 
   return (
