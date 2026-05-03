@@ -134,8 +134,9 @@ function SearchResultItem({
   addFriendAction,
   createChatAction,
 }: SearchResultItemProps) {
+  const { t } = useUiPackageContext();
+
   const handleCreateChat = async (userId: User["id"]) => {
-    const { t } = useUiPackageContext();
     const chat = await createChatAction(me!.id, userId);
     setIsExpanded(false);
     createChatCb?.(chat);
