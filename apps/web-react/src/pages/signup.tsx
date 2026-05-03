@@ -1,18 +1,17 @@
-import { SubmitHandler } from "react-hook-form";
-import { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
-import { useAppContext } from "@/contexts/app-provider";
-import { SignupFormType } from "@/validators/auth.validators";
-import { SignupFormEntries } from "@/hooks/signup/use-signup-form";
-import { AuthService } from "@/services/auth.service";
-import { ROUTES } from "@/lib/routes";
-import { toast } from "@/components/ui/use-toast";
-import SignupSlogan from "@/components/signup/signup-slogan";
-import SignupFormProvider from "@/contexts/signup-form-provider";
 import SignupForm from "@/components/signup/signup-form";
-import AlreadyHaveAccount from "@/components/signup/already-have-account";
-import { useTranslation } from "react-i18next";
+import { toast } from "@/components/ui/use-toast";
+import { useAppContext } from "@/contexts/app-provider";
+import SignupFormProvider from "@/contexts/signup-form-provider";
+import { SignupFormEntries } from "@/hooks/signup/use-signup-form";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
+import { ROUTES } from "@/lib/routes";
+import { AuthService } from "@/services/auth.service";
+import { SignupFormType } from "@/validators/auth.validators";
+import { AlreadyHaveAccount, SignupSlogan } from "@packages/ui";
+import { AxiosError } from "axios";
+import { SubmitHandler } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const { t } = useTranslation();
@@ -20,7 +19,7 @@ export default function Signup() {
   const navigate = useNavigate();
   const { setUser } = useAppContext();
   const onSubmit: SubmitHandler<SignupFormType> = async (
-    data: SignupFormEntries
+    data: SignupFormEntries,
   ) => {
     try {
       const user = await AuthService.signup(data);
