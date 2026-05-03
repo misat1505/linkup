@@ -1,22 +1,21 @@
 "use client";
-import { DefaultValues, SubmitHandler } from "react-hook-form";
-import { AxiosError } from "axios";
-import { queryKeys } from "@/lib/query-keys";
-import { buildFileURL } from "@/utils/build-file-url";
-import { toast } from "@/components/ui/use-toast";
-import { downloadFile } from "@/features/files/actions/download-file";
-import { useAppContext } from "@/providers/app-provider";
-import { updateMe } from "@/features/auth/actions/update-me";
-import { useLanguageContext } from "@/providers/language-provider";
-import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/shared/loading";
-import { SignupFormEntries } from "@/features/auth/hooks/use-signup-form";
-import { SignupFormType } from "@/features/auth/schemas/auth.validators";
-import SignupFormProvider from "@/features/auth/providers/signup-form-provider";
-import SignupForm from "@/features/auth/components/signup-form";
-import SettingsSlogan from "@/features/settings/components/settings-slogan";
-import SettingsCards from "@/features/settings/components/settings-cards";
 import AuthGuard from "@/components/auth-guard";
+import Loading from "@/components/shared/loading";
+import { toast } from "@/components/ui/use-toast";
+import { updateMe } from "@/features/auth/actions/update-me";
+import SignupForm from "@/features/auth/components/signup-form";
+import { SignupFormEntries } from "@/features/auth/hooks/use-signup-form";
+import SignupFormProvider from "@/features/auth/providers/signup-form-provider";
+import { SignupFormType } from "@/features/auth/schemas/auth.validators";
+import { downloadFile } from "@/features/files/actions/download-file";
+import SettingsWrapper from "@/features/settings/components/settings-wrapper";
+import { queryKeys } from "@/lib/query-keys";
+import { useAppContext } from "@/providers/app-provider";
+import { useLanguageContext } from "@/providers/language-provider";
+import { buildFileURL } from "@/utils/build-file-url";
+import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { DefaultValues, SubmitHandler } from "react-hook-form";
 
 export default function Settings() {
   return (
@@ -88,8 +87,7 @@ function SettingsContent() {
   return (
     <div className="my-auto min-h-[calc(100vh-5rem)] w-full grid-cols-2 px-12 xl:grid mb-4 xl:mb-0">
       <div className="my-auto">
-        <SettingsSlogan />
-        <SettingsCards />
+        <SettingsWrapper />
       </div>
       <div className="col-span-1 mx-auto my-auto h-fit w-fit rounded-lg bg-transparent p-4 shadow-2xl shadow-black">
         <SignupFormProvider

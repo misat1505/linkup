@@ -77,8 +77,8 @@ export const LanguageProvider = ({ children }: Props) => {
 
   const changeLanguage = async (lng: string) => {
     await setLanguageCookie(lng);
+    await loadTranslations(lng);
     setLocale(lng);
-    loadTranslations(lng);
   };
 
   useEffect(() => {

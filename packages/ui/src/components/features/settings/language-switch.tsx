@@ -94,13 +94,13 @@ export function LanguageSwitch({
 type Language = {
   flagCode: string;
   displayLang: string;
-  onclick: () => void;
+  onclick: () => Promise<void>;
   code: string;
 };
 
 function LanguageSwitchItem({ onclick, flagCode, displayLang }: Language) {
-  const handleClick = () => {
-    onclick();
+  const handleClick = async () => {
+    await onclick();
     // setTimeout(() => {
     //   document.title = `LinkUp - ${TRANSLATION_FUNCTION("tabs.settings")}`;
     // }, 100);
