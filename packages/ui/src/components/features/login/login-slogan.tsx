@@ -1,3 +1,4 @@
+"use client";
 import { TRANSLATION_COMPONENT } from "../../../config";
 import { useLocalStorageAnimation } from "../../../hooks/use-local-storage-animation";
 import { cn } from "../../../lib/utils";

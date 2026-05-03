@@ -1,7 +1,7 @@
 import { useLanguageContext } from "@/providers/language-provider";
+import { FormField } from "@packages/ui";
 import { useLoginFormContext } from "../providers/login-form-provider";
 import { LoginFormType } from "../schemas/auth.validators";
-import FormField from "@/components/shared/forms/form-field";
 
 export default function LoginFormFields() {
   const { t } = useLanguageContext();

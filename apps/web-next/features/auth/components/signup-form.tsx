@@ -1,10 +1,10 @@
+import { SignupSubmitButton } from "@packages/ui";
 import { useSignupFormContext } from "../providers/signup-form-provider";
 import SignupFormFields from "./signup-form-fields";
 import SignupImageFormField from "./signup-image-form-field";
-import SignupSubmitButton from "./signup-submit-button";
 
 export default function SignupForm() {
-  const { submitForm } = useSignupFormContext();
+  const { submitForm, isSubmitting, type } = useSignupFormContext();
 
   return (
     <form onSubmit={submitForm}>
@@ -12,7 +12,7 @@ export default function SignupForm() {
         <SignupFormFields />
         <SignupImageFormField />
       </div>
-      <SignupSubmitButton />
+      <SignupSubmitButton isSubmitting={isSubmitting} type={type} />
     </form>
   );
 }

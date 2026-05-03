@@ -1,17 +1,16 @@
 "use client";
-import { SubmitHandler } from "react-hook-form";
 import { toast } from "@/components/ui/use-toast";
-import { useLanguageContext } from "@/providers/language-provider";
-import SignupSlogan from "@/features/auth/components/signup-slogan";
-import SignupForm from "@/features/auth/components/signup-form";
-import AlreadyHaveAccount from "@/features/auth/components/already-have-account";
-import SignupFormProvider from "@/features/auth/providers/signup-form-provider";
-import { useRouter } from "next/navigation";
-import { SignupFormType } from "@/features/auth/schemas/auth.validators";
-import { SignupFormEntries } from "@/features/auth/hooks/use-signup-form";
 import { signupUser } from "@/features/auth/actions/signup-user";
+import SignupForm from "@/features/auth/components/signup-form";
+import { SignupFormEntries } from "@/features/auth/hooks/use-signup-form";
+import SignupFormProvider from "@/features/auth/providers/signup-form-provider";
+import { SignupFormType } from "@/features/auth/schemas/auth.validators";
 import { useAppContext } from "@/providers/app-provider";
+import { useLanguageContext } from "@/providers/language-provider";
 import { sleep } from "@/utils/sleep";
+import { AlreadyHaveAccount, SignupSlogan } from "@packages/ui";
+import { useRouter } from "next/navigation";
+import { SubmitHandler } from "react-hook-form";
 
 export default function Signup() {
   const { t } = useLanguageContext();

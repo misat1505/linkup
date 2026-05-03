@@ -1,9 +1,8 @@
-import { Input } from "@/components/ui/input";
+import { Input, SignupImageDisplay } from "@packages/ui";
 import { useSignupFormContext } from "../providers/signup-form-provider";
-import SignupImageDisplay from "./signup-image-display";
 
 export default function SignupImageFormField() {
-  const { errors, setValue } = useSignupFormContext();
+  const { errors, setValue, file, removeFile, data } = useSignupFormContext();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
@@ -12,7 +11,7 @@ export default function SignupImageFormField() {
 
   return (
     <div className="flex w-full flex-col justify-center">
-      <SignupImageDisplay />
+      <SignupImageDisplay data={data} fileData={file} removeFile={removeFile} />
       <Input
         type="file"
         accept=".jpg, .webp, .png"
