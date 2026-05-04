@@ -1,7 +1,11 @@
 import LoginForm from "@/components/login/login-form";
 import LoginFormProvider from "@/contexts/login-form-provider";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
-import { LoginPageLogo, LoginSlogan, NoAccount } from "@packages/ui";
+import {
+  LoginPageLogo,
+  LoginSlogan,
+  NoAccount,
+} from "@packages/ui/features/login";
 import { useTranslation } from "react-i18next";
 
 export default function Login() {

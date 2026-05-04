@@ -2,7 +2,7 @@ import { API_URL, LOGO_PATH } from "@/constants";
 import { useFetchProtectedURL } from "@/hooks/use-fetch-protected-url";
 import { queryKeys } from "@/lib/query-keys";
 import { UserService } from "@/services/user.service";
-import { UiPackageProvider } from "@packages/ui";
+import { UiPackageProvider } from "@packages/ui/config";
 import { PropsWithChildren, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";

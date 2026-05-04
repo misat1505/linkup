@@ -2,7 +2,7 @@ import { useThemeContext } from "@/contexts/theme-provider";
 import { queryKeys } from "@/lib/query-keys";
 import { PostService } from "@/services/post.service";
 import { Post } from "@packages/schemas";
-import { MyPostPreview } from "@packages/ui";
+import { MyPostPreview } from "@packages/ui/features/posts";
 import { useQueryClient } from "react-query";
 
 export default function MyPostPreviewWrapper({ post }: { post: Post }) {

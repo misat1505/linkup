@@ -6,7 +6,7 @@ import { AuthService } from "@/services/auth.service";
 import { ChatService } from "@/services/chat.service";
 import { FriendService } from "@/services/friend.service";
 import { Chat, Friendship } from "@packages/schemas";
-import { Navbar } from "@packages/ui";
+import { Navbar } from "@packages/ui/misc";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 

@@ -4,7 +4,7 @@ import { useEditorContext } from "@/contexts/editor-provider";
 import { useThemeContext } from "@/contexts/theme-provider";
 import { queryKeys } from "@/lib/query-keys";
 import { FileService } from "@/services/file.service";
-import { Editor } from "@packages/ui";
+import { Editor } from "@packages/ui/features/editor";
 import { useQuery, useQueryClient } from "react-query";
 
 function useGetCache() {

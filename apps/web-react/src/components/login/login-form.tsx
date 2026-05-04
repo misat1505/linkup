@@ -1,5 +1,5 @@
 import { useLoginFormContext } from "@/contexts/login-form-provider";
-import { LoginFormSubmitButton } from "@packages/ui";
+import { LoginFormSubmitButton } from "@packages/ui/features/login";
 import LoginFormFields from "./login-form-fields";
 
 export default function LoginForm() {

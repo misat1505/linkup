@@ -3,7 +3,7 @@ import { useAppContext } from "@/contexts/app-provider";
 import { queryKeys } from "@/lib/query-keys";
 import { FriendService } from "@/services/friend.service";
 import { Friendship } from "@packages/schemas";
-import { FriendsPageContent } from "@packages/ui";
+import { FriendsPageContent } from "@packages/ui/features/friends";
 import { useQueryClient } from "react-query";
 
 type FriendsPageContentWrapperProps = {

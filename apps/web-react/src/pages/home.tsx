@@ -3,7 +3,7 @@ import PostPreview from "@/components/posts/post-preview";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { queryKeys } from "@/lib/query-keys";
 import { PostService } from "@/services/post.service";
-import { EmptyFeed } from "@packages/ui";
+import { EmptyFeed } from "@packages/ui/features/home";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useInView } from "react-intersection-observer";

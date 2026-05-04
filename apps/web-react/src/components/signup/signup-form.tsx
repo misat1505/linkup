@@ -1,5 +1,5 @@
 import { useSignupFormContext } from "@/contexts/signup-form-provider";
-import { SignupSubmitButton } from "@packages/ui";
+import { SignupSubmitButton } from "@packages/ui/features/signup";
 import SignupFormFields from "./signup-form-fields";
 import SignupImageFormField from "./signup-image-form-field";
 

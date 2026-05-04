@@ -4,7 +4,7 @@ import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { queryKeys } from "@/lib/query-keys";
 import { PostService } from "@/services/post.service";
 import { Post } from "@packages/schemas";
-import { PostsPageLayout } from "@packages/ui";
+import { PostsPageLayout } from "@packages/ui/features/posts";
 import { orderBy } from "lodash";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";

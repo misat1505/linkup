@@ -7,7 +7,7 @@ import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { ROUTES } from "@/lib/routes";
 import { AuthService } from "@/services/auth.service";
 import { SignupFormType } from "@/validators/auth.validators";
-import { AlreadyHaveAccount, SignupSlogan } from "@packages/ui";
+import { AlreadyHaveAccount, SignupSlogan } from "@packages/ui/features/signup";
 import { AxiosError } from "axios";
 import { SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { getStatus, Status, timeDifference } from "@/utils/time-difference";
 import { User } from "@packages/schemas";
-import { Image } from "@packages/ui";
+import { Image } from "@packages/ui/misc";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ImCancelCircle } from "react-icons/im";

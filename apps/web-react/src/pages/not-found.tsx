@@ -1,5 +1,5 @@
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
-import { NotFoundPage } from "@packages/ui";
+import { NotFoundPage } from "@packages/ui/misc";
 import { useTranslation } from "react-i18next";
 
 export default function NotFound() {

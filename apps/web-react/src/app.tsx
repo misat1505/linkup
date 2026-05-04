@@ -1,4 +1,4 @@
-import { Toaster } from "@packages/ui";
+import { Toaster } from "@packages/ui/shadcn";
 import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Loading from "./components/common/loading";

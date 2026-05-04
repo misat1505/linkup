@@ -7,7 +7,7 @@ import { ChatService } from "@/services/chat.service";
 import { PostService } from "@/services/post.service";
 import { markdownPreviewOptions } from "@/utils/markdown-preview-options";
 import { Chat, Post } from "@packages/schemas";
-import { PostHeader } from "@packages/ui";
+import { PostHeader } from "@packages/ui/features/posts";
 import MDEditor from "@uiw/react-md-editor";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

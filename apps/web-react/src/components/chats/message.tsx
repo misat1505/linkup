@@ -8,7 +8,6 @@ import { getInitials } from "@/utils/get-initials";
 import { isShowingAvatar } from "@/utils/is-showing-avatar";
 import { timeDifference } from "@/utils/time-difference";
 import { Message as MessageType } from "@packages/schemas";
-import moment from "moment";
 import { useTranslation } from "react-i18next";
 import Avatar from "../common/avatar";
 import Tooltip from "../common/tooltip";
@@ -56,7 +55,7 @@ export default function Message({ message }: { message: MessageType }) {
     const prevMessage = messages[idx + 1];
     const diff = timeDifference(
       prevMessage.createdAt,
-      moment(message.createdAt),
+      message.createdAt,
     );
 
     if (diff.days === 0 && diff.hours === 0) return "";
