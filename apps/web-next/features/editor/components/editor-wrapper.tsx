@@ -1,13 +1,26 @@
 "use client";
 
 import { queryKeys } from "@/lib/query-keys";
+import { Loading } from "@packages/ui/misc";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
+import dynamic from "next/dynamic";
 import { getCache } from "../actions/get-cache";
 import { insertFileToCache } from "../actions/insert-file-to-cache";
 import { removeFromCache } from "../actions/remove-from-cache";
 import { useEditorContext } from "../providers/editor-provider";
-import { Editor } from "@packages/ui/features/editor"
+
+const Editor = dynamic(
+  () => import("@packages/ui/features/editor").then((m) => m.Editor),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[calc(100vh-5rem)]">
+        <Loading />
+      </div>
+    ),
+  },
+);
 
 function useGetCache() {
   return useQuery({
