@@ -30,7 +30,10 @@ export function MyPostPreview({ post, useTheme, ...rest }: MyPostPreviewProps) {
           className="markdown-body bg-post-light! text-post-dark! dark:bg-post-dark! dark:text-post-light!"
         ></div>
       ) : (
-        <MyPostPreviewNotPrerenderedContentWrapper content={post.content} />
+        <MyPostPreviewNotPrerenderedContentWrapper
+          content={post.content}
+          useTheme={useTheme}
+        />
       )}
       <PostActions
         postId={post.id}

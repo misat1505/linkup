@@ -6,13 +6,19 @@ import { markdownPreviewOptions } from "../../../utils/markdown-preview-options"
 
 type MyPostPreviewNotPrerenderedContentWrapperProps = {
   content: Post["content"];
+  useTheme: () => { theme: "light" | "dark" };
 };
 
 const MyPostPreviewNotPrerenderedContentWrapper = ({
   content,
+  useTheme,
 }: MyPostPreviewNotPrerenderedContentWrapperProps) => {
+  const { theme } = useTheme();
+
   return (
-    <MDEditor.Markdown source={content} components={markdownPreviewOptions} />
+    <div data-color-mode={theme}>
+      <MDEditor.Markdown source={content} components={markdownPreviewOptions} />
+    </div>
   );
 };
 
