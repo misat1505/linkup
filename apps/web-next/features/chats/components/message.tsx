@@ -8,7 +8,6 @@ import { createFullName } from "@/utils/create-full-name";
 import { getInitials } from "@/utils/get-initials";
 import { timeDifference } from "@/utils/time-difference";
 import { Message as MessageType } from "@packages/schemas";
-import moment from "moment";
 import { useChatContext } from "../providers/chat-provider";
 import { ChatUtils } from "../utils/chat-utils";
 import { isShowingAvatar } from "../utils/is-showing-avatar";
@@ -54,10 +53,7 @@ export default function Message({ message }: { message: MessageType }) {
     if (idx === messages.length - 1) return compareWithNow();
 
     const prevMessage = messages[idx + 1];
-    const diff = timeDifference(
-      prevMessage.createdAt,
-      moment(message.createdAt),
-    );
+    const diff = timeDifference(prevMessage.createdAt, message.createdAt);
 
     if (diff.days === 0 && diff.hours === 0) return "";
 

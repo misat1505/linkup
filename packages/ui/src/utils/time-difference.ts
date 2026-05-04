@@ -1,4 +1,9 @@
-import moment from "moment";
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  differenceInSeconds,
+} from "date-fns";
 import { TranslateFn } from "../config";
 
 export type TimeDifference = {
@@ -8,19 +13,20 @@ export type TimeDifference = {
   seconds: number;
 };
 
-export function timeDifference(date: Date, now = moment()): TimeDifference {
-  const past = moment(date);
-
-  const days = now.diff(past, "days");
-  const hours = now.diff(past, "hours") % 24;
-  const minutes = now.diff(past, "minutes") % 60;
-  const seconds = now.diff(past, "seconds") % 60;
+export function timeDifference(
+  date: Date,
+  now: Date = new Date(),
+): TimeDifference {
+  const days = differenceInDays(now, date);
+  const hours = differenceInHours(now, date) % 24;
+  const minutes = differenceInMinutes(now, date) % 60;
+  const seconds = differenceInSeconds(now, date) % 60;
 
   return {
-    days: days,
-    hours: hours,
-    minutes: minutes,
-    seconds: seconds,
+    days,
+    hours,
+    minutes,
+    seconds,
   };
 }
 

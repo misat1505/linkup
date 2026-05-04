@@ -48,7 +48,7 @@
     "react-icons": "*",
     "react-spinners": "*",
     "react-world-flags": "*",
-    "moment": "*",
+    "date-fns": "*",
     "react-image": "*"
   },
   "devDependencies": {
