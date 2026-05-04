@@ -41,7 +41,8 @@ export class FileService {
     await apiContractClient.deleteFromCache({ params: { filename } });
   }
 
-  static async insertFileToCache(file: File): Promise<string> {
+  static async insertFileToCache(fd: FormData): Promise<string> {
+    const file = fd.get("file") as File;
     const res = await apiContractClient.insertToCache({ body: { file } });
     return buildFileURL(res.file, { type: "cache" });
   }

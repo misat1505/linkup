@@ -5,7 +5,7 @@ import { FaTrash } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
 import { TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
 import { createFullName } from "../../../utils/create-full-name";
-import Tooltip from "../../misc/tooltip";
+import { Tooltip } from "../../misc";
 import {
   Button,
   DropdownMenu,

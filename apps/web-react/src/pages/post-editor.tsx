@@ -1,13 +1,13 @@
-import { useParams } from "react-router-dom";
-import { useQuery } from "react-query";
-import EditorProvider from "@/contexts/editor-provider";
-import Editor from "@/components/posts/editor";
+import Loading from "@/components/common/loading";
+import EditorWrapper from "@/components/posts/editor-wrapper";
 import { useAppContext } from "@/contexts/app-provider";
+import EditorProvider from "@/contexts/editor-provider";
+import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { queryKeys } from "@/lib/query-keys";
 import { PostService } from "@/services/post.service";
-import Loading from "@/components/common/loading";
-import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 
 export default function PostEditor() {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ export default function PostEditor() {
   if (!postId)
     return (
       <EditorProvider variant="new">
-        <Editor />
+        <EditorWrapper />
       </EditorProvider>
     );
 
@@ -40,7 +40,7 @@ function PostEditorExistent() {
 
   return (
     <EditorProvider variant="update" post={post}>
-      <Editor />
+      <EditorWrapper />
     </EditorProvider>
   );
 }

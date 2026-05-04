@@ -32,7 +32,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../../shadcn/sheet";
-import Tooltip from "../tooltip";
+import { Tooltip } from "../tooltip";
 import { NavbarAvatar } from "./navbar-avatar";
 
 type LogoutFn = () => Promise<void>;

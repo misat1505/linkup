@@ -1,24 +1,30 @@
-import { useEditorContext } from "@/contexts/editor-provider";
-import { useThemeContext } from "@/contexts/theme-provider";
-import { ROUTES } from "@/lib/routes";
-import { markdownPreviewOptions } from "@/utils/markdown-preview-options";
-import { Post } from "@packages/schemas";
+"use client";
 import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
-import { useTranslation } from "react-i18next";
 import { FaSave } from "react-icons/fa";
-import { useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "../ui/use-toast";
-import FileDialog from "./file-dialog";
 
-export default function Editor() {
-  const { t } = useTranslation();
-  const { markdown, handleSafeChange, handleSave, variant } =
-    useEditorContext();
-  const { toast } = useToast();
-  const { theme } = useThemeContext();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
+import { Post } from "@packages/schemas";
+import { navigate, useUiPackageContext } from "../../../config";
+import { markdownPreviewOptions } from "../../../utils/markdown-preview-options";
+import { toast } from "../../shadcn";
+import { FileDialog, FileDialogProps } from "./file-dialog";
+
+type EditorProps = Omit<FileDialogProps, "content"> & {
+  markdown: Post["content"];
+  handleSafeChange: (text: Post["content"]) => void;
+  variant: "new" | "update";
+  handleSave: () => Promise<Post>;
+  theme: "light" | "dark";
+};
+
+export function Editor({
+  handleSafeChange,
+  handleSave,
+  markdown,
+  theme,
+  variant,
+  ...fileDialogProps
+}: EditorProps) {
+  const { t } = useUiPackageContext();
 
   const buttonText = variant === "new" ? "Save" : "Update";
 
@@ -42,16 +48,8 @@ export default function Editor() {
       execute: async (_, __) => {
         try {
           const post = await handleSave();
-          queryClient.setQueryData<Post>(
-            ["posts", { postId: post.id }],
-            () => ({
-              ...post,
-            }),
-          );
           handleSafeChange(post.content);
-          navigate(
-            ROUTES.POST_EDITOR.$buildPath({ params: { postId: post.id } }),
-          );
+          navigate(`/posts/editor/${post.id}`);
           toast({
             title: successText,
           });
@@ -70,19 +68,19 @@ export default function Editor() {
       name: "files",
       keyCommand: "files",
       buttonProps: { "aria-label": buttonText, title: "show files" },
-      icon: <FileDialog content={markdown} />,
+      icon: <FileDialog content={markdown} {...fileDialogProps} />,
     },
   ];
 
   return (
-    <div data-color-mode={theme} className="w-full">
+    <div data-color-mode={theme} className="w-full h-[calc(100vh-5rem)]">
       <MDEditor
         data-testid="cy-post-editor"
         value={markdown}
         onChange={(text) => handleSafeChange(text || "")}
         commands={[...commands.getCommands(), ...customCommands]}
         extraCommands={[...commands.getExtraCommands(), ...customExtraCommands]}
-        className="!h-[calc(100vh-5rem)] flex-grow !overflow-auto"
+        className="!h-full grow overflow-auto!"
         highlightEnable={true}
         previewOptions={{
           components: markdownPreviewOptions,

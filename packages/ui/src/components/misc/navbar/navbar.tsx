@@ -7,7 +7,7 @@ import {
   LOGO_PATH,
   TRANSLATION_COMPONENT,
 } from "../../../config";
-import Tooltip from "../tooltip";
+import { Tooltip } from "../tooltip";
 import { NavbarSearch, NavbarSearchProps } from "./navbar-search";
 import { NavbarSheet } from "./navbar-sheet";
 import { ThemeToggle, ThemeToggleProps } from "./theme-toggle";

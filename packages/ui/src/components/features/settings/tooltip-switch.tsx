@@ -1,5 +1,5 @@
 import useLocalStorage from "use-local-storage";
-import Tooltip from "../../misc/tooltip";
+import { Tooltip } from "../../misc";
 import { Switch } from "../../shadcn";
 
 export function TooltipSwitch() {

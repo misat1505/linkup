@@ -1,6 +1,6 @@
 import { useFetchProtectedURL } from "../../config";
 
-export default function ProtectedVideo({ src }: { src: string }) {
+export function ProtectedVideo({ src }: { src: string }) {
   const { data } = useFetchProtectedURL(src);
 
   return (

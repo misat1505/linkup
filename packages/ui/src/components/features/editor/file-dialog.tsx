@@ -1,8 +1,12 @@
-import { I18nText } from "@/components/shared/i18n-text";
-import Image from "@/components/shared/image";
-import Loading from "@/components/shared/loading";
-import ProtectedVideo from "@/components/shared/protected-video";
-import Tooltip from "@/components/shared/tooltip";
+"use client";
+import { Post } from "@packages/schemas";
+import { useRef } from "react";
+import { AiFillDelete } from "react-icons/ai";
+import { FaCopy } from "react-icons/fa";
+import { IoMdAdd } from "react-icons/io";
+import { PiFilesFill } from "react-icons/pi";
+import { TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
+import { Image, Loading, ProtectedVideo, Tooltip } from "../../misc";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,30 +17,25 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
-import { queryKeys } from "@/lib/query-keys";
-import { useLanguageContext } from "@/providers/language-provider";
-import { Post } from "@packages/schemas";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRef } from "react";
-import { AiFillDelete } from "react-icons/ai";
-import { FaCopy } from "react-icons/fa";
-import { IoMdAdd } from "react-icons/io";
-import { PiFilesFill } from "react-icons/pi";
-import { getCache } from "../actions/get-cache";
-import { insertFileToCache } from "../actions/insert-file-to-cache";
-import { removeFromCache } from "../actions/remove-from-cache";
+  useToast,
+} from "../../shadcn";
 
-export default function FileDialog({ content }: { content?: Post["content"] }) {
+export type FileDialogProps = {
+  content?: Post["content"];
+  useGetCache: () => { isLoading: boolean; data: string[] };
+  insertToCacheAction: (fd: FormData) => Promise<string>;
+  insertToCacheCb?: (url: string) => void;
+  removeFromCacheAction: (file: string) => Promise<void>;
+  removeFromCacheCb?: (file: string) => void;
+};
+
+export function FileDialog(props: FileDialogProps) {
   function extractUrlsFromMarkdown(content: Post["content"]): string[] {
     const urlRegex =
       /!\[.*?\]\(\s*(.*?)\s*\)|<img[^>]+src="([^"]+)"|<source[^>]+src="([^"]+)"/g;
@@ -57,8 +56,8 @@ export default function FileDialog({ content }: { content?: Post["content"] }) {
   }
 
   const getPreviouslyUsedURLs = (): string[] | null => {
-    if (!content) return null;
-    return extractUrlsFromMarkdown(content);
+    if (!props.content) return null;
+    return extractUrlsFromMarkdown(props.content);
   };
 
   return (
@@ -68,20 +67,20 @@ export default function FileDialog({ content }: { content?: Post["content"] }) {
           <PiFilesFill />
         </span>
       </DialogTrigger>
-      <FileDialogContent previousURLs={getPreviouslyUsedURLs()} />
+      <FileDialogContent previousURLs={getPreviouslyUsedURLs()} {...props} />
     </Dialog>
   );
 }
 
-function FileDialogContent({
-  previousURLs,
-}: {
-  previousURLs: string[] | null;
-}) {
+function FileDialogContent(
+  props: FileDialogProps & {
+    previousURLs: string[] | null;
+  },
+) {
   const getValidURLs = (): string[] | null => {
-    if (!previousURLs) return null;
+    if (!props.previousURLs) return null;
     const validURLs: string[] = [];
-    for (const url of previousURLs) {
+    for (const url of props.previousURLs) {
       try {
         const urlObject = new URL(url);
         const filter = urlObject.searchParams.get("filter");
@@ -93,17 +92,18 @@ function FileDialogContent({
 
   const validPreviousURLs = getValidURLs();
 
-  const { isLoading, data: files } = useQuery({
-    queryKey: queryKeys.cache(),
-    queryFn: getCache,
-  });
+  // const { isLoading, data: files } = useQuery({
+  //   queryKey: queryKeys.cache(),
+  //   queryFn: getCache,
+  // });
+  const { data: files, isLoading } = props.useGetCache();
 
   if (isLoading) return <Loading />;
 
   if (!files)
     return (
       <div>
-        <I18nText translationKey="editor.file-dialog.cache-empty" />
+        <TRANSLATION_COMPONENT translationKey="editor.file-dialog.cache-empty" />
       </div>
     );
 
@@ -122,17 +122,17 @@ function FileDialogContent({
     <DialogContent className="sm:max-w-106.25">
       <DialogHeader>
         <DialogTitle>
-          <I18nText translationKey="editor.file-dialog.title" />
+          <TRANSLATION_COMPONENT translationKey="editor.file-dialog.title" />
         </DialogTitle>
         <DialogDescription>
-          <I18nText translationKey="editor.file-dialog.description" />
+          <TRANSLATION_COMPONENT translationKey="editor.file-dialog.description" />
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
         {validPreviousURLs && (
           <>
             <h2>
-              <I18nText translationKey="editor.file-dialog.used-files" />
+              <TRANSLATION_COMPONENT translationKey="editor.file-dialog.used-files" />
             </h2>
 
             <div className="flex flex-wrap items-center gap-2">
@@ -161,9 +161,12 @@ function FileDialogContent({
         )}
         <div className="flex items-center gap-x-2">
           <h2>
-            <I18nText translationKey="editor.file-dialog.cache" />
+            <TRANSLATION_COMPONENT translationKey="editor.file-dialog.cache" />
           </h2>
-          <CacheFileUploader />
+          <CacheFileUploader
+            insertToCacheAction={props.insertToCacheAction}
+            insertToCacheCb={props.insertToCacheCb}
+          />
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {files.map((file, idx) => (
@@ -181,7 +184,11 @@ function FileDialogContent({
                   <ProtectedVideo src={file} />
                 </div>
               )}
-              <FileDialogImageButtons file={file} />
+              <FileDialogImageButtons
+                file={file}
+                removeFromCacheAction={props.removeFromCacheAction}
+                removeFromCacheCb={props.removeFromCacheCb}
+              />
             </div>
           ))}
         </div>
@@ -190,16 +197,24 @@ function FileDialogContent({
   );
 }
 
-function FileDialogImageButtons({ file }: { file: string }) {
-  const queryClient = useQueryClient();
+function FileDialogImageButtons({
+  file,
+  removeFromCacheAction,
+  removeFromCacheCb,
+}: Pick<FileDialogProps, "removeFromCacheAction" | "removeFromCacheCb"> & {
+  file: string;
+}) {
+  // const queryClient = useQueryClient();
 
   const deleteFile = async () => {
-    await removeFromCache(file);
+    // await removeFromCache(file);
+    await removeFromCacheAction(file);
 
-    queryClient.setQueryData<string[]>(queryKeys.cache(), (oldPaths) => {
-      if (!oldPaths) return [];
-      return oldPaths.filter((p) => p !== file);
-    });
+    removeFromCacheCb?.(file);
+    // queryClient.setQueryData<string[]>(queryKeys.cache(), (oldPaths) => {
+    //   if (!oldPaths) return [];
+    //   return oldPaths.filter((p) => p !== file);
+    // });
   };
 
   return (
@@ -211,7 +226,7 @@ function FileDialogImageButtons({ file }: { file: string }) {
           <button className="border-none">
             <Tooltip
               content={
-                <I18nText translationKey="editor.file-dialog.item.remove.trigger.tooltip" />
+                <TRANSLATION_COMPONENT translationKey="editor.file-dialog.item.remove.trigger.tooltip" />
               }
             >
               <span>
@@ -228,18 +243,18 @@ function FileDialogImageButtons({ file }: { file: string }) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              <I18nText translationKey="editor.file-dialog.item.remove.dialog.title" />
+              <TRANSLATION_COMPONENT translationKey="editor.file-dialog.item.remove.dialog.title" />
             </AlertDialogTitle>
             <AlertDialogDescription>
-              <I18nText translationKey="editor.file-dialog.item.remove.dialog.description" />
+              <TRANSLATION_COMPONENT translationKey="editor.file-dialog.item.remove.dialog.description" />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>
-              <I18nText translationKey="editor.file-dialog.item.remove.dialog.cancel" />
+              <TRANSLATION_COMPONENT translationKey="editor.file-dialog.item.remove.dialog.cancel" />
             </AlertDialogCancel>
             <AlertDialogAction onClick={deleteFile}>
-              <I18nText translationKey="editor.file-dialog.item.remove.dialog.confirm" />
+              <TRANSLATION_COMPONENT translationKey="editor.file-dialog.item.remove.dialog.confirm" />
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -249,7 +264,7 @@ function FileDialogImageButtons({ file }: { file: string }) {
 }
 
 function CopyElementToClipboardButton({ file }: { file: string }) {
-  const { t } = useLanguageContext();
+  const { t } = useUiPackageContext();
   const { toast } = useToast();
 
   const copyFileURLToClipboard = async () => {
@@ -286,8 +301,11 @@ function CopyElementToClipboardButton({ file }: { file: string }) {
   );
 }
 
-function CacheFileUploader() {
-  const queryClient = useQueryClient();
+function CacheFileUploader({
+  insertToCacheAction,
+  insertToCacheCb,
+}: Pick<FileDialogProps, "insertToCacheAction" | "insertToCacheCb">) {
+  // const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = async () => {
@@ -297,12 +315,14 @@ function CacheFileUploader() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const newFilename = await insertFileToCache(formData);
+    // const newFilename = await insertFileToCache(formData);
+    const newFilename = await insertToCacheAction(formData);
 
-    queryClient.setQueryData<string[]>(queryKeys.cache(), (oldPaths) => {
-      if (!oldPaths) return [];
-      return [...oldPaths, newFilename];
-    });
+    insertToCacheCb?.(newFilename);
+    // queryClient.setQueryData<string[]>(queryKeys.cache(), (oldPaths) => {
+    //   if (!oldPaths) return [];
+    //   return [...oldPaths, newFilename];
+    // });
   };
 
   return (
@@ -316,7 +336,7 @@ function CacheFileUploader() {
       />
       <Tooltip
         content={
-          <I18nText translationKey="editor.file-dialog.file-upload.tooltip" />
+          <TRANSLATION_COMPONENT translationKey="editor.file-dialog.file-upload.tooltip" />
         }
       >
         <span>

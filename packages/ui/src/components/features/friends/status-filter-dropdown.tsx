@@ -3,7 +3,7 @@ import { Table } from "@tanstack/react-table";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { TRANSLATION_COMPONENT } from "../../../config";
 import useCountStatusCategories from "../../../hooks/use-count-status-categories";
-import Tooltip from "../../misc/tooltip";
+import { Tooltip } from "../../misc";
 import {
   Button,
   DropdownMenu,

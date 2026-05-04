@@ -27,7 +27,7 @@ import {
 } from "../../shadcn";
 import { Avatar } from "../avatar";
 import { FocusableSpan } from "../focusable-span";
-import Tooltip from "../tooltip";
+import { Tooltip } from "../tooltip";
 
 export type NavbarSearchProps = {
   user: User;

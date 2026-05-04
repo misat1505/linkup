@@ -1,7 +1,7 @@
 import { FaFileAlt } from "react-icons/fa";
 import { useFetchProtectedURL } from "../../config";
 
-export default function ProtectedFile({ src }: { src: string }) {
+export function ProtectedFile({ src }: { src: string }) {
   const { data } = useFetchProtectedURL(src);
 
   return (

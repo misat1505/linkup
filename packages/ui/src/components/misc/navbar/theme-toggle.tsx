@@ -2,7 +2,7 @@ import { IoMoon } from "react-icons/io5";
 import { MdSunny } from "react-icons/md";
 import { useUiPackageContext } from "../../../config";
 import { Switch } from "../../shadcn/theme-switch";
-import Tooltip from "../tooltip";
+import { Tooltip } from "../tooltip";
 
 export type ThemeToggleProps = {
   theme: "light" | "dark";

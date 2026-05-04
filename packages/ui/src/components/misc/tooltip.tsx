@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 import useLocalStorage from "use-local-storage";
 import {
   TooltipContent,
-  Tooltip as TooltipLib,
+  TooltipShadcn as TooltipLib,
   TooltipProvider,
   TooltipTrigger,
 } from "../shadcn/tooltip";
@@ -11,7 +11,7 @@ type TooltipProps = PropsWithChildren & {
   content: React.ReactNode;
 };
 
-export default function Tooltip({ children, content }: TooltipProps) {
+export function Tooltip({ children, content }: TooltipProps) {
   const [showTooltips] = useLocalStorage("show-tooltips", true);
 
   return (
