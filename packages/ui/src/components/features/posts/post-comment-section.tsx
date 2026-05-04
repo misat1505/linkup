@@ -5,6 +5,7 @@ import { TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
 import { cn } from "../../../lib/utils";
 import { createFullName } from "../../../utils/create-full-name";
 import { Tooltip } from "../../misc";
+import { Button } from "../../shadcn";
 import { Comment } from "./comment";
 
 type PostCommentSectionLayoutProps = PropsWithChildren & {
@@ -68,15 +69,13 @@ export function CommentSectionOpenButton({
 
   return (
     <Tooltip content={tooltipText}>
-      <button
-        className={cn(
-          "mt-4 flex w-full justify-center rounded-md p-4 transition-all hover:bg-post-dark/20 hover:opacity-50 dark:hover:bg-post-light/20",
-          { "my-4": isCommentSectionOpen },
-        )}
+      <Button
+        variant="ghost"
+        className={cn("w-full mt-4", { "my-4": isCommentSectionOpen })}
         onClick={toggleIsCommentSectionOpen}
       >
         <FaArrowDown className={cn({ "rotate-180": isCommentSectionOpen })} />
-      </button>
+      </Button>
     </Tooltip>
   );
 }
