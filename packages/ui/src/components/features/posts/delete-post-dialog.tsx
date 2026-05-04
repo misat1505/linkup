@@ -1,8 +1,10 @@
 "use client";
 
-import FocusableSpan from "@/components/shared/focusable-span";
-import { I18nText } from "@/components/shared/i18n-text";
-import Tooltip from "@/components/shared/tooltip";
+import { Post } from "@packages/schemas";
+import { useState } from "react";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { TRANSLATION_COMPONENT } from "../../../config";
+import { FocusableSpan, Tooltip } from "../../misc";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,17 +14,24 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Post } from "@packages/schemas";
-import { useState } from "react";
-import { FaRegTrashAlt } from "react-icons/fa";
-import { deletePost } from "../actions/delete-post";
+} from "../../shadcn";
 
-export default function DeletePostDialog({ postId }: { postId: Post["id"] }) {
+export type DeletePostDialogProps = {
+  postId: Post["id"];
+  deletePostAction: (id: Post["id"]) => Promise<void>;
+  deletePostCb?: (id: Post["id"]) => void;
+};
+
+export function DeletePostDialog({
+  postId,
+  deletePostAction,
+  deletePostCb,
+}: DeletePostDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = async () => {
-    await deletePost(postId);
+    await deletePostAction(postId);
+    deletePostCb?.(postId);
 
     setIsOpen(false);
   };
@@ -30,7 +39,9 @@ export default function DeletePostDialog({ postId }: { postId: Post["id"] }) {
   return (
     <AlertDialog open={isOpen}>
       <Tooltip
-        content={<I18nText translationKey="posts.delete.button.tooltip" />}
+        content={
+          <TRANSLATION_COMPONENT translationKey="posts.delete.button.tooltip" />
+        }
       >
         <span className="text-black transition-all hover:scale-110 hover:cursor-pointer dark:text-white">
           <FocusableSpan fn={() => setIsOpen(true)}>
@@ -41,18 +52,18 @@ export default function DeletePostDialog({ postId }: { postId: Post["id"] }) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            <I18nText translationKey="posts.delete.dialog.title" />
+            <TRANSLATION_COMPONENT translationKey="posts.delete.dialog.title" />
           </AlertDialogTitle>
           <AlertDialogDescription>
-            <I18nText translationKey="posts.delete.dialog.description" />
+            <TRANSLATION_COMPONENT translationKey="posts.delete.dialog.description" />
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={() => setIsOpen(false)}>
-            <I18nText translationKey="posts.delete.dialog.cancel" />
+            <TRANSLATION_COMPONENT translationKey="posts.delete.dialog.cancel" />
           </AlertDialogCancel>
           <AlertDialogAction onClick={handleClick}>
-            <I18nText translationKey="posts.delete.dialog.confirm" />
+            <TRANSLATION_COMPONENT translationKey="posts.delete.dialog.confirm" />
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -1,3 +1,5 @@
+"use client";
+
 import { User } from "@packages/schemas";
 import React from "react";
 import { ImCancelCircle } from "react-icons/im";

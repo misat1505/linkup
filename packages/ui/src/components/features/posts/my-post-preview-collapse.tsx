@@ -1,15 +1,17 @@
 "use client";
 
 import { PropsWithChildren, useState } from "react";
-import { useTheme } from "next-themes";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { I18nText } from "@/components/shared/i18n-text";
+import { TRANSLATION_COMPONENT } from "../../../config";
+import { cn } from "../../../lib/utils";
+import { Button } from "../../shadcn";
 
-type MyPostPreviewCollapseProps = PropsWithChildren;
+export type MyPostPreviewCollapseProps = PropsWithChildren & {
+  useTheme: () => { theme: "dark" | "light" };
+};
 
 export function MyPostPreviewCollapse({
   children,
+  useTheme,
 }: MyPostPreviewCollapseProps) {
   const { theme } = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -30,9 +32,9 @@ export function MyPostPreviewCollapse({
         onClick={() => setIsExpanded((prev) => !prev)}
       >
         {isExpanded ? (
-          <I18nText translationKey="posts.preview.show-less" />
+          <TRANSLATION_COMPONENT translationKey="posts.preview.show-less" />
         ) : (
-          <I18nText translationKey="posts.preview.show-more" />
+          <TRANSLATION_COMPONENT translationKey="posts.preview.show-more" />
         )}
       </Button>
     </div>
