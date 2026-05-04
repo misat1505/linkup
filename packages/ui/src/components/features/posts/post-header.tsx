@@ -1,24 +1,17 @@
-import { useAppContext } from "@/contexts/app-provider";
-import { queryKeys } from "@/lib/query-keys";
-import { ROUTES } from "@/lib/routes";
-import { ChatService } from "@/services/chat.service";
-import { PostService } from "@/services/post.service";
-import { buildFileURL } from "@/utils/build-file-url";
-import { createFullName } from "@/utils/create-full-name";
-import { getInitials } from "@/utils/get-initials";
-import { timeDifference } from "@/utils/time-difference";
+"use client";
+
 import { Chat, Post, User } from "@packages/schemas";
-import { AxiosError } from "axios";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { IoIosChatbubbles } from "react-icons/io";
 import { MdOutlineReport } from "react-icons/md";
-import { useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
-import Avatar from "../common/avatar";
-import FocusableSpan from "../common/focusable-span";
-import { ActionButton } from "../common/navbar/navbar-search";
-import Tooltip from "../common/tooltip";
+import {
+  navigate,
+  TRANSLATION_COMPONENT,
+  useUiPackageContext,
+} from "../../../config";
+import { createFullName } from "../../../utils/create-full-name";
+import { timeDifference } from "../../../utils/time-difference";
+import { ActionButton, FocusableSpan, Tooltip } from "../../misc";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,24 +21,34 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../ui/alert-dialog";
-import { useToast } from "../ui/use-toast";
+  useToast,
+} from "../../shadcn";
+import PostAuthorAvatar from "./post-author-avatar";
 
-export default function PostHeader({ post }: { post: Post }) {
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const { user: me } = useAppContext();
-  const { t } = useTranslation();
+type PostHeaderProps = ReportPostProps & {
+  me: User;
+  createPrivateChatAction: (id1: User["id"], id2: User["id"]) => Promise<Chat>;
+  createPrivateChatCb?: (chat: Chat) => void;
+};
+
+export function PostHeader({
+  post,
+  reportPost,
+  createPrivateChatAction,
+  createPrivateChatCb,
+  me,
+}: PostHeaderProps) {
+  const { t } = useUiPackageContext();
 
   const getTimeText = (): string => {
     const timeDiff = timeDifference(post.createdAt);
 
     if (timeDiff.days) {
-      return t("common.time.days", { count: timeDiff.days });
+      return t("common.time.days", { count: String(timeDiff.days) });
     } else if (timeDiff.hours) {
-      return t("common.time.hours", { count: timeDiff.hours });
+      return t("common.time.hours", { count: String(timeDiff.hours) });
     } else if (timeDiff.minutes > 5) {
-      return t("common.time.minutes", { count: timeDiff.minutes });
+      return t("common.time.minutes", { count: String(timeDiff.minutes) });
     } else {
       return t("common.time.now");
     }
@@ -55,22 +58,15 @@ export default function PostHeader({ post }: { post: Post }) {
   const isMine = author.id === me!.id;
 
   const handleCreateChat = async (userId: User["id"]) => {
-    const chat = await ChatService.createPrivateChat(me!.id, userId);
-    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-      if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
-      return oldChats ? [...oldChats, chat] : [chat];
-    });
-    navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId: chat.id } }));
+    const chat = await createPrivateChatAction(me!.id, userId);
+    createPrivateChatCb?.(chat);
+    navigate(`/chats/${chat.id}`);
   };
 
   return (
     <div className="w-full flex items-center justify-between">
       <div className="flex items-center gap-x-4 py-4">
-        <Avatar
-          className="border"
-          src={buildFileURL(author.photoURL, { type: "avatar" })}
-          alt={getInitials(author)}
-        />
+        <PostAuthorAvatar author={author} />
         <div>
           <div className="flex items-center gap-x-4">
             <h2 className="text-lg font-semibold">{createFullName(author)}</h2>
@@ -89,29 +85,34 @@ export default function PostHeader({ post }: { post: Post }) {
           </p>
         </div>
       </div>
-      {!isMine && <ReportPost post={post} />}
+      {!isMine && <ReportPost post={post} reportPost={reportPost} />}
     </div>
   );
 }
 
-function ReportPost({ post }: { post: Post }) {
-  const { t } = useTranslation();
+type ReportPostProps = {
+  post: Post;
+  reportPost: (id: Post["id"]) => Promise<void>;
+};
+
+function ReportPost({ post, reportPost }: ReportPostProps) {
+  const { t } = useUiPackageContext();
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
 
   const handleClick = async () => {
     try {
-      await PostService.reportPost(post.id);
+      await reportPost(post.id);
       toast({
         title: t("posts.report.toast.title"),
         description: t("posts.report.toast.description"),
       });
     } catch (e) {
-      if (e instanceof AxiosError)
+      if ("response" in (e as any))
         toast({
           variant: "destructive",
           title: t("posts.report.fail-toast.title"),
-          description: e.response?.data.message,
+          description: (e as any).response?.data.message,
         });
     } finally {
       setIsOpen(false);
@@ -120,7 +121,11 @@ function ReportPost({ post }: { post: Post }) {
 
   return (
     <AlertDialog open={isOpen}>
-      <Tooltip content={t("posts.report.dialog.trigger.tooltip")}>
+      <Tooltip
+        content={
+          <TRANSLATION_COMPONENT translationKey="posts.report.dialog.trigger.tooltip" />
+        }
+      >
         <span className="aspect-square text-red-500 transition-all hover:scale-110 hover:cursor-pointer mr-4">
           <FocusableSpan fn={() => setIsOpen(true)}>
             <MdOutlineReport size={20} />
@@ -129,18 +134,20 @@ function ReportPost({ post }: { post: Post }) {
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t("posts.report.dialog.title")}</AlertDialogTitle>
+          <AlertDialogTitle>
+            <TRANSLATION_COMPONENT translationKey="posts.report.dialog.title" />
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            {t("posts.report.dialog.description")}
+            <TRANSLATION_COMPONENT translationKey="posts.report.dialog.description" />
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
           <AlertDialogCancel onClick={() => setIsOpen(false)}>
-            {t("posts.report.dialog.cancel")}
+            <TRANSLATION_COMPONENT translationKey="posts.report.dialog.cancel" />
           </AlertDialogCancel>
           <AlertDialogAction onClick={handleClick}>
-            {t("posts.report.dialog.confirm")}
+            <TRANSLATION_COMPONENT translationKey="posts.report.dialog.confirm" />
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

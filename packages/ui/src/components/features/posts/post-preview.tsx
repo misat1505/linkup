@@ -1,27 +1,20 @@
-import { useAppContext } from "@/contexts/app-provider";
 import PostCommentsSectionProvider from "@/contexts/post-comment-section-provider";
 import { useThemeContext } from "@/contexts/theme-provider";
-import { queryKeys } from "@/lib/query-keys";
 import { cn } from "@/lib/utils";
-import { ChatService } from "@/services/chat.service";
-import { PostService } from "@/services/post.service";
 import { markdownPreviewOptions } from "@/utils/markdown-preview-options";
-import { Chat, Post } from "@packages/schemas";
-import { PostHeader } from "@packages/ui";
+import { Post } from "@packages/schemas";
 import MDEditor from "@uiw/react-md-editor";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useQueryClient } from "react-query";
 import { Button } from "../ui/button";
 import PostCommentSection from "./post-comment-section";
+import PostHeader from "./post-header";
 
 export default function PostPreview({ post }: { post: Post }) {
   const { t } = useTranslation();
   const { theme } = useThemeContext();
-  const { user: me } = useAppContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const postRef = useRef<HTMLDivElement>(null);
-  const queryClient = useQueryClient();
 
   const handleToggleExpand = () => {
     setIsExpanded((prev) => {
@@ -31,13 +24,6 @@ export default function PostPreview({ post }: { post: Post }) {
       return !prev;
     });
   };
-
-  function createPrivateChatCb(chat: Chat) {
-    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-      if (oldChats?.find((c) => c.id === chat.id)) return oldChats;
-      return oldChats ? [...oldChats, chat] : [chat];
-    });
-  }
 
   return (
     <div
@@ -52,13 +38,7 @@ export default function PostPreview({ post }: { post: Post }) {
             "sticky top-20 z-30 bg-post-light dark:bg-post-dark": isExpanded,
           })}
         >
-          <PostHeader
-            post={post}
-            reportPost={PostService.reportPost}
-            createPrivateChatAction={ChatService.createPrivateChat}
-            me={me!}
-            createPrivateChatCb={createPrivateChatCb}
-          />
+          <PostHeader post={post} />
         </div>
         <MDEditor.Markdown
           className={cn("overflow-x-auto overflow-y-hidden", {

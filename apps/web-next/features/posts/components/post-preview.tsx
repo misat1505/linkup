@@ -1,18 +1,22 @@
 import { I18nText } from "@/components/shared/i18n-text";
 import { Button } from "@/components/ui/button";
+import { createPrivateChat } from "@/features/chats/actions/create-private-chats";
 import { cn } from "@/lib/utils";
+import { useAppContext } from "@/providers/app-provider";
+import { PostHeader } from "@packages/ui";
 import { useTheme } from "next-themes";
 import { useRef, useState } from "react";
+import { reportPost } from "../actions/report-post";
 import PostCommentsSectionProvider from "../providers/post-comment-section-provider";
 import { PostWithRenderedContent } from "../schemas/post-with-rendered-content";
 import PostCommentSection from "./post-comment-section";
-import PostHeader from "./post-header";
 
 export default function PostPreview({
   post,
 }: {
   post: PostWithRenderedContent;
 }) {
+  const { user: me } = useAppContext();
   const { theme } = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
   const postRef = useRef<HTMLDivElement>(null);
@@ -39,7 +43,12 @@ export default function PostPreview({
             "sticky top-20 z-30 bg-post-light dark:bg-post-dark": isExpanded,
           })}
         >
-          <PostHeader post={post} />
+          <PostHeader
+            post={post}
+            createPrivateChatAction={createPrivateChat}
+            me={me!}
+            reportPost={reportPost}
+          />
         </div>
         <div
           dangerouslySetInnerHTML={{ __html: post.renderedContent }}
