@@ -1,5 +1,5 @@
 "use client";
-import { LoginFormSubmitButton } from "@packages/ui";
+import { LoginFormSubmitButton } from "@packages/ui/features/login";
 import { useLoginFormContext } from "../providers/login-form-provider";
 import LoginFormFields from "./login-form-fields";
 

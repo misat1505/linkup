@@ -1,4 +1,5 @@
-import { Input, SignupImageDisplay } from "@packages/ui";
+import { SignupImageDisplay } from "@packages/ui/features/signup";
+import { Input } from "@packages/ui/shadcn";
 import { useSignupFormContext } from "../providers/signup-form-provider";
 
 export default function SignupImageFormField() {

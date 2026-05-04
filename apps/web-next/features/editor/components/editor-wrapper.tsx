@@ -1,13 +1,13 @@
 "use client";
 
 import { queryKeys } from "@/lib/query-keys";
-import { Editor } from "@packages/ui";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
 import { getCache } from "../actions/get-cache";
 import { insertFileToCache } from "../actions/insert-file-to-cache";
 import { removeFromCache } from "../actions/remove-from-cache";
 import { useEditorContext } from "../providers/editor-provider";
+import { Editor } from "@packages/ui/features/editor"
 
 function useGetCache() {
   return useQuery({

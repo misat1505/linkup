@@ -1,5 +1,5 @@
 import { useLanguageContext } from "@/providers/language-provider";
-import { FormField } from "@packages/ui";
+import { FormField } from "@packages/ui/forms";
 import { useSignupFormContext } from "../providers/signup-form-provider";
 import { SignupFormType } from "../schemas/auth.validators";
 

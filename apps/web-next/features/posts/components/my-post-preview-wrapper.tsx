@@ -1,4 +1,4 @@
-import { MyPostPreview } from "@packages/ui";
+import { MyPostPreview } from "@packages/ui/features/posts";
 import { useTheme } from "next-themes";
 import { deletePost } from "../actions/delete-post";
 import { PostWithRenderedContent } from "../schemas/post-with-rendered-content";

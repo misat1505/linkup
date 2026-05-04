@@ -1,5 +1,5 @@
 import { useLanguageContext } from "@/providers/language-provider";
-import { FormField } from "@packages/ui";
+import { FormField } from "@packages/ui/forms";
 import { useLoginFormContext } from "../providers/login-form-provider";
 import { LoginFormType } from "../schemas/auth.validators";
 

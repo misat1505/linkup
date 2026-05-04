@@ -4,11 +4,10 @@ import { createPrivateChat } from "@/features/chats/actions/create-private-chats
 import { createFriendship } from "@/features/friends/actions/create-friendship";
 import { useAppContext } from "@/providers/app-provider";
 import { sleep } from "@/utils/sleep";
+import { Navbar } from "@packages/ui/misc";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-
-import { Navbar } from "@packages/ui";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 
 export default function NavbarWrapper() {
   const { user, invalidateCurrentUser } = useAppContext();

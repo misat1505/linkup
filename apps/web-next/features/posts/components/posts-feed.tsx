@@ -3,7 +3,7 @@
 import Loading from "@/components/shared/loading";
 import { queryKeys } from "@/lib/query-keys";
 import { DEFAULT_POSTS_FEED_PAGE_LENGTH } from "@/utils/constants";
-import { EmptyFeed } from "@packages/ui";
+import { EmptyFeed } from "@packages/ui/features/home";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";

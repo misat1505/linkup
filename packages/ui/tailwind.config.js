@@ -55,6 +55,20 @@ export default {
           5: "hsl(var(--chart-5))",
         },
       },
+      keyframes: {
+        titleEntry: {
+          "0%": { opacity: "0", transform: "translateX(-200px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        descriptionEntry: {
+          "0%": { opacity: "0", transform: "translateY(-200px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        titleEntry: "titleEntry 1s ease-in-out",
+        descriptionEntry: "descriptionEntry 1s ease-in-out",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

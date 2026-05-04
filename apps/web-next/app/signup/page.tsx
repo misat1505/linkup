@@ -8,7 +8,7 @@ import { SignupFormType } from "@/features/auth/schemas/auth.validators";
 import { useAppContext } from "@/providers/app-provider";
 import { useLanguageContext } from "@/providers/language-provider";
 import { sleep } from "@/utils/sleep";
-import { AlreadyHaveAccount, SignupSlogan } from "@packages/ui";
+import { AlreadyHaveAccount, SignupSlogan } from "@packages/ui/features/signup";
 import { useRouter } from "next/navigation";
 import { SubmitHandler } from "react-hook-form";
 

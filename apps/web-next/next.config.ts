@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["@packages/ui"],
   /* config options here */
   cacheComponents: true,
   images: {
@@ -26,7 +27,6 @@ const nextConfig: NextConfig = {
     resolveAlias: {
       "@packages/api-contract": "../../packages/api-contract/src",
       "@packages/schemas": "../../packages/schemas/src",
-      "@packages/ui": "../../packages/ui/src",
     },
   },
 };

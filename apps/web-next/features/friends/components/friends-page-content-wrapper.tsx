@@ -1,7 +1,7 @@
 "use client";
 import { useAppContext } from "@/providers/app-provider";
 import { Friendship } from "@packages/schemas";
-import { FriendsPageContent } from "@packages/ui";
+import { FriendsPageContent } from "@packages/ui/features/friends";
 import { acceptFriendship } from "../actions/accept-friendship";
 import { deleteFriendship } from "../actions/delete-friendship";
 

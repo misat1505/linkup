@@ -1,7 +1,6 @@
 import { TRANSLATION_COMPONENT } from "../../../config";
 import { useLocalStorageAnimation } from "../../../hooks/use-local-storage-animation";
 import { cn } from "../../../lib/utils";
-import styles from "../login/slogan.module.css";
 
 export function SignupSlogan() {
   const isAnimating = useLocalStorageAnimation(
@@ -14,10 +13,8 @@ export function SignupSlogan() {
       <h1
         className={cn(
           "mx-auto mt-20 text-6xl font-bold text-white md:text-8xl xl:text-9xl",
-          styles.shadow,
-          {
-            [styles.title]: isAnimating,
-          },
+          "text-shadow-[0_25px_50px_rgba(0,0,0,0.5)]",
+          isAnimating && "animate-titleEntry",
         )}
       >
         <div className="text-nowrap">
@@ -27,15 +24,14 @@ export function SignupSlogan() {
           <TRANSLATION_COMPONENT translationKey="signup.header.2" />
         </div>
       </h1>
+
       <p
         className={cn(
           "mt-32 mb-8 text-balance text-center text-2xl font-semibold",
-          {
-            [styles.description]: isAnimating,
-          },
+          isAnimating && "animate-descriptionEntry",
         )}
       >
-        <TRANSLATION_COMPONENT translationKey="signup.slogan" />{" "}
+        <TRANSLATION_COMPONENT translationKey="signup.slogan" />
       </p>
     </div>
   );

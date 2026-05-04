@@ -7,7 +7,7 @@ import {
   PostCommentSectionLayout,
   ResponseSetButton,
   ToggleSubsectionOpenButton,
-} from "@packages/ui";
+} from "@packages/ui/features/posts";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { usePostCommentsSectionContext } from "../providers/post-comment-section-provider";
