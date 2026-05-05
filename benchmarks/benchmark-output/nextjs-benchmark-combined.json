@@ -1,0 +1,309 @@
+{
+  "mode": "nextjs",
+  "paths": [
+    "/",
+    "/chats/6360af6a-6c04-4339-aafc-819261079290"
+  ],
+  "iterations": 5,
+  "generatedAt": "2026-05-05T13:53:55.529Z",
+  "totalDurationMs": 3047012,
+  "description": "combinedMean is the arithmetic mean of per-path means for each metric",
+  "combined": {
+    "desktop-unthrottled": {
+      "label": "Desktop - Unthrottled",
+      "stats": {
+        "largest-contentful-paint": {
+          "combinedMean": 755.56,
+          "display": "756 ms"
+        },
+        "first-contentful-paint": {
+          "combinedMean": 688.91,
+          "display": "689 ms"
+        },
+        "speed-index": {
+          "combinedMean": 695.4,
+          "display": "695 ms"
+        },
+        "total-blocking-time": {
+          "combinedMean": 3.35,
+          "display": "3 ms"
+        },
+        "max-potential-fid": {
+          "combinedMean": 36.95,
+          "display": "37 ms"
+        },
+        "cumulative-layout-shift": {
+          "combinedMean": 0,
+          "display": "0 ms"
+        },
+        "interactive": {
+          "combinedMean": 727.6,
+          "display": "728 ms"
+        },
+        "server-response-time": {
+          "combinedMean": 9.32,
+          "display": "9 ms"
+        }
+      }
+    },
+    "desktop-fiber": {
+      "label": "Desktop - Fiber",
+      "stats": {
+        "largest-contentful-paint": {
+          "combinedMean": 731.66,
+          "display": "732 ms"
+        },
+        "first-contentful-paint": {
+          "combinedMean": 678.36,
+          "display": "678 ms"
+        },
+        "speed-index": {
+          "combinedMean": 678.8,
+          "display": "679 ms"
+        },
+        "total-blocking-time": {
+          "combinedMean": 0.26,
+          "display": "0 ms"
+        },
+        "max-potential-fid": {
+          "combinedMean": 30.65,
+          "display": "31 ms"
+        },
+        "cumulative-layout-shift": {
+          "combinedMean": 0,
+          "display": "0 ms"
+        },
+        "interactive": {
+          "combinedMean": 686.16,
+          "display": "686 ms"
+        },
+        "server-response-time": {
+          "combinedMean": 9.64,
+          "display": "10 ms"
+        }
+      }
+    },
+    "laptop-cable": {
+      "label": "Laptop - Cable",
+      "stats": {
+        "largest-contentful-paint": {
+          "combinedMean": 1987.13,
+          "display": "1.99 s"
+        },
+        "first-contentful-paint": {
+          "combinedMean": 1830.61,
+          "display": "1.83 s"
+        },
+        "speed-index": {
+          "combinedMean": 1869.4,
+          "display": "1.87 s"
+        },
+        "total-blocking-time": {
+          "combinedMean": 42.31,
+          "display": "42 ms"
+        },
+        "max-potential-fid": {
+          "combinedMean": 82.31,
+          "display": "82 ms"
+        },
+        "cumulative-layout-shift": {
+          "combinedMean": 0,
+          "display": "0 ms"
+        },
+        "interactive": {
+          "combinedMean": 1975.38,
+          "display": "1.98 s"
+        },
+        "server-response-time": {
+          "combinedMean": 10.12,
+          "display": "10 ms"
+        }
+      }
+    },
+    "tablet-LTE": {
+      "label": "Tablet - LTE",
+      "stats": {
+        "largest-contentful-paint": {
+          "combinedMean": 3130.74,
+          "display": "3.13 s"
+        },
+        "first-contentful-paint": {
+          "combinedMean": 2898.11,
+          "display": "2.90 s"
+        },
+        "speed-index": {
+          "combinedMean": 2948.4,
+          "display": "2.95 s"
+        },
+        "total-blocking-time": {
+          "combinedMean": 88.17,
+          "display": "88 ms"
+        },
+        "max-potential-fid": {
+          "combinedMean": 127.8,
+          "display": "128 ms"
+        },
+        "cumulative-layout-shift": {
+          "combinedMean": 0,
+          "display": "0 ms"
+        },
+        "interactive": {
+          "combinedMean": 3316.38,
+          "display": "3.32 s"
+        },
+        "server-response-time": {
+          "combinedMean": 9.5,
+          "display": "10 ms"
+        }
+      }
+    },
+    "mid-range phone-LTE": {
+      "label": "Mid-range Phone - LTE",
+      "stats": {
+        "largest-contentful-paint": {
+          "combinedMean": 4000.89,
+          "display": "4.00 s"
+        },
+        "first-contentful-paint": {
+          "combinedMean": 3752.76,
+          "display": "3.75 s"
+        },
+        "speed-index": {
+          "combinedMean": 3826.6,
+          "display": "3.83 s"
+        },
+        "total-blocking-time": {
+          "combinedMean": 140.31,
+          "display": "140 ms"
+        },
+        "max-potential-fid": {
+          "combinedMean": 168.21,
+          "display": "168 ms"
+        },
+        "cumulative-layout-shift": {
+          "combinedMean": 0,
+          "display": "0 ms"
+        },
+        "interactive": {
+          "combinedMean": 4239.93,
+          "display": "4.24 s"
+        },
+        "server-response-time": {
+          "combinedMean": 10.2,
+          "display": "10 ms"
+        }
+      }
+    },
+    "mid-range phone-slow 3G": {
+      "label": "Mid-range Phone - Slow 3G",
+      "stats": {
+        "largest-contentful-paint": {
+          "combinedMean": 13392.42,
+          "display": "13.39 s"
+        },
+        "first-contentful-paint": {
+          "combinedMean": 12256.31,
+          "display": "12.26 s"
+        },
+        "speed-index": {
+          "combinedMean": 12620.1,
+          "display": "12.62 s"
+        },
+        "total-blocking-time": {
+          "combinedMean": 208.22,
+          "display": "208 ms"
+        },
+        "max-potential-fid": {
+          "combinedMean": 225.63,
+          "display": "226 ms"
+        },
+        "cumulative-layout-shift": {
+          "combinedMean": 0,
+          "display": "0 ms"
+        },
+        "interactive": {
+          "combinedMean": 13547.17,
+          "display": "13.55 s"
+        },
+        "server-response-time": {
+          "combinedMean": 6.81,
+          "display": "7 ms"
+        }
+      }
+    },
+    "budget phone-slow 3G": {
+      "label": "Budget Phone - Slow 3G",
+      "stats": {
+        "largest-contentful-paint": {
+          "combinedMean": 14332.42,
+          "display": "14.33 s"
+        },
+        "first-contentful-paint": {
+          "combinedMean": 12949.4,
+          "display": "12.95 s"
+        },
+        "speed-index": {
+          "combinedMean": 13271.3,
+          "display": "13.27 s"
+        },
+        "total-blocking-time": {
+          "combinedMean": 390.54,
+          "display": "391 ms"
+        },
+        "max-potential-fid": {
+          "combinedMean": 357.99,
+          "display": "358 ms"
+        },
+        "cumulative-layout-shift": {
+          "combinedMean": 0,
+          "display": "0 ms"
+        },
+        "interactive": {
+          "combinedMean": 14500.88,
+          "display": "14.50 s"
+        },
+        "server-response-time": {
+          "combinedMean": 5.48,
+          "display": "5 ms"
+        }
+      }
+    },
+    "budget phone-edge 2G": {
+      "label": "Budget Phone - Edge 2G",
+      "stats": {
+        "largest-contentful-paint": {
+          "combinedMean": 23289.83,
+          "display": "23.29 s"
+        },
+        "first-contentful-paint": {
+          "combinedMean": 20897.18,
+          "display": "20.90 s"
+        },
+        "speed-index": {
+          "combinedMean": 21459.5,
+          "display": "21.46 s"
+        },
+        "total-blocking-time": {
+          "combinedMean": 444.63,
+          "display": "445 ms"
+        },
+        "max-potential-fid": {
+          "combinedMean": 403.07,
+          "display": "403 ms"
+        },
+        "cumulative-layout-shift": {
+          "combinedMean": 0,
+          "display": "0 ms"
+        },
+        "interactive": {
+          "combinedMean": 23452.28,
+          "display": "23.45 s"
+        },
+        "server-response-time": {
+          "combinedMean": 5,
+          "display": "5 ms"
+        }
+      }
+    }
+  }
+}
