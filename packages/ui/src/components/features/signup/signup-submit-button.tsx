@@ -1,6 +1,6 @@
 import { ClipLoader } from "react-spinners";
 import { TRANSLATION_COMPONENT } from "../../../config";
-import { Button } from "../../shadcn";
+import { Button } from "../../shadcn/button";
 
 type SignupSubmitButtonProps = {
   isSubmitting: boolean;

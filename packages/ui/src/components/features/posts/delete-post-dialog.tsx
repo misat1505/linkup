@@ -4,7 +4,8 @@ import { Post } from "@packages/schemas";
 import { useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { TRANSLATION_COMPONENT } from "../../../config";
-import { FocusableSpan, Tooltip } from "../../misc";
+import { FocusableSpan } from "../../misc/focusable-span";
+import { Tooltip } from "../../misc/tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,7 +15,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../../shadcn";
+} from "../../shadcn/alert-dialog";
 
 export type DeletePostDialogProps = {
   postId: Post["id"];

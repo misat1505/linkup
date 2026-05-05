@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { createPrivateChat } from "@/features/chats/actions/create-private-chats";
 import { cn } from "@/lib/utils";
 import { useAppContext } from "@/providers/app-provider";
-import { PostHeader } from "@packages/ui/features/posts";
+import { PostHeader } from "@packages/ui/components/features/posts/post-header";
 import { useTheme } from "next-themes";
 import { useRef, useState } from "react";
 import { reportPost } from "../actions/report-post";

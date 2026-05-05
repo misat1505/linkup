@@ -1,10 +1,8 @@
 import LoginForm from "@/features/auth/components/login-form";
 import LoginFormProvider from "@/features/auth/providers/login-form-provider";
-import {
-  LoginPageLogo,
-  LoginSlogan,
-  NoAccount,
-} from "@packages/ui/features/login";
+import { LoginPageLogo } from "@packages/ui/components/features/login/login-page-logo";
+import { LoginSlogan } from "@packages/ui/components/features/login/login-slogan";
+import { NoAccount } from "@packages/ui/components/features/login/no-account";
 
 export default function Login() {
   // const { t } = useTranslation();

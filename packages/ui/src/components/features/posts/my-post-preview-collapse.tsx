@@ -3,7 +3,7 @@
 import { PropsWithChildren, useState } from "react";
 import { TRANSLATION_COMPONENT } from "../../../config";
 import { cn } from "../../../lib/utils";
-import { Button } from "../../shadcn";
+import { Button } from "../../shadcn/button";
 
 export type MyPostPreviewCollapseProps = PropsWithChildren & {
   useTheme: () => { theme: "dark" | "light" };

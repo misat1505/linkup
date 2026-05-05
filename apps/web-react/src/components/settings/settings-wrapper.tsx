@@ -1,7 +1,8 @@
 import { useLanguageContext } from "@/contexts/language-provider";
 import { useThemeContext } from "@/contexts/theme-provider";
 import i18n from "@/i18n";
-import { SettingsCards, SettingsSlogan } from "@packages/ui/features/settings";
+import { SettingsCards } from "@packages/ui/components/features/settings/settings-cards";
+import { SettingsSlogan } from "@packages/ui/components/features/settings/settings-slogan";
 import React from "react";
 
 const SettingsWrapper = () => {

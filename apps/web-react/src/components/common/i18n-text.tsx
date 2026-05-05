@@ -1,6 +1,6 @@
 "use client";
 
-import { TranslationProps } from "@packages/ui/config";
+import { TranslationProps } from "@packages/ui/config/index";
 import { useTranslation } from "react-i18next";
 
 export function I18nText({ translationKey, values }: TranslationProps) {

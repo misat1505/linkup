@@ -8,7 +8,7 @@ import {
   PostCommentSectionLayout,
   ResponseSetButton,
   ToggleSubsectionOpenButton,
-} from "@packages/ui/features/posts";
+} from "@packages/ui/components/features/posts/post-comment-section";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import PostCommentForm from "./post-comment-form";

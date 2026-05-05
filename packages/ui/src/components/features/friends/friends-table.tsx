@@ -1,14 +1,14 @@
 import { Friendship } from "@packages/schemas";
 import { flexRender, Table as TableType } from "@tanstack/react-table";
 import { TRANSLATION_COMPONENT } from "../../../config";
-import { FocusableSpan } from "../../misc";
+import { FocusableSpan } from "../../misc/focusable-span";
 import {
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "../../shadcn";
+} from "../../shadcn/table";
 
 type FriendsTableProps = {
   table: TableType<Friendship>;

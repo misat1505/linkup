@@ -3,7 +3,7 @@
 import { User } from "@packages/schemas";
 import { buildFileURL } from "../../../utils/build-file-url";
 import { getInitials } from "../../../utils/get-initials";
-import { Avatar } from "../../misc";
+import { Avatar } from "../../misc/avatar";
 
 type PostAuthorAvatarProps = { author: User };
 

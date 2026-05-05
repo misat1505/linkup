@@ -1,6 +1,6 @@
 import { useLoginFormContext } from "@/contexts/login-form-provider";
 import { LoginFormType } from "@/validators/auth.validators";
-import { FormField } from "@packages/ui/forms";
+import { FormField } from "@packages/ui/components/forms/form-field";
 import { useTranslation } from "react-i18next";
 
 export default function LoginFormFields() {

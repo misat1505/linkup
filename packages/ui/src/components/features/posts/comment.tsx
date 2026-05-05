@@ -7,7 +7,9 @@ import {
   timeDifference,
   useGetReadableCommentUploadDate,
 } from "../../../utils/time-difference";
-import { Image, ProtectedFile, ProtectedVideo } from "../../misc";
+import { Image } from "../../misc/image";
+import { ProtectedFile } from "../../misc/protected-file";
+import { ProtectedVideo } from "../../misc/protected-video";
 import PostAuthorAvatar from "./post-author-avatar";
 
 export function Comment({ message }: { message: Message }) {

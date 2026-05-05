@@ -10,7 +10,7 @@ import {
   useLanguageContext,
 } from "@/providers/language-provider";
 import { API_URL } from "@/utils/constants";
-import { UiPackageProvider } from "@packages/ui/config";
+import { UiPackageProvider } from "@packages/ui/config/index";
 import { QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeProvider } from "next-themes";

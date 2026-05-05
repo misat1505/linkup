@@ -1,5 +1,5 @@
 "use client";
-import { Image } from "../components";
+import { Image } from "../components/misc/image";
 import { API_URL, useFetchProtectedURL } from "../config";
 import { cn } from "../lib/utils";
 

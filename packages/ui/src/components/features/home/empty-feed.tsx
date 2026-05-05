@@ -4,7 +4,7 @@ import {
   LOGO_PATH,
   TRANSLATION_COMPONENT,
 } from "../../../config";
-import { buttonVariants } from "../../shadcn";
+import { buttonVariants } from "../../shadcn/button";
 
 export function EmptyFeed() {
   return (

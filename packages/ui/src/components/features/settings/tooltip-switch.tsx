@@ -1,6 +1,6 @@
 import useLocalStorage from "use-local-storage";
-import { Tooltip } from "../../misc";
-import { Switch } from "../../shadcn";
+import { Tooltip } from "../../misc/tooltip";
+import { Switch } from "../../shadcn/switch";
 
 export function TooltipSwitch() {
   const [showTooltips, setShowTooltips] = useLocalStorage(

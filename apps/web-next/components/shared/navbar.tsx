@@ -4,7 +4,7 @@ import { createPrivateChat } from "@/features/chats/actions/create-private-chats
 import { createFriendship } from "@/features/friends/actions/create-friendship";
 import { useAppContext } from "@/providers/app-provider";
 import { sleep } from "@/utils/sleep";
-import { Navbar } from "@packages/ui/misc";
+import { Navbar } from "@packages/ui/components/misc/navbar/navbar";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";

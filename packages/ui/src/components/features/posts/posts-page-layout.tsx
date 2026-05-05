@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import { LINK_COMPONENT, TRANSLATION_COMPONENT } from "../../../config";
-import { buttonVariants } from "../../shadcn";
+import { buttonVariants } from "../../shadcn/button";
 
 type PostsPageLayoutProps = PropsWithChildren;
 

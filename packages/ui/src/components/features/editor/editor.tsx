@@ -5,7 +5,7 @@ import { FaSave } from "react-icons/fa";
 import { Post } from "@packages/schemas";
 import { navigate, useUiPackageContext } from "../../../config";
 import { markdownPreviewOptions } from "../../../utils/markdown-preview-options";
-import { toast } from "../../shadcn";
+import { toast } from "../../shadcn/use-toast";
 import { FileDialog, FileDialogProps } from "./file-dialog";
 
 type EditorProps = Omit<FileDialogProps, "content"> & {
@@ -80,7 +80,7 @@ export function Editor({
         onChange={(text) => handleSafeChange(text || "")}
         commands={[...commands.getCommands(), ...customCommands]}
         extraCommands={[...commands.getExtraCommands(), ...customExtraCommands]}
-        className="!h-full grow overflow-auto!"
+        className="h-full! grow overflow-auto!"
         highlightEnable={true}
         previewOptions={{
           components: markdownPreviewOptions,

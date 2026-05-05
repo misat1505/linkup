@@ -1,12 +1,12 @@
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Flag from "react-world-flags";
+import { Button } from "../../shadcn/button";
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../shadcn";
+} from "../../shadcn/dropdown-menu";
 
 export type LanguageSwitchProps = {
   language: string;

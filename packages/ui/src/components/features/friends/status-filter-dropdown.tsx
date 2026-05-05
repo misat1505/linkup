@@ -3,14 +3,14 @@ import { Table } from "@tanstack/react-table";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { TRANSLATION_COMPONENT } from "../../../config";
 import useCountStatusCategories from "../../../hooks/use-count-status-categories";
-import { Tooltip } from "../../misc";
+import { Tooltip } from "../../misc/tooltip";
+import { Button } from "../../shadcn/button";
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../shadcn";
+} from "../../shadcn/dropdown-menu";
 
 type StatusFilterDropdownProps = {
   me: User;

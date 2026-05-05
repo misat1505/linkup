@@ -2,7 +2,7 @@ import Providers from "@/components/providers";
 import ReportWebVitals from "@/components/report-web-vitals";
 import BgGradient from "@/components/shared/bg-gradient";
 import NavbarWrapper from "@/components/shared/navbar";
-import { Toaster } from "@packages/ui/shadcn";
+import { Toaster } from "@packages/ui/components/shadcn/toaster";
 import "github-markdown-css/github-markdown.css";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -24,7 +24,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "LinkUp – Social Media for Programmers",
+  title: "LinkUp - Social Media for Programmers",
   description:
     "Connect, share, and collaborate with programmers worldwide on LinkUp, the social media platform built for developers.",
   keywords: [

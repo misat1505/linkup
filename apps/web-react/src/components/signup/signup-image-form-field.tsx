@@ -1,5 +1,5 @@
 import { useSignupFormContext } from "@/contexts/signup-form-provider";
-import { SignupImageDisplay } from "@packages/ui/features/signup";
+import { SignupImageDisplay } from "@packages/ui/components/features/signup/signup-image-display";
 import { Input } from "../ui/input";
 
 export default function SignupImageFormField() {

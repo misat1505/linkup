@@ -8,21 +8,10 @@
     "build": "tsc"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./features/login": "./dist/components/features/login/index.js",
-    "./features/posts": "./dist/components/features/posts/index.js",
-    "./features/friends": "./dist/components/features/friends/index.js",
-    "./features/home": "./dist/components/features/home/index.js",
-    "./features/settings": "./dist/components/features/settings/index.js",
-    "./features/signup": "./dist/components/features/signup/index.js",
-    "./features/editor": "./dist/components/features/editor/index.js",
-    "./hooks": "./dist/hooks/index.js",
-    "./utils": "./dist/utils/index.js",
-    "./lib": "./dist/lib/utils.js",
-    "./shadcn": "./dist/components/shadcn/index.js",
-    "./misc": "./dist/components/misc/index.js",
-    "./config": "./dist/config/index.js",
-    "./forms": "./dist/components/forms/index.js"
+    "./*": {
+      "import": "./dist/*.js",
+      "types": "./dist/*.d.ts"
+    }
   },
   "sideEffects": false,
   "keywords": [],

@@ -6,7 +6,10 @@ import { FaCopy } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { PiFilesFill } from "react-icons/pi";
 import { TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
-import { Image, Loading, ProtectedVideo, Tooltip } from "../../misc";
+import { Image } from "../../misc/image";
+import { Loading } from "../../misc/loading";
+import { ProtectedVideo } from "../../misc/protected-video";
+import { Tooltip } from "../../misc/tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,14 +20,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
+} from "../../shadcn/alert-dialog";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
-  useToast,
-} from "../../shadcn";
+} from "../../shadcn/dialog";
+import { useToast } from "../../shadcn/use-toast";
 
 export type FileDialogProps = {
   content?: Post["content"];
@@ -92,10 +96,6 @@ function FileDialogContent(
 
   const validPreviousURLs = getValidURLs();
 
-  // const { isLoading, data: files } = useQuery({
-  //   queryKey: queryKeys.cache(),
-  //   queryFn: getCache,
-  // });
   const { data: files, isLoading } = props.useGetCache();
 
   if (isLoading) return <Loading />;
@@ -120,14 +120,14 @@ function FileDialogContent(
 
   return (
     <DialogContent className="sm:max-w-106.25">
-      <DialogHeader>
+      <AlertDialogHeader>
         <DialogTitle>
           <TRANSLATION_COMPONENT translationKey="editor.file-dialog.title" />
         </DialogTitle>
         <DialogDescription>
           <TRANSLATION_COMPONENT translationKey="editor.file-dialog.description" />
         </DialogDescription>
-      </DialogHeader>
+      </AlertDialogHeader>
       <div className="grid gap-4 py-4">
         {validPreviousURLs && (
           <>

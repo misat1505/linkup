@@ -1,7 +1,7 @@
 import { Post } from "@packages/schemas";
 import { IoPencil } from "react-icons/io5";
 import { LINK_COMPONENT, TRANSLATION_COMPONENT } from "../../../config";
-import { Tooltip } from "../../misc";
+import { Tooltip } from "../../misc/tooltip";
 import { DeletePostDialog, DeletePostDialogProps } from "./delete-post-dialog";
 import MyPostHeader from "./my-post-header";
 import {

@@ -14,17 +14,17 @@ import { cn } from "../../../lib/utils";
 import { buildFileURL } from "../../../utils/build-file-url";
 import { createFullName } from "../../../utils/create-full-name";
 import { getInitials } from "../../../utils/get-initials";
+import { Button } from "../../shadcn/button";
 import {
-  Button,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-  Skeleton,
-  toast,
-} from "../../shadcn";
+} from "../../shadcn/command";
+import { Skeleton } from "../../shadcn/skeleton";
+import { toast } from "../../shadcn/use-toast";
 import { Avatar } from "../avatar";
 import { FocusableSpan } from "../focusable-span";
 import { Tooltip } from "../tooltip";
@@ -70,7 +70,7 @@ export function NavbarSearch({
       <CommandList
         ref={commandListRef}
         className={cn(
-          "no-scrollbar absolute top-14 w-[238px] bg-white shadow-md",
+          "no-scrollbar absolute top-14 w-59.5 bg-white shadow-md",
           {
             hidden: !isExpanded,
           },

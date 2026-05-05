@@ -3,7 +3,7 @@
 import { Post } from "@packages/schemas";
 import React, { Suspense } from "react";
 import { markdownPreviewOptions } from "../../../utils/markdown-preview-options";
-import { Loading } from "../../misc";
+import { Loading } from "../../misc/loading";
 
 const MDEditorMarkdown = React.lazy(() =>
   import("@uiw/react-md-editor").then((m) => ({

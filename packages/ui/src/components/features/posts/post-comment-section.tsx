@@ -4,8 +4,8 @@ import { FaArrowDown, FaReply } from "react-icons/fa";
 import { TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
 import { cn } from "../../../lib/utils";
 import { createFullName } from "../../../utils/create-full-name";
-import { Tooltip } from "../../misc";
-import { Button } from "../../shadcn";
+import { Tooltip } from "../../misc/tooltip";
+import { Button } from "../../shadcn/button";
 import { Comment } from "./comment";
 
 type PostCommentSectionLayoutProps = PropsWithChildren & {
@@ -42,7 +42,7 @@ export function PostCommentSectionLayout({
   return (
     <Tooltip content={getTooltipText(message)}>
       <div className="group flex items-center justify-between hover:bg-slate-100/50 dark:hover:bg-slate-900/50">
-        <div className="ml-1 flex flex-grow gap-x-2 overflow-hidden">
+        <div className="ml-1 flex grow gap-x-2 overflow-hidden">
           <LevelIndicator level={level} />
           <Comment message={message} />
         </div>

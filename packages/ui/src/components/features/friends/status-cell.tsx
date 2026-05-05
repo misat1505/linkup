@@ -5,16 +5,16 @@ import { FaTrash } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
 import { TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
 import { createFullName } from "../../../utils/create-full-name";
-import { Tooltip } from "../../misc";
+import { Tooltip } from "../../misc/tooltip";
+import { Button } from "../../shadcn/button";
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  useToast,
-} from "../../shadcn";
+} from "../../shadcn/dropdown-menu";
+import { useToast } from "../../shadcn/use-toast";
 
 export type StatusCellProps = {
   friendship: Friendship;

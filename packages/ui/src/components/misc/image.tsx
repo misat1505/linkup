@@ -8,7 +8,7 @@ import {
   useFetchProtectedURL,
 } from "../../config";
 import { cn } from "../../lib/utils";
-import { Skeleton } from "../shadcn";
+import { Skeleton } from "../shadcn/skeleton";
 
 function DefaultLoader({ className }: { className?: string }) {
   return <Skeleton className={cn("h-full w-full", className)} />;

@@ -1,7 +1,7 @@
 import AuthGuard from "@/components/auth-guard";
 import { getMyPosts } from "@/features/posts/actions/get-my-posts";
 import MyPostPreviewWrapper from "@/features/posts/components/my-post-preview-wrapper";
-import { PostsPageLayout } from "@packages/ui/features/posts";
+import { PostsPageLayout } from "@packages/ui/components/features/posts/posts-page-layout";
 
 export default async function MyPostsPage() {
   const posts = await getMyPosts();

@@ -1,5 +1,6 @@
 import { useLanguageContext } from "@/providers/language-provider";
-import { SettingsCards, SettingsSlogan } from "@packages/ui/features/settings";
+import { SettingsCards } from "@packages/ui/components/features/settings/settings-cards";
+import { SettingsSlogan } from "@packages/ui/components/features/settings/settings-slogan";
 import { useTheme } from "next-themes";
 import React from "react";
 

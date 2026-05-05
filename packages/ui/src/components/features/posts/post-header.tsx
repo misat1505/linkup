@@ -11,7 +11,9 @@ import {
 } from "../../../config";
 import { createFullName } from "../../../utils/create-full-name";
 import { timeDifference } from "../../../utils/time-difference";
-import { ActionButton, FocusableSpan, Tooltip } from "../../misc";
+import { FocusableSpan } from "../../misc/focusable-span";
+import { ActionButton } from "../../misc/navbar/navbar-search";
+import { Tooltip } from "../../misc/tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,8 +23,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  useToast,
-} from "../../shadcn";
+} from "../../shadcn/alert-dialog";
+import { useToast } from "../../shadcn/use-toast";
 import PostAuthorAvatar from "./post-author-avatar";
 
 type PostHeaderProps = ReportPostProps & {
@@ -80,9 +82,7 @@ export function PostHeader({
               />
             )}
           </div>
-          <p className="text-sm text-muted-foreground mt-[-0.25rem]">
-            {getTimeText()}
-          </p>
+          <p className="text-sm text-muted-foreground -mt-1">{getTimeText()}</p>
         </div>
       </div>
       {!isMine && <ReportPost post={post} reportPost={reportPost} />}

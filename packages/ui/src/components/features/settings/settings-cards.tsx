@@ -1,5 +1,5 @@
 import { TRANSLATION_COMPONENT } from "../../../config";
-import { ThemeToggle, ThemeToggleProps } from "../../misc";
+import { ThemeToggle, ThemeToggleProps } from "../../misc/navbar/theme-toggle";
 import { LanguageSwitch, LanguageSwitchProps } from "./language-switch";
 import { SettingCard } from "./setting-card";
 import { TooltipSwitch } from "./tooltip-switch";
