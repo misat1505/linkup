@@ -99,9 +99,9 @@ async function runSingleLighthouse(
 
   const { lhr } = runnerResult;
 
-  if (lhr.finalUrl !== lhr.requestedUrl) {
+  if (lhr.finalDisplayedUrl !== lhr.requestedUrl) {
     console.warn(
-      `  ⚠️  redirect detected: ${lhr.requestedUrl} → ${lhr.finalUrl}`,
+      `  ⚠️  redirect detected: ${lhr.requestedUrl} → ${lhr.finalDisplayedUrl}`,
     );
   }
 
@@ -115,7 +115,7 @@ async function runSingleLighthouse(
     };
   }
 
-  await page.goto(lhr.finalUrl!, { waitUntil: "networkidle0" });
+  await page.goto(lhr.finalDisplayedUrl!, { waitUntil: "networkidle0" });
   await page.screenshot({
     path: path.join(
       debugDir,
@@ -204,50 +204,65 @@ function printComparisonSummary(results: ProfileResult[]) {
 
 async function runProfile(
   profile: BenchmarkProfile,
-  page: Page,
-  chromePort: number,
-  cookieHeader: string,
   mode: Mode,
   iterations: number,
   routePath: string,
   routeSlug: string,
 ): Promise<ProfileResult> {
-  const url = getFrontendUrlBase(mode) + routePath;
-  const flags = buildFlags(profile, chromePort, cookieHeader);
+  // Fresh Chrome instance per profile to guarantee a clean session
+  const chrome = await launch({ chromeFlags: ["--headless"] });
 
-  banner(`${profile.emoji}  Starting: ${profile.label}  [${routePath}]`, "·");
-  console.log(`   ${profile.description}`);
+  try {
+    const browser = await puppeteer.connect({
+      browserURL: `http://localhost:${chrome.port}`,
+    });
 
-  console.log("   Warming up (2 runs)...");
-  for (let i = 0; i < 2; i++) {
-    await lighthouse(url, flags);
+    const page = await browser.newPage();
+
+    const cookieHeader = await login(page);
+    const url = getFrontendUrlBase(mode) + routePath;
+    const flags = buildFlags(profile, chrome.port, cookieHeader);
+
+    banner(`${profile.emoji}  Starting: ${profile.label}  [${routePath}]`, "·");
+    console.log(`   ${profile.description}`);
+
+    console.log("   Warming up (2 runs)...");
+    for (let i = 0; i < 2; i++) {
+      await lighthouse(url, flags);
+    }
+
+    const allResults: Record<MetricKey, MetricResult>[] = [];
+    const profileStart = performance.now();
+
+    for (let i = 0; i < iterations; i++) {
+      process.stdout.write(`   Run ${i + 1}/${iterations}...`);
+      const start = performance.now();
+      const result = await runSingleLighthouse(
+        page,
+        url,
+        flags,
+        profile.id,
+        i + 1,
+        routeSlug,
+        mode,
+      );
+      const elapsed = ((performance.now() - start) / 1000).toFixed(1);
+      process.stdout.write(
+        ` ${elapsed}s (${new Date().toLocaleTimeString()})\n`,
+      );
+      allResults.push(result);
+    }
+
+    const durationMs = performance.now() - profileStart;
+    const stats = aggregateResults(allResults);
+    printProfileStats(profile, stats);
+
+    await browser.disconnect();
+
+    return { profile, iterations: allResults, stats, durationMs };
+  } finally {
+    chrome.kill();
   }
-
-  const allResults: Record<MetricKey, MetricResult>[] = [];
-  const profileStart = performance.now();
-
-  for (let i = 0; i < iterations; i++) {
-    process.stdout.write(`   Run ${i + 1}/${iterations}...`);
-    const start = performance.now();
-    const result = await runSingleLighthouse(
-      page,
-      url,
-      flags,
-      profile.id,
-      i + 1,
-      routeSlug,
-      mode,
-    );
-    const elapsed = ((performance.now() - start) / 1000).toFixed(1);
-    process.stdout.write(` ${elapsed}s\n`);
-    allResults.push(result);
-  }
-
-  const durationMs = performance.now() - profileStart;
-  const stats = aggregateResults(allResults);
-  printProfileStats(profile, stats);
-
-  return { profile, iterations: allResults, stats, durationMs };
 }
 
 function getFrontendUrlBase(mode: Mode): string {
@@ -257,71 +272,62 @@ function getFrontendUrlBase(mode: Mode): string {
   throw new Error(`Unknown mode: ${mode}`);
 }
 
-/**
- * Builds a "combined" output JSON that averages all per-metric means across
- * all measured paths, grouped by profile. Useful for a single at-a-glance
- * comparison between the two modes.
- */
-function buildCombinedStats(pathResults: PathResult[]): object {
-  // profileId -> metricKey -> all mean values (one per path)
-  const accumulator: Record<string, Record<MetricKey, number[]>> = {};
-
-  for (const pr of pathResults) {
-    for (const profileResult of pr.profiles) {
-      const pid = profileResult.profile.id;
-      if (!accumulator[pid]) {
-        accumulator[pid] = {} as Record<MetricKey, number[]>;
-      }
-      for (const metric of importantMetrics) {
-        if (!accumulator[pid][metric]) accumulator[pid][metric] = [];
-        const mean = profileResult.stats[metric].mean;
-        if (mean !== null) accumulator[pid][metric].push(mean);
-      }
-    }
-  }
-
-  const combined: Record<
+function buildMergedProfiles(pathResults: PathResult[]): any[] {
+  const map: Record<
     string,
     {
-      label: string;
-      stats: Record<
-        MetricKey,
-        { combinedMean: number | null; display: string }
-      >;
+      profile: BenchmarkProfile;
+      allIterations: Record<MetricKey, MetricResult>[];
+      totalDurationMs: number;
     }
   > = {};
 
   for (const pr of pathResults) {
-    for (const profileResult of pr.profiles) {
-      const pid = profileResult.profile.id;
-      if (combined[pid]) continue; // already filled
+    for (const p of pr.profiles) {
+      const id = p.profile.id;
 
-      combined[pid] = {
-        label: profileResult.profile.label,
-        stats: {} as Record<
-          MetricKey,
-          { combinedMean: number | null; display: string }
-        >,
-      };
-
-      for (const metric of importantMetrics) {
-        const means = accumulator[pid]![metric] ?? [];
-        if (means.length === 0) {
-          combined[pid].stats[metric] = { combinedMean: null, display: "-" };
-          continue;
-        }
-        const avg = parseFloat(
-          (means.reduce((a, b) => a + b, 0) / means.length).toFixed(2),
-        );
-        combined[pid].stats[metric] = {
-          combinedMean: avg,
-          display: ms(avg),
+      if (!map[id]) {
+        map[id] = {
+          profile: p.profile,
+          allIterations: [],
+          totalDurationMs: 0,
         };
       }
+
+      map[id].allIterations.push(...p.iterations);
+      map[id].totalDurationMs += p.durationMs;
     }
   }
 
-  return combined;
+  return Object.values(map).map((entry) => ({
+    profileId: entry.profile.id,
+    label: entry.profile.label,
+    durationMs: Math.round(entry.totalDurationMs),
+    stats: aggregateResults(entry.allIterations),
+  }));
+}
+
+async function login(page: Page) {
+  const base = getFrontendUrlBase(MODE);
+  const waitUntil = MODE === "react" ? "networkidle0" : "domcontentloaded";
+
+  console.log(`\nOpening login page at ${base}/login...`);
+  await page.goto(`${base}/login`, { waitUntil });
+  await page.waitForSelector('input[name="login"]', { timeout: 10000 });
+  await page.type('input[name="login"]', "login1");
+  await page.type('input[name="password"]', "pass1");
+  await page.click("button[type=submit]");
+  await new Promise((res) => setTimeout(res, 1500));
+
+  const cookies = await page.browser().cookies();
+
+  const refreshToken = cookies.find((c) => c.name === "refresh-token")?.value;
+  if (!refreshToken) throw new Error("No refresh-token cookie after login");
+
+  const cookieHeader = `refresh-token=${refreshToken}`;
+
+  console.log("Refreshed session ✓");
+  return cookieHeader;
 }
 
 async function main() {
@@ -338,136 +344,98 @@ async function main() {
     `🚀  Lighthouse Benchmark  |  mode: ${MODE}  |  ${ITERATIONS} runs × ${activeProfiles.length} profiles × ${PATHS_TO_BENCHMARK.length} paths`,
     "═",
   );
+  console.log(`Start time: ${new Date().toLocaleTimeString()}`);
 
   await fs.mkdir(debugDir, { recursive: true });
   await fs.mkdir(outputDir, { recursive: true });
 
-  const chrome = await launch({ chromeFlags: ["--headless"] });
+  const totalStart = performance.now();
+  const allPathResults: PathResult[] = [];
 
-  try {
-    const browser = await puppeteer.connect({
-      browserURL: `http://localhost:${chrome.port}`,
-    });
+  for (const routePath of PATHS_TO_BENCHMARK) {
+    // slug used in filenames, e.g. "/" -> "root", "/chats" -> "chats"
+    const routeSlug =
+      routePath === "/"
+        ? "root"
+        : routePath.replace(/^\//, "").replace(/\//g, "-");
 
-    const page = await browser.newPage();
+    banner(`📂  Path: ${routePath}`, "═");
 
-    console.log(`\nOpening login page at ${getFrontendUrlBase(MODE)}/login...`);
-    await page.goto(`${getFrontendUrlBase(MODE)}/login`, {
-      waitUntil: "networkidle0",
-    });
-    await page.type('input[name="login"]', "login1");
-    await page.type('input[name="password"]', "pass1");
-    await Promise.all([
-      page.click("button[type=submit]"),
-      page.waitForNavigation({ waitUntil: "networkidle0" }),
-    ]);
-    await new Promise((res) => setTimeout(res, 1000));
+    const profileResults: ProfileResult[] = [];
 
-    const cookies = await page.cookies();
-    const cookieHeader = cookies.map((c) => `${c.name}=${c.value}`).join("; ");
-
-    const waitUntil = MODE === "react" ? "networkidle0" : "domcontentloaded";
-    await page.goto(getFrontendUrlBase(MODE), { waitUntil });
-    console.log("Logged in ✓");
-
-    const totalStart = performance.now();
-    const allPathResults: PathResult[] = [];
-
-    for (const routePath of PATHS_TO_BENCHMARK) {
-      // slug used in filenames, e.g. "/" -> "root", "/chats" -> "chats"
-      const routeSlug =
-        routePath === "/"
-          ? "root"
-          : routePath.replace(/^\//, "").replace(/\//g, "-");
-
-      banner(`📂  Path: ${routePath}`, "═");
-
-      const profileResults: ProfileResult[] = [];
-
-      for (const profile of activeProfiles) {
-        const result = await runProfile(
-          profile,
-          page,
-          chrome.port,
-          cookieHeader,
-          MODE,
-          ITERATIONS,
-          routePath,
-          routeSlug,
-        );
-        profileResults.push(result);
-      }
-
-      printComparisonSummary(profileResults);
-      allPathResults.push({ path: routePath, profiles: profileResults });
-
-      // Per-path JSON output
-      const perPathFile = path.join(
-        outputDir,
-        `${MODE}-benchmark-${routeSlug}.json`,
+    for (const profile of activeProfiles) {
+      const result = await runProfile(
+        profile,
+        MODE,
+        ITERATIONS,
+        routePath,
+        routeSlug,
       );
-      await fs.writeFile(
-        perPathFile,
-        JSON.stringify(
-          {
-            mode: MODE,
-            path: routePath,
-            iterations: ITERATIONS,
-            generatedAt: new Date().toISOString(),
-            profiles: profileResults.map((r) => ({
-              profileId: r.profile.id,
-              label: r.profile.label,
-              durationMs: parseFloat(r.durationMs.toFixed(0)),
-              stats: r.stats,
-            })),
-            raw: profileResults.map((r) => ({
-              profileId: r.profile.id,
-              runs: r.iterations,
-            })),
-          },
-          null,
-          2,
-        ),
-        "utf-8",
-      );
-      console.log(`\n   ✅  Saved: ${perPathFile}`);
+      profileResults.push(result);
     }
 
-    const totalMs = performance.now() - totalStart;
+    printComparisonSummary(profileResults);
+    allPathResults.push({ path: routePath, profiles: profileResults });
 
-    // Combined JSON — averages across all paths
-    const combinedStats = buildCombinedStats(allPathResults);
-    const combinedFile = path.join(
+    // Per-path JSON output
+    const perPathFile = path.join(
       outputDir,
-      `${MODE}-benchmark-combined.json`,
+      `${MODE}-benchmark-${routeSlug}.json`,
     );
     await fs.writeFile(
-      combinedFile,
+      perPathFile,
       JSON.stringify(
         {
           mode: MODE,
-          paths: PATHS_TO_BENCHMARK,
+          path: routePath,
           iterations: ITERATIONS,
           generatedAt: new Date().toISOString(),
-          totalDurationMs: parseFloat(totalMs.toFixed(0)),
-          description:
-            "combinedMean is the arithmetic mean of per-path means for each metric",
-          combined: combinedStats,
+          profiles: profileResults.map((r) => ({
+            profileId: r.profile.id,
+            label: r.profile.label,
+            durationMs: parseFloat(r.durationMs.toFixed(0)),
+            stats: r.stats,
+          })),
+          raw: profileResults.map((r) => ({
+            profileId: r.profile.id,
+            runs: r.iterations,
+          })),
         },
         null,
         2,
       ),
       "utf-8",
     );
-
-    banner(`✅  Done in ${(totalMs / 1000 / 60).toFixed(1)} min`, "═");
-    console.log(`   Per-path files : ${MODE}-benchmark-{root,chats}.json`);
-    console.log(`   Combined file  : ${combinedFile}\n`);
-
-    await browser.disconnect();
-  } finally {
-    chrome.kill();
+    console.log(`\n   ✅  Saved: ${perPathFile}`);
   }
+
+  const totalMs = performance.now() - totalStart;
+
+  // Combined JSON — averages across all paths
+  const combinedStats = buildMergedProfiles(allPathResults);
+  const combinedFile = path.join(outputDir, `${MODE}-benchmark-combined.json`);
+  await fs.writeFile(
+    combinedFile,
+    JSON.stringify(
+      {
+        mode: MODE,
+        paths: PATHS_TO_BENCHMARK,
+        iterations: ITERATIONS,
+        generatedAt: new Date().toISOString(),
+        totalDurationMs: parseFloat(totalMs.toFixed(0)),
+        description:
+          "combinedMean is the arithmetic mean of per-path means for each metric",
+        profiles: combinedStats,
+      },
+      null,
+      2,
+    ),
+    "utf-8",
+  );
+
+  banner(`✅  Done in ${(totalMs / 1000 / 60).toFixed(1)} min`, "═");
+  console.log(`   Per-path files : ${MODE}-benchmark-{root,chats}.json`);
+  console.log(`   Combined file  : ${combinedFile}\n`);
 }
 
 main().catch((e) => {
