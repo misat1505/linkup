@@ -1,17 +1,21 @@
 import { useAppContext } from "@/contexts/app-provider";
 import { useChatPageContext } from "@/contexts/chat-page-provider";
+import GroupChatFormProvider from "@/contexts/group-chat-form-provider";
 import { ROUTES } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { buildFileURL, Filter } from "@/utils/build-file-url";
 import { ChatUtils } from "@/utils/chat-utils";
 import { Chat } from "@packages/schemas";
+import { ChatCreator } from "@packages/ui/components/features/chats/chat-creation-dialog/chat-creator";
 import { useTranslation } from "react-i18next";
 import { FaUserGroup } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router-dom";
 import Avatar from "../common/avatar";
 import Loading from "../common/loading";
 import Tooltip from "../common/tooltip";
-import ChatCreator from "./chat-creation-dialog/chat-creator";
+import GroupChatForm from "./chat-creation-dialog/group-chat-form";
+import PrivateChatForm from "./chat-creation-dialog/private-chat-form";
+import { CreateChatTarget } from "./create-chat-trigger";
 import NoChats from "./no-chats";
 
 export default function ChatNavigation() {
@@ -49,7 +53,17 @@ function ChatNavigationHeader() {
   return (
     <div className="flex w-full items-center justify-between bg-transparent px-4 py-2 text-white">
       <h2 className="text-lg font-semibold">{t("chats.navigation.title")}</h2>
-      <ChatCreator />
+      <ChatCreator
+        slots={{
+          createChatTarget: CreateChatTarget,
+          groupChatForm: (
+            <GroupChatFormProvider>
+              <GroupChatForm />
+            </GroupChatFormProvider>
+          ),
+          privateChatForm: <PrivateChatForm />,
+        }}
+      />
     </div>
   );
 }
