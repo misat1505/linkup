@@ -1,25 +1,15 @@
 import { Chat, Message, User } from "@packages/schemas";
-import { TFunction } from "i18next";
-import { ChatUtils } from "./chat-utils";
-import { createFullName } from "./create-full-name";
+import { TranslateFn } from "@packages/ui/config/index";
+import { ChatUtils } from "@packages/ui/utils/chat-utils";
+import { createFullName } from "@packages/ui/utils/create-full-name";
 
 export class ChatFooterUtils {
-  private chat: Chat;
-  private message: Message;
-  private me: User;
-  private t: TFunction<"translation", undefined>;
-
   constructor(
-    chat: Chat,
-    message: Message,
-    me: User,
-    translations: TFunction<"translation", undefined>,
-  ) {
-    this.chat = chat;
-    this.message = message;
-    this.me = me;
-    this.t = translations;
-  }
+    private readonly chat: Chat,
+    private readonly message: Message,
+    private readonly me: User,
+    private readonly t: TranslateFn,
+  ) {}
 
   public getReplyAuthorText(): string {
     const chatUtils = new ChatUtils(this.chat, this.me);
@@ -40,7 +30,7 @@ export class ChatFooterUtils {
   public getReplyText() {
     if (this.message.content) return this.message.content;
     return this.t("chats.form.reply.only-files", {
-      count: this.message.files.length,
+      count: String(this.message.files.length),
     });
   }
 }

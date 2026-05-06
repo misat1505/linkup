@@ -1,6 +1,6 @@
 import { apiContractClient } from "@/lib/api-contract-client";
 import { getAccessToken } from "@/lib/token";
-import { buildFileURL } from "@/utils/build-file-url";
+import { buildFileURL } from "@packages/ui/utils/build-file-url";
 
 export class FileService {
   static async downloadFile(

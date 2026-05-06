@@ -2,7 +2,6 @@ import { useAppContext } from "@/contexts/app-provider";
 import { ROUTES } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { AuthService } from "@/services/auth.service";
-import { createFullName } from "@/utils/create-full-name";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +22,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@packages/ui/components/shadcn/sheet";
+import { createFullName } from "@packages/ui/utils/create-full-name";
 import React, { HTMLAttributes, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { CiLogin, CiLogout } from "react-icons/ci";

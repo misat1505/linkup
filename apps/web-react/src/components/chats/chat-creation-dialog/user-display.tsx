@@ -1,9 +1,9 @@
 import Avatar from "@/components/common/avatar";
 import { cn } from "@/lib/utils";
-import { buildFileURL } from "@/utils/build-file-url";
-import { createFullName } from "@/utils/create-full-name";
-import { getInitials } from "@/utils/get-initials";
 import { User } from "@packages/schemas";
+import { buildFileURL } from "@packages/ui/utils/build-file-url";
+import { createFullName } from "@packages/ui/utils/create-full-name";
+import { getInitials } from "@packages/ui/utils/get-initials";
 import { ButtonHTMLAttributes } from "react";
 
 type UserDisplayProps = ButtonHTMLAttributes<HTMLButtonElement> & {

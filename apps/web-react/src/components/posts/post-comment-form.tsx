@@ -1,8 +1,8 @@
 import { useAppContext } from "@/contexts/app-provider";
 import { usePostCommentsSectionContext } from "@/contexts/post-comment-section-provider";
 import { cn } from "@/lib/utils";
-import { createFullName } from "@/utils/create-full-name";
 import { Input } from "@packages/ui/components/shadcn/input";
+import { createFullName } from "@packages/ui/utils/create-full-name";
 import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { FaFileAlt } from "react-icons/fa";

@@ -6,9 +6,6 @@ import { cn } from "@/lib/utils";
 import { ChatService } from "@/services/chat.service";
 import { FriendService } from "@/services/friend.service";
 import { UserService } from "@/services/user.service";
-import { buildFileURL } from "@/utils/build-file-url";
-import { createFullName } from "@/utils/create-full-name";
-import { getInitials } from "@/utils/get-initials";
 import { Chat, Friendship, User } from "@packages/schemas";
 import { Button } from "@packages/ui/components/shadcn/button";
 import {
@@ -21,6 +18,9 @@ import {
 } from "@packages/ui/components/shadcn/command";
 import { Skeleton } from "@packages/ui/components/shadcn/skeleton";
 import { useToast } from "@packages/ui/components/shadcn/use-toast";
+import { buildFileURL } from "@packages/ui/utils/build-file-url";
+import { createFullName } from "@packages/ui/utils/create-full-name";
+import { getInitials } from "@packages/ui/utils/get-initials";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaUserFriends } from "react-icons/fa";
