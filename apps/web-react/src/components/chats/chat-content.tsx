@@ -1,15 +1,15 @@
+import { useAppContext } from "@/contexts/app-provider";
 import { useChatContext } from "@/contexts/chat-provider";
 import useChatScroll from "@/hooks/chats/use-chat-scroll";
-import Loading from "../common/loading";
-import Message from "./message";
-import IncomeMessage from "./income-message";
-import { useInView } from "react-intersection-observer";
-import { useEffect, useRef } from "react";
-import ChatStarted from "./chat-started";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { ChatUtils } from "@/utils/chat-utils";
-import { useAppContext } from "@/contexts/app-provider";
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { useInView } from "react-intersection-observer";
+import Loading from "../common/loading";
+import ChatStarted from "./chat-started";
+import IncomeMessage from "./income-message";
+import { MessageWrapper } from "./message-wrapper";
 
 export default function ChatContent() {
   const { t } = useTranslation();
@@ -79,7 +79,7 @@ export default function ChatContent() {
         <div ref={topRef} className="h-2"></div>
         {!hasNextPage && <ChatStarted />}
         {[...messages].reverse().map((message) => (
-          <Message key={message.id} message={message} />
+          <MessageWrapper key={message.id} message={message} />
         ))}
         <div ref={bottomRef} />
       </div>
