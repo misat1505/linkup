@@ -1,41 +1,32 @@
 import ChatFooterProvider from "@/contexts/chat-footer-provider";
 import { useChatPageContext } from "@/contexts/chat-page-provider";
 import ChatProvider, { useChatContext } from "@/contexts/chat-provider";
-import { ROUTES } from "@/lib/routes";
-import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
-import { BsChatLeftTextFill } from "react-icons/bs";
-import { Link, useParams } from "react-router-dom";
-import { Button, buttonVariants } from "../ui/button";
+import { ChatError } from "@packages/ui/components/features/chats/chat-error";
+import { NoActiveChat } from "@packages/ui/components/features/chats/no-active-chat";
+import { PropsWithChildren } from "react";
+import { useParams } from "react-router-dom";
+import { Button } from "../ui/button";
 import ChatContent from "./chat-content";
 import ChatFooter from "./chat-footer";
 import ChatHeaderWrapper from "./chat-header-wrapper";
 
-export default function ChatGuard() {
-  const { t } = useTranslation();
+function Trigger({ children }: PropsWithChildren) {
   const { createChatTriggerRef } = useChatPageContext();
+
+  return (
+    <Button
+      onClick={() => createChatTriggerRef.current!.click()}
+      className="mt-4 mx-auto"
+    >
+      {children}
+    </Button>
+  );
+}
+
+export default function ChatGuard() {
   const { chatId } = useParams();
 
-  if (!chatId)
-    return (
-      <div className="relative hidden flex-grow md:block">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  bg-slate-100 p-8 dark:bg-slate-900 text-center shadow-lg">
-          <BsChatLeftTextFill className="mx-auto h-64 w-64 text-muted-foreground" />
-          <h2 className="my-4 text-center text-xl font-semibold">
-            {t("chats.no-chat-selected.title")}
-          </h2>
-          <p className="max-w-64 text-muted-foreground text-sm text-center">
-            {t("chats.no-chat-selected.description")}
-          </p>
-          <Button
-            onClick={() => createChatTriggerRef.current!.click()}
-            className="mt-4 mx-auto"
-          >
-            {t("chats.no-chat-selected.action")}
-          </Button>
-        </div>
-      </div>
-    );
+  if (!chatId) return <NoActiveChat slots={{ trigger: Trigger }} />;
 
   return (
     <ChatProvider key={chatId} chatId={chatId}>
@@ -45,35 +36,12 @@ export default function ChatGuard() {
 }
 
 function Chat() {
-  const { t } = useTranslation();
   const { error, chatId } = useChatContext();
   const { chats } = useChatPageContext();
 
   const isUserInChat = chats?.find((c) => c.id === chatId);
 
-  if (error || !isUserInChat)
-    return (
-      <div className="relative flex-grow">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-100 p-8 text-center dark:bg-slate-900 shadow-lg">
-          <BsChatLeftTextFill className="mx-auto h-64 w-64 text-red-500" />
-          <h2 className="my-4 text-center text-xl font-semibold">
-            {t("chats.chat-unavailable.title")}
-          </h2>
-          <p className="max-w-64 text-left text-muted-foreground text-sm">
-            {t("chats.chat-unavailable.description")}
-          </p>
-          <Link
-            className={cn(
-              "mx-auto mt-4",
-              buttonVariants({ variant: "default" }),
-            )}
-            to={ROUTES.CHATS.$path()}
-          >
-            {t("chats.chat-unavailable.action")}
-          </Link>
-        </div>
-      </div>
-    );
+  if (error || !isUserInChat) return <ChatError />;
 
   return (
     <div className="w-[calc(100vw-20rem)] flex-grow">
