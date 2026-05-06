@@ -9,7 +9,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button, buttonVariants } from "../ui/button";
 import ChatContent from "./chat-content";
 import ChatFooter from "./chat-footer";
-import ChatHeader from "./chat-header";
+import ChatHeaderWrapper from "./chat-header-wrapper";
 
 export default function ChatGuard() {
   const { t } = useTranslation();
@@ -78,7 +78,7 @@ function Chat() {
   return (
     <div className="w-[calc(100vw-20rem)] flex-grow">
       <div className="flex h-full w-full flex-col">
-        <ChatHeader chatId={chatId} />
+        <ChatHeaderWrapper chatId={chatId} />
         <ChatFooterProvider chatId={chatId}>
           <ChatContent />
           <ChatFooter />
