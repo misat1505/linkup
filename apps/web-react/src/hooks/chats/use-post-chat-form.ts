@@ -1,9 +1,9 @@
-import { useToast } from "@/components/ui/use-toast";
 import { queryKeys } from "@/lib/query-keys";
 import { ChatService } from "@/services/chat.service";
 import { chatFormSchema, ChatFormType } from "@/validators/chat.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Chat, Message } from "@packages/schemas";
+import { useToast } from "@packages/ui/components/shadcn/use-toast";
 import { AxiosError } from "axios";
 import { useState } from "react";
 import {

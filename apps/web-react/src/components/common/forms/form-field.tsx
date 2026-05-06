@@ -1,5 +1,5 @@
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { Input } from "@packages/ui/components/shadcn/input";
 import React from "react";
 import FormFieldError from "./form-field-error";
 
@@ -18,14 +18,14 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
             {
               "mb-2 ring-2 ring-red-500 ring-offset-2 focus-visible:ring-red-500":
                 error,
-            }
+            },
           )}
           {...rest}
         />
         {error && <FormFieldError message={error} />}
       </div>
     );
-  }
+  },
 );
 
 FormField.displayName = "FormField";

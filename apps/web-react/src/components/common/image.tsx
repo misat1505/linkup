@@ -1,8 +1,8 @@
+import { useFetchProtectedURL } from "@/hooks/use-fetch-protected-url";
+import { cn } from "@/lib/utils";
+import { Skeleton } from "@packages/ui/components/shadcn/skeleton";
 import { ReactNode } from "react";
 import { ImgProps } from "react-image";
-import { Skeleton } from "../ui/skeleton";
-import { cn } from "@/lib/utils";
-import { useFetchProtectedURL } from "@/hooks/use-fetch-protected-url";
 
 function DefaultLoader({ className }: { className?: string }) {
   return <Skeleton className={cn("h-full w-full", className)} />;
@@ -19,7 +19,7 @@ function DefaultError({
     <p
       className={cn(
         "flex h-full w-full items-center justify-center",
-        className
+        className,
       )}
     >
       {content}

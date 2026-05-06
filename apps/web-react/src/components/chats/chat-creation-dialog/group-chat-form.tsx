@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useGroupChatFormContext } from "@/contexts/group-chat-form-provider";
 import useUserSearch from "@/hooks/use-user-search";
 import { User } from "@packages/schemas";
+import { Button } from "@packages/ui/components/shadcn/button";
+import { Input } from "@packages/ui/components/shadcn/input";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaUserGroup } from "react-icons/fa6";

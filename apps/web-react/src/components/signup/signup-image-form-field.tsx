@@ -1,6 +1,6 @@
 import { useSignupFormContext } from "@/contexts/signup-form-provider";
 import { SignupImageDisplay } from "@packages/ui/components/features/signup/signup-image-display";
-import { Input } from "../ui/input";
+import { Input } from "@packages/ui/components/shadcn/input";
 
 export default function SignupImageFormField() {
   const { errors, setValue, file, data, removeFile } = useSignupFormContext();

@@ -1,4 +1,3 @@
-import { useToast } from "@/components/ui/use-toast";
 import { useAppContext } from "@/contexts/app-provider";
 import { ROUTES } from "@/lib/routes";
 import { AuthService } from "@/services/auth.service";
@@ -7,6 +6,7 @@ import {
   useLoginFormSchema,
 } from "@/validators/auth.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@packages/ui/components/shadcn/use-toast";
 import { AxiosError } from "axios";
 import {
   FieldErrors,

@@ -1,10 +1,10 @@
-import React, { PropsWithChildren } from "react";
 import {
-  TooltipProvider,
-  Tooltip as TooltipLib,
-  TooltipTrigger,
   TooltipContent,
-} from "../ui/tooltip";
+  TooltipShadcn as TooltipLib,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@packages/ui/components/shadcn/tooltip";
+import React, { PropsWithChildren } from "react";
 import useLocalStorage from "use-local-storage";
 
 type TooltipProps = PropsWithChildren & {

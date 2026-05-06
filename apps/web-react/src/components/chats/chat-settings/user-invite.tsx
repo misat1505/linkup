@@ -1,10 +1,10 @@
-import { Input } from "@/components/ui/input";
 import { useChatContext } from "@/contexts/chat-provider";
 import useUserSearch from "@/hooks/use-user-search";
 import { queryKeys } from "@/lib/query-keys";
 import { ChatService } from "@/services/chat.service";
 import { Chat, UserInChat } from "@packages/schemas";
 import { UserSearchDisplayer } from "@packages/ui/components/features/chats/chat-settings/user-invite";
+import { Input } from "@packages/ui/components/shadcn/input";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";

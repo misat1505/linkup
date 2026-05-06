@@ -1,15 +1,15 @@
+import { useAppContext } from "@/contexts/app-provider";
+import { usePostCommentsSectionContext } from "@/contexts/post-comment-section-provider";
+import { cn } from "@/lib/utils";
+import { createFullName } from "@/utils/create-full-name";
+import { Input } from "@packages/ui/components/shadcn/input";
 import React, { useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { FaFileAlt } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { MdCancel } from "react-icons/md";
-import { FaFileAlt } from "react-icons/fa";
-import { usePostCommentsSectionContext } from "@/contexts/post-comment-section-provider";
-import { Input } from "../ui/input";
 import { ClipLoader } from "react-spinners";
 import Tooltip from "../common/tooltip";
-import { useAppContext } from "@/contexts/app-provider";
-import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
-import { createFullName } from "@/utils/create-full-name";
 
 export default function PostCommentForm() {
   const { t } = useTranslation();

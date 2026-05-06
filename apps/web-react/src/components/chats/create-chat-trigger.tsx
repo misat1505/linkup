@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useChatPageContext } from "@/contexts/chat-page-provider";
+import { Button } from "@packages/ui/components/shadcn/button";
 import { PropsWithChildren } from "react";
 
 type CreateChatTriggerProps = PropsWithChildren;

@@ -1,10 +1,10 @@
-import { Input } from "@/components/ui/input";
 import { useAppContext } from "@/contexts/app-provider";
 import useUserSearch from "@/hooks/use-user-search";
 import { queryKeys } from "@/lib/query-keys";
 import { ROUTES } from "@/lib/routes";
 import { ChatService } from "@/services/chat.service";
 import { Chat, User } from "@packages/schemas";
+import { Input } from "@packages/ui/components/shadcn/input";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";

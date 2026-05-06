@@ -1,16 +1,16 @@
+import { useAppContext } from "@/contexts/app-provider";
 import { useChatFooterContext } from "@/contexts/chat-footer-provider";
 import { useChatContext } from "@/contexts/chat-provider";
+import { cn } from "@/lib/utils";
+import { ChatFooterUtils } from "@/utils/chat-footer-utils";
+import { Input } from "@packages/ui/components/shadcn/input";
 import React, { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { FaFileAlt } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
-import { Input } from "../ui/input";
 import { ClipLoader } from "react-spinners";
 import Tooltip from "../common/tooltip";
-import { cn } from "@/lib/utils";
-import { useAppContext } from "@/contexts/app-provider";
-import { ChatFooterUtils } from "@/utils/chat-footer-utils";
-import { useTranslation } from "react-i18next";
 
 export default function ChatFooter() {
   const { t } = useTranslation();

@@ -1,14 +1,3 @@
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/components/ui/use-toast";
 import { useAppContext } from "@/contexts/app-provider";
 import useClickOutside from "@/hooks/use-click-outside";
 import { queryKeys } from "@/lib/query-keys";
@@ -21,6 +10,17 @@ import { buildFileURL } from "@/utils/build-file-url";
 import { createFullName } from "@/utils/create-full-name";
 import { getInitials } from "@/utils/get-initials";
 import { Chat, Friendship, User } from "@packages/schemas";
+import { Button } from "@packages/ui/components/shadcn/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@packages/ui/components/shadcn/command";
+import { Skeleton } from "@packages/ui/components/shadcn/skeleton";
+import { useToast } from "@packages/ui/components/shadcn/use-toast";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaUserFriends } from "react-icons/fa";

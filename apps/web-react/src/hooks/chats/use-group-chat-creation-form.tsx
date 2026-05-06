@@ -1,4 +1,3 @@
-import { useToast } from "@/components/ui/use-toast";
 import { useAppContext } from "@/contexts/app-provider";
 import { queryKeys } from "@/lib/query-keys";
 import { ROUTES } from "@/lib/routes";
@@ -9,6 +8,7 @@ import {
 } from "@/validators/chat.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Chat, User } from "@packages/schemas";
+import { useToast } from "@packages/ui/components/shadcn/use-toast";
 import { AxiosError } from "axios";
 import { useEffect } from "react";
 import {

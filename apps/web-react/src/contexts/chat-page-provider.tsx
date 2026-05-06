@@ -1,9 +1,9 @@
-import { useToast } from "@/components/ui/use-toast";
 import { queryKeys } from "@/lib/query-keys";
 import { SocketAction, socketClient, SocketErrors } from "@/lib/socket-client";
 import { ChatService } from "@/services/chat.service";
 import { sortChatsByActivity } from "@/utils/sort-chats-by-activity";
 import { Chat, Message } from "@packages/schemas";
+import { useToast } from "@packages/ui/components/shadcn/use-toast";
 import React, {
   createContext,
   useCallback,

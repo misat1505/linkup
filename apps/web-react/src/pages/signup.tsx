@@ -1,5 +1,4 @@
 import SignupForm from "@/components/signup/signup-form";
-import { toast } from "@/components/ui/use-toast";
 import { useAppContext } from "@/contexts/app-provider";
 import SignupFormProvider from "@/contexts/signup-form-provider";
 import { SignupFormEntries } from "@/hooks/signup/use-signup-form";
@@ -9,6 +8,7 @@ import { AuthService } from "@/services/auth.service";
 import { SignupFormType } from "@/validators/auth.validators";
 import { AlreadyHaveAccount } from "@packages/ui/components/features/signup/already-have-account";
 import { SignupSlogan } from "@packages/ui/components/features/signup/signup-slogan";
+import { toast } from "@packages/ui/components/shadcn/use-toast";
 import { AxiosError } from "axios";
 import { SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";

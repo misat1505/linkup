@@ -1,9 +1,9 @@
-import { MdSunny } from "react-icons/md";
-import { IoMoon } from "react-icons/io5";
-import Tooltip from "../tooltip";
 import { useThemeContext } from "@/contexts/theme-provider";
-import { Switch } from "@/components/ui/theme-switch";
+import { Switch } from "@packages/ui/components/shadcn/theme-switch";
 import { useTranslation } from "react-i18next";
+import { IoMoon } from "react-icons/io5";
+import { MdSunny } from "react-icons/md";
+import Tooltip from "../tooltip";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useThemeContext();
@@ -23,7 +23,7 @@ export default function ThemeToggle() {
   return (
     <Tooltip content={tooltipText}>
       <span>
-        <Switch onClick={toggleTheme} checked={theme === "dark"}>
+        <Switch onClick={toggleTheme} theme={theme} checked={theme === "dark"}>
           <div className="flex h-full w-full items-center justify-center">
             {component}
           </div>

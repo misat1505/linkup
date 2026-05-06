@@ -8,11 +8,11 @@ import { PostService } from "@/services/post.service";
 import { markdownPreviewOptions } from "@/utils/markdown-preview-options";
 import { Chat, Post } from "@packages/schemas";
 import { PostHeader } from "@packages/ui/components/features/posts/post-header";
+import { Button } from "@packages/ui/components/shadcn/button";
 import MDEditor from "@uiw/react-md-editor";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
-import { Button } from "../ui/button";
 import PostCommentSection from "./post-comment-section";
 
 export default function PostPreview({ post }: { post: Post }) {

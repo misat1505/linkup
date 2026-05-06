@@ -1,7 +1,6 @@
 import Loading from "@/components/common/loading";
 import SettingsWrapper from "@/components/settings/settings-wrapper";
 import SignupForm from "@/components/signup/signup-form";
-import { toast } from "@/components/ui/use-toast";
 import { useAppContext } from "@/contexts/app-provider";
 import SignupFormProvider from "@/contexts/signup-form-provider";
 import { SignupFormEntries } from "@/hooks/signup/use-signup-form";
@@ -11,6 +10,7 @@ import { AuthService } from "@/services/auth.service";
 import { FileService } from "@/services/file.service";
 import { buildFileURL } from "@/utils/build-file-url";
 import { SignupFormType } from "@/validators/auth.validators";
+import { toast } from "@packages/ui/components/shadcn/use-toast";
 import { AxiosError } from "axios";
 import { DefaultValues, SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";

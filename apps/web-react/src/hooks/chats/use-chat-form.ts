@@ -1,4 +1,3 @@
-import { useToast } from "@/components/ui/use-toast";
 import { useChatPageContext } from "@/contexts/chat-page-provider";
 import { useChatContext } from "@/contexts/chat-provider";
 import { socketClient } from "@/lib/socket-client";
@@ -6,6 +5,7 @@ import { ChatService } from "@/services/chat.service";
 import { chatFormSchema, ChatFormType } from "@/validators/chat.validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Chat, Message } from "@packages/schemas";
+import { useToast } from "@packages/ui/components/shadcn/use-toast";
 import { AxiosError } from "axios";
 import {
   FieldErrors,
