@@ -3,11 +3,11 @@ import { useChatContext } from "@/contexts/chat-provider";
 import useChatScroll from "@/hooks/chats/use-chat-scroll";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { ChatUtils } from "@/utils/chat-utils";
+import { ChatStarted } from "@packages/ui/components/features/chats/chat-started";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useInView } from "react-intersection-observer";
 import Loading from "../common/loading";
-import ChatStarted from "./chat-started";
 import IncomeMessage from "./income-message";
 import { MessageWrapper } from "./message-wrapper";
 
@@ -77,7 +77,7 @@ export default function ChatContent() {
         className="max-h-full overflow-auto px-4 dark:[color-scheme:dark]"
       >
         <div ref={topRef} className="h-2"></div>
-        {!hasNextPage && <ChatStarted />}
+        {!hasNextPage && <ChatStarted chat={chat!} me={me!} />}
         {[...messages].reverse().map((message) => (
           <MessageWrapper key={message.id} message={message} />
         ))}

@@ -1,15 +1,17 @@
-import { useAppContext } from "@/contexts/app-provider";
-import { useChatContext } from "@/contexts/chat-provider";
-import { buildFileURL, Filter } from "@/utils/build-file-url";
-import { ChatUtils } from "@/utils/chat-utils";
-import { useTranslation } from "react-i18next";
+import { Chat, User } from "@packages/schemas";
 import { FaUserGroup } from "react-icons/fa6";
-import Image from "../common/image";
+import { TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
+import { buildFileURL, Filter } from "../../../utils/build-file-url";
+import { ChatUtils } from "../../../utils/chat-utils";
+import { Image } from "../../misc/image";
 
-export default function ChatStarted() {
-  const { t } = useTranslation();
-  const { user: me } = useAppContext();
-  const { chat } = useChatContext();
+type ChatStartedProps = {
+  me: User;
+  chat: Chat;
+};
+
+export function ChatStarted({ me, chat }: ChatStartedProps) {
+  const { t } = useUiPackageContext();
 
   const utils = new ChatUtils(chat!, me!);
 
@@ -40,15 +42,18 @@ export default function ChatStarted() {
       />
       <h2 className="font-bold text-2xl mb-4">{chatName}</h2>
       <p className="text-muted-foreground mb-2 font-bold text-balance text-center">
-        {t("chats.chat-start.created-at", {
-          date: chat?.createdAt.toLocaleDateString(
-            t("chats.date-seperator.locale"),
-            JSON.parse(t("chats.date-seperator.options.message-tooltip")),
-          ),
-        })}
+        <TRANSLATION_COMPONENT
+          translationKey="chats.chat-start.created-at"
+          values={{
+            date: chat?.createdAt.toLocaleDateString(
+              t("chats.date-seperator.locale"),
+              JSON.parse(t("chats.date-seperator.options.message-tooltip")),
+            ),
+          }}
+        />
       </p>
       <p className="text-sm text-muted-foreground text-balance text-center">
-        {t("chats.chat-start.greeting")}
+        <TRANSLATION_COMPONENT translationKey="chats.chat-start.greeting" />
       </p>
     </div>
   );
