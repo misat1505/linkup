@@ -1,24 +1,19 @@
 import { useAppContext } from "@/contexts/app-provider";
 import { useChatPageContext } from "@/contexts/chat-page-provider";
 import GroupChatFormProvider from "@/contexts/group-chat-form-provider";
-import { ROUTES } from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import { buildFileURL, Filter } from "@/utils/build-file-url";
-import { ChatUtils } from "@/utils/chat-utils";
-import { Chat } from "@packages/schemas";
 import { ChatCreator } from "@packages/ui/components/features/chats/chat-creation-dialog/chat-creator";
+import { NavigationList } from "@packages/ui/components/features/chats/chat-navigation-list";
+import { NoChats } from "@packages/ui/components/features/chats/no-chats";
 import { useTranslation } from "react-i18next";
-import { FaUserGroup } from "react-icons/fa6";
-import { useNavigate, useParams } from "react-router-dom";
-import Avatar from "../common/avatar";
+import { useParams } from "react-router-dom";
 import Loading from "../common/loading";
-import Tooltip from "../common/tooltip";
 import GroupChatForm from "./chat-creation-dialog/group-chat-form";
 import PrivateChatForm from "./chat-creation-dialog/private-chat-form";
 import { CreateChatTarget } from "./create-chat-trigger";
-import NoChats from "./no-chats";
 
 export default function ChatNavigation() {
+  const { user: me } = useAppContext();
   const { chatId } = useParams();
   const { chats, isLoading } = useChatPageContext();
 
@@ -38,10 +33,11 @@ export default function ChatNavigation() {
         className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto relative"
         data-testid="cy-chat-nav"
       >
-        {chats?.length === 0 && <NoChats />}
-        {chats?.map((chat) => (
-          <NavigationItem key={chat.id} chat={chat} />
-        ))}
+        {chats?.length === 0 ? (
+          <NoChats />
+        ) : (
+          <NavigationList chats={chats!} me={me!} />
+        )}
       </div>
     </div>
   );
@@ -65,99 +61,5 @@ function ChatNavigationHeader() {
         }}
       />
     </div>
-  );
-}
-
-function NavigationItem({ chat }: { chat: Chat }) {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { user: me } = useAppContext();
-
-  if (!me) throw new Error();
-
-  const utils = new ChatUtils(chat, me);
-
-  const handleOpenChat = (chatId: Chat["id"]) => {
-    navigate(ROUTES.CHAT_DETAIL.$buildPath({ params: { chatId } }));
-  };
-
-  const src = utils.getImageURL()!;
-  const alt =
-    chat.type === "PRIVATE" ? (
-      utils.getImageAlt()
-    ) : (
-      <FaUserGroup className="object-fit h-full w-full pt-4" />
-    );
-  const chatName = utils.getChatName();
-  const lastActive = utils.getLastActive();
-
-  const buildFilter = (): Filter => {
-    if (chat.type === "PRIVATE") return { type: "avatar" };
-    return { type: "chat-photo", id: chat.id };
-  };
-
-  return (
-    <Tooltip content={t("chats.navigation.items.tooltip")}>
-      <span>
-        <button
-          className="mx-4 mb-2 flex w-[calc(100%-2rem)] items-center gap-x-4  bg-slate-100 px-4 py-2 shadow-md transition-all hover:cursor-pointer hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 md:w-72"
-          onClick={() => handleOpenChat(chat.id)}
-        >
-          <Avatar
-            src={buildFileURL(src, buildFilter())}
-            className="min-h-12 min-w-12"
-            alt={alt}
-            lastActive={lastActive}
-          />
-          <div className="overflow-hidden text-left">
-            <div className="overflow-hidden text-nowrap font-semibold">
-              {chatName}
-            </div>
-            <div className="overflow-hidden text-nowrap text-sm">
-              <LastMessageDisplayer
-                chat={chat}
-                lastMessage={chat.lastMessage}
-              />
-            </div>
-          </div>
-        </button>
-      </span>
-    </Tooltip>
-  );
-}
-
-function LastMessageDisplayer({
-  lastMessage,
-  chat,
-}: {
-  lastMessage: Chat["lastMessage"];
-  chat: Chat;
-}) {
-  const { t } = useTranslation();
-  const { user: me } = useAppContext();
-
-  if (!lastMessage) return null;
-
-  const utils = new ChatUtils(chat!, me!);
-
-  const displayName = utils.getNavigationLastMessageDisplayName(
-    t("common.you"),
-  );
-
-  if (lastMessage.content)
-    return (
-      <>
-        <span className="font-semibold">{displayName}: </span>
-        <span>{lastMessage.content}</span>
-      </>
-    );
-
-  return (
-    <span>
-      {t("chats.navigation.items.only-file-text", {
-        fullName: displayName,
-        count: lastMessage.files.length,
-      })}
-    </span>
   );
 }
