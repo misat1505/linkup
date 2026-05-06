@@ -1,6 +1,4 @@
 import Loading from "@/components/common/loading";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useChatContext } from "@/contexts/chat-provider";
 import { queryKeys } from "@/lib/query-keys";
 import { ChatService } from "@/services/chat.service";
@@ -8,9 +6,7 @@ import { FileService } from "@/services/file.service";
 import { buildFileURL } from "@/utils/build-file-url";
 import { sortChatsByActivity } from "@/utils/sort-chats-by-activity";
 import { Chat } from "@packages/schemas";
-import React, { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { FaUserGroup } from "react-icons/fa6";
+import { Updater } from "@packages/ui/components/features/chats/chat-settings/chat-info-updater";
 import { useQuery, useQueryClient } from "react-query";
 
 export default function ChatInfoUpdater() {
@@ -30,46 +26,14 @@ export default function ChatInfoUpdater() {
         <Loading />
       </div>
     );
-
-  return <Updater file={data || null} />;
+  return <UpdaterWrapper file={data || null} />;
 }
 
-function Updater({ file }: { file: File | null }) {
-  const { t } = useTranslation();
+function UpdaterWrapper({ file }: { file: File | null }) {
   const queryClient = useQueryClient();
   const { chat } = useChatContext();
-  const [image, setImage] = useState(file);
-  const [groupName, setGroupName] = useState(chat?.name);
 
-  const handleRemoveFile = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    e.preventDefault();
-    setImage(null);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setImage(selectedFile);
-    }
-  };
-
-  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const text = e.target.value;
-    const newValue = text || null;
-    setGroupName(newValue);
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const updatedChat = await ChatService.updateChat(
-      chat!.id,
-      groupName || null,
-      image,
-    );
-
+  function cb(updatedChat: Chat) {
     queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
       if (!oldChats) return [];
 
@@ -77,49 +41,14 @@ function Updater({ file }: { file: File | null }) {
       filteredChats.push(updatedChat);
       return sortChatsByActivity(filteredChats);
     });
-  };
-
-  const source = useMemo(() => {
-    return image ? URL.createObjectURL(image) : "";
-  }, [image]);
+  }
 
   return (
-    <form
-      className="mx-auto mt-4 flex max-w-60 flex-col items-center gap-4"
-      onSubmit={handleSubmit}
-    >
-      <Input
-        value={groupName || ""}
-        onChange={handleTextChange}
-        placeholder={t("chats.settings.group.info.input.name.placeholder")}
-      />
-      <div className="group relative mt-8">
-        {source ? (
-          <img
-            className="h-32 w-32 overflow-hidden rounded-full object-cover"
-            src={source}
-          />
-        ) : (
-          <FaUserGroup className="h-32 w-32 overflow-hidden rounded-full pt-8" />
-        )}
-        {source && (
-          <button
-            onClick={handleRemoveFile}
-            className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:cursor-pointer group-hover:opacity-100"
-          >
-            {t("chats.settings.group.info.input.file.remove")}
-          </button>
-        )}
-      </div>
-      <Input
-        type="file"
-        className="hover:cursor-pointer"
-        onChange={handleFileChange}
-        accept=".jpg, .png, .webp"
-      />
-      <Button className="self-end" type="submit">
-        {t("chats.settings.group.info.submit")}
-      </Button>
-    </form>
+    <Updater
+      chat={chat!}
+      file={file}
+      updateChatAction={ChatService.updateChat}
+      updateChatCb={cb}
+    />
   );
 }

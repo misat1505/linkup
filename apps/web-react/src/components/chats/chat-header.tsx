@@ -5,6 +5,7 @@ import { buildFileURL, Filter } from "@/utils/build-file-url";
 import { ChatUtils } from "@/utils/chat-utils";
 import { getStatus, Status, timeDifference } from "@/utils/time-difference";
 import { Chat } from "@packages/schemas";
+import { ChatSettingsDialog } from "@packages/ui/components/features/chats/chat-settings/chat-settings-dialog";
 import { useTranslation } from "react-i18next";
 import { FaUserGroup } from "react-icons/fa6";
 import { RxCross1 } from "react-icons/rx";
@@ -13,7 +14,8 @@ import Avatar from "../common/avatar";
 import FocusableSpan from "../common/focusable-span";
 import Tooltip from "../common/tooltip";
 import ChatLeaveDialog from "./chat-leave-dialog";
-import ChatSettingsDialog from "./chat-settings/chat-settings-dialog";
+import ChatMembersDisplayer from "./chat-settings/chat-members-displayer";
+import GroupChatContent from "./chat-settings/group-chat-content";
 
 export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
   const { t } = useTranslation();
@@ -65,7 +67,13 @@ export default function ChatHeader({ chatId }: { chatId: Chat["id"] }) {
       </div>
       <div className="flex items-center gap-x-2">
         {chat.type === "GROUP" && <ChatLeaveDialog />}
-        <ChatSettingsDialog />
+        <ChatSettingsDialog
+          chat={chat}
+          slots={{
+            privateChatContent: <ChatMembersDisplayer />,
+            groupChatContent: <GroupChatContent />,
+          }}
+        />
         <Tooltip content={t("chats.close.tooltip")}>
           <span className="transition-all hover:scale-125">
             <FocusableSpan fn={() => navigate(ROUTES.CHATS.$path())}>

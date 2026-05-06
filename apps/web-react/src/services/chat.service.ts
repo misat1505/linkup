@@ -7,11 +7,10 @@ import { Chat, Message, Reaction, User, UserInChat } from "@packages/schemas";
 import { AxiosError, HttpStatusCode } from "axios";
 
 export class ChatService {
-  static async updateChat(
-    chatId: Chat["id"],
-    name: string | null,
-    file: File | null,
-  ): Promise<Chat> {
+  static async updateChat(chatId: Chat["id"], fd: FormData): Promise<Chat> {
+    const name = (fd.get("name") as string) ?? null;
+    const file = (fd.get("file") as File) ?? null;
+
     const res = await apiContractClient.updateGroupChat({
       body: { name, file },
       params: { chatId },

@@ -1,28 +1,12 @@
-import Avatar from "@/components/common/avatar";
-import Tooltip from "@/components/common/tooltip";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { useChatContext } from "@/contexts/chat-provider";
 import useUserSearch from "@/hooks/use-user-search";
 import { queryKeys } from "@/lib/query-keys";
 import { ChatService } from "@/services/chat.service";
-import { buildFileURL } from "@/utils/build-file-url";
-import { createFullName } from "@/utils/create-full-name";
-import { getInitials } from "@/utils/get-initials";
-import { Chat, User } from "@packages/schemas";
-import React, { useState } from "react";
+import { Chat, UserInChat } from "@packages/schemas";
+import { UserSearchDisplayer } from "@packages/ui/components/features/chats/chat-settings/user-invite";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { HiUserAdd } from "react-icons/hi";
 import { useQueryClient } from "react-query";
 
 export default function UserInvite() {
@@ -30,10 +14,21 @@ export default function UserInvite() {
   const [text, setText] = useState("");
   const { data } = useUserSearch(text);
   const { chat } = useChatContext();
+  const queryClient = useQueryClient();
 
   const filteredUsers = data?.filter(
     (user) => !chat!.users!.some((u) => u.id === user.id),
   );
+
+  function cb(newUser: UserInChat) {
+    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+      if (!oldChats) return [];
+
+      const updatedChat = oldChats.find((c) => c.id === chat!.id)!;
+      updatedChat.users?.push(newUser);
+      return [...oldChats];
+    });
+  }
 
   return (
     <div>
@@ -42,107 +37,12 @@ export default function UserInvite() {
         className="my-2"
         onChange={(e) => setText(e.currentTarget.value)}
       />
-      <UserSearchDisplayer users={filteredUsers} />
+      <UserSearchDisplayer
+        users={filteredUsers}
+        chatId={chat!.id}
+        addUserToChatAction={ChatService.addUserToChat}
+        addUserToChatCb={cb}
+      />
     </div>
-  );
-}
-
-function UserSearchDisplayer({ users }: { users: User[] | undefined }) {
-  const { t } = useTranslation();
-  const classes = "mt-4 w-full text-center text-sm text-muted-foreground";
-
-  if (users === undefined)
-    return <p className={classes}>{t("chats.settings.group.invite.empty")}</p>;
-
-  if (users.length === 0)
-    return (
-      <p className={classes}>{t("chats.settings.group.invite.no-result")}</p>
-    );
-
-  return (
-    <div className="no-scrollbar max-h-[340px] overflow-auto">
-      {users.map((user) => (
-        <UserDisplay user={user} key={user.id} />
-      ))}
-    </div>
-  );
-}
-
-function UserDisplay({ user }: { user: User }) {
-  return (
-    <div className="my-1 flex w-full items-center justify-between gap-x-2 rounded-md bg-slate-100 p-2 transition-all dark:bg-slate-900">
-      <div className="flex items-center gap-x-2">
-        <Avatar
-          src={buildFileURL(user.photoURL, { type: "avatar" })}
-          alt={getInitials(user)}
-          className="h-8 w-8 text-xs"
-        />
-        <p className="font-semibold">{createFullName(user)}</p>
-      </div>
-      <UserAddDialog user={user} />
-    </div>
-  );
-}
-
-function UserAddDialog({ user }: { user: User }) {
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const { chatId } = useChatContext();
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleClick = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    e.preventDefault();
-    const newUser = await ChatService.addUserToChat(chatId, user.id);
-
-    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-      if (!oldChats) return [];
-
-      const chat = oldChats.find((c) => c.id === chatId)!;
-      chat.users?.push(newUser);
-      return [...oldChats];
-    });
-  };
-
-  return (
-    <AlertDialog open={isOpen}>
-      <AlertDialogTrigger asChild onClick={() => setIsOpen(true)}>
-        <span>
-          <Tooltip
-            content={t("chats.settings.group.invite.trigger.tooltip", {
-              name: createFullName(user),
-            })}
-          >
-            <div className="mr-1 rounded-full bg-slate-200 p-1 transition-colors hover:cursor-pointer hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
-              <HiUserAdd size={20} />
-            </div>
-          </Tooltip>
-        </span>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            {t("chats.settings.group.invite.dialog.title", {
-              name: createFullName(user),
-            })}
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            {t("chats.settings.group.invite.dialog.description", {
-              name: createFullName(user),
-            })}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setIsOpen(false)}>
-            {t("chats.settings.group.invite.dialog.cancel")}
-          </AlertDialogCancel>
-          <AlertDialogAction onClick={handleClick}>
-            {t("chats.settings.group.invite.dialog.confirm")}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
   );
 }
