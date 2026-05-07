@@ -1,8 +1,8 @@
 "use client";
 
-import Loading from "@/components/shared/loading";
 import { useAppContext } from "@/providers/app-provider";
 import { ChatStarted } from "@packages/ui/components/features/chats/chat-started";
+import { Loading } from "@packages/ui/components/misc/loading";
 import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import useChatScroll from "../hooks/use-chat-scroll";

@@ -1,5 +1,4 @@
 "use client";
-import { useToast } from "@/components/ui/use-toast";
 import { createMessage } from "@/features/chats/actions/create-message";
 import {
   chatFormSchema,
@@ -9,6 +8,7 @@ import { queryKeys } from "@/lib/query-keys";
 import { useLanguageContext } from "@/providers/language-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Chat, Message } from "@packages/schemas";
+import { useToast } from "@packages/ui/components/shadcn/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useState } from "react";

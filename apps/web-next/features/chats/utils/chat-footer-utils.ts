@@ -1,6 +1,6 @@
 import { TranslateFn } from "@/providers/language-provider";
-import { createFullName } from "@/utils/create-full-name";
 import { Chat, Message, User } from "@packages/schemas";
+import { createFullName } from "@packages/ui/utils/create-full-name";
 import { ChatUtils } from "./chat-utils";
 
 export class ChatFooterUtils {

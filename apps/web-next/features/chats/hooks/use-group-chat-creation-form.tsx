@@ -1,9 +1,9 @@
 "use client";
-import { useToast } from "@/components/ui/use-toast";
 import { useAppContext } from "@/providers/app-provider";
 import { useLanguageContext } from "@/providers/language-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@packages/schemas";
+import { useToast } from "@packages/ui/components/shadcn/use-toast";
 import { AxiosError } from "axios";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";

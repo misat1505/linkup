@@ -1,9 +1,14 @@
 "use client";
 
-import { I18nText } from "@/components/shared/i18n-text";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { I18nText } from "@/components/i18n-text";
 import { useAppContext } from "@/providers/app-provider";
 import { Chat } from "@packages/schemas";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@packages/ui/components/shadcn/tabs";
 import ChatInfoUpdater from "./chat-info-updater";
 import ChatMembersDisplayer from "./chat-members-displayer";
 import UserInvite from "./user-invite";

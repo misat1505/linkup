@@ -1,5 +1,4 @@
 "use client";
-import { toast } from "@/components/ui/use-toast";
 import { signupUser } from "@/features/auth/actions/signup-user";
 import SignupForm from "@/features/auth/components/signup-form";
 import { SignupFormEntries } from "@/features/auth/hooks/use-signup-form";
@@ -10,6 +9,7 @@ import { useLanguageContext } from "@/providers/language-provider";
 import { sleep } from "@/utils/sleep";
 import { AlreadyHaveAccount } from "@packages/ui/components/features/signup/already-have-account";
 import { SignupSlogan } from "@packages/ui/components/features/signup/signup-slogan";
+import { toast } from "@packages/ui/components/shadcn/use-toast";
 import { useRouter } from "next/navigation";
 import { SubmitHandler } from "react-hook-form";
 

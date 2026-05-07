@@ -1,11 +1,11 @@
-import Avatar from "@/components/shared/avatar";
-import { I18nText } from "@/components/shared/i18n-text";
+import { I18nText } from "@/components/i18n-text";
 import useDelay from "@/hooks/use-delay";
 import { cn } from "@/lib/utils";
 import { useAppContext } from "@/providers/app-provider";
-import { buildFileURL } from "@/utils/build-file-url";
-import { getInitials } from "@/utils/get-initials";
 import { Message } from "@packages/schemas";
+import { Avatar } from "@packages/ui/components/misc/avatar";
+import { buildFileURL } from "@packages/ui/utils/build-file-url";
+import { getInitials } from "@packages/ui/utils/get-initials";
 import { useState } from "react";
 import { useChatContext } from "../providers/chat-provider";
 import { ChatUtils } from "../utils/chat-utils";

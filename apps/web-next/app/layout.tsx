@@ -1,7 +1,7 @@
+import NavbarWrapper from "@/components/navbar";
 import Providers from "@/components/providers";
 import ReportWebVitals from "@/components/report-web-vitals";
-import BgGradient from "@/components/shared/bg-gradient";
-import NavbarWrapper from "@/components/shared/navbar";
+import { BgGradient } from "@packages/ui/components/misc/bg-gradient";
 import { Toaster } from "@packages/ui/components/shadcn/toaster";
 import "github-markdown-css/github-markdown.css";
 import type { Metadata, Viewport } from "next";

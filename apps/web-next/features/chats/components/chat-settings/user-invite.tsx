@@ -1,10 +1,10 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import useUserSearch from "@/hooks/use-user-search";
 import { useLanguageContext } from "@/providers/language-provider";
 import { Chat } from "@packages/schemas";
 import { UserSearchDisplayer } from "@packages/ui/components/features/chats/chat-settings/user-invite";
+import { Input } from "@packages/ui/components/shadcn/input";
 import { useState } from "react";
 import { addUserToChat } from "../../actions/add-user-to-chat";
 

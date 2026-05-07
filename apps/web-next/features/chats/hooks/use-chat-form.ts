@@ -1,8 +1,8 @@
-import { useToast } from "@/components/ui/use-toast";
 import { socketClient } from "@/lib/socket-client";
 import { useLanguageContext } from "@/providers/language-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Chat, Message } from "@packages/schemas";
+import { useToast } from "@packages/ui/components/shadcn/use-toast";
 import { AxiosError } from "axios";
 import {
   FieldErrors,

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@packages/ui/components/shadcn/button";
 import { PropsWithChildren } from "react";
 import { useChatPageContext } from "../providers/chat-page-provider";
 

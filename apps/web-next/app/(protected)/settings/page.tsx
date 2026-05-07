@@ -1,7 +1,5 @@
 "use client";
 import AuthGuard from "@/components/auth-guard";
-import Loading from "@/components/shared/loading";
-import { toast } from "@/components/ui/use-toast";
 import { updateMe } from "@/features/auth/actions/update-me";
 import SignupForm from "@/features/auth/components/signup-form";
 import { SignupFormEntries } from "@/features/auth/hooks/use-signup-form";
@@ -12,7 +10,9 @@ import SettingsWrapper from "@/features/settings/components/settings-wrapper";
 import { queryKeys } from "@/lib/query-keys";
 import { useAppContext } from "@/providers/app-provider";
 import { useLanguageContext } from "@/providers/language-provider";
-import { buildFileURL } from "@/utils/build-file-url";
+import { Loading } from "@packages/ui/components/misc/loading";
+import { toast } from "@packages/ui/components/shadcn/use-toast";
+import { buildFileURL } from "@packages/ui/utils/build-file-url";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { DefaultValues, SubmitHandler } from "react-hook-form";

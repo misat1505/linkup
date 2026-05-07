@@ -1,5 +1,6 @@
-import { I18nText } from "@/components/shared/i18n-text";
-import Tooltip from "@/components/shared/tooltip";
+import { I18nText } from "@/components/i18n-text";
+import { Chat, User } from "@packages/schemas";
+import { Tooltip } from "@packages/ui/components/misc/tooltip";
 import {
   Dialog,
   DialogContent,
@@ -7,8 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Chat, User } from "@packages/schemas";
+} from "@packages/ui/components/shadcn/dialog";
 import { CiSettings } from "react-icons/ci";
 import ChatMembersDisplayer from "./chat-members-displayer";
 import GroupChatContent from "./group-chat-content";

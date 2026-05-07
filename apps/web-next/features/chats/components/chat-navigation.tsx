@@ -1,4 +1,4 @@
-import { I18nText } from "@/components/shared/i18n-text";
+import { I18nText } from "@/components/i18n-text";
 import { getMeCached } from "@/features/auth/actions/get-me";
 import { NavigationList } from "@packages/ui/components/features/chats/chat-navigation-list";
 import { NoChats } from "@packages/ui/components/features/chats/no-chats";

@@ -1,8 +1,8 @@
 "use server";
 
 import { FILE_API } from "@/utils/api";
-import { buildFileURL } from "@/utils/build-file-url";
 import { serverSideRequestFactory } from "@/utils/server-side-request-factory";
+import { buildFileURL } from "@packages/ui/utils/build-file-url";
 
 export async function insertFileToCache(formData: FormData): Promise<string> {
   const api = await serverSideRequestFactory({

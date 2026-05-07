@@ -1,8 +1,8 @@
-import Image from "next/image";
 import logo from "@/assets/logo.webp";
+import { I18nText } from "@/components/i18n-text";
+import { buttonVariants } from "@packages/ui/components/shadcn/button";
+import Image from "next/image";
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
-import { I18nText } from "@/components/shared/i18n-text";
 
 export default function EmptyFeed() {
   return (

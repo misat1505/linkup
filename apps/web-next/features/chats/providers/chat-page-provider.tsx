@@ -1,10 +1,10 @@
 "use client";
 
-import { toast } from "@/components/ui/use-toast";
 import { queryKeys } from "@/lib/query-keys";
 import { socketClient, SocketErrors } from "@/lib/socket-client";
 import { useLanguageContext } from "@/providers/language-provider";
 import { Chat, Message } from "@packages/schemas";
+import { toast } from "@packages/ui/components/shadcn/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import React, {
   createContext,

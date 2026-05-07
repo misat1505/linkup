@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppContext } from "@/providers/app-provider";
-import Loading from "./shared/loading";
+import { Loading } from "@packages/ui/components/misc/loading";
 import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 

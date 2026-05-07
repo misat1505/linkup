@@ -1,11 +1,11 @@
 "use client";
-import Loading from "@/components/shared/loading";
 import { downloadFile } from "@/features/files/actions/download-file";
 import { queryKeys } from "@/lib/query-keys";
 import { useAppContext } from "@/providers/app-provider";
-import { buildFileURL } from "@/utils/build-file-url";
 import { Chat } from "@packages/schemas";
 import { Updater } from "@packages/ui/components/features/chats/chat-settings/chat-info-updater";
+import { Loading } from "@packages/ui/components/misc/loading";
+import { buildFileURL } from "@packages/ui/utils/build-file-url";
 import { useQuery } from "@tanstack/react-query";
 import { updateChat } from "../../actions/update-chat";
 

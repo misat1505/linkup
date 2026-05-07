@@ -1,11 +1,11 @@
 "use client";
-import { I18nText } from "@/components/shared/i18n-text";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { I18nText } from "@/components/i18n-text";
 import useUserSearch from "@/hooks/use-user-search";
 import { useLanguageContext } from "@/providers/language-provider";
 import { User } from "@packages/schemas";
 import { UserDisplay } from "@packages/ui/components/features/chats/chat-creation-dialog/user-display";
+import { Button } from "@packages/ui/components/shadcn/button";
+import { Input } from "@packages/ui/components/shadcn/input";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { FaUserGroup } from "react-icons/fa6";

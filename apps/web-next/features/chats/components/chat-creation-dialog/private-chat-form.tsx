@@ -1,10 +1,10 @@
 "use client";
-import { Input } from "@/components/ui/input";
 import useUserSearch from "@/hooks/use-user-search";
 import { useAppContext } from "@/providers/app-provider";
 import { useLanguageContext } from "@/providers/language-provider";
 import { User } from "@packages/schemas";
 import { UserDisplay } from "@packages/ui/components/features/chats/chat-creation-dialog/user-display";
+import { Input } from "@packages/ui/components/shadcn/input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createPrivateChat } from "../../actions/create-private-chats";
