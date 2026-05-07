@@ -3,11 +3,11 @@ import { useChatContext } from "@/contexts/chat-provider";
 import useChatScroll from "@/hooks/chats/use-chat-scroll";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { ChatStarted } from "@packages/ui/components/features/chats/chat-started";
+import { Loading } from "@packages/ui/components/misc/loading";
 import { ChatUtils } from "@packages/ui/utils/chat-utils";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useInView } from "react-intersection-observer";
-import Loading from "../common/loading";
 import IncomeMessage from "./income-message";
 import { MessageWrapper } from "./message-wrapper";
 

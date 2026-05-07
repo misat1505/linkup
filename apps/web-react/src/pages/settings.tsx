@@ -1,4 +1,3 @@
-import Loading from "@/components/common/loading";
 import SettingsWrapper from "@/components/settings/settings-wrapper";
 import SignupForm from "@/components/signup/signup-form";
 import { useAppContext } from "@/contexts/app-provider";
@@ -9,6 +8,7 @@ import { queryKeys } from "@/lib/query-keys";
 import { AuthService } from "@/services/auth.service";
 import { FileService } from "@/services/file.service";
 import { SignupFormType } from "@/validators/auth.validators";
+import { Loading } from "@packages/ui/components/misc/loading";
 import { toast } from "@packages/ui/components/shadcn/use-toast";
 import { buildFileURL } from "@packages/ui/utils/build-file-url";
 import { AxiosError } from "axios";

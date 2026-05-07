@@ -1,8 +1,8 @@
-import Loading from "@/components/common/loading";
 import FriendsPageContentWrapper from "@/components/friends/friends-page-content-wrapper";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { queryKeys } from "@/lib/query-keys";
 import { FriendService } from "@/services/friend.service";
+import { Loading } from "@packages/ui/components/misc/loading";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 

@@ -31,26 +31,19 @@
   "license": "ISC",
   "packageManager": "pnpm@10.10.0",
   "devDependencies": {
-    "@commitlint/cli": "^20.5.0",
-    "@commitlint/config-conventional": "^20.5.0",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "concurrently": "^9.2.1",
     "husky": "^9.1.7",
     "turbo": "^2.9.6"
-  },
-  "dependencies": {
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "http-status-codes": "^2.3.0",
-    "@asteasolutions/zod-to-openapi": "^8.5.0"
   },
   "pnpm": {
     "overrides": {
       "react": "19.0.0",
       "react-dom": "19.0.0",
       "@types/react": "19.0.0",
-      "@types/react-dom": "19.0.0"
+      "@types/react-dom": "19.0.0",
+      "zod": "4.3.6"
     }
   }
 }

@@ -1,7 +1,7 @@
 import { useChatPageContext } from "@/contexts/chat-page-provider";
-import Loading from "../common/loading";
-import ChatNavigation from "./chat-navigation";
+import { Loading } from "@packages/ui/components/misc/loading";
 import Chat from "./chat";
+import ChatNavigation from "./chat-navigation";
 
 export default function ChatPageContent() {
   const { isLoading } = useChatPageContext();

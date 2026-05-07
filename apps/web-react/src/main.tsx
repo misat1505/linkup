@@ -1,9 +1,9 @@
+import { BgGradient } from "@packages/ui/components/misc/bg-gradient";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router } from "react-router-dom";
 import App from "./app.tsx";
-import BgGradient from "./components/common/bg-gradient.tsx";
 import UiPackageWrapper from "./components/common/ui-package-wrapper.tsx";
 import AppProvider from "./contexts/app-provider.tsx";
 import LanguageProvider from "./contexts/language-provider.tsx";

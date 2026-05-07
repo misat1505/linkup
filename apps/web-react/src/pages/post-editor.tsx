@@ -1,10 +1,10 @@
-import Loading from "@/components/common/loading";
 import EditorWrapper from "@/components/posts/editor-wrapper";
 import { useAppContext } from "@/contexts/app-provider";
 import EditorProvider from "@/contexts/editor-provider";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { queryKeys } from "@/lib/query-keys";
 import { PostService } from "@/services/post.service";
+import { Loading } from "@packages/ui/components/misc/loading";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";

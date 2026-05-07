@@ -1,10 +1,10 @@
-import Loading from "@/components/common/loading";
 import MyPostPreviewWrapper from "@/components/posts/my-post-preview-wrapper";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { queryKeys } from "@/lib/query-keys";
 import { PostService } from "@/services/post.service";
 import { Post } from "@packages/schemas";
 import { PostsPageLayout } from "@packages/ui/components/features/posts/posts-page-layout";
+import { Loading } from "@packages/ui/components/misc/loading";
 import { orderBy } from "lodash";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";

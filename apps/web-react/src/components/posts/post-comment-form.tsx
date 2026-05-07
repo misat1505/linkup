@@ -1,6 +1,7 @@
 import { useAppContext } from "@/contexts/app-provider";
 import { usePostCommentsSectionContext } from "@/contexts/post-comment-section-provider";
 import { cn } from "@/lib/utils";
+import { Tooltip } from "@packages/ui/components/misc/tooltip";
 import { Input } from "@packages/ui/components/shadcn/input";
 import { createFullName } from "@packages/ui/utils/create-full-name";
 import React, { useRef } from "react";
@@ -9,7 +10,6 @@ import { FaFileAlt } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { MdCancel } from "react-icons/md";
 import { ClipLoader } from "react-spinners";
-import Tooltip from "../common/tooltip";
 
 export default function PostCommentForm() {
   const { t } = useTranslation();

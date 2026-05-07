@@ -1,9 +1,9 @@
-import Loading from "@/components/common/loading";
 import PostPreview from "@/components/posts/post-preview";
 import useChangeTabTitle from "@/hooks/use-change-tab-title";
 import { queryKeys } from "@/lib/query-keys";
 import { PostService } from "@/services/post.service";
 import { EmptyFeed } from "@packages/ui/components/features/home/empty-feed";
+import { Loading } from "@packages/ui/components/misc/loading";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useInView } from "react-intersection-observer";

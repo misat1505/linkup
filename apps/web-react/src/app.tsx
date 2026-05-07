@@ -1,7 +1,7 @@
+import { Loading } from "@packages/ui/components/misc/loading";
 import { Toaster } from "@packages/ui/components/shadcn/toaster";
 import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import Loading from "./components/common/loading";
 import NavbarWrapper from "./components/common/navbar";
 import ProtectedRoute from "./components/common/protected-route";
 import { useAppContext } from "./contexts/app-provider";
