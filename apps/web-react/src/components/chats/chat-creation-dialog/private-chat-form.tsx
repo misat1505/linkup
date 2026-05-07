@@ -4,12 +4,12 @@ import { queryKeys } from "@/lib/query-keys";
 import { ROUTES } from "@/lib/routes";
 import { ChatService } from "@/services/chat.service";
 import { Chat, User } from "@packages/schemas";
+import { UserDisplay } from "@packages/ui/components/features/chats/chat-creation-dialog/user-display";
 import { Input } from "@packages/ui/components/shadcn/input";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import UserDisplay from "./user-display";
 
 export default function PrivateChatForm() {
   const { t } = useTranslation();

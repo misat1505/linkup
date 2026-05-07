@@ -5,11 +5,11 @@ import { Input } from "@/components/ui/input";
 import useUserSearch from "@/hooks/use-user-search";
 import { useLanguageContext } from "@/providers/language-provider";
 import { User } from "@packages/schemas";
+import { UserDisplay } from "@packages/ui/components/features/chats/chat-creation-dialog/user-display";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { FaUserGroup } from "react-icons/fa6";
 import { useGroupChatFormContext } from "../../providers/group-chat-form-provider";
-import UserDisplay from "./user-display";
 
 export default function GroupChatForm() {
   const { submitForm } = useGroupChatFormContext();

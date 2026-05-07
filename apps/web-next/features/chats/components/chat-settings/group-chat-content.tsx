@@ -2,6 +2,7 @@
 
 import { I18nText } from "@/components/shared/i18n-text";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAppContext } from "@/providers/app-provider";
 import { Chat } from "@packages/schemas";
 import ChatInfoUpdater from "./chat-info-updater";
 import ChatMembersDisplayer from "./chat-members-displayer";
@@ -12,6 +13,8 @@ type GroupChatContentProps = {
 };
 
 export default function GroupChatContent({ chat }: GroupChatContentProps) {
+  const { user: me } = useAppContext();
+
   return (
     <Tabs defaultValue="overrall">
       <TabsList className="grid w-full grid-cols-3">
@@ -29,7 +32,7 @@ export default function GroupChatContent({ chat }: GroupChatContentProps) {
         <ChatInfoUpdater chat={chat} />
       </TabsContent>
       <TabsContent value="members">
-        <ChatMembersDisplayer chat={chat} />
+        <ChatMembersDisplayer chat={chat} me={me!} />
       </TabsContent>
       <TabsContent value="invite">
         <UserInvite chat={chat} />

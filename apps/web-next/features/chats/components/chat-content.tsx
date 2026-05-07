@@ -1,15 +1,18 @@
 "use client";
 
 import Loading from "@/components/shared/loading";
+import { useAppContext } from "@/providers/app-provider";
+import { ChatStarted } from "@packages/ui/components/features/chats/chat-started";
 import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import useChatScroll from "../hooks/use-chat-scroll";
 import { useChatContext } from "../providers/chat-provider";
-import ChatStarted from "./chat-started";
 import IncomeMessage from "./income-message";
 import { MessageWrapper } from "./message-wrapper";
 
 export default function ChatContent() {
+  const { chat } = useChatContext();
+  const { user: me } = useAppContext();
   const {
     messages,
     isLoading,
@@ -68,7 +71,7 @@ export default function ChatContent() {
         className="max-h-full overflow-auto px-4 dark:scheme-dark"
       >
         <div ref={topRef} className="h-2"></div>
-        {!hasNextPage && <ChatStarted />}
+        {!hasNextPage && <ChatStarted chat={chat} me={me!} />}
         {[...messages].reverse().map((message) => (
           <MessageWrapper key={message.id} message={message} />
         ))}

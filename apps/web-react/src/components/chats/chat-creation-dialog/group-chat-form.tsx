@@ -1,12 +1,12 @@
 import { useGroupChatFormContext } from "@/contexts/group-chat-form-provider";
 import useUserSearch from "@/hooks/use-user-search";
 import { User } from "@packages/schemas";
+import { UserDisplay } from "@packages/ui/components/features/chats/chat-creation-dialog/user-display";
 import { Button } from "@packages/ui/components/shadcn/button";
 import { Input } from "@packages/ui/components/shadcn/input";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaUserGroup } from "react-icons/fa6";
-import UserDisplay from "./user-display";
 
 export default function GroupChatForm() {
   const { submitForm } = useGroupChatFormContext();
