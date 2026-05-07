@@ -20,7 +20,7 @@ import {
 type ChatLeaveDialogProps = {
   chatId: Chat["id"];
   leaveChatAction: (id: Chat["id"]) => Promise<void>;
-  leaveChatCb: (id: Chat["id"]) => void;
+  leaveChatCb?: (id: Chat["id"]) => void;
 };
 
 export function ChatLeaveDialog({

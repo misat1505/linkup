@@ -26,7 +26,7 @@ type AliasUpdateModalProps = {
     userId: User["id"],
     alias: UserInChat["alias"],
   ) => Promise<void>;
-  updateAliasCb: (text: UserInChat["alias"]) => void;
+  updateAliasCb?: (text: UserInChat["alias"]) => void;
 };
 
 export function AliasUpdateModal({

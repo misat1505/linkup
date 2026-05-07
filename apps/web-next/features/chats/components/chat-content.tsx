@@ -1,13 +1,13 @@
 "use client";
 
-import IncomeMessage from "./income-message";
-import { useInView } from "react-intersection-observer";
-import { useEffect, useRef } from "react";
-import ChatStarted from "./chat-started";
-import { useChatContext } from "../providers/chat-provider";
-import useChatScroll from "../hooks/use-chat-scroll";
 import Loading from "@/components/shared/loading";
-import Message from "./message";
+import { useEffect, useRef } from "react";
+import { useInView } from "react-intersection-observer";
+import useChatScroll from "../hooks/use-chat-scroll";
+import { useChatContext } from "../providers/chat-provider";
+import ChatStarted from "./chat-started";
+import IncomeMessage from "./income-message";
+import { MessageWrapper } from "./message-wrapper";
 
 export default function ChatContent() {
   const {
@@ -70,7 +70,7 @@ export default function ChatContent() {
         <div ref={topRef} className="h-2"></div>
         {!hasNextPage && <ChatStarted />}
         {[...messages].reverse().map((message) => (
-          <Message key={message.id} message={message} />
+          <MessageWrapper key={message.id} message={message} />
         ))}
         <div ref={bottomRef} />
       </div>

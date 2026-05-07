@@ -1,11 +1,9 @@
 import { Chat, User } from "@packages/schemas";
 import React from "react";
-import { RxCross1 } from "react-icons/rx";
-import { LINK_COMPONENT, TRANSLATION_COMPONENT } from "../../../config";
 import { ChatUtils } from "../../../utils/chat-utils";
-import { Tooltip } from "../../misc/tooltip";
 import { ChatHeaderAvatar } from "./chat-header-avatar";
 import ChatHeaderStatus from "./chat-header-status";
+import { CloseChatButton } from "./close-chat-button";
 
 type ChatHeaderProps = {
   chat: Chat;
@@ -36,17 +34,7 @@ export function ChatHeader({ chat, me, slots }: ChatHeaderProps) {
       <div className="flex items-center gap-x-2">
         {chat.type === "GROUP" && slots.chatLeaveDialog}
         {slots.chatSettingsDialog}
-        <Tooltip
-          content={
-            <TRANSLATION_COMPONENT translationKey="chats.close.tooltip" />
-          }
-        >
-          <span className="transition-all hover:scale-125">
-            <LINK_COMPONENT href="/chats">
-              <RxCross1 size={16} />
-            </LINK_COMPONENT>
-          </span>
-        </Tooltip>
+        <CloseChatButton />
       </div>
     </div>
   );

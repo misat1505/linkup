@@ -8,16 +8,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Chat } from "@packages/schemas";
+import { Chat, User } from "@packages/schemas";
 import { CiSettings } from "react-icons/ci";
 import ChatMembersDisplayer from "./chat-members-displayer";
 import GroupChatContent from "./group-chat-content";
 
 type ChatSettingsDialogProps = {
   chat: Chat;
+  me: User;
 };
 
-export default function ChatSettingsDialog({ chat }: ChatSettingsDialogProps) {
+export default function ChatSettingsDialog({
+  chat,
+  me,
+}: ChatSettingsDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild className="aspect-square h-5 w-5">
@@ -50,7 +54,7 @@ export default function ChatSettingsDialog({ chat }: ChatSettingsDialogProps) {
           </DialogDescription>
         </DialogHeader>
         {chat.type === "PRIVATE" ? (
-          <ChatMembersDisplayer chat={chat} />
+          <ChatMembersDisplayer chat={chat} me={me} />
         ) : (
           <GroupChatContent chat={chat} />
         )}

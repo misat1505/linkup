@@ -3,7 +3,7 @@ import ChatFooterProvider from "../providers/chat-footer-provider";
 import ChatProvider from "../providers/chat-provider";
 import ChatContent from "./chat-content";
 import ChatFooter from "./chat-footer";
-import ChatHeader from "./chat-header";
+import ChatHeaderWrapper from "./chat-header-wrapper";
 
 type ChatProps = { chat: ChatType };
 
@@ -12,7 +12,7 @@ export default function Chat({ chat }: ChatProps) {
     <ChatProvider chat={chat}>
       <div className="w-[calc(100vw-20rem)] grow">
         <div className="flex h-full w-full flex-col">
-          <ChatHeader chat={chat} />
+          <ChatHeaderWrapper chat={chat} />
           <ChatFooterProvider chatId={chat.id}>
             <ChatContent />
             <ChatFooter />

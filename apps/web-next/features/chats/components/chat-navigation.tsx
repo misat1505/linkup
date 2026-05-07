@@ -1,12 +1,16 @@
-import NoChats from "./no-chats";
-import { ChatNavigationHide } from "./chat-navigation-hide";
-import { getChatsCached } from "../actions/get-chats";
 import { I18nText } from "@/components/shared/i18n-text";
-import ChatCreator from "./chat-creation-dialog/chat-creator";
-import NavigationList from "./chat-navigation-item";
+import { getMeCached } from "@/features/auth/actions/get-me";
+import { NavigationList } from "@packages/ui/components/features/chats/chat-navigation-list";
+import { NoChats } from "@packages/ui/components/features/chats/no-chats";
+import { getChatsCached } from "../actions/get-chats";
+import { sortChatsByActivity } from "../utils/sort-chats-by-activity";
+import ChatCreatorWrapper from "./chat-creator-wrapper";
+import { ChatNavigationHide } from "./chat-navigation-hide";
 
 export default async function ChatNavigation() {
-  const chats = await getChatsCached();
+  const [chats, me] = await Promise.all([getChatsCached(), getMeCached()]);
+
+  const sortedChats = sortChatsByActivity(chats);
 
   return (
     <ChatNavigationHide>
@@ -15,8 +19,8 @@ export default async function ChatNavigation() {
         className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto relative"
         data-testid="cy-chat-nav"
       >
-        {chats.length === 0 && <NoChats />}
-        <NavigationList />
+        {sortedChats.length === 0 && <NoChats />}
+        <NavigationList chats={sortedChats!} me={me!} />
       </div>
     </ChatNavigationHide>
   );
@@ -28,7 +32,7 @@ function ChatNavigationHeader() {
       <h2 className="text-lg font-semibold">
         <I18nText translationKey="chats.navigation.title" />
       </h2>
-      <ChatCreator />
+      <ChatCreatorWrapper />
     </div>
   );
 }

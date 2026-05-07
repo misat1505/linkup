@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useChatPageContext } from "../providers/chat-page-provider";
 import { PropsWithChildren } from "react";
+import { useChatPageContext } from "../providers/chat-page-provider";
 
 type CreateChatTriggerProps = PropsWithChildren;
 
