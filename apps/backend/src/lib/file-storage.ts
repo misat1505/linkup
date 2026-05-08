@@ -1,15 +1,15 @@
+import { env } from "@/config/env";
 import {
-  S3Client,
-  PutObjectCommand,
+  CopyObjectCommand,
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
   GetObjectCommand,
   ListObjectsV2Command,
-  DeleteObjectCommand,
-  CopyObjectCommand,
-  DeleteObjectsCommand,
+  PutObjectCommand,
+  S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dotenv from "dotenv";
-import { env } from "@/config/env";
 
 dotenv.config();
 
@@ -129,8 +129,7 @@ export class FileStorage {
    */
   async getSignedUrl(path: string, expiresIn = 60): Promise<string> {
     if (env.DO_NOT_SIGN_OBJECTS) {
-      const objectPath = `${env.S3_ENDPOINT}/${env.S3_BUCKET_NAME}/${path}`;
-      return objectPath.replace("minio", "localhost");
+      return `https://${this.bucketName}.s3.${env.AWS_REGION}.amazonaws.com/${path}`;
     }
 
     const command = new GetObjectCommand({
