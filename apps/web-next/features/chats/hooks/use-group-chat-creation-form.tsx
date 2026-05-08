@@ -72,7 +72,7 @@ export default function useNewGroupChatForm(): useNewGroupChatFormValue {
       if (e instanceof AxiosError) {
         toast({
           title: t("chats.create-new-chat.group.error.toast.title"),
-          description: e.response?.data.message,
+          description: "Failed to create group chat. Please try again.",
           variant: "destructive",
         });
       }

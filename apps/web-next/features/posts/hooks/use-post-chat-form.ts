@@ -87,7 +87,7 @@ export default function usePostChatForm(
       if (e instanceof AxiosError) {
         toast({
           title: t("posts.comments.form.toasts.error.title"),
-          description: e.response?.data.message,
+          description: "Failed to post comment. Please try again.",
           variant: "destructive",
         });
       }

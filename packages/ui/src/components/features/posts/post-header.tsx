@@ -112,7 +112,7 @@ function ReportPost({ post, reportPost }: ReportPostProps) {
         toast({
           variant: "destructive",
           title: t("posts.report.fail-toast.title"),
-          description: (e as any).response?.data.message,
+          description: "Failed to report post. Please try again.",
         });
     } finally {
       setIsOpen(false);

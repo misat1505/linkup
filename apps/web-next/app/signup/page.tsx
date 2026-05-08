@@ -41,7 +41,7 @@ export default function Signup() {
       if (e instanceof Error) {
         toast({
           title: t("signup.form.errors.toast.title"),
-          description: e.message,
+          description: "Failed to create account. Please try again.",
           variant: "destructive",
         });
       }

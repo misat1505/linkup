@@ -72,7 +72,7 @@ export default function useChatForm(chatId: Chat["id"]): useChatFormValue {
       if (e instanceof AxiosError) {
         toast({
           title: t("chats.form.error.toast.title"),
-          description: e.response?.data.message,
+          description: "Failed to send message. Please try again.",
           variant: "destructive",
         });
       }

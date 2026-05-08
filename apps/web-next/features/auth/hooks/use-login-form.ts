@@ -57,7 +57,7 @@ export default function useLoginForm(): useLoginFormValue {
       if (e instanceof Error) {
         toast({
           title: t("login.error.toast.title"),
-          description: e.message,
+          description: "Invalid login credentials. Please try again.",
           variant: "destructive",
         });
       }

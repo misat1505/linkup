@@ -77,7 +77,7 @@ function SettingsContent() {
       if (e instanceof AxiosError) {
         toast({
           title: t("settings.form.error.toast.title"),
-          description: e.response?.data.message,
+          description: "Failed to update account settings. Please try again.",
           variant: "destructive",
         });
       }
