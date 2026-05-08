@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const s3Url = new URL(process.env.S3_URL!);
+const s3Url = new URL(process.env.S3_URL ?? "http://localhost:9000");
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@packages/ui"],
