@@ -1,7 +1,8 @@
-import { StatusCodes } from "http-status-codes";
 import { validate } from "@/middlewares/validate";
-import { mockRequest, mockResponse } from "../utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
+import { mockRequest, mockResponse } from "../utils/mocks";
 
 describe("validate middleware", () => {
   const UserDTO = z
@@ -11,10 +12,10 @@ describe("validate middleware", () => {
     .strict();
   type UserDTO = z.infer<typeof UserDTO>;
 
-  const mockNextFunction = jest.fn();
+  const mockNextFunction = vi.fn();
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("proceeds to next function on successful validation", async () => {

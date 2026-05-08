@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response } from "express";
 import {
   RequestValidatedValues,
   RequestValidation,
-} from "@/types/RequestValidation";
-import { ZodError } from "zod";
+} from "@/types/request-validation";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { ZodError } from "zod";
 
 /**
  * Middleware to validate Express request properties using Zod schemas.
@@ -45,6 +45,7 @@ export const validate = (validations: RequestValidation) => {
       const typedKey = key as keyof RequestValidatedValues;
       const result = schema.safeParse(req[typedKey]);
       if (!result.success) errors.push(result.error);
+      // @ts-expect-error result.data is of correct type
       else validated[typedKey] = result.data;
     });
 

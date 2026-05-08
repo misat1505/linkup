@@ -1,8 +1,7 @@
-import { Router } from "express";
-import { upload } from "@/middlewares/multer";
 import { FileControllers } from "@/controllers";
-import { validate } from "@/middlewares/validate";
-import { Filename, FileQuery } from "@/validators/files/getFiles.validators";
+import { upload } from "@/middlewares/multer";
+import { buildProtectedRoute, buildRouter } from "@/utils/build-router";
+import { API_CONTRACT } from "@packages/api-contract";
 
 /**
  * File Routes Router.
@@ -11,19 +10,18 @@ import { Filename, FileQuery } from "@/validators/files/getFiles.validators";
  * retrieving files from cache, and deleting files from cache. It also supports
  * authorization for file insertions and uses multer for file uploads.
  */
-const fileRouter = Router();
+const routes = [
+  buildProtectedRoute(API_CONTRACT.GET_CACHE, FileControllers.getCache),
+  buildProtectedRoute(
+    API_CONTRACT.DELETE_FROM_CACHE,
+    FileControllers.deleteFromCache,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.INSERT_TO_CACHE,
+    FileControllers.insertToCache,
+    { extraMiddlewares: [upload.single("file")] },
+  ),
+  buildProtectedRoute(API_CONTRACT.GET_FILE, FileControllers.getFile),
+];
 
-fileRouter.get("/cache", FileControllers.getCache);
-fileRouter.delete(
-  "/cache/:filename",
-  validate({ params: Filename }),
-  FileControllers.deleteFromCache
-);
-fileRouter.post("/cache", upload.single("file"), FileControllers.insertToCache);
-fileRouter.get(
-  "/:filename",
-  validate({ params: Filename, query: FileQuery }),
-  FileControllers.getFile
-);
-
-export default fileRouter;
+export default buildRouter(routes);

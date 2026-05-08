@@ -1,0 +1,24 @@
+import { User } from "@packages/schemas";
+import { FaUser } from "react-icons/fa";
+import { buildFileURL } from "../../../utils/build-file-url";
+import { getInitials } from "../../../utils/get-initials";
+import { Avatar } from "../avatar";
+
+type NavbarAvatarProps = { user: User | null };
+
+export function NavbarAvatar({ user }: NavbarAvatarProps) {
+  if (!user) {
+    return (
+      <div className="flex h-12 w-12 items-center rounded-full bg-white dark:bg-black">
+        <FaUser className="h-full flex-grow rounded-full pt-3 text-slate-600 dark:text-slate-400" />
+      </div>
+    );
+  }
+
+  return (
+    <Avatar
+      src={buildFileURL(user.photoURL, { type: "avatar" })}
+      alt={getInitials(user)}
+    />
+  );
+}

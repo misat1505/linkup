@@ -1,4 +1,6 @@
 import { refreshTokenCookieName } from "@/config/jwt-cookie";
+import { buildValidatedResponder } from "@/utils/validated-responder";
+import { CONTRACT_KEYS } from "@packages/api-contract";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -17,17 +19,6 @@ import { StatusCodes } from "http-status-codes";
  * @source
  *
  * @throws {Error} If there is an error during the logout process, the next middleware will be called with an error.
- *
- * @swagger
- * /auth/logout:
- *   post:
- *     summary: Log out a user
- *     tags: [Auth]
- *     responses:
- *       200:
- *         description: User logged out successfully
- *       500:
- *         description: Cannot log out
  */
 
 export const logoutController = (
@@ -35,11 +26,14 @@ export const logoutController = (
   res: Response,
   next: NextFunction,
 ) => {
+  const contractKey = CONTRACT_KEYS.LOGOUT;
+  const respond = buildValidatedResponder(res, contractKey);
   try {
     res.clearCookie(refreshTokenCookieName);
-    res
-      .status(StatusCodes.OK)
-      .json({ message: req.t("auth.controllers.logout.success") });
+
+    return respond(StatusCodes.OK, {
+      message: req.t("auth.controllers.logout.success"),
+    });
   } catch {
     next(new Error(req.t("auth.controllers.logout.failure")));
   }

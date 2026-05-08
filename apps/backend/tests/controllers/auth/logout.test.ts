@@ -1,23 +1,33 @@
-import { StatusCodes } from "http-status-codes";
 import { AuthControllers } from "@/controllers";
-import { TokenProcessor } from "@/lib/TokenProcessor";
+import { TokenProcessor } from "@/lib/token-processor";
 import { mockRequest, mockResponse } from "@tests/utils/mocks";
-import { seedProvider } from "@tests/utils/seedProvider";
+import { seedProvider } from "@tests/utils/seed-provider";
+import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-jest.mock("@/lib/TokenProcessor");
+vi.mock("@/lib/token-processor");
+
+const respond = vi.fn();
+vi.mock("@/utils/validated-responder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("logout", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("logs out user", async () => {
     await seedProvider(async (seed) => {
       const user = seed.users[0];
-      (TokenProcessor.encode as jest.Mock).mockReturnValue("logout_jwt_token");
+      (TokenProcessor.encode as Mock).mockReturnValue("logout_jwt_token");
 
       const req = mockRequest({ user });
       const res = mockResponse();
 
-      AuthControllers.logout(req, res, jest.fn());
+      AuthControllers.logout(req, res, vi.fn());
 
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
       expect(res.clearCookie).toHaveBeenCalled();
     });
   });

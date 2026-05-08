@@ -14,20 +14,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: "pnpm"
+
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
 
       - name: Install dependencies
-        run: |
-          cd apps/backend
-          npm ci
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shared packages
+        run: pnpm build:packages
 
       - name: Copy envs for tests
         run: cp apps/backend/env.example apps/backend/.env.test
 
+      - name: Generate Prisma Client
+        run: pnpm --filter backend exec prisma generate
+
       - name: Run Tests
-        run: |
-          cd apps/backend
-          npm run test
+        run: pnpm test

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { AUTH_API } from "@/utils/api";
-import { refreshToken } from "@/features/auth/utils/refreshToken";
-import { serverSideRequestFactory } from "@/utils/serverSideRequestFactory";
+import { refreshToken } from "@/features/auth/utils/refresh-token";
+import { serverSideRequestFactory } from "@/utils/server-side-request-factory";
 
 export async function GET() {
   await refreshToken();

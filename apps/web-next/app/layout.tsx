@@ -1,12 +1,12 @@
+import NavbarWrapper from "@/components/navbar";
+import Providers from "@/components/providers";
+import ReportWebVitals from "@/components/report-web-vitals";
+import { BgGradient } from "@packages/ui/components/misc/bg-gradient";
+import { Toaster } from "@packages/ui/components/shadcn/toaster";
+import "github-markdown-css/github-markdown.css";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import BgGradient from "@/components/shared/BgGradient";
-import { Toaster } from "@/components/ui/toaster";
-import Providers from "@/components/Providers";
-import Navbar from "@/components/shared/navbar/Navbar";
-import "github-markdown-css/github-markdown.css";
-import ReportWebVitals from "@/components/ReportWebVitals";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +24,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "LinkUp – Social Media for Programmers",
+  title: "LinkUp - Social Media for Programmers",
   description:
     "Connect, share, and collaborate with programmers worldwide on LinkUp, the social media platform built for developers.",
   keywords: [
@@ -49,7 +49,7 @@ export default function RootLayout({
       >
         <Providers>
           <BgGradient />
-          <Navbar />
+          <NavbarWrapper />
           <div className="relative z-10">{children}</div>
           <Toaster />
         </Providers>

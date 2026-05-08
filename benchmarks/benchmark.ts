@@ -1,11 +1,11 @@
 import { launch } from "chrome-launcher";
-import lighthouse, { Flags } from "lighthouse";
-import puppeteer, { type Page } from "puppeteer-core";
 import fs from "fs/promises";
+import lighthouse, { Flags } from "lighthouse";
 import path from "path";
-import type { MetricKey, MetricResult, Mode } from "./types";
+import puppeteer, { type Page } from "puppeteer-core";
 import { debugDir, importantMetrics, outputDir } from "./constants";
 import { type BenchmarkProfile, buildFlags, profiles } from "./profiles";
+import type { MetricKey, MetricResult, Mode } from "./types";
 
 const args = process.argv.slice(2);
 const getArg = (flag: string) => {
@@ -16,6 +16,9 @@ const getArg = (flag: string) => {
 const MODE: Mode = (getArg("--mode") as Mode | undefined) ?? "react";
 const ITERATIONS = parseInt(getArg("--iterations") ?? "5", 10);
 const PROFILE_FILTER = getArg("--profile");
+
+// Paths to benchmark — extend this array to add more routes
+const PATHS_TO_BENCHMARK = ["/", "/chats/6360af6a-6c04-4339-aafc-819261079290"];
 
 interface MetricStats {
   mean: number | null;
@@ -32,6 +35,11 @@ interface ProfileResult {
   iterations: Record<MetricKey, MetricResult>[];
   stats: ProfileStats;
   durationMs: number;
+}
+
+interface PathResult {
+  path: string;
+  profiles: ProfileResult[];
 }
 
 function calcStats(values: number[]): {
@@ -79,8 +87,9 @@ async function runSingleLighthouse(
   flags: Flags,
   profileId: string,
   index: number,
+  routeSlug: string,
+  mode: Mode,
 ): Promise<Record<MetricKey, MetricResult>> {
-  // Clear cache before every run for isolation
   const client = await page.createCDPSession();
   await client.send("Network.clearBrowserCache");
   await client.detach();
@@ -88,11 +97,17 @@ async function runSingleLighthouse(
   const runnerResult = await lighthouse(url, flags);
   if (!runnerResult) throw new Error("Lighthouse run returned no result");
 
-  const { audits } = runnerResult.lhr;
-  const results = {} as Record<MetricKey, MetricResult>;
+  const { lhr } = runnerResult;
 
+  if (lhr.finalDisplayedUrl !== lhr.requestedUrl) {
+    console.warn(
+      `  ⚠️  redirect detected: ${lhr.requestedUrl} → ${lhr.finalDisplayedUrl}`,
+    );
+  }
+
+  const results = {} as Record<MetricKey, MetricResult>;
   for (const metric of importantMetrics) {
-    const audit = audits[metric];
+    const audit = lhr.audits[metric];
     results[metric] = {
       value: audit?.numericValue ?? null,
       display: audit?.displayValue ?? null,
@@ -100,13 +115,14 @@ async function runSingleLighthouse(
     };
   }
 
-  // Save page snapshot for debugging
-  const html = await page.content();
-  await fs.writeFile(
-    path.join(debugDir, `snapshot-${profileId}-run${index}.html`),
-    html,
-    "utf-8",
-  );
+  await page.goto(lhr.finalDisplayedUrl!, { waitUntil: "networkidle0" });
+  await page.screenshot({
+    path: path.join(
+      debugDir,
+      `screenshot-${MODE}-${routeSlug}-${profileId}-run${index}.png`,
+    ),
+    fullPage: true,
+  });
 
   return results;
 }
@@ -188,47 +204,65 @@ function printComparisonSummary(results: ProfileResult[]) {
 
 async function runProfile(
   profile: BenchmarkProfile,
-  page: Page,
-  chromePort: number,
-  cookieHeader: string,
   mode: Mode,
   iterations: number,
+  routePath: string,
+  routeSlug: string,
 ): Promise<ProfileResult> {
-  const url = getFrontendUrlBase(mode);
-  const flags = buildFlags(profile, chromePort, cookieHeader);
+  // Fresh Chrome instance per profile to guarantee a clean session
+  const chrome = await launch({ chromeFlags: ["--headless"] });
 
-  banner(`${profile.emoji}  Starting: ${profile.label}`, "·");
-  console.log(`   ${profile.description}`);
+  try {
+    const browser = await puppeteer.connect({
+      browserURL: `http://localhost:${chrome.port}`,
+    });
 
-  // 2 warmup runs per profile
-  console.log("   Warming up (2 runs)...");
-  for (let i = 0; i < 2; i++) {
-    await lighthouse(url, flags);
+    const page = await browser.newPage();
+
+    const cookieHeader = await login(page);
+    const url = getFrontendUrlBase(mode) + routePath;
+    const flags = buildFlags(profile, chrome.port, cookieHeader);
+
+    banner(`${profile.emoji}  Starting: ${profile.label}  [${routePath}]`, "·");
+    console.log(`   ${profile.description}`);
+
+    console.log("   Warming up (2 runs)...");
+    for (let i = 0; i < 2; i++) {
+      await lighthouse(url, flags);
+    }
+
+    const allResults: Record<MetricKey, MetricResult>[] = [];
+    const profileStart = performance.now();
+
+    for (let i = 0; i < iterations; i++) {
+      process.stdout.write(`   Run ${i + 1}/${iterations}...`);
+      const start = performance.now();
+      const result = await runSingleLighthouse(
+        page,
+        url,
+        flags,
+        profile.id,
+        i + 1,
+        routeSlug,
+        mode,
+      );
+      const elapsed = ((performance.now() - start) / 1000).toFixed(1);
+      process.stdout.write(
+        ` ${elapsed}s (${new Date().toLocaleTimeString()})\n`,
+      );
+      allResults.push(result);
+    }
+
+    const durationMs = performance.now() - profileStart;
+    const stats = aggregateResults(allResults);
+    printProfileStats(profile, stats);
+
+    await browser.disconnect();
+
+    return { profile, iterations: allResults, stats, durationMs };
+  } finally {
+    chrome.kill();
   }
-
-  const allResults: Record<MetricKey, MetricResult>[] = [];
-  const profileStart = performance.now();
-
-  for (let i = 0; i < iterations; i++) {
-    process.stdout.write(`   Run ${i + 1}/${iterations}...`);
-    const start = performance.now();
-    const result = await runSingleLighthouse(
-      page,
-      url,
-      flags,
-      profile.id,
-      i + 1,
-    );
-    const elapsed = ((performance.now() - start) / 1000).toFixed(1);
-    process.stdout.write(` ${elapsed}s\n`);
-    allResults.push(result);
-  }
-
-  const durationMs = performance.now() - profileStart;
-  const stats = aggregateResults(allResults);
-  printProfileStats(profile, stats);
-
-  return { profile, iterations: allResults, stats, durationMs };
 }
 
 function getFrontendUrlBase(mode: Mode): string {
@@ -236,6 +270,64 @@ function getFrontendUrlBase(mode: Mode): string {
   if (mode === "nextjs") return `${common}${3000}`;
   else if (mode === "react") return `${common}${3001}`;
   throw new Error(`Unknown mode: ${mode}`);
+}
+
+function buildMergedProfiles(pathResults: PathResult[]): any[] {
+  const map: Record<
+    string,
+    {
+      profile: BenchmarkProfile;
+      allIterations: Record<MetricKey, MetricResult>[];
+      totalDurationMs: number;
+    }
+  > = {};
+
+  for (const pr of pathResults) {
+    for (const p of pr.profiles) {
+      const id = p.profile.id;
+
+      if (!map[id]) {
+        map[id] = {
+          profile: p.profile,
+          allIterations: [],
+          totalDurationMs: 0,
+        };
+      }
+
+      map[id].allIterations.push(...p.iterations);
+      map[id].totalDurationMs += p.durationMs;
+    }
+  }
+
+  return Object.values(map).map((entry) => ({
+    profileId: entry.profile.id,
+    label: entry.profile.label,
+    durationMs: Math.round(entry.totalDurationMs),
+    stats: aggregateResults(entry.allIterations),
+  }));
+}
+
+async function login(page: Page) {
+  const base = getFrontendUrlBase(MODE);
+  const waitUntil = MODE === "react" ? "networkidle0" : "domcontentloaded";
+
+  console.log(`\nOpening login page at ${base}/login...`);
+  await page.goto(`${base}/login`, { waitUntil });
+  await page.waitForSelector('input[name="login"]', { timeout: 10000 });
+  await page.type('input[name="login"]', "login1");
+  await page.type('input[name="password"]', "pass1");
+  await page.click("button[type=submit]");
+  await new Promise((res) => setTimeout(res, 1500));
+
+  const cookies = await page.browser().cookies();
+
+  const refreshToken = cookies.find((c) => c.name === "refresh-token")?.value;
+  if (!refreshToken) throw new Error("No refresh-token cookie after login");
+
+  const cookieHeader = `refresh-token=${refreshToken}`;
+
+  console.log("Refreshed session ✓");
+  return cookieHeader;
 }
 
 async function main() {
@@ -249,78 +341,62 @@ async function main() {
   }
 
   banner(
-    `🚀  Lighthouse Benchmark  |  mode: ${MODE}  |  ${ITERATIONS} runs × ${activeProfiles.length} profiles`,
+    `🚀  Lighthouse Benchmark  |  mode: ${MODE}  |  ${ITERATIONS} runs × ${activeProfiles.length} profiles × ${PATHS_TO_BENCHMARK.length} paths`,
     "═",
   );
+  console.log(`Start time: ${new Date().toLocaleTimeString()}`);
 
   await fs.mkdir(debugDir, { recursive: true });
   await fs.mkdir(outputDir, { recursive: true });
 
-  const chrome = await launch({ chromeFlags: ["--headless"] });
+  const totalStart = performance.now();
+  const allPathResults: PathResult[] = [];
 
-  try {
-    const browser = await puppeteer.connect({
-      browserURL: `http://localhost:${chrome.port}`,
-    });
+  for (const routePath of PATHS_TO_BENCHMARK) {
+    // slug used in filenames, e.g. "/" -> "root", "/chats" -> "chats"
+    const routeSlug =
+      routePath === "/"
+        ? "root"
+        : routePath.replace(/^\//, "").replace(/\//g, "-");
 
-    const page = await browser.newPage();
+    banner(`📂  Path: ${routePath}`, "═");
 
-    console.log(`\nOpening login page at ${getFrontendUrlBase(MODE)}/login...`);
-    await page.goto(`${getFrontendUrlBase(MODE)}/login`, {
-      waitUntil: "networkidle0",
-    });
-    await page.type('input[name="login"]', "login6");
-    await page.type('input[name="password"]', "pass6");
-    await Promise.all([
-      page.click("button[type=submit]"),
-      page.waitForNavigation({ waitUntil: "networkidle0" }),
-    ]);
-    await new Promise((res) => setTimeout(res, 1000));
-
-    const cookies = await page.cookies();
-    const cookieHeader = cookies.map((c) => `${c.name}=${c.value}`).join("; ");
-
-    const waitUntil = MODE === "react" ? "networkidle0" : "domcontentloaded";
-    await page.goto(getFrontendUrlBase(MODE), { waitUntil });
-    console.log("Logged in ✓");
-
-    const totalStart = performance.now();
-    const allProfileResults: ProfileResult[] = [];
+    const profileResults: ProfileResult[] = [];
 
     for (const profile of activeProfiles) {
       const result = await runProfile(
         profile,
-        page,
-        chrome.port,
-        cookieHeader,
         MODE,
         ITERATIONS,
+        routePath,
+        routeSlug,
       );
-      allProfileResults.push(result);
+      profileResults.push(result);
     }
 
-    const totalMs = performance.now() - totalStart;
+    printComparisonSummary(profileResults);
+    allPathResults.push({ path: routePath, profiles: profileResults });
 
-    printComparisonSummary(allProfileResults);
-
-    const summary = allProfileResults.map((r) => ({
-      profileId: r.profile.id,
-      label: r.profile.label,
-      durationMs: parseFloat(r.durationMs.toFixed(0)),
-      stats: r.stats,
-    }));
-
-    const outputFile = path.join(outputDir, `${MODE}-benchmark.json`);
+    // Per-path JSON output
+    const perPathFile = path.join(
+      outputDir,
+      `${MODE}-benchmark-${routeSlug}.json`,
+    );
     await fs.writeFile(
-      outputFile,
+      perPathFile,
       JSON.stringify(
         {
           mode: MODE,
+          path: routePath,
           iterations: ITERATIONS,
           generatedAt: new Date().toISOString(),
-          totalDurationMs: parseFloat(totalMs.toFixed(0)),
-          profiles: summary,
-          raw: allProfileResults.map((r) => ({
+          profiles: profileResults.map((r) => ({
+            profileId: r.profile.id,
+            label: r.profile.label,
+            durationMs: parseFloat(r.durationMs.toFixed(0)),
+            stats: r.stats,
+          })),
+          raw: profileResults.map((r) => ({
             profileId: r.profile.id,
             runs: r.iterations,
           })),
@@ -330,14 +406,36 @@ async function main() {
       ),
       "utf-8",
     );
-
-    banner(`✅  Done in ${(totalMs / 1000 / 60).toFixed(1)} min`, "═");
-    console.log(`   Results saved to: ${outputFile}\n`);
-
-    await browser.disconnect();
-  } finally {
-    chrome.kill();
+    console.log(`\n   ✅  Saved: ${perPathFile}`);
   }
+
+  const totalMs = performance.now() - totalStart;
+
+  // Combined JSON — averages across all paths
+  const combinedStats = buildMergedProfiles(allPathResults);
+  const combinedFile = path.join(outputDir, `${MODE}-benchmark-combined.json`);
+  await fs.writeFile(
+    combinedFile,
+    JSON.stringify(
+      {
+        mode: MODE,
+        paths: PATHS_TO_BENCHMARK,
+        iterations: ITERATIONS,
+        generatedAt: new Date().toISOString(),
+        totalDurationMs: parseFloat(totalMs.toFixed(0)),
+        description:
+          "combinedMean is the arithmetic mean of per-path means for each metric",
+        profiles: combinedStats,
+      },
+      null,
+      2,
+    ),
+    "utf-8",
+  );
+
+  banner(`✅  Done in ${(totalMs / 1000 / 60).toFixed(1)} min`, "═");
+  console.log(`   Per-path files : ${MODE}-benchmark-{root,chats}.json`);
+  console.log(`   Combined file  : ${combinedFile}\n`);
 }
 
 main().catch((e) => {

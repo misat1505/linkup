@@ -1,9 +1,19 @@
-import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/user-with-credentials";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validated-responder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("createMessage", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("creates message for authorized user", async () => {
     const newMessage = { id: "message1", content: "Hello" };
     mockChatService.isUserInChat.mockResolvedValue(true);
@@ -15,9 +25,12 @@ describe("createMessage", () => {
       files: [],
     });
     const res = mockResponse();
-    await ChatControllers.createMessage(req, res, jest.fn());
+    await ChatControllers.createMessage(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
+    );
   });
 
   it("blocks message creation by non-chat member", async () => {
@@ -29,9 +42,12 @@ describe("createMessage", () => {
       files: [],
     });
     const res = mockResponse();
-    await ChatControllers.createMessage(req, res, jest.fn());
+    await ChatControllers.createMessage(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
   });
 
   it("blocks message with responseId outside chat", async () => {
@@ -50,8 +66,11 @@ describe("createMessage", () => {
       files: [],
     });
     const res = mockResponse();
-    await ChatControllers.createMessage(req, res, jest.fn());
+    await ChatControllers.createMessage(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
   });
 });

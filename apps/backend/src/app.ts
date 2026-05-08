@@ -2,31 +2,33 @@ import * as Sentry from "@sentry/node";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express, { NextFunction, Request, Response } from "express";
-import { env } from "./config/env";
-import { corsMiddleware } from "./config/cors";
-import { initReactions } from "./config/reactions";
-import swaggerUi from "swagger-ui-express";
-import swaggerSpec from "./lib/swagger";
-import { prisma } from "./lib/Prisma";
-import i18next from "./i18n";
-import middleware from "i18next-http-middleware";
-import { initializeServices } from "./utils/initializeServices";
-import { Routers } from "./routes";
-import { StatusCodes } from "http-status-codes";
 import http from "http";
-import { initializeSocket } from "./utils/initializeSocket";
+import { StatusCodes } from "http-status-codes";
+import middleware from "i18next-http-middleware";
+import swaggerUi from "swagger-ui-express";
+import { corsMiddleware } from "./config/cors";
+import { env } from "./config/env";
+import { initReactions } from "./config/reactions";
+import i18next from "./i18n";
+import { generateOpenApiDocument } from "./lib/openapi";
+import { prisma } from "./lib/prisma";
+import { Routers } from "./routes";
+import { initializeServices } from "./utils/initialize-services";
+import { initializeSocket } from "./utils/initialize-socket";
 
 const app = express();
 
 const server = http.createServer(app);
 
-initializeSocket(server);
+if (env.NODE_ENV !== "test") {
+  initializeSocket(server);
+}
 
 app.services = initializeServices(prisma);
 
 const isSentryActive = !!env.SENTRY_DSN;
 
-if (isSentryActive) {
+if (isSentryActive && env.NODE_ENV !== "test") {
   Sentry.init({
     dsn: env.SENTRY_DSN,
     tracesSampleRate: 1.0,
@@ -44,7 +46,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(middleware.handle(i18next));
 
 if (env.NODE_ENV === "development") {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  const spec = generateOpenApiDocument();
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec));
 
   app.get("/", async (req: Request, res: Response, _next: NextFunction) => {
     const users = await req.app.services.userService.getUserByLogin("login1");

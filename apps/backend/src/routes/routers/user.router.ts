@@ -1,19 +1,14 @@
-import { Router } from "express";
 import { UserControllers } from "@/controllers";
-import { validate } from "@/middlewares/validate";
-import { SearchUserQuery } from "@/validators/users/users.validators";
+import { buildProtectedRoute, buildRouter } from "@/utils/build-router";
+import { API_CONTRACT } from "@packages/api-contract";
 
 /**
  * User Routes Router.
  *
  * This router handles user-related operations, including searching for users.
  */
-const userRouter = Router();
+const routes = [
+  buildProtectedRoute(API_CONTRACT.SEARCH_USER, UserControllers.searchUser),
+];
 
-userRouter.get(
-  "/search",
-  validate({ query: SearchUserQuery }),
-  UserControllers.searchUser
-);
-
-export default userRouter;
+export default buildRouter(routes);

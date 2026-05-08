@@ -1,14 +1,24 @@
-import { StatusCodes } from "http-status-codes";
 import { FriendshipControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/user-with-credentials";
 import {
   mockFriendshipService,
   mockRequest,
   mockResponse,
 } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockFriendship } from "./setup";
 
+const respond = vi.fn();
+vi.mock("@/utils/validated-responder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
+
 describe("deleteFriendship", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("deletes friendship successfully", async () => {
     mockFriendshipService.deleteFriendship.mockResolvedValue(true);
 
@@ -23,9 +33,9 @@ describe("deleteFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.deleteFriendship(req, res, jest.fn());
+    await FriendshipControllers.deleteFriendship(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
   });
 
   it("fails for non-participant user", async () => {
@@ -42,9 +52,12 @@ describe("deleteFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.deleteFriendship(req, res, jest.fn());
+    await FriendshipControllers.deleteFriendship(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
   });
 
   it("fails for non-existent friendship", async () => {
@@ -61,8 +74,11 @@ describe("deleteFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.deleteFriendship(req, res, jest.fn());
+    await FriendshipControllers.deleteFriendship(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.NOT_FOUND,
+      expect.anything(),
+    );
   });
 });

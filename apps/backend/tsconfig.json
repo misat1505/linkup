@@ -1,12 +1,15 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "types": ["jest", "./src/types/express.d.ts"],
+    "target": "esnext",
+    "module": "node16",
+    "moduleResolution": "node16",
+    "types": ["./src/types/express.d.ts"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
+    "isolatedModules": true,
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
@@ -14,5 +17,6 @@
     },
     "outDir": "build",
     "rootDir": "."
-  }
+  },
+  "include": ["src", "tests"]
 }

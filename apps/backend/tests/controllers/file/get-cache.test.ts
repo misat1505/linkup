@@ -1,12 +1,18 @@
-import { StatusCodes } from "http-status-codes";
 import { FileControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/user-with-credentials";
 import {
   mockFileService,
   mockFileStorage,
   mockRequest,
   mockResponse,
 } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validated-responder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("getCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
@@ -14,10 +20,10 @@ describe("getCache", () => {
   mockFileService.isChatPhoto.mockResolvedValue(true);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  it("retrieves user’s cache files", async () => {
+  it("retrieves user's cache files", async () => {
     mockFileStorage.listFiles.mockResolvedValue(["url", "url2"]);
 
     const req = mockRequest({
@@ -29,9 +35,9 @@ describe("getCache", () => {
     });
     const res = mockResponse();
 
-    await FileControllers.getCache(req, res, jest.fn());
+    await FileControllers.getCache(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
 
     expect(mockFileStorage.listFiles).toHaveBeenCalledTimes(1);
     expect(mockFileStorage.listFiles).toHaveBeenCalledWith(`cache/${"userId"}`);

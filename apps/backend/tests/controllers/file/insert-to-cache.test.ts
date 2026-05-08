@@ -1,13 +1,19 @@
-import { StatusCodes } from "http-status-codes";
 import { FileControllers } from "@/controllers";
-import { CACHE_CAPACITY } from "@/controllers/file/insertToCache.controller";
-import { UserWithCredentials } from "@/types/User";
+import { CACHE_CAPACITY } from "@/controllers/file/insert-to-cache.controller";
+import { UserWithCredentials } from "@/types/user-with-credentials";
 import {
   mockFileService,
   mockFileStorage,
   mockRequest,
   mockResponse,
 } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validated-responder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("insertToCache", () => {
   mockFileService.isUserAvatar.mockResolvedValue(true);
@@ -15,7 +21,7 @@ describe("insertToCache", () => {
   mockFileService.isChatPhoto.mockResolvedValue(true);
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("inserts file to cache with new filename", async () => {
@@ -31,18 +37,18 @@ describe("insertToCache", () => {
     });
     const res = mockResponse();
 
-    await FileControllers.insertToCache(req, res, jest.fn());
+    await FileControllers.insertToCache(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
-    expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({ file: expect.any(String) })
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
     );
     expect(mockFileStorage.uploadFile).toHaveBeenCalledTimes(1);
   });
 
   it(`blocks cache insertion at ${CACHE_CAPACITY}-file limit`, async () => {
     mockFileStorage.listFiles.mockResolvedValue(
-      new Array(CACHE_CAPACITY).fill("existing-file.jpg")
+      new Array(CACHE_CAPACITY).fill("existing-file.jpg"),
     );
 
     const req = mockRequest({
@@ -51,9 +57,12 @@ describe("insertToCache", () => {
     });
     const res = mockResponse();
 
-    await FileControllers.insertToCache(req, res, jest.fn());
+    await FileControllers.insertToCache(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
   });
 
   it("returns 400 for missing file upload", async () => {
@@ -62,16 +71,19 @@ describe("insertToCache", () => {
     });
     const res = mockResponse();
 
-    await FileControllers.insertToCache(req, res, jest.fn());
+    await FileControllers.insertToCache(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
   });
 
   it("returns 500 for failed cache insertion", async () => {
     mockFileStorage.listFiles.mockResolvedValue([]);
     mockFileStorage.uploadFile.mockRejectedValue(new Error("upload failed"));
 
-    const mockNextFunction = jest.fn();
+    const mockNextFunction = vi.fn();
 
     const req = mockRequest({
       file: { buffer: Buffer.from("fake-image-data") } as Express.Multer.File,

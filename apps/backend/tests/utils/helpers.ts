@@ -1,6 +1,6 @@
 import { env } from "@/config/env";
-import { TokenProcessor } from "@/lib/TokenProcessor";
-import { User } from "@/types/User";
+import { TokenProcessor } from "@/lib/token-processor";
+import { User } from "@packages/schemas";
 
 export const TestHelpers = {
   createToken: (id: User["id"], secret = env.ACCESS_TOKEN_SECRET) =>

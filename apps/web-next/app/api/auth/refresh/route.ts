@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { refreshToken } from "@/features/auth/utils/refreshToken";
+import { refreshToken } from "@/features/auth/utils/refresh-token";
 
 export async function POST() {
   try {

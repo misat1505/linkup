@@ -1,14 +1,24 @@
-import { StatusCodes } from "http-status-codes";
 import { FriendshipControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
+import { UserWithCredentials } from "@/types/user-with-credentials";
 import {
   mockFriendshipService,
   mockRequest,
   mockResponse,
 } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockFriendship } from "./setup";
 
+const respond = vi.fn();
+vi.mock("@/utils/validated-responder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
+
 describe("createFriendship", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("creates friendship successfully", async () => {
     mockFriendshipService.createFriendship.mockResolvedValue(mockFriendship);
 
@@ -23,9 +33,12 @@ describe("createFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.createFriendship(req, res, jest.fn());
+    await FriendshipControllers.createFriendship(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CREATED,
+      expect.anything(),
+    );
   });
 
   it("fails for mismatched requesterId", async () => {
@@ -42,9 +55,12 @@ describe("createFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.createFriendship(req, res, jest.fn());
+    await FriendshipControllers.createFriendship(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
   });
 
   it("fails for existing friendship", async () => {
@@ -61,8 +77,11 @@ describe("createFriendship", () => {
     });
     const res = mockResponse();
 
-    await FriendshipControllers.createFriendship(req, res, jest.fn());
+    await FriendshipControllers.createFriendship(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CONFLICT,
+      expect.anything(),
+    );
   });
 });

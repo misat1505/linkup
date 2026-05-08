@@ -1,10 +1,20 @@
-import { Prisma } from "@prisma/client";
 import { PostControllers } from "@/controllers";
+import { UserWithCredentials } from "@/types/user-with-credentials";
+import { Prisma } from "@prisma/client";
 import { mockPostService, mockRequest, mockResponse } from "@tests/utils/mocks";
-import { UserWithCredentials } from "@/types/User";
 import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const respond = vi.fn();
+vi.mock("@/utils/validated-responder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("reportPost", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   const postId = "123";
   const userId = "user-id";
 
@@ -17,9 +27,9 @@ describe("reportPost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.reportPost(req, res, jest.fn());
+    await PostControllers.reportPost(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockPostService.reportPost).toHaveBeenCalledWith(userId, postId);
   });
 
@@ -37,14 +47,17 @@ describe("reportPost", () => {
     });
     const res = mockResponse();
 
-    await PostControllers.reportPost(req, res, jest.fn());
+    await PostControllers.reportPost(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.CONFLICT);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.CONFLICT,
+      expect.anything(),
+    );
   });
 
   it("passes errors to error middleware", async () => {
     mockPostService.reportPost.mockRejectedValue(new Error("Unexpected error"));
-    const mockNextFunction = jest.fn();
+    const mockNextFunction = vi.fn();
 
     const req = mockRequest({
       user: { id: userId } as UserWithCredentials,

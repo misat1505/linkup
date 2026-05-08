@@ -1,7 +1,7 @@
-import { acceptFriendship as acceptFriendshipController } from "./acceptFriendship.controller";
-import { createFriendship as createFriendshipController } from "./createFriendship.controller";
-import { deleteFriendship as deleteFriendshipController } from "./deleteFriendship.controller";
-import { getUserFriendships as getUserFriendshipsController } from "./getUserFriendships.controller";
+import { acceptFriendship as acceptFriendshipController } from "./accept-friendship.controller";
+import { createFriendship as createFriendshipController } from "./create-friendship.controller";
+import { deleteFriendship as deleteFriendshipController } from "./delete-friendship.controller";
+import { getUserFriendships as getUserFriendshipsController } from "./get-user-friendships.controller";
 
 export const FriendshipControllers = {
   acceptFriendship: acceptFriendshipController,

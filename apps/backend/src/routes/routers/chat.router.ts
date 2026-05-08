@@ -1,20 +1,7 @@
-import { Router } from "express";
-import { validate } from "@/middlewares/validate";
-import { upload } from "@/middlewares/multer";
 import { ChatControllers } from "@/controllers";
-import {
-  ChatId,
-  CreateMessageDTO,
-  CreateReactionDTO,
-  GetMessagesQuery,
-} from "@/validators/chats/messages.validators";
-import { UserId } from "@/validators/shared.validators";
-import {
-  CreateGroupChatDTO,
-  CreatePrivateChatDTO,
-  UpdateAliasDTO,
-  UpdateGroupChatDTO,
-} from "@/validators/chats/chats.validatotors";
+import { upload } from "@/middlewares/multer";
+import { buildProtectedRoute, buildRouter } from "@/utils/build-router";
+import { API_CONTRACT } from "@packages/api-contract";
 
 /**
  * Chat Routes Router.
@@ -23,65 +10,50 @@ import {
  * sending messages, adding reactions, updating user aliases, and managing group chat users.
  * All routes are protected and require authorization, with file uploads supported for certain endpoints.
  */
-const chatRouter = Router();
+const routes = [
+  buildProtectedRoute(
+    API_CONTRACT.CREATE_PRIVATE_CHAT,
+    ChatControllers.createPrivateChat,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.CREATE_GROUP_CHAT,
+    ChatControllers.createGroupChat,
+    { extraMiddlewares: [upload.single("file")] },
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.GET_SELF_CHATS,
+    ChatControllers.getSelfChats,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.CREATE_MESSAGE,
+    ChatControllers.createMessage,
+    { extraMiddlewares: [upload.array("files")] },
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.GET_CHAT_MESSAGES,
+    ChatControllers.getChatMessages,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.CREATE_REACTION,
+    ChatControllers.createReaction,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.UDPATE_USER_ALIAS,
+    ChatControllers.updateAlias,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.ADD_USER_TO_GROUP_CHAT,
+    ChatControllers.addUserToGroupChat,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.DELETE_SELF_FROM_GROUP_CHAT,
+    ChatControllers.deleteSelfFromGroupChat,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.UPDATE_GROUP_CHAT,
+    ChatControllers.updateGroupChat,
+    { extraMiddlewares: [upload.single("file")] },
+  ),
+];
 
-chatRouter.post(
-  "/private",
-  validate({ body: CreatePrivateChatDTO }),
-  ChatControllers.createPrivateChat
-);
-
-chatRouter.post(
-  "/group",
-  upload.single("file"),
-  validate({ body: CreateGroupChatDTO }),
-  ChatControllers.createGroupChat
-);
-
-chatRouter.get("/", ChatControllers.getSelfChats);
-
-chatRouter.post(
-  "/:chatId/messages",
-  upload.array("files"),
-  validate({ body: CreateMessageDTO, params: ChatId }),
-  ChatControllers.createMessage
-);
-
-chatRouter.get(
-  "/:chatId/messages",
-  validate({ params: ChatId, query: GetMessagesQuery }),
-  ChatControllers.getChatMessages
-);
-
-chatRouter.post(
-  "/:chatId/reactions",
-  validate({ body: CreateReactionDTO, params: ChatId }),
-  ChatControllers.createReaction
-);
-
-chatRouter.put(
-  "/:chatId/users/:userId/alias",
-  validate({ body: UpdateAliasDTO, params: ChatId.merge(UserId) }),
-  ChatControllers.updateAlias
-);
-
-chatRouter.post(
-  "/:chatId/users",
-  validate({ body: UserId, params: ChatId }),
-  ChatControllers.addUserToGroupChat
-);
-
-chatRouter.delete(
-  "/:chatId/users",
-  validate({ params: ChatId }),
-  ChatControllers.deleteSelfFromGroupChat
-);
-
-chatRouter.put(
-  "/:chatId",
-  upload.single("file"),
-  validate({ body: UpdateGroupChatDTO, params: ChatId }),
-  ChatControllers.updateGroupChat
-);
-
-export default chatRouter;
+export default buildRouter(routes);

@@ -1,0 +1,517 @@
+{
+  "mode": "react",
+  "paths": [
+    "/",
+    "/chats/6360af6a-6c04-4339-aafc-819261079290"
+  ],
+  "iterations": 5,
+  "generatedAt": "2026-05-05T17:37:00.936Z",
+  "totalDurationMs": 7068772,
+  "description": "combinedMean is the arithmetic mean of per-path means for each metric",
+  "profiles": [
+    {
+      "profileId": "desktop-unthrottled",
+      "label": "Desktop - Unthrottled",
+      "durationMs": 220197,
+      "stats": {
+        "largest-contentful-paint": {
+          "mean": 1291.44,
+          "stddev": 343.88,
+          "min": 816.56,
+          "max": 1740.5,
+          "display": "🟢 1.29 s  ±344 ms  [817 ms - 1.74 s]"
+        },
+        "first-contentful-paint": {
+          "mean": 430.97,
+          "stddev": 62.29,
+          "min": 333.46,
+          "max": 524.32,
+          "display": "🟢 431 ms  ±62 ms  [333 ms - 524 ms]"
+        },
+        "speed-index": {
+          "mean": 765.8,
+          "stddev": 127.65,
+          "min": 551,
+          "max": 956,
+          "display": "🟢 766 ms  ±128 ms  [551 ms - 956 ms]"
+        },
+        "total-blocking-time": {
+          "mean": 532.51,
+          "stddev": 430.36,
+          "min": 63.18,
+          "max": 1041.34,
+          "display": "🟡 533 ms  ±430 ms  [63 ms - 1.04 s]"
+        },
+        "max-potential-fid": {
+          "mean": 290.2,
+          "stddev": 185.11,
+          "min": 79.73,
+          "max": 542.06,
+          "display": "🟡 290 ms  ±185 ms  [80 ms - 542 ms]"
+        },
+        "cumulative-layout-shift": {
+          "mean": 0.06,
+          "stddev": 0.06,
+          "min": 0,
+          "max": 0.12,
+          "display": "🟡 0 ms  ±0 ms  [0 ms - 0 ms]"
+        },
+        "interactive": {
+          "mean": 1439.6,
+          "stddev": 271.71,
+          "min": 1064.45,
+          "max": 1815.1,
+          "display": "🟢 1.44 s  ±272 ms  [1.06 s - 1.82 s]"
+        },
+        "server-response-time": {
+          "mean": 1.93,
+          "stddev": 0.66,
+          "min": 1.43,
+          "max": 3.24,
+          "display": "🟢 2 ms  ±1 ms  [1 ms - 3 ms]"
+        }
+      }
+    },
+    {
+      "profileId": "desktop-fiber",
+      "label": "Desktop - Fiber",
+      "durationMs": 246727,
+      "stats": {
+        "largest-contentful-paint": {
+          "mean": 1448.99,
+          "stddev": 421.69,
+          "min": 1003.77,
+          "max": 2268.55,
+          "display": "🟢 1.45 s  ±422 ms  [1.00 s - 2.27 s]"
+        },
+        "first-contentful-paint": {
+          "mean": 496.81,
+          "stddev": 65.92,
+          "min": 406.35,
+          "max": 585.15,
+          "display": "🟢 497 ms  ±66 ms  [406 ms - 585 ms]"
+        },
+        "speed-index": {
+          "mean": 878.6,
+          "stddev": 153.77,
+          "min": 719,
+          "max": 1214,
+          "display": "🟢 879 ms  ±154 ms  [719 ms - 1.21 s]"
+        },
+        "total-blocking-time": {
+          "mean": 619.47,
+          "stddev": 511.7,
+          "min": 79.89,
+          "max": 1478.68,
+          "display": "🟢 619 ms  ±512 ms  [80 ms - 1.48 s]"
+        },
+        "max-potential-fid": {
+          "mean": 314.86,
+          "stddev": 208.84,
+          "min": 104.05,
+          "max": 667.6,
+          "display": "🟢 315 ms  ±209 ms  [104 ms - 668 ms]"
+        },
+        "cumulative-layout-shift": {
+          "mean": 0.06,
+          "stddev": 0.06,
+          "min": 0,
+          "max": 0.12,
+          "display": "🟡 0 ms  ±0 ms  [0 ms - 0 ms]"
+        },
+        "interactive": {
+          "mean": 1614.36,
+          "stddev": 381.19,
+          "min": 1155.41,
+          "max": 2403.96,
+          "display": "🟢 1.61 s  ±381 ms  [1.16 s - 2.40 s]"
+        },
+        "server-response-time": {
+          "mean": 2.43,
+          "stddev": 1.41,
+          "min": 1.24,
+          "max": 5.72,
+          "display": "🟢 2 ms  ±1 ms  [1 ms - 6 ms]"
+        }
+      }
+    },
+    {
+      "profileId": "laptop-cable",
+      "label": "Laptop - Cable",
+      "durationMs": 273221,
+      "stats": {
+        "largest-contentful-paint": {
+          "mean": 3544.43,
+          "stddev": 980.29,
+          "min": 2374.86,
+          "max": 4723.35,
+          "display": "🟡 3.54 s  ±980 ms  [2.37 s - 4.72 s]"
+        },
+        "first-contentful-paint": {
+          "mean": 1146.41,
+          "stddev": 97.97,
+          "min": 1000.93,
+          "max": 1277.19,
+          "display": "🟡 1.15 s  ±98 ms  [1.00 s - 1.28 s]"
+        },
+        "speed-index": {
+          "mean": 1878.1,
+          "stddev": 540.34,
+          "min": 1226,
+          "max": 2514,
+          "display": "🟢 1.88 s  ±540 ms  [1.23 s - 2.51 s]"
+        },
+        "total-blocking-time": {
+          "mean": 1840.66,
+          "stddev": 1424.8,
+          "min": 343.14,
+          "max": 3538.75,
+          "display": "🔴 1.84 s  ±1.42 s  [343 ms - 3.54 s]"
+        },
+        "max-potential-fid": {
+          "mean": 881.42,
+          "stddev": 589.54,
+          "min": 253.72,
+          "max": 1647.91,
+          "display": "🔴 881 ms  ±590 ms  [254 ms - 1.65 s]"
+        },
+        "cumulative-layout-shift": {
+          "mean": 0,
+          "stddev": 0,
+          "min": 0,
+          "max": 0,
+          "display": "🟢 0 ms  ±0 ms  [0 ms - 0 ms]"
+        },
+        "interactive": {
+          "mean": 3500.2,
+          "stddev": 1334.74,
+          "min": 1928.24,
+          "max": 5047.02,
+          "display": "🟢 3.50 s  ±1.33 s  [1.93 s - 5.05 s]"
+        },
+        "server-response-time": {
+          "mean": 1.67,
+          "stddev": 0.44,
+          "min": 1.17,
+          "max": 2.68,
+          "display": "🟢 2 ms  ±0 ms  [1 ms - 3 ms]"
+        }
+      }
+    },
+    {
+      "profileId": "tablet-LTE",
+      "label": "Tablet - LTE",
+      "durationMs": 297177,
+      "stats": {
+        "largest-contentful-paint": {
+          "mean": 5156.27,
+          "stddev": 735.91,
+          "min": 4243.11,
+          "max": 6389.63,
+          "display": "🔴 5.16 s  ±736 ms  [4.24 s - 6.39 s]"
+        },
+        "first-contentful-paint": {
+          "mean": 1728.32,
+          "stddev": 338.19,
+          "min": 1301.08,
+          "max": 2224.06,
+          "display": "🟡 1.73 s  ±338 ms  [1.30 s - 2.22 s]"
+        },
+        "speed-index": {
+          "mean": 3250.6,
+          "stddev": 1025.79,
+          "min": 2085,
+          "max": 4651,
+          "display": "🟢 3.25 s  ±1.03 s  [2.08 s - 4.65 s]"
+        },
+        "total-blocking-time": {
+          "mean": 2606.63,
+          "stddev": 1620.11,
+          "min": 888.56,
+          "max": 4677.97,
+          "display": "🔴 2.61 s  ±1.62 s  [889 ms - 4.68 s]"
+        },
+        "max-potential-fid": {
+          "mean": 1170.36,
+          "stddev": 646.34,
+          "min": 459.09,
+          "max": 2003.97,
+          "display": "🔴 1.17 s  ±646 ms  [459 ms - 2.00 s]"
+        },
+        "cumulative-layout-shift": {
+          "mean": 0,
+          "stddev": 0,
+          "min": 0,
+          "max": 0,
+          "display": "🟢 0 ms  ±0 ms  [0 ms - 0 ms]"
+        },
+        "interactive": {
+          "mean": 5110.35,
+          "stddev": 1197.11,
+          "min": 3669.06,
+          "max": 6867.38,
+          "display": "🟡 5.11 s  ±1.20 s  [3.67 s - 6.87 s]"
+        },
+        "server-response-time": {
+          "mean": 1.4,
+          "stddev": 0.32,
+          "min": 1,
+          "max": 2.19,
+          "display": "🟢 1 ms  ±0 ms  [1 ms - 2 ms]"
+        }
+      }
+    },
+    {
+      "profileId": "mid-range phone-LTE",
+      "label": "Mid-range Phone - LTE",
+      "durationMs": 392609,
+      "stats": {
+        "largest-contentful-paint": {
+          "mean": 12648.33,
+          "stddev": 13604.03,
+          "min": 6077.98,
+          "max": 53295.95,
+          "display": "🔴 12.65 s  ±13.60 s  [6.08 s - 53.30 s]"
+        },
+        "first-contentful-paint": {
+          "mean": 2471.94,
+          "stddev": 587.66,
+          "min": 1761.64,
+          "max": 3440.2,
+          "display": "🔴 2.47 s  ±588 ms  [1.76 s - 3.44 s]"
+        },
+        "speed-index": {
+          "mean": 8259.9,
+          "stddev": 8785.5,
+          "min": 3768,
+          "max": 34472,
+          "display": "🔴 8.26 s  ±8.79 s  [3.77 s - 34.47 s]"
+        },
+        "total-blocking-time": {
+          "mean": 9280.14,
+          "stddev": 13090.31,
+          "min": 1561.82,
+          "max": 47956.46,
+          "display": "🔴 9.28 s  ±13.09 s  [1.56 s - 47.96 s]"
+        },
+        "max-potential-fid": {
+          "mean": 6755.71,
+          "stddev": 13130.39,
+          "min": 772.57,
+          "max": 46009.41,
+          "display": "🔴 6.76 s  ±13.13 s  [773 ms - 46.01 s]"
+        },
+        "cumulative-layout-shift": {
+          "mean": 0,
+          "stddev": 0,
+          "min": 0,
+          "max": 0,
+          "display": "🟢 0 ms  ±0 ms  [0 ms - 0 ms]"
+        },
+        "interactive": {
+          "mean": 12697.14,
+          "stddev": 13445.96,
+          "min": 5499.23,
+          "max": 52728.2,
+          "display": "🔴 12.70 s  ±13.45 s  [5.50 s - 52.73 s]"
+        },
+        "server-response-time": {
+          "mean": 1.48,
+          "stddev": 0.21,
+          "min": 1.17,
+          "max": 1.82,
+          "display": "🟢 1 ms  ±0 ms  [1 ms - 2 ms]"
+        }
+      }
+    },
+    {
+      "profileId": "mid-range phone-slow 3G",
+      "label": "Mid-range Phone - Slow 3G",
+      "durationMs": 1027096,
+      "stats": {
+        "largest-contentful-paint": {
+          "mean": 25681.17,
+          "stddev": 466.11,
+          "min": 25129.3,
+          "max": 26796.44,
+          "display": "🔴 25.68 s  ±466 ms  [25.13 s - 26.80 s]"
+        },
+        "first-contentful-paint": {
+          "mean": 8598.39,
+          "stddev": 465.35,
+          "min": 8049.85,
+          "max": 9406.91,
+          "display": "🔴 8.60 s  ±465 ms  [8.05 s - 9.41 s]"
+        },
+        "speed-index": {
+          "mean": 10564.3,
+          "stddev": 3736.76,
+          "min": 6745,
+          "max": 14727,
+          "display": "🔴 10.56 s  ±3.74 s  [6.75 s - 14.73 s]"
+        },
+        "total-blocking-time": {
+          "mean": 866.74,
+          "stddev": 781.84,
+          "min": 83.54,
+          "max": 1879.24,
+          "display": "🔴 867 ms  ±782 ms  [84 ms - 1.88 s]"
+        },
+        "max-potential-fid": {
+          "mean": 1796.5,
+          "stddev": 1048.04,
+          "min": 671.15,
+          "max": 3488.28,
+          "display": "🔴 1.80 s  ±1.05 s  [671 ms - 3.49 s]"
+        },
+        "cumulative-layout-shift": {
+          "mean": 0,
+          "stddev": 0,
+          "min": 0,
+          "max": 0,
+          "display": "🟢 0 ms  ±0 ms  [0 ms - 0 ms]"
+        },
+        "interactive": {
+          "mean": 11305.14,
+          "stddev": 2620.28,
+          "min": 8423.74,
+          "max": 14408.63,
+          "display": "🔴 11.31 s  ±2.62 s  [8.42 s - 14.41 s]"
+        },
+        "server-response-time": {
+          "mean": 1.57,
+          "stddev": 0.3,
+          "min": 1.17,
+          "max": 2.21,
+          "display": "🟢 2 ms  ±0 ms  [1 ms - 2 ms]"
+        }
+      }
+    },
+    {
+      "profileId": "budget phone-slow 3G",
+      "label": "Budget Phone - Slow 3G",
+      "durationMs": 1078289,
+      "stats": {
+        "largest-contentful-paint": {
+          "mean": 31217.56,
+          "stddev": 1521.08,
+          "min": 28629.03,
+          "max": 33287.53,
+          "display": "🔴 31.22 s  ±1.52 s  [28.63 s - 33.29 s]"
+        },
+        "first-contentful-paint": {
+          "mean": 10261.67,
+          "stddev": 1004.89,
+          "min": 9002.4,
+          "max": 11908.82,
+          "display": "🔴 10.26 s  ±1.00 s  [9.00 s - 11.91 s]"
+        },
+        "speed-index": {
+          "mean": 10960.1,
+          "stddev": 3381.95,
+          "min": 7387,
+          "max": 15492,
+          "display": "🔴 10.96 s  ±3.38 s  [7.39 s - 15.49 s]"
+        },
+        "total-blocking-time": {
+          "mean": 2429.83,
+          "stddev": 2354.83,
+          "min": 157.49,
+          "max": 5900.41,
+          "display": "🔴 2.43 s  ±2.35 s  [157 ms - 5.90 s]"
+        },
+        "max-potential-fid": {
+          "mean": 3367.71,
+          "stddev": 1822.69,
+          "min": 1143.78,
+          "max": 5996.09,
+          "display": "🔴 3.37 s  ±1.82 s  [1.14 s - 6.00 s]"
+        },
+        "cumulative-layout-shift": {
+          "mean": 0,
+          "stddev": 0,
+          "min": 0,
+          "max": 0,
+          "display": "🟢 0 ms  ±0 ms  [0 ms - 0 ms]"
+        },
+        "interactive": {
+          "mean": 14162.54,
+          "stddev": 4670.54,
+          "min": 9238.3,
+          "max": 20613.1,
+          "display": "🔴 14.16 s  ±4.67 s  [9.24 s - 20.61 s]"
+        },
+        "server-response-time": {
+          "mean": 1.71,
+          "stddev": 0.59,
+          "min": 1.2,
+          "max": 3.15,
+          "display": "🟢 2 ms  ±1 ms  [1 ms - 3 ms]"
+        }
+      }
+    },
+    {
+      "profileId": "budget phone-edge 2G",
+      "label": "Budget Phone - Edge 2G",
+      "durationMs": 1537441,
+      "stats": {
+        "largest-contentful-paint": {
+          "mean": 33464.42,
+          "stddev": 11580.9,
+          "min": 21074.71,
+          "max": 46279.52,
+          "display": "🔴 33.46 s  ±11.58 s  [21.07 s - 46.28 s]"
+        },
+        "first-contentful-paint": {
+          "mean": 14526.55,
+          "stddev": 292.07,
+          "min": 14128.57,
+          "max": 15030.15,
+          "display": "🔴 14.53 s  ±292 ms  [14.13 s - 15.03 s]"
+        },
+        "speed-index": {
+          "mean": 14776.5,
+          "stddev": 2778.09,
+          "min": 11764,
+          "max": 17968,
+          "display": "🔴 14.78 s  ±2.78 s  [11.76 s - 17.97 s]"
+        },
+        "total-blocking-time": {
+          "mean": 1100.64,
+          "stddev": 910.8,
+          "min": 167.83,
+          "max": 2632.94,
+          "display": "🔴 1.10 s  ±911 ms  [168 ms - 2.63 s]"
+        },
+        "max-potential-fid": {
+          "mean": 2966.11,
+          "stddev": 2015.89,
+          "min": 699.36,
+          "max": 5350.62,
+          "display": "🔴 2.97 s  ±2.02 s  [699 ms - 5.35 s]"
+        },
+        "cumulative-layout-shift": {
+          "mean": 0,
+          "stddev": 0,
+          "min": 0,
+          "max": 0,
+          "display": "🟢 0 ms  ±0 ms  [0 ms - 0 ms]"
+        },
+        "interactive": {
+          "mean": 19856,
+          "stddev": 5206.65,
+          "min": 14926.06,
+          "max": 28540.2,
+          "display": "🔴 19.86 s  ±5.21 s  [14.93 s - 28.54 s]"
+        },
+        "server-response-time": {
+          "mean": 1.43,
+          "stddev": 0.25,
+          "min": 1.14,
+          "max": 1.86,
+          "display": "🟢 1 ms  ±0 ms  [1 ms - 2 ms]"
+        }
+      }
+    }
+  ]
+}

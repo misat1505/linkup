@@ -1,10 +1,11 @@
+import { User } from "@packages/schemas";
 import { z } from "zod";
 
 export const chatFormSchema = z
   .object({
     content: z.string(),
     files: z.array(z.instanceof(File)).optional(),
-    responseId: z.string().nullable().optional()
+    responseId: z.string().nullable().optional(),
   })
   .refine(
     (data) => {
@@ -14,24 +15,20 @@ export const chatFormSchema = z
     },
     {
       message: "You must provide some text or upload at least one file.",
-      path: ["content"]
-    }
+      path: ["content"],
+    },
   );
 
 export type ChatFormType = z.infer<typeof chatFormSchema>;
 
-const userSchema = z.object({
-  id: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  photoURL: z.string().nullable(),
-  lastActive: z.date()
+const userSchema = User.omit({ lastActive: true }).extend({
+  lastActive: z.date(),
 });
 
 export const newGroupChatFormSchema = z.object({
   name: z.string().optional(),
   file: z.optional(z.instanceof(FileList)),
-  users: z.array(userSchema)
+  users: z.array(userSchema),
 });
 
 export type NewGroupChatFormType = z.infer<typeof newGroupChatFormSchema>;

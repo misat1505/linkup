@@ -1,11 +1,14 @@
+import { BgGradient } from "@packages/ui/components/misc/bg-gradient";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ThemeProvider } from "./contexts/ThemeProvider.tsx";
-import BgGradient from "./components/common/BgGradient.tsx";
-import LanguageProvider from "./contexts/LanguageProvider.tsx";
+import { BrowserRouter as Router } from "react-router-dom";
+import App from "./app.tsx";
+import UiPackageWrapper from "./components/common/ui-package-wrapper.tsx";
+import AppProvider from "./contexts/app-provider.tsx";
+import LanguageProvider from "./contexts/language-provider.tsx";
+import { ThemeProvider } from "./contexts/theme-provider.tsx";
+import "./index.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,10 +26,16 @@ createRoot(document.getElementById("root")!).render(
         <BgGradient />
         <LanguageProvider>
           <div className="relative z-10">
-            <App />
+            <Router>
+              <AppProvider>
+                <UiPackageWrapper>
+                  <App />
+                </UiPackageWrapper>
+              </AppProvider>
+            </Router>
           </div>
         </LanguageProvider>
       </ThemeProvider>
     </QueryClientProvider>
-  </StrictMode>
+  </StrictMode>,
 );

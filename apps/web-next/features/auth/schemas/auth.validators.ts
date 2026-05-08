@@ -1,4 +1,10 @@
-import { useLanguageContext } from "@/providers/LanguageProvider";
+import { useLanguageContext } from "@/providers/language-provider";
+import {
+  LOGIN_VALIDATION,
+  LoginDTO,
+  SIGNUP_VALIDATION,
+  SignupDTO,
+} from "@packages/schemas";
 import { z } from "zod";
 
 export const useLoginFormSchema = () => {
@@ -7,13 +13,14 @@ export const useLoginFormSchema = () => {
   return z.object({
     login: z
       .string()
-      .min(5, t("login.form.errors.login.min"))
-      .max(50, t("login.form.errors.login.max")),
+      .min(LOGIN_VALIDATION.login.min, t("login.form.errors.login.min"))
+      .max(LOGIN_VALIDATION.login.max, t("login.form.errors.login.max")),
     password: z.string().min(5, t("login.form.errors.password.min")),
   });
 };
 
-export type LoginFormType = z.infer<ReturnType<typeof useLoginFormSchema>>;
+// CICD build requires not to infer types from ReturnType
+export type LoginFormType = LoginDTO;
 
 export const useSignupFormSchema = () => {
   const { t } = useLanguageContext();
@@ -22,18 +29,40 @@ export const useSignupFormSchema = () => {
     .object({
       firstName: z
         .string()
-        .min(1, t("signup.form.errors.firstname.min"))
-        .max(50, t("signup.form.errors.firstname.max")),
+        .min(
+          SIGNUP_VALIDATION.firstName.min,
+          t("signup.form.errors.firstname.min"),
+        )
+        .max(
+          SIGNUP_VALIDATION.firstName.max,
+          t("signup.form.errors.firstname.max"),
+        ),
       lastName: z
         .string()
-        .min(1, t("signup.form.errors.lastname.min"))
-        .max(50, t("signup.form.errors.lastname.max")),
+        .min(
+          SIGNUP_VALIDATION.lastName.min,
+          t("signup.form.errors.lastname.min"),
+        )
+        .max(
+          SIGNUP_VALIDATION.lastName.max,
+          t("signup.form.errors.lastname.max"),
+        ),
       login: z
         .string()
-        .min(5, t("signup.form.errors.login.min"))
-        .max(50, t("signup.form.errors.login.max")),
-      password: z.string().min(5, t("signup.form.errors.password.min")),
-      confirmPassword: z.string().min(5, t("signup.form.errors.password.min")),
+        .min(SIGNUP_VALIDATION.login.min, t("signup.form.errors.login.min"))
+        .max(SIGNUP_VALIDATION.login.max, t("signup.form.errors.login.max")),
+      password: z
+        .string()
+        .min(
+          SIGNUP_VALIDATION.password.min,
+          t("signup.form.errors.password.min"),
+        ),
+      confirmPassword: z
+        .string()
+        .min(
+          SIGNUP_VALIDATION.password.min,
+          t("signup.form.errors.password.min"),
+        ),
       file: z.instanceof(File).nullable(),
     })
     .refine((ctx) => ctx.password === ctx.confirmPassword, {
@@ -42,4 +71,8 @@ export const useSignupFormSchema = () => {
     });
 };
 
-export type SignupFormType = z.infer<ReturnType<typeof useSignupFormSchema>>;
+// CICD build requires not to infer types from ReturnType
+export type SignupFormType = Omit<SignupDTO, "file"> & {
+  confirmPassword: string;
+  file: File | null;
+};

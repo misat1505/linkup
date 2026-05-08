@@ -1,14 +1,20 @@
-import { StatusCodes } from "http-status-codes";
 import { ChatControllers } from "@/controllers";
-import { UserWithCredentials } from "@/types/User";
-import { processAvatar } from "@/utils/processAvatar";
+import { UserWithCredentials } from "@/types/user-with-credentials";
+import { processAvatar } from "@/utils/process-avatar";
 import { mockChatService, mockRequest, mockResponse } from "@tests/utils/mocks";
+import { StatusCodes } from "http-status-codes";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-jest.mock("@/utils/processAvatar");
+vi.mock("@/utils/process-avatar");
+
+const respond = vi.fn();
+vi.mock("@/utils/validated-responder", () => ({
+  buildValidatedResponder: vi.fn(() => respond),
+}));
 
 describe("updateGroupChat", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("updates group chat successfully", async () => {
@@ -16,7 +22,7 @@ describe("updateGroupChat", () => {
     mockChatService.getChatById.mockResolvedValue({
       type: "GROUP",
     });
-    (processAvatar as jest.Mock).mockResolvedValue("processedAvatarPath");
+    (processAvatar as Mock).mockResolvedValue("processedAvatarPath");
     mockChatService.updateGroupChat.mockResolvedValue({
       id: "123",
       name: "New Chat Name",
@@ -29,9 +35,9 @@ describe("updateGroupChat", () => {
     });
     const res = mockResponse();
 
-    await ChatControllers.updateGroupChat(req, res, jest.fn());
+    await ChatControllers.updateGroupChat(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
+    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       chatId: "123",
       userId: "789",
@@ -53,9 +59,12 @@ describe("updateGroupChat", () => {
     });
     const res = mockResponse();
 
-    await ChatControllers.updateGroupChat(req, res, jest.fn());
+    await ChatControllers.updateGroupChat(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.FORBIDDEN);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.FORBIDDEN,
+      expect.anything(),
+    );
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       chatId: "123",
       userId: "789",
@@ -77,9 +86,12 @@ describe("updateGroupChat", () => {
     });
     const res = mockResponse();
 
-    await ChatControllers.updateGroupChat(req, res, jest.fn());
+    await ChatControllers.updateGroupChat(req, res, vi.fn());
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+    expect(respond).toHaveBeenCalledWith(
+      StatusCodes.BAD_REQUEST,
+      expect.anything(),
+    );
     expect(mockChatService.isUserInChat).toHaveBeenCalledWith({
       chatId: "123",
       userId: "789",

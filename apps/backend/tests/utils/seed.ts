@@ -1,9 +1,9 @@
-import { PrismaClient } from "@prisma/client";
-import { UserWithCredentials } from "@/types/User";
-import { Post } from "@/types/Post";
-import { userSelect } from "@/utils/prisma/userSelect";
-import { postChatSelect } from "@/utils/prisma/postChatSelect";
 import { initReactions, reactions } from "@/config/reactions";
+import { UserWithCredentials } from "@/types/user-with-credentials";
+import { postChatSelect } from "@/utils/prisma/post-chat-select";
+import { userSelect } from "@/utils/prisma/user-select";
+import { Post } from "@packages/schemas";
+import { PrismaClient } from "@prisma/client";
 
 type ChatEntity = {
   id: string;

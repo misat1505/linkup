@@ -1,11 +1,6 @@
-import { Router } from "express";
 import { FriendshipControllers } from "@/controllers";
-import { validate } from "@/middlewares/validate";
-import {
-  AcceptFriendshipDTO,
-  CreateFriendshipDTO,
-  DeleteFriendshipDTO,
-} from "@/validators/friendships/friendships.validators";
+import { buildProtectedRoute, buildRouter } from "@/utils/build-router";
+import { API_CONTRACT } from "@packages/api-contract";
 
 /**
  * Friendship Routes Router.
@@ -13,23 +8,23 @@ import {
  * This router handles operations related to user friendships, including viewing,
  * creating, accepting, and deleting friendships.
  */
-const friendshipRouter = Router();
+const routes = [
+  buildProtectedRoute(
+    API_CONTRACT.GET_USER_FRIENDSHIPS,
+    FriendshipControllers.getUserFriendships,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.ACCEPT_FRIENDSHIP,
+    FriendshipControllers.acceptFriendship,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.CREATE_FRIENDSHIP,
+    FriendshipControllers.createFriendship,
+  ),
+  buildProtectedRoute(
+    API_CONTRACT.DELETE_FRIENDSHIP,
+    FriendshipControllers.deleteFriendship,
+  ),
+];
 
-friendshipRouter.get("/", FriendshipControllers.getUserFriendships);
-friendshipRouter.post(
-  "/accept",
-  validate({ body: AcceptFriendshipDTO }),
-  FriendshipControllers.acceptFriendship
-);
-friendshipRouter.post(
-  "/",
-  validate({ body: CreateFriendshipDTO }),
-  FriendshipControllers.createFriendship
-);
-friendshipRouter.delete(
-  "/",
-  validate({ body: DeleteFriendshipDTO }),
-  FriendshipControllers.deleteFriendship
-);
-
-export default friendshipRouter;
+export default buildRouter(routes);

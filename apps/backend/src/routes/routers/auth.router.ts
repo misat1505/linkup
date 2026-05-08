@@ -1,8 +1,7 @@
-import { Router } from "express";
-import { upload } from "@/middlewares/multer";
-import { validate } from "@/middlewares/validate";
 import { AuthControllers } from "@/controllers";
-import { SignupDTO } from "@/validators/auth/signup.validators";
+import { upload } from "@/middlewares/multer";
+import { buildProtectedRoute, buildRouter } from "@/utils/build-router";
+import { API_CONTRACT } from "@packages/api-contract";
 
 /**
  * Protected Authentication Routes Router.
@@ -10,15 +9,12 @@ import { SignupDTO } from "@/validators/auth/signup.validators";
  * This router manages authentication-related routes that require authorization,
  * such as logging out, fetching user details, and updating user information.
  */
-const authRouterProtected = Router();
+const routes = [
+  buildProtectedRoute(API_CONTRACT.LOGOUT, AuthControllers.logout),
+  buildProtectedRoute(API_CONTRACT.GET_SELF, AuthControllers.getSelf),
+  buildProtectedRoute(API_CONTRACT.UPDATE_SELF, AuthControllers.updateSelf, {
+    extraMiddlewares: [upload.single("file")],
+  }),
+];
 
-authRouterProtected.post("/logout", AuthControllers.logout);
-authRouterProtected.get("/user", AuthControllers.getSelf);
-authRouterProtected.put(
-  "/user",
-  upload.single("file"),
-  validate({ body: SignupDTO }),
-  AuthControllers.updateSelf
-);
-
-export default authRouterProtected;
+export default buildRouter(routes);

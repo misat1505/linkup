@@ -1,5 +1,5 @@
 {
-  "name": "inzynierka",
+  "name": "linkup",
   "version": "1.0.0",
   "description": "LinkUp is a social media platform developed as a Bachelor's thesis project. It enables seamless communication and content sharing among users. The platform offers real-time chats, group conversations, file sharing, and Markdown-based posts — all wrapped in a clean, responsive user interface. The focus is on delivering a reliable, user-friendly experience that supports modern social interaction needs.",
   "main": "index.js",
@@ -7,20 +7,43 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend start\" \"pnpm --filter web-react preview\" \"pnpm --filter web-next start\"",
+    "dev": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend dev\" \"pnpm --filter web-react dev\" \"pnpm --filter web-next dev\"",
+    "test": "concurrently -n \"backend,@packages/api-contract\" -c \"green,blue\" \"pnpm --filter backend test\" \"pnpm --filter @packages/api-contract test\"",
+    "build": "turbo build",
+    "build:packages": "turbo run build --filter=@packages/*",
+    "lint": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend lint\" \"pnpm --filter web-react lint\" \"pnpm --filter web-next lint\"",
     "prepare": "husky"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://gitlab-stud.elka.pw.edu.pl/msatala/praca_inzynierska.git"
+  "lint-staged": {
+    "apps/web-next/**/*.{js,jsx,ts,tsx}": [
+      "pnpm --filter web-next lint"
+    ],
+    "apps/web-react/**/*.{js,jsx,ts,tsx}": [
+      "pnpm --filter web-react lint"
+    ],
+    "apps/backend/**/*.{js,ts}": [
+      "pnpm --filter backend lint"
+    ]
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "packageManager": "pnpm@10.10.0",
   "devDependencies": {
-    "@commitlint/cli": "^20.5.0",
-    "@commitlint/config-conventional": "^20.5.0",
-    "husky": "^9.1.7"
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "concurrently": "^9.2.1",
+    "husky": "^9.1.7",
+    "turbo": "^2.9.6"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.0.0",
+      "react-dom": "19.0.0",
+      "@types/react": "19.0.0",
+      "@types/react-dom": "19.0.0",
+      "zod": "4.3.6"
+    }
   }
 }

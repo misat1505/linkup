@@ -4,7 +4,6 @@
 /load-tests-report
 /logs
 /build
-/prisma/migrations
 /src/config/security/*
 /.env*
 /docs

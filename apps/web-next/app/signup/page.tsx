@@ -1,17 +1,17 @@
 "use client";
-import { SubmitHandler } from "react-hook-form";
-import { toast } from "@/components/ui/use-toast";
-import { useLanguageContext } from "@/providers/LanguageProvider";
-import SignupSlogan from "@/features/auth/components/SignupSlogan";
-import SignupForm from "@/features/auth/components/SignupForm";
-import AlreadyHaveAccount from "@/features/auth/components/AlreadyHaveAccount";
-import SignupFormProvider from "@/features/auth/providers/SignupFormProvider";
-import { useRouter } from "next/navigation";
+import { signupUser } from "@/features/auth/actions/signup-user";
+import SignupForm from "@/features/auth/components/signup-form";
+import { SignupFormEntries } from "@/features/auth/hooks/use-signup-form";
+import SignupFormProvider from "@/features/auth/providers/signup-form-provider";
 import { SignupFormType } from "@/features/auth/schemas/auth.validators";
-import { SignupFormEntries } from "@/features/auth/hooks/useSignupForm";
-import { signupUser } from "@/features/auth/actions/signupUser";
-import { useAppContext } from "@/providers/AppProvider";
+import { useAppContext } from "@/providers/app-provider";
+import { useLanguageContext } from "@/providers/language-provider";
 import { sleep } from "@/utils/sleep";
+import { AlreadyHaveAccount } from "@packages/ui/components/features/signup/already-have-account";
+import { SignupSlogan } from "@packages/ui/components/features/signup/signup-slogan";
+import { toast } from "@packages/ui/components/shadcn/use-toast";
+import { useRouter } from "next/navigation";
+import { SubmitHandler } from "react-hook-form";
 
 export default function Signup() {
   const { t } = useLanguageContext();
@@ -41,7 +41,7 @@ export default function Signup() {
       if (e instanceof Error) {
         toast({
           title: t("signup.form.errors.toast.title"),
-          description: e.message,
+          description: "Failed to create account. Please try again.",
           variant: "destructive",
         });
       }

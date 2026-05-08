@@ -1,0 +1,62 @@
+{
+  "name": "@packages/ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "exports": {
+    "./*": {
+      "import": "./dist/*.js",
+      "types": "./dist/*.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
+  "peerDependencies": {
+    "react": "^19",
+    "react-dom": "^19",
+    "zod": "^4",
+    "@radix-ui/react-dialog": "*",
+    "@radix-ui/react-dropdown-menu": "*",
+    "@radix-ui/react-tabs": "*",
+    "@radix-ui/react-toast": "*",
+    "@radix-ui/react-tooltip": "*",
+    "@radix-ui/react-avatar": "*",
+    "@radix-ui/react-switch": "*",
+    "@radix-ui/react-alert-dialog": "*",
+    "@radix-ui/react-slot": "*",
+    "@tanstack/react-table": "*",
+    "@uiw/react-md-editor": "*",
+    "lucide-react": "*",
+    "react-icons": "*",
+    "react-spinners": "*",
+    "react-world-flags": "*",
+    "date-fns": "*",
+    "react-image": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/react-world-flags": "^1.6.0",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.11",
+    "react": "^19",
+    "react-dom": "^19",
+    "tailwindcss": "^4.2.4",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@packages/schemas": "workspace:*",
+    "clsx": "^2.1.1",
+    "class-variance-authority": "^0.7.1",
+    "tailwind-merge": "^3.5.0",
+    "cmdk": "^1.1.1",
+    "use-local-storage": "^3.0.0"
+  }
+}
