@@ -1,5 +1,6 @@
 import { useAppContext } from "@/contexts/app-provider";
 import { ROUTES } from "@/lib/routes";
+import { getAccessToken } from "@/lib/token";
 import { Loading } from "@packages/ui/components/misc/loading";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -21,7 +22,7 @@ export default function ProtectedRoute({
     );
   }
 
-  if (user === null) {
+  if (!user || !getAccessToken()) {
     return <Navigate to={ROUTES.LOGIN.$path()} />;
   }
 
