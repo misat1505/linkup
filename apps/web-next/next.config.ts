@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const s3Url = new URL(process.env.S3_URL!);
+
 const nextConfig: NextConfig = {
   transpilePackages: ["@packages/ui"],
   /* config options here */
@@ -11,10 +13,8 @@ const nextConfig: NextConfig = {
     qualities: [25, 50, 75, 90, 100],
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
-        // port: "9000",
-        // pathname: "/linkup-bucket/**",
+        protocol: s3Url.protocol.replace(":", "") as "http" | "https",
+        hostname: s3Url.hostname,
       },
     ],
   },
