@@ -8,7 +8,9 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
   :root {
     --background: 0 0% 100%;
@@ -89,4 +91,8 @@ body {
 
 #root {
   min-height: 100vh;
+}
+
+.w-md-editor {
+  height: 100% !important;
 }

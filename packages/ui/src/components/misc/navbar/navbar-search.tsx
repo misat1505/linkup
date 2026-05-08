@@ -70,7 +70,7 @@ export function NavbarSearch({
       <CommandList
         ref={commandListRef}
         className={cn(
-          "no-scrollbar absolute top-14 w-59.5 bg-white shadow-md",
+          "no-scrollbar absolute top-14 w-[238px] bg-white shadow-md",
           {
             hidden: !isExpanded,
           },
