@@ -1,3 +1,5 @@
+"use client";
+
 import { User } from "@packages/schemas";
 import React, { HTMLAttributes, ReactNode } from "react";
 import { CiLogin, CiLogout } from "react-icons/ci";

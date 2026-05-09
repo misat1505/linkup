@@ -1,3 +1,5 @@
+"use client";
+
 import { BsChatLeftTextFill } from "react-icons/bs";
 import { LINK_COMPONENT, TRANSLATION_COMPONENT } from "../../../config";
 import { cn } from "../../../lib/utils";

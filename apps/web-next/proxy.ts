@@ -6,9 +6,23 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  const { pathname } = request.nextUrl;
+
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname.includes(".")
+  ) {
+    return NextResponse.next();
+  }
+
   const refreshTokenCookie = request.cookies.get("refresh-token")?.value;
 
   if (!refreshTokenCookie) {
+    return NextResponse.next();
+  }
+
+  if (request.headers.get("accept")?.includes("text/html") === false) {
     return NextResponse.next();
   }
 

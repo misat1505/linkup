@@ -1,8 +1,6 @@
 import { Post } from "@packages/schemas";
-import { IoPencil } from "react-icons/io5";
-import { LINK_COMPONENT, TRANSLATION_COMPONENT } from "../../../config";
-import { Tooltip } from "../../misc/tooltip";
 import { DeletePostDialog, DeletePostDialogProps } from "./delete-post-dialog";
+import { EditChatLink } from "./edit-chat-link";
 import MyPostHeader from "./my-post-header";
 import {
   MyPostPreviewCollapse,
@@ -47,15 +45,7 @@ export function MyPostPreview({ post, useTheme, ...rest }: MyPostPreviewProps) {
 function PostActions(props: DeletePostDialogProps & { postId: Post["id"] }) {
   return (
     <div className="absolute right-4 top-4 flex items-center gap-x-4">
-      <Tooltip
-        content={
-          <TRANSLATION_COMPONENT translationKey="posts.edit.button.tooltip" />
-        }
-      >
-        <LINK_COMPONENT href={`/posts/editor/${props.postId}`}>
-          <IoPencil className="text-black transition-all hover:scale-110 hover:cursor-pointer dark:text-white h-4 w-4" />
-        </LINK_COMPONENT>
-      </Tooltip>
+      <EditChatLink id={props.postId} />
       <DeletePostDialog {...props} />
     </div>
   );

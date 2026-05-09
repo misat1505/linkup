@@ -1,3 +1,5 @@
+"use client";
+
 import {
   IMAGE_COMPONENT,
   LINK_COMPONENT,

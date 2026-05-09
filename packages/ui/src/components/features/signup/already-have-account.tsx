@@ -1,3 +1,5 @@
+"use client";
+
 import { LINK_COMPONENT, TRANSLATION_COMPONENT } from "../../../config";
 
 export function AlreadyHaveAccount() {

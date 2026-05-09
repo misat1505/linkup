@@ -10,6 +10,6 @@ export async function setRefreshTokenCookie(value: string) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     path: "/",
-    maxAge: 60 * 15,
+    maxAge: 60 * 60 * 24 * 7,
   });
 }
