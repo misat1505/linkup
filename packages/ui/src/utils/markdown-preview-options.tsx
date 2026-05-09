@@ -33,12 +33,15 @@ export const markdownPreviewOptions = {
       return <div>{props.alt || "Image not available"}</div>;
     }
     return (
-      <div className="h-96">
+      <div className="relative aspect-video w-full overflow-hidden rounded-md">
         <Image
           src={props.src!}
           alt={props.alt || "image"}
           unloader={<div>{props.alt}</div>}
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, 768px"
+          className={{
+            common: "object-cover",
+          }}
         />
       </div>
     );

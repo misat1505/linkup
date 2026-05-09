@@ -37,7 +37,10 @@ export class PostService {
     const res = await apiContractClient.getPosts({
       query: { lastPostId, limit },
     });
-    return res.posts;
+
+    return res.posts.sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    );
   }
 
   static async createPost(content: string): Promise<Post> {

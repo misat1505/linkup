@@ -73,6 +73,7 @@ function MultimediaDisplayItem({
           common: "h-40 w-40 object-cover",
           error: "bg-slate-200 font-semibold",
         }}
+        sizes="160px"
         errorContent="Error loading image."
       />
     );

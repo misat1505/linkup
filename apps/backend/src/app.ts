@@ -3,8 +3,9 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express, { NextFunction, Request, Response } from "express";
 import http from "http";
-import { StatusCodes } from "http-status-codes";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import middleware from "i18next-http-middleware";
+import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import { corsMiddleware } from "./config/cors";
 import { env } from "./config/env";
@@ -21,13 +22,13 @@ const app = express();
 const server = http.createServer(app);
 
 if (env.NODE_ENV !== "test") {
+  app.use(morgan("tiny"));
   initializeSocket(server);
 }
 
 app.services = initializeServices(prisma);
 
 const isSentryActive = !!env.SENTRY_DSN;
-
 if (isSentryActive && env.NODE_ENV !== "test") {
   Sentry.init({
     dsn: env.SENTRY_DSN,
@@ -48,23 +49,16 @@ app.use(middleware.handle(i18next));
 if (env.NODE_ENV === "development") {
   const spec = generateOpenApiDocument();
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec));
-
-  app.get("/", async (req: Request, res: Response, _next: NextFunction) => {
-    const users = await req.app.services.userService.getUserByLogin("login1");
-    res.json(users);
-  });
 }
-
-app.use(async (req, _res, next) => {
-  if (env.NODE_ENV === "development") {
-    // eslint-disable-next-line no-console
-    console.log(req.url);
-  }
-  next();
-});
 
 app.use("/", Routers.publicRoutes);
 app.use("/", Routers.protectedRoutes);
+
+app.get("/health", (_req, res) => {
+  res
+    .status(StatusCodes.OK)
+    .json({ status: ReasonPhrases.OK, timestamp: new Date().toISOString() });
+});
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   if (env.NODE_ENV !== "test") console.error(err);
