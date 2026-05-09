@@ -1,7 +1,7 @@
 import { getAccessTokenFromCookie } from "@/features/auth/utils/get-access-token-from-cookie";
 
-import { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import { getRefreshTokenFromCookie } from "@/features/auth/utils/get-refresh-token-from-cookie";
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
 type FactoryOptions = {
   base: AxiosInstance;
@@ -14,7 +14,9 @@ type FactoryOptions = {
 export async function serverSideRequestFactory(
   options: FactoryOptions,
 ): Promise<AxiosInstance> {
-  const instance = options.base;
+  const instance = axios.create({
+    ...options.base.defaults,
+  });
 
   instance.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {

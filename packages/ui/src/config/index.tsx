@@ -59,7 +59,7 @@ export let IS_NEXT_IMAGE: boolean = false;
 // @ts-expect-error it will be null for now
 export let LOGO_PATH: string = null;
 
-type UiPackageContextValue = { t: TranslateFn };
+type UiPackageContextValue = { t: TranslateFn; LinkComponent: LinkComponent };
 
 const UiPackageContext = createContext<UiPackageContextValue | undefined>(
   undefined,
@@ -114,7 +114,9 @@ const UiPackageProvider = ({
   LOGO_PATH = logoPath;
 
   return (
-    <UiPackageContext.Provider value={{ t: translationFunction }}>
+    <UiPackageContext.Provider
+      value={{ t: translationFunction, LinkComponent: linkComponent }}
+    >
       {children}
     </UiPackageContext.Provider>
   );
