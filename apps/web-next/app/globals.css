@@ -32,6 +32,10 @@
   }
 }
 
+.markdown-body img {
+  @apply rounded-md;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

@@ -3,7 +3,7 @@
 import { Chat } from "@packages/schemas";
 import React, { useState } from "react";
 import { TbLogout2 } from "react-icons/tb";
-import { TRANSLATION_COMPONENT } from "../../../config";
+import { navigate, TRANSLATION_COMPONENT } from "../../../config";
 import { FocusableSpan } from "../../misc/focusable-span";
 import { Tooltip } from "../../misc/tooltip";
 import {
@@ -36,6 +36,7 @@ export function ChatLeaveDialog({
     e.preventDefault();
     await leaveChatAction(chatId);
     leaveChatCb?.(chatId);
+    navigate("/chats");
   };
 
   return (
