@@ -19,7 +19,7 @@ export function MyPostPreviewCollapse({
   return (
     <div
       className={cn(
-        "relative m-auto my-4 w-[95%] overflow-hidden p-4 lg:w-[60%]",
+        "relative m-auto my-4 w-[95%] overflow-hidden px-4 pb-4 lg:w-[60%]",
         {
           "max-h-72": !isExpanded,
         },
