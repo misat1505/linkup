@@ -3,8 +3,6 @@ import type { NextConfig } from "next";
 const s3Url = new URL(process.env.S3_URL ?? "http://localhost:9000");
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@packages/ui"],
-  /* config options here */
   cacheComponents: true,
   images: {
     dangerouslyAllowLocalIP: true,
@@ -27,6 +25,7 @@ const nextConfig: NextConfig = {
     resolveAlias: {
       "@packages/api-contract": "../../packages/api-contract/src",
       "@packages/schemas": "../../packages/schemas/src",
+      "@packages/ui": "../../packages/ui/src",
     },
   },
 };

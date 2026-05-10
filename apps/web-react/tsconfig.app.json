@@ -23,6 +23,9 @@
     "noUncheckedSideEffectImports": true,
     "paths": {
       "@/*": ["./src/*"],
+      "@packages/ui/*": ["../../packages/ui/src/*"],
+      "@packages/schemas/*": ["../../packages/schemas/src/*"],
+      "@packages/api-contract/*": ["../../packages/api-contract/src/*"],
       "@packages/*": ["../../packages/*/src"]
     }
   },

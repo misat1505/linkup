@@ -29,6 +29,10 @@ export default defineConfig({
         find: "@packages/api-contract",
         replacement: path.resolve(__dirname, "../../packages/api-contract/src"),
       },
+      {
+        find: "@packages/ui",
+        replacement: path.resolve(__dirname, "../../packages/ui/src"),
+      },
     ],
   },
 });
