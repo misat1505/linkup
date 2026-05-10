@@ -16,14 +16,18 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const refreshTokenCookie = request.cookies.get("refresh-token")?.value;
-
-  if (!refreshTokenCookie) {
+  if (request.headers.get("accept")?.includes("text/html") === false) {
     return NextResponse.next();
   }
 
-  if (request.headers.get("accept")?.includes("text/html") === false) {
+  const accessTokenCookie = request.cookies.get("access-token")?.value;
+  if (accessTokenCookie) {
     return NextResponse.next();
+  }
+
+  const refreshTokenCookie = request.cookies.get("refresh-token")?.value;
+  if (!refreshTokenCookie) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   try {
@@ -34,7 +38,8 @@ export async function proxy(request: NextRequest) {
       },
     });
 
-    if (!response.ok) return NextResponse.next();
+    if (!response.ok)
+      return NextResponse.redirect(new URL("/login", request.url));
 
     const data = await response.json();
     const accessToken = data.accessToken;
@@ -53,7 +58,7 @@ export async function proxy(request: NextRequest) {
 
     return nextResponse;
   } catch {
-    return NextResponse.next();
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 }
 
