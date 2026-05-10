@@ -18,7 +18,7 @@ const ITERATIONS = parseInt(getArg("--iterations") ?? "5", 10);
 const PROFILE_FILTER = getArg("--profile");
 
 // Paths to benchmark — extend this array to add more routes
-const PATHS_TO_BENCHMARK = ["/", "/chats/6360af6a-6c04-4339-aafc-819261079290"];
+const PATHS_TO_BENCHMARK = ["/", "/chats/c6ebfe7c-4616-439f-9871-c82247e150fb"];
 
 interface MetricStats {
   mean: number | null;
@@ -119,7 +119,7 @@ async function runSingleLighthouse(
   await page.screenshot({
     path: path.join(
       debugDir,
-      `screenshot-${MODE}-${routeSlug}-${profileId}-run${index}.png`,
+      `prod-screenshot-${MODE}-${routeSlug}-${profileId}-run${index}.png`,
     ),
     fullPage: true,
   });
@@ -266,10 +266,13 @@ async function runProfile(
 }
 
 function getFrontendUrlBase(mode: Mode): string {
-  const common = "http://localhost:";
-  if (mode === "nextjs") return `${common}${3000}`;
-  else if (mode === "react") return `${common}${3001}`;
-  throw new Error(`Unknown mode: ${mode}`);
+  if (mode === "react") return "https://linkup-frontend-xaom.onrender.com";
+  return "https://linkup-web-next.vercel.app";
+
+  // const common = "http://localhost:";
+  // if (mode === "nextjs") return `${common}${3000}`;
+  // else if (mode === "react") return `${common}${3001}`;
+  // throw new Error(`Unknown mode: ${mode}`);
 }
 
 function buildMergedProfiles(pathResults: PathResult[]): any[] {
@@ -380,7 +383,7 @@ async function main() {
     // Per-path JSON output
     const perPathFile = path.join(
       outputDir,
-      `${MODE}-benchmark-${routeSlug}.json`,
+      `prod-${MODE}-benchmark-${routeSlug}.json`,
     );
     await fs.writeFile(
       perPathFile,
@@ -413,7 +416,10 @@ async function main() {
 
   // Combined JSON — averages across all paths
   const combinedStats = buildMergedProfiles(allPathResults);
-  const combinedFile = path.join(outputDir, `${MODE}-benchmark-combined.json`);
+  const combinedFile = path.join(
+    outputDir,
+    `prod-${MODE}-benchmark-combined.json`,
+  );
   await fs.writeFile(
     combinedFile,
     JSON.stringify(
@@ -434,7 +440,7 @@ async function main() {
   );
 
   banner(`✅  Done in ${(totalMs / 1000 / 60).toFixed(1)} min`, "═");
-  console.log(`   Per-path files : ${MODE}-benchmark-{root,chats}.json`);
+  console.log(`   Per-path files : prod-${MODE}-benchmark-{root,chats}.json`);
   console.log(`   Combined file  : ${combinedFile}\n`);
 }
 
