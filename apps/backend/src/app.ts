@@ -15,7 +15,6 @@ import { generateOpenApiDocument } from "./lib/openapi";
 import { prisma } from "./lib/prisma";
 import { Routers } from "./routes";
 import { initializeServices } from "./utils/initialize-services";
-import { initializeSocket } from "./utils/initialize-socket";
 
 const app = express();
 
@@ -23,7 +22,6 @@ const server = http.createServer(app);
 
 if (env.NODE_ENV !== "test") {
   app.use(morgan("tiny"));
-  initializeSocket(server);
 }
 
 app.services = initializeServices(prisma);
