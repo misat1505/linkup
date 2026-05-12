@@ -33,7 +33,9 @@ jobs:
         run: pnpm build:packages
 
       - name: Copy envs for tests
-        run: cp apps/backend/env.example apps/backend/.env.test
+        run: |
+          cp apps/backend/env.example apps/backend/.env
+          cp apps/backend/env.example apps/backend/.env.test
 
       - name: Generate Prisma Client
         run: pnpm --filter backend exec prisma generate
