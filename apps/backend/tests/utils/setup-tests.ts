@@ -1,3 +1,4 @@
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import {
   PostgreSqlContainer,
@@ -16,7 +17,7 @@ const configFilePath = path.join(__dirname, "test-config.json");
 export async function startContainer() {
   if (container) return;
 
-  container = await new PostgreSqlContainer()
+  container = await new PostgreSqlContainer("postgres:16-alpine")
     .withReuse()
     .withCommand([
       "postgres",
@@ -37,9 +38,11 @@ export async function startContainer() {
     stdio: "inherit",
   });
 
-  _prisma = new PrismaClient({
-    datasources: { db: { url: dbUrl } },
+  const adapter = new PrismaPg({
+    connectionString: dbUrl,
   });
+
+  _prisma = new PrismaClient({ adapter });
 
   await _prisma.$queryRaw`SELECT 1`;
 
@@ -68,13 +71,11 @@ export function initializeTestCase(): {
   );
 
   if (!_prisma) {
-    _prisma = new PrismaClient({
-      datasources: {
-        db: {
-          url: database_url + "?connection_limit=2",
-        },
-      },
+    const adapter = new PrismaPg({
+      connectionString: database_url,
     });
+
+    _prisma = new PrismaClient({ adapter });
   }
 
   return { prisma: _prisma, seed };

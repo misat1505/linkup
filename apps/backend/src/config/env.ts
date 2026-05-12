@@ -10,6 +10,7 @@ const getEnvPath = (): string => {
 dotenv.config({
   override: true,
   path: getEnvPath(),
+  quiet: process.env.NODE_ENV === "dev",
 });
 
 const envSchema = z.object({

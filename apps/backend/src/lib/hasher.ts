@@ -1,4 +1,4 @@
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 
 /**
  * A utility class for hashing data using the SHA-256 algorithm.
