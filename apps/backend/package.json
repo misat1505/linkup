@@ -2,7 +2,6 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "start": "prisma db push && cross-env NODE_ENV=production node ./build/app.js",
     "build": "tsup",
