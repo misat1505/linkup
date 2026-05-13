@@ -31,10 +31,7 @@ const schema = {
   },
 };
 
-export const renderMarkdownCached = async (
-  postId: string,
-  markdown: string,
-) => {
+const renderMarkdownCached = async (postId: string, markdown: string) => {
   "use cache";
   cacheTag(`post-${postId}`);
   cacheLife({ revalidate: 86400 });

@@ -1,10 +1,20 @@
 import type { KnipConfig } from "knip";
 
 export default {
-  ignore: ["apps/backend/typedoc.json", "benchmarks/**"],
+  ignore: [
+    "apps/backend/typedoc.json",
+    "benchmarks/**",
+    "packages/schemas/src/dto/friendship-dtos.ts",
+  ],
+  ignoreDependencies: [
+    "dotenv-cli",
+    "lint-staged",
+    "@commitlint/cli",
+    "tailwindcss-animate",
+  ],
   ignoreBinaries: ["tsc", "artillery"],
-  ignoreDependencies: ["dotenv-cli", "lint-staged", "@commitlint/cli"],
   prisma: false,
+  husky: false,
   workspaces: {
     "apps/backend": {
       entry: ["tests/**/*.ts"],

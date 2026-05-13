@@ -14,7 +14,7 @@ const LoginFormContext = createContext<LoginContextValue>(
 // eslint-disable-next-line react-refresh/only-export-components
 export const useLoginFormContext = () => useContext(LoginFormContext);
 
-export const LoginFormProvider = ({ children }: LoginFormContextProps) => {
+const LoginFormProvider = ({ children }: LoginFormContextProps) => {
   return (
     <LoginFormContext.Provider value={useLoginForm()}>
       {children}

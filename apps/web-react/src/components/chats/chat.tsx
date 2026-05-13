@@ -3,25 +3,11 @@ import { useChatPageContext } from "@/contexts/chat-page-provider";
 import ChatProvider, { useChatContext } from "@/contexts/chat-provider";
 import { ChatError } from "@packages/ui/components/features/chats/chat-error";
 import { NoActiveChat } from "@packages/ui/components/features/chats/no-active-chat";
-import { Button } from "@packages/ui/components/shadcn/button";
-import { PropsWithChildren } from "react";
 import { useParams } from "react-router-dom";
 import ChatContent from "./chat-content";
 import ChatFooter from "./chat-footer";
 import ChatHeaderWrapper from "./chat-header-wrapper";
-
-function Trigger({ children }: PropsWithChildren) {
-  const { createChatTriggerRef } = useChatPageContext();
-
-  return (
-    <Button
-      onClick={() => createChatTriggerRef.current!.click()}
-      className="mt-4 mx-auto"
-    >
-      {children}
-    </Button>
-  );
-}
+import { Trigger } from "./create-chat-trigger";
 
 export default function ChatGuard() {
   const { chatId } = useParams();

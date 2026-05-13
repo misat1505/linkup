@@ -47,7 +47,7 @@ const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
 
 export const useChatContext = () => useContext(ChatContext);
 
-export const ChatProvider = ({ children, chat }: ChatContextProps) => {
+const ChatProvider = ({ children, chat }: ChatContextProps) => {
   const queryClient = useQueryClient();
   const messageRefs = useRef<Record<Message["id"], HTMLDivElement | null>>({});
   const [incomeMessageId, setIncomeMessageId] = useState<Message["id"] | null>(

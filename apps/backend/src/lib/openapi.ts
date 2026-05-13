@@ -4,9 +4,9 @@ import {
 } from "@asteasolutions/zod-to-openapi";
 import { API_CONTRACT } from "@packages/api-contract";
 
-export const registry = new OpenAPIRegistry();
+const registry = new OpenAPIRegistry();
 
-export function registerRoutes() {
+function registerRoutes() {
   registry.registerComponent("securitySchemes", "bearerAuth", {
     type: "http",
     scheme: "bearer",

@@ -19,7 +19,7 @@ import {
   UseFormRegister,
 } from "react-hook-form";
 
-export type PostChatFormEntries = {
+type PostChatFormEntries = {
   content: string;
   files?: File[] | undefined;
   responseId?: Message["id"] | null;

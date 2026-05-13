@@ -20,7 +20,7 @@ const AppContext = createContext<AppContextValue>({} as AppContextValue);
 
 export const useAppContext = () => useContext(AppContext);
 
-export const AppProvider = ({ children }: AppContextProps) => {
+const AppProvider = ({ children }: AppContextProps) => {
   const queryClient = useQueryClient();
   const { data: user, isLoading } = useQuery({
     queryKey: queryKeys.me(),

@@ -32,7 +32,7 @@ const ChatPageContext = createContext<ChatPageContextValue>(
 // eslint-disable-next-line react-refresh/only-export-components
 export const useChatPageContext = () => useContext(ChatPageContext);
 
-export const ChatPageProvider = ({ children }: ChatPageContextProps) => {
+const ChatPageProvider = ({ children }: ChatPageContextProps) => {
   const { t } = useTranslation();
   const createChatTriggerRef = useRef<HTMLDivElement | null>(null);
   const { toast } = useToast();

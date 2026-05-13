@@ -2,7 +2,7 @@ import z from "zod";
 import { API_CONTRACT } from "../contract";
 import { ExtractSchema } from "../utils";
 
-export type ExtractRequestBody<K extends keyof typeof API_CONTRACT> =
+type ExtractRequestBody<K extends keyof typeof API_CONTRACT> =
   (typeof API_CONTRACT)[K] extends {
     request: { body: { content: { "application/json": { schema: infer S } } } };
   }
@@ -18,15 +18,6 @@ export type ExtractRequestBody<K extends keyof typeof API_CONTRACT> =
         ? z.infer<S>
         : never
       : never;
-
-export type ExtractQuery<K extends keyof typeof API_CONTRACT> =
-  (typeof API_CONTRACT)[K] extends {
-    request: { query: infer S };
-  }
-    ? S extends z.ZodTypeAny
-      ? z.infer<S>
-      : never
-    : never;
 
 export type ExtractResponse<
   K extends keyof typeof API_CONTRACT,
@@ -44,14 +35,14 @@ type ReplaceFiles<T> = {
       : T[K];
 };
 
-export type ExtractRequestParams<K extends keyof typeof API_CONTRACT> =
+type ExtractRequestParams<K extends keyof typeof API_CONTRACT> =
   (typeof API_CONTRACT)[K] extends { request: { params: infer S } }
     ? S extends z.ZodTypeAny
       ? z.infer<S>
       : never
     : never;
 
-export type ExtractRequestQuery<K extends keyof typeof API_CONTRACT> =
+type ExtractRequestQuery<K extends keyof typeof API_CONTRACT> =
   (typeof API_CONTRACT)[K] extends { request: { query: infer S } }
     ? S extends z.ZodTypeAny
       ? z.infer<S>

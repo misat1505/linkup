@@ -19,7 +19,7 @@ const SignupFormContext = createContext<SignupContextValue>(
 
 export const useSignupFormContext = () => useContext(SignupFormContext);
 
-export const SignupFormProvider = ({
+const SignupFormProvider = ({
   children,
   type,
   ...props

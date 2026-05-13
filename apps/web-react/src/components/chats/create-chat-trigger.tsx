@@ -4,9 +4,7 @@ import { useChatPageContext } from "@/contexts/chat-page-provider";
 import { Button } from "@packages/ui/components/shadcn/button";
 import { PropsWithChildren } from "react";
 
-type CreateChatTriggerProps = PropsWithChildren;
-
-export function CreateChatTrigger({ children }: CreateChatTriggerProps) {
+export function Trigger({ children }: PropsWithChildren) {
   const { createChatTriggerRef } = useChatPageContext();
 
   return (

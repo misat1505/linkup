@@ -47,7 +47,7 @@ const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
 // eslint-disable-next-line react-refresh/only-export-components
 export const useChatContext = () => useContext(ChatContext);
 
-export const ChatProvider = ({ children, chatId }: ChatContextProps) => {
+const ChatProvider = ({ children, chatId }: ChatContextProps) => {
   const queryClient = useQueryClient();
   const messageRefs = useRef<Record<Message["id"], HTMLDivElement | null>>({});
   const [incomeMessageId, setIncomeMessageId] = useState<Message["id"] | null>(

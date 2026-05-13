@@ -20,7 +20,7 @@ const SignupFormContext = createContext<SignupContextValue>(
 // eslint-disable-next-line react-refresh/only-export-components
 export const useSignupFormContext = () => useContext(SignupFormContext);
 
-export const SignupFormProvider = ({
+const SignupFormProvider = ({
   children,
   type,
   ...props

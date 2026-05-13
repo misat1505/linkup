@@ -15,7 +15,7 @@ import { useChatPageContext } from "../providers/chat-page-provider";
 import { useChatContext } from "../providers/chat-provider";
 import { chatFormSchema, ChatFormType } from "../schemas/chat-validators";
 
-export type ChatFormEntries = {
+type ChatFormEntries = {
   content: string;
   files?: File[] | undefined;
   responseId?: Message["id"] | null;

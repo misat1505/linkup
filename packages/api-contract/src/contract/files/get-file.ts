@@ -7,7 +7,7 @@ import { TAGS } from "../../utils/constants";
 import { errors } from "../../utils/error-responses";
 import { response } from "../../utils/responses";
 
-export const FileQueryOpenApi = z
+const FileQueryOpenApi = z
   .object({
     filter: z.enum(["avatar", "chat-message", "chat-photo", "cache", "post"]),
     chat: Chat.shape.id.optional(),

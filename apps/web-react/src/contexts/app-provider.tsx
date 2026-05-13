@@ -19,7 +19,7 @@ const AppContext = createContext<AppContextValue>({} as AppContextValue);
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAppContext = () => useContext(AppContext);
 
-export const AppProvider = ({ children }: AppContextProps) => {
+const AppProvider = ({ children }: AppContextProps) => {
   const queryClient = useQueryClient();
   const { isLoading } = useQuery({
     queryKey: queryKeys.me(),
