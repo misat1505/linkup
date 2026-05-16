@@ -14,9 +14,7 @@ const GroupChatFormContext = createContext<GroupChatFormContextValue>(
 
 export const useGroupChatFormContext = () => useContext(GroupChatFormContext);
 
-export const GroupChatFormProvider = ({
-  children,
-}: GroupChatFormContextProps) => {
+const GroupChatFormProvider = ({ children }: GroupChatFormContextProps) => {
   return (
     <GroupChatFormContext.Provider value={useNewGroupChatForm()}>
       {children}

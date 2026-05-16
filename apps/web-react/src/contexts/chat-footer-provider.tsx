@@ -15,10 +15,7 @@ const ChatFooterContext = createContext<ChatFooterContextValue>(
 // eslint-disable-next-line react-refresh/only-export-components
 export const useChatFooterContext = () => useContext(ChatFooterContext);
 
-export const ChatFooterProvider = ({
-  children,
-  chatId,
-}: ChatFooterContextProps) => {
+const ChatFooterProvider = ({ children, chatId }: ChatFooterContextProps) => {
   return (
     <ChatFooterContext.Provider value={useChatForm(chatId)}>
       {children}

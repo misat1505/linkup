@@ -8,12 +8,10 @@ async function getSignedUrlCachedUnsafe(filename: string, query: string = "") {
   const key = filename + query;
 
   if (signedUrlCache.has(key)) {
-    console.log("Cache hit", key);
     return signedUrlCache.get(key)!;
   }
 
   const url = `${FILE_API.defaults.baseURL}/${filename}${query}`;
-  console.log("Sending request for signed URL:", url);
 
   const token = await getAccessTokenFromCookie();
   const result = await fetch(url, {
@@ -31,7 +29,6 @@ async function getSignedUrlCachedUnsafe(filename: string, query: string = "") {
   }
 
   const data = await result.json();
-  console.log("Received signed URL:", data.url);
 
   signedUrlCache.set(key, data.url);
 
@@ -48,6 +45,8 @@ export async function replaceLinksCachedUnsafe(
   markdown: string,
 ): Promise<string> {
   const baseApiURL = FILE_API.defaults.baseURL!;
+
+  // eslint-disable-next-line no-useless-escape
   const escapedBaseUrl = baseApiURL.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 
   const fileLinkRegex = new RegExp(

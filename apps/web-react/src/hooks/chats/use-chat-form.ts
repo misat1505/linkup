@@ -15,7 +15,7 @@ import {
 } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-export type ChatFormEntries = {
+type ChatFormEntries = {
   content: string;
   files?: File[] | undefined;
   responseId?: Message["id"] | null;

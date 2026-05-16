@@ -15,6 +15,10 @@ const alias = {
   "@": path.resolve(__dirname, "src"),
 };
 
+const env = {
+  DOTENV_CONFIG_QUIET: "true",
+};
+
 export default defineConfig({
   test: {
     projects: [
@@ -25,8 +29,8 @@ export default defineConfig({
           pool: "vmThreads",
           maxWorkers: 8,
           globalSetup: ["./tests/utils/test-global-setup.ts"],
-          globalTeardown: ["./tests/utils/test-global-teardown.ts"],
           include: integrationTests,
+          env,
         },
         resolve: { alias },
       },
@@ -38,6 +42,7 @@ export default defineConfig({
           maxWorkers: 8,
           include: testFiles,
           exclude: integrationTests,
+          env,
         },
         resolve: { alias },
       },

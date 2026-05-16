@@ -35,12 +35,14 @@ export class ApiContractClient {
       data:
         body !== undefined
           ? asFormData
-            ? buildFormData(body as any)
+            ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              buildFormData(body as any)
             : body
           : undefined,
       params: query,
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const schema = extractResponseSchema(key, status) as any;
     return schema.parse(responseData);
   }

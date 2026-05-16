@@ -17,6 +17,7 @@ describe("ApiContractClient", () => {
       }),
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const client = new ApiContractClient(mockApi as any);
 
     const res = await client.getSelf();
@@ -31,6 +32,7 @@ describe("ApiContractClient", () => {
       }),
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const client = new ApiContractClient(mockApi as any);
 
     await expect(client.getSelf()).rejects.toThrow();

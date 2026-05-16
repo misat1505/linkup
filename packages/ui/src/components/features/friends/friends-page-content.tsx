@@ -87,7 +87,6 @@ export function FriendsPageContent({
     },
   ];
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: friendships,
     columns,

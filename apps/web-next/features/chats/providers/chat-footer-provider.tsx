@@ -16,10 +16,7 @@ const ChatFooterContext = createContext<ChatFooterContextValue>(
 
 export const useChatFooterContext = () => useContext(ChatFooterContext);
 
-export const ChatFooterProvider = ({
-  children,
-  chatId,
-}: ChatFooterContextProps) => {
+const ChatFooterProvider = ({ children, chatId }: ChatFooterContextProps) => {
   return (
     <ChatFooterContext.Provider value={useChatForm(chatId)}>
       {children}

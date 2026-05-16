@@ -8,11 +8,9 @@ type DotPaths<T> = T extends object
 
 export type TranslationPath = DotPaths<Translation>;
 
-export type TranslateFn = (key: TranslationPath, vars?: TVars) => string;
-
 export type TVars = Record<string, string>;
 
-export type Translation = {
+type Translation = {
   tabs: TabsTranslations;
   "not-found": NotFoundTranslations;
   login: LoginTranslations;

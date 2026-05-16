@@ -31,10 +31,7 @@ const schema = {
   },
 };
 
-export const renderMarkdownCached = async (
-  postId: string,
-  markdown: string,
-) => {
+const renderMarkdownCached = async (postId: string, markdown: string) => {
   "use cache";
   cacheTag(`post-${postId}`);
   cacheLife({ revalidate: 86400 });
@@ -52,8 +49,6 @@ export const renderMarkdownCached = async (
     })
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(markdown);
-
-  console.log("RENDER MARKDOWN", postId);
 
   return result.toString();
 };

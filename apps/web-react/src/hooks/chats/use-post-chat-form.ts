@@ -15,7 +15,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 
-export type PostChatFormEntries = {
+type PostChatFormEntries = {
   content: string;
   files?: File[] | undefined;
   responseId?: Message["id"] | null;

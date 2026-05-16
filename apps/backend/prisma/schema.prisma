@@ -10,27 +10,26 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
-  id          String    @id @default(uuid())
-  firstName   String
-  lastName    String
-  photoURL    String?
-  lastActive  DateTime
-  login       String    @unique
-  password    String
-  salt        String
+  id         String   @id @default(uuid())
+  firstName  String
+  lastName   String
+  photoURL   String?
+  lastActive DateTime
+  login      String   @unique
+  password   String
+  salt       String
 
-  posts         Post[]    @relation("UserPosts")
+  posts         Post[]         @relation("UserPosts")
   chats         UserChat[]
-  messages      Message[] @relation("MessageAuthor")
+  messages      Message[]      @relation("MessageAuthor")
   reactions     UserReaction[]
   reportedPosts PostReport[]
 
-  sentRequests      Friend[] @relation("UserSentRequests")
-  receivedRequests  Friend[] @relation("UserReceivedRequests")
+  sentRequests     Friend[] @relation("UserSentRequests")
+  receivedRequests Friend[] @relation("UserReceivedRequests")
 }
 
 enum FriendshipStatus {
@@ -43,33 +42,37 @@ model Friend {
   acceptorId  String
   status      FriendshipStatus
 
-  requester   User @relation("UserSentRequests", fields: [requesterId], references: [id])
-  acceptor    User @relation("UserReceivedRequests", fields: [acceptorId], references: [id])
+  requester User @relation("UserSentRequests", fields: [requesterId], references: [id])
+  acceptor  User @relation("UserReceivedRequests", fields: [acceptorId], references: [id])
 
   @@id([requesterId, acceptorId])
+  @@index([acceptorId])
 }
 
 model Post {
-  id              String    @id @default(uuid())
-  content         String    @db.Text
-  authorId        String
-  createdAt       DateTime  @default(now())
-  chatId          String    @unique
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  authorId  String
+  createdAt DateTime @default(now())
+  chatId    String   @unique
 
   reports PostReport[]
 
-  author      User      @relation("UserPosts", fields: [authorId], references: [id])
-  chat        Chat      @relation("PostChat", fields: [chatId], references: [id])
+  author User @relation("UserPosts", fields: [authorId], references: [id])
+  chat   Chat @relation("PostChat", fields: [chatId], references: [id])
+
+  @@index([authorId])
 }
 
 model PostReport {
-  userId   String
-  postId   String
+  userId String
+  postId String
 
-  user     User   @relation(fields: [userId], references: [id])
-  post     Post   @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
 
   @@id([userId, postId])
+  @@index([postId])
 }
 
 enum ChatType {
@@ -79,70 +82,79 @@ enum ChatType {
 }
 
 model Chat {
-  id        String      @id @default(uuid())
-  createdAt DateTime    @default(now())
-  name      String?
-  photoURL  String?
-  type      ChatType
-  lastMessageId String? @unique
+  id            String   @id @default(uuid())
+  createdAt     DateTime @default(now())
+  name          String?
+  photoURL      String?
+  type          ChatType
+  lastMessageId String?  @unique
 
-  users     UserChat[]
-  post      Post?       @relation("PostChat")
-  messages  Message[]   @relation("MessageChat")
-  lastMessage  Message?  @relation("LastMessageInChat", fields: [lastMessageId], references: [id])
+  users       UserChat[]
+  post        Post?     @relation("PostChat")
+  messages    Message[] @relation("MessageChat")
+  lastMessage Message?  @relation("LastMessageInChat", fields: [lastMessageId], references: [id])
 }
 
 model Message {
-  id          String    @id @default(uuid())
-  content     String?   @db.Text
-  authorId    String
-  createdAt   DateTime  @default(now())
-  responseId  String?
-  chatId      String
+  id         String   @id @default(uuid())
+  content    String?  @db.Text
+  authorId   String
+  createdAt  DateTime @default(now())
+  responseId String?
+  chatId     String
 
-  chat        Chat      @relation("MessageChat", fields: [chatId], references: [id])
-  author      User      @relation("MessageAuthor", fields: [authorId], references: [id])
-  response    Message?  @relation("MessageResponses", fields: [responseId], references: [id])
-  replies     Message[] @relation("MessageResponses")
-  files       File[]    @relation("MessageFiles")
-  reactions   UserReaction[]
-  Chat        Chat?     @relation("LastMessageInChat")
+  chat            Chat           @relation("MessageChat", fields: [chatId], references: [id])
+  author          User           @relation("MessageAuthor", fields: [authorId], references: [id])
+  response        Message?       @relation("MessageResponses", fields: [responseId], references: [id])
+  replies         Message[]      @relation("MessageResponses")
+  files           File[]         @relation("MessageFiles")
+  reactions       UserReaction[]
+  lastMessageChat Chat?          @relation("LastMessageInChat")
+
+  @@index([chatId, createdAt(sort: Desc)])
+  @@index([responseId])
+  @@index([authorId])
 }
 
 model File {
-  id          String    @id @default(uuid())
-  url         String    @unique
-  messageId   String?
-  postId      String?
+  id        String  @id @default(uuid())
+  url       String  @unique
+  messageId String?
+  postId    String?
 
-  message     Message? @relation("MessageFiles", fields: [messageId], references: [id])
+  message Message? @relation("MessageFiles", fields: [messageId], references: [id])
+
+  @@index([messageId])
+  @@index([postId])
 }
 
 model Reaction {
-  id          String    @id @default(uuid())
-  name        String
+  id            String         @id @default(uuid())
+  name          String         @unique
   userReactions UserReaction[]
 }
 
 model UserReaction {
-  userId      String
-  messageId   String
-  reactionId  String
+  userId     String
+  messageId  String
+  reactionId String
 
-  user        User      @relation(fields: [userId], references: [id])
-  message     Message   @relation(fields: [messageId], references: [id])
-  reaction    Reaction  @relation(fields: [reactionId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+  message  Message  @relation(fields: [messageId], references: [id])
+  reaction Reaction @relation(fields: [reactionId], references: [id])
 
   @@id([userId, messageId])
+  @@index([messageId])
 }
 
 model UserChat {
-  userId      String
-  chatId      String
-  alias       String?
+  userId String
+  chatId String
+  alias  String?
 
-  user        User      @relation(fields: [userId], references: [id])
-  chat        Chat      @relation(fields: [chatId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+  chat Chat @relation(fields: [chatId], references: [id])
 
   @@id([userId, chatId])
+  @@index([userId])
 }

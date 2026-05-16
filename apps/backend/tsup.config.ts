@@ -9,8 +9,5 @@ export default defineConfig({
   clean: true,
   dts: false,
   sourcemap: false,
-  alias: {
-    "@": "./src",
-  },
   minify: true,
 });

@@ -1,5 +1,5 @@
-import { env } from "./env";
 import cors from "cors";
+import { env } from "./env";
 
 /**
  * Configuration object for CORS middleware.
@@ -9,7 +9,7 @@ import cors from "cors";
  *
  * @source
  */
-export const corsConfig = {
+const corsConfig = {
   origin: env.FRONTEND_URL,
   credentials: true,
 };

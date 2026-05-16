@@ -2,15 +2,13 @@
   "name": "websocket",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "start": "node ./build/src/app.js",
     "build": "tsc",
-    "dev": "ts-node-dev ./src/app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch --clear-screen=false src/app.ts",
+    "lint": "eslint src/"
   },
   "dependencies": {
-    "@packages/schemas": "workspace:*",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "socket.io": "^4.8.1"
@@ -18,7 +16,7 @@
   "devDependencies": {
     "@types/express": "^4.17.25",
     "@types/node": "^25.6.2",
-    "ts-node-dev": "^2.0.0"
+    "tsx": "^4.21.0"
   },
   "keywords": [],
   "author": "",

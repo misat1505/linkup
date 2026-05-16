@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 "use client";
 
 import { useEffect } from "react";
-import { onCLS, onLCP, onINP, onFCP, onTTFB } from "web-vitals";
+import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals";
 
 export default function ReportWebVitals() {
   useEffect(() => {

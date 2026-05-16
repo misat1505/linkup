@@ -2,7 +2,6 @@
   "name": "linkup",
   "version": "1.0.0",
   "description": "LinkUp is a social media platform developed as a Bachelor's thesis project. It enables seamless communication and content sharing among users. The platform offers real-time chats, group conversations, file sharing, and Markdown-based posts — all wrapped in a clean, responsive user interface. The focus is on delivering a reliable, user-friendly experience that supports modern social interaction needs.",
-  "main": "index.js",
   "directories": {
     "doc": "docs"
   },
@@ -12,19 +11,9 @@
     "test": "concurrently -n \"backend,@packages/api-contract\" -c \"green,blue\" \"pnpm --filter backend test\" \"pnpm --filter @packages/api-contract test\"",
     "build": "turbo build",
     "build:packages": "turbo run build --filter=@packages/*",
-    "lint": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend lint\" \"pnpm --filter web-react lint\" \"pnpm --filter web-next lint\"",
-    "prepare": "husky"
-  },
-  "lint-staged": {
-    "apps/web-next/**/*.{js,jsx,ts,tsx}": [
-      "pnpm --filter web-next lint"
-    ],
-    "apps/web-react/**/*.{js,jsx,ts,tsx}": [
-      "pnpm --filter web-react lint"
-    ],
-    "apps/backend/**/*.{js,ts}": [
-      "pnpm --filter backend lint"
-    ]
+    "lint": "pnpm -r --parallel run lint",
+    "prepare": "husky",
+    "detect:dead:code": "knip"
   },
   "keywords": [],
   "author": "",
@@ -33,9 +22,13 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^10.0.1",
     "concurrently": "^9.2.1",
+    "eslint": "^10.4.0",
     "husky": "^9.1.7",
-    "turbo": "^2.9.6"
+    "knip": "^6.13.1",
+    "turbo": "^2.9.6",
+    "typescript-eslint": "^8.59.3"
   },
   "pnpm": {
     "overrides": {

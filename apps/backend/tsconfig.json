@@ -10,10 +10,9 @@
     "strict": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],
-      "@tests/*": ["tests/*"]
+      "@/*": ["./src/*"],
+      "@tests/*": ["./tests/*"]
     },
     "outDir": "build",
     "rootDir": "."

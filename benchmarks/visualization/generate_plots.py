@@ -403,9 +403,9 @@ def plot_metric_distribution(ax, r_mean, r_std, n_mean, n_std, metric, title):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--react", default="../benchmark-output/react-benchmark-combined.json")
-    parser.add_argument("--nextjs", default="../benchmark-output/nextjs-benchmark-combined.json")
-    parser.add_argument("--out", default="./plots")
+    parser.add_argument("--react", default="../benchmark-output/prod-react-benchmark-combined.json")
+    parser.add_argument("--nextjs", default="../benchmark-output/prod-nextjs-benchmark-combined.json")
+    parser.add_argument("--out", default="./plots/prod")
     args = parser.parse_args()
 
     try:

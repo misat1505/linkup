@@ -1,6 +1,6 @@
 import { AppServices } from "@/utils/initialize-services";
 import { RequestValidatedValues } from "./request-validation";
-import { UserWithCredentials } from "./user";
+import { UserWithCredentials } from "./user-with-credentials";
 
 declare global {
   namespace Express {

@@ -33,7 +33,7 @@ const ChatPageContext = createContext<ChatPageContextValue>(
 
 export const useChatPageContext = () => useContext(ChatPageContext);
 
-export const ChatPageProvider = ({
+const ChatPageProvider = ({
   children,
   chats: chatsArg,
 }: ChatPageContextProps) => {
