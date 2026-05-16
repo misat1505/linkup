@@ -5,6 +5,7 @@ export default {
     "apps/backend/typedoc.json",
     "benchmarks/**",
     "packages/schemas/src/dto/friendship-dtos.ts",
+    "lint-staged.config.mjs",
   ],
   ignoreDependencies: [
     "dotenv-cli",
