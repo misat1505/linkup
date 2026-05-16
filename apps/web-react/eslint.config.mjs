@@ -6,8 +6,8 @@ import rootConfig from "../../eslint.config.mjs";
 
 export default tseslint.config(
   ...rootConfig,
+  { ignores: ["dist", "eslint.config.mjs"] },
   {
-    ignores: ["dist", "eslint.config.js"],
     languageOptions: {
       parserOptions: {
         project: [

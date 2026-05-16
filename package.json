@@ -15,17 +15,6 @@
     "prepare": "husky",
     "detect:dead:code": "knip"
   },
-  "lint-staged": {
-    "apps/web-next/**/*.{js,jsx,ts,tsx}": [
-      "pnpm --filter web-next lint"
-    ],
-    "apps/web-react/**/*.{js,jsx,ts,tsx}": [
-      "pnpm --filter web-react lint"
-    ],
-    "apps/backend/**/*.{js,ts}": [
-      "pnpm --filter backend lint"
-    ]
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
