@@ -1,0 +1,8 @@
+/countlines*
+*.turbo
+node_modules
+dist
+.next
+build
+coverage
+pnpm-lock.yaml
