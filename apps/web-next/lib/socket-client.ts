@@ -24,10 +24,12 @@ class SocketClient {
     this.socket = io(serverUrl);
 
     this.socket.on("connect", () => {
+      // eslint-disable-next-line no-console
       console.log("Connected to socket.");
     });
 
     this.socket.on("disconnect", () => {
+      // eslint-disable-next-line no-console
       console.log("Disconnected from socket.");
     });
   }

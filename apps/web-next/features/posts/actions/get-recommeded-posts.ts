@@ -10,9 +10,6 @@ export async function getRecommendedPosts(
   lastPostId: Post["id"] | null,
   limit: number,
 ): Promise<PostWithRenderedContent[]> {
-  console.log(
-    `Getting recommended posts ${JSON.stringify({ lastPostId, limit })}`,
-  );
   const res = await apiContractClient.getPosts({
     query: { lastPostId, limit },
   });

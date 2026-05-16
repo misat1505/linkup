@@ -1,9 +1,8 @@
-import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import rootConfig from "../../eslint.config.mjs";
 
 export default tseslint.config(
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...rootConfig,
   {
     rules: {
       "@typescript-eslint/no-unused-vars": [

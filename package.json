@@ -11,7 +11,7 @@
     "test": "concurrently -n \"backend,@packages/api-contract\" -c \"green,blue\" \"pnpm --filter backend test\" \"pnpm --filter @packages/api-contract test\"",
     "build": "turbo build",
     "build:packages": "turbo run build --filter=@packages/*",
-    "lint": "concurrently -n \"backend,react,next\" -c \"green,cyan,gray\" \"pnpm --filter backend lint\" \"pnpm --filter web-react lint\" \"pnpm --filter web-next lint\"",
+    "lint": "pnpm -r --parallel run lint",
     "prepare": "husky",
     "detect:dead:code": "knip"
   },
@@ -33,10 +33,13 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^10.0.1",
     "concurrently": "^9.2.1",
+    "eslint": "^10.4.0",
     "husky": "^9.1.7",
     "knip": "^6.13.1",
-    "turbo": "^2.9.6"
+    "turbo": "^2.9.6",
+    "typescript-eslint": "^8.59.3"
   },
   "pnpm": {
     "overrides": {

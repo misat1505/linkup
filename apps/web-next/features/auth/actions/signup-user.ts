@@ -32,7 +32,7 @@ export async function signupUser(formData: FormData): Promise<User> {
     return User.parse(user);
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
-      throw new Error(e.response?.data.message);
+      throw new Error(e.response?.data.message, { cause: e });
     }
   }
 }

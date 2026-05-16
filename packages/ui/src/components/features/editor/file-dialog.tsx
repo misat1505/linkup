@@ -89,7 +89,9 @@ function FileDialogContent(
         const urlObject = new URL(url);
         const filter = urlObject.searchParams.get("filter");
         if (!validURLs.includes(url) && filter === "post") validURLs.push(url);
-      } catch {}
+      } catch {
+        // empty
+      }
     }
     return validURLs;
   };

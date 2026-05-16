@@ -50,8 +50,6 @@ const renderMarkdownCached = async (postId: string, markdown: string) => {
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(markdown);
 
-  console.log("RENDER MARKDOWN", postId);
-
   return result.toString();
 };
 

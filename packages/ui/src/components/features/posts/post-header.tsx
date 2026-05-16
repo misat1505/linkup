@@ -108,6 +108,7 @@ function ReportPost({ post, reportPost }: ReportPostProps) {
         description: t("posts.report.toast.description"),
       });
     } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if ("response" in (e as any))
         toast({
           variant: "destructive",

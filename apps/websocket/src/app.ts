@@ -37,5 +37,6 @@ io.on("connection", (socket) => {
 const port = Number(process.env.PORT);
 
 server.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`WebSocket server listening on port ${port}.`);
 });
