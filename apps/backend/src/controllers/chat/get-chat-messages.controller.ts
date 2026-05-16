@@ -18,49 +18,48 @@ import { StatusCodes } from "http-status-codes";
  * @source
  */
 export const getChatMessagesController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
+	req: Request,
+	res: Response,
+	next: NextFunction,
 ) => {
-  const contractKey = CONTRACT_KEYS.GET_CHAT_MESSAGES;
-  const respond = buildValidatedResponder(res, contractKey);
+	const contractKey = CONTRACT_KEYS.GET_CHAT_MESSAGES;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      params: { chatId },
-      query,
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			params: { chatId },
+			query,
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const chatService = req.app.services.chatService;
+		const userId = req.user!.id;
+		const chatService = req.app.services.chatService;
 
-    const isUserAuthorized = await chatService.isUserInChat({
-      chatId,
-      userId,
-    });
+		const isUserAuthorized = await chatService.isUserInChat({
+			chatId,
+			userId,
+		});
 
-    if (!isUserAuthorized) {
-      return respond(StatusCodes.FORBIDDEN, {
-        message: req.t("chats.controllers.get-messages.unauthorized"),
-      });
-    }
+		if (!isUserAuthorized) {
+			return respond(StatusCodes.FORBIDDEN, {
+				message: req.t("chats.controllers.get-messages.unauthorized"),
+			});
+		}
 
-    let messages: Message[];
+		let messages: Message[];
 
-    if ("responseId" in query) {
-      const responseId =
-        query.responseId! === "null" ? null : query.responseId!;
-      messages = await chatService.getPostChatMessages(chatId, responseId);
-    } else {
-      messages = await chatService.getChatMessages(
-        chatId,
-        query.lastMessageId ?? undefined,
-        query.limit,
-      );
-    }
+		if ("responseId" in query) {
+			const responseId = query.responseId! === "null" ? null : query.responseId!;
+			messages = await chatService.getPostChatMessages(chatId, responseId);
+		} else {
+			messages = await chatService.getChatMessages(
+				chatId,
+				query.lastMessageId ?? undefined,
+				query.limit,
+			);
+		}
 
-    return respond(StatusCodes.OK, { messages });
-  } catch {
-    next(new Error(req.t("chats.controllers.get-messages.failure")));
-  }
+		return respond(StatusCodes.OK, { messages });
+	} catch {
+		next(new Error(req.t("chats.controllers.get-messages.failure")));
+	}
 };

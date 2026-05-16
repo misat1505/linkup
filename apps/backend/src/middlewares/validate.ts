@@ -1,7 +1,4 @@
-import {
-  RequestValidatedValues,
-  RequestValidation,
-} from "@/types/request-validation";
+import { RequestValidatedValues, RequestValidation } from "@/types/request-validation";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
@@ -37,23 +34,23 @@ import { ZodError } from "zod";
  * @source
  */
 export const validate = (validations: RequestValidation) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    const validated = {} as RequestValidatedValues;
-    const errors: ZodError<unknown>[] = [];
+	return async (req: Request, res: Response, next: NextFunction) => {
+		const validated = {} as RequestValidatedValues;
+		const errors: ZodError<unknown>[] = [];
 
-    Object.entries(validations).forEach(([key, schema]) => {
-      const typedKey = key as keyof RequestValidatedValues;
-      const result = schema.safeParse(req[typedKey]);
-      if (!result.success) errors.push(result.error);
-      // @ts-expect-error result.data is of correct type
-      else validated[typedKey] = result.data;
-    });
+		Object.entries(validations).forEach(([key, schema]) => {
+			const typedKey = key as keyof RequestValidatedValues;
+			const result = schema.safeParse(req[typedKey]);
+			if (!result.success) errors.push(result.error);
+			// @ts-expect-error result.data is of correct type
+			else validated[typedKey] = result.data;
+		});
 
-    if (errors.length === 0) {
-      req.validated = validated;
-      return next();
-    }
+		if (errors.length === 0) {
+			req.validated = validated;
+			return next();
+		}
 
-    res.status(StatusCodes.BAD_REQUEST).json({ errors });
-  };
+		res.status(StatusCodes.BAD_REQUEST).json({ errors });
+	};
 };

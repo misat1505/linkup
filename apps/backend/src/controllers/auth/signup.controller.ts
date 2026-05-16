@@ -1,9 +1,9 @@
 import { env } from "@/config/env";
 import {
-  accessTokenSignOptions,
-  refreshTokenCookieName,
-  refreshTokenCookieOptions,
-  refreshTokenSignOptions,
+	accessTokenSignOptions,
+	refreshTokenCookieName,
+	refreshTokenCookieOptions,
+	refreshTokenSignOptions,
 } from "@/config/jwt-cookie";
 import { Hasher } from "@/lib/hasher";
 import { TokenProcessor } from "@/lib/token-processor";
@@ -31,64 +31,60 @@ import { v4 as uuidv4 } from "uuid";
  *
  * @source
  */
-export const signupController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.SIGNUP;
-  const respond = buildValidatedResponder(res, contractKey);
+export const signupController = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.SIGNUP;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const { body } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
-    const { firstName, lastName, login, password } = body;
+	try {
+		const { body } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+		const { firstName, lastName, login, password } = body;
 
-    const { userService, fileStorage } = req.app.services;
-    const file = await processAvatar(fileStorage, req.file);
+		const { userService, fileStorage } = req.app.services;
+		const file = await processAvatar(fileStorage, req.file);
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = Hasher.hash(password + salt);
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = Hasher.hash(password + salt);
 
-    const isLoginTaken = await userService.isLoginTaken(login);
+		const isLoginTaken = await userService.isLoginTaken(login);
 
-    if (isLoginTaken) {
-      return respond(StatusCodes.CONFLICT, {
-        message: req.t("auth.controllers.signup.login-already-exists"),
-      });
-    }
+		if (isLoginTaken) {
+			return respond(StatusCodes.CONFLICT, {
+				message: req.t("auth.controllers.signup.login-already-exists"),
+			});
+		}
 
-    const user: UserWithCredentials = {
-      id: uuidv4(),
-      firstName,
-      lastName,
-      login,
-      password: hashedPassword,
-      salt,
-      photoURL: file,
-      lastActive: new Date(),
-    };
+		const user: UserWithCredentials = {
+			id: uuidv4(),
+			firstName,
+			lastName,
+			login,
+			password: hashedPassword,
+			salt,
+			photoURL: file,
+			lastActive: new Date(),
+		};
 
-    await userService.insertUser(user);
+		await userService.insertUser(user);
 
-    const refreshToken = TokenProcessor.encode(
-      { userId: user.id },
-      env.REFRESH_TOKEN_SECRET,
-      refreshTokenSignOptions,
-    );
+		const refreshToken = TokenProcessor.encode(
+			{ userId: user.id },
+			env.REFRESH_TOKEN_SECRET,
+			refreshTokenSignOptions,
+		);
 
-    const accessToken = TokenProcessor.encode(
-      { userId: user.id },
-      env.ACCESS_TOKEN_SECRET,
-      accessTokenSignOptions,
-    );
+		const accessToken = TokenProcessor.encode(
+			{ userId: user.id },
+			env.ACCESS_TOKEN_SECRET,
+			accessTokenSignOptions,
+		);
 
-    res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
+		res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
 
-    return respond(StatusCodes.CREATED, {
-      user,
-      accessToken,
-    });
-  } catch {
-    next(new Error(req.t("auth.controllers.signup.failure")));
-  }
+		return respond(StatusCodes.CREATED, {
+			user,
+			accessToken,
+		});
+	} catch {
+		next(new Error(req.t("auth.controllers.signup.failure")));
+	}
 };

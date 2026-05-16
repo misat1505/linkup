@@ -3,14 +3,14 @@ import { RequestValidatedValues } from "./request-validation";
 import { UserWithCredentials } from "./user-with-credentials";
 
 declare global {
-  namespace Express {
-    interface Application {
-      services: AppServices;
-    }
+	namespace Express {
+		interface Application {
+			services: AppServices;
+		}
 
-    interface Request {
-      user?: UserWithCredentials;
-      validated?: RequestValidatedValues;
-    }
-  }
+		interface Request {
+			user?: UserWithCredentials;
+			validated?: RequestValidatedValues;
+		}
+	}
 }

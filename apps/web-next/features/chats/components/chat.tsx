@@ -8,17 +8,17 @@ import ChatHeaderWrapper from "./chat-header-wrapper";
 type ChatProps = { chat: ChatType };
 
 export default function Chat({ chat }: ChatProps) {
-  return (
-    <ChatProvider chat={chat}>
-      <div className="w-[calc(100vw-20rem)] grow">
-        <div className="flex h-full w-full flex-col">
-          <ChatHeaderWrapper chat={chat} />
-          <ChatFooterProvider chatId={chat.id}>
-            <ChatContent />
-            <ChatFooter />
-          </ChatFooterProvider>
-        </div>
-      </div>
-    </ChatProvider>
-  );
+	return (
+		<ChatProvider chat={chat}>
+			<div className="w-[calc(100vw-20rem)] grow">
+				<div className="flex h-full w-full flex-col">
+					<ChatHeaderWrapper chat={chat} />
+					<ChatFooterProvider chatId={chat.id}>
+						<ChatContent />
+						<ChatFooter />
+					</ChatFooterProvider>
+				</div>
+			</div>
+		</ChatProvider>
+	);
 }

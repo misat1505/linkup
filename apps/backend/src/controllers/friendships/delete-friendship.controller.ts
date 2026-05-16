@@ -16,43 +16,36 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const deleteFriendship = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.DELETE_FRIENDSHIP;
-  const respond = buildValidatedResponder(res, contractKey);
+export const deleteFriendship = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.DELETE_FRIENDSHIP;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      body: { acceptorId, requesterId },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			body: { acceptorId, requesterId },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const friendshipService = req.app.services.friendshipService;
+		const userId = req.user!.id;
+		const friendshipService = req.app.services.friendshipService;
 
-    if (![requesterId, acceptorId].includes(userId)) {
-      return respond(StatusCodes.FORBIDDEN, {
-        message: req.t("friends.controllers.delete.unauthorized"),
-      });
-    }
+		if (![requesterId, acceptorId].includes(userId)) {
+			return respond(StatusCodes.FORBIDDEN, {
+				message: req.t("friends.controllers.delete.unauthorized"),
+			});
+		}
 
-    const isDeleted = await friendshipService.deleteFriendship(
-      requesterId,
-      acceptorId,
-    );
+		const isDeleted = await friendshipService.deleteFriendship(requesterId, acceptorId);
 
-    if (!isDeleted) {
-      return respond(StatusCodes.NOT_FOUND, {
-        message: req.t("friends.controllers.delete.not-found"),
-      });
-    }
+		if (!isDeleted) {
+			return respond(StatusCodes.NOT_FOUND, {
+				message: req.t("friends.controllers.delete.not-found"),
+			});
+		}
 
-    return respond(StatusCodes.OK, {
-      message: req.t("friends.controllers.delete.success"),
-    });
-  } catch {
-    next(new Error(req.t("friends.controllers.delete.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			message: req.t("friends.controllers.delete.success"),
+		});
+	} catch {
+		next(new Error(req.t("friends.controllers.delete.failure")));
+	}
 };

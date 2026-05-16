@@ -5,27 +5,27 @@ import request from "supertest";
 import { describe, it } from "vitest";
 
 describe("[DELETE] /posts/:id", () => {
-  it("deletes post successfully", async () => {
-    await testWithTransaction(async ({ app, seed }) => {
-      const token = TestHelpers.createToken(seed.users[0].id);
-      const postId = seed.posts[0].id;
+	it("deletes post successfully", async () => {
+		await testWithTransaction(async ({ app, seed }) => {
+			const token = TestHelpers.createToken(seed.users[0].id);
+			const postId = seed.posts[0].id;
 
-      await request(app)
-        .delete(`/posts/${postId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .expect(StatusCodes.OK);
-    });
-  });
+			await request(app)
+				.delete(`/posts/${postId}`)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(StatusCodes.OK);
+		});
+	});
 
-  it("blocks post deletion by non-owner", async () => {
-    await testWithTransaction(async ({ app, seed }) => {
-      const token = TestHelpers.createToken(seed.users[1].id);
-      const postId = seed.posts[0].id;
+	it("blocks post deletion by non-owner", async () => {
+		await testWithTransaction(async ({ app, seed }) => {
+			const token = TestHelpers.createToken(seed.users[1].id);
+			const postId = seed.posts[0].id;
 
-      await request(app)
-        .delete(`/posts/${postId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .expect(StatusCodes.FORBIDDEN);
-    });
-  });
+			await request(app)
+				.delete(`/posts/${postId}`)
+				.set("Authorization", `Bearer ${token}`)
+				.expect(StatusCodes.FORBIDDEN);
+		});
+	});
 });

@@ -9,29 +9,29 @@ import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
 
 export const acceptFriendshipRoute = {
-  method: "post",
-  path: "/friendships/accept",
-  summary: "Accept an existing friendship request",
-  tags: [TAGS.FRIENDSHIPS],
+	method: "post",
+	path: "/friendships/accept",
+	summary: "Accept an existing friendship request",
+	tags: [TAGS.FRIENDSHIPS],
 
-  request: {
-    body: request.json({
-      schema: AcceptFriendshipDTO,
-    }),
-  },
+	request: {
+		body: request.json({
+			schema: AcceptFriendshipDTO,
+		}),
+	},
 
-  responses: {
-    [StatusCodes.OK]: response.json({
-      schema: z.object({ friendship: Friendship }),
-      description: "Friendship accepted successfully",
-    }),
+	responses: {
+		[StatusCodes.OK]: response.json({
+			schema: z.object({ friendship: Friendship }),
+			description: "Friendship accepted successfully",
+		}),
 
-    [StatusCodes.BAD_REQUEST]: errors.badRequest({
-      description: "Invalid friendship request or unauthorized action",
-    }),
+		[StatusCodes.BAD_REQUEST]: errors.badRequest({
+			description: "Invalid friendship request or unauthorized action",
+		}),
 
-    [StatusCodes.CONFLICT]: errors.conflict({
-      description: "Friendship request does not exist or is already processed",
-    }),
-  },
+		[StatusCodes.CONFLICT]: errors.conflict({
+			description: "Friendship request does not exist or is already processed",
+		}),
+	},
 } satisfies RouteConfig;

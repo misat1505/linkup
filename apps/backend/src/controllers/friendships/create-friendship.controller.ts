@@ -16,43 +16,36 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const createFriendship = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.CREATE_FRIENDSHIP;
-  const respond = buildValidatedResponder(res, contractKey);
+export const createFriendship = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.CREATE_FRIENDSHIP;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      body: { acceptorId, requesterId },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			body: { acceptorId, requesterId },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const friendshipService = req.app.services.friendshipService;
+		const userId = req.user!.id;
+		const friendshipService = req.app.services.friendshipService;
 
-    if (userId !== requesterId) {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t("friends.controllers.create.unauthorized"),
-      });
-    }
+		if (userId !== requesterId) {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("friends.controllers.create.unauthorized"),
+			});
+		}
 
-    const friendship = await friendshipService.createFriendship(
-      requesterId,
-      acceptorId,
-    );
+		const friendship = await friendshipService.createFriendship(requesterId, acceptorId);
 
-    if (!friendship) {
-      return respond(StatusCodes.CONFLICT, {
-        message: req.t("friends.controllers.create.already-exists"),
-      });
-    }
+		if (!friendship) {
+			return respond(StatusCodes.CONFLICT, {
+				message: req.t("friends.controllers.create.already-exists"),
+			});
+		}
 
-    return respond(StatusCodes.CREATED, {
-      friendship,
-    });
-  } catch {
-    next(new Error(req.t("friends.controllers.create.failure")));
-  }
+		return respond(StatusCodes.CREATED, {
+			friendship,
+		});
+	} catch {
+		next(new Error(req.t("friends.controllers.create.failure")));
+	}
 };

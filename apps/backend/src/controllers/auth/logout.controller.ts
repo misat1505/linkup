@@ -21,20 +21,16 @@ import { StatusCodes } from "http-status-codes";
  * @throws {Error} If there is an error during the logout process, the next middleware will be called with an error.
  */
 
-export const logoutController = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.LOGOUT;
-  const respond = buildValidatedResponder(res, contractKey);
-  try {
-    res.clearCookie(refreshTokenCookieName);
+export const logoutController = (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.LOGOUT;
+	const respond = buildValidatedResponder(res, contractKey);
+	try {
+		res.clearCookie(refreshTokenCookieName);
 
-    return respond(StatusCodes.OK, {
-      message: req.t("auth.controllers.logout.success"),
-    });
-  } catch {
-    next(new Error(req.t("auth.controllers.logout.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			message: req.t("auth.controllers.logout.success"),
+		});
+	} catch {
+		next(new Error(req.t("auth.controllers.logout.failure")));
+	}
 };

@@ -9,27 +9,27 @@ import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
 
 export const createGroupChatRoute = {
-  method: "post",
-  path: "/chats/group",
-  summary: "Create a new group chat",
-  tags: [TAGS.CHATS],
+	method: "post",
+	path: "/chats/group",
+	summary: "Create a new group chat",
+	tags: [TAGS.CHATS],
 
-  request: {
-    body: request.multipart({
-      schema: CreateGroupChatDTO,
-    }),
-  },
+	request: {
+		body: request.multipart({
+			schema: CreateGroupChatDTO,
+		}),
+	},
 
-  responses: {
-    [StatusCodes.CREATED]: response.json({
-      schema: z.object({
-        chat: Chat,
-      }),
-      description: "Group chat created successfully",
-    }),
+	responses: {
+		[StatusCodes.CREATED]: response.json({
+			schema: z.object({
+				chat: Chat,
+			}),
+			description: "Group chat created successfully",
+		}),
 
-    [StatusCodes.BAD_REQUEST]: errors.badRequest({
-      description: "Invalid data for group chat creation",
-    }),
-  },
+		[StatusCodes.BAD_REQUEST]: errors.badRequest({
+			description: "Invalid data for group chat creation",
+		}),
+	},
 } satisfies RouteConfig;

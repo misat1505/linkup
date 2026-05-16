@@ -4,15 +4,15 @@ import MyPostPreviewWrapper from "@/features/posts/components/my-post-preview-wr
 import { PostsPageLayout } from "@packages/ui/components/features/posts/posts-page-layout";
 
 export default async function MyPostsPage() {
-  const posts = await getMyPosts();
+	const posts = await getMyPosts();
 
-  return (
-    <AuthGuard>
-      <PostsPageLayout>
-        {posts.map((post) => (
-          <MyPostPreviewWrapper post={post} key={post.id} />
-        ))}
-      </PostsPageLayout>
-    </AuthGuard>
-  );
+	return (
+		<AuthGuard>
+			<PostsPageLayout>
+				{posts.map((post) => (
+					<MyPostPreviewWrapper post={post} key={post.id} />
+				))}
+			</PostsPageLayout>
+		</AuthGuard>
+	);
 }

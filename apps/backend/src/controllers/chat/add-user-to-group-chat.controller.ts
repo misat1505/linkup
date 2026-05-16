@@ -19,59 +19,53 @@ import { StatusCodes } from "http-status-codes";
  * @source
  */
 export const addUserToGroupChatController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
+	req: Request,
+	res: Response,
+	next: NextFunction,
 ) => {
-  const contractKey = CONTRACT_KEYS.ADD_USER_TO_GROUP_CHAT;
-  const respond = buildValidatedResponder(res, contractKey);
+	const contractKey = CONTRACT_KEYS.ADD_USER_TO_GROUP_CHAT;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const chatService = req.app.services.chatService;
+	try {
+		const chatService = req.app.services.chatService;
 
-    const {
-      params: { chatId },
-      body: { userId },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+		const {
+			params: { chatId },
+			body: { userId },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const myId = req.user!.id;
+		const myId = req.user!.id;
 
-    const [chatType, iAmInChat, isOtherInChat] = await Promise.all([
-      chatService.getChatType(chatId),
-      chatService.isUserInChat({ userId: myId, chatId }),
-      chatService.isUserInChat({ userId, chatId }),
-    ]);
+		const [chatType, iAmInChat, isOtherInChat] = await Promise.all([
+			chatService.getChatType(chatId),
+			chatService.isUserInChat({ userId: myId, chatId }),
+			chatService.isUserInChat({ userId, chatId }),
+		]);
 
-    if (chatType !== "GROUP") {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t(
-          "chats.controllers.add-user-to-group-chat.bad-chat-type",
-        ),
-      });
-    }
+		if (chatType !== "GROUP") {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("chats.controllers.add-user-to-group-chat.bad-chat-type"),
+			});
+		}
 
-    if (!iAmInChat) {
-      return respond(StatusCodes.FORBIDDEN, {
-        message: req.t(
-          "chats.controllers.add-user-to-group-chat.i-am-not-in-chat",
-        ),
-      });
-    }
+		if (!iAmInChat) {
+			return respond(StatusCodes.FORBIDDEN, {
+				message: req.t("chats.controllers.add-user-to-group-chat.i-am-not-in-chat"),
+			});
+		}
 
-    if (isOtherInChat) {
-      return respond(StatusCodes.CONFLICT, {
-        message: req.t(
-          "chats.controllers.add-user-to-group-chat.user-already-in-chat",
-        ),
-      });
-    }
+		if (isOtherInChat) {
+			return respond(StatusCodes.CONFLICT, {
+				message: req.t("chats.controllers.add-user-to-group-chat.user-already-in-chat"),
+			});
+		}
 
-    const user = await chatService.addUserToChat({ chatId, userId });
+		const user = await chatService.addUserToChat({ chatId, userId });
 
-    return respond(StatusCodes.CREATED, {
-      user,
-    });
-  } catch {
-    next(new Error(req.t("chats.controllers.add-user-to-group-chat.failure")));
-  }
+		return respond(StatusCodes.CREATED, {
+			user,
+		});
+	} catch {
+		next(new Error(req.t("chats.controllers.add-user-to-group-chat.failure")));
+	}
 };

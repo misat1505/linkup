@@ -8,28 +8,24 @@ import ChatMembersDisplayerWrapper from "./chat-settings/chat-members-displayer"
 import GroupChatContent from "./chat-settings/group-chat-content";
 
 export default async function ChatHeaderWrapper({ chat }: { chat: Chat }) {
-  const me = await getMeCached();
+	const me = await getMeCached();
 
-  return (
-    <ChatHeader
-      chat={chat}
-      me={me}
-      slots={{
-        chatLeaveDialog: (
-          <ChatLeaveDialog chatId={chat.id} leaveChatAction={leaveChat} />
-        ),
-        chatSettingsDialog: (
-          <ChatSettingsDialog
-            chat={chat}
-            slots={{
-              privateChatContent: (
-                <ChatMembersDisplayerWrapper chat={chat} me={me} />
-              ),
-              groupChatContent: <GroupChatContent chat={chat} />,
-            }}
-          />
-        ),
-      }}
-    />
-  );
+	return (
+		<ChatHeader
+			chat={chat}
+			me={me}
+			slots={{
+				chatLeaveDialog: <ChatLeaveDialog chatId={chat.id} leaveChatAction={leaveChat} />,
+				chatSettingsDialog: (
+					<ChatSettingsDialog
+						chat={chat}
+						slots={{
+							privateChatContent: <ChatMembersDisplayerWrapper chat={chat} me={me} />,
+							groupChatContent: <GroupChatContent chat={chat} />,
+						}}
+					/>
+				),
+			}}
+		/>
+	);
 }

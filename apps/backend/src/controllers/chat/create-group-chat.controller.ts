@@ -21,49 +21,38 @@ import { v4 as uuidv4 } from "uuid";
  * @source
  */
 export const createGroupChatController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
+	req: Request,
+	res: Response,
+	next: NextFunction,
 ) => {
-  const contractKey = CONTRACT_KEYS.CREATE_GROUP_CHAT;
-  const respond = buildValidatedResponder(res, contractKey);
+	const contractKey = CONTRACT_KEYS.CREATE_GROUP_CHAT;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const userId = req.user!.id;
+	try {
+		const userId = req.user!.id;
 
-    const {
-      body: { users, name },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+		const {
+			body: { users, name },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const { chatService, fileStorage } = req.app.services;
+		const { chatService, fileStorage } = req.app.services;
 
-    if (!users.includes(userId)) {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t(
-          "chats.controllers.create-group-chat.not-belonging-to-you",
-        ),
-      });
-    }
+		if (!users.includes(userId)) {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("chats.controllers.create-group-chat.not-belonging-to-you"),
+			});
+		}
 
-    const newFilename = req.file ? uuidv4() + ".webp" : null;
+		const newFilename = req.file ? uuidv4() + ".webp" : null;
 
-    const chat = await chatService.createGroupChat(
-      users,
-      name || null,
-      newFilename,
-    );
+		const chat = await chatService.createGroupChat(users, name || null, newFilename);
 
-    if (newFilename) {
-      await processAvatar(
-        fileStorage,
-        req.file,
-        `chats/${chat.id}/`,
-        newFilename,
-      );
-    }
+		if (newFilename) {
+			await processAvatar(fileStorage, req.file, `chats/${chat.id}/`, newFilename);
+		}
 
-    return respond(StatusCodes.CREATED, { chat });
-  } catch {
-    next(new Error(req.t("chats.controllers.create-group-chat.failure")));
-  }
+		return respond(StatusCodes.CREATED, { chat });
+	} catch {
+		next(new Error(req.t("chats.controllers.create-group-chat.failure")));
+	}
 };

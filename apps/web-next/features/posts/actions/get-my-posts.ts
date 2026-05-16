@@ -5,13 +5,11 @@ import { getCachedRenderedPost } from "../utils/render-post";
 import { sortPosts } from "../utils/sort-posts";
 
 export async function getMyPosts(): Promise<PostWithRenderedContent[]> {
-  const res = await apiContractClient.getUserPosts();
+	const res = await apiContractClient.getUserPosts();
 
-  const sortedPosts = sortPosts(res.posts);
+	const sortedPosts = sortPosts(res.posts);
 
-  const renderedPosts = await Promise.all(
-    sortedPosts.map((post) => getCachedRenderedPost(post)),
-  );
+	const renderedPosts = await Promise.all(sortedPosts.map((post) => getCachedRenderedPost(post)));
 
-  return renderedPosts;
+	return renderedPosts;
 }

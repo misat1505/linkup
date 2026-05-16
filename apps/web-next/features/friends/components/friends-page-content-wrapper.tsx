@@ -6,22 +6,20 @@ import { acceptFriendship } from "../actions/accept-friendship";
 import { deleteFriendship } from "../actions/delete-friendship";
 
 type FriendsPageContentWrapperProps = {
-  friendships: Friendship[];
+	friendships: Friendship[];
 };
 
-const FriendsPageContentWrapper = ({
-  friendships,
-}: FriendsPageContentWrapperProps) => {
-  const { user } = useAppContext();
+const FriendsPageContentWrapper = ({ friendships }: FriendsPageContentWrapperProps) => {
+	const { user } = useAppContext();
 
-  return (
-    <FriendsPageContent
-      friendships={friendships}
-      me={user!}
-      acceptFriendshipAction={acceptFriendship}
-      deleteFriendshipAction={deleteFriendship}
-    />
-  );
+	return (
+		<FriendsPageContent
+			friendships={friendships}
+			me={user!}
+			acceptFriendshipAction={acceptFriendship}
+			deleteFriendshipAction={deleteFriendship}
+		/>
+	);
 };
 
 export default FriendsPageContentWrapper;

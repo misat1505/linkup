@@ -20,51 +20,42 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const updatePost = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.UPDATE_POST;
-  const respond = buildValidatedResponder(res, contractKey);
+export const updatePost = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.UPDATE_POST;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      body: { content },
-      params: { id },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			body: { content },
+			params: { id },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const { postService, fileStorage } = req.app.services;
+		const userId = req.user!.id;
+		const { postService, fileStorage } = req.app.services;
 
-    const post = await postService.getPost(id);
+		const post = await postService.getPost(id);
 
-    if (!post) {
-      return respond(StatusCodes.NOT_FOUND, {
-        message: req.t("posts.controllers.update.not-found"),
-      });
-    }
+		if (!post) {
+			return respond(StatusCodes.NOT_FOUND, {
+				message: req.t("posts.controllers.update.not-found"),
+			});
+		}
 
-    if (post.author.id !== userId) {
-      return respond(StatusCodes.FORBIDDEN, {
-        message: req.t("posts.controllers.update.unauthorized"),
-      });
-    }
+		if (post.author.id !== userId) {
+			return respond(StatusCodes.FORBIDDEN, {
+				message: req.t("posts.controllers.update.unauthorized"),
+			});
+		}
 
-    const updatedContent = await handleMarkdownUpdate(
-      fileStorage,
-      content,
-      userId,
-      id,
-    );
+		const updatedContent = await handleMarkdownUpdate(fileStorage, content, userId, id);
 
-    const newPost = await postService.updatePost({
-      id,
-      content: updatedContent,
-    });
+		const newPost = await postService.updatePost({
+			id,
+			content: updatedContent,
+		});
 
-    return respond(StatusCodes.OK, { post: newPost! });
-  } catch {
-    next(new Error(req.t("posts.controllers.update.failure")));
-  }
+		return respond(StatusCodes.OK, { post: newPost! });
+	} catch {
+		next(new Error(req.t("posts.controllers.update.failure")));
+	}
 };

@@ -4,14 +4,14 @@ import Chat from "./chat";
 import ChatNavigation from "./chat-navigation";
 
 export default function ChatPageContent() {
-  const { isLoading } = useChatPageContext();
+	const { isLoading } = useChatPageContext();
 
-  if (isLoading) return <Loading />;
+	if (isLoading) return <Loading />;
 
-  return (
-    <>
-      <ChatNavigation />
-      <Chat />
-    </>
-  );
+	return (
+		<>
+			<ChatNavigation />
+			<Chat />
+		</>
+	);
 }

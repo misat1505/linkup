@@ -8,41 +8,41 @@ import { useAppContext } from "./contexts/app-provider";
 import { protectedRoutes, publicRoutes } from "./lib/routes";
 
 export default function App() {
-  const { isLoading } = useAppContext();
+	const { isLoading } = useAppContext();
 
-  if (isLoading) return <Loading />;
+	if (isLoading) return <Loading />;
 
-  return (
-    <>
-      <NavbarWrapper />
-      <Routes>
-        {protectedRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={
-              <ProtectedRoute>
-                <Suspense fallback={<Loading />}>
-                  <route.component />
-                </Suspense>
-              </ProtectedRoute>
-            }
-          />
-        ))}
-        {publicRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={
-              <Suspense fallback={<Loading />}>
-                <route.component />
-              </Suspense>
-            }
-          />
-        ))}
-      </Routes>
+	return (
+		<>
+			<NavbarWrapper />
+			<Routes>
+				{protectedRoutes.map((route, index) => (
+					<Route
+						key={index}
+						path={route.path}
+						element={
+							<ProtectedRoute>
+								<Suspense fallback={<Loading />}>
+									<route.component />
+								</Suspense>
+							</ProtectedRoute>
+						}
+					/>
+				))}
+				{publicRoutes.map((route, index) => (
+					<Route
+						key={index}
+						path={route.path}
+						element={
+							<Suspense fallback={<Loading />}>
+								<route.component />
+							</Suspense>
+						}
+					/>
+				))}
+			</Routes>
 
-      <Toaster />
-    </>
-  );
+			<Toaster />
+		</>
+	);
 }

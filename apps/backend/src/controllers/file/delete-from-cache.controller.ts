@@ -16,28 +16,24 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const deleteFromCache = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.DELETE_FROM_CACHE;
-  const respond = buildValidatedResponder(res, contractKey);
+export const deleteFromCache = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.DELETE_FROM_CACHE;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      params: { filename },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			params: { filename },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const fileStorage = req.app.services.fileStorage;
+		const userId = req.user!.id;
+		const fileStorage = req.app.services.fileStorage;
 
-    await fileStorage.deleteFile(`cache/${userId}/${filename}`);
+		await fileStorage.deleteFile(`cache/${userId}/${filename}`);
 
-    return respond(StatusCodes.OK, {
-      message: req.t("files.controllers.delete-from-cache.success"),
-    });
-  } catch {
-    next(new Error(req.t("files.controllers.delete-from-cache.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			message: req.t("files.controllers.delete-from-cache.success"),
+		});
+	} catch {
+		next(new Error(req.t("files.controllers.delete-from-cache.failure")));
+	}
 };

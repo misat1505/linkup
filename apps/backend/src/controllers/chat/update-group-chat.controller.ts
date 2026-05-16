@@ -19,64 +19,64 @@ import { v4 as uuidv4 } from "uuid";
  * @source
  */
 export const updateGroupChatController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
+	req: Request,
+	res: Response,
+	next: NextFunction,
 ) => {
-  const contractKey = CONTRACT_KEYS.UPDATE_GROUP_CHAT;
-  const respond = buildValidatedResponder(res, contractKey);
+	const contractKey = CONTRACT_KEYS.UPDATE_GROUP_CHAT;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      body: { name },
-      params: { chatId },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			body: { name },
+			params: { chatId },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const { chatService, fileStorage } = req.app.services;
+		const userId = req.user!.id;
+		const { chatService, fileStorage } = req.app.services;
 
-    const isAuthorized = await chatService.isUserInChat({
-      chatId,
-      userId,
-    });
+		const isAuthorized = await chatService.isUserInChat({
+			chatId,
+			userId,
+		});
 
-    if (!isAuthorized) {
-      return respond(StatusCodes.FORBIDDEN, {
-        message: req.t("chats.controllers.update-group-chat.unauthorized"),
-      });
-    }
+		if (!isAuthorized) {
+			return respond(StatusCodes.FORBIDDEN, {
+				message: req.t("chats.controllers.update-group-chat.unauthorized"),
+			});
+		}
 
-    const oldChat = await chatService.getChatById(chatId);
+		const oldChat = await chatService.getChatById(chatId);
 
-    if (!oldChat || oldChat.type !== "GROUP") {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t("chats.controllers.update-group-chat.bad-type"),
-      });
-    }
+		if (!oldChat || oldChat.type !== "GROUP") {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("chats.controllers.update-group-chat.bad-type"),
+			});
+		}
 
-    const newFilename = uuidv4();
+		const newFilename = uuidv4();
 
-    const file = await processAvatar(
-      fileStorage,
-      req.file,
-      `chats/${chatId}/`,
-      newFilename + ".webp",
-    );
+		const file = await processAvatar(
+			fileStorage,
+			req.file,
+			`chats/${chatId}/`,
+			newFilename + ".webp",
+		);
 
-    if (oldChat.photoURL) {
-      await fileStorage.deleteFile(`chats/${chatId}/${oldChat.photoURL}`);
-    }
+		if (oldChat.photoURL) {
+			await fileStorage.deleteFile(`chats/${chatId}/${oldChat.photoURL}`);
+		}
 
-    const chat = await chatService.updateGroupChat({
-      chatId,
-      file,
-      name: name || null,
-    });
+		const chat = await chatService.updateGroupChat({
+			chatId,
+			file,
+			name: name || null,
+		});
 
-    return respond(StatusCodes.OK, {
-      chat,
-    });
-  } catch {
-    next(new Error(req.t("chats.controllers.update-group-chat.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			chat,
+		});
+	} catch {
+		next(new Error(req.t("chats.controllers.update-group-chat.failure")));
+	}
 };

@@ -20,27 +20,23 @@ import { StatusCodes } from "http-status-codes";
  *
  * @throws {Error} If there is an error fetching the user, the next middleware will be called with an error.
  */
-export const getSelfController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.GET_SELF;
-  const respond = buildValidatedResponder(res, contractKey);
-  try {
-    const userId = req.user!.id;
-    const userService = req.app.services.userService;
+export const getSelfController = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.GET_SELF;
+	const respond = buildValidatedResponder(res, contractKey);
+	try {
+		const userId = req.user!.id;
+		const userService = req.app.services.userService;
 
-    const user = await userService.getUser(userId);
+		const user = await userService.getUser(userId);
 
-    if (!user) {
-      return respond(StatusCodes.NOT_FOUND, {
-        message: req.t("auth.controllers.get-self.user-not-found"),
-      });
-    }
+		if (!user) {
+			return respond(StatusCodes.NOT_FOUND, {
+				message: req.t("auth.controllers.get-self.user-not-found"),
+			});
+		}
 
-    return respond(StatusCodes.OK, { user });
-  } catch {
-    next(new Error(req.t("auth.controllers.get-self.failure")));
-  }
+		return respond(StatusCodes.OK, { user });
+	} catch {
+		next(new Error(req.t("auth.controllers.get-self.failure")));
+	}
 };

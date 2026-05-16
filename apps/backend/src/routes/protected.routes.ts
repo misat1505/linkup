@@ -8,18 +8,18 @@ import { Routers } from "./routers";
  * All requests to these routes will first go through the `authorize` and `updateLastActive` middlewares.
  */
 const routers = [
-  Routers.auth.protected,
-  Routers.file,
-  Routers.user,
-  Routers.chat,
-  Routers.post,
-  Routers.friendship,
+	Routers.auth.protected,
+	Routers.file,
+	Routers.user,
+	Routers.chat,
+	Routers.post,
+	Routers.friendship,
 ];
 
 const protectedRouter = Router();
 
 routers.forEach((router) => {
-  protectedRouter.use(router);
+	protectedRouter.use(router);
 });
 
 export default protectedRouter;

@@ -16,55 +16,51 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const updateAliasController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.UDPATE_USER_ALIAS;
-  const respond = buildValidatedResponder(res, contractKey);
+export const updateAliasController = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.UDPATE_USER_ALIAS;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      body: { alias },
-      params: { chatId, userId: userToUpdateId },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			body: { alias },
+			params: { chatId, userId: userToUpdateId },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const chatService = req.app.services.chatService;
+		const userId = req.user!.id;
+		const chatService = req.app.services.chatService;
 
-    const isUserUpdatedInChat = await chatService.isUserInChat({
-      userId: userToUpdateId,
-      chatId,
-    });
+		const isUserUpdatedInChat = await chatService.isUserInChat({
+			userId: userToUpdateId,
+			chatId,
+		});
 
-    if (!isUserUpdatedInChat) {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t("chats.controllers.update-alias.user-not-in-chat"),
-      });
-    }
+		if (!isUserUpdatedInChat) {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("chats.controllers.update-alias.user-not-in-chat"),
+			});
+		}
 
-    const isAuthorized = await chatService.isUserInChat({
-      userId,
-      chatId,
-    });
+		const isAuthorized = await chatService.isUserInChat({
+			userId,
+			chatId,
+		});
 
-    if (!isAuthorized) {
-      return respond(StatusCodes.FORBIDDEN, {
-        message: req.t("chats.controllers.update-alias.unauthorized"),
-      });
-    }
+		if (!isAuthorized) {
+			return respond(StatusCodes.FORBIDDEN, {
+				message: req.t("chats.controllers.update-alias.unauthorized"),
+			});
+		}
 
-    await chatService.updateAlias({
-      userId: userToUpdateId,
-      chatId,
-      alias,
-    });
+		await chatService.updateAlias({
+			userId: userToUpdateId,
+			chatId,
+			alias,
+		});
 
-    return respond(StatusCodes.OK, {
-      alias,
-    });
-  } catch {
-    next(new Error(req.t("chats.controllers.update-alias.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			alias,
+		});
+	} catch {
+		next(new Error(req.t("chats.controllers.update-alias.failure")));
+	}
 };

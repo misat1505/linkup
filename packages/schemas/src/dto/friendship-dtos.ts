@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const AcceptFriendshipDTO = z.object({
-  requesterId: z.uuid(),
-  acceptorId: z.uuid(),
+	requesterId: z.uuid(),
+	acceptorId: z.uuid(),
 });
 export type AcceptFriendshipDTO = z.infer<typeof AcceptFriendshipDTO>;
 

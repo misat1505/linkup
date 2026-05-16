@@ -6,10 +6,10 @@ import { signupController } from "./signup.controller";
 import { updateSelfController } from "./update-self.controller";
 
 export const AuthControllers = {
-  getSelf: getSelfController,
-  login: loginController,
-  logout: logoutController,
-  refreshToken: refreshTokenController,
-  signup: signupController,
-  updateSelf: updateSelfController,
+	getSelf: getSelfController,
+	login: loginController,
+	logout: logoutController,
+	refreshToken: refreshTokenController,
+	signup: signupController,
+	updateSelf: updateSelfController,
 };

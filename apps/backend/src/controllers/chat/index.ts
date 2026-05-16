@@ -10,14 +10,14 @@ import { updateGroupChatController } from "./update-group-chat.controller";
 import { updateAliasController } from "./update-user-alias.controller";
 
 export const ChatControllers = {
-  addUserToGroupChat: addUserToGroupChatController,
-  createGroupChat: createGroupChatController,
-  createMessage: createMessageController,
-  createPrivateChat: createPrivateChatController,
-  createReaction: createReactionController,
-  deleteSelfFromGroupChat: deleteSelfFromGroupChatController,
-  getChatMessages: getChatMessagesController,
-  getSelfChats: getSelfChatsController,
-  updateGroupChat: updateGroupChatController,
-  updateAlias: updateAliasController,
+	addUserToGroupChat: addUserToGroupChatController,
+	createGroupChat: createGroupChatController,
+	createMessage: createMessageController,
+	createPrivateChat: createPrivateChatController,
+	createReaction: createReactionController,
+	deleteSelfFromGroupChat: deleteSelfFromGroupChatController,
+	getChatMessages: getChatMessagesController,
+	getSelfChats: getSelfChatsController,
+	updateGroupChat: updateGroupChatController,
+	updateAlias: updateAliasController,
 };

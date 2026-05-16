@@ -19,37 +19,33 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const reportPost = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.REPORT_POST;
-  const respond = buildValidatedResponder(res, contractKey);
+export const reportPost = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.REPORT_POST;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      params: { id },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			params: { id },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const postService = req.app.services.postService;
+		const userId = req.user!.id;
+		const postService = req.app.services.postService;
 
-    await postService.reportPost(userId, id);
+		await postService.reportPost(userId, id);
 
-    return respond(StatusCodes.OK, {
-      message: req.t("posts.controllers.report.success"),
-    });
-  } catch (e) {
-    const violatedUniqueConstraint =
-      e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002";
+		return respond(StatusCodes.OK, {
+			message: req.t("posts.controllers.report.success"),
+		});
+	} catch (e) {
+		const violatedUniqueConstraint =
+			e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002";
 
-    if (violatedUniqueConstraint) {
-      return respond(StatusCodes.CONFLICT, {
-        message: req.t("posts.controllers.report.already-reported"),
-      });
-    }
+		if (violatedUniqueConstraint) {
+			return respond(StatusCodes.CONFLICT, {
+				message: req.t("posts.controllers.report.already-reported"),
+			});
+		}
 
-    next(new Error(req.t("posts.controllers.report.failure")));
-  }
+		next(new Error(req.t("posts.controllers.report.failure")));
+	}
 };

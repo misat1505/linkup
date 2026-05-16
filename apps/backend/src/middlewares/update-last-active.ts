@@ -13,15 +13,11 @@ import { NextFunction, Request, Response } from "express";
  *
  * @source
  */
-export const updateLastActive = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const userId = req.user!.id;
-  const userService = req.app.services.userService;
+export const updateLastActive = async (req: Request, res: Response, next: NextFunction) => {
+	const userId = req.user!.id;
+	const userService = req.app.services.userService;
 
-  await userService.updateLastActive(userId);
+	await userService.updateLastActive(userId);
 
-  next();
+	next();
 };

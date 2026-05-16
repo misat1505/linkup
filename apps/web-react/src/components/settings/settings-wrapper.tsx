@@ -6,20 +6,20 @@ import { SettingsSlogan } from "@packages/ui/components/features/settings/settin
 import React from "react";
 
 const SettingsWrapper = () => {
-  const { theme, toggleTheme } = useThemeContext();
-  const { changeLanguage } = useLanguageContext();
+	const { theme, toggleTheme } = useThemeContext();
+	const { changeLanguage } = useLanguageContext();
 
-  return (
-    <React.Fragment>
-      <SettingsSlogan />
-      <SettingsCards
-        changeLanguage={changeLanguage}
-        language={i18n.language}
-        theme={theme}
-        toggleTheme={toggleTheme}
-      />
-    </React.Fragment>
-  );
+	return (
+		<React.Fragment>
+			<SettingsSlogan />
+			<SettingsCards
+				changeLanguage={changeLanguage}
+				language={i18n.language}
+				theme={theme}
+				toggleTheme={toggleTheme}
+			/>
+		</React.Fragment>
+	);
 };
 
 export default SettingsWrapper;

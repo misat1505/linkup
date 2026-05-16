@@ -10,45 +10,40 @@ import { buildFileURL } from "@packages/ui/utils/build-file-url";
 import { useQuery, useQueryClient } from "react-query";
 
 export default function ChatInfoUpdater() {
-  const { chat } = useChatContext();
-  const { data, isLoading } = useQuery({
-    queryKey: queryKeys.downloadFile(chat!.photoURL!),
-    queryFn: () =>
-      FileService.downloadFile(
-        buildFileURL(chat!.photoURL, { type: "chat-photo", id: chat!.id }),
-        chat!.photoURL,
-      ),
-  });
+	const { chat } = useChatContext();
+	const { data, isLoading } = useQuery({
+		queryKey: queryKeys.downloadFile(chat!.photoURL!),
+		queryFn: () =>
+			FileService.downloadFile(
+				buildFileURL(chat!.photoURL, { type: "chat-photo", id: chat!.id }),
+				chat!.photoURL,
+			),
+	});
 
-  if (isLoading)
-    return (
-      <div className="relative h-32 w-full">
-        <Loading />
-      </div>
-    );
-  return <UpdaterWrapper file={data || null} />;
+	if (isLoading)
+		return (
+			<div className="relative h-32 w-full">
+				<Loading />
+			</div>
+		);
+	return <UpdaterWrapper file={data || null} />;
 }
 
 function UpdaterWrapper({ file }: { file: File | null }) {
-  const queryClient = useQueryClient();
-  const { chat } = useChatContext();
+	const queryClient = useQueryClient();
+	const { chat } = useChatContext();
 
-  function cb(updatedChat: Chat) {
-    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-      if (!oldChats) return [];
+	function cb(updatedChat: Chat) {
+		queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+			if (!oldChats) return [];
 
-      const filteredChats = oldChats.filter((c) => c.id !== chat!.id);
-      filteredChats.push(updatedChat);
-      return sortChatsByActivity(filteredChats);
-    });
-  }
+			const filteredChats = oldChats.filter((c) => c.id !== chat!.id);
+			filteredChats.push(updatedChat);
+			return sortChatsByActivity(filteredChats);
+		});
+	}
 
-  return (
-    <Updater
-      chat={chat!}
-      file={file}
-      updateChatAction={ChatService.updateChat}
-      updateChatCb={cb}
-    />
-  );
+	return (
+		<Updater chat={chat!} file={file} updateChatAction={ChatService.updateChat} updateChatCb={cb} />
+	);
 }

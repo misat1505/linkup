@@ -9,9 +9,9 @@ import { v4 as uuidv4 } from "uuid";
  * @source
  */
 export function generateNewFilename(filename: string): string {
-  const splitted = filename.split(".");
-  const extension = splitted.pop();
-  const newname = uuidv4();
+	const splitted = filename.split(".");
+	const extension = splitted.pop();
+	const newname = uuidv4();
 
-  return extension ? `${newname}.${extension}` : newname;
+	return extension ? `${newname}.${extension}` : newname;
 }

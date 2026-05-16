@@ -16,31 +16,27 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const getPost = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.GET_POST;
-  const respond = buildValidatedResponder(res, contractKey);
+export const getPost = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.GET_POST;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      params: { id },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			params: { id },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const postService = req.app.services.postService;
+		const postService = req.app.services.postService;
 
-    const post = await postService.getPost(id);
+		const post = await postService.getPost(id);
 
-    if (!post) {
-      return respond(StatusCodes.NOT_FOUND, {
-        message: req.t("posts.controllers.get-single.not-found"),
-      });
-    }
+		if (!post) {
+			return respond(StatusCodes.NOT_FOUND, {
+				message: req.t("posts.controllers.get-single.not-found"),
+			});
+		}
 
-    return respond(StatusCodes.OK, { post });
-  } catch {
-    next(new Error(req.t("posts.controllers.get-single.failure")));
-  }
+		return respond(StatusCodes.OK, { post });
+	} catch {
+		next(new Error(req.t("posts.controllers.get-single.failure")));
+	}
 };

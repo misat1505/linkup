@@ -3,43 +3,41 @@ import { SocketAction, socketClient } from "@/lib/socket-client";
 import { ChatService } from "@/services/chat.service";
 import { Chat, Message, Reaction } from "@packages/schemas";
 import React, {
-  createContext,
-  PropsWithChildren,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
+	createContext,
+	PropsWithChildren,
+	useCallback,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
 } from "react";
 import {
-  FetchNextPageOptions,
-  InfiniteQueryObserverResult,
-  useInfiniteQuery,
-  useQueryClient,
+	FetchNextPageOptions,
+	InfiniteQueryObserverResult,
+	useInfiniteQuery,
+	useQueryClient,
 } from "react-query";
 import { useChatPageContext } from "./chat-page-provider";
 
 type ChatContextProps = PropsWithChildren & {
-  chatId: Chat["id"];
+	chatId: Chat["id"];
 };
 
 type ChatContextValue = {
-  messages: Message[] | undefined;
-  isLoading: boolean;
-  error: unknown;
-  chat: Chat | null;
-  chatId: Chat["id"];
-  incomeMessage: Message | null;
-  messageRefs: React.MutableRefObject<
-    Record<Message["id"], HTMLDivElement | null>
-  >;
-  setIncomeMessageId: React.Dispatch<React.SetStateAction<string | null>>;
-  fetchNextPage: (
-    options?: FetchNextPageOptions,
-  ) => Promise<InfiniteQueryObserverResult<Message, unknown>>;
-  hasNextPage?: boolean;
-  isFetchingNextPage: boolean;
-  addReaction: (reaction: Reaction) => void;
+	messages: Message[] | undefined;
+	isLoading: boolean;
+	error: unknown;
+	chat: Chat | null;
+	chatId: Chat["id"];
+	incomeMessage: Message | null;
+	messageRefs: React.MutableRefObject<Record<Message["id"], HTMLDivElement | null>>;
+	setIncomeMessageId: React.Dispatch<React.SetStateAction<string | null>>;
+	fetchNextPage: (
+		options?: FetchNextPageOptions,
+	) => Promise<InfiniteQueryObserverResult<Message, unknown>>;
+	hasNextPage?: boolean;
+	isFetchingNextPage: boolean;
+	addReaction: (reaction: Reaction) => void;
 };
 
 const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
@@ -48,110 +46,98 @@ const ChatContext = createContext<ChatContextValue>({} as ChatContextValue);
 export const useChatContext = () => useContext(ChatContext);
 
 const ChatProvider = ({ children, chatId }: ChatContextProps) => {
-  const queryClient = useQueryClient();
-  const messageRefs = useRef<Record<Message["id"], HTMLDivElement | null>>({});
-  const [incomeMessageId, setIncomeMessageId] = useState<Message["id"] | null>(
-    null,
-  );
-  const { chats, addMessage } = useChatPageContext();
+	const queryClient = useQueryClient();
+	const messageRefs = useRef<Record<Message["id"], HTMLDivElement | null>>({});
+	const [incomeMessageId, setIncomeMessageId] = useState<Message["id"] | null>(null);
+	const { chats, addMessage } = useChatPageContext();
 
-  const {
-    data,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: queryKeys.messages(chatId),
-    queryFn: ({ pageParam }) =>
-      ChatService.getMessages(chatId, undefined, pageParam || null),
-    getNextPageParam: (lastPage) => {
-      if (lastPage.length > 0) {
-        return lastPage[lastPage.length - 1].id;
-      }
-      return undefined;
-    },
-    select: (data) => ({
-      pages: data.pages.flatMap((page) => page),
-      pageParams: data.pageParams,
-    }),
-    refetchOnMount: false,
-  });
+	const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+		useInfiniteQuery({
+			queryKey: queryKeys.messages(chatId),
+			queryFn: ({ pageParam }) => ChatService.getMessages(chatId, undefined, pageParam || null),
+			getNextPageParam: (lastPage) => {
+				if (lastPage.length > 0) {
+					return lastPage[lastPage.length - 1].id;
+				}
+				return undefined;
+			},
+			select: (data) => ({
+				pages: data.pages.flatMap((page) => page),
+				pageParams: data.pageParams,
+			}),
+			refetchOnMount: false,
+		});
 
-  const messages = data?.pages || [];
+	const messages = data?.pages || [];
 
-  const incomeMessage =
-    messages?.find((message) => message.id === incomeMessageId) || null;
+	const incomeMessage = messages?.find((message) => message.id === incomeMessageId) || null;
 
-  const chat = chats?.find((c) => c.id === chatId) || null;
+	const chat = chats?.find((c) => c.id === chatId) || null;
 
-  const addReaction = useCallback(
-    (reaction: Reaction) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      queryClient.setQueryData(queryKeys.messages(chat!.id), (oldData: any) => {
-        if (!oldData) return oldData;
+	const addReaction = useCallback(
+		(reaction: Reaction) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			queryClient.setQueryData(queryKeys.messages(chat!.id), (oldData: any) => {
+				if (!oldData) return oldData;
 
-        const newPages = oldData.pages.map((page: Message[]) =>
-          page.map((m) => {
-            if (m.id !== reaction.messageId) return m;
+				const newPages = oldData.pages.map((page: Message[]) =>
+					page.map((m) => {
+						if (m.id !== reaction.messageId) return m;
 
-            const alreadyReacted = m.reactions.some(
-              (r) => r.user.id === reaction.user.id,
-            );
-            if (alreadyReacted) return m;
+						const alreadyReacted = m.reactions.some((r) => r.user.id === reaction.user.id);
+						if (alreadyReacted) return m;
 
-            return {
-              ...m,
-              reactions: [...m.reactions, reaction],
-            };
-          }),
-        );
+						return {
+							...m,
+							reactions: [...m.reactions, reaction],
+						};
+					}),
+				);
 
-        return {
-          pages: newPages,
-          pageParams: [...oldData.pageParams],
-        };
-      });
-    },
-    [chat, queryClient],
-  );
+				return {
+					pages: newPages,
+					pageParams: [...oldData.pageParams],
+				};
+			});
+		},
+		[chat, queryClient],
+	);
 
-  useEffect(() => {
-    socketClient.onReceiveMessage((message) => {
-      addMessage(message);
-      if (message.chatId === chatId) setIncomeMessageId(message.id);
-    });
+	useEffect(() => {
+		socketClient.onReceiveMessage((message) => {
+			addMessage(message);
+			if (message.chatId === chatId) setIncomeMessageId(message.id);
+		});
 
-    socketClient.onReceiveReaction((reaction) => {
-      addReaction(reaction);
-    });
+		socketClient.onReceiveReaction((reaction) => {
+			addReaction(reaction);
+		});
 
-    return () => {
-      socketClient.off(SocketAction.RECEIVE_MESSAGE);
-    };
-  }, [addMessage, addReaction, chatId]);
+		return () => {
+			socketClient.off(SocketAction.RECEIVE_MESSAGE);
+		};
+	}, [addMessage, addReaction, chatId]);
 
-  return (
-    <ChatContext.Provider
-      value={{
-        messages,
-        isLoading,
-        error,
-        chat,
-        chatId,
-        incomeMessage,
-        messageRefs,
-        setIncomeMessageId,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-        addReaction,
-      }}
-    >
-      {children}
-    </ChatContext.Provider>
-  );
+	return (
+		<ChatContext.Provider
+			value={{
+				messages,
+				isLoading,
+				error,
+				chat,
+				chatId,
+				incomeMessage,
+				messageRefs,
+				setIncomeMessageId,
+				fetchNextPage,
+				hasNextPage,
+				isFetchingNextPage,
+				addReaction,
+			}}
+		>
+			{children}
+		</ChatContext.Provider>
+	);
 };
 
 export default ChatProvider;

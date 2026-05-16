@@ -6,28 +6,28 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const respond = vi.fn();
 vi.mock("@/utils/validated-responder", () => ({
-  buildValidatedResponder: vi.fn(() => respond),
+	buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("searchUser", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
 
-  it("retrieves users matching search criteria", async () => {
-    await seedProvider(async (seed) => {
-      const users = seed.users;
-      mockUserService.searchUsers.mockResolvedValue(users);
+	it("retrieves users matching search criteria", async () => {
+		await seedProvider(async (seed) => {
+			const users = seed.users;
+			mockUserService.searchUsers.mockResolvedValue(users);
 
-      const req = mockRequest({
-        validated: { query: { term: "abc" } },
-      });
+			const req = mockRequest({
+				validated: { query: { term: "abc" } },
+			});
 
-      const res = mockResponse();
+			const res = mockResponse();
 
-      await UserControllers.searchUser(req, res, vi.fn());
+			await UserControllers.searchUser(req, res, vi.fn());
 
-      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
-    });
-  });
+			expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+		});
+	});
 });

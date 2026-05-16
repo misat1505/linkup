@@ -19,75 +19,67 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const createMessageController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.CREATE_MESSAGE;
-  const respond = buildValidatedResponder(res, contractKey);
+export const createMessageController = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.CREATE_MESSAGE;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      body: { content, responseId },
-      params: { chatId },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			body: { content, responseId },
+			params: { chatId },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const files = req.files as Express.Multer.File[];
+		const userId = req.user!.id;
+		const files = req.files as Express.Multer.File[];
 
-    const { chatService, fileStorage } = req.app.services;
+		const { chatService, fileStorage } = req.app.services;
 
-    const checks = [chatService.isUserInChat({ chatId, userId })];
+		const checks = [chatService.isUserInChat({ chatId, userId })];
 
-    if (responseId) {
-      checks.push(
-        chatService.isMessageInChat({
-          chatId,
-          messageId: responseId,
-        }),
-      );
-    }
+		if (responseId) {
+			checks.push(
+				chatService.isMessageInChat({
+					chatId,
+					messageId: responseId,
+				}),
+			);
+		}
 
-    const [isUserAuthorized, isResponseInChat] = await Promise.all(checks);
+		const [isUserAuthorized, isResponseInChat] = await Promise.all(checks);
 
-    if (!isUserAuthorized) {
-      return respond(StatusCodes.FORBIDDEN, {
-        message: req.t(
-          "chats.controllers.create-message.user-not-belonging-to-chat",
-        ),
-      });
-    }
+		if (!isUserAuthorized) {
+			return respond(StatusCodes.FORBIDDEN, {
+				message: req.t("chats.controllers.create-message.user-not-belonging-to-chat"),
+			});
+		}
 
-    if (responseId && !isResponseInChat) {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t(
-          "chats.controllers.create-message.response-not-existent",
-        ),
-      });
-    }
+		if (responseId && !isResponseInChat) {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("chats.controllers.create-message.response-not-existent"),
+			});
+		}
 
-    const filenames = await Promise.all(
-      files.map(async (file) => {
-        const name = generateNewFilename(file.originalname);
-        const key = `chats/${chatId}/${name}`;
-        await fileStorage.uploadFile(file.buffer, file.mimetype, key);
-        return name;
-      }),
-    );
+		const filenames = await Promise.all(
+			files.map(async (file) => {
+				const name = generateNewFilename(file.originalname);
+				const key = `chats/${chatId}/${name}`;
+				await fileStorage.uploadFile(file.buffer, file.mimetype, key);
+				return name;
+			}),
+		);
 
-    const message = await chatService.createMessage({
-      content,
-      authorId: userId,
-      chatId,
-      files: filenames,
-      responseId: responseId ?? null,
-    });
+		const message = await chatService.createMessage({
+			content,
+			authorId: userId,
+			chatId,
+			files: filenames,
+			responseId: responseId ?? null,
+		});
 
-    return respond(StatusCodes.CREATED, {
-      message,
-    });
-  } catch {
-    next(new Error(req.t("chats.controllers.create-message.failure")));
-  }
+		return respond(StatusCodes.CREATED, {
+			message,
+		});
+	} catch {
+		next(new Error(req.t("chats.controllers.create-message.failure")));
+	}
 };

@@ -6,16 +6,16 @@ import ChatPageProvider from "@/features/chats/providers/chat-page-provider";
 import { NoActiveChat } from "@packages/ui/components/features/chats/no-active-chat";
 
 export default async function ChatsPage() {
-  const chats = await getChatsCached();
+	const chats = await getChatsCached();
 
-  return (
-    <AuthGuard>
-      <ChatPageProvider chats={chats}>
-        <div className="flex h-[calc(100vh-5rem)] w-screen">
-          <ChatNavigation />
-          <NoActiveChat slots={{ trigger: CreateChatTrigger }} />
-        </div>
-      </ChatPageProvider>
-    </AuthGuard>
-  );
+	return (
+		<AuthGuard>
+			<ChatPageProvider chats={chats}>
+				<div className="flex h-[calc(100vh-5rem)] w-screen">
+					<ChatNavigation />
+					<NoActiveChat slots={{ trigger: CreateChatTrigger }} />
+				</div>
+			</ChatPageProvider>
+		</AuthGuard>
+	);
 }

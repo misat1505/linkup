@@ -5,24 +5,24 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 
 type useUserSearchOptions = {
-  timeout: number;
+	timeout: number;
 };
 
 const defaultOptions: useUserSearchOptions = {
-  timeout: 300,
+	timeout: 300,
 };
 
 export default function useUserSearch(
-  text: string,
-  options = defaultOptions,
+	text: string,
+	options = defaultOptions,
 ): UseQueryResult<User[], unknown> {
-  const [debouncedText] = useDebounce(text, options.timeout);
+	const [debouncedText] = useDebounce(text, options.timeout);
 
-  const data = useQuery({
-    queryKey: queryKeys.searchUsers(debouncedText),
-    queryFn: () => searchUsers(debouncedText),
-    enabled: debouncedText.length > 0,
-  });
+	const data = useQuery({
+		queryKey: queryKeys.searchUsers(debouncedText),
+		queryFn: () => searchUsers(debouncedText),
+		enabled: debouncedText.length > 0,
+	});
 
-  return data;
+	return data;
 }

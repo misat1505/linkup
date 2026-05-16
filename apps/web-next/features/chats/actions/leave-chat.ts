@@ -6,8 +6,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function leaveChat(chatId: Chat["id"]): Promise<void> {
-  await apiContractClient.deleteSelfFromGroupChat({ params: { chatId } });
+	await apiContractClient.deleteSelfFromGroupChat({ params: { chatId } });
 
-  revalidatePath("/chats");
-  redirect("/chats");
+	revalidatePath("/chats");
+	redirect("/chats");
 }

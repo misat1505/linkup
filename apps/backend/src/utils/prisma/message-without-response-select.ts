@@ -16,17 +16,17 @@ import { userSelect } from "./user-select";
  * });
  */
 export const messageWithoutResponseSelect = {
-  id: true,
-  content: true,
-  author: {
-    select: userSelect,
-  },
-  createdAt: true,
-  chatId: true,
-  files: {
-    select: {
-      id: true,
-      url: true,
-    },
-  },
+	id: true,
+	content: true,
+	author: {
+		select: userSelect,
+	},
+	createdAt: true,
+	chatId: true,
+	files: {
+		select: {
+			id: true,
+			url: true,
+		},
+	},
 } as const;

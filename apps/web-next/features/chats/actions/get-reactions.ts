@@ -9,6 +9,6 @@ const ReactionBase = Reaction.pick({ id: true, name: true });
 type ReactionBase = z.infer<typeof ReactionBase>;
 
 export async function getReactions(): Promise<ReactionBase[]> {
-  const res = await apiContractClient.getReactions();
-  return res.reactions;
+	const res = await apiContractClient.getReactions();
+	return res.reactions;
 }

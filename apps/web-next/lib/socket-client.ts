@@ -5,73 +5,73 @@ import { io, Socket } from "socket.io-client";
 type Room = string;
 
 export enum SocketAction {
-  JOIN_ROOM = "join-room",
-  LEAVE_ROOM = "leave-room",
-  SEND_MESSAGE = "send-message",
-  RECEIVE_MESSAGE = "receive-message",
-  SEND_REACTION = "send-reaction",
-  RECEIVE_REACTION = "receive-reaction",
+	JOIN_ROOM = "join-room",
+	LEAVE_ROOM = "leave-room",
+	SEND_MESSAGE = "send-message",
+	RECEIVE_MESSAGE = "receive-message",
+	SEND_REACTION = "send-reaction",
+	RECEIVE_REACTION = "receive-reaction",
 }
 
 export enum SocketErrors {
-  JOINING_ROOM_ERROR = "joining-room-error",
+	JOINING_ROOM_ERROR = "joining-room-error",
 }
 
 class SocketClient {
-  private socket: Socket;
+	private socket: Socket;
 
-  constructor(serverUrl: string) {
-    this.socket = io(serverUrl);
+	constructor(serverUrl: string) {
+		this.socket = io(serverUrl);
 
-    this.socket.on("connect", () => {
-      // eslint-disable-next-line no-console
-      console.log("Connected to socket.");
-    });
+		this.socket.on("connect", () => {
+			// eslint-disable-next-line no-console
+			console.log("Connected to socket.");
+		});
 
-    this.socket.on("disconnect", () => {
-      // eslint-disable-next-line no-console
-      console.log("Disconnected from socket.");
-    });
-  }
+		this.socket.on("disconnect", () => {
+			// eslint-disable-next-line no-console
+			console.log("Disconnected from socket.");
+		});
+	}
 
-  joinRoom(room: Room) {
-    this.socket.emit(SocketAction.JOIN_ROOM, room);
-  }
+	joinRoom(room: Room) {
+		this.socket.emit(SocketAction.JOIN_ROOM, room);
+	}
 
-  leaveRoom(room: Room) {
-    this.socket.emit(SocketAction.LEAVE_ROOM, room);
-  }
+	leaveRoom(room: Room) {
+		this.socket.emit(SocketAction.LEAVE_ROOM, room);
+	}
 
-  sendMessage(message: Message) {
-    this.socket.emit(SocketAction.SEND_MESSAGE, message, message.chatId);
-  }
+	sendMessage(message: Message) {
+		this.socket.emit(SocketAction.SEND_MESSAGE, message, message.chatId);
+	}
 
-  onReceiveMessage(callback: (message: Message) => void) {
-    this.socket.on(SocketAction.RECEIVE_MESSAGE, (dirtyMessage: unknown) => {
-      const convertedMessage = Message.parse(dirtyMessage);
-      const message: Message = convertedMessage;
-      callback(message);
-    });
-  }
+	onReceiveMessage(callback: (message: Message) => void) {
+		this.socket.on(SocketAction.RECEIVE_MESSAGE, (dirtyMessage: unknown) => {
+			const convertedMessage = Message.parse(dirtyMessage);
+			const message: Message = convertedMessage;
+			callback(message);
+		});
+	}
 
-  sendReaction(reaction: Reaction, chatId: Chat["id"]) {
-    this.socket.emit(SocketAction.SEND_REACTION, reaction, chatId);
-  }
+	sendReaction(reaction: Reaction, chatId: Chat["id"]) {
+		this.socket.emit(SocketAction.SEND_REACTION, reaction, chatId);
+	}
 
-  onReceiveReaction(callback: (reaction: Reaction) => void) {
-    this.socket.on(SocketAction.RECEIVE_REACTION, (reaction: unknown) => {
-      callback(Reaction.parse(reaction));
-    });
-  }
+	onReceiveReaction(callback: (reaction: Reaction) => void) {
+		this.socket.on(SocketAction.RECEIVE_REACTION, (reaction: unknown) => {
+			callback(Reaction.parse(reaction));
+		});
+	}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  on(action: SocketAction | SocketErrors, cb: (...args: any[]) => void) {
-    this.socket.on(action, cb);
-  }
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	on(action: SocketAction | SocketErrors, cb: (...args: any[]) => void) {
+		this.socket.on(action, cb);
+	}
 
-  off(action: SocketAction) {
-    this.socket.off(action);
-  }
+	off(action: SocketAction) {
+		this.socket.off(action);
+	}
 }
 
 export const socketClient = new SocketClient(SOCKET_URL);

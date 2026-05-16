@@ -11,38 +11,38 @@ import { useDebounce } from "use-debounce";
 import { LinkWrapper } from "./link-wrapper";
 
 function useSearchUsersQuery() {
-  const [text, setText] = useState("");
-  const [debouncedText] = useDebounce(text, 300);
-  const { data: users = [], isFetching } = useQuery({
-    queryKey: queryKeys.searchUsers(debouncedText),
-    queryFn: () => UserService.search(debouncedText),
-    enabled: debouncedText.length > 0,
-  });
+	const [text, setText] = useState("");
+	const [debouncedText] = useDebounce(text, 300);
+	const { data: users = [], isFetching } = useQuery({
+		queryKey: queryKeys.searchUsers(debouncedText),
+		queryFn: () => UserService.search(debouncedText),
+		enabled: debouncedText.length > 0,
+	});
 
-  return { users, isFetching, setText, debouncedText };
+	return { users, isFetching, setText, debouncedText };
 }
 
 function ImageWrapper(props: { src: string; alt: string; className?: string }) {
-  return <img {...props} />;
+	return <img {...props} />;
 }
 
 export default function UiPackageWrapper({ children }: PropsWithChildren) {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+	const { t } = useTranslation();
+	const navigate = useNavigate();
 
-  return (
-    <UiPackageProvider
-      apiUrl={API_URL}
-      linkComponent={LinkWrapper}
-      imageComponent={ImageWrapper}
-      // @ts-expect-error it's fine
-      useFetchProtectedURL={useFetchProtectedURL}
-      useSearchUsersQuery={useSearchUsersQuery}
-      translationFunction={t}
-      navigate={navigate}
-      logoPath={LOGO_PATH}
-    >
-      {children}
-    </UiPackageProvider>
-  );
+	return (
+		<UiPackageProvider
+			apiUrl={API_URL}
+			linkComponent={LinkWrapper}
+			imageComponent={ImageWrapper}
+			// @ts-expect-error it's fine
+			useFetchProtectedURL={useFetchProtectedURL}
+			useSearchUsersQuery={useSearchUsersQuery}
+			translationFunction={t}
+			navigate={navigate}
+			logoPath={LOGO_PATH}
+		>
+			{children}
+		</UiPackageProvider>
+	);
 }

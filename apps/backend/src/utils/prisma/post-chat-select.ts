@@ -13,7 +13,7 @@
  * });
  */
 export const postChatSelect = {
-  id: true,
-  createdAt: true,
-  type: true,
+	id: true,
+	createdAt: true,
+	type: true,
 } as const;

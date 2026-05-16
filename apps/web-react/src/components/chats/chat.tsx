@@ -10,34 +10,34 @@ import ChatHeaderWrapper from "./chat-header-wrapper";
 import { Trigger } from "./create-chat-trigger";
 
 export default function ChatGuard() {
-  const { chatId } = useParams();
+	const { chatId } = useParams();
 
-  if (!chatId) return <NoActiveChat slots={{ trigger: Trigger }} />;
+	if (!chatId) return <NoActiveChat slots={{ trigger: Trigger }} />;
 
-  return (
-    <ChatProvider key={chatId} chatId={chatId}>
-      <Chat />
-    </ChatProvider>
-  );
+	return (
+		<ChatProvider key={chatId} chatId={chatId}>
+			<Chat />
+		</ChatProvider>
+	);
 }
 
 function Chat() {
-  const { error, chatId } = useChatContext();
-  const { chats } = useChatPageContext();
+	const { error, chatId } = useChatContext();
+	const { chats } = useChatPageContext();
 
-  const isUserInChat = chats?.find((c) => c.id === chatId);
+	const isUserInChat = chats?.find((c) => c.id === chatId);
 
-  if (error || !isUserInChat) return <ChatError />;
+	if (error || !isUserInChat) return <ChatError />;
 
-  return (
-    <div className="w-[calc(100vw-20rem)] flex-grow">
-      <div className="flex h-full w-full flex-col">
-        <ChatHeaderWrapper chatId={chatId} />
-        <ChatFooterProvider chatId={chatId}>
-          <ChatContent />
-          <ChatFooter />
-        </ChatFooterProvider>
-      </div>
-    </div>
-  );
+	return (
+		<div className="w-[calc(100vw-20rem)] flex-grow">
+			<div className="flex h-full w-full flex-col">
+				<ChatHeaderWrapper chatId={chatId} />
+				<ChatFooterProvider chatId={chatId}>
+					<ChatContent />
+					<ChatFooter />
+				</ChatFooterProvider>
+			</div>
+		</div>
+	);
 }

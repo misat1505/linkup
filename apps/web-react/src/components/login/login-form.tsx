@@ -3,12 +3,12 @@ import { LoginFormSubmitButton } from "@packages/ui/components/features/login/lo
 import LoginFormFields from "./login-form-fields";
 
 export default function LoginForm() {
-  const { submitForm, isSubmitting } = useLoginFormContext();
+	const { submitForm, isSubmitting } = useLoginFormContext();
 
-  return (
-    <form onSubmit={submitForm}>
-      <LoginFormFields />
-      <LoginFormSubmitButton isSubmitting={isSubmitting} />
-    </form>
-  );
+	return (
+		<form onSubmit={submitForm}>
+			<LoginFormFields />
+			<LoginFormSubmitButton isSubmitting={isSubmitting} />
+		</form>
+	);
 }

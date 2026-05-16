@@ -4,13 +4,13 @@ import ChatMembersDisplayer from "./chat-members-displayer";
 import UserInvite from "./user-invite";
 
 export default function GroupChatContent() {
-  return (
-    <GccUi
-      slots={{
-        chatInfoUpdater: <ChatInfoUpdater />,
-        chatMembersDisplayer: <ChatMembersDisplayer />,
-        userInvite: <UserInvite />,
-      }}
-    />
-  );
+	return (
+		<GccUi
+			slots={{
+				chatInfoUpdater: <ChatInfoUpdater />,
+				chatMembersDisplayer: <ChatMembersDisplayer />,
+				userInvite: <UserInvite />,
+			}}
+		/>
+	);
 }

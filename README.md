@@ -61,8 +61,8 @@ Follow these steps to set up and run **LinkUp** on your local machine:
 
 Make sure you have the following installed:
 
-* [Docker](https://www.docker.com/) and Docker Compose  
-* [Node.js](https://nodejs.org/)
+- [Docker](https://www.docker.com/) and Docker Compose
+- [Node.js](https://nodejs.org/)
 
 ---
 
@@ -73,7 +73,7 @@ Clone the project repository and navigate into the folder:
 ```bash
 git clone https://github.com/misat1505/linkup.git
 cd linkup
-````
+```
 
 ---
 
@@ -85,21 +85,21 @@ Use the `docker-compose.sh` script to manage and run the app. It supports multip
 >
 > ✅ You only need to do this **once** — the bucket will persist between restarts.
 
-* **🚀 Production Mode**
+- **🚀 Production Mode**
   Builds and runs optimized Docker images for deployment:
 
   ```bash
   ./docker-compose.sh prod
   ```
 
-* **🛠️ Development Mode**
+- **🛠️ Development Mode**
   Starts database, socket, and S3 services like production, plus runs backend and frontend in development mode with hot-module replacement enabled via attached volume:
 
   ```bash
   ./docker-compose.sh dev
   ```
 
-* **🧪 End-to-End (e2e) Testing Mode**
+- **🧪 End-to-End (e2e) Testing Mode**
   Start the app in e2e mode:
 
   ```bash

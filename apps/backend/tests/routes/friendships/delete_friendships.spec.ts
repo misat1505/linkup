@@ -5,55 +5,43 @@ import request from "supertest";
 import { describe, it } from "vitest";
 
 describe("[DELETE] /friendships", () => {
-  it("deletes existing friendship", async () => {
-    await testWithTransaction(async ({ app, seed }) => {
-      const tokens = TestHelpers.createTokens([
-        seed.users[0].id,
-        seed.users[1].id,
-      ]);
+	it("deletes existing friendship", async () => {
+		await testWithTransaction(async ({ app, seed }) => {
+			const tokens = TestHelpers.createTokens([seed.users[0].id, seed.users[1].id]);
 
-      await request(app)
-        .post("/friendships")
-        .set("Authorization", `Bearer ${tokens[0]}`)
-        .send({
-          requesterId: seed.users[0].id,
-          acceptorId: seed.users[1].id,
-        });
+			await request(app).post("/friendships").set("Authorization", `Bearer ${tokens[0]}`).send({
+				requesterId: seed.users[0].id,
+				acceptorId: seed.users[1].id,
+			});
 
-      await request(app)
-        .delete("/friendships")
-        .set("Authorization", `Bearer ${tokens[1]}`)
-        .send({
-          requesterId: seed.users[0].id,
-          acceptorId: seed.users[1].id,
-        })
-        .expect(StatusCodes.OK);
-    });
-  });
+			await request(app)
+				.delete("/friendships")
+				.set("Authorization", `Bearer ${tokens[1]}`)
+				.send({
+					requesterId: seed.users[0].id,
+					acceptorId: seed.users[1].id,
+				})
+				.expect(StatusCodes.OK);
+		});
+	});
 
-  it("blocks deletion of non-owned friendship", async () => {
-    await testWithTransaction(async ({ app, seed }) => {
-      const tokens = TestHelpers.createTokens([
-        seed.users[0].id,
-        seed.users[2].id,
-      ]);
+	it("blocks deletion of non-owned friendship", async () => {
+		await testWithTransaction(async ({ app, seed }) => {
+			const tokens = TestHelpers.createTokens([seed.users[0].id, seed.users[2].id]);
 
-      await request(app)
-        .post("/friendships")
-        .set("Authorization", `Bearer ${tokens[0]}`)
-        .send({
-          requesterId: seed.users[0].id,
-          acceptorId: seed.users[1].id,
-        });
+			await request(app).post("/friendships").set("Authorization", `Bearer ${tokens[0]}`).send({
+				requesterId: seed.users[0].id,
+				acceptorId: seed.users[1].id,
+			});
 
-      await request(app)
-        .delete("/friendships")
-        .set("Authorization", `Bearer ${tokens[1]}`)
-        .send({
-          requesterId: seed.users[0].id,
-          acceptorId: seed.users[1].id,
-        })
-        .expect(StatusCodes.FORBIDDEN);
-    });
-  });
+			await request(app)
+				.delete("/friendships")
+				.set("Authorization", `Bearer ${tokens[1]}`)
+				.send({
+					requesterId: seed.users[0].id,
+					acceptorId: seed.users[1].id,
+				})
+				.expect(StatusCodes.FORBIDDEN);
+		});
+	});
 });

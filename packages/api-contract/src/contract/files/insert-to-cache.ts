@@ -9,27 +9,27 @@ import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
 
 export const insertToCacheRoute = {
-  method: "post",
-  path: "/files/cache",
-  summary: "Upload a file to the user's cache",
-  tags: [TAGS.FILES],
+	method: "post",
+	path: "/files/cache",
+	summary: "Upload a file to the user's cache",
+	tags: [TAGS.FILES],
 
-  request: {
-    body: request.multipart({
-      schema: InsertToCacheDTO,
-    }),
-  },
+	request: {
+		body: request.multipart({
+			schema: InsertToCacheDTO,
+		}),
+	},
 
-  responses: {
-    [StatusCodes.CREATED]: response.json({
-      schema: z.object({
-        file: z.string(),
-      }),
-      description: "File uploaded successfully",
-    }),
+	responses: {
+		[StatusCodes.CREATED]: response.json({
+			schema: z.object({
+				file: z.string(),
+			}),
+			description: "File uploaded successfully",
+		}),
 
-    [StatusCodes.BAD_REQUEST]: errors.badRequest({
-      description: "Cache limit reached or no file provided",
-    }),
-  },
+		[StatusCodes.BAD_REQUEST]: errors.badRequest({
+			description: "Cache limit reached or no file provided",
+		}),
+	},
 } satisfies RouteConfig;

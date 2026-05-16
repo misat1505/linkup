@@ -9,28 +9,28 @@ import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
 
 export const signupRoute = {
-  method: "post",
-  path: "/auth/signup",
-  summary: "Sign up a new user",
-  tags: [TAGS.AUTH],
+	method: "post",
+	path: "/auth/signup",
+	summary: "Sign up a new user",
+	tags: [TAGS.AUTH],
 
-  request: {
-    body: request.multipart({
-      schema: SignupDTO,
-    }),
-  },
+	request: {
+		body: request.multipart({
+			schema: SignupDTO,
+		}),
+	},
 
-  responses: {
-    [StatusCodes.CREATED]: response.json({
-      schema: z.object({
-        user: User,
-        accessToken: z.string(),
-      }),
-      description: "User created successfully",
-    }),
+	responses: {
+		[StatusCodes.CREATED]: response.json({
+			schema: z.object({
+				user: User,
+				accessToken: z.string(),
+			}),
+			description: "User created successfully",
+		}),
 
-    [StatusCodes.CONFLICT]: errors.conflict({
-      description: "Login already taken",
-    }),
-  },
+		[StatusCodes.CONFLICT]: errors.conflict({
+			description: "Login already taken",
+		}),
+	},
 } satisfies RouteConfig;

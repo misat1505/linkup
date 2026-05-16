@@ -7,11 +7,11 @@ import { reportPostRoute } from "./report-post";
 import { updatePostRoute } from "./update-post";
 
 export const postsContract = {
-  CREATE_POST: createPostRoute,
-  DELETE_POST: deletePostRoute,
-  GET_POST: getPostRoute,
-  GET_POSTS: getPostsRoute,
-  GET_USER_POSTS: getUserPostsRoute,
-  REPORT_POST: reportPostRoute,
-  UPDATE_POST: updatePostRoute,
+	CREATE_POST: createPostRoute,
+	DELETE_POST: deletePostRoute,
+	GET_POST: getPostRoute,
+	GET_POSTS: getPostsRoute,
+	GET_USER_POSTS: getUserPostsRoute,
+	REPORT_POST: reportPostRoute,
+	UPDATE_POST: updatePostRoute,
 };

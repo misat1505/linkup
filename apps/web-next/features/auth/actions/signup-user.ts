@@ -9,30 +9,27 @@ import { setRefreshTokenCookie } from "../utils/set-refresh-token-cookie";
 
 // @ts-expect-error User isn't returned when request fails
 export async function signupUser(formData: FormData): Promise<User> {
-  try {
-    const {
-      data: { user, accessToken },
-      headers,
-    } = await AUTH_API.post("/signup", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+	try {
+		const {
+			data: { user, accessToken },
+			headers,
+		} = await AUTH_API.post("/signup", formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		});
 
-    const cookieString = headers["set-cookie"]![0] as string;
-    const refreshToken = extractRefreshTokenFromSetCookieString(cookieString);
+		const cookieString = headers["set-cookie"]![0] as string;
+		const refreshToken = extractRefreshTokenFromSetCookieString(cookieString);
 
-    if (!refreshToken) throw new Error("Got response without refresh token");
+		if (!refreshToken) throw new Error("Got response without refresh token");
 
-    await Promise.all([
-      setRefreshTokenCookie(refreshToken),
-      setAccessTokenCookie(accessToken),
-    ]);
+		await Promise.all([setRefreshTokenCookie(refreshToken), setAccessTokenCookie(accessToken)]);
 
-    return User.parse(user);
-  } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      throw new Error(e.response?.data.message, { cause: e });
-    }
-  }
+		return User.parse(user);
+	} catch (e: unknown) {
+		if (e instanceof AxiosError) {
+			throw new Error(e.response?.data.message, { cause: e });
+		}
+	}
 }

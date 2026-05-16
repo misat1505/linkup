@@ -6,14 +6,14 @@ import { postsContract } from "./posts";
 import { usersContract } from "./users";
 
 export const API_CONTRACT = {
-  ...authContract,
-  ...chatsContract,
-  ...filesContract,
-  ...friendshipsContract,
-  ...postsContract,
-  ...usersContract,
+	...authContract,
+	...chatsContract,
+	...filesContract,
+	...friendshipsContract,
+	...postsContract,
+	...usersContract,
 };
 
 export const CONTRACT_KEYS = Object.fromEntries(
-  Object.keys(API_CONTRACT).map((key) => [key, key]),
+	Object.keys(API_CONTRACT).map((key) => [key, key]),
 ) as { [K in keyof typeof API_CONTRACT]: K };

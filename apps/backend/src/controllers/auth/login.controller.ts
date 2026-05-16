@@ -1,9 +1,9 @@
 import { env } from "@/config/env";
 import {
-  accessTokenSignOptions,
-  refreshTokenCookieName,
-  refreshTokenCookieOptions,
-  refreshTokenSignOptions,
+	accessTokenSignOptions,
+	refreshTokenCookieName,
+	refreshTokenCookieOptions,
+	refreshTokenSignOptions,
 } from "@/config/jwt-cookie";
 import { Hasher } from "@/lib/hasher";
 import { TokenProcessor } from "@/lib/token-processor";
@@ -31,47 +31,43 @@ import { StatusCodes } from "http-status-codes";
  * @source
  */
 
-export const loginController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.LOGIN;
-  const respond = buildValidatedResponder(res, contractKey);
-  try {
-    const {
-      body: { login, password },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
-    const userService = req.app.services.userService;
+export const loginController = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.LOGIN;
+	const respond = buildValidatedResponder(res, contractKey);
+	try {
+		const {
+			body: { login, password },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+		const userService = req.app.services.userService;
 
-    const user = await userService.getUserByLogin(login);
+		const user = await userService.getUserByLogin(login);
 
-    if (!user) {
-      return respond(StatusCodes.UNAUTHORIZED, {
-        message: req.t("auth.controllers.login.invalid-login"),
-      });
-    }
+		if (!user) {
+			return respond(StatusCodes.UNAUTHORIZED, {
+				message: req.t("auth.controllers.login.invalid-login"),
+			});
+		}
 
-    const hashedPassword = Hasher.hash(password + user.salt);
-    if (hashedPassword !== user.password) {
-      return respond(StatusCodes.UNAUTHORIZED, {
-        message: req.t("auth.controllers.login.invalid-password"),
-      });
-    }
+		const hashedPassword = Hasher.hash(password + user.salt);
+		if (hashedPassword !== user.password) {
+			return respond(StatusCodes.UNAUTHORIZED, {
+				message: req.t("auth.controllers.login.invalid-password"),
+			});
+		}
 
-    const refreshToken = TokenProcessor.encode(
-      { userId: user.id },
-      env.REFRESH_TOKEN_SECRET,
-      refreshTokenSignOptions,
-    );
-    const accessToken = TokenProcessor.encode(
-      { userId: user.id },
-      env.ACCESS_TOKEN_SECRET,
-      accessTokenSignOptions,
-    );
-    res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
-    return respond(StatusCodes.OK, { user, accessToken });
-  } catch {
-    next(new Error(req.t("auth.controllers.login.failure")));
-  }
+		const refreshToken = TokenProcessor.encode(
+			{ userId: user.id },
+			env.REFRESH_TOKEN_SECRET,
+			refreshTokenSignOptions,
+		);
+		const accessToken = TokenProcessor.encode(
+			{ userId: user.id },
+			env.ACCESS_TOKEN_SECRET,
+			accessTokenSignOptions,
+		);
+		res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
+		return respond(StatusCodes.OK, { user, accessToken });
+	} catch {
+		next(new Error(req.t("auth.controllers.login.failure")));
+	}
 };

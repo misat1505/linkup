@@ -18,39 +18,30 @@ import { v4 as uuidv4 } from "uuid";
  *
  * @source
  */
-export const createPost = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.CREATE_POST;
-  const respond = buildValidatedResponder(res, contractKey);
+export const createPost = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.CREATE_POST;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      body: { content },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			body: { content },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const { postService, fileStorage } = req.app.services;
+		const userId = req.user!.id;
+		const { postService, fileStorage } = req.app.services;
 
-    const id = uuidv4();
+		const id = uuidv4();
 
-    const updatedContent = await handleMarkdownUpdate(
-      fileStorage,
-      content,
-      userId,
-      id,
-    );
+		const updatedContent = await handleMarkdownUpdate(fileStorage, content, userId, id);
 
-    const post = await postService.createPost({
-      id,
-      content: updatedContent,
-      authorId: userId,
-    });
+		const post = await postService.createPost({
+			id,
+			content: updatedContent,
+			authorId: userId,
+		});
 
-    return respond(StatusCodes.CREATED, { post });
-  } catch {
-    next(new Error(req.t("posts.controllers.create.failure")));
-  }
+		return respond(StatusCodes.CREATED, { post });
+	} catch {
+		next(new Error(req.t("posts.controllers.create.failure")));
+	}
 };

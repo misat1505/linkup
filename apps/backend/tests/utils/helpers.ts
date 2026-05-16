@@ -3,10 +3,10 @@ import { TokenProcessor } from "@/lib/token-processor";
 import { User } from "@packages/schemas";
 
 export const TestHelpers = {
-  createToken: (id: User["id"], secret = env.ACCESS_TOKEN_SECRET) =>
-    TokenProcessor.encode({ userId: id }, secret),
+	createToken: (id: User["id"], secret = env.ACCESS_TOKEN_SECRET) =>
+		TokenProcessor.encode({ userId: id }, secret),
 
-  createTokens: (ids: User["id"][], secret = env.ACCESS_TOKEN_SECRET) => {
-    return ids.map((id) => TestHelpers.createToken(id, secret));
-  },
+	createTokens: (ids: User["id"][], secret = env.ACCESS_TOKEN_SECRET) => {
+		return ids.map((id) => TestHelpers.createToken(id, secret));
+	},
 };

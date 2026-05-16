@@ -15,29 +15,25 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const getCache = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.GET_CACHE;
-  const respond = buildValidatedResponder(res, contractKey);
+export const getCache = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.GET_CACHE;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const userId = req.user!.id;
-    const fileStorage = req.app.services.fileStorage;
+	try {
+		const userId = req.user!.id;
+		const fileStorage = req.app.services.fileStorage;
 
-    const files = await fileStorage.listFiles(`cache/${userId}`);
+		const files = await fileStorage.listFiles(`cache/${userId}`);
 
-    const filenames = files.map((filename) => {
-      const splitted = filename.split("/");
-      return splitted[splitted.length - 1];
-    });
+		const filenames = files.map((filename) => {
+			const splitted = filename.split("/");
+			return splitted[splitted.length - 1];
+		});
 
-    return respond(StatusCodes.OK, {
-      files: filenames,
-    });
-  } catch {
-    next(new Error(req.t("files.controllers.get-cache.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			files: filenames,
+		});
+	} catch {
+		next(new Error(req.t("files.controllers.get-cache.failure")));
+	}
 };

@@ -17,25 +17,20 @@ import { Routers } from "./routers";
 const publicRoutes = Router();
 
 publicRoutes.use(Routers.auth.public);
-publicRoutes[API_CONTRACT.GET_REACTIONS.method](
-  API_CONTRACT.GET_REACTIONS.path,
-  (req, res) => {
-    const respond = buildValidatedResponder(res, CONTRACT_KEYS.GET_REACTIONS);
-    return respond(StatusCodes.OK, { reactions });
-  },
-);
+publicRoutes[API_CONTRACT.GET_REACTIONS.method](API_CONTRACT.GET_REACTIONS.path, (req, res) => {
+	const respond = buildValidatedResponder(res, CONTRACT_KEYS.GET_REACTIONS);
+	return respond(StatusCodes.OK, { reactions });
+});
 
 if (env.NODE_ENV === "e2e") {
-  publicRoutes.post("/reset-db", async (req, res, next) => {
-    try {
-      await resetDB();
-      return res
-        .status(StatusCodes.OK)
-        .json({ message: "Successfully reset db." });
-    } catch {
-      next(new Error("Error when resetting db."));
-    }
-  });
+	publicRoutes.post("/reset-db", async (req, res, next) => {
+		try {
+			await resetDB();
+			return res.status(StatusCodes.OK).json({ message: "Successfully reset db." });
+		} catch {
+			next(new Error("Error when resetting db."));
+		}
+	});
 }
 
 export default publicRoutes;

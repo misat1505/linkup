@@ -7,8 +7,6 @@ import { API_CONTRACT } from "@packages/api-contract";
  *
  * This router handles user-related operations, including searching for users.
  */
-const routes = [
-  buildProtectedRoute(API_CONTRACT.SEARCH_USER, UserControllers.searchUser),
-];
+const routes = [buildProtectedRoute(API_CONTRACT.SEARCH_USER, UserControllers.searchUser)];
 
 export default buildRouter(routes);

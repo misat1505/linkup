@@ -8,23 +8,23 @@ import { errors } from "../../utils/error-responses";
 import { response } from "../../utils/responses";
 
 export const reportPostRoute = {
-  method: "post",
-  path: "/posts/{id}/report",
-  summary: "Report a post",
-  tags: [TAGS.POSTS],
+	method: "post",
+	path: "/posts/{id}/report",
+	summary: "Report a post",
+	tags: [TAGS.POSTS],
 
-  request: {
-    params: Post.pick({ id: true }),
-  },
+	request: {
+		params: Post.pick({ id: true }),
+	},
 
-  responses: {
-    [StatusCodes.OK]: response.json({
-      schema: SuccessMessage,
-      description: "Post reported successfully",
-    }),
+	responses: {
+		[StatusCodes.OK]: response.json({
+			schema: SuccessMessage,
+			description: "Post reported successfully",
+		}),
 
-    [StatusCodes.CONFLICT]: errors.conflict({
-      description: "This post has already been reported by you.",
-    }),
-  },
+		[StatusCodes.CONFLICT]: errors.conflict({
+			description: "This post has already been reported by you.",
+		}),
+	},
 } satisfies RouteConfig;

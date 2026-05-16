@@ -9,60 +9,54 @@ vi.mock("@/utils/process-avatar");
 
 const respond = vi.fn();
 vi.mock("@/utils/validated-responder", () => ({
-  buildValidatedResponder: vi.fn(() => respond),
+	buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("createGroupChat", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
 
-  it("creates group chat with user included", async () => {
-    const chat = { id: "chat1" };
+	it("creates group chat with user included", async () => {
+		const chat = { id: "chat1" };
 
-    (processAvatar as Mock).mockResolvedValue("file");
-    mockChatService.createGroupChat.mockResolvedValue(chat);
+		(processAvatar as Mock).mockResolvedValue("file");
+		mockChatService.createGroupChat.mockResolvedValue(chat);
 
-    const req = mockRequest({
-      user: { id: "userId" } as UserWithCredentials,
-      validated: {
-        body: {
-          users: ["userId", "user2"],
-          name: "Group Chat",
-        },
-      },
-    });
+		const req = mockRequest({
+			user: { id: "userId" } as UserWithCredentials,
+			validated: {
+				body: {
+					users: ["userId", "user2"],
+					name: "Group Chat",
+				},
+			},
+		});
 
-    const res = mockResponse();
+		const res = mockResponse();
 
-    await ChatControllers.createGroupChat(req, res, vi.fn());
+		await ChatControllers.createGroupChat(req, res, vi.fn());
 
-    expect(respond).toHaveBeenCalledWith(
-      StatusCodes.CREATED,
-      expect.anything(),
-    );
-  });
+		expect(respond).toHaveBeenCalledWith(StatusCodes.CREATED, expect.anything());
+	});
 
-  it("blocks group chat creation without user", async () => {
-    (processAvatar as Mock).mockResolvedValue("file");
+	it("blocks group chat creation without user", async () => {
+		(processAvatar as Mock).mockResolvedValue("file");
 
-    const req = mockRequest({
-      user: { id: "userId" } as UserWithCredentials,
-      validated: {
-        body: {
-          users: ["user2", "user3"],
-          name: "Group Chat",
-        },
-      },
-    });
+		const req = mockRequest({
+			user: { id: "userId" } as UserWithCredentials,
+			validated: {
+				body: {
+					users: ["user2", "user3"],
+					name: "Group Chat",
+				},
+			},
+		});
 
-    const res = mockResponse();
+		const res = mockResponse();
 
-    await ChatControllers.createGroupChat(req, res, vi.fn());
+		await ChatControllers.createGroupChat(req, res, vi.fn());
 
-    expect(respond).toHaveBeenCalledWith(
-      StatusCodes.BAD_REQUEST,
-      expect.anything(),
-    );
-  });
+		expect(respond).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST, expect.anything());
+	});
 });

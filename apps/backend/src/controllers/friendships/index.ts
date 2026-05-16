@@ -4,8 +4,8 @@ import { deleteFriendship as deleteFriendshipController } from "./delete-friends
 import { getUserFriendships as getUserFriendshipsController } from "./get-user-friendships.controller";
 
 export const FriendshipControllers = {
-  acceptFriendship: acceptFriendshipController,
-  createFriendship: createFriendshipController,
-  deleteFriendship: deleteFriendshipController,
-  getUserFriendships: getUserFriendshipsController,
+	acceptFriendship: acceptFriendshipController,
+	createFriendship: createFriendshipController,
+	deleteFriendship: deleteFriendshipController,
+	getUserFriendships: getUserFriendshipsController,
 };
