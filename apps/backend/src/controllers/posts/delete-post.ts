@@ -16,46 +16,42 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const deletePost = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.DELETE_POST;
-  const respond = buildValidatedResponder(res, contractKey);
+export const deletePost = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.DELETE_POST;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      params: { id },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			params: { id },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const { postService, fileStorage } = req.app.services;
+		const userId = req.user!.id;
+		const { postService, fileStorage } = req.app.services;
 
-    const post = await postService.getPost(id);
+		const post = await postService.getPost(id);
 
-    if (!post) {
-      return respond(StatusCodes.NOT_FOUND, {
-        message: req.t("posts.controllers.delete.not-found"),
-      });
-    }
+		if (!post) {
+			return respond(StatusCodes.NOT_FOUND, {
+				message: req.t("posts.controllers.delete.not-found"),
+			});
+		}
 
-    if (post.author.id !== userId) {
-      return respond(StatusCodes.FORBIDDEN, {
-        message: req.t("posts.controllers.delete.unauthorized"),
-      });
-    }
+		if (post.author.id !== userId) {
+			return respond(StatusCodes.FORBIDDEN, {
+				message: req.t("posts.controllers.delete.unauthorized"),
+			});
+		}
 
-    await Promise.all([
-      postService.deletePost(id),
-      fileStorage.deleteAllFilesInDirectory(`posts/${post.id}`),
-      fileStorage.deleteAllFilesInDirectory(`chats/${post.chat.id}`),
-    ]);
+		await Promise.all([
+			postService.deletePost(id),
+			fileStorage.deleteAllFilesInDirectory(`posts/${post.id}`),
+			fileStorage.deleteAllFilesInDirectory(`chats/${post.chat.id}`),
+		]);
 
-    return respond(StatusCodes.OK, {
-      message: req.t("posts.controllers.delete.success"),
-    });
-  } catch {
-    next(new Error(req.t("posts.controllers.delete.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			message: req.t("posts.controllers.delete.success"),
+		});
+	} catch {
+		next(new Error(req.t("posts.controllers.delete.failure")));
+	}
 };

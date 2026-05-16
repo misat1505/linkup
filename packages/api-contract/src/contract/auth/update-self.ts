@@ -9,27 +9,27 @@ import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
 
 export const updateSelfRoute = {
-  method: "put",
-  path: "/auth/user",
-  summary: "Update user details",
-  tags: [TAGS.AUTH],
+	method: "put",
+	path: "/auth/user",
+	summary: "Update user details",
+	tags: [TAGS.AUTH],
 
-  request: {
-    body: request.multipart({
-      schema: SignupDTO,
-    }),
-  },
+	request: {
+		body: request.multipart({
+			schema: SignupDTO,
+		}),
+	},
 
-  responses: {
-    [StatusCodes.OK]: response.json({
-      schema: z.object({
-        user: User,
-      }),
-      description: "User updated successfully",
-    }),
+	responses: {
+		[StatusCodes.OK]: response.json({
+			schema: z.object({
+				user: User,
+			}),
+			description: "User updated successfully",
+		}),
 
-    [StatusCodes.CONFLICT]: errors.conflict({
-      description: "Login already taken",
-    }),
-  },
+		[StatusCodes.CONFLICT]: errors.conflict({
+			description: "Login already taken",
+		}),
+	},
 } satisfies RouteConfig;

@@ -7,10 +7,10 @@ import postRouter from "./post.router";
 import userRouter from "./user.router";
 
 export const Routers = {
-  auth: { public: authRouter, protected: authRouterProtected },
-  chat: chatRouter,
-  file: fileRouter,
-  friendship: friendshipRouter,
-  post: postRouter,
-  user: userRouter,
+	auth: { public: authRouter, protected: authRouterProtected },
+	chat: chatRouter,
+	file: fileRouter,
+	friendship: friendshipRouter,
+	post: postRouter,
+	user: userRouter,
 };

@@ -1,29 +1,29 @@
 import axios from "axios";
 
 describe("login spec", () => {
-  const frontendUrl = "http://localhost:3000";
-  const backendUrl = "http://localhost:5500";
+	const frontendUrl = "http://localhost:3000";
+	const backendUrl = "http://localhost:5500";
 
-  beforeEach(() => {
-    cy.visit(`${frontendUrl}/login`);
-    axios.post(`${backendUrl}/reset-db`);
-  });
+	beforeEach(() => {
+		cy.visit(`${frontendUrl}/login`);
+		axios.post(`${backendUrl}/reset-db`);
+	});
 
-  it("logs in existing user and redirects to main page", () => {
-    cy.get("[data-testid=cy-login-form-login]").type("login2");
-    cy.get("[data-testid=cy-login-form-password]").type("pass2");
+	it("logs in existing user and redirects to main page", () => {
+		cy.get("[data-testid=cy-login-form-login]").type("login2");
+		cy.get("[data-testid=cy-login-form-password]").type("pass2");
 
-    cy.get("[data-testid=cy-login-form-button]").click();
+		cy.get("[data-testid=cy-login-form-button]").click();
 
-    cy.url().should("eq", `${frontendUrl}/`);
-  });
+		cy.url().should("eq", `${frontendUrl}/`);
+	});
 
-  it("shouldn't log in non-existent user and stays on login", () => {
-    cy.get("[data-testid=cy-login-form-login]").type("not-exist");
-    cy.get("[data-testid=cy-login-form-password]").type("not-exist");
+	it("shouldn't log in non-existent user and stays on login", () => {
+		cy.get("[data-testid=cy-login-form-login]").type("not-exist");
+		cy.get("[data-testid=cy-login-form-password]").type("not-exist");
 
-    cy.get("[data-testid=cy-login-form-button]").click();
+		cy.get("[data-testid=cy-login-form-button]").click();
 
-    cy.url().should("eq", `${frontendUrl}/login`);
-  });
+		cy.url().should("eq", `${frontendUrl}/login`);
+	});
 });

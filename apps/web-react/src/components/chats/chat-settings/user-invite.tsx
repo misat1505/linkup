@@ -10,39 +10,37 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 
 export default function UserInvite() {
-  const { t } = useTranslation();
-  const [text, setText] = useState("");
-  const { data } = useUserSearch(text);
-  const { chat } = useChatContext();
-  const queryClient = useQueryClient();
+	const { t } = useTranslation();
+	const [text, setText] = useState("");
+	const { data } = useUserSearch(text);
+	const { chat } = useChatContext();
+	const queryClient = useQueryClient();
 
-  const filteredUsers = data?.filter(
-    (user) => !chat!.users!.some((u) => u.id === user.id),
-  );
+	const filteredUsers = data?.filter((user) => !chat!.users!.some((u) => u.id === user.id));
 
-  function cb(newUser: UserInChat) {
-    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-      if (!oldChats) return [];
+	function cb(newUser: UserInChat) {
+		queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+			if (!oldChats) return [];
 
-      const updatedChat = oldChats.find((c) => c.id === chat!.id)!;
-      updatedChat.users?.push(newUser);
-      return [...oldChats];
-    });
-  }
+			const updatedChat = oldChats.find((c) => c.id === chat!.id)!;
+			updatedChat.users?.push(newUser);
+			return [...oldChats];
+		});
+	}
 
-  return (
-    <div>
-      <Input
-        placeholder={t("chats.settings.group.invite.search.placeholder")}
-        className="my-2"
-        onChange={(e) => setText(e.currentTarget.value)}
-      />
-      <UserSearchDisplayer
-        users={filteredUsers}
-        chatId={chat!.id}
-        addUserToChatAction={ChatService.addUserToChat}
-        addUserToChatCb={cb}
-      />
-    </div>
-  );
+	return (
+		<div>
+			<Input
+				placeholder={t("chats.settings.group.invite.search.placeholder")}
+				className="my-2"
+				onChange={(e) => setText(e.currentTarget.value)}
+			/>
+			<UserSearchDisplayer
+				users={filteredUsers}
+				chatId={chat!.id}
+				addUserToChatAction={ChatService.addUserToChat}
+				addUserToChatCb={cb}
+			/>
+		</div>
+	);
 }

@@ -1,39 +1,36 @@
-import {
-  OpenAPIRegistry,
-  OpenApiGeneratorV3,
-} from "@asteasolutions/zod-to-openapi";
+import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import { API_CONTRACT } from "@packages/api-contract";
 
 const registry = new OpenAPIRegistry();
 
 function registerRoutes() {
-  registry.registerComponent("securitySchemes", "bearerAuth", {
-    type: "http",
-    scheme: "bearer",
-    bearerFormat: "JWT",
-  });
+	registry.registerComponent("securitySchemes", "bearerAuth", {
+		type: "http",
+		scheme: "bearer",
+		bearerFormat: "JWT",
+	});
 
-  Object.values(API_CONTRACT).forEach((route) => {
-    registry.registerPath(route);
-  });
+	Object.values(API_CONTRACT).forEach((route) => {
+		registry.registerPath(route);
+	});
 }
 
 export function generateOpenApiDocument() {
-  registerRoutes();
+	registerRoutes();
 
-  const generator = new OpenApiGeneratorV3(registry.definitions);
+	const generator = new OpenApiGeneratorV3(registry.definitions);
 
-  return generator.generateDocument({
-    openapi: "3.0.0",
-    info: {
-      title: "LinkUp API",
-      version: "1.0.0",
-      description: "API documentation for LinkUp",
-    },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
-  });
+	return generator.generateDocument({
+		openapi: "3.0.0",
+		info: {
+			title: "LinkUp API",
+			version: "1.0.0",
+			description: "API documentation for LinkUp",
+		},
+		security: [
+			{
+				bearerAuth: [],
+			},
+		],
+	});
 }

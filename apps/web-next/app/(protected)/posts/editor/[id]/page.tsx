@@ -5,21 +5,21 @@ import { getPost } from "@/features/posts/actions/get-post";
 import { notFound } from "next/navigation";
 
 export default async function PostEditorUpdatePage({
-  params,
+	params,
 }: {
-  params: Promise<{ id: string }>;
+	params: Promise<{ id: string }>;
 }) {
-  const postId = (await params).id;
+	const postId = (await params).id;
 
-  const post = await getPost(postId!);
+	const post = await getPost(postId!);
 
-  if (!post) return notFound();
+	if (!post) return notFound();
 
-  return (
-    <AuthGuard>
-      <EditorProvider variant="update" post={post}>
-        <EditorWrapper />
-      </EditorProvider>
-    </AuthGuard>
-  );
+	return (
+		<AuthGuard>
+			<EditorProvider variant="update" post={post}>
+				<EditorWrapper />
+			</EditorProvider>
+		</AuthGuard>
+	);
 }

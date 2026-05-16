@@ -9,34 +9,34 @@ import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
 
 export const updateAliasRoute = {
-  method: "put",
-  path: "/chats/{chatId}/users/{userId}/alias",
-  summary: "Update a user's alias in a group chat",
-  tags: [TAGS.CHATS],
+	method: "put",
+	path: "/chats/{chatId}/users/{userId}/alias",
+	summary: "Update a user's alias in a group chat",
+	tags: [TAGS.CHATS],
 
-  request: {
-    params: z.object({
-      chatId: Chat.shape.id,
-      userId: User.shape.id,
-    }),
+	request: {
+		params: z.object({
+			chatId: Chat.shape.id,
+			userId: User.shape.id,
+		}),
 
-    body: request.json({
-      schema: UpdateUserAliasDTO,
-    }),
-  },
+		body: request.json({
+			schema: UpdateUserAliasDTO,
+		}),
+	},
 
-  responses: {
-    [StatusCodes.OK]: response.json({
-      schema: UserInChat.pick({ alias: true }),
-      description: "Alias updated successfully",
-    }),
+	responses: {
+		[StatusCodes.OK]: response.json({
+			schema: UserInChat.pick({ alias: true }),
+			description: "Alias updated successfully",
+		}),
 
-    [StatusCodes.BAD_REQUEST]: errors.badRequest({
-      description: "User is not a member of this chat",
-    }),
+		[StatusCodes.BAD_REQUEST]: errors.badRequest({
+			description: "User is not a member of this chat",
+		}),
 
-    [StatusCodes.FORBIDDEN]: errors.forbidden({
-      description: "User not authorized to update aliases in this chat",
-    }),
-  },
+		[StatusCodes.FORBIDDEN]: errors.forbidden({
+			description: "User not authorized to update aliases in this chat",
+		}),
+	},
 } satisfies RouteConfig;

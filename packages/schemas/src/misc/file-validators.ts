@@ -1,34 +1,34 @@
 import { z } from "zod";
 
 export const FileQuery = z.discriminatedUnion("filter", [
-  z
-    .object({
-      filter: z.literal("avatar"),
-    })
-    .strict(),
-  z
-    .object({
-      filter: z.literal("chat-message"),
-      chat: z.uuid(),
-    })
-    .strict(),
-  z
-    .object({
-      filter: z.literal("chat-photo"),
-      chat: z.uuid(),
-    })
-    .strict(),
-  z
-    .object({
-      filter: z.literal("cache"),
-    })
-    .strict(),
-  z
-    .object({
-      filter: z.literal("post"),
-      post: z.uuid(),
-    })
-    .strict(),
+	z
+		.object({
+			filter: z.literal("avatar"),
+		})
+		.strict(),
+	z
+		.object({
+			filter: z.literal("chat-message"),
+			chat: z.uuid(),
+		})
+		.strict(),
+	z
+		.object({
+			filter: z.literal("chat-photo"),
+			chat: z.uuid(),
+		})
+		.strict(),
+	z
+		.object({
+			filter: z.literal("cache"),
+		})
+		.strict(),
+	z
+		.object({
+			filter: z.literal("post"),
+			post: z.uuid(),
+		})
+		.strict(),
 ]);
 export type FileQuery = z.infer<typeof FileQuery>;
 

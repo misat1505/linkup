@@ -8,26 +8,26 @@ import { errors } from "../../utils/error-responses";
 import { response } from "../../utils/responses";
 
 export const searchUserRoute = {
-  method: "get",
-  path: "/users/search",
-  summary: "Search users by term",
-  description: "Search for users based on a search term.",
-  tags: [TAGS.USERS],
+	method: "get",
+	path: "/users/search",
+	summary: "Search users by term",
+	description: "Search for users based on a search term.",
+	tags: [TAGS.USERS],
 
-  request: {
-    query: SearchUserQuery,
-  },
+	request: {
+		query: SearchUserQuery,
+	},
 
-  responses: {
-    [StatusCodes.OK]: response.json({
-      schema: z.object({
-        users: z.array(User),
-      }),
-      description: "A list of users matching the search term",
-    }),
+	responses: {
+		[StatusCodes.OK]: response.json({
+			schema: z.object({
+				users: z.array(User),
+			}),
+			description: "A list of users matching the search term",
+		}),
 
-    [StatusCodes.BAD_REQUEST]: errors.badRequest({
-      description: "Missing or invalid search query parameter",
-    }),
-  },
+		[StatusCodes.BAD_REQUEST]: errors.badRequest({
+			description: "Missing or invalid search query parameter",
+		}),
+	},
 } satisfies RouteConfig;

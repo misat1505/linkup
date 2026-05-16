@@ -5,23 +5,19 @@ import { createContext, PropsWithChildren, useContext } from "react";
 import useChatForm, { useChatFormValue } from "../hooks/use-chat-form";
 
 type ChatFooterContextProps = PropsWithChildren & {
-  chatId: Chat["id"];
+	chatId: Chat["id"];
 };
 
 type ChatFooterContextValue = useChatFormValue;
 
-const ChatFooterContext = createContext<ChatFooterContextValue>(
-  {} as ChatFooterContextValue,
-);
+const ChatFooterContext = createContext<ChatFooterContextValue>({} as ChatFooterContextValue);
 
 export const useChatFooterContext = () => useContext(ChatFooterContext);
 
 const ChatFooterProvider = ({ children, chatId }: ChatFooterContextProps) => {
-  return (
-    <ChatFooterContext.Provider value={useChatForm(chatId)}>
-      {children}
-    </ChatFooterContext.Provider>
-  );
+	return (
+		<ChatFooterContext.Provider value={useChatForm(chatId)}>{children}</ChatFooterContext.Provider>
+	);
 };
 
 export default ChatFooterProvider;

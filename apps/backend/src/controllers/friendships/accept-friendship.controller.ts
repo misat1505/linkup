@@ -16,43 +16,36 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const acceptFriendship = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.ACCEPT_FRIENDSHIP;
-  const respond = buildValidatedResponder(res, contractKey);
+export const acceptFriendship = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.ACCEPT_FRIENDSHIP;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      body: { acceptorId, requesterId },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			body: { acceptorId, requesterId },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const friendshipService = req.app.services.friendshipService;
+		const userId = req.user!.id;
+		const friendshipService = req.app.services.friendshipService;
 
-    if (userId !== acceptorId) {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t("friends.controllers.accept.unauthorized"),
-      });
-    }
+		if (userId !== acceptorId) {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("friends.controllers.accept.unauthorized"),
+			});
+		}
 
-    const friendship = await friendshipService.acceptFriendship(
-      requesterId,
-      acceptorId,
-    );
+		const friendship = await friendshipService.acceptFriendship(requesterId, acceptorId);
 
-    if (!friendship) {
-      return respond(StatusCodes.CONFLICT, {
-        message: req.t("friends.controllers.accept.not-found"),
-      });
-    }
+		if (!friendship) {
+			return respond(StatusCodes.CONFLICT, {
+				message: req.t("friends.controllers.accept.not-found"),
+			});
+		}
 
-    return respond(StatusCodes.OK, {
-      friendship,
-    });
-  } catch {
-    next(new Error(req.t("friends.controllers.accept.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			friendship,
+		});
+	} catch {
+		next(new Error(req.t("friends.controllers.accept.failure")));
+	}
 };

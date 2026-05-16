@@ -5,18 +5,15 @@ import { useParams } from "next/navigation";
 import { PropsWithChildren } from "react";
 
 type ChatNavigationHideProps = PropsWithChildren & {
-  className?: string;
+	className?: string;
 };
 
-export function ChatNavigationHide({
-  children,
-  className,
-}: ChatNavigationHideProps) {
-  const { id } = useParams();
+export function ChatNavigationHide({ children, className }: ChatNavigationHideProps) {
+	const { id } = useParams();
 
-  const classnames = cn("w-full md:w-80", className, {
-    "hidden md:block": !!id,
-  });
+	const classnames = cn("w-full md:w-80", className, {
+		"hidden md:block": !!id,
+	});
 
-  return <div className={classnames}>{children}</div>;
+	return <div className={classnames}>{children}</div>;
 }

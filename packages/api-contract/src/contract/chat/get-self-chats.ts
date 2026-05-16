@@ -7,17 +7,17 @@ import { TAGS } from "../../utils/constants";
 import { response } from "../../utils/responses";
 
 export const getSelfChatsRoute = {
-  method: "get",
-  path: "/chats",
-  summary: "Get all chats for a user",
-  tags: [TAGS.CHATS],
+	method: "get",
+	path: "/chats",
+	summary: "Get all chats for a user",
+	tags: [TAGS.CHATS],
 
-  responses: {
-    [StatusCodes.OK]: response.json({
-      schema: z.object({
-        chats: z.array(Chat),
-      }),
-      description: "Chats retrieved successfully",
-    }),
-  },
+	responses: {
+		[StatusCodes.OK]: response.json({
+			schema: z.object({
+				chats: z.array(Chat),
+			}),
+			description: "Chats retrieved successfully",
+		}),
+	},
 } satisfies RouteConfig;

@@ -17,45 +17,43 @@ import { StatusCodes } from "http-status-codes";
  * @source
  */
 export const deleteSelfFromGroupChatController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
+	req: Request,
+	res: Response,
+	next: NextFunction,
 ) => {
-  const contractKey = CONTRACT_KEYS.DELETE_SELF_FROM_GROUP_CHAT;
-  const respond = buildValidatedResponder(res, contractKey);
+	const contractKey = CONTRACT_KEYS.DELETE_SELF_FROM_GROUP_CHAT;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      params: { chatId },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			params: { chatId },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const chatService = req.app.services.chatService;
+		const userId = req.user!.id;
+		const chatService = req.app.services.chatService;
 
-    const chatType = await chatService.getChatType(chatId);
+		const chatType = await chatService.getChatType(chatId);
 
-    if (chatType !== "GROUP") {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t("chats.controllers.delete-self-from-chat.bad-chat-type"),
-      });
-    }
+		if (chatType !== "GROUP") {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("chats.controllers.delete-self-from-chat.bad-chat-type"),
+			});
+		}
 
-    const iAmInChat = await chatService.isUserInChat({ userId, chatId });
+		const iAmInChat = await chatService.isUserInChat({ userId, chatId });
 
-    if (!iAmInChat) {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t(
-          "chats.controllers.delete-self-from-chat.not-belonging-to-you",
-        ),
-      });
-    }
+		if (!iAmInChat) {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("chats.controllers.delete-self-from-chat.not-belonging-to-you"),
+			});
+		}
 
-    await chatService.deleteFromChat({ chatId, userId });
+		await chatService.deleteFromChat({ chatId, userId });
 
-    return respond(StatusCodes.OK, {
-      message: req.t("chats.controllers.delete-self-from-chat.success"),
-    });
-  } catch {
-    next(new Error(req.t("chats.controllers.delete-self-from-chat.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			message: req.t("chats.controllers.delete-self-from-chat.success"),
+		});
+	} catch {
+		next(new Error(req.t("chats.controllers.delete-self-from-chat.failure")));
+	}
 };

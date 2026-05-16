@@ -8,20 +8,20 @@ import { errors } from "../../utils/error-responses";
 import { response } from "../../utils/responses";
 
 export const getSelfRoute = {
-  method: "get",
-  path: "/auth/user",
-  summary: "Get current user details",
-  tags: [TAGS.AUTH],
-  responses: {
-    [StatusCodes.OK]: response.json({
-      schema: z.object({
-        user: User,
-      }),
-      description: "User fetched successfully",
-    }),
+	method: "get",
+	path: "/auth/user",
+	summary: "Get current user details",
+	tags: [TAGS.AUTH],
+	responses: {
+		[StatusCodes.OK]: response.json({
+			schema: z.object({
+				user: User,
+			}),
+			description: "User fetched successfully",
+		}),
 
-    [StatusCodes.NOT_FOUND]: errors.notFound({
-      description: "User not found",
-    }),
-  },
+		[StatusCodes.NOT_FOUND]: errors.notFound({
+			description: "User not found",
+		}),
+	},
 } satisfies RouteConfig;

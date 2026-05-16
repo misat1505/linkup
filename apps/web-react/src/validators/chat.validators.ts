@@ -2,33 +2,31 @@ import { User } from "@packages/schemas";
 import { z } from "zod";
 
 export const chatFormSchema = z
-  .object({
-    content: z.string(),
-    files: z.array(z.instanceof(File)).optional(),
-    responseId: z.string().nullable().optional(),
-  })
-  .refine(
-    (data) => {
-      return (
-        data.content.trim().length > 0 || (data.files && data.files.length > 0)
-      );
-    },
-    {
-      message: "You must provide some text or upload at least one file.",
-      path: ["content"],
-    },
-  );
+	.object({
+		content: z.string(),
+		files: z.array(z.instanceof(File)).optional(),
+		responseId: z.string().nullable().optional(),
+	})
+	.refine(
+		(data) => {
+			return data.content.trim().length > 0 || (data.files && data.files.length > 0);
+		},
+		{
+			message: "You must provide some text or upload at least one file.",
+			path: ["content"],
+		},
+	);
 
 export type ChatFormType = z.infer<typeof chatFormSchema>;
 
 const userSchema = User.omit({ lastActive: true }).extend({
-  lastActive: z.date(),
+	lastActive: z.date(),
 });
 
 export const newGroupChatFormSchema = z.object({
-  name: z.string().optional(),
-  file: z.optional(z.instanceof(FileList)),
-  users: z.array(userSchema),
+	name: z.string().optional(),
+	file: z.optional(z.instanceof(FileList)),
+	users: z.array(userSchema),
 });
 
 export type NewGroupChatFormType = z.infer<typeof newGroupChatFormSchema>;

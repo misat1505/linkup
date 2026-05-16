@@ -1,54 +1,46 @@
-import usePostChatForm, {
-  usePostChatFormValue,
-} from "@/hooks/chats/use-post-chat-form";
+import usePostChatForm, { usePostChatFormValue } from "@/hooks/chats/use-post-chat-form";
 import { Post } from "@packages/schemas";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 
 type PostCommentsSectionContextProps = PropsWithChildren & {
-  chat: Post["chat"];
+	chat: Post["chat"];
 };
 
 type PostCommentsSectionContextProvidedValues = usePostChatFormValue & {
-  chat: Post["chat"];
-  isCommentSectionOpen: boolean;
-  toggleIsCommentSectionOpen: () => void;
+	chat: Post["chat"];
+	isCommentSectionOpen: boolean;
+	toggleIsCommentSectionOpen: () => void;
 };
 
 const PostCommentsSectionContext = createContext<
-  PostCommentsSectionContextProvidedValues | undefined
+	PostCommentsSectionContextProvidedValues | undefined
 >(undefined);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const usePostCommentsSectionContext = () => {
-  const context = useContext(PostCommentsSectionContext);
-  if (context === undefined)
-    throw new Error(
-      "usePostCommentsSectionContext called outside its provider.",
-    );
-  return context;
+	const context = useContext(PostCommentsSectionContext);
+	if (context === undefined)
+		throw new Error("usePostCommentsSectionContext called outside its provider.");
+	return context;
 };
 
-const PostCommentsSectionProvider = ({
-  children,
-  chat,
-}: PostCommentsSectionContextProps) => {
-  const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false);
+const PostCommentsSectionProvider = ({ children, chat }: PostCommentsSectionContextProps) => {
+	const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false);
 
-  const toggleIsCommentSectionOpen = () =>
-    setIsCommentSectionOpen((prev) => !prev);
+	const toggleIsCommentSectionOpen = () => setIsCommentSectionOpen((prev) => !prev);
 
-  return (
-    <PostCommentsSectionContext.Provider
-      value={{
-        ...usePostChatForm(chat.id),
-        chat,
-        isCommentSectionOpen,
-        toggleIsCommentSectionOpen,
-      }}
-    >
-      {children}
-    </PostCommentsSectionContext.Provider>
-  );
+	return (
+		<PostCommentsSectionContext.Provider
+			value={{
+				...usePostChatForm(chat.id),
+				chat,
+				isCommentSectionOpen,
+				toggleIsCommentSectionOpen,
+			}}
+		>
+			{children}
+		</PostCommentsSectionContext.Provider>
+	);
 };
 
 export default PostCommentsSectionProvider;

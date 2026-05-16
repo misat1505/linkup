@@ -11,15 +11,15 @@ import { updateGroupChatRoute } from "./update-group-chat";
 import { updateAliasRoute } from "./update-user-alias";
 
 export const chatsContract = {
-  ADD_USER_TO_GROUP_CHAT: addUserToGroupChatRoute,
-  CREATE_GROUP_CHAT: createGroupChatRoute,
-  CREATE_MESSAGE: createMessageRoute,
-  CREATE_PRIVATE_CHAT: createPrivateChatRoute,
-  CREATE_REACTION: createReactionRoute,
-  DELETE_SELF_FROM_GROUP_CHAT: deleteSelfFromGroupChatRoute,
-  GET_CHAT_MESSAGES: getChatMessagesRoute,
-  GET_REACTIONS: getReactionsRoute,
-  GET_SELF_CHATS: getSelfChatsRoute,
-  UPDATE_GROUP_CHAT: updateGroupChatRoute,
-  UDPATE_USER_ALIAS: updateAliasRoute,
+	ADD_USER_TO_GROUP_CHAT: addUserToGroupChatRoute,
+	CREATE_GROUP_CHAT: createGroupChatRoute,
+	CREATE_MESSAGE: createMessageRoute,
+	CREATE_PRIVATE_CHAT: createPrivateChatRoute,
+	CREATE_REACTION: createReactionRoute,
+	DELETE_SELF_FROM_GROUP_CHAT: deleteSelfFromGroupChatRoute,
+	GET_CHAT_MESSAGES: getChatMessagesRoute,
+	GET_REACTIONS: getReactionsRoute,
+	GET_SELF_CHATS: getSelfChatsRoute,
+	UPDATE_GROUP_CHAT: updateGroupChatRoute,
+	UDPATE_USER_ALIAS: updateAliasRoute,
 };

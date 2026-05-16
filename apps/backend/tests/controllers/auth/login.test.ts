@@ -7,85 +7,77 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const respond = vi.fn();
 vi.mock("@/utils/validated-responder", () => ({
-  buildValidatedResponder: vi.fn(() => respond),
+	buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("loginUser", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
 
-  it("logs in user with valid credentials", async () => {
-    const id = uuidv4();
-    const salt = "salt";
+	it("logs in user with valid credentials", async () => {
+		const id = uuidv4();
+		const salt = "salt";
 
-    const mockUser: UserWithCredentials = {
-      id,
-      firstName: "John",
-      lastName: "Doe",
-      login: "john_doe",
-      password:
-        "7a37b85c8918eac19a9089c0fa5a2ab4dce3f90528dcdeec108b23ddf3607b99",
-      salt,
-      photoURL: "file.jpg",
-      lastActive: new Date(),
-    };
+		const mockUser: UserWithCredentials = {
+			id,
+			firstName: "John",
+			lastName: "Doe",
+			login: "john_doe",
+			password: "7a37b85c8918eac19a9089c0fa5a2ab4dce3f90528dcdeec108b23ddf3607b99",
+			salt,
+			photoURL: "file.jpg",
+			lastActive: new Date(),
+		};
 
-    mockUserService.getUserByLogin.mockResolvedValue(mockUser);
+		mockUserService.getUserByLogin.mockResolvedValue(mockUser);
 
-    const req = mockRequest({
-      validated: { body: { login: "john_doe", password: "password" } },
-    });
-    const res = mockResponse();
+		const req = mockRequest({
+			validated: { body: { login: "john_doe", password: "password" } },
+		});
+		const res = mockResponse();
 
-    await AuthControllers.login(req, res, vi.fn());
+		await AuthControllers.login(req, res, vi.fn());
 
-    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
-    expect(res.cookie).toHaveBeenCalled();
-  });
+		expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+		expect(res.cookie).toHaveBeenCalled();
+	});
 
-  it("fails for invalid login", async () => {
-    mockUserService.getUserByLogin.mockResolvedValue(null);
+	it("fails for invalid login", async () => {
+		mockUserService.getUserByLogin.mockResolvedValue(null);
 
-    const req = mockRequest({
-      validated: { body: { login: "john_doe", password: "wrong_password" } },
-    });
-    const res = mockResponse();
+		const req = mockRequest({
+			validated: { body: { login: "john_doe", password: "wrong_password" } },
+		});
+		const res = mockResponse();
 
-    await AuthControllers.login(req, res, vi.fn());
+		await AuthControllers.login(req, res, vi.fn());
 
-    expect(respond).toHaveBeenCalledWith(
-      StatusCodes.UNAUTHORIZED,
-      expect.anything(),
-    );
-    expect(res.cookie).not.toHaveBeenCalled();
-  });
+		expect(respond).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED, expect.anything());
+		expect(res.cookie).not.toHaveBeenCalled();
+	});
 
-  it("fails for invalid password", async () => {
-    const mockUser: UserWithCredentials = {
-      id: uuidv4(),
-      firstName: "John",
-      lastName: "Doe",
-      login: "login1",
-      password:
-        "7a37b85c8918eac19a9089c0fa5a2ab4dce3f90528dcdeec108b23ddf3607b99",
-      salt: "salt",
-      photoURL: "file.jpg",
-      lastActive: new Date(),
-    };
-    mockUserService.getUserByLogin.mockResolvedValue(mockUser);
+	it("fails for invalid password", async () => {
+		const mockUser: UserWithCredentials = {
+			id: uuidv4(),
+			firstName: "John",
+			lastName: "Doe",
+			login: "login1",
+			password: "7a37b85c8918eac19a9089c0fa5a2ab4dce3f90528dcdeec108b23ddf3607b99",
+			salt: "salt",
+			photoURL: "file.jpg",
+			lastActive: new Date(),
+		};
+		mockUserService.getUserByLogin.mockResolvedValue(mockUser);
 
-    const req = mockRequest({
-      validated: { body: { login: "john_doe", password: "wrong_password" } },
-    });
-    const res = mockResponse();
+		const req = mockRequest({
+			validated: { body: { login: "john_doe", password: "wrong_password" } },
+		});
+		const res = mockResponse();
 
-    await AuthControllers.login(req, res, vi.fn());
+		await AuthControllers.login(req, res, vi.fn());
 
-    expect(respond).toHaveBeenCalledWith(
-      StatusCodes.UNAUTHORIZED,
-      expect.anything(),
-    );
-    expect(res.cookie).not.toHaveBeenCalled();
-  });
+		expect(respond).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED, expect.anything());
+		expect(res.cookie).not.toHaveBeenCalled();
+	});
 });

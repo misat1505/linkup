@@ -16,22 +16,18 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const getUserPosts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.GET_USER_POSTS;
-  const respond = buildValidatedResponder(res, contractKey);
+export const getUserPosts = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.GET_USER_POSTS;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const userId = req.user!.id;
-    const postService = req.app.services.postService;
+	try {
+		const userId = req.user!.id;
+		const postService = req.app.services.postService;
 
-    const posts = await postService.getUserPosts(userId);
+		const posts = await postService.getUserPosts(userId);
 
-    return respond(StatusCodes.OK, { posts });
-  } catch {
-    next(new Error(req.t("posts.controllers.get-users.failure")));
-  }
+		return respond(StatusCodes.OK, { posts });
+	} catch {
+		next(new Error(req.t("posts.controllers.get-users.failure")));
+	}
 };

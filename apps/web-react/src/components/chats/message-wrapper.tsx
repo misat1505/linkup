@@ -11,55 +11,51 @@ import { ReactionCreator } from "@packages/ui/components/features/chats/reaction
 import { useQueryClient } from "react-query";
 
 export function MessageWrapper({ message }: { message: MessageType }) {
-  const { user: me } = useAppContext();
-  const { messages, messageRefs, chat } = useChatContext();
+	const { user: me } = useAppContext();
+	const { messages, messageRefs, chat } = useChatContext();
 
-  if (!me || !messages || !chat) throw new Error();
+	if (!me || !messages || !chat) throw new Error();
 
-  return (
-    <Message
-      message={message}
-      me={me}
-      chat={chat}
-      messages={messages}
-      messageRef={(el) => (messageRefs.current[message.id] = el)}
-      messageControls={<MessageControlsWrapper message={message} />}
-      onScrollToMessage={(id) =>
-        messageRefs.current[id]?.scrollIntoView({ behavior: "smooth" })
-      }
-    />
-  );
+	return (
+		<Message
+			message={message}
+			me={me}
+			chat={chat}
+			messages={messages}
+			messageRef={(el) => (messageRefs.current[message.id] = el)}
+			messageControls={<MessageControlsWrapper message={message} />}
+			onScrollToMessage={(id) => messageRefs.current[id]?.scrollIntoView({ behavior: "smooth" })}
+		/>
+	);
 }
 
 function MessageControlsWrapper({ message }: { message: MessageType }) {
-  const { setIncomeMessageId, addReaction } = useChatContext();
-  const { setResponse } = useChatFooterContext();
-  const { user: me } = useAppContext();
-  const queryClient = useQueryClient();
+	const { setIncomeMessageId, addReaction } = useChatContext();
+	const { setResponse } = useChatFooterContext();
+	const { user: me } = useAppContext();
+	const queryClient = useQueryClient();
 
-  return (
-    <MessageControls
-      onReply={() => setResponse(message.id)}
-      slots={{
-        reactionCreator: (
-          <ReactionCreator
-            alreadyReacted={message.reactions.some((r) => r.user.id === me!.id)}
-            availableReactions={
-              queryClient.getQueryData(queryKeys.reactions()) ?? null
-            }
-            onReact={async (reactionId) => {
-              const reaction = await ChatService.createReaction(
-                message.id,
-                reactionId,
-                message.chatId,
-              );
-              setIncomeMessageId(null);
-              addReaction(reaction);
-              socketClient.sendReaction(reaction, message.chatId);
-            }}
-          />
-        ),
-      }}
-    />
-  );
+	return (
+		<MessageControls
+			onReply={() => setResponse(message.id)}
+			slots={{
+				reactionCreator: (
+					<ReactionCreator
+						alreadyReacted={message.reactions.some((r) => r.user.id === me!.id)}
+						availableReactions={queryClient.getQueryData(queryKeys.reactions()) ?? null}
+						onReact={async (reactionId) => {
+							const reaction = await ChatService.createReaction(
+								message.id,
+								reactionId,
+								message.chatId,
+							);
+							setIncomeMessageId(null);
+							addReaction(reaction);
+							socketClient.sendReaction(reaction, message.chatId);
+						}}
+					/>
+				),
+			}}
+		/>
+	);
 }

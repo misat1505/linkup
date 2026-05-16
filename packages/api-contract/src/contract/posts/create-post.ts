@@ -7,19 +7,19 @@ import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
 
 export const createPostRoute = {
-  method: "post",
-  path: "/posts",
-  summary: "Create a new post",
-  tags: [TAGS.POSTS],
+	method: "post",
+	path: "/posts",
+	summary: "Create a new post",
+	tags: [TAGS.POSTS],
 
-  request: {
-    body: request.json({ schema: CreatePostDTO }),
-  },
+	request: {
+		body: request.json({ schema: CreatePostDTO }),
+	},
 
-  responses: {
-    [StatusCodes.CREATED]: response.json({
-      schema: z.object({ post: Post }),
-      description: "Post created successfully",
-    }),
-  },
+	responses: {
+		[StatusCodes.CREATED]: response.json({
+			schema: z.object({ post: Post }),
+			description: "Post created successfully",
+		}),
+	},
 } satisfies RouteConfig;

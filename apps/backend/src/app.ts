@@ -21,21 +21,21 @@ const app = express();
 const server = http.createServer(app);
 
 if (env.NODE_ENV !== "test") {
-  app.use(morgan("tiny"));
+	app.use(morgan("tiny"));
 }
 
 app.services = initializeServices(prisma);
 
 const isSentryActive = !!env.SENTRY_DSN;
 if (isSentryActive && env.NODE_ENV !== "test") {
-  Sentry.init({
-    dsn: env.SENTRY_DSN,
-    tracesSampleRate: 1.0,
-  });
+	Sentry.init({
+		dsn: env.SENTRY_DSN,
+		tracesSampleRate: 1.0,
+	});
 
-  import("express-status-monitor").then(({ default: expressStatusMonitor }) => {
-    app.use(expressStatusMonitor());
-  });
+	import("express-status-monitor").then(({ default: expressStatusMonitor }) => {
+		app.use(expressStatusMonitor());
+	});
 }
 
 app.use(corsMiddleware);
@@ -45,34 +45,32 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(middleware.handle(i18next));
 
 if (env.NODE_ENV === "development") {
-  const spec = generateOpenApiDocument();
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec));
+	const spec = generateOpenApiDocument();
+	app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec));
 }
 
 app.use("/", Routers.publicRoutes);
 app.use("/", Routers.protectedRoutes);
 
 app.get("/health", (_req, res) => {
-  res
-    .status(StatusCodes.OK)
-    .json({ status: ReasonPhrases.OK, timestamp: new Date().toISOString() });
+	res
+		.status(StatusCodes.OK)
+		.json({ status: ReasonPhrases.OK, timestamp: new Date().toISOString() });
 });
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  if (env.NODE_ENV !== "test") console.error(err);
-  if (isSentryActive) Sentry.captureException(err);
-  return res
-    .status(StatusCodes.INTERNAL_SERVER_ERROR)
-    .json({ message: err.message });
+	if (env.NODE_ENV !== "test") console.error(err);
+	if (isSentryActive) Sentry.captureException(err);
+	return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
 });
 
 if (env.NODE_ENV !== "test") {
-  initReactions();
+	initReactions();
 
-  server.listen(env.PORT, () => {
-    // eslint-disable-next-line no-console
-    console.log(`Server running on port ${env.PORT}.`);
-  });
+	server.listen(env.PORT, () => {
+		// eslint-disable-next-line no-console
+		console.log(`Server running on port ${env.PORT}.`);
+	});
 }
 
 export default app;

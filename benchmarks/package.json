@@ -1,26 +1,26 @@
 {
-  "name": "scripts",
-  "version": "1.0.0",
-  "description": "",
-  "main": "lighthouse.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "benchmark:react": "pnpm build && node ./dist/benchmark.js --mode react",
-    "benchmark:nextjs": "pnpm build && node ./dist/benchmark.js --mode nextjs",
-    "benchmark:quick": "pnpm build && node ./dist/benchmark.js --iterations 2",
-    "benchmark:mobile": "pnpm build && node ./dist/benchmark.js --profile mobile-mid-3g"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "chrome-launcher": "^1.2.1",
-    "lighthouse": "^12.8.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "puppeteer-core": "^24.42.0"
-  }
+	"name": "scripts",
+	"version": "1.0.0",
+	"description": "",
+	"main": "lighthouse.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc",
+		"benchmark:react": "pnpm build && node ./dist/benchmark.js --mode react",
+		"benchmark:nextjs": "pnpm build && node ./dist/benchmark.js --mode nextjs",
+		"benchmark:quick": "pnpm build && node ./dist/benchmark.js --iterations 2",
+		"benchmark:mobile": "pnpm build && node ./dist/benchmark.js --profile mobile-mid-3g"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"chrome-launcher": "^1.2.1",
+		"lighthouse": "^12.8.2",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"puppeteer-core": "^24.42.0"
+	}
 }

@@ -6,10 +6,10 @@ import { signupRoute } from "./signup";
 import { updateSelfRoute } from "./update-self";
 
 export const authContract = {
-  GET_SELF: getSelfRoute,
-  LOGIN: loginRoute,
-  LOGOUT: logoutRoute,
-  REFRESH_TOKEN: refreshTokenRoute,
-  SIGNUP: signupRoute,
-  UPDATE_SELF: updateSelfRoute,
+	GET_SELF: getSelfRoute,
+	LOGIN: loginRoute,
+	LOGOUT: logoutRoute,
+	REFRESH_TOKEN: refreshTokenRoute,
+	SIGNUP: signupRoute,
+	UPDATE_SELF: updateSelfRoute,
 };

@@ -9,33 +9,29 @@ import { prefetchFirstPage } from "@/features/chats/utils/prefetch-first-page";
 import { makeQueryClient } from "@/lib/make-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-export default async function ChatPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const queryClient = makeQueryClient();
-  const id = (await params).id;
+export default async function ChatPage({ params }: { params: Promise<{ id: string }> }) {
+	const queryClient = makeQueryClient();
+	const id = (await params).id;
 
-  const [allChats, chat] = await Promise.all([
-    getChatsCached(),
-    getChatByIdCached(id),
-    prefetchFirstPage(queryClient, id),
-    getMeCached(),
-  ]);
+	const [allChats, chat] = await Promise.all([
+		getChatsCached(),
+		getChatByIdCached(id),
+		prefetchFirstPage(queryClient, id),
+		getMeCached(),
+	]);
 
-  if (!chat) throw new Error("Chat not found");
+	if (!chat) throw new Error("Chat not found");
 
-  return (
-    <AuthGuard>
-      <ChatPageProvider chats={allChats}>
-        <div className="flex h-[calc(100vh-5rem)] w-screen">
-          <ChatNavigation />
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <Chat chat={chat} />
-          </HydrationBoundary>
-        </div>
-      </ChatPageProvider>
-    </AuthGuard>
-  );
+	return (
+		<AuthGuard>
+			<ChatPageProvider chats={allChats}>
+				<div className="flex h-[calc(100vh-5rem)] w-screen">
+					<ChatNavigation />
+					<HydrationBoundary state={dehydrate(queryClient)}>
+						<Chat chat={chat} />
+					</HydrationBoundary>
+				</div>
+			</ChatPageProvider>
+		</AuthGuard>
+	);
 }

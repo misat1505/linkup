@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
-import { TokenProcessor } from "@/lib/token-processor";
 import { env } from "@/config/env";
 import { refreshTokenCookieName } from "@/config/jwt-cookie";
+import { TokenProcessor } from "@/lib/token-processor";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -21,45 +21,37 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const authorize = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const authorization = req.headers.authorization;
-  const userService = req.app.services.userService;
+export const authorize = async (req: Request, res: Response, next: NextFunction) => {
+	const authorization = req.headers.authorization;
+	const userService = req.app.services.userService;
 
-  if (!authorization) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: "Invalid request - no token" });
-  }
+	if (!authorization) {
+		return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid request - no token" });
+	}
 
-  if (!authorization.startsWith("Bearer ")) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: "Invalid request - token doesn't start with Bearer" });
-  }
+	if (!authorization.startsWith("Bearer ")) {
+		return res
+			.status(StatusCodes.UNAUTHORIZED)
+			.json({ message: "Invalid request - token doesn't start with Bearer" });
+	}
 
-  const token = authorization.split("Bearer ")[1];
+	const token = authorization.split("Bearer ")[1];
 
-  const tokenPayload = TokenProcessor.decode(token, env.ACCESS_TOKEN_SECRET);
-  if (!tokenPayload) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: "Invalid token" });
-  }
+	const tokenPayload = TokenProcessor.decode(token, env.ACCESS_TOKEN_SECRET);
+	if (!tokenPayload) {
+		return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid token" });
+	}
 
-  const user = await userService.getUser(tokenPayload.userId);
+	const user = await userService.getUser(tokenPayload.userId);
 
-  if (!user) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: "Invalid request - user not found." });
-  }
+	if (!user) {
+		return res
+			.status(StatusCodes.UNAUTHORIZED)
+			.json({ message: "Invalid request - user not found." });
+	}
 
-  req.user = user;
-  next();
+	req.user = user;
+	next();
 };
 
 /**
@@ -80,34 +72,30 @@ export const authorize = async (
  * @source
  */
 export const authorizeWithRefreshToken = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
+	req: Request,
+	res: Response,
+	next: NextFunction,
 ) => {
-  const userService = req.app.services.userService;
-  const token = req.cookies[refreshTokenCookieName];
+	const userService = req.app.services.userService;
+	const token = req.cookies[refreshTokenCookieName];
 
-  if (!token) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: "Invalid request - no token" });
-  }
+	if (!token) {
+		return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid request - no token" });
+	}
 
-  const tokenPayload = TokenProcessor.decode(token, env.REFRESH_TOKEN_SECRET);
-  if (!tokenPayload) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: "Invalid token" });
-  }
+	const tokenPayload = TokenProcessor.decode(token, env.REFRESH_TOKEN_SECRET);
+	if (!tokenPayload) {
+		return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid token" });
+	}
 
-  const user = await userService.getUser(tokenPayload.userId);
+	const user = await userService.getUser(tokenPayload.userId);
 
-  if (!user) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: "Invalid request - user not found." });
-  }
+	if (!user) {
+		return res
+			.status(StatusCodes.UNAUTHORIZED)
+			.json({ message: "Invalid request - user not found." });
+	}
 
-  req.user = user;
-  next();
+	req.user = user;
+	next();
 };

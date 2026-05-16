@@ -9,22 +9,10 @@ import { API_CONTRACT } from "@packages/api-contract";
  * creating, accepting, and deleting friendships.
  */
 const routes = [
-  buildProtectedRoute(
-    API_CONTRACT.GET_USER_FRIENDSHIPS,
-    FriendshipControllers.getUserFriendships,
-  ),
-  buildProtectedRoute(
-    API_CONTRACT.ACCEPT_FRIENDSHIP,
-    FriendshipControllers.acceptFriendship,
-  ),
-  buildProtectedRoute(
-    API_CONTRACT.CREATE_FRIENDSHIP,
-    FriendshipControllers.createFriendship,
-  ),
-  buildProtectedRoute(
-    API_CONTRACT.DELETE_FRIENDSHIP,
-    FriendshipControllers.deleteFriendship,
-  ),
+	buildProtectedRoute(API_CONTRACT.GET_USER_FRIENDSHIPS, FriendshipControllers.getUserFriendships),
+	buildProtectedRoute(API_CONTRACT.ACCEPT_FRIENDSHIP, FriendshipControllers.acceptFriendship),
+	buildProtectedRoute(API_CONTRACT.CREATE_FRIENDSHIP, FriendshipControllers.createFriendship),
+	buildProtectedRoute(API_CONTRACT.DELETE_FRIENDSHIP, FriendshipControllers.deleteFriendship),
 ];
 
 export default buildRouter(routes);

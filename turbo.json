@@ -1,8 +1,8 @@
 {
-  "globalEnv": ["NEXT_PUBLIC_API_URL", "NEXT_PUBLIC_SOCKET_URL", "S3_URL"],
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"]
-    }
-  }
+	"globalEnv": ["NEXT_PUBLIC_API_URL", "NEXT_PUBLIC_SOCKET_URL", "S3_URL"],
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"]
+		}
+	}
 }

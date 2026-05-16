@@ -16,55 +16,51 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const createReactionController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.CREATE_REACTION;
-  const respond = buildValidatedResponder(res, contractKey);
+export const createReactionController = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.CREATE_REACTION;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      body: { messageId, reactionId },
-      params: { chatId },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			body: { messageId, reactionId },
+			params: { chatId },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const chatService = req.app.services.chatService;
+		const userId = req.user!.id;
+		const chatService = req.app.services.chatService;
 
-    const isUserAuthorized = await chatService.isUserInChat({
-      chatId,
-      userId,
-    });
+		const isUserAuthorized = await chatService.isUserInChat({
+			chatId,
+			userId,
+		});
 
-    if (!isUserAuthorized) {
-      return respond(StatusCodes.FORBIDDEN, {
-        message: req.t("chats.controllers.create-reaction.bad-chat"),
-      });
-    }
+		if (!isUserAuthorized) {
+			return respond(StatusCodes.FORBIDDEN, {
+				message: req.t("chats.controllers.create-reaction.bad-chat"),
+			});
+		}
 
-    const isMessageInChat = await chatService.isMessageInChat({
-      chatId,
-      messageId,
-    });
+		const isMessageInChat = await chatService.isMessageInChat({
+			chatId,
+			messageId,
+		});
 
-    if (!isMessageInChat) {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t("chats.controllers.create-reaction.bad-message"),
-      });
-    }
+		if (!isMessageInChat) {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("chats.controllers.create-reaction.bad-message"),
+			});
+		}
 
-    const reaction = await chatService.createReactionToMessage({
-      userId,
-      reactionId,
-      messageId,
-    });
+		const reaction = await chatService.createReactionToMessage({
+			userId,
+			reactionId,
+			messageId,
+		});
 
-    return respond(StatusCodes.CREATED, {
-      reaction,
-    });
-  } catch {
-    next(new Error(req.t("chats.controllers.create-reaction.failure")));
-  }
+		return respond(StatusCodes.CREATED, {
+			reaction,
+		});
+	} catch {
+		next(new Error(req.t("chats.controllers.create-reaction.failure")));
+	}
 };

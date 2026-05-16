@@ -10,8 +10,8 @@ import { env } from "./env";
  * @source
  */
 const corsConfig = {
-  origin: env.FRONTEND_URL,
-  credentials: true,
+	origin: env.FRONTEND_URL,
+	credentials: true,
 };
 
 /**

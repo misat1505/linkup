@@ -8,29 +8,29 @@ import { request } from "../../utils/requests";
 import { response } from "../../utils/responses";
 
 export const deleteFriendshipRoute = {
-  method: "delete",
-  path: "/friendships",
-  summary: "Delete an existing friendship",
-  tags: [TAGS.FRIENDSHIPS],
+	method: "delete",
+	path: "/friendships",
+	summary: "Delete an existing friendship",
+	tags: [TAGS.FRIENDSHIPS],
 
-  request: {
-    body: request.json({
-      schema: DeleteFriendshipDTO,
-    }),
-  },
+	request: {
+		body: request.json({
+			schema: DeleteFriendshipDTO,
+		}),
+	},
 
-  responses: {
-    [StatusCodes.OK]: response.json({
-      schema: SuccessMessage,
-      description: "Friendship deleted successfully",
-    }),
+	responses: {
+		[StatusCodes.OK]: response.json({
+			schema: SuccessMessage,
+			description: "Friendship deleted successfully",
+		}),
 
-    [StatusCodes.NOT_FOUND]: errors.notFound({
-      description: "Friendship does not exist",
-    }),
+		[StatusCodes.NOT_FOUND]: errors.notFound({
+			description: "Friendship does not exist",
+		}),
 
-    [StatusCodes.FORBIDDEN]: errors.forbidden({
-      description: "User not authorized to delete this friendship",
-    }),
-  },
+		[StatusCodes.FORBIDDEN]: errors.forbidden({
+			description: "User not authorized to delete this friendship",
+		}),
+	},
 } satisfies RouteConfig;

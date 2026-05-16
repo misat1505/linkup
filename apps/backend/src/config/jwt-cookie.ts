@@ -20,10 +20,10 @@ export const refreshTokenCookieName = "refresh-token";
  * @source
  */
 export const refreshTokenCookieOptions: CookieOptions = {
-  sameSite: "none",
-  secure: true,
-  httpOnly: true,
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
+	sameSite: "none",
+	secure: true,
+	httpOnly: true,
+	maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
 };
 
 /**
@@ -35,7 +35,7 @@ export const refreshTokenCookieOptions: CookieOptions = {
  * @source
  */
 export const refreshTokenSignOptions: SignOptions = {
-  expiresIn: "7d",
+	expiresIn: "7d",
 };
 
 /**
@@ -47,5 +47,5 @@ export const refreshTokenSignOptions: SignOptions = {
  * @source
  */
 export const accessTokenSignOptions: SignOptions = {
-  expiresIn: "15m",
+	expiresIn: "15m",
 };

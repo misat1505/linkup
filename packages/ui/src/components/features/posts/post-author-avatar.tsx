@@ -8,13 +8,13 @@ import { Avatar } from "../../misc/avatar";
 type PostAuthorAvatarProps = { author: User };
 
 const PostAuthorAvatar = ({ author }: PostAuthorAvatarProps) => {
-  return (
-    <Avatar
-      className="border"
-      src={buildFileURL(author.photoURL, { type: "avatar" })}
-      alt={getInitials(author)}
-    />
-  );
+	return (
+		<Avatar
+			className="border"
+			src={buildFileURL(author.photoURL, { type: "avatar" })}
+			alt={getInitials(author)}
+		/>
+	);
 };
 
 export default PostAuthorAvatar;

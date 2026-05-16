@@ -9,52 +9,44 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+	variable: "--font-geist-sans",
+	subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+	variable: "--font-geist-mono",
+	subsets: ["latin"],
 });
 
 export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1.0,
+	width: "device-width",
+	initialScale: 1.0,
 };
 
 export const metadata: Metadata = {
-  title: "LinkUp - Social Media for Programmers",
-  description:
-    "Connect, share, and collaborate with programmers worldwide on LinkUp, the social media platform built for developers.",
-  keywords: [
-    "programming",
-    "developers",
-    "social media",
-    "tech community",
-    "LinkUp",
-  ],
-  authors: [{ name: "LinkUp Team" }],
+	title: "LinkUp - Social Media for Programmers",
+	description:
+		"Connect, share, and collaborate with programmers worldwide on LinkUp, the social media platform built for developers.",
+	keywords: ["programming", "developers", "social media", "tech community", "LinkUp"],
+	authors: [{ name: "LinkUp Team" }],
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>
-          <BgGradient />
-          <NavbarWrapper />
-          <div className="relative z-10">{children}</div>
-          <Toaster />
-        </Providers>
-        <ReportWebVitals />
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en" suppressHydrationWarning>
+			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+				<Providers>
+					<BgGradient />
+					<NavbarWrapper />
+					<div className="relative z-10">{children}</div>
+					<Toaster />
+				</Providers>
+				<ReportWebVitals />
+			</body>
+		</html>
+	);
 }

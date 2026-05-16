@@ -7,21 +7,21 @@ import request from "supertest";
 import { describe, expect, it } from "vitest";
 
 describe("[POST] /posts", () => {
-  it("creates new post", async () => {
-    await testWithTransaction(async ({ app, seed }) => {
-      const token = TestHelpers.createToken(seed.users[0].id);
-      mockFileStorage.listFiles.mockResolvedValue([]);
+	it("creates new post", async () => {
+		await testWithTransaction(async ({ app, seed }) => {
+			const token = TestHelpers.createToken(seed.users[0].id);
+			mockFileStorage.listFiles.mockResolvedValue([]);
 
-      const res = await request(app)
-        .post("/posts")
-        .set("Authorization", `Bearer ${token}`)
-        .send({
-          content: "This is a new post.",
-        })
-        .expect(StatusCodes.CREATED);
+			const res = await request(app)
+				.post("/posts")
+				.set("Authorization", `Bearer ${token}`)
+				.send({
+					content: "This is a new post.",
+				})
+				.expect(StatusCodes.CREATED);
 
-      Post.strict().parse(res.body.post);
-      expect(res.body.post.content).toBe("This is a new post.");
-    });
-  });
+			Post.strict().parse(res.body.post);
+			expect(res.body.post.content).toBe("This is a new post.");
+		});
+	});
 });

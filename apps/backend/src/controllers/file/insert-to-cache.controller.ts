@@ -18,47 +18,39 @@ export const CACHE_CAPACITY = 10;
  *
  * @source
  */
-export const insertToCache = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.INSERT_TO_CACHE;
-  const respond = buildValidatedResponder(res, contractKey);
+export const insertToCache = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.INSERT_TO_CACHE;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const file = req.file;
-    const userId = req.user!.id;
-    const fileStorage = req.app.services.fileStorage;
+	try {
+		const file = req.file;
+		const userId = req.user!.id;
+		const fileStorage = req.app.services.fileStorage;
 
-    if (!file) {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t("files.controllers.insert-to-cache.no-file"),
-      });
-    }
+		if (!file) {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("files.controllers.insert-to-cache.no-file"),
+			});
+		}
 
-    const cachePaths = await fileStorage.listFiles(`cache/${userId}`);
+		const cachePaths = await fileStorage.listFiles(`cache/${userId}`);
 
-    if (cachePaths.length >= CACHE_CAPACITY) {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t("files.controllers.insert-to-cache.limit-reached", {
-          count: CACHE_CAPACITY,
-        }),
-      });
-    }
+		if (cachePaths.length >= CACHE_CAPACITY) {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("files.controllers.insert-to-cache.limit-reached", {
+					count: CACHE_CAPACITY,
+				}),
+			});
+		}
 
-    const filename = generateNewFilename(file.originalname);
+		const filename = generateNewFilename(file.originalname);
 
-    await fileStorage.uploadFile(
-      file.buffer,
-      file.mimetype,
-      `cache/${userId}/${filename}`,
-    );
+		await fileStorage.uploadFile(file.buffer, file.mimetype, `cache/${userId}/${filename}`);
 
-    return respond(StatusCodes.CREATED, {
-      file: filename,
-    });
-  } catch {
-    next(new Error(req.t("files.controllers.insert-to-cache.failure")));
-  }
+		return respond(StatusCodes.CREATED, {
+			file: filename,
+		});
+	} catch {
+		next(new Error(req.t("files.controllers.insert-to-cache.failure")));
+	}
 };

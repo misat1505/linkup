@@ -6,24 +6,24 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const respond = vi.fn();
 vi.mock("@/utils/validated-responder", () => ({
-  buildValidatedResponder: vi.fn(() => respond),
+	buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("getSelfChats", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
 
-  it("retrieves user's chats", async () => {
-    const chats = [{ id: "chat1" }, { id: "chat2" }];
-    mockChatService.getUserChats.mockResolvedValue(chats);
+	it("retrieves user's chats", async () => {
+		const chats = [{ id: "chat1" }, { id: "chat2" }];
+		mockChatService.getUserChats.mockResolvedValue(chats);
 
-    const req = mockRequest({
-      user: { id: "userId" } as UserWithCredentials,
-    });
-    const res = mockResponse();
-    await ChatControllers.getSelfChats(req, res, vi.fn());
+		const req = mockRequest({
+			user: { id: "userId" } as UserWithCredentials,
+		});
+		const res = mockResponse();
+		await ChatControllers.getSelfChats(req, res, vi.fn());
 
-    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
-  });
+		expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+	});
 });

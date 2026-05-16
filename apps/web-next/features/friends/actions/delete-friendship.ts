@@ -5,17 +5,17 @@ import { User } from "@packages/schemas";
 import { revalidatePath } from "next/cache";
 
 export async function deleteFriendship(
-  requesterId: User["id"],
-  acceptorId: User["id"],
+	requesterId: User["id"],
+	acceptorId: User["id"],
 ): Promise<void> {
-  const body = {
-    requesterId,
-    acceptorId,
-  };
+	const body = {
+		requesterId,
+		acceptorId,
+	};
 
-  await apiContractClient.deleteFriendship({
-    body,
-  });
+	await apiContractClient.deleteFriendship({
+		body,
+	});
 
-  revalidatePath("/friends");
+	revalidatePath("/friends");
 }

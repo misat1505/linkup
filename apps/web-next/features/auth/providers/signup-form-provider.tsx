@@ -1,34 +1,25 @@
 import React, { createContext, useContext } from "react";
-import useSignupForm, {
-  useSignupFormProps,
-  useSubmitFormValue,
-} from "../hooks/use-signup-form";
+import useSignupForm, { useSignupFormProps, useSubmitFormValue } from "../hooks/use-signup-form";
 
 type FormType = "create" | "modify";
 
 type SignupFormContextProps = useSignupFormProps & {
-  children: React.ReactNode;
-  type: FormType;
+	children: React.ReactNode;
+	type: FormType;
 };
 
 type SignupContextValue = useSubmitFormValue & { type: FormType };
 
-const SignupFormContext = createContext<SignupContextValue>(
-  {} as SignupContextValue,
-);
+const SignupFormContext = createContext<SignupContextValue>({} as SignupContextValue);
 
 export const useSignupFormContext = () => useContext(SignupFormContext);
 
-const SignupFormProvider = ({
-  children,
-  type,
-  ...props
-}: SignupFormContextProps) => {
-  return (
-    <SignupFormContext.Provider value={{ ...useSignupForm(props), type }}>
-      {children}
-    </SignupFormContext.Provider>
-  );
+const SignupFormProvider = ({ children, type, ...props }: SignupFormContextProps) => {
+	return (
+		<SignupFormContext.Provider value={{ ...useSignupForm(props), type }}>
+			{children}
+		</SignupFormContext.Provider>
+	);
 };
 
 export default SignupFormProvider;

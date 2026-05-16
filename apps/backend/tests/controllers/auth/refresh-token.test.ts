@@ -9,26 +9,26 @@ vi.mock("@/lib/token-processor");
 
 const respond = vi.fn();
 vi.mock("@/utils/validated-responder", () => ({
-  buildValidatedResponder: vi.fn(() => respond),
+	buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("refreshToken", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
 
-  it("refreshes authentication token", async () => {
-    await seedProvider(async (seed) => {
-      const user = seed.users[0];
-      (TokenProcessor.encode as Mock).mockReturnValue("new_fake_jwt_token");
+	it("refreshes authentication token", async () => {
+		await seedProvider(async (seed) => {
+			const user = seed.users[0];
+			(TokenProcessor.encode as Mock).mockReturnValue("new_fake_jwt_token");
 
-      const req = mockRequest({ user });
-      const res = mockResponse();
+			const req = mockRequest({ user });
+			const res = mockResponse();
 
-      AuthControllers.refreshToken(req, res, vi.fn());
+			AuthControllers.refreshToken(req, res, vi.fn());
 
-      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
-      expect(res.cookie).toHaveBeenCalled();
-    });
-  });
+			expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+			expect(res.cookie).toHaveBeenCalled();
+		});
+	});
 });

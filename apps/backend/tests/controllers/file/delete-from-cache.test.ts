@@ -1,58 +1,51 @@
 import { FileControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/user-with-credentials";
-import {
-  mockFileService,
-  mockFileStorage,
-  mockRequest,
-  mockResponse,
-} from "@tests/utils/mocks";
+import { mockFileService, mockFileStorage, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const respond = vi.fn();
 vi.mock("@/utils/validated-responder", () => ({
-  buildValidatedResponder: vi.fn(() => respond),
+	buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("deleteFromCache", () => {
-  mockFileService.isUserAvatar.mockResolvedValue(true);
-  mockFileService.isChatMessage.mockResolvedValue(true);
-  mockFileService.isChatPhoto.mockResolvedValue(true);
+	mockFileService.isUserAvatar.mockResolvedValue(true);
+	mockFileService.isChatMessage.mockResolvedValue(true);
+	mockFileService.isChatPhoto.mockResolvedValue(true);
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
+	afterEach(() => {
+		vi.clearAllMocks();
+	});
 
-  it("deletes file from cache successfully", async () => {
-    const req = mockRequest({
-      user: { id: "userId" } as UserWithCredentials,
-      validated: { params: { filename: "url1" } },
-    });
-    const res = mockResponse();
+	it("deletes file from cache successfully", async () => {
+		const req = mockRequest({
+			user: { id: "userId" } as UserWithCredentials,
+			validated: { params: { filename: "url1" } },
+		});
+		const res = mockResponse();
 
-    await FileControllers.deleteFromCache(req, res, vi.fn());
+		await FileControllers.deleteFromCache(req, res, vi.fn());
 
-    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+		expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
 
-    expect(mockFileStorage.deleteFile).toHaveBeenCalledTimes(1);
-    expect(mockFileStorage.deleteFile).toHaveBeenCalledWith(
-      `cache/${"userId"}/url1`,
-    );
-  });
+		expect(mockFileStorage.deleteFile).toHaveBeenCalledTimes(1);
+		expect(mockFileStorage.deleteFile).toHaveBeenCalledWith(`cache/${"userId"}/url1`);
+	});
 
-  it("returns 500 for failed cache deletion", async () => {
-    mockFileStorage.deleteFile.mockRejectedValue(new Error());
+	it("returns 500 for failed cache deletion", async () => {
+		mockFileStorage.deleteFile.mockRejectedValue(new Error());
 
-    const mockNextFunction = vi.fn();
+		const mockNextFunction = vi.fn();
 
-    const req = mockRequest({
-      user: { id: "userId" } as UserWithCredentials,
-      validated: { params: { filename: "testfile.txt" } },
-    });
-    const res = mockResponse();
+		const req = mockRequest({
+			user: { id: "userId" } as UserWithCredentials,
+			validated: { params: { filename: "testfile.txt" } },
+		});
+		const res = mockResponse();
 
-    await FileControllers.deleteFromCache(req, res, mockNextFunction);
+		await FileControllers.deleteFromCache(req, res, mockNextFunction);
 
-    expect(mockNextFunction).toHaveBeenCalled();
-  });
+		expect(mockNextFunction).toHaveBeenCalled();
+	});
 });

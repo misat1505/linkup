@@ -22,56 +22,51 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const updateSelfController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.UPDATE_SELF;
-  const respond = buildValidatedResponder(res, contractKey);
+export const updateSelfController = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.UPDATE_SELF;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const { body } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
-    const { firstName, lastName, login, password } = body;
+	try {
+		const { body } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+		const { firstName, lastName, login, password } = body;
 
-    const userId = req.user!.id;
-    const { userService, fileStorage } = req.app.services;
+		const userId = req.user!.id;
+		const { userService, fileStorage } = req.app.services;
 
-    const file = await processAvatar(fileStorage, req.file);
+		const file = await processAvatar(fileStorage, req.file);
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = Hasher.hash(password + salt);
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = Hasher.hash(password + salt);
 
-    const fetchedUser = await userService.getUserByLogin(login);
+		const fetchedUser = await userService.getUserByLogin(login);
 
-    const isLoginTaken =
-      fetchedUser && fetchedUser.login === login && fetchedUser.id !== userId;
+		const isLoginTaken = fetchedUser && fetchedUser.login === login && fetchedUser.id !== userId;
 
-    if (isLoginTaken) {
-      return respond(StatusCodes.CONFLICT, {
-        message: req.t("auth.controllers.update.login-already-exists"),
-      });
-    }
+		if (isLoginTaken) {
+			return respond(StatusCodes.CONFLICT, {
+				message: req.t("auth.controllers.update.login-already-exists"),
+			});
+		}
 
-    const user: UserWithCredentials = {
-      id: userId,
-      firstName,
-      lastName,
-      login,
-      password: hashedPassword,
-      salt,
-      photoURL: file,
-      lastActive: new Date(),
-    };
+		const user: UserWithCredentials = {
+			id: userId,
+			firstName,
+			lastName,
+			login,
+			password: hashedPassword,
+			salt,
+			photoURL: file,
+			lastActive: new Date(),
+		};
 
-    await userService.updateUser(user);
+		await userService.updateUser(user);
 
-    if (fetchedUser?.photoURL) {
-      await fileStorage.deleteFile(`avatars/${fetchedUser.photoURL}`);
-    }
+		if (fetchedUser?.photoURL) {
+			await fileStorage.deleteFile(`avatars/${fetchedUser.photoURL}`);
+		}
 
-    return respond(StatusCodes.OK, { user });
-  } catch {
-    next(new Error(req.t("auth.controllers.update.failure")));
-  }
+		return respond(StatusCodes.OK, { user });
+	} catch {
+		next(new Error(req.t("auth.controllers.update.failure")));
+	}
 };

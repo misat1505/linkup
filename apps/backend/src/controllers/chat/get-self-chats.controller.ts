@@ -15,24 +15,20 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const getSelfChatsController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.GET_SELF_CHATS;
-  const respond = buildValidatedResponder(res, contractKey);
+export const getSelfChatsController = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.GET_SELF_CHATS;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const userId = req.user!.id;
-    const chatService = req.app.services.chatService;
+	try {
+		const userId = req.user!.id;
+		const chatService = req.app.services.chatService;
 
-    const chats = await chatService.getUserChats(userId);
+		const chats = await chatService.getUserChats(userId);
 
-    return respond(StatusCodes.OK, {
-      chats,
-    });
-  } catch {
-    next(new Error(req.t("chats.controllers.get-self-chats.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			chats,
+		});
+	} catch {
+		next(new Error(req.t("chats.controllers.get-self-chats.failure")));
+	}
 };

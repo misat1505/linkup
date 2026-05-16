@@ -7,18 +7,16 @@ import { getCachedRenderedPost } from "../utils/render-post";
 import { sortPosts } from "../utils/sort-posts";
 
 export async function getRecommendedPosts(
-  lastPostId: Post["id"] | null,
-  limit: number,
+	lastPostId: Post["id"] | null,
+	limit: number,
 ): Promise<PostWithRenderedContent[]> {
-  const res = await apiContractClient.getPosts({
-    query: { lastPostId, limit },
-  });
+	const res = await apiContractClient.getPosts({
+		query: { lastPostId, limit },
+	});
 
-  const sortedPosts = sortPosts(res.posts);
+	const sortedPosts = sortPosts(res.posts);
 
-  const renderedPosts = await Promise.all(
-    sortedPosts.map((post) => getCachedRenderedPost(post)),
-  );
+	const renderedPosts = await Promise.all(sortedPosts.map((post) => getCachedRenderedPost(post)));
 
-  return renderedPosts;
+	return renderedPosts;
 }

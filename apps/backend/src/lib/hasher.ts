@@ -16,7 +16,7 @@ import { createHash } from "node:crypto";
  * @source
  */
 export class Hasher {
-  static hash(data: string): string {
-    return createHash("sha256").update(data).digest("hex");
-  }
+	static hash(data: string): string {
+		return createHash("sha256").update(data).digest("hex");
+	}
 }

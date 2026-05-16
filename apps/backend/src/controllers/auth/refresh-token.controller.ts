@@ -1,9 +1,9 @@
 import { env } from "@/config/env";
 import {
-  accessTokenSignOptions,
-  refreshTokenCookieName,
-  refreshTokenCookieOptions,
-  refreshTokenSignOptions,
+	accessTokenSignOptions,
+	refreshTokenCookieName,
+	refreshTokenCookieOptions,
+	refreshTokenSignOptions,
 } from "@/config/jwt-cookie";
 import { TokenProcessor } from "@/lib/token-processor";
 import { buildValidatedResponder } from "@/utils/validated-responder";
@@ -25,36 +25,32 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const refreshTokenController = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.REFRESH_TOKEN;
-  const respond = buildValidatedResponder(res, contractKey);
+export const refreshTokenController = (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.REFRESH_TOKEN;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const { id: userId } = req.user!;
+	try {
+		const { id: userId } = req.user!;
 
-    const refreshToken = TokenProcessor.encode(
-      { userId },
-      env.REFRESH_TOKEN_SECRET,
-      refreshTokenSignOptions,
-    );
+		const refreshToken = TokenProcessor.encode(
+			{ userId },
+			env.REFRESH_TOKEN_SECRET,
+			refreshTokenSignOptions,
+		);
 
-    const accessToken = TokenProcessor.encode(
-      { userId },
-      env.ACCESS_TOKEN_SECRET,
-      accessTokenSignOptions,
-    );
+		const accessToken = TokenProcessor.encode(
+			{ userId },
+			env.ACCESS_TOKEN_SECRET,
+			accessTokenSignOptions,
+		);
 
-    res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
+		res.cookie(refreshTokenCookieName, refreshToken, refreshTokenCookieOptions);
 
-    return respond(StatusCodes.OK, {
-      message: req.t("auth.controllers.refresh.success"),
-      accessToken,
-    });
-  } catch {
-    next(new Error(req.t("auth.controllers.refresh.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			message: req.t("auth.controllers.refresh.success"),
+			accessToken,
+		});
+	} catch {
+		next(new Error(req.t("auth.controllers.refresh.failure")));
+	}
 };

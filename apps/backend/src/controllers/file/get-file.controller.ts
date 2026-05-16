@@ -7,29 +7,29 @@ import { StatusCodes } from "http-status-codes";
 const contractKey = CONTRACT_KEYS.GET_FILE;
 
 const sendFileBuilder =
-  (filename: string, req: Request, res: Response) =>
-  async (
-    validator: () => Promise<boolean>,
-    errorMessage = req.t("files.controllers.get-file.default-error-message"),
-  ) => {
-    const respond = buildValidatedResponder(res, contractKey);
+	(filename: string, req: Request, res: Response) =>
+	async (
+		validator: () => Promise<boolean>,
+		errorMessage = req.t("files.controllers.get-file.default-error-message"),
+	) => {
+		const respond = buildValidatedResponder(res, contractKey);
 
-    const fileStorage = req.app.services.fileStorage;
-    const result = await validator();
+		const fileStorage = req.app.services.fileStorage;
+		const result = await validator();
 
-    if (!result) {
-      return respond(StatusCodes.FORBIDDEN, { message: errorMessage });
-    }
+		if (!result) {
+			return respond(StatusCodes.FORBIDDEN, { message: errorMessage });
+		}
 
-    try {
-      const url = await fileStorage.getSignedUrl(filename);
-      return respond(StatusCodes.OK, { url });
-    } catch {
-      return respond(StatusCodes.NOT_FOUND, {
-        message: req.t("files.controllers.get-file.not-found"),
-      });
-    }
-  };
+		try {
+			const url = await fileStorage.getSignedUrl(filename);
+			return respond(StatusCodes.OK, { url });
+		} catch {
+			return respond(StatusCodes.NOT_FOUND, {
+				message: req.t("files.controllers.get-file.not-found"),
+			});
+		}
+	};
 
 /**
  * Controller to retrieve a file based on specified filters and parameters.
@@ -43,78 +43,74 @@ const sendFileBuilder =
  *
  * @source
  */
-export const getFileController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const respond = buildValidatedResponder(res, contractKey);
+export const getFileController = async (req: Request, res: Response, next: NextFunction) => {
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      params: { filename },
-      query,
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			params: { filename },
+			query,
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const { fileService, fileStorage } = req.app.services;
+		const userId = req.user!.id;
+		const { fileService, fileStorage } = req.app.services;
 
-    const sendFile = (path: string) => sendFileBuilder(path, req, res);
+		const sendFile = (path: string) => sendFileBuilder(path, req, res);
 
-    switch (query.filter) {
-      case "avatar": {
-        const path = `avatars/${filename}`;
-        return sendFile(path)(
-          () => fileService.isUserAvatar(filename),
-          req.t("files.controllers.get-file.avatar-not-found"),
-        );
-      }
+		switch (query.filter) {
+			case "avatar": {
+				const path = `avatars/${filename}`;
+				return sendFile(path)(
+					() => fileService.isUserAvatar(filename),
+					req.t("files.controllers.get-file.avatar-not-found"),
+				);
+			}
 
-      case "chat-photo": {
-        const path = `chats/${query.chat}/${filename}`;
-        return sendFile(path)(
-          () => fileService.isChatPhoto(filename, userId),
-          req.t("files.controllers.get-file.group-photo-not-found"),
-        );
-      }
+			case "chat-photo": {
+				const path = `chats/${query.chat}/${filename}`;
+				return sendFile(path)(
+					() => fileService.isChatPhoto(filename, userId),
+					req.t("files.controllers.get-file.group-photo-not-found"),
+				);
+			}
 
-      case "chat-message": {
-        const path = `chats/${query.chat}/${filename}`;
-        return sendFile(path)(
-          () => fileService.isChatMessage(filename, userId),
-          req.t("files.controllers.get-file.group-photo-not-found"),
-        );
-      }
+			case "chat-message": {
+				const path = `chats/${query.chat}/${filename}`;
+				return sendFile(path)(
+					() => fileService.isChatMessage(filename, userId),
+					req.t("files.controllers.get-file.group-photo-not-found"),
+				);
+			}
 
-      case "cache": {
-        const path = `cache/${userId}/${filename}`;
+			case "cache": {
+				const path = `cache/${userId}/${filename}`;
 
-        try {
-          const url = await fileStorage.getSignedUrl(path);
+				try {
+					const url = await fileStorage.getSignedUrl(path);
 
-          return respond(StatusCodes.OK, { url });
-        } catch {
-          return respond(StatusCodes.NOT_FOUND, {
-            message: req.t("files.controllers.get-file.not-found"),
-          });
-        }
-      }
+					return respond(StatusCodes.OK, { url });
+				} catch {
+					return respond(StatusCodes.NOT_FOUND, {
+						message: req.t("files.controllers.get-file.not-found"),
+					});
+				}
+			}
 
-      case "post": {
-        const path = `posts/${query.post}/${filename}`;
+			case "post": {
+				const path = `posts/${query.post}/${filename}`;
 
-        try {
-          const url = await fileStorage.getSignedUrl(path, 86400);
+				try {
+					const url = await fileStorage.getSignedUrl(path, 86400);
 
-          return respond(StatusCodes.OK, { url });
-        } catch {
-          return respond(StatusCodes.NOT_FOUND, {
-            message: req.t("files.controllers.get-file.not-found"),
-          });
-        }
-      }
-    }
-  } catch {
-    next(new Error(req.t("files.controllers.get-file.failure")));
-  }
+					return respond(StatusCodes.OK, { url });
+				} catch {
+					return respond(StatusCodes.NOT_FOUND, {
+						message: req.t("files.controllers.get-file.not-found"),
+					});
+				}
+			}
+		}
+	} catch {
+		next(new Error(req.t("files.controllers.get-file.failure")));
+	}
 };

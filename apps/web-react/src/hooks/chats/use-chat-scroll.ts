@@ -2,69 +2,68 @@ import { useChatContext } from "@/contexts/chat-provider";
 import { useLayoutEffect, useRef } from "react";
 
 type useChatScrollValue = {
-  containerRef: React.RefObject<HTMLDivElement | null>;
-  handleScroll: () => void;
-  bottomRef: React.RefObject<HTMLDivElement | null>;
-  wasAtBottomRef: React.MutableRefObject<boolean>;
-  scrollToBottom: () => void;
+	containerRef: React.RefObject<HTMLDivElement | null>;
+	handleScroll: () => void;
+	bottomRef: React.RefObject<HTMLDivElement | null>;
+	wasAtBottomRef: React.MutableRefObject<boolean>;
+	scrollToBottom: () => void;
 };
 
 export default function useChatScroll(): useChatScrollValue {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const bottomRef = useRef<HTMLDivElement | null>(null);
-  const scrollTopRef = useRef<number>(0);
-  const isInitialMount = useRef<boolean>(true);
-  const wasAtBottomRef = useRef<boolean>(true);
-  const { messages, isFetchingNextPage } = useChatContext();
-  const prevScrollHeightRef = useRef<number>(0);
+	const containerRef = useRef<HTMLDivElement | null>(null);
+	const bottomRef = useRef<HTMLDivElement | null>(null);
+	const scrollTopRef = useRef<number>(0);
+	const isInitialMount = useRef<boolean>(true);
+	const wasAtBottomRef = useRef<boolean>(true);
+	const { messages, isFetchingNextPage } = useChatContext();
+	const prevScrollHeightRef = useRef<number>(0);
 
-  const handleScroll = () => {
-    if (containerRef.current) {
-      scrollTopRef.current = containerRef.current.scrollTop;
-      const container = containerRef.current;
-      const atBottom =
-        container.scrollHeight - container.scrollTop === container.clientHeight;
-      wasAtBottomRef.current = atBottom;
-    }
-  };
+	const handleScroll = () => {
+		if (containerRef.current) {
+			scrollTopRef.current = containerRef.current.scrollTop;
+			const container = containerRef.current;
+			const atBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
+			wasAtBottomRef.current = atBottom;
+		}
+	};
 
-  useLayoutEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+	useLayoutEffect(() => {
+		const container = containerRef.current;
+		if (!container) return;
 
-    if (isInitialMount.current) {
-      bottomRef.current?.scrollIntoView();
-      isInitialMount.current = false;
-      prevScrollHeightRef.current = container.scrollHeight;
-      return;
-    }
+		if (isInitialMount.current) {
+			bottomRef.current?.scrollIntoView();
+			isInitialMount.current = false;
+			prevScrollHeightRef.current = container.scrollHeight;
+			return;
+		}
 
-    if (isFetchingNextPage) {
-      prevScrollHeightRef.current = container.scrollHeight;
-      return;
-    }
+		if (isFetchingNextPage) {
+			prevScrollHeightRef.current = container.scrollHeight;
+			return;
+		}
 
-    const newScrollHeight = container.scrollHeight;
-    const heightDiff = newScrollHeight - prevScrollHeightRef.current;
+		const newScrollHeight = container.scrollHeight;
+		const heightDiff = newScrollHeight - prevScrollHeightRef.current;
 
-    if (heightDiff > 0 && !wasAtBottomRef.current) {
-      container.scrollTop = scrollTopRef.current + heightDiff;
-    } else if (wasAtBottomRef.current) {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
+		if (heightDiff > 0 && !wasAtBottomRef.current) {
+			container.scrollTop = scrollTopRef.current + heightDiff;
+		} else if (wasAtBottomRef.current) {
+			bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+		}
 
-    prevScrollHeightRef.current = newScrollHeight;
-  }, [messages, isFetchingNextPage]);
+		prevScrollHeightRef.current = newScrollHeight;
+	}, [messages, isFetchingNextPage]);
 
-  const scrollToBottom = () => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+	const scrollToBottom = () => {
+		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+	};
 
-  return {
-    containerRef,
-    handleScroll,
-    bottomRef,
-    wasAtBottomRef,
-    scrollToBottom,
-  };
+	return {
+		containerRef,
+		handleScroll,
+		bottomRef,
+		wasAtBottomRef,
+		scrollToBottom,
+	};
 }

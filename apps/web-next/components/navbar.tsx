@@ -10,28 +10,28 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 
 export default function NavbarWrapper() {
-  const { user, invalidateCurrentUser } = useAppContext();
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  const { theme, setTheme } = useTheme();
+	const { user, invalidateCurrentUser } = useAppContext();
+	const queryClient = useQueryClient();
+	const router = useRouter();
+	const { theme, setTheme } = useTheme();
 
-  const handleLogout = async () => {
-    logoutUser();
-    invalidateCurrentUser();
-    queryClient.clear();
+	const handleLogout = async () => {
+		logoutUser();
+		invalidateCurrentUser();
+		queryClient.clear();
 
-    await sleep(10);
-    router.push("/login");
-  };
+		await sleep(10);
+		router.push("/login");
+	};
 
-  return (
-    <Navbar
-      user={user ?? null}
-      addFriendAction={createFriendship}
-      createChatAction={createPrivateChat}
-      handleLogout={handleLogout}
-      theme={theme as "light" | "dark"}
-      toggleTheme={() => setTheme(theme === "light" ? "dark" : "light")}
-    />
-  );
+	return (
+		<Navbar
+			user={user ?? null}
+			addFriendAction={createFriendship}
+			createChatAction={createPrivateChat}
+			handleLogout={handleLogout}
+			theme={theme as "light" | "dark"}
+			toggleTheme={() => setTheme(theme === "light" ? "dark" : "light")}
+		/>
+	);
 }

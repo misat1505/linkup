@@ -6,16 +6,16 @@ import request from "supertest";
 import { describe, it } from "vitest";
 
 describe("[GET] /auth/user", () => {
-  it("retrieves authenticated user", async () => {
-    await testWithTransaction(async ({ app, seed }) => {
-      const token = TestHelpers.createToken(seed.users[0].id);
+	it("retrieves authenticated user", async () => {
+		await testWithTransaction(async ({ app, seed }) => {
+			const token = TestHelpers.createToken(seed.users[0].id);
 
-      const res = await request(app)
-        .get("/auth/user")
-        .set("Authorization", `Bearer ${token}`)
-        .expect(StatusCodes.OK);
+			const res = await request(app)
+				.get("/auth/user")
+				.set("Authorization", `Bearer ${token}`)
+				.expect(StatusCodes.OK);
 
-      User.strict().parse(res.body.user);
-    });
-  });
+			User.strict().parse(res.body.user);
+		});
+	});
 });

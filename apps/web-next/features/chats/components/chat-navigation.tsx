@@ -8,31 +8,31 @@ import ChatCreatorWrapper from "./chat-creator-wrapper";
 import { ChatNavigationHide } from "./chat-navigation-hide";
 
 export default async function ChatNavigation() {
-  const [chats, me] = await Promise.all([getChatsCached(), getMeCached()]);
+	const [chats, me] = await Promise.all([getChatsCached(), getMeCached()]);
 
-  const sortedChats = sortChatsByActivity(chats);
+	const sortedChats = sortChatsByActivity(chats);
 
-  return (
-    <ChatNavigationHide>
-      <ChatNavigationHeader />
-      <div
-        className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto relative"
-        data-testid="cy-chat-nav"
-      >
-        {sortedChats.length === 0 && <NoChats />}
-        <NavigationList chats={sortedChats!} me={me!} />
-      </div>
-    </ChatNavigationHide>
-  );
+	return (
+		<ChatNavigationHide>
+			<ChatNavigationHeader />
+			<div
+				className="no-scrollbar h-[calc(100vh-8rem)] overflow-auto relative"
+				data-testid="cy-chat-nav"
+			>
+				{sortedChats.length === 0 && <NoChats />}
+				<NavigationList chats={sortedChats!} me={me!} />
+			</div>
+		</ChatNavigationHide>
+	);
 }
 
 function ChatNavigationHeader() {
-  return (
-    <div className="flex w-full items-center justify-between bg-transparent px-4 py-2 text-white">
-      <h2 className="text-lg font-semibold">
-        <I18nText translationKey="chats.navigation.title" />
-      </h2>
-      <ChatCreatorWrapper />
-    </div>
-  );
+	return (
+		<div className="flex w-full items-center justify-between bg-transparent px-4 py-2 text-white">
+			<h2 className="text-lg font-semibold">
+				<I18nText translationKey="chats.navigation.title" />
+			</h2>
+			<ChatCreatorWrapper />
+		</div>
+	);
 }

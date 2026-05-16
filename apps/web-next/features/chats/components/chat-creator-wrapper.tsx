@@ -7,17 +7,17 @@ import PrivateChatForm from "./chat-creation-dialog/private-chat-form";
 import { CreateChatTarget } from "./create-chat-trigger";
 
 export default function ChatCreatorWrapper() {
-  return (
-    <ChatCreator
-      slots={{
-        createChatTarget: CreateChatTarget,
-        groupChatForm: (
-          <GroupChatFormProvider>
-            <GroupChatForm />
-          </GroupChatFormProvider>
-        ),
-        privateChatForm: <PrivateChatForm />,
-      }}
-    />
-  );
+	return (
+		<ChatCreator
+			slots={{
+				createChatTarget: CreateChatTarget,
+				groupChatForm: (
+					<GroupChatFormProvider>
+						<GroupChatForm />
+					</GroupChatFormProvider>
+				),
+				privateChatForm: <PrivateChatForm />,
+			}}
+		/>
+	);
 }

@@ -19,40 +19,38 @@ import { StatusCodes } from "http-status-codes";
  * @source
  */
 export const createPrivateChatController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
+	req: Request,
+	res: Response,
+	next: NextFunction,
 ) => {
-  const contractKey = CONTRACT_KEYS.CREATE_PRIVATE_CHAT;
-  const respond = buildValidatedResponder(res, contractKey);
+	const contractKey = CONTRACT_KEYS.CREATE_PRIVATE_CHAT;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const userId = req.user!.id;
+	try {
+		const userId = req.user!.id;
 
-    const {
-      body: { users },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+		const {
+			body: { users },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const chatService = req.app.services.chatService;
+		const chatService = req.app.services.chatService;
 
-    if (!users.includes(userId)) {
-      return respond(StatusCodes.BAD_REQUEST, {
-        message: req.t(
-          "chats.controllers.create-private-chat.not-belonging-to-you",
-        ),
-      });
-    }
+		if (!users.includes(userId)) {
+			return respond(StatusCodes.BAD_REQUEST, {
+				message: req.t("chats.controllers.create-private-chat.not-belonging-to-you"),
+			});
+		}
 
-    const chat = await chatService.getPrivateChatByUserIds(users[0], users[1]);
+		const chat = await chatService.getPrivateChatByUserIds(users[0], users[1]);
 
-    if (chat) {
-      return respond(StatusCodes.CONFLICT, { chat });
-    }
+		if (chat) {
+			return respond(StatusCodes.CONFLICT, { chat });
+		}
 
-    const createdChat = await chatService.createPrivateChat(users[0], users[1]);
+		const createdChat = await chatService.createPrivateChat(users[0], users[1]);
 
-    return respond(StatusCodes.CREATED, { chat: createdChat });
-  } catch {
-    next(new Error(req.t("chats.controllers.create-private-chat.failure")));
-  }
+		return respond(StatusCodes.CREATED, { chat: createdChat });
+	} catch {
+		next(new Error(req.t("chats.controllers.create-private-chat.failure")));
+	}
 };

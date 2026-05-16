@@ -20,25 +20,21 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const searchUserController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.SEARCH_USER;
-  const respond = buildValidatedResponder(res, contractKey);
+export const searchUserController = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.SEARCH_USER;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      query: { term },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			query: { term },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userService = req.app.services.userService;
+		const userService = req.app.services.userService;
 
-    const users = await userService.searchUsers(term);
+		const users = await userService.searchUsers(term);
 
-    return respond(StatusCodes.OK, { users });
-  } catch {
-    next(new Error(req.t("users.controllers.search.failure")));
-  }
+		return respond(StatusCodes.OK, { users });
+	} catch {
+		next(new Error(req.t("users.controllers.search.failure")));
+	}
 };

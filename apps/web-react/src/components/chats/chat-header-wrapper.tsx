@@ -11,45 +11,45 @@ import ChatMembersDisplayerWrapper from "./chat-settings/chat-members-displayer"
 import GroupChatContent from "./chat-settings/group-chat-content";
 
 export default function ChatHeaderWrapper({ chatId }: { chatId: Chat["id"] }) {
-  const queryClient = useQueryClient();
-  const { chats } = useChatPageContext();
-  const { user: me } = useAppContext();
+	const queryClient = useQueryClient();
+	const { chats } = useChatPageContext();
+	const { user: me } = useAppContext();
 
-  const chat = chats?.find((c) => c.id === chatId);
+	const chat = chats?.find((c) => c.id === chatId);
 
-  if (!me || !chat) throw new Error();
+	if (!me || !chat) throw new Error();
 
-  function leaveChatCb(id: Chat["id"]) {
-    queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-      if (!oldChats) return [];
+	function leaveChatCb(id: Chat["id"]) {
+		queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+			if (!oldChats) return [];
 
-      const newChats = oldChats.filter((c) => c.id !== id);
-      return newChats;
-    });
-  }
+			const newChats = oldChats.filter((c) => c.id !== id);
+			return newChats;
+		});
+	}
 
-  return (
-    <ChatHeader
-      chat={chat}
-      me={me}
-      slots={{
-        chatLeaveDialog: (
-          <ChatLeaveDialog
-            chatId={chatId}
-            leaveChatAction={ChatService.leaveChat}
-            leaveChatCb={leaveChatCb}
-          />
-        ),
-        chatSettingsDialog: (
-          <ChatSettingsDialog
-            chat={chat}
-            slots={{
-              privateChatContent: <ChatMembersDisplayerWrapper />,
-              groupChatContent: <GroupChatContent />,
-            }}
-          />
-        ),
-      }}
-    />
-  );
+	return (
+		<ChatHeader
+			chat={chat}
+			me={me}
+			slots={{
+				chatLeaveDialog: (
+					<ChatLeaveDialog
+						chatId={chatId}
+						leaveChatAction={ChatService.leaveChat}
+						leaveChatCb={leaveChatCb}
+					/>
+				),
+				chatSettingsDialog: (
+					<ChatSettingsDialog
+						chat={chat}
+						slots={{
+							privateChatContent: <ChatMembersDisplayerWrapper />,
+							groupChatContent: <GroupChatContent />,
+						}}
+					/>
+				),
+			}}
+		/>
+	);
 }

@@ -5,39 +5,39 @@ import { z } from "zod";
 import { mockRequest, mockResponse } from "../utils/mocks";
 
 describe("validate middleware", () => {
-  const UserDTO = z
-    .object({
-      name: z.string(),
-    })
-    .strict();
-  type UserDTO = z.infer<typeof UserDTO>;
+	const UserDTO = z
+		.object({
+			name: z.string(),
+		})
+		.strict();
+	type UserDTO = z.infer<typeof UserDTO>;
 
-  const mockNextFunction = vi.fn();
+	const mockNextFunction = vi.fn();
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
 
-  it("proceeds to next function on successful validation", async () => {
-    const middleware = validate({ body: UserDTO });
+	it("proceeds to next function on successful validation", async () => {
+		const middleware = validate({ body: UserDTO });
 
-    const req = mockRequest({ body: { name: "Bob" } });
-    const res = mockResponse();
+		const req = mockRequest({ body: { name: "Bob" } });
+		const res = mockResponse();
 
-    await middleware(req, res, mockNextFunction);
+		await middleware(req, res, mockNextFunction);
 
-    expect(mockNextFunction).toHaveBeenCalled();
-  });
+		expect(mockNextFunction).toHaveBeenCalled();
+	});
 
-  it("returns errors on failed validation", async () => {
-    const middleware = validate({ body: UserDTO });
+	it("returns errors on failed validation", async () => {
+		const middleware = validate({ body: UserDTO });
 
-    const req = mockRequest({ body: {} });
-    const res = mockResponse();
+		const req = mockRequest({ body: {} });
+		const res = mockResponse();
 
-    await middleware(req, res, mockNextFunction);
+		await middleware(req, res, mockNextFunction);
 
-    expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
-    expect(mockNextFunction).not.toHaveBeenCalled();
-  });
+		expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+		expect(mockNextFunction).not.toHaveBeenCalled();
+	});
 });

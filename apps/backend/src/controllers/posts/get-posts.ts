@@ -16,31 +16,22 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const getPosts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.GET_POSTS;
-  const respond = buildValidatedResponder(res, contractKey);
+export const getPosts = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.GET_POSTS;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const {
-      query: { lastPostId, limit },
-    } = extractValidatedRequest(req, API_CONTRACT[contractKey]);
+	try {
+		const {
+			query: { lastPostId, limit },
+		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-    const userId = req.user!.id;
-    const postRecommendationService =
-      req.app.services.postRecommendationService;
+		const userId = req.user!.id;
+		const postRecommendationService = req.app.services.postRecommendationService;
 
-    const posts = await postRecommendationService.getRecommendedPosts(
-      userId,
-      lastPostId,
-      limit,
-    );
+		const posts = await postRecommendationService.getRecommendedPosts(userId, lastPostId, limit);
 
-    return respond(StatusCodes.OK, { posts });
-  } catch {
-    next(new Error(req.t("posts.controllers.get-all.failure")));
-  }
+		return respond(StatusCodes.OK, { posts });
+	} catch {
+		next(new Error(req.t("posts.controllers.get-all.failure")));
+	}
 };

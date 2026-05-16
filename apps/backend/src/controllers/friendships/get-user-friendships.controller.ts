@@ -15,24 +15,20 @@ import { StatusCodes } from "http-status-codes";
  *
  * @source
  */
-export const getUserFriendships = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const contractKey = CONTRACT_KEYS.GET_USER_FRIENDSHIPS;
-  const respond = buildValidatedResponder(res, contractKey);
+export const getUserFriendships = async (req: Request, res: Response, next: NextFunction) => {
+	const contractKey = CONTRACT_KEYS.GET_USER_FRIENDSHIPS;
+	const respond = buildValidatedResponder(res, contractKey);
 
-  try {
-    const userId = req.user!.id;
-    const friendshipService = req.app.services.friendshipService;
+	try {
+		const userId = req.user!.id;
+		const friendshipService = req.app.services.friendshipService;
 
-    const friendships = await friendshipService.getUserFriendships(userId);
+		const friendships = await friendshipService.getUserFriendships(userId);
 
-    return respond(StatusCodes.OK, {
-      friendships,
-    });
-  } catch {
-    next(new Error(req.t("friends.controllers.get.failure")));
-  }
+		return respond(StatusCodes.OK, {
+			friendships,
+		});
+	} catch {
+		next(new Error(req.t("friends.controllers.get.failure")));
+	}
 };

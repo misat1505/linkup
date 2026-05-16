@@ -10,34 +10,30 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 
 export default function Posts() {
-  const { t } = useTranslation();
-  useChangeTabTitle(t("tabs.posts"));
+	const { t } = useTranslation();
+	useChangeTabTitle(t("tabs.posts"));
 
-  const { data: posts, isLoading } = useQuery({
-    queryKey: queryKeys.myPosts(),
-    queryFn: PostService.getMyPosts,
-  });
+	const { data: posts, isLoading } = useQuery({
+		queryKey: queryKeys.myPosts(),
+		queryFn: PostService.getMyPosts,
+	});
 
-  if (isLoading)
-    return (
-      <div className="relative flex h-[calc(100vh-5rem)] w-screen">
-        <Loading />
-      </div>
-    );
+	if (isLoading)
+		return (
+			<div className="relative flex h-[calc(100vh-5rem)] w-screen">
+				<Loading />
+			</div>
+		);
 
-  const getSortedPosts = (): Post[] => {
-    return orderBy(
-      posts,
-      [(post) => new Date(post.createdAt).getTime()],
-      ["desc"],
-    );
-  };
+	const getSortedPosts = (): Post[] => {
+		return orderBy(posts, [(post) => new Date(post.createdAt).getTime()], ["desc"]);
+	};
 
-  return (
-    <PostsPageLayout>
-      {getSortedPosts().map((post) => (
-        <MyPostPreviewWrapper post={post} key={post.id} />
-      ))}
-    </PostsPageLayout>
-  );
+	return (
+		<PostsPageLayout>
+			{getSortedPosts().map((post) => (
+				<MyPostPreviewWrapper post={post} key={post.id} />
+			))}
+		</PostsPageLayout>
+	);
 }

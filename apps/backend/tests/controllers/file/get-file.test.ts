@@ -1,181 +1,167 @@
 import { FileControllers } from "@/controllers";
 import { UserWithCredentials } from "@/types/user-with-credentials";
-import {
-  mockFileService,
-  mockFileStorage,
-  mockRequest,
-  mockResponse,
-} from "@tests/utils/mocks";
+import { mockFileService, mockFileStorage, mockRequest, mockResponse } from "@tests/utils/mocks";
 import { StatusCodes } from "http-status-codes";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const respond = vi.fn();
 vi.mock("@/utils/validated-responder", () => ({
-  buildValidatedResponder: vi.fn(() => respond),
+	buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("getFile", () => {
-  mockFileService.isUserAvatar.mockResolvedValue(true);
-  mockFileService.isChatMessage.mockResolvedValue(true);
-  mockFileService.isChatPhoto.mockResolvedValue(true);
+	mockFileService.isUserAvatar.mockResolvedValue(true);
+	mockFileService.isChatMessage.mockResolvedValue(true);
+	mockFileService.isChatPhoto.mockResolvedValue(true);
 
-  const mockChatId = "some-chat-id";
-  const mockPostId = "post-id";
+	const mockChatId = "some-chat-id";
+	const mockPostId = "post-id";
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
 
-  describe("avatar", () => {
-    it("returns 404 for non-existent file", async () => {
-      mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
+	describe("avatar", () => {
+		it("returns 404 for non-existent file", async () => {
+			mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
-      const req = mockRequest({
-        user: { id: "userId" } as UserWithCredentials,
-        validated: {
-          params: { filename: "testfile.txt" },
-          query: { filter: "avatar" },
-        },
-      });
-      const res = mockResponse();
+			const req = mockRequest({
+				user: { id: "userId" } as UserWithCredentials,
+				validated: {
+					params: { filename: "testfile.txt" },
+					query: { filter: "avatar" },
+				},
+			});
+			const res = mockResponse();
 
-      await FileControllers.getFile(req, res, vi.fn());
+			await FileControllers.getFile(req, res, vi.fn());
 
-      expect(respond).toHaveBeenCalledWith(
-        StatusCodes.NOT_FOUND,
-        expect.anything(),
-      );
-    });
+			expect(respond).toHaveBeenCalledWith(StatusCodes.NOT_FOUND, expect.anything());
+		});
 
-    it("returns avatar URL for existing file", async () => {
-      mockFileStorage.getSignedUrl.mockResolvedValue("url");
+		it("returns avatar URL for existing file", async () => {
+			mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
-      const req = mockRequest({
-        user: { id: "userId" } as UserWithCredentials,
-        validated: {
-          params: { filename: "testfile.txt" },
-          query: { filter: "avatar" },
-        },
-      });
-      const res = mockResponse();
+			const req = mockRequest({
+				user: { id: "userId" } as UserWithCredentials,
+				validated: {
+					params: { filename: "testfile.txt" },
+					query: { filter: "avatar" },
+				},
+			});
+			const res = mockResponse();
 
-      await FileControllers.getFile(req, res, vi.fn());
+			await FileControllers.getFile(req, res, vi.fn());
 
-      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
-    });
-  });
+			expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+		});
+	});
 
-  describe("chat", () => {
-    it("returns chat photo URL for existing file", async () => {
-      mockFileStorage.getSignedUrl.mockResolvedValue("url");
+	describe("chat", () => {
+		it("returns chat photo URL for existing file", async () => {
+			mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
-      const req = mockRequest({
-        user: { id: "userId" } as UserWithCredentials,
-        validated: {
-          params: { filename: "testfile.txt" },
-          query: { filter: "chat-photo", chat: mockChatId },
-        },
-      });
-      const res = mockResponse();
+			const req = mockRequest({
+				user: { id: "userId" } as UserWithCredentials,
+				validated: {
+					params: { filename: "testfile.txt" },
+					query: { filter: "chat-photo", chat: mockChatId },
+				},
+			});
+			const res = mockResponse();
 
-      await FileControllers.getFile(req, res, vi.fn());
+			await FileControllers.getFile(req, res, vi.fn());
 
-      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
-    });
+			expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+		});
 
-    it("returns chat message file URL for existing file", async () => {
-      mockFileStorage.getSignedUrl.mockResolvedValue("url");
+		it("returns chat message file URL for existing file", async () => {
+			mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
-      const req = mockRequest({
-        user: { id: "userId" } as UserWithCredentials,
-        validated: {
-          params: { filename: "testfile.txt" },
-          query: { filter: "chat-message", chat: mockChatId },
-        },
-      });
-      const res = mockResponse();
+			const req = mockRequest({
+				user: { id: "userId" } as UserWithCredentials,
+				validated: {
+					params: { filename: "testfile.txt" },
+					query: { filter: "chat-message", chat: mockChatId },
+				},
+			});
+			const res = mockResponse();
 
-      await FileControllers.getFile(req, res, vi.fn());
+			await FileControllers.getFile(req, res, vi.fn());
 
-      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
-    });
-  });
+			expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+		});
+	});
 
-  describe("cache", () => {
-    it("returns cache file URL for existing file", async () => {
-      mockFileStorage.getSignedUrl.mockResolvedValue("url");
+	describe("cache", () => {
+		it("returns cache file URL for existing file", async () => {
+			mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
-      const req = mockRequest({
-        user: { id: "userId" } as UserWithCredentials,
-        validated: {
-          params: { filename: "testfile.txt" },
-          query: { filter: "cache" },
-        },
-      });
-      const res = mockResponse();
+			const req = mockRequest({
+				user: { id: "userId" } as UserWithCredentials,
+				validated: {
+					params: { filename: "testfile.txt" },
+					query: { filter: "cache" },
+				},
+			});
+			const res = mockResponse();
 
-      await FileControllers.getFile(req, res, vi.fn());
+			await FileControllers.getFile(req, res, vi.fn());
 
-      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
-    });
+			expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+		});
 
-    it("returns 404 for non-existent cache file", async () => {
-      mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
+		it("returns 404 for non-existent cache file", async () => {
+			mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
-      const req = mockRequest({
-        user: { id: "userId" } as UserWithCredentials,
-        validated: {
-          params: { filename: "testfile.txt" },
-          query: { filter: "cache" },
-        },
-      });
-      const res = mockResponse();
+			const req = mockRequest({
+				user: { id: "userId" } as UserWithCredentials,
+				validated: {
+					params: { filename: "testfile.txt" },
+					query: { filter: "cache" },
+				},
+			});
+			const res = mockResponse();
 
-      await FileControllers.getFile(req, res, vi.fn());
+			await FileControllers.getFile(req, res, vi.fn());
 
-      expect(respond).toHaveBeenCalledWith(
-        StatusCodes.NOT_FOUND,
-        expect.anything(),
-      );
-    });
-  });
+			expect(respond).toHaveBeenCalledWith(StatusCodes.NOT_FOUND, expect.anything());
+		});
+	});
 
-  describe("post", () => {
-    it("returns post file URL for existing file", async () => {
-      mockFileStorage.getSignedUrl.mockResolvedValue("url");
+	describe("post", () => {
+		it("returns post file URL for existing file", async () => {
+			mockFileStorage.getSignedUrl.mockResolvedValue("url");
 
-      const req = mockRequest({
-        user: { id: "userId" } as UserWithCredentials,
-        validated: {
-          params: { filename: "testfile.txt" },
-          query: { filter: "post", post: mockPostId },
-        },
-      });
-      const res = mockResponse();
+			const req = mockRequest({
+				user: { id: "userId" } as UserWithCredentials,
+				validated: {
+					params: { filename: "testfile.txt" },
+					query: { filter: "post", post: mockPostId },
+				},
+			});
+			const res = mockResponse();
 
-      await FileControllers.getFile(req, res, vi.fn());
+			await FileControllers.getFile(req, res, vi.fn());
 
-      expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
-    });
+			expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+		});
 
-    it("returns 404 for non-existent post file", async () => {
-      mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
+		it("returns 404 for non-existent post file", async () => {
+			mockFileStorage.getSignedUrl.mockRejectedValue(new Error());
 
-      const req = mockRequest({
-        user: { id: "userId" } as UserWithCredentials,
-        validated: {
-          params: { filename: "testfile.txt" },
-          query: { filter: "post", post: mockPostId },
-        },
-      });
-      const res = mockResponse();
+			const req = mockRequest({
+				user: { id: "userId" } as UserWithCredentials,
+				validated: {
+					params: { filename: "testfile.txt" },
+					query: { filter: "post", post: mockPostId },
+				},
+			});
+			const res = mockResponse();
 
-      await FileControllers.getFile(req, res, vi.fn());
+			await FileControllers.getFile(req, res, vi.fn());
 
-      expect(respond).toHaveBeenCalledWith(
-        StatusCodes.NOT_FOUND,
-        expect.anything(),
-      );
-    });
-  });
+			expect(respond).toHaveBeenCalledWith(StatusCodes.NOT_FOUND, expect.anything());
+		});
+	});
 });

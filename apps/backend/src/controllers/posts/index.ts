@@ -7,11 +7,11 @@ import { reportPost as reportPostController } from "./report-post";
 import { updatePost as updatePostController } from "./update-post";
 
 export const PostControllers = {
-  createPost: createPostController,
-  deletePost: deletePostController,
-  getPost: getPostController,
-  getPosts: getPostsController,
-  getUserPosts: getUserPostsController,
-  reportPost: reportPostController,
-  updatePost: updatePostController,
+	createPost: createPostController,
+	deletePost: deletePostController,
+	getPost: getPostController,
+	getPosts: getPostsController,
+	getUserPosts: getUserPostsController,
+	reportPost: reportPostController,
+	updatePost: updatePostController,
 };

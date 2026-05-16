@@ -4,129 +4,114 @@ import { ChatService } from "@/services/chat.service";
 import { sortChatsByActivity } from "@/utils/sort-chats-by-activity";
 import { Chat, Message } from "@packages/schemas";
 import { useToast } from "@packages/ui/components/shadcn/use-toast";
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-} from "react";
+import React, { createContext, useCallback, useContext, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "react-query";
 
 type ChatPageContextProps = {
-  children: React.ReactNode;
+	children: React.ReactNode;
 };
 
 type ChatPageContextValue = {
-  chats: Chat[] | undefined;
-  isLoading: boolean;
-  addMessage: (message: Message) => void;
-  createChatTriggerRef: React.RefObject<HTMLDivElement | null>;
+	chats: Chat[] | undefined;
+	isLoading: boolean;
+	addMessage: (message: Message) => void;
+	createChatTriggerRef: React.RefObject<HTMLDivElement | null>;
 };
 
-const ChatPageContext = createContext<ChatPageContextValue>(
-  {} as ChatPageContextValue,
-);
+const ChatPageContext = createContext<ChatPageContextValue>({} as ChatPageContextValue);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useChatPageContext = () => useContext(ChatPageContext);
 
 const ChatPageProvider = ({ children }: ChatPageContextProps) => {
-  const { t } = useTranslation();
-  const createChatTriggerRef = useRef<HTMLDivElement | null>(null);
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const { data: chats, isLoading } = useQuery({
-    queryKey: queryKeys.chats(),
-    queryFn: ChatService.getChats,
-    refetchOnMount: true,
-    onSuccess: (data) => {
-      queryClient.setQueryData<Chat[]>(
-        queryKeys.chats(),
-        sortChatsByActivity(data),
-      );
-      data.forEach((chat) => {
-        socketClient.joinRoom(chat.id);
-      });
-    },
-  });
+	const { t } = useTranslation();
+	const createChatTriggerRef = useRef<HTMLDivElement | null>(null);
+	const { toast } = useToast();
+	const queryClient = useQueryClient();
+	const { data: chats, isLoading } = useQuery({
+		queryKey: queryKeys.chats(),
+		queryFn: ChatService.getChats,
+		refetchOnMount: true,
+		onSuccess: (data) => {
+			queryClient.setQueryData<Chat[]>(queryKeys.chats(), sortChatsByActivity(data));
+			data.forEach((chat) => {
+				socketClient.joinRoom(chat.id);
+			});
+		},
+	});
 
-  const addMessage = useCallback(
-    (message: Message): void => {
-      queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
-        const updatedChats = oldChats!.map((chat) => {
-          if (chat.id !== message.chatId) return chat;
-          chat.lastMessage = message;
-          return { ...chat };
-        });
+	const addMessage = useCallback(
+		(message: Message): void => {
+			queryClient.setQueryData<Chat[]>(queryKeys.chats(), (oldChats) => {
+				const updatedChats = oldChats!.map((chat) => {
+					if (chat.id !== message.chatId) return chat;
+					chat.lastMessage = message;
+					return { ...chat };
+				});
 
-        return sortChatsByActivity(updatedChats);
-      });
+				return sortChatsByActivity(updatedChats);
+			});
 
-      queryClient.setQueryData(
-        queryKeys.messages(message.chatId),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (oldData: any) => {
-          if (!oldData) {
-            return {
-              pages: [[message]],
-              pageParams: [undefined],
-            };
-          }
+			queryClient.setQueryData(
+				queryKeys.messages(message.chatId),
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				(oldData: any) => {
+					if (!oldData) {
+						return {
+							pages: [[message]],
+							pageParams: [undefined],
+						};
+					}
 
-          const allMessages = oldData.pages.flat();
-          const isDuplicate = allMessages.some(
-            (m: Message) => m.id === message.id,
-          );
+					const allMessages = oldData.pages.flat();
+					const isDuplicate = allMessages.some((m: Message) => m.id === message.id);
 
-          if (isDuplicate) {
-            return oldData;
-          }
+					if (isDuplicate) {
+						return oldData;
+					}
 
-          return {
-            pages: [[message], ...oldData.pages],
-            pageParams: [undefined, ...oldData.pageParams],
-          };
-        },
-      );
-    },
-    [queryClient],
-  );
+					return {
+						pages: [[message], ...oldData.pages],
+						pageParams: [undefined, ...oldData.pageParams],
+					};
+				},
+			);
+		},
+		[queryClient],
+	);
 
-  useEffect(() => {
-    socketClient.onReceiveMessage((message) => {
-      addMessage(message);
-    });
+	useEffect(() => {
+		socketClient.onReceiveMessage((message) => {
+			addMessage(message);
+		});
 
-    socketClient.on(SocketErrors.JOINING_ROOM_ERROR, () => {
-      toast({
-        title: t("chats.sockets.errors.connection.toast.title"),
-        description: t("chats.sockets.errors.connection.toast.description"),
-        variant: "destructive",
-      });
-    });
+		socketClient.on(SocketErrors.JOINING_ROOM_ERROR, () => {
+			toast({
+				title: t("chats.sockets.errors.connection.toast.title"),
+				description: t("chats.sockets.errors.connection.toast.description"),
+				variant: "destructive",
+			});
+		});
 
-    return () => {
-      socketClient.off(SocketAction.RECEIVE_MESSAGE);
-    };
-  }, [addMessage, t, toast]);
+		return () => {
+			socketClient.off(SocketAction.RECEIVE_MESSAGE);
+		};
+	}, [addMessage, t, toast]);
 
-  useEffect(() => {
-    return () => {
-      queryClient.getQueryData<Chat[]>(queryKeys.chats())?.forEach((chat) => {
-        socketClient.leaveRoom(chat.id);
-      });
-    };
-  }, [queryClient]);
+	useEffect(() => {
+		return () => {
+			queryClient.getQueryData<Chat[]>(queryKeys.chats())?.forEach((chat) => {
+				socketClient.leaveRoom(chat.id);
+			});
+		};
+	}, [queryClient]);
 
-  return (
-    <ChatPageContext.Provider
-      value={{ chats, isLoading, addMessage, createChatTriggerRef }}
-    >
-      {children}
-    </ChatPageContext.Provider>
-  );
+	return (
+		<ChatPageContext.Provider value={{ chats, isLoading, addMessage, createChatTriggerRef }}>
+			{children}
+		</ChatPageContext.Provider>
+	);
 };
 
 export default ChatPageProvider;

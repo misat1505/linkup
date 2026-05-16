@@ -1,17 +1,14 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
-  "compilerOptions": {
-    "rootDir": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@packages/ui/*": ["../../packages/ui/src/*"],
-      "@packages/schemas/*": ["../../packages/schemas/src/*"],
-      "@packages/api-contract/*": ["../../packages/api-contract/src/*"],
-      "@packages/*": ["../../packages/*/src"]
-    }
-  }
+	"files": [],
+	"references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+	"compilerOptions": {
+		"rootDir": ".",
+		"paths": {
+			"@/*": ["./src/*"],
+			"@packages/ui/*": ["../../packages/ui/src/*"],
+			"@packages/schemas/*": ["../../packages/schemas/src/*"],
+			"@packages/api-contract/*": ["../../packages/api-contract/src/*"],
+			"@packages/*": ["../../packages/*/src"]
+		}
+	}
 }

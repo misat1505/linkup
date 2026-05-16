@@ -7,66 +7,63 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const respond = vi.fn();
 vi.mock("@/utils/validated-responder", () => ({
-  buildValidatedResponder: vi.fn(() => respond),
+	buildValidatedResponder: vi.fn(() => respond),
 }));
 
 describe("reportPost", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
 
-  const postId = "123";
-  const userId = "user-id";
+	const postId = "123";
+	const userId = "user-id";
 
-  it("reports post successfully", async () => {
-    mockPostService.reportPost.mockResolvedValue(undefined);
+	it("reports post successfully", async () => {
+		mockPostService.reportPost.mockResolvedValue(undefined);
 
-    const req = mockRequest({
-      user: { id: userId } as UserWithCredentials,
-      validated: { params: { id: postId } },
-    });
-    const res = mockResponse();
+		const req = mockRequest({
+			user: { id: userId } as UserWithCredentials,
+			validated: { params: { id: postId } },
+		});
+		const res = mockResponse();
 
-    await PostControllers.reportPost(req, res, vi.fn());
+		await PostControllers.reportPost(req, res, vi.fn());
 
-    expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
-    expect(mockPostService.reportPost).toHaveBeenCalledWith(userId, postId);
-  });
+		expect(respond).toHaveBeenCalledWith(StatusCodes.OK, expect.anything());
+		expect(mockPostService.reportPost).toHaveBeenCalledWith(userId, postId);
+	});
 
-  it("returns 409 for already reported post", async () => {
-    mockPostService.reportPost.mockRejectedValue(
-      new Prisma.PrismaClientKnownRequestError("Unique constraint", {
-        clientVersion: "4.0.0",
-        code: "P2002",
-      }),
-    );
+	it("returns 409 for already reported post", async () => {
+		mockPostService.reportPost.mockRejectedValue(
+			new Prisma.PrismaClientKnownRequestError("Unique constraint", {
+				clientVersion: "4.0.0",
+				code: "P2002",
+			}),
+		);
 
-    const req = mockRequest({
-      user: { id: userId } as UserWithCredentials,
-      validated: { params: { id: postId } },
-    });
-    const res = mockResponse();
+		const req = mockRequest({
+			user: { id: userId } as UserWithCredentials,
+			validated: { params: { id: postId } },
+		});
+		const res = mockResponse();
 
-    await PostControllers.reportPost(req, res, vi.fn());
+		await PostControllers.reportPost(req, res, vi.fn());
 
-    expect(respond).toHaveBeenCalledWith(
-      StatusCodes.CONFLICT,
-      expect.anything(),
-    );
-  });
+		expect(respond).toHaveBeenCalledWith(StatusCodes.CONFLICT, expect.anything());
+	});
 
-  it("passes errors to error middleware", async () => {
-    mockPostService.reportPost.mockRejectedValue(new Error("Unexpected error"));
-    const mockNextFunction = vi.fn();
+	it("passes errors to error middleware", async () => {
+		mockPostService.reportPost.mockRejectedValue(new Error("Unexpected error"));
+		const mockNextFunction = vi.fn();
 
-    const req = mockRequest({
-      user: { id: userId } as UserWithCredentials,
-      validated: { params: { id: postId } },
-    });
-    const res = mockResponse();
+		const req = mockRequest({
+			user: { id: userId } as UserWithCredentials,
+			validated: { params: { id: postId } },
+		});
+		const res = mockResponse();
 
-    await PostControllers.reportPost(req, res, mockNextFunction);
+		await PostControllers.reportPost(req, res, mockNextFunction);
 
-    expect(mockNextFunction).toHaveBeenCalled();
-  });
+		expect(mockNextFunction).toHaveBeenCalled();
+	});
 });

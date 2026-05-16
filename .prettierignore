@@ -6,3 +6,7 @@ dist
 build
 coverage
 pnpm-lock.yaml
+apps/backend/docs
+.venv
+debug
+apps/backend/load-tests-report/test-result.json.html
