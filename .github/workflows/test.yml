@@ -38,7 +38,7 @@ jobs:
           cp apps/backend/env.example apps/backend/.env.test
 
       - name: Generate Prisma Client
-        run: pnpm --filter backend exec prisma generate
+        run: pnpm --filter backend prisma:generate
 
       - name: Run Tests
         run: pnpm test

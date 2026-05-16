@@ -7,6 +7,7 @@
     "build": "tsup",
     "dev": "cross-env NODE_ENV=development tsx watch --clear-screen=false src/app.ts",
     "prisma:push": "prisma db push",
+    "prisma:generate": "prisma generate",
     "e2e": "cross-env NODE_ENV=e2e tsx watch --clear-screen=false src/app.ts",
     "test": "concurrently -n \"unit,integration\" -c \"yellow,magenta\" \"pnpm test:unit\" \"pnpm test:integration\"",
     "test:unit": "pnpm vitest run --project unit",
