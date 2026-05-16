@@ -7,38 +7,29 @@ on:
 
 jobs:
   run-tests:
-    name: Run Backend Tests
+    name: Run Tests
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: "pnpm"
-
       - name: Enable Corepack (pnpm)
         run: corepack enable
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
       - name: Build shared packages
         run: pnpm build:packages
-
       - name: Copy envs for tests
         run: |
           cp apps/backend/env.example apps/backend/.env
           cp apps/backend/env.example apps/backend/.env.test
-
       - name: Generate Prisma Client
         run: pnpm --filter backend prisma:generate
-
       - name: Run Tests
         run: pnpm test
