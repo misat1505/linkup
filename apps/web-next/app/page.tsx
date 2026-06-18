@@ -1,4 +1,3 @@
-import AuthGuard from "@/components/auth-guard";
 import { getRecommendedPosts } from "@/features/posts/actions/get-recommeded-posts";
 import { PostsFeed } from "@/features/posts/components/posts-feed";
 import { PostWithRenderedContent } from "@/features/posts/schemas/post-with-rendered-content";
@@ -28,12 +27,10 @@ export default async function Page() {
 	});
 
 	return (
-		<AuthGuard>
-			<div>
-				<HydrationBoundary state={dehydrate(queryClient)}>
-					<PostsFeed />
-				</HydrationBoundary>
-			</div>
-		</AuthGuard>
+		<div>
+			<HydrationBoundary state={dehydrate(queryClient)}>
+				<PostsFeed />
+			</HydrationBoundary>
+		</div>
 	);
 }
