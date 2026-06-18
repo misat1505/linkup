@@ -52,7 +52,7 @@ export const getFileController = async (req: Request, res: Response, next: NextF
 			query,
 		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-		const userId = req.user!.id;
+		const userId = req.user?.id ?? null;
 		const { fileService, fileStorage } = req.app.services;
 
 		const sendFile = (path: string) => sendFileBuilder(path, req, res);
@@ -68,24 +68,24 @@ export const getFileController = async (req: Request, res: Response, next: NextF
 
 			case "chat-photo": {
 				const path = `chats/${query.chat}/${filename}`;
-				return sendFile(path)(
-					() => fileService.isChatPhoto(filename, userId),
-					req.t("files.controllers.get-file.group-photo-not-found"),
-				);
+				return sendFile(path)(async () => {
+					if (!userId) return false;
+					return fileService.isChatPhoto(filename, userId);
+				}, req.t("files.controllers.get-file.group-photo-not-found"));
 			}
 
 			case "chat-message": {
 				const path = `chats/${query.chat}/${filename}`;
-				return sendFile(path)(
-					() => fileService.isChatMessage(filename, userId),
-					req.t("files.controllers.get-file.group-photo-not-found"),
-				);
+				return sendFile(path)(async () => {
+					if (!userId) return false;
+					return fileService.isChatPhoto(filename, userId);
+				}, req.t("files.controllers.get-file.group-photo-not-found"));
 			}
 
 			case "cache": {
-				const path = `cache/${userId}/${filename}`;
-
 				try {
+					if (!userId) throw new Error();
+					const path = `cache/${userId}/${filename}`;
 					const url = await fileStorage.getSignedUrl(path);
 
 					return respond(StatusCodes.OK, { url });
@@ -97,9 +97,8 @@ export const getFileController = async (req: Request, res: Response, next: NextF
 			}
 
 			case "post": {
-				const path = `posts/${query.post}/${filename}`;
-
 				try {
+					const path = `posts/${query.post}/${filename}`;
 					const url = await fileStorage.getSignedUrl(path, 86400);
 
 					return respond(StatusCodes.OK, { url });
