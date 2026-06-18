@@ -1,6 +1,7 @@
 import { FileControllers } from "@/controllers";
+import { authorizePassthrough } from "@/middlewares/authorize";
 import { upload } from "@/middlewares/multer";
-import { buildProtectedRoute, buildRouter } from "@/utils/build-router";
+import { buildProtectedRoute, buildRoute, buildRouter } from "@/utils/build-router";
 import { API_CONTRACT } from "@packages/api-contract";
 
 /**
@@ -16,7 +17,9 @@ const routes = [
 	buildProtectedRoute(API_CONTRACT.INSERT_TO_CACHE, FileControllers.insertToCache, {
 		extraMiddlewares: [upload.single("file")],
 	}),
-	buildProtectedRoute(API_CONTRACT.GET_FILE, FileControllers.getFile),
+	buildRoute(API_CONTRACT.GET_FILE, FileControllers.getFile, {
+		extraMiddlewares: [authorizePassthrough],
+	}),
 ];
 
 export default buildRouter(routes);

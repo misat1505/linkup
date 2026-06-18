@@ -4,7 +4,13 @@ import { Chat, Post, User } from "@packages/schemas";
 import { useState } from "react";
 import { IoIosChatbubbles } from "react-icons/io";
 import { MdOutlineReport } from "react-icons/md";
-import { navigate, TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
+import {
+	LINK_COMPONENT,
+	navigate,
+	TRANSLATION_COMPONENT,
+	useUiPackageContext,
+} from "../../../config";
+import { cn } from "../../../lib/utils";
 import { createFullName } from "../../../utils/create-full-name";
 import { timeDifference } from "../../../utils/time-difference";
 import { FocusableSpan } from "../../misc/focusable-span";
@@ -20,11 +26,12 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "../../shadcn/alert-dialog";
-import { useToast } from "../../shadcn/use-toast";
+import { buttonVariants } from "../../shadcn/button";
+import { toast, useToast } from "../../shadcn/use-toast";
 import PostAuthorAvatar from "./post-author-avatar";
 
 type PostHeaderProps = ReportPostProps & {
-	me: User;
+	me: User | undefined;
 	createPrivateChatAction: (id1: User["id"], id2: User["id"]) => Promise<Chat>;
 	createPrivateChatCb?: (chat: Chat) => void;
 };
@@ -53,10 +60,20 @@ export function PostHeader({
 	};
 
 	const { author } = post;
-	const isMine = author.id === me!.id;
+	const isMine = me ? author.id === me.id : false;
 
 	const handleCreateChat = async (userId: User["id"]) => {
-		const chat = await createPrivateChatAction(me!.id, userId);
+		if (!me)
+			return toast({
+				title: "Login to use this feature.",
+				action: (
+					<LINK_COMPONENT className={buttonVariants({ variant: "default" })} href="/login">
+						Go to login page
+					</LINK_COMPONENT>
+				),
+				variant: "destructive",
+			});
+		const chat = await createPrivateChatAction(me.id, userId);
 		createPrivateChatCb?.(chat);
 		navigate(`/chats/${chat.id}`);
 	};
@@ -70,6 +87,7 @@ export function PostHeader({
 						<h2 className="text-lg font-semibold">{createFullName(author)}</h2>
 						{!isMine && (
 							<ActionButton
+								className={cn({ "hover:cursor-not-allowed": !me })}
 								onClick={() => handleCreateChat(post.author.id)}
 								tooltipText={t("common.navbar.search.message.button.tooltip")}
 								Icon={<IoIosChatbubbles className="transition-all hover:scale-110" />}
@@ -79,7 +97,7 @@ export function PostHeader({
 					<p className="text-sm text-muted-foreground -mt-1">{getTimeText()}</p>
 				</div>
 			</div>
-			{!isMine && <ReportPost post={post} reportPost={reportPost} />}
+			{me && !isMine && <ReportPost post={post} reportPost={reportPost} />}
 		</div>
 	);
 }

@@ -1,11 +1,12 @@
 import { Message, User } from "@packages/schemas";
 import { PropsWithChildren } from "react";
 import { FaArrowDown, FaReply } from "react-icons/fa";
-import { TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
+import { LINK_COMPONENT, TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
 import { cn } from "../../../lib/utils";
 import { createFullName } from "../../../utils/create-full-name";
 import { Tooltip } from "../../misc/tooltip";
-import { Button } from "../../shadcn/button";
+import { Button, buttonVariants } from "../../shadcn/button";
+import { toast } from "../../shadcn/use-toast";
 import { Comment } from "./comment";
 
 type PostCommentSectionLayoutProps = PropsWithChildren & {
@@ -51,11 +52,13 @@ export function PostCommentSectionLayout({
 type CommentSectionOpenButtonProps = {
 	isCommentSectionOpen: boolean;
 	toggleIsCommentSectionOpen: () => void;
+	me: User | undefined;
 };
 
 export function CommentSectionOpenButton({
 	isCommentSectionOpen,
 	toggleIsCommentSectionOpen,
+	me,
 }: CommentSectionOpenButtonProps) {
 	const tooltipText = isCommentSectionOpen ? (
 		<TRANSLATION_COMPONENT translationKey="posts.comments.section.close" />
@@ -63,12 +66,30 @@ export function CommentSectionOpenButton({
 		<TRANSLATION_COMPONENT translationKey="posts.comments.section.open" />
 	);
 
+	const handleClick = () => {
+		if (!me)
+			return toast({
+				title: "Login to use this feature.",
+				action: (
+					<LINK_COMPONENT className={buttonVariants({ variant: "default" })} href="/login">
+						Go to login page
+					</LINK_COMPONENT>
+				),
+				variant: "destructive",
+			});
+
+		toggleIsCommentSectionOpen();
+	};
+
 	return (
 		<Tooltip content={tooltipText}>
 			<Button
 				variant="ghost"
-				className={cn("w-full mt-4", { "my-4": isCommentSectionOpen })}
-				onClick={toggleIsCommentSectionOpen}
+				className={cn("w-full mt-4", {
+					"my-4": isCommentSectionOpen,
+					"hover:cursor-not-allowed": !me,
+				})}
+				onClick={handleClick}
 			>
 				<FaArrowDown className={cn({ "rotate-180": isCommentSectionOpen })} />
 			</Button>

@@ -1,5 +1,6 @@
 import { PostControllers } from "@/controllers";
-import { buildProtectedRoute, buildRouter } from "@/utils/build-router";
+import { authorizePassthrough } from "@/middlewares/authorize";
+import { buildProtectedRoute, buildRoute, buildRouter } from "@/utils/build-router";
 import { API_CONTRACT } from "@packages/api-contract";
 
 /**
@@ -14,7 +15,9 @@ const routes = [
 	buildProtectedRoute(API_CONTRACT.GET_USER_POSTS, PostControllers.getUserPosts),
 	buildProtectedRoute(API_CONTRACT.GET_POST, PostControllers.getPost),
 	buildProtectedRoute(API_CONTRACT.DELETE_POST, PostControllers.deletePost),
-	buildProtectedRoute(API_CONTRACT.GET_POSTS, PostControllers.getPosts),
+	buildRoute(API_CONTRACT.GET_POSTS, PostControllers.getPosts, {
+		extraMiddlewares: [authorizePassthrough],
+	}),
 	buildProtectedRoute(API_CONTRACT.REPORT_POST, PostControllers.reportPost),
 	buildProtectedRoute(API_CONTRACT.CREATE_POST, PostControllers.createPost),
 ];

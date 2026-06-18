@@ -1,6 +1,7 @@
 import { extractValidatedRequest } from "@/utils/extract-validated-request";
 import { buildValidatedResponder } from "@/utils/validated-responder";
 import { API_CONTRACT, CONTRACT_KEYS } from "@packages/api-contract";
+import { Post } from "@packages/schemas";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -25,10 +26,16 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
 			query: { lastPostId, limit },
 		} = extractValidatedRequest(req, API_CONTRACT[contractKey]);
 
-		const userId = req.user!.id;
+		const userId = req.user?.id ?? null;
 		const postRecommendationService = req.app.services.postRecommendationService;
 
-		const posts = await postRecommendationService.getRecommendedPosts(userId, lastPostId, limit);
+		let posts: Post[] = [];
+
+		if (userId) {
+			posts = await postRecommendationService.getRecommendedPosts(userId, lastPostId, limit);
+		} else {
+			posts = await postRecommendationService.getRecommendedPostsAnonymous(lastPostId, limit);
+		}
 
 		return respond(StatusCodes.OK, { posts });
 	} catch {

@@ -14,6 +14,7 @@ import { usePostCommentsSectionContext } from "../providers/post-comment-section
 import PostCommentForm from "./post-comment-form";
 
 export default function PostCommentSection() {
+	const { user: me } = useAppContext();
 	const { isCommentSectionOpen, toggleIsCommentSectionOpen } = usePostCommentsSectionContext();
 
 	return (
@@ -21,6 +22,7 @@ export default function PostCommentSection() {
 			<CommentSectionOpenButton
 				isCommentSectionOpen={isCommentSectionOpen}
 				toggleIsCommentSectionOpen={toggleIsCommentSectionOpen}
+				me={me ?? undefined}
 			/>
 			{isCommentSectionOpen && (
 				<div>
