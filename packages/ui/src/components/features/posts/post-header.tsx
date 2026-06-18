@@ -4,7 +4,13 @@ import { Chat, Post, User } from "@packages/schemas";
 import { useState } from "react";
 import { IoIosChatbubbles } from "react-icons/io";
 import { MdOutlineReport } from "react-icons/md";
-import { navigate, TRANSLATION_COMPONENT, useUiPackageContext } from "../../../config";
+import {
+	LINK_COMPONENT,
+	navigate,
+	TRANSLATION_COMPONENT,
+	useUiPackageContext,
+} from "../../../config";
+import { cn } from "../../../lib/utils";
 import { createFullName } from "../../../utils/create-full-name";
 import { timeDifference } from "../../../utils/time-difference";
 import { FocusableSpan } from "../../misc/focusable-span";
@@ -20,7 +26,8 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "../../shadcn/alert-dialog";
-import { useToast } from "../../shadcn/use-toast";
+import { buttonVariants } from "../../shadcn/button";
+import { toast, useToast } from "../../shadcn/use-toast";
 import PostAuthorAvatar from "./post-author-avatar";
 
 type PostHeaderProps = ReportPostProps & {
@@ -56,7 +63,16 @@ export function PostHeader({
 	const isMine = me ? author.id === me.id : false;
 
 	const handleCreateChat = async (userId: User["id"]) => {
-		if (!me) return;
+		if (!me)
+			return toast({
+				title: "Login to use this feature.",
+				action: (
+					<LINK_COMPONENT className={buttonVariants({ variant: "default" })} href="/login">
+						Go to login page
+					</LINK_COMPONENT>
+				),
+				variant: "destructive",
+			});
 		const chat = await createPrivateChatAction(me.id, userId);
 		createPrivateChatCb?.(chat);
 		navigate(`/chats/${chat.id}`);
@@ -69,8 +85,9 @@ export function PostHeader({
 				<div>
 					<div className="flex items-center gap-x-4">
 						<h2 className="text-lg font-semibold">{createFullName(author)}</h2>
-						{me && !isMine && (
+						{!isMine && (
 							<ActionButton
+								className={cn({ "hover:cursor-not-allowed": !me })}
 								onClick={() => handleCreateChat(post.author.id)}
 								tooltipText={t("common.navbar.search.message.button.tooltip")}
 								Icon={<IoIosChatbubbles className="transition-all hover:scale-110" />}

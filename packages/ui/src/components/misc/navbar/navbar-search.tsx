@@ -202,13 +202,16 @@ type ActionButtonProps = {
 	tooltipText: React.ReactNode;
 	onClick: () => void;
 	Icon: React.JSX.Element;
+	className?: string;
 };
 
-export function ActionButton({ onClick, tooltipText, Icon }: ActionButtonProps) {
+export function ActionButton({ onClick, tooltipText, Icon, className }: ActionButtonProps) {
 	return (
 		<Tooltip content={tooltipText}>
 			<span>
-				<FocusableSpan fn={onClick}>{Icon}</FocusableSpan>
+				<FocusableSpan fn={onClick} className={className}>
+					{Icon}
+				</FocusableSpan>
 			</span>
 		</Tooltip>
 	);
