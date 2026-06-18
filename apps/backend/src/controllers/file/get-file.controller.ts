@@ -78,7 +78,7 @@ export const getFileController = async (req: Request, res: Response, next: NextF
 				const path = `chats/${query.chat}/${filename}`;
 				return sendFile(path)(async () => {
 					if (!userId) return false;
-					return fileService.isChatPhoto(filename, userId);
+					return fileService.isChatMessage(filename, userId);
 				}, req.t("files.controllers.get-file.group-photo-not-found"));
 			}
 
