@@ -54,6 +54,43 @@ export const authorize = async (req: Request, res: Response, next: NextFunction)
 	next();
 };
 
+export const authorizePassthrough = async (req: Request, res: Response, next: NextFunction) => {
+	const authorization = req.headers.authorization;
+	const userService = req.app.services.userService;
+
+	if (!authorization) {
+		// @ts-expect-error for this middleware the user will be null
+		req.user = null;
+		return next();
+	}
+
+	if (!authorization.startsWith("Bearer ")) {
+		// @ts-expect-error for this middleware the user will be null
+		req.user = null;
+		return next();
+	}
+
+	const token = authorization.split("Bearer ")[1];
+
+	const tokenPayload = TokenProcessor.decode(token, env.ACCESS_TOKEN_SECRET);
+	if (!tokenPayload) {
+		// @ts-expect-error for this middleware the user will be null
+		req.user = null;
+		return next();
+	}
+
+	const user = await userService.getUser(tokenPayload.userId);
+
+	if (!user) {
+		// @ts-expect-error for this middleware the user will be null
+		req.user = null;
+		return next();
+	}
+
+	req.user = user;
+	next();
+};
+
 /**
  * Middleware to authorize and verify JWT token from cookies.
  *

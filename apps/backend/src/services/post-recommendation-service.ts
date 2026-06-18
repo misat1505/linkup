@@ -183,4 +183,43 @@ export class PostRecommendationService {
 
 		return [...friendsPosts, ...otherPosts].map((p) => Post.parse(p));
 	}
+
+	/**
+	 * Retrieves recommended posts for anonymous users.
+	 * Posts are returned in reverse chronological order.
+	 *
+	 * @param lastPostId - ID of the last post from the previous page.
+	 * @param limit - Maximum number of posts to fetch.
+	 * @returns List of posts.
+	 */
+	async getRecommendedPostsAnonymous(
+		lastPostId: Post["id"] | null,
+		limit: number,
+	): Promise<Post[]> {
+		const lastPost = await this.getLastPost(lastPostId);
+
+		const posts = await this.prisma.post.findMany({
+			where: {
+				createdAt: lastPost
+					? {
+							lt: lastPost.createdAt,
+						}
+					: undefined,
+			},
+			include: {
+				author: {
+					select: userSelect,
+				},
+				chat: {
+					select: postChatSelect,
+				},
+			},
+			orderBy: {
+				createdAt: "desc",
+			},
+			take: limit,
+		});
+
+		return posts.map((p) => Post.parse(p));
+	}
 }

@@ -30,10 +30,6 @@ export const ROUTES = {
 
 export const protectedRoutes: RouteType[] = [
 	{
-		path: ROUTES.HOME.$path(),
-		component: Home,
-	},
-	{
 		path: ROUTES.SETTINGS.$path(),
 		component: Settings,
 	},
@@ -60,6 +56,10 @@ export const protectedRoutes: RouteType[] = [
 ];
 
 export const publicRoutes: RouteType[] = [
+	{
+		path: ROUTES.HOME.$path(),
+		component: Home,
+	},
 	{
 		path: ROUTES.LOGIN.$path(),
 		component: Login,

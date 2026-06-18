@@ -24,7 +24,7 @@ import { useToast } from "../../shadcn/use-toast";
 import PostAuthorAvatar from "./post-author-avatar";
 
 type PostHeaderProps = ReportPostProps & {
-	me: User;
+	me: User | undefined;
 	createPrivateChatAction: (id1: User["id"], id2: User["id"]) => Promise<Chat>;
 	createPrivateChatCb?: (chat: Chat) => void;
 };
@@ -53,10 +53,11 @@ export function PostHeader({
 	};
 
 	const { author } = post;
-	const isMine = author.id === me!.id;
+	const isMine = me ? author.id === me.id : false;
 
 	const handleCreateChat = async (userId: User["id"]) => {
-		const chat = await createPrivateChatAction(me!.id, userId);
+		if (!me) return;
+		const chat = await createPrivateChatAction(me.id, userId);
 		createPrivateChatCb?.(chat);
 		navigate(`/chats/${chat.id}`);
 	};
@@ -68,7 +69,7 @@ export function PostHeader({
 				<div>
 					<div className="flex items-center gap-x-4">
 						<h2 className="text-lg font-semibold">{createFullName(author)}</h2>
-						{!isMine && (
+						{me && !isMine && (
 							<ActionButton
 								onClick={() => handleCreateChat(post.author.id)}
 								tooltipText={t("common.navbar.search.message.button.tooltip")}
@@ -79,7 +80,7 @@ export function PostHeader({
 					<p className="text-sm text-muted-foreground -mt-1">{getTimeText()}</p>
 				</div>
 			</div>
-			{!isMine && <ReportPost post={post} reportPost={reportPost} />}
+			{me && !isMine && <ReportPost post={post} reportPost={reportPost} />}
 		</div>
 	);
 }
