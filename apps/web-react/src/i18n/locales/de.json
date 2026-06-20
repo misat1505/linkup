@@ -103,7 +103,7 @@
 				"title": "Tooltips",
 				"description": "Aktiviere oder deaktiviere Tooltips für zusätzliche Anleitungen in der App."
 			},
-			"slogan": "Passe deine Einstellungen an, um LinkUp wirklich zu deinem zu machen. Schalte Themen um, ändere Vorlieben und gestalte die Art und Weise, wie du mit der Plattform interagierst.",
+			"slogan": "Passe deine Einstellungen an, um Nexus wirklich zu deinem zu machen. Schalte Themen um, ändere Vorlieben und gestalte die Art und Weise, wie du mit der Plattform interagierst.",
 			"header": {
 				"1": "Personalisiere",
 				"2": "Dein Erlebnis"
@@ -125,7 +125,9 @@
 			"loading": "Warte kurz, während wir die App vorbereiten...",
 			"navbar": {
 				"sheet": {
-					"trigger": { "tooltip": "Aktionen anzeigen" },
+					"trigger": {
+						"tooltip": "Aktionen anzeigen"
+					},
 					"title": {
 						"logged-in": "Willkommen, {{fullName}}!",
 						"anonymous": "Willkommen!"
@@ -153,7 +155,7 @@
 					"tooltip": "Startseite"
 				},
 				"search": {
-					"placeholder": "Auf LinkUp suchen...",
+					"placeholder": "Auf Nexus suchen...",
 					"no-users": "Keine Benutzer gefunden.",
 					"tooltip": "Nach Benutzern suchen",
 					"heading": "Suchergebnis",
@@ -231,12 +233,18 @@
 				"show-more": "Mehr anzeigen",
 				"show-less": "Weniger anzeigen"
 			},
-			"new": { "button": "Neuen Beitrag erstellen" },
+			"new": {
+				"button": "Neuen Beitrag erstellen"
+			},
 			"edit": {
-				"button": { "tooltip": "Bearbeiten" }
+				"button": {
+					"tooltip": "Bearbeiten"
+				}
 			},
 			"delete": {
-				"button": { "tooltip": "Löschen" },
+				"button": {
+					"tooltip": "Löschen"
+				},
 				"dialog": {
 					"title": "Bist du absolut sicher?",
 					"description": "Bist du sicher, dass du diesen Beitrag löschen möchtest? Dies löscht deinen Beitrag, seine Kommentare und alle damit verbundenen Dateien.",
@@ -255,35 +263,54 @@
 					"locale": "de-DE"
 				},
 				"buttons": {
-					"reply": { "tooltip": "Antworten" },
-					"extend": { "tooltip": "Antworten anzeigen" },
-					"reduce": { "tooltip": "Antworten schließen" }
+					"reply": {
+						"tooltip": "Antworten"
+					},
+					"extend": {
+						"tooltip": "Antworten anzeigen"
+					},
+					"reduce": {
+						"tooltip": "Antworten schließen"
+					}
 				},
 				"form": {
 					"toasts": {
-						"success": { "title": "Kommentar erfolgreich gesendet." },
-						"error": { "title": "Nachricht kann nicht gesendet werden." }
+						"success": {
+							"title": "Kommentar erfolgreich gesendet."
+						},
+						"error": {
+							"title": "Nachricht kann nicht gesendet werden."
+						}
 					},
 					"inputs": {
 						"text": {
 							"placeholder": "Hinterlasse deinen Kommentar..."
 						},
-						"file": { "tooltip": "Datei anhängen", "remove": "Datei entfernen" }
+						"file": {
+							"tooltip": "Datei anhängen",
+							"remove": "Datei entfernen"
+						}
 					},
-					"submit": { "tooltip": "Kommentar senden" },
+					"submit": {
+						"tooltip": "Kommentar senden"
+					},
 					"reply": {
 						"to": {
 							"me": "Antwort an dich selbst.",
 							"other": "Antwort an {{fullName}}."
 						},
-						"remove": { "tooltip": "Antwort entfernen" }
+						"remove": {
+							"tooltip": "Antwort entfernen"
+						}
 					}
 				}
 			}
 		},
 		"friends": {
 			"filter": {
-				"input": { "placeholder": "Benutzer filtern..." },
+				"input": {
+					"placeholder": "Benutzer filtern..."
+				},
 				"statuses": {
 					"input": {
 						"placeholder": "Benutzer filtern...",
@@ -299,13 +326,19 @@
 				}
 			},
 			"column": {
-				"user": { "title": "Benutzer" },
-				"status": { "title": "Status" }
+				"user": {
+					"title": "Benutzer"
+				},
+				"status": {
+					"title": "Status"
+				}
 			},
 			"no-result": {
 				"title": "Keine Ergebnisse.",
 				"description": "Suche nach Personen mit der",
-				"link": { "text": "Navigationsleiste" }
+				"link": {
+					"text": "Navigationsleiste"
+				}
 			},
 			"cells": {
 				"statuses": {
@@ -314,7 +347,9 @@
 					"awaiting-other": "Wartet auf die Zustimmung von {{fullName}}"
 				},
 				"actions": {
-					"trigger": { "tooltip": "Aktionen anzeigen" },
+					"trigger": {
+						"tooltip": "Aktionen anzeigen"
+					},
 					"accept": "Akzeptieren",
 					"delete": "Löschen"
 				}
@@ -368,7 +403,9 @@
 				}
 			},
 			"create-new-chat": {
-				"trigger": { "tooltip": "Chat erstellen" },
+				"trigger": {
+					"tooltip": "Chat erstellen"
+				},
 				"dialog": {
 					"title": "Neuen Chat erstellen",
 					"description": "Suche und lade andere Benutzer in deinen neu erstellten Chat ein. Klicke auf den Benutzer, um ihn in den Chat einzuladen."
@@ -387,8 +424,12 @@
 				"group": {
 					"form": {
 						"inputs": {
-							"name": { "placeholder": "Chat-Anzeigename (optional)" },
-							"search": { "placeholder": "Nach Personen suchen..." }
+							"name": {
+								"placeholder": "Chat-Anzeigename (optional)"
+							},
+							"search": {
+								"placeholder": "Nach Personen suchen..."
+							}
 						}
 					},
 					"error": {
@@ -407,14 +448,26 @@
 					}
 				},
 				"inputs": {
-					"text": { "placeholder": "Tippen..." },
-					"file": { "tooltip": "Datei anhängen", "remove": "Datei entfernen" }
+					"text": {
+						"placeholder": "Tippen..."
+					},
+					"file": {
+						"tooltip": "Datei anhängen",
+						"remove": "Datei entfernen"
+					}
 				},
-				"submit": { "tooltip": "Nachricht senden" },
+				"submit": {
+					"tooltip": "Nachricht senden"
+				},
 				"reply": {
-					"author": { "me": "Antwort an mich", "other": "Antwort an {{name}}" },
+					"author": {
+						"me": "Antwort an mich",
+						"other": "Antwort an {{name}}"
+					},
 					"only-files": "{{count}} Datei(en) gesendet.",
-					"cancel": { "tooltip": "Abbrechen" }
+					"cancel": {
+						"tooltip": "Abbrechen"
+					}
 				}
 			},
 			"income-message": {
@@ -435,9 +488,13 @@
 					"foreign": "{{date}} von {{name}}"
 				},
 				"controls": {
-					"reply": { "tooltip": "Antworten" },
+					"reply": {
+						"tooltip": "Antworten"
+					},
 					"reaction": {
-						"trigger": { "tooltip": "Reaktion erstellen" },
+						"trigger": {
+							"tooltip": "Reaktion erstellen"
+						},
 						"title": "Erstelle deine Reaktion",
 						"already-reacted": "Du hast bereits eine Reaktion für diese Nachricht erstellt.",
 						"not-available": "Reagieren ist derzeit nicht verfügbar.",
@@ -462,7 +519,9 @@
 				}
 			},
 			"leave": {
-				"trigger": { "tooltip": "Chat verlassen" },
+				"trigger": {
+					"tooltip": "Chat verlassen"
+				},
 				"dialog": {
 					"title": "Chat verlassen",
 					"description": "Bist du sicher, dass du diesen Chat verlassen möchtest? Wenn du gehst, hast du keinen Zugriff mehr auf die laufende Unterhaltung. Wenn du sicher bist, bestätige dies bitte unten.",
@@ -482,7 +541,9 @@
 				"tooltip": "Chat schließen"
 			},
 			"settings": {
-				"trigger": { "tooltip": "Einstellungen" },
+				"trigger": {
+					"tooltip": "Einstellungen"
+				},
 				"title": "Einstellungen",
 				"description": {
 					"private": "Verwalte die Mitglieder dieses Chats, indem du siehst, wer aktuell an der Unterhaltung teilnimmt. Du kannst ihre Aliase nach Bedarf aktualisieren oder entfernen.",
@@ -490,8 +551,12 @@
 				},
 				"users": {
 					"actions": {
-						"send-message": { "tooltip": "Nachricht senden" },
-						"update-alias": { "tooltip": "Alias aktualisieren" }
+						"send-message": {
+							"tooltip": "Nachricht senden"
+						},
+						"update-alias": {
+							"tooltip": "Alias aktualisieren"
+						}
 					}
 				},
 				"update-alias-dialog": {
@@ -499,7 +564,9 @@
 					"description": "Du kannst den Alias für diesen Benutzer aktualisieren. Dieser Alias wird anstelle seines vollständigen Namens im Chat angezeigt. Bitte bestätige den neuen Alias unten. Lass es leer, um den Alias zu entfernen.",
 					"cancel": "Abbrechen",
 					"confirm": "Speichern",
-					"input": { "placeholder": "Alias erstellen" },
+					"input": {
+						"placeholder": "Alias erstellen"
+					},
 					"no-alias": "(Kein Alias)"
 				},
 				"group": {
@@ -510,16 +577,24 @@
 					},
 					"info": {
 						"input": {
-							"name": { "placeholder": "Gruppenname..." },
-							"file": { "remove": "Entfernen" }
+							"name": {
+								"placeholder": "Gruppenname..."
+							},
+							"file": {
+								"remove": "Entfernen"
+							}
 						},
 						"submit": "Speichern"
 					},
 					"invite": {
-						"search": { "placeholder": "Nach Personen suchen..." },
+						"search": {
+							"placeholder": "Nach Personen suchen..."
+						},
 						"empty": "Schreibe, um nach Benutzern zu suchen.",
 						"no-result": "Keine Benutzer gefunden.",
-						"trigger": { "tooltip": "{{name}} in diesen Chat einladen" },
+						"trigger": {
+							"tooltip": "{{name}} in diesen Chat einladen"
+						},
 						"dialog": {
 							"title": "{{name}} in diesen Chat einladen",
 							"description": "Bist du sicher, dass du {{name}} in diesen Chat einladen möchtest? Einmal eingeladen, können sie die Unterhaltung sehen und daran teilnehmen. Bestätige deine Aktion unten.",
@@ -550,7 +625,9 @@
 				"description": "Kopiere URLs von Dateien aus deinem Cache, um sie in deinen Beitrag einzufügen.",
 				"cache-empty": "Keine Dateien im Cache.",
 				"used-files": "Verwendete Dateien",
-				"file-upload": { "tooltip": "Datei hochladen" },
+				"file-upload": {
+					"tooltip": "Datei hochladen"
+				},
 				"cache": "Cache",
 				"item": {
 					"copy-to-clipboard": {
@@ -558,7 +635,9 @@
 						"toast": "Element in die Zwischenablage kopiert."
 					},
 					"remove": {
-						"trigger": { "tooltip": "Datei entfernen" },
+						"trigger": {
+							"tooltip": "Datei entfernen"
+						},
 						"dialog": {
 							"title": "Bist du absolut sicher?",
 							"description": "Diese Aktion kann nicht rückgängig gemacht werden. Dies löscht deine Datei dauerhaft von unseren Servern.",

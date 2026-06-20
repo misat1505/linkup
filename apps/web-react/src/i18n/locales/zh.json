@@ -103,7 +103,7 @@
 				"title": "提示",
 				"description": "启用或禁用提示，以在应用中获得额外指导。"
 			},
-			"slogan": "自定义你的设置，让 LinkUp 真正属于你。切换主题、调整偏好，塑造你与平台互动的方式。",
+			"slogan": "自定义你的设置，让 Nexus 真正属于你。切换主题、调整偏好，塑造你与平台互动的方式。",
 			"header": {
 				"1": "个性化",
 				"2": "你的体验"
@@ -125,7 +125,9 @@
 			"loading": "请稍等，我们正在准备应用...",
 			"navbar": {
 				"sheet": {
-					"trigger": { "tooltip": "显示操作" },
+					"trigger": {
+						"tooltip": "显示操作"
+					},
 					"title": {
 						"logged-in": "欢迎，{{fullName}}！",
 						"anonymous": "欢迎！"
@@ -153,7 +155,7 @@
 					"tooltip": "主页"
 				},
 				"search": {
-					"placeholder": "在 LinkUp 上搜索...",
+					"placeholder": "在 Nexus 上搜索...",
 					"no-users": "未找到用户。",
 					"tooltip": "搜索用户",
 					"heading": "搜索结果",
@@ -231,12 +233,18 @@
 				"show-more": "显示更多",
 				"show-less": "显示更少"
 			},
-			"new": { "button": "创建新帖子" },
+			"new": {
+				"button": "创建新帖子"
+			},
 			"edit": {
-				"button": { "tooltip": "编辑" }
+				"button": {
+					"tooltip": "编辑"
+				}
 			},
 			"delete": {
-				"button": { "tooltip": "删除" },
+				"button": {
+					"tooltip": "删除"
+				},
 				"dialog": {
 					"title": "你完全确定吗？",
 					"description": "你确定要删除这篇帖子吗？这将删除你的帖子、其评论以及所有相关文件。",
@@ -255,35 +263,54 @@
 					"locale": "zh-CN"
 				},
 				"buttons": {
-					"reply": { "tooltip": "回复" },
-					"extend": { "tooltip": "显示回复" },
-					"reduce": { "tooltip": "关闭回复" }
+					"reply": {
+						"tooltip": "回复"
+					},
+					"extend": {
+						"tooltip": "显示回复"
+					},
+					"reduce": {
+						"tooltip": "关闭回复"
+					}
 				},
 				"form": {
 					"toasts": {
-						"success": { "title": "评论发送成功。" },
-						"error": { "title": "无法发送消息。" }
+						"success": {
+							"title": "评论发送成功。"
+						},
+						"error": {
+							"title": "无法发送消息。"
+						}
 					},
 					"inputs": {
 						"text": {
 							"placeholder": "留下你的评论..."
 						},
-						"file": { "tooltip": "附加文件", "remove": "移除文件" }
+						"file": {
+							"tooltip": "附加文件",
+							"remove": "移除文件"
+						}
 					},
-					"submit": { "tooltip": "发送评论" },
+					"submit": {
+						"tooltip": "发送评论"
+					},
 					"reply": {
 						"to": {
 							"me": "回复自己。",
 							"other": "回复 {{fullName}}。"
 						},
-						"remove": { "tooltip": "移除回复" }
+						"remove": {
+							"tooltip": "移除回复"
+						}
 					}
 				}
 			}
 		},
 		"friends": {
 			"filter": {
-				"input": { "placeholder": "过滤用户..." },
+				"input": {
+					"placeholder": "过滤用户..."
+				},
 				"statuses": {
 					"input": {
 						"placeholder": "过滤用户...",
@@ -299,13 +326,19 @@
 				}
 			},
 			"column": {
-				"user": { "title": "用户" },
-				"status": { "title": "状态" }
+				"user": {
+					"title": "用户"
+				},
+				"status": {
+					"title": "状态"
+				}
 			},
 			"no-result": {
 				"title": "无结果。",
 				"description": "使用",
-				"link": { "text": "导航栏" }
+				"link": {
+					"text": "导航栏"
+				}
 			},
 			"cells": {
 				"statuses": {
@@ -314,7 +347,9 @@
 					"awaiting-other": "等待 {{fullName}} 的批准"
 				},
 				"actions": {
-					"trigger": { "tooltip": "显示操作" },
+					"trigger": {
+						"tooltip": "显示操作"
+					},
 					"accept": "接受",
 					"delete": "删除"
 				}
@@ -368,7 +403,9 @@
 				}
 			},
 			"create-new-chat": {
-				"trigger": { "tooltip": "创建聊天" },
+				"trigger": {
+					"tooltip": "创建聊天"
+				},
 				"dialog": {
 					"title": "创建新聊天",
 					"description": "搜索并邀请其他用户加入你新创建的聊天。点击用户以邀请他加入聊天。"
@@ -387,12 +424,18 @@
 				"group": {
 					"form": {
 						"inputs": {
-							"name": { "placeholder": "聊天显示名称（可选）" },
-							"search": { "placeholder": "搜索用户..." }
+							"name": {
+								"placeholder": "聊天显示名称（可选）"
+							},
+							"search": {
+								"placeholder": "搜索用户..."
+							}
 						}
 					},
 					"error": {
-						"toast": { "title": "无法创建新群聊。" }
+						"toast": {
+							"title": "无法创建新群聊。"
+						}
 					}
 				},
 				"invited-users": "已邀请的人",
@@ -405,14 +448,26 @@
 					}
 				},
 				"inputs": {
-					"text": { "placeholder": "输入..." },
-					"file": { "tooltip": "附加文件", "remove": "移除文件" }
+					"text": {
+						"placeholder": "输入..."
+					},
+					"file": {
+						"tooltip": "附加文件",
+						"remove": "移除文件"
+					}
 				},
-				"submit": { "tooltip": "发送消息" },
+				"submit": {
+					"tooltip": "发送消息"
+				},
 				"reply": {
-					"author": { "me": "回复自己", "other": "回复 {{name}}" },
+					"author": {
+						"me": "回复自己",
+						"other": "回复 {{name}}"
+					},
 					"only-files": "发送了 {{count}} 个文件。",
-					"cancel": { "tooltip": "取消" }
+					"cancel": {
+						"tooltip": "取消"
+					}
 				}
 			},
 			"income-message": {
@@ -433,9 +488,13 @@
 					"foreign": "{{date}} 由 {{name}}"
 				},
 				"controls": {
-					"reply": { "tooltip": "回复" },
+					"reply": {
+						"tooltip": "回复"
+					},
 					"reaction": {
-						"trigger": { "tooltip": "创建反应" },
+						"trigger": {
+							"tooltip": "创建反应"
+						},
 						"title": "创建你的反应",
 						"already-reacted": "你已为此消息创建了反应。",
 						"not-available": "目前无法反应。",
@@ -460,7 +519,9 @@
 				}
 			},
 			"leave": {
-				"trigger": { "tooltip": "离开聊天" },
+				"trigger": {
+					"tooltip": "离开聊天"
+				},
 				"dialog": {
 					"title": "离开聊天",
 					"description": "你确定要离开这个聊天吗？离开后，你将无法访问正在进行的对话。如果确定，请在下方确认。",
@@ -480,7 +541,9 @@
 				"tooltip": "关闭聊天"
 			},
 			"settings": {
-				"trigger": { "tooltip": "设置" },
+				"trigger": {
+					"tooltip": "设置"
+				},
 				"title": "设置",
 				"description": {
 					"private": "管理此聊天的成员，查看当前参与对话的人员。你可以根据需要更新或删除他们的别名。",
@@ -488,8 +551,12 @@
 				},
 				"users": {
 					"actions": {
-						"send-message": { "tooltip": "发送消息" },
-						"update-alias": { "tooltip": "更新别名" }
+						"send-message": {
+							"tooltip": "发送消息"
+						},
+						"update-alias": {
+							"tooltip": "更新别名"
+						}
 					}
 				},
 				"update-alias-dialog": {
@@ -497,7 +564,9 @@
 					"description": "你可以为此用户更新别名。此别名将在聊天中显示，代替他们的全名。请在下方确认新别名。留空以删除别名。",
 					"cancel": "取消",
 					"confirm": "保存",
-					"input": { "placeholder": "创建别名" },
+					"input": {
+						"placeholder": "创建别名"
+					},
 					"no-alias": "（无别名）"
 				},
 				"group": {
@@ -508,16 +577,24 @@
 					},
 					"info": {
 						"input": {
-							"name": { "placeholder": "群组名称..." },
-							"file": { "remove": "移除" }
+							"name": {
+								"placeholder": "群组名称..."
+							},
+							"file": {
+								"remove": "移除"
+							}
 						},
 						"submit": "保存"
 					},
 					"invite": {
-						"search": { "placeholder": "搜索用户..." },
+						"search": {
+							"placeholder": "搜索用户..."
+						},
 						"empty": "输入以搜索用户。",
 						"no-result": "未找到用户。",
-						"trigger": { "tooltip": "邀请 {{name}} 加入此聊天" },
+						"trigger": {
+							"tooltip": "邀请 {{name}} 加入此聊天"
+						},
 						"dialog": {
 							"title": "邀请 {{name}} 加入此聊天",
 							"description": "你确定要邀请 {{name}} 加入此聊天吗？一旦受邀，他们将能够查看并参与对话。请在下方确认你的操作。",
@@ -548,7 +625,9 @@
 				"description": "从你的缓存中复制文件 URL 以输入到你的帖子中。",
 				"cache-empty": "缓存中没有文件。",
 				"used-files": "已使用的文件",
-				"file-upload": { "tooltip": "上传文件" },
+				"file-upload": {
+					"tooltip": "上传文件"
+				},
 				"cache": "缓存",
 				"item": {
 					"copy-to-clipboard": {
@@ -556,7 +635,9 @@
 						"toast": "元素已复制到剪贴板。"
 					},
 					"remove": {
-						"trigger": { "tooltip": "移除文件" },
+						"trigger": {
+							"tooltip": "移除文件"
+						},
 						"dialog": {
 							"title": "你完全确定吗？",
 							"description": "此操作无法撤销。这将永久从我们的服务器上删除你的文件。",

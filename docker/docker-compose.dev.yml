@@ -1,5 +1,5 @@
 version: "3.8"
-name: link-up
+name: nexus
 
 services:
   minio:
@@ -20,7 +20,7 @@ services:
     image: postgres:15-alpine
     restart: always
     environment:
-      POSTGRES_DB: linkup
+      POSTGRES_DB: nexus
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:

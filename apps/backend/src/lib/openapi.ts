@@ -23,9 +23,9 @@ export function generateOpenApiDocument() {
 	return generator.generateDocument({
 		openapi: "3.0.0",
 		info: {
-			title: "LinkUp API",
+			title: "Nexus API",
 			version: "1.0.0",
-			description: "API documentation for LinkUp",
+			description: "API documentation for Nexus",
 		},
 		security: [
 			{

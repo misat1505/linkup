@@ -1,7 +1,7 @@
 {
-	"name": "linkup",
+	"name": "Nexus",
 	"version": "1.0.0",
-	"description": "LinkUp is a social media platform developed as a Bachelor's thesis project. It enables seamless communication and content sharing among users. The platform offers real-time chats, group conversations, file sharing, and Markdown-based posts — all wrapped in a clean, responsive user interface. The focus is on delivering a reliable, user-friendly experience that supports modern social interaction needs.",
+	"description": "Nexus is a social media platform developed as a Bachelor's thesis project. It enables seamless communication and content sharing among users. The platform offers real-time chats, group conversations, file sharing, and Markdown-based posts — all wrapped in a clean, responsive user interface. The focus is on delivering a reliable, user-friendly experience that supports modern social interaction needs.",
 	"directories": {
 		"doc": "docs"
 	},

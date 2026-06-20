@@ -5,5 +5,5 @@
 	"plugin": ["typedoc-plugin-inline-sources", "typedoc-theme-hierarchy"],
 	"theme": "hierarchy",
 	"logLevel": "Error",
-	"name": "LinkUp - backend"
+	"name": "Nexus - backend"
 }

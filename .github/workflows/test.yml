@@ -1,4 +1,4 @@
-name: LinkUp Tests
+name: Nexus Tests
 
 on:
   pull_request:
