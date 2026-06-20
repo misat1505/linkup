@@ -18,7 +18,7 @@ export function LoginSlogan() {
 				<div className="text-nowrap">
 					<TRANSLATION_COMPONENT translationKey="login.greeting" />
 				</div>
-				<div className="text-nowrap">LinkUp</div>
+				<div className="text-nowrap">Nexus</div>
 			</h1>
 
 			<p

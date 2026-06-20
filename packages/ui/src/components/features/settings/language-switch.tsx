@@ -99,7 +99,7 @@ function LanguageSwitchItem({ onclick, flagCode, displayLang }: Language) {
 	const handleClick = async () => {
 		await onclick();
 		// setTimeout(() => {
-		//   document.title = `LinkUp - ${TRANSLATION_FUNCTION("tabs.settings")}`;
+		//   document.title = `Nexus - ${TRANSLATION_FUNCTION("tabs.settings")}`;
 		// }, 100);
 	};
 

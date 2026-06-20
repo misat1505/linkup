@@ -24,11 +24,11 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-	title: "LinkUp - Social Media for Programmers",
+	title: "Nexus - Social Media for Programmers",
 	description:
-		"Connect, share, and collaborate with programmers worldwide on LinkUp, the social media platform built for developers.",
-	keywords: ["programming", "developers", "social media", "tech community", "LinkUp"],
-	authors: [{ name: "LinkUp Team" }],
+		"Connect, share, and collaborate with programmers worldwide on Nexus, the social media platform built for developers.",
+	keywords: ["programming", "developers", "social media", "tech community", "Nexus"],
+	authors: [{ name: "Nexus Team" }],
 };
 
 export default function RootLayout({
